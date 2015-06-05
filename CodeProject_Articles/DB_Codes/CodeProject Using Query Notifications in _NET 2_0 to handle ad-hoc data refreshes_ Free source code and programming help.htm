@@ -1,0 +1,1903 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!-- saved from url=(0062)http://www.codeproject.com/KB/database/QueryNotifications.aspx -->
+<HTML><HEAD><TITLE>CodeProject: Using Query Notifications in .NET 2.0 to handle ad-hoc data refreshes. Free source code and programming help</TITLE>
+<META http-equiv=Content-Type content="text/html; charset=utf-8">
+<META 
+content="Query Notification in SQL Server 2005 solves the problem of having to maintain a polling database to get the updated data. The new notification service of SQL Server 2005 can perform this amazing task of notifying a .NET code when any DML operations are performed to a specified table.; Author: rajiv404; Section: Database; Chapter: Database" 
+name=Description>
+<META 
+content=".NET 2.0, SQL 2005, VS2005, C#, SQL, Windows, DBA, Dev, ADO.NET, Intermediate,Database,Database,Free source code, tutorials" 
+name=Keywords>
+<META content="The Code Project" name=Author>
+<META content=General name=Rating>
+<META content="index, follow" name=Robots>
+<META content="1 days" name=Revisit-After><LINK 
+title="CodeProject Latest articles - All topics" 
+href="http://www.codeproject.com/webservices/articlerss.aspx?cat=1" 
+type=application/rss+xml rel=alternate><LINK 
+title="CodeProject Latest articles - MFC / C++" 
+href="http://www.codeproject.com/webservices/articlerss.aspx?cat=2" 
+type=application/rss+xml rel=alternate><LINK 
+title="CodeProject Latest articles - C#" 
+href="http://www.codeproject.com/webservices/articlerss.aspx?cat=3" 
+type=application/rss+xml rel=alternate><LINK 
+title="CodeProject Latest articles - ASP.NET" 
+href="http://www.codeproject.com/webservices/articlerss.aspx?cat=4" 
+type=application/rss+xml rel=alternate><LINK 
+title="CodeProject Latest articles - .NET" 
+href="http://www.codeproject.com/webservices/articlerss.aspx?cat=5" 
+type=application/rss+xml rel=alternate><LINK 
+title="CodeProject Latest articles - VB.NET" 
+href="http://www.codeproject.com/webservices/articlerss.aspx?cat=6" 
+type=application/rss+xml rel=alternate><LINK title="CodeProject Lounge Postings" 
+href="http://www.codeproject.com/webservices/LoungeRSS.aspx" 
+type=application/rss+xml rel=alternate><LINK title=CodeProject 
+href="http://www.codeproject.com/info/OpenSearch.xml" 
+type=application/opensearchdescription+xml rel=search><LINK 
+href="CodeProject Using Query Notifications in _NET 2_0 to handle ad-hoc data refreshes_ Free source code and programming help_files/CodeProject.css" 
+type=text/css rel=stylesheet><LINK 
+href="CodeProject Using Query Notifications in _NET 2_0 to handle ad-hoc data refreshes_ Free source code and programming help_files/ForumClassic.css" 
+type=text/css rel=stylesheet>
+<SCRIPT type=text/javascript>
+  var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+  document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</SCRIPT>
+
+<SCRIPT type=text/javascript>
+   var pageTracker = _gat._getTracker("UA-1735123-1");
+   pageTracker._setDomainName("www.codeproject.com");
+   pageTracker._setSessionTimeout("1200"); // 20 mins
+   pageTracker._initData();
+   pageTracker._trackPageview();
+</SCRIPT>
+
+<SCRIPT language=Javascript 
+src="CodeProject Using Query Notifications in _NET 2_0 to handle ad-hoc data refreshes_ Free source code and programming help_files/oncopy.js" 
+type=text/javascript></SCRIPT>
+
+<SCRIPT language=Javascript 
+src="CodeProject Using Query Notifications in _NET 2_0 to handle ad-hoc data refreshes_ Free source code and programming help_files/jxs.js" 
+type=text/javascript></SCRIPT>
+
+<SCRIPT language=Javascript 
+src="CodeProject Using Query Notifications in _NET 2_0 to handle ad-hoc data refreshes_ Free source code and programming help_files/bookmark.js" 
+type=text/javascript></SCRIPT>
+
+<SCRIPT language=Javascript 
+src="CodeProject Using Query Notifications in _NET 2_0 to handle ad-hoc data refreshes_ Free source code and programming help_files/rateitem.js" 
+type=text/javascript></SCRIPT>
+
+<SCRIPT language=Javascript type=text/javascript>//<![CDATA[
+function ToggleMenu(itemName)
+{
+	var elm = document.getElementById(itemName);
+	var i,others = document.getElementById('SectionMenu');
+	for(i=0; i < others.childNodes.length; i++)
+	{
+		var other = others.childNodes[i];
+		if ((other.className == 'MenuSectionBlock') && (other != elm))
+			other.style.display='none';
+	}
+	if (elm.style.display == 'block') elm.style.display='none';
+	else elm.style.display='block';
+	return false;
+}
+
+//]]></SCRIPT>
+
+<SCRIPT language=Javascript 
+src="CodeProject Using Query Notifications in _NET 2_0 to handle ad-hoc data refreshes_ Free source code and programming help_files/addto.js" 
+type=text/javascript></SCRIPT>
+
+<SCRIPT language=Javascript type=text/javascript>//<![CDATA[
+function MsgVoteForm(MemberID,MsgID,GB,gp,bp,mt) {
+ if(!GB)document.write("Rate this message: ");
+ document.write(unescape("%3Ca href=\"#xx" + MsgID.toString() + "xx\" onclick=\"RateMsg(" + MemberID.toString() + ", " + MsgID.toString() + ","));document.write((GB?"5":"1")+unescape(");\"%3E"));
+ if(GB) document.write(unescape("%3Cimg height=\"24\" width=\"24\" src=\"/script/Forums/Images/good.png\" alt=\"good\" border=\"0\" align=\"absmiddle\" /%3E "+gp+" "+mt+"%3C/a%3E "));
+ else document.write(unescape("%3Cimg height=\"14\" width=\"14\" src=\"/script/Forums/Images/thumbs_down.gif\" alt=\"vote 1\" border=\"0\" align=\"middle\" /%3E%3C/a%3E "));
+ if(GB)document.write(" &nbsp;"); else for(var i=1; i<=5;i++)
+  document.write(unescape("%3Ca class=\"Frm_MHL\" href=\"#xx" + MsgID.toString() + "xx\" title=\"vote this message a " + i.toString() + "\" onclick=\"RateMsg(" + MemberID.toString() + ", " + MsgID.toString() + ", " + i.toString() + ")\"%3E%3Cb%3E" + i.toString() + "%3C/b%3E%3C/a%3E "));
+ document.write(unescape("%3Ca href=\"#xx" + MsgID.toString() + "xx\" onclick=\"RateMsg(" + MemberID.toString() + ", " + MsgID.toString() + ","));document.write((GB?"1":"5")+unescape(");\"%3E"));
+ if(GB)document.write(unescape("%3Cimg height=\"24\" width=\"24\" src=\"/script/Forums/Images/bad.png\" alt=\"bad\" border=\"0\" align=\"absmiddle\" /%3E "+bp+" "+mt+"%3C/a%3E"));
+ else document.write(unescape("%3Cimg height=\"14\" width=\"14\" src=\"/script/Forums/Images/thumbs_up.gif\" border=\"0\" alt=\"vote 5\" align=\"middle\" /%3E%3C/a%3E "));
+}
+
+function ReportMsg(userid, msgid, score) {
+ if (confirm("Are you sure you want to report this message?") == true)
+  return RateMsg(userid, msgid, score);
+ else return false;
+}
+function RateMsg(memberid, msgid, score) {
+ var req = new ActiveXObject("MSXML2.XMLHTTP");
+ req.onreadystatechange = function() {
+  if (req.readyState == 4) {
+   if ( req.status == 200 ) {
+    var respText = req.responseText;
+    var re = new RegExp(unescape("\%3Cdiv\%3E([^\%3C]*)\%3C/div\%3E"), "g");
+    var match = re.exec(respText);
+    voteStatus.innerHTML = unescape("%3Cb%3E") + (match)?match[1]:"An error occured" + unescape("%3C/b%3E");
+   }
+   else
+   {
+    voteStatus.innerHTML = unescape("%3Cb style='color:red'%3EFailed!") + req.statusText + unescape("%3C/b%3E");
+   }
+  }
+ }
+ var voteStatus = document.getElementById("MVF" + msgid);
+ if (!voteStatus) return;
+ voteStatus.innerHTML = unescape("%3Cb style='color:green'%3EVoting...%3C/b%3E");
+ var strAction = "/script/Forums/Vote.aspx?js=1&fmid="+memberid.toString()+"&select="+msgid.toString()+"&score="+score.toString();
+ req.open("GET", strAction, true);
+ req.send(null);
+  return false;
+}
+//]]></SCRIPT>
+
+<SCRIPT language=Javascript type=text/javascript>//<![CDATA[
+var Selected = "-1";
+
+function SwitchMessage(e, msgId)
+{
+  if (!msgId) {
+    if(!e)e=window.event;
+    var target=e.target?e.target:e.srcElement;
+    while(target&&target.id!='DynMessLink')target=target.parentNode;
+    if(!target||target.id!='DynMessLink')return;
+    msgId=target.name;
+  }
+  if(Selected&&Selected!=""){
+    var body=eval("document.getElementById('F" + Selected + "_h1')");
+    if(body) body.style.display = 'none';
+    var head=eval("document.getElementById('F" + Selected + "_h0')");
+    if(head) head.className = head.className.replace("Sel", "UnSel");
+  }
+  if(Selected==msgId.toString())
+    Selected="";
+  else {
+    Selected=msgId.toString();
+    var body=eval("document.getElementById('F" + Selected + "_h1')");
+    if(body){
+      if(body.style.display=='none') body.style.display='';
+      else body.style.display = 'none';
+    }
+    var head=eval("document.getElementById('F" + Selected + "_h0')");
+    if (head) 
+      head.className = head.className.replace("UnSel", "Sel");
+    if(body&&head&&body.style.display!='none'){
+      document.body.scrollTop = getRealPos(head, "Top") - document.body.clientHeight/10;
+      EnsureMessageVisible(Selected, true);
+    }
+  }
+  if (e){if(e.preventDefault)e.preventDefault;else e.returnValue=false;}
+  return false;
+}
+
+//]]></SCRIPT>
+
+<SCRIPT language=Javascript 
+src="CodeProject Using Query Notifications in _NET 2_0 to handle ad-hoc data refreshes_ Free source code and programming help_files/ShortCuts.js" 
+type=text/javascript></SCRIPT>
+<LINK 
+href="CodeProject Using Query Notifications in _NET 2_0 to handle ad-hoc data refreshes_ Free source code and programming help_files/ForumClassicIE6.css" 
+type=text/css rel=stylesheet><LINK href="/favicon.ico" type=image/ico 
+rel=icon><LINK href="/favicon.ico" type=image/ico rel="shortcut icon">
+<META content="MSHTML 6.00.2900.2180" name=GENERATOR></HEAD>
+<BODY>
+<TABLE id=ctl00_AT cellSpacing=0 cellPadding=0 border=0>
+  <TBODY>
+  <TR vAlign=top>
+    <TD colSpan=2>
+      <TABLE cellSpacing=0 cellPadding=0 border=0>
+        <TBODY>
+        <TR>
+          <TD class=HeaderLogo><A href="http://www.codeproject.com/"><IMG 
+            id=ctl00_Logo 
+            style="BORDER-TOP-WIDTH: 0px; BORDER-LEFT-WIDTH: 0px; BORDER-BOTTOM-WIDTH: 0px; WIDTH: 225px; HEIGHT: 90px; BORDER-RIGHT-WIDTH: 0px" 
+            alt="The Code Project" 
+            src="CodeProject Using Query Notifications in _NET 2_0 to handle ad-hoc data refreshes_ Free source code and programming help_files/logo225x90.gif"></A></TD>
+          <TD class=HeaderBanner align=right width="100%">
+            <SCRIPT type=text/javascript>document.write(unescape("%3ca%20href%3d%22http%3a%2f%2fwww.codeproject.com%2fRedir.aspx%3fadid%3d6481%26way%3dban%22%20target%3d%22_blank%22%20rel%3d%22nofollow%22%3e%3cimg%20src%3d%22http%3a%2f%2fwww.codeproject.com%2fscript%2fAnn%2fServeImg.aspx%3fFile%3d%252fscript%252fadmentor%252fimages%252fAppdev_728x90.gif%26C%3dFalse%26id%3d6481%22%20alt%3d%22%22%20border%3d%220%22%20width%3d%22728%22%20height%3d%2290%22%3e%3c%2fa%3e"));</SCRIPT>
+          </TD></TR>
+        <TR>
+          <TD colSpan=2>
+            <TABLE class=MemberNavBar cellSpacing=0 cellPadding=5 
+              width="100%"><TBODY>
+              <TR>
+                <TD class=SmallText style="FONT-WEIGHT: bold">5,215,143 
+                  members and growing! (21,023 online)</TD>
+                <TD align=right>
+                  <DIV class=MemberNavBarText 
+                  id=ctl00_MemberMenu_LoggedOnOptions><A 
+                  id=ctl00_MemberMenu_MyProfile 
+                  href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=2959938">abdelrady2030</A> 
+                  | <A id=ctl00_MemberMenu_MySettings 
+                  href="http://www.codeproject.com/script/Membership/Modify.aspx">My 
+                  Settings</A> | <A id=ctl00_MemberMenu_MyCodeProject 
+                  href="http://www.codeproject.com/script/Membership/MyCodeProject.aspx"><B>My 
+                  CodeProject</B></A> | <A id=ctl00_MemberMenu_MyBookmarks 
+                  href="http://www.codeproject.com/script/Bookmarks/List.aspx?obtid=2"><IMG 
+                  height=16 
+                  src="CodeProject Using Query Notifications in _NET 2_0 to handle ad-hoc data refreshes_ Free source code and programming help_files/fave.gif" 
+                  width=16 align=absMiddle border=0> My Bookmarks</A> | <A 
+                  id=ctl00_MemberMenu_MyArticles 
+                  href="http://www.codeproject.com/script/Articles/MemberArticles.aspx?amid=2959938">My 
+                  Articles</A> | <A id=ctl00_MemberMenu_Signout 
+                  href="http://www.codeproject.com/script/Membership/LogOff.aspx?rp=%2fKB%2fdatabase%2fQueryNotifications.aspx">Sign 
+                  out</A> </DIV></TD></TR></TBODY></TABLE></TD></TR>
+        <TR>
+          <TD colSpan=2>
+            <TABLE class=SiteNavBar id=tblSiteToolbar cellSpacing=0 
+            cellPadding=0>
+              <TBODY>
+              <TR>
+                <TD noWrap><A href="http://www.codeproject.com/">Home</A></TD>
+                <TD>&nbsp; </TD>
+                <TD noWrap align=right>Current Site: </TD>
+                <TD class=SelCat noWrap><A 
+                  href="http://www.codeproject.com/">Main Site</A></TD>
+                <TD noWrap><A href="http://java.codeproject.com/">Java</A></TD>
+                <TD noWrap><A href="http://lamp.codeproject.com/">Linux Apache 
+                  MySQL PHP</A></TD>
+                <TD width="100%">&nbsp;</TD>
+                <TD id=ctl00_TopNavBar_RightMenus><!--380-->
+                  <DIV id=MenuPos 
+                  style="WIDTH: 305px; POSITION: relative; TOP: 1px; HEIGHT: 22px">
+                  <TABLE 
+                  style="BORDER-TOP-WIDTH: 0px; BORDER-LEFT-WIDTH: 0px; BORDER-BOTTOM-WIDTH: 0px; HEIGHT: 20px; BORDER-RIGHT-WIDTH: 0px" 
+                  cellSpacing=0 cellPadding=0 width=305>
+                    <TBODY>
+                    <TR vAlign=center>
+                      <TD 
+                      style="BORDER-TOP-WIDTH: 0px; BORDER-LEFT-WIDTH: 0px; BORDER-BOTTOM-WIDTH: 0px; BORDER-RIGHT-WIDTH: 0px" 
+                      noWrap><A 
+                        href="http://www.codeproject.com/info/FAQ.aspx">Help!</A></TD>
+                      <TD 
+                      style="BORDER-TOP-WIDTH: 0px; BORDER-LEFT-WIDTH: 0px; BORDER-BOTTOM-WIDTH: 0px; BORDER-RIGHT-WIDTH: 0px" 
+                      noWrap><A 
+                        href="http://www.codeproject.com/script/Articles/Latest.aspx">Articles</A></TD>
+                      <TD 
+                      style="BORDER-TOP-WIDTH: 0px; BORDER-LEFT-WIDTH: 0px; BORDER-BOTTOM-WIDTH: 0px; BORDER-RIGHT-WIDTH: 0px" 
+                      noWrap><A 
+                        href="http://www.codeproject.com/script/Forums/List.aspx">Message 
+                        Boards</A></TD>
+                      <TD 
+                      style="BORDER-TOP-WIDTH: 0px; BORDER-LEFT-WIDTH: 0px; BORDER-BOTTOM-WIDTH: 0px; BORDER-RIGHT-WIDTH: 0px" 
+                      noWrap><A 
+                        href="http://www.codeproject.com/Lounge.aspx">Lounge</A></TD></TR></TBODY></TABLE></DIV></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+  <TR>
+    <TD vAlign=top colSpan=2><A name=_top></A>
+      <TABLE class=ArticleHeader id=ctl00_ArticleTopHeader_HeaderTable 
+      cellSpacing=0 cellPadding=3 width="100%" border=0>
+        <TBODY>
+        <TR vAlign=top>
+          <TD class=SmallText><A id=ctl00_ArticleTopHeader_ChapterLink 
+            href="http://www.codeproject.com/script/Content/Chapter.aspx?chptId=4">Database</A> 
+            » <A id=ctl00_ArticleTopHeader_SectionLink 
+            href="http://www.codeproject.com/KB/database/">Database</A> » <A 
+            id=ctl00_ArticleTopHeader_SubsectionLink 
+            href="http://www.codeproject.com/KB/database/index.aspx?#Database - General">General</A> 
+            <SPAN class=ArticleIntermediate 
+            id=ctl00_ArticleTopHeader_SkillLevel>&nbsp;&nbsp;&nbsp; 
+            Intermediate</SPAN> <SPAN 
+            id=ctl00_ArticleTopHeader_LicenceTerms></SPAN><BR><BR>
+            <H1><SPAN class=ArticleTopTitle 
+            id=ctl00_ArticleTopHeader_ArticleTitle>Using Query Notifications in 
+            .NET 2.0 to handle ad-hoc data refreshes</SPAN></H1><B>By <A 
+            href="http://www.codeproject.com/script/Articles/MemberArticles.aspx?amid=1768231">rajiv404</A></B><BR><BR><SPAN 
+            class=ArticleTopDescr id=ctl00_ArticleTopHeader_ArticleDescr>Query 
+            Notification in SQL Server 2005 solves the problem of having to 
+            maintain a polling database to get the updated data. The new 
+            notification service of SQL Server 2005 can perform this amazing 
+            task of notifying a .NET code when any DML operations are performed 
+            to a specified table.</SPAN> </TD>
+          <TD class=SmallText style="WIDTH: 210px"><SPAN 
+            id=ctl00_ArticleTopHeader_ArticleAttributes>C#, SQL, Windows, .NET 
+            2.0, .NET, ADO.NET, SQL, VS, SQL 2005, VS2005, DBA, 
+            Dev</SPAN><BR><BR><SPAN style="PADDING-RIGHT: 2ex">Posted</SPAN>: 
+            <B>1 Feb 2006</B><BR><SPAN 
+            style="PADDING-RIGHT: 0.5ex">Updated</SPAN>: <B>1 Feb 2006</B> 
+            <BR><SPAN style="PADDING-RIGHT: 3.2ex">Views</SPAN>: 
+            <B>29,444</B><BR></TD></TR>
+        <TR>
+          <TD colSpan=2>
+            <TABLE width="100%">
+              <TBODY>
+              <TR>
+                <TD></TD>
+                <TD class=SmallText style="WHITE-SPACE: nowrap" 
+              align=right></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+  <TR vAlign=top>
+    <TD class=LHNavBar id=ctl00_LeftNavCell>
+      <DIV style="PADDING-TOP: 5px; TEXT-ALIGN: center"><IFRAME 
+      src="CodeProject Using Query Notifications in _NET 2_0 to handle ad-hoc data refreshes_ Free source code and programming help_files/ServeHTML.htm" 
+      frameBorder=0 width=150 scrolling=no height=80></IFRAME></DIV>
+      <DIV class=FeatureBlockHeader>Announcements</DIV>
+      <DIV class="FeatureBlockContent RHFeatureBar">
+      <DIV style="PADDING-TOP: 0px"><IMG 
+      style="FLOAT: left; MARGIN-LEFT: 8px; MARGIN-RIGHT: 9px" height=20 
+      alt=Comp 
+      src="CodeProject Using Query Notifications in _NET 2_0 to handle ad-hoc data refreshes_ Free source code and programming help_files/prize_winner.gif" 
+      width=10> <A href="http://www.codeproject.com/Feature/CodeGenComp/">Code 
+      Generation<BR>comp. $1,000 prize!</A></DIV>
+      <DIV style="MARGIN-TOP: 4px; MARGIN-BOTTOM: 3px"><IMG 
+      style="FLOAT: left; MARGIN-LEFT: 6px; MARGIN-RIGHT: 6px" height=16 
+      alt=Comp 
+      src="CodeProject Using Query Notifications in _NET 2_0 to handle ad-hoc data refreshes_ Free source code and programming help_files/coffee.gif" 
+      width=16> <A href="http://www.codeproject.com/Zones/IBM/">Win CodeProject 
+      Coffee!</A></DIV>
+      <DIV style="PADDING-TOP: 0px"><IMG 
+      style="FLOAT: left; MARGIN-LEFT: 8px; MARGIN-RIGHT: 9px" height=20 
+      alt=Comp 
+      src="CodeProject Using Query Notifications in _NET 2_0 to handle ad-hoc data refreshes_ Free source code and programming help_files/prize_winner.gif" 
+      width=10> <A id=ctl00_Announcements_CompLink 
+      href="http://www.codeproject.com/Feature/ArticleCompetition/">Monthly 
+      Competition</A><BR clear=all>
+      <DIV style="PADDING-BOTTOM: 5px; PADDING-TOP: 3px"><IMG 
+      style="PADDING-RIGHT: 10px; FLOAT: left; MARGIN-LEFT: 7px; MARGIN-RIGHT: 8px" 
+      height=16 alt=Staff 
+      src="CodeProject Using Query Notifications in _NET 2_0 to handle ad-hoc data refreshes_ Free source code and programming help_files/staff_sm.gif" 
+      width=12> <A href="http://www.codeproject.com/info/jobs/">We're 
+      Hiring</A></DIV></DIV></DIV>
+      <DIV class=MenuCat>Services</DIV>
+      <DIV class=MenuChapter><A 
+      href="http://www.codeproject.com/script/Jobs/List.aspx">Job 
+Board</A></DIV>
+      <DIV class=MenuChapter><A 
+      href="http://www.codeproject.com/Services/coffee.aspx">Code Project 
+      Coffee</A></DIV>
+      <DIV class=MenuChapter><A 
+      href="http://www.codeproject.com/Services/TradePub.aspx">Free 
+      Magazines</A></DIV><BR>
+      <DIV id=SectionMenu>
+      <DIV class=MenuCat>Chapters</DIV>
+      <DIV class=MenuChapter><A onclick="return ToggleMenu('Chapter1');" 
+      href="http://www.codeproject.com/script/Content/Chapter.aspx?chptId=1">Desktop 
+      Development</A></DIV>
+      <DIV class=MenuSectionBlock id=Chapter1 style="DISPLAY: none">
+      <DIV class=MI id=Section1><A 
+      href="http://www.codeproject.com/KB/buttons/">Button Controls</A></DIV>
+      <DIV class=MI id=Section15><A 
+      href="http://www.codeproject.com/KB/clipboard/">Clipboard</A></DIV>
+      <DIV class=MI id=Section2><A 
+      href="http://www.codeproject.com/KB/combobox/">Combo &amp; List 
+      Boxes</A></DIV>
+      <DIV class=MI id=Section67><A 
+      href="http://www.codeproject.com/KB/dialog/">Dialogs and Windows</A></DIV>
+      <DIV class=MI id=Section107><A 
+      href="http://www.codeproject.com/KB/gadgets/">Desktop Gadgets</A></DIV>
+      <DIV class=MI id=Section16><A 
+      href="http://www.codeproject.com/KB/docview/">Document / View</A></DIV>
+      <DIV class=MI id=Section4><A 
+      href="http://www.codeproject.com/KB/edit/">Edit Controls</A></DIV>
+      <DIV class=MI id=Section17><A 
+      href="http://www.codeproject.com/KB/files/">Files and Folders</A></DIV>
+      <DIV class=MI id=Section3><A 
+      href="http://www.codeproject.com/KB/grid/">Grid &amp; Data 
+      Controls</A></DIV>
+      <DIV class=MI id=Section5><A 
+      href="http://www.codeproject.com/KB/list/">List Controls</A></DIV>
+      <DIV class=MI id=Section6><A 
+      href="http://www.codeproject.com/KB/menus/">Menus</A></DIV>
+      <DIV class=MI id=Section14><A 
+      href="http://www.codeproject.com/KB/miscctrl/">Miscellaneous</A></DIV>
+      <DIV class=MI id=Section18><A 
+      href="http://www.codeproject.com/KB/printing/">Printing</A></DIV>
+      <DIV class=MI id=Section95><A 
+      href="http://www.codeproject.com/KB/progress/">Progress Controls</A></DIV>
+      <DIV class=MI id=Section11><A 
+      href="http://www.codeproject.com/KB/selection/">Selection 
+      Controls</A></DIV>
+      <DIV class=MI id=Section19><A 
+      href="http://www.codeproject.com/KB/shell/">Shell and IE 
+      programming</A></DIV>
+      <DIV class=MI id=Section68><A 
+      href="http://www.codeproject.com/KB/smart/">Smart Client</A></DIV>
+      <DIV class=MI id=Section8><A 
+      href="http://www.codeproject.com/KB/splitter/">Splitter Windows</A></DIV>
+      <DIV class=MI id=Section9><A 
+      href="http://www.codeproject.com/KB/static/">Static &amp; Panel 
+      Controls</A></DIV>
+      <DIV class=MI id=Section10><A 
+      href="http://www.codeproject.com/KB/statusbar/">Status Bar</A></DIV>
+      <DIV class=MI id=Section7><A 
+      href="http://www.codeproject.com/KB/tabs/">Tabs &amp; Property 
+      Pages</A></DIV>
+      <DIV class=MI id=Section12><A 
+      href="http://www.codeproject.com/KB/toolbars/">Toolbars &amp; Docking 
+      windows</A></DIV>
+      <DIV class=MI id=Section13><A 
+      href="http://www.codeproject.com/KB/tree/">Tree Controls</A></DIV></DIV>
+      <DIV class=MenuChapter><A onclick="return ToggleMenu('Chapter2');" 
+      href="http://www.codeproject.com/script/Content/Chapter.aspx?chptId=2">Web 
+      Development</A></DIV>
+      <DIV class=MenuSectionBlock id=Chapter2 style="DISPLAY: none">
+      <DIV class=MI id=Section70><A 
+      href="http://www.codeproject.com/KB/ajax/">Ajax and Atlas</A></DIV>
+      <DIV class=MI id=Section27><A 
+      href="http://www.codeproject.com/KB/applications/">Applications &amp; 
+      Tools</A></DIV>
+      <DIV class=MI id=Section85><A 
+      href="http://www.codeproject.com/KB/asp/">ASP</A></DIV>
+      <DIV class=MI id=Section89><A 
+      href="http://www.codeproject.com/KB/aspnet/">ASP.NET</A></DIV>
+      <DIV class=MI id=Section28><A 
+      href="http://www.codeproject.com/KB/webforms/">ASP.NET Controls</A></DIV>
+      <DIV class=MI id=Section38><A 
+      href="http://www.codeproject.com/KB/ATL-Server/">ATL Server</A></DIV>
+      <DIV class=MI id=Section29><A 
+      href="http://www.codeproject.com/KB/web-cache/">Caching</A></DIV>
+      <DIV class=MI id=Section91><A 
+      href="http://www.codeproject.com/KB/web-image/">Charts, Graphs and 
+      Images</A></DIV>
+      <DIV class=MI id=Section25><A 
+      href="http://www.codeproject.com/KB/scripting/">Client side 
+      scripting</A></DIV>
+      <DIV class=MI id=Section30><A 
+      href="http://www.codeproject.com/KB/custom-controls/">Custom 
+      Controls</A></DIV>
+      <DIV class=MI id=Section23><A 
+      href="http://www.codeproject.com/KB/HTML/">HTML / CSS</A></DIV>
+      <DIV class=MI id=Section22><A 
+      href="http://www.codeproject.com/KB/IP/">Internet / Network</A></DIV>
+      <DIV class=MI id=Section24><A 
+      href="http://www.codeproject.com/KB/ISAPI/">ISAPI</A></DIV>
+      <DIV class=MI id=Section33><A 
+      href="http://www.codeproject.com/KB/server-management/">Site &amp; Server 
+      Management</A></DIV>
+      <DIV class=MI id=Section34><A 
+      href="http://www.codeproject.com/KB/session/">Session State</A></DIV>
+      <DIV class=MI id=Section113><A 
+      href="http://www.codeproject.com/KB/silverlight/">Silverlight</A></DIV>
+      <DIV class=MI id=Section36><A 
+      href="http://www.codeproject.com/KB/trace/">Trace and Logs</A></DIV>
+      <DIV class=MI id=Section31><A 
+      href="http://www.codeproject.com/KB/user-controls/">User 
+Controls</A></DIV>
+      <DIV class=MI id=Section37><A 
+      href="http://www.codeproject.com/KB/validation/">Validation</A></DIV>
+      <DIV class=MI id=Section35><A 
+      href="http://www.codeproject.com/KB/viewstate/">View State</A></DIV>
+      <DIV class=MI id=Section26><A 
+      href="http://www.codeproject.com/KB/WAP/">WAP / WML</A></DIV>
+      <DIV class=MI id=Section32><A 
+      href="http://www.codeproject.com/KB/web-security/">Web Security</A></DIV>
+      <DIV class=MI id=Section20><A 
+      href="http://www.codeproject.com/KB/webservices/">Web 
+      Services</A></DIV></DIV>
+      <DIV class=MenuChapter><A onclick="return ToggleMenu('Chapter9');" 
+      href="http://www.codeproject.com/script/Content/Chapter.aspx?chptId=9">Enterprise 
+      Systems</A></DIV>
+      <DIV class=MenuSectionBlock id=Chapter9 style="DISPLAY: none">
+      <DIV class=MI id=Section98><A 
+      href="http://www.codeproject.com/KB/MCMS/">Content Management 
+      Server</A></DIV>
+      <DIV class=MI id=Section99><A 
+      href="http://www.codeproject.com/KB/biztalk/">Microsoft BizTalk 
+      Server</A></DIV>
+      <DIV class=MI id=Section102><A 
+      href="http://www.codeproject.com/KB/exchange/">Microsoft 
+Exchange</A></DIV>
+      <DIV class=MI id=Section90><A 
+      href="http://www.codeproject.com/KB/office/">Office Development</A></DIV>
+      <DIV class=MI id=Section101><A 
+      href="http://www.codeproject.com/KB/sharepoint/">SharePoint 
+      Server</A></DIV></DIV>
+      <DIV class=MenuChapter><A onclick="return ToggleMenu('Chapter3');" 
+      href="http://www.codeproject.com/script/Content/Chapter.aspx?chptId=3">Multimedia</A></DIV>
+      <DIV class=MenuSectionBlock id=Chapter3 style="DISPLAY: none">
+      <DIV class=MI id=Section42><A 
+      href="http://www.codeproject.com/KB/audio-video/">Audio and 
+Video</A></DIV>
+      <DIV class=MI id=Section44><A 
+      href="http://www.codeproject.com/KB/directx/">DirectX</A></DIV>
+      <DIV class=MI id=Section46><A 
+      href="http://www.codeproject.com/KB/GDI/">GDI</A></DIV>
+      <DIV class=MI id=Section47><A 
+      href="http://www.codeproject.com/KB/GDI-plus/">GDI+</A></DIV>
+      <DIV class=MI id=Section43><A 
+      href="http://www.codeproject.com/KB/graphics/">General Graphics</A></DIV>
+      <DIV class=MI id=Section45><A 
+      href="http://www.codeproject.com/KB/openGL/">OpenGL</A></DIV></DIV>
+      <DIV class=MenuChapter><A onclick="return ToggleMenu('Chapter4');" 
+      href="http://www.codeproject.com/script/Content/Chapter.aspx?chptId=4">Database</A></DIV>
+      <DIV class=MenuSectionBlock id=Chapter4>
+      <DIV class=MIS id=Section66><A 
+      href="http://www.codeproject.com/KB/database/">Database</A></DIV>
+      <DIV class=MI id=Section100><A 
+      href="http://www.codeproject.com/KB/reporting-services/">SQL Reporting 
+      Services</A></DIV></DIV>
+      <DIV class=MenuChapter><A onclick="return ToggleMenu('Chapter8');" 
+      href="http://www.codeproject.com/script/Content/Chapter.aspx?chptId=8">Platforms, 
+      Frameworks &amp; Libraries</A></DIV>
+      <DIV class=MenuSectionBlock id=Chapter8 style="DISPLAY: none">
+      <DIV class=MI id=Section83><A 
+      href="http://www.codeproject.com/KB/atl/">ATL</A></DIV>
+      <DIV class=MI id=Section117><A 
+      href="http://www.codeproject.com/KB/MFC/">MFC</A></DIV>
+      <DIV class=MI id=Section88><A 
+      href="http://www.codeproject.com/KB/stl/">STL</A></DIV>
+      <DIV class=MI id=Section84><A 
+      href="http://www.codeproject.com/KB/wtl/">WTL</A></DIV>
+      <DIV class=MI id=Section49><A 
+      href="http://www.codeproject.com/KB/COM/">COM / COM+</A></DIV>
+      <DIV class=MI id=Section76><A 
+      href="http://www.codeproject.com/KB/dotnet/">.NET Framework</A></DIV>
+      <DIV class=MI id=Section92><A 
+      href="http://www.codeproject.com/KB/winsdk/">Win32/64 SDK &amp; 
+      OS</A></DIV>
+      <DIV class=MI id=Section108><A 
+      href="http://www.codeproject.com/KB/vista/">Vista API</A></DIV>
+      <DIV class=MI id=Section110><A 
+      href="http://www.codeproject.com/KB/vista-security/">Vista 
+      Security</A></DIV>
+      <DIV class=MI id=Section82><A 
+      href="http://www.codeproject.com/KB/cross-platform/">Cross 
+      Platform</A></DIV>
+      <DIV class=MI id=Section69><A 
+      href="http://www.codeproject.com/KB/game/">Game Development</A></DIV>
+      <DIV class=MI id=Section73><A 
+      href="http://www.codeproject.com/KB/mobile/">Mobile Development</A></DIV>
+      <DIV class=MI id=Section106><A 
+      href="http://www.codeproject.com/KB/WC/">Windows CardSpace</A></DIV>
+      <DIV class=MI id=Section103><A 
+      href="http://www.codeproject.com/KB/WCF/">Windows Communication 
+      Foundation</A></DIV>
+      <DIV class=MI id=Section104><A 
+      href="http://www.codeproject.com/KB/WPF/">Windows Presentation 
+      Foundation</A></DIV>
+      <DIV class=MI id=Section105><A 
+      href="http://www.codeproject.com/KB/WF/">Windows Workflow 
+      Foundation</A></DIV>
+      <DIV class=MI id=Section119><A 
+      href="http://www.codeproject.com/KB/library/">Libraries</A></DIV>
+      <DIV class=MI id=Section122><A 
+      href="http://www.codeproject.com/KB/powershell/">Windows 
+      Powershell</A></DIV>
+      <DIV class=MI id=Section123><A 
+      href="http://www.codeproject.com/KB/linq/">LINQ</A></DIV></DIV>
+      <DIV class=MenuChapter><A onclick="return ToggleMenu('Chapter5');" 
+      href="http://www.codeproject.com/script/Content/Chapter.aspx?chptId=5">Languages</A></DIV>
+      <DIV class=MenuSectionBlock id=Chapter5 style="DISPLAY: none">
+      <DIV class=MI id=Section71><A href="http://www.codeproject.com/KB/cpp/">C 
+      / C++ Language</A></DIV>
+      <DIV class=MI id=Section72><A 
+      href="http://www.codeproject.com/KB/mcpp/">C++ / CLI</A></DIV>
+      <DIV class=MI id=Section93><A 
+      href="http://www.codeproject.com/KB/cs/">C#</A></DIV>
+      <DIV class=MI id=Section78><A 
+      href="http://www.codeproject.com/KB/msil/">MSIL</A></DIV>
+      <DIV class=MI id=Section86><A 
+      href="http://www.codeproject.com/KB/vbscript/">VBScript</A></DIV>
+      <DIV class=MI id=Section87><A 
+      href="http://www.codeproject.com/KB/vb/">VB.NET</A></DIV>
+      <DIV class=MI id=Section115><A 
+      href="http://www.codeproject.com/KB/vb-interop/">VB6 Interop</A></DIV>
+      <DIV class=MI id=Section77><A 
+      href="http://www.codeproject.com/KB/net-languages/">Other .NET 
+      Languages</A></DIV>
+      <DIV class=MI id=Section21><A 
+      href="http://www.codeproject.com/KB/XML/">XML</A></DIV>
+      <DIV class=MI id=Section96><A 
+      href="http://www.codeproject.com/KB/java/">Java</A></DIV></DIV>
+      <DIV class=MenuChapter><A onclick="return ToggleMenu('Chapter6');" 
+      href="http://www.codeproject.com/script/Content/Chapter.aspx?chptId=6">General 
+      Programming</A></DIV>
+      <DIV class=MenuSectionBlock id=Chapter6 style="DISPLAY: none">
+      <DIV class=MI id=Section57><A 
+      href="http://www.codeproject.com/KB/recipes/">Algorithms &amp; 
+      Recipes</A></DIV>
+      <DIV class=MI id=Section64><A 
+      href="http://www.codeproject.com/KB/bugs/">Bugs &amp; 
+Workarounds</A></DIV>
+      <DIV class=MI id=Section79><A 
+      href="http://www.codeproject.com/KB/collections/">Collections</A></DIV>
+      <DIV class=MI id=Section56><A 
+      href="http://www.codeproject.com/KB/security/">Cryptography &amp; 
+      Security</A></DIV>
+      <DIV class=MI id=Section50><A 
+      href="http://www.codeproject.com/KB/datetime/">Date and Time</A></DIV>
+      <DIV class=MI id=Section52><A 
+      href="http://www.codeproject.com/KB/DLL/">DLLs &amp; Assemblies</A></DIV>
+      <DIV class=MI id=Section80><A 
+      href="http://www.codeproject.com/KB/exception/">Exception 
+      Handling</A></DIV>
+      <DIV class=MI id=Section81><A 
+      href="http://www.codeproject.com/KB/locale/">Localisation</A></DIV>
+      <DIV class=MI id=Section53><A 
+      href="http://www.codeproject.com/KB/macros/">Macros and Add-ins</A></DIV>
+      <DIV class=MI id=Section54><A 
+      href="http://www.codeproject.com/KB/tips/">Programming Tips</A></DIV>
+      <DIV class=MI id=Section55><A 
+      href="http://www.codeproject.com/KB/string/">String handling</A></DIV>
+      <DIV class=MI id=Section58><A 
+      href="http://www.codeproject.com/KB/threads/">Threads, Processes &amp; 
+      IPC</A></DIV>
+      <DIV class=MI id=Section59><A 
+      href="http://www.codeproject.com/KB/winhelp/">WinHelp / 
+      HTMLHelp</A></DIV></DIV>
+      <DIV class=MenuChapter><A onclick="return ToggleMenu('Chapter10');" 
+      href="http://www.codeproject.com/script/Content/Chapter.aspx?chptId=10">Graphics 
+      / Design</A></DIV>
+      <DIV class=MenuSectionBlock id=Chapter10 style="DISPLAY: none">
+      <DIV class=MI id=Section40><A 
+      href="http://www.codeproject.com/KB/expression/">Expression</A></DIV>
+      <DIV class=MI id=Section114><A 
+      href="http://www.codeproject.com/KB/usability/">Usability</A></DIV></DIV>
+      <DIV class=MenuChapter><A onclick="return ToggleMenu('Chapter11');" 
+      href="http://www.codeproject.com/script/Content/Chapter.aspx?chptId=11">Development 
+      Lifecycle</A></DIV>
+      <DIV class=MenuSectionBlock id=Chapter11 style="DISPLAY: none">
+      <DIV class=MI id=Section51><A 
+      href="http://www.codeproject.com/KB/debug/">Debug Tips</A></DIV>
+      <DIV class=MI id=Section39><A 
+      href="http://www.codeproject.com/KB/architecture/">Design and 
+      Architecture</A></DIV>
+      <DIV class=MI id=Section112><A 
+      href="http://www.codeproject.com/KB/install/">Installation</A></DIV>
+      <DIV class=MI id=Section41><A 
+      href="http://www.codeproject.com/KB/work/">Work Issues</A></DIV>
+      <DIV class=MI id=Section126><A 
+      href="http://www.codeproject.com/KB/codegen/">Code 
+      Generation</A></DIV></DIV>
+      <DIV class=MenuChapter><A onclick="return ToggleMenu('Chapter7');" 
+      href="http://www.codeproject.com/script/Content/Chapter.aspx?chptId=7">General 
+      Reading</A></DIV>
+      <DIV class=MenuSectionBlock id=Chapter7 style="DISPLAY: none">
+      <DIV class=MI id=Section60><A 
+      href="http://www.codeproject.com/KB/books/">Book Chapters</A></DIV>
+      <DIV class=MI id=Section61><A 
+      href="http://www.codeproject.com/KB/book-reviews/">Book Reviews</A></DIV>
+      <DIV class=MI id=Section109><A 
+      href="http://www.codeproject.com/KB/hardware-review/">Hardware 
+      Reviews</A></DIV>
+      <DIV class=MI id=Section63><A 
+      href="http://www.codeproject.com/KB/interviews/">Interviews</A></DIV>
+      <DIV class=MI id=Section62><A 
+      href="http://www.codeproject.com/KB/scrapbook/">Scrapbook</A></DIV>
+      <DIV class=MI id=Section48><A 
+      href="http://www.codeproject.com/KB/system/">Hardware &amp; 
+      System</A></DIV></DIV>
+      <DIV class=MenuChapter><A onclick="return ToggleMenu('Chapter12');" 
+      href="http://www.codeproject.com/script/Content/Chapter.aspx?chptId=12">Third 
+      Party Products</A></DIV>
+      <DIV class=MenuSectionBlock id=Chapter12 style="DISPLAY: none">
+      <DIV class=MI id=Section65><A 
+      href="http://www.codeproject.com/KB/showcase/">Product Showcase</A></DIV>
+      <DIV class=MI id=Section124><A 
+      href="http://www.codeproject.com/KB/solution-center/">Solution 
+      Center</A></DIV></DIV></DIV><BR>
+      <DIV class=MenuCat>Feature Zones</DIV>
+      <DIV class=MenuChapter><A href="http://www.codeproject.com/Zones/IBM">IBM 
+      DeveloperWorks</A></DIV>
+      <DIV class=MenuChapter><A 
+      href="http://www.codeproject.com/Zones/WhitePapers">WhitePapers</A></DIV>
+      <DIV class=MenuChapter><A 
+      href="http://www.codeproject.com/Zones/CodeGeneration">Code 
+      Generation</A></DIV>
+      <DIV class=MenuChapter><A 
+      href="http://www.codeproject.com/Zones/QuestSQL">Quest SQL 
+      Zone</A></DIV><BR>
+      <SCRIPT type=text/javascript>document.write(unescape("%3ca%20href%3d%22http%3a%2f%2fwww.codeproject.com%2fRedir.aspx%3fadid%3d6484%26way%3dban%22%20target%3d%22_blank%22%20rel%3d%22nofollow%22%3e%3cimg%20src%3d%22http%3a%2f%2fwww.codeproject.com%2fscript%2fAnn%2fServeImg.aspx%3fFile%3d%252fscript%252fadmentor%252fimages%252fDPB%2b160x600.jpg%26C%3dFalse%26id%3d6484%22%20alt%3d%22%22%20border%3d%220%22%20width%3d%22160%22%20height%3d%22600%22%3e%3c%2fa%3e"));</SCRIPT>
+      <IMG height=1 alt="" 
+      src="CodeProject Using Query Notifications in _NET 2_0 to handle ad-hoc data refreshes_ Free source code and programming help_files/t.gif" 
+      width=160> </TD>
+    <TD class=ArticlePane vAlign=top>
+      <TABLE class=SearchHeaderBar cellSpacing=0 width="100%">
+        <TBODY>
+        <TR>
+          <TD style="WIDTH: 60%; WHITE-SPACE: nowrap" vAlign=center 
+            align=right><FORM style="MARGIN: 0px" name=Search 
+            action=/info/search.aspx method=get><B>Search &nbsp;</B> <INPUT 
+            class=SmallText style="WIDTH: 200px" name=artkw> <SELECT 
+            class=SmallText style="FONT-WEIGHT: bold" name=sbo> <OPTION 
+              value=kw selected>Articles</OPTION> <OPTION 
+              value=fm>Messages</OPTION></SELECT> <INPUT class=SmallText style="FONT-WEIGHT: bold" type=submit value=" Go! "> 
+            &nbsp; </FORM></TD>
+          <TD class=TinyText style="WHITE-SPACE: nowrap"><A 
+            href="http://www.codeproject.com/info/search.aspx">Advanced 
+            Search</A><BR><A 
+            href="http://www.codeproject.com/script/Content/SiteMap.aspx">Sitemap</A> 
+            | <A id=ctl00_SearchBarCtrl_AddToIESearchLnk 
+            title="Add The Code Project to your IE search Providers" 
+            onclick="window.external.AddSearchProvider('http://www.codeproject.com/info/OpenSearch.xml');return false;" 
+            href="http://www.codeproject.com/">Add to IE Search</A> 
+        </TD></TR></TBODY></TABLE><SPAN id=ctl00_ResultMessage></SPAN>
+      <DIV id=ctl00_ArtDiv>
+      <TABLE cellSpacing=0 cellPadding=0 width="100%" border=0>
+        <TBODY>
+        <TR vAlign=top>
+          <TD vAlign=top>
+            <TABLE>
+              <TBODY></TBODY></TABLE>
+            <DIV class=SmallText><IMG style="VERTICAL-ALIGN: middle" height=16 
+            alt=print 
+            src="CodeProject Using Query Notifications in _NET 2_0 to handle ad-hoc data refreshes_ Free source code and programming help_files/print.gif" 
+            width=16> <A id=ctl00_ArticleHeaderLinks_PrintLnk 
+            href="http://www.codeproject.com/KB/database/QueryNotifications.aspx?display=Print">Print</A> 
+            &nbsp; <IMG style="VERTICAL-ALIGN: middle" height=16 
+            alt="Broken Article?" 
+            src="CodeProject Using Query Notifications in _NET 2_0 to handle ad-hoc data refreshes_ Free source code and programming help_files/report.gif" 
+            width=16> <A id=ctl00_ArticleHeaderLinks_BrokenLnk 
+            href="http://www.codeproject.com/script/Articles/Report.aspx?aid=12918">Report 
+            Article</A> &nbsp; <IMG style="VERTICAL-ALIGN: middle" alt=Watch 
+            src="CodeProject Using Query Notifications in _NET 2_0 to handle ad-hoc data refreshes_ Free source code and programming help_files/watchon.png"> 
+            <A class="" id=bmw_12918,2 onclick="return watchMe(12918, 2);" 
+            href="http://www.codeproject.com/script/Bookmarks/Add.aspx?&amp;obid=12918&amp;obtid=2&amp;bma=AddWatch" 
+            name=ajaxBookmarkWatchLink>Watch</A> <SPAN class=TinyText 
+            style="VISIBILITY: hidden"></SPAN><SPAN 
+            id=ctl00_ArticleHeaderLinks_ArticleBmkWatch_Message></SPAN>&nbsp; 
+            <IMG style="VERTICAL-ALIGN: middle" height=16 alt=Bookmark 
+            src="CodeProject Using Query Notifications in _NET 2_0 to handle ad-hoc data refreshes_ Free source code and programming help_files/link.png" 
+            width=16> <A class="" id=bm_12918,2 
+            onclick="return bookmarkMe(12918, 2);" 
+            href="http://www.codeproject.com/script/Bookmarks/Add.aspx?&amp;obid=12918&amp;obtid=2&amp;bma=AddBookmark" 
+            name=ajaxBookmarkLink>Bookmark</A> <SPAN class=TinyText 
+            style="VISIBILITY: hidden"></SPAN><SPAN 
+            id=ctl00_ArticleHeaderLinks_ArticleBmk_Message></SPAN>&nbsp; <IMG 
+            style="VERTICAL-ALIGN: middle" height=16 alt=Discuss 
+            src="CodeProject Using Query Notifications in _NET 2_0 to handle ad-hoc data refreshes_ Free source code and programming help_files/discuss.gif" 
+            width=15> <A 
+            href="http://www.codeproject.com/KB/database/QueryNotifications.aspx#_comments">Discuss</A> 
+            &nbsp; <IMG style="VERTICAL-ALIGN: middle" height=16 
+            alt="Recommend Article" 
+            src="CodeProject Using Query Notifications in _NET 2_0 to handle ad-hoc data refreshes_ Free source code and programming help_files/mail.gif" 
+            width=16>&nbsp;<A id=ctl00_ArticleHeaderLinks_Recommend 
+            href="http://www.codeproject.com/script/common/TellFriend.aspx?obtid=2&amp;obid=12918">Send&nbsp;to&nbsp;a&nbsp;friend</A> 
+            </DIV></TD>
+          <TD style="WIDTH: 100px; WHITE-SPACE: nowrap; TEXT-ALIGN: right">
+            <TABLE id=CurRat>
+              <TBODY>
+              <TR>
+                <TD>
+                  <TABLE>
+                    <TBODY>
+                    <TR>
+                      <TD class=SmallText style="WHITE-SPACE: nowrap" 
+                      align=right><SPAN id=ctl00_ArticleRating_VoteLabel>19 
+                        votes for this Article.</SPAN></TD>
+                      <TD>
+                        <TABLE cellSpacing=0 cellPadding=0 border=1>
+                          <TBODY>
+                          <TR>
+                            <TD width=20 bgColor=white height=7><IMG height=7 
+                              src="CodeProject Using Query Notifications in _NET 2_0 to handle ad-hoc data refreshes_ Free source code and programming help_files/red.gif" 
+                              width=20 align=center border=0></TD>
+                            <TD width=20 bgColor=white height=7><IMG height=7 
+                              src="CodeProject Using Query Notifications in _NET 2_0 to handle ad-hoc data refreshes_ Free source code and programming help_files/red.gif" 
+                              width=20 align=center border=0></TD>
+                            <TD width=20 bgColor=white height=7><IMG height=7 
+                              src="CodeProject Using Query Notifications in _NET 2_0 to handle ad-hoc data refreshes_ Free source code and programming help_files/red.gif" 
+                              width=20 align=center border=0></TD>
+                            <TD noWrap width=20 bgColor=white height=7><IMG 
+                              height=7 
+                              src="CodeProject Using Query Notifications in _NET 2_0 to handle ad-hoc data refreshes_ Free source code and programming help_files/red.gif" 
+                              width=17 align=center border=0></TD>
+                            <TD width=20 bgColor=white height=7><IMG height=7 
+                              src="CodeProject Using Query Notifications in _NET 2_0 to handle ad-hoc data refreshes_ Free source code and programming help_files/white.gif" 
+                              width=20 align=center 
+                      border=0></TD></TR></TBODY></TABLE></TD></TR>
+                    <TR id=ctl00_ArticleRating_PopularityRow>
+                      <TD class=SmallText align=right colSpan=2><A 
+                        id=ctl00_ArticleRating_PopularityLnk 
+                        title="Calculated as rating x Log10(# votes)" 
+                        href="http://www.codeproject.com/script/Articles/TopArticles.aspx?ta_so=1">Popularity: 
+                        4.90</A> <SPAN 
+                        id=ctl00_ArticleRating_PopularityLbl></SPAN><SPAN 
+                        id=ratingVal>Rating: <B>3.83</B> out of 
+                    5</SPAN></TD></TR></TBODY></TABLE></TD>
+                <TD>
+                  <DIV>
+                  <TABLE class=HistTable 
+                  title="Voting Distribution. Recent data only">
+                    <TBODY>
+                    <TR>
+                      <TD><IMG title="3 votes, 15.8%" height=5 
+                        alt="3 votes, 15.8%" 
+                        src="CodeProject Using Query Notifications in _NET 2_0 to handle ad-hoc data refreshes_ Free source code and programming help_files/pollcol.gif" 
+                        width=10 border=0><BR>1</TD>
+                      <TD><IMG title="0 votes, 0.0%" height=1 
+                        alt="0 votes, 0.0%" src="" width=10 border=0><BR>2</TD>
+                      <TD><IMG title="0 votes, 0.0%" height=1 
+                        alt="0 votes, 0.0%" src="" width=10 border=0><BR>3</TD>
+                      <TD><IMG title="4 votes, 21.1%" height=6 
+                        alt="4 votes, 21.1%" 
+                        src="CodeProject Using Query Notifications in _NET 2_0 to handle ad-hoc data refreshes_ Free source code and programming help_files/pollcol.gif" 
+                        width=10 border=0><BR>4</TD>
+                      <TD><IMG title="12 votes, 63.2%" height=20 
+                        alt="12 votes, 63.2%" 
+                        src="CodeProject Using Query Notifications in _NET 2_0 to handle ad-hoc data refreshes_ Free source code and programming help_files/pollcol.gif" 
+                        width=10 
+              border=0><BR>5</TD></TD></TR></TBODY></TABLE></DIV></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE>
+      <UL class=Callout id=ctl00_confirmError style="MARGIN-RIGHT: 20px">
+        <LI class=SmallText 
+        style="LIST-STYLE-IMAGE: url(/images/warning.gif)">You are signed up for 
+        one or more <A id=ctl00_SubscribeLink2 
+        href="http://www.codeproject.com/script/Membership/Subscribe.aspx?rp=%2fKB%2fdatabase%2fQueryNotifications.aspx">newsletters</A> 
+        but your email address is either unconfirmed, or has not been 
+        reconfirmed in a long time. Please click <A id=ctl00_RequestConfirmLink2 
+        href="http://www.codeproject.com/script/Membership/SendConfirmRequest.aspx?rp=%2fKB%2fdatabase%2fQueryNotifications.aspx">here</A> 
+        to have an email sent that will allow us to confirm your email address 
+        and start sending you newsletters again.</LI></UL><SPAN id=intelliTXT>
+      <DIV id=contentdiv><!-- Main Page Contents Start --><!-- Article Starts -->
+      <H2>Introduction</H2>
+      <P>Query Notification in SQL Server 2005 solves the problem of having to 
+      maintain a polling database to get the updated data. The new notification 
+      service of SQL Server 2005 can perform this amazing task of notifying a 
+      .NET code when any DML operations are performed to a specified table. The 
+      notification cycle starts from the .NET 2.0 application through the object 
+      named <CODE>SqlDependency</CODE> in the <CODE>System.Data.SqlClient</CODE> 
+      namespace, the object just takes the <CODE>SQLCommand</CODE> object which 
+      has the query.</P><PRE lang=cs>SqlCommand cmd = <SPAN class=code-keyword>new</SPAN> SqlCommand(<SPAN class=code-string>"</SPAN><SPAN class=code-string>SELECT ID, Name, "</SPAN> + 
+   <SPAN class=code-string>"</SPAN><SPAN class=code-string>Address FROM dbo.employee"</SPAN>, SQLConnectionObject));
+SqlDependency depend = <SPAN class=code-keyword>new</SPAN> SqlDependency(cmd);</PRE>
+      <P>The dependency has to be started using:</P><PRE lang=cs>SqlDependency.Start(connstring);
+<SPAN class=code-comment>//</SPAN><SPAN class=code-comment>It takes the connection string as a parameter.</SPAN></PRE>
+      <P>Now, the question is how and who would get notified?</P>
+      <P>The answers lies in the <CODE>SQLDependency</CODE> instance you make. 
+      You can delegate an event handler on the <CODE>OnChange</CODE> event of 
+      the <CODE>SqlDependency</CODE> object.</P><PRE lang=cs>SqlDependency depend = <SPAN class=code-keyword>new</SPAN> SqlDependency(cmd);
+SqlDependency.Start(connstring);
+depend.OnChange += <SPAN class=code-keyword>new</SPAN> OnChangeEventHandler(MyOnChanged);</PRE>
+      <P>So when the notification arrives, it goes to the specified handler.</P>
+      <H2>Preparing SQL Server 2005 for Notifications</H2>
+      <OL type=1>
+        <LI>Install the Notification Service 
+        <P>You will have to install the SQL Server Notification Service from the 
+        SQL Server 2005 installation package. If it is already installed, you 
+        will surely see a ‘Notification Services’ folder in the SQL Server 
+        Management Studio.</P>
+        <LI>Enable the .NET CLR 
+        <P>You will have to enable the .NET CLR for SQL Server 2005, because the 
+        service broker uses it.</P>
+        <P>To enable .NET CLR, execute this command:</P><PRE lang=sql><SPAN class=code-keyword>EXEC</SPAN> sp_configure <SPAN class=code-string>'</SPAN><SPAN class=code-string>show advanced options'</SPAN> , <SPAN class=code-string>'</SPAN><SPAN class=code-string>1'</SPAN>;
+<SPAN class=code-keyword>go</SPAN>
+reconfigure;
+<SPAN class=code-keyword>go</SPAN>
+<SPAN class=code-keyword>EXEC</SPAN> sp_configure <SPAN class=code-string>'</SPAN><SPAN class=code-string>clr enabled'</SPAN> , <SPAN class=code-string>'</SPAN><SPAN class=code-string>1'</SPAN>
+<SPAN class=code-keyword>go</SPAN>
+reconfigure;
+<SPAN class=code-keyword>go</SPAN></PRE>
+        <LI>Enable Broker 
+        <P>Query Notifications use the Service Broker SERVICEs. A SERVICE in 
+        this case is a destination for asynchronous messages; the messages can 
+        be required to follow a specific set of rules known as a CONTRACT. A 
+        Service Broker SERVICE is always associated with a QUEUE that is the 
+        physical message destination.</P>
+        <P>The broker has to be enabled for each database using the following 
+        statement:</P><PRE lang=sql><SPAN class=code-keyword>ALTER</SPAN> <SPAN class=code-keyword>DATABASE</SPAN> databasename <SPAN class=code-keyword>SET</SPAN> ENABLE_BROKER</PRE>
+        <LI>Grant Permissions 
+        <P>Grant permission to the user using the following statement:</P><PRE lang=sql><SPAN class=code-keyword>GRANT</SPAN> SUBSCRIBE QUERY NOTIFICATIONS <SPAN class=code-keyword>TO</SPAN> username</PRE></LI></OL>
+      <H2>About Notifications</H2>
+      <P>The created notification is always executed once. So when a 
+      notification arrives, its job is done, and to continue receiving 
+      notification, you will have to recreate the <CODE>SqlDependency</CODE> on 
+      the handler.</P>
+      <P>The best usage of the query notification is in the case of caching. You 
+      don’t have to poll the database from time to time to find out any data 
+      changes. You can invalidate the cache in the handler and get the data 
+      table again, and along with that re-create the <CODE>SqlDependency</CODE> 
+      with a fresh notification.</P>
+      <P>Please note, since the SQL Server 2005 Express does not support the 
+      notification service, you will not be able to perform Query Notification 
+      in SQL Server 2005 Express.</P>
+      <H2>Links</H2>
+      <P>For more information, you can go through this article:</P>
+      <UL>
+        <LI><A 
+        href="http://msdn.microsoft.com/library/default.asp?url=/library/en-us/dnvs05/html/querynotification.asp" 
+        target=_blank>Query Notifications in ADO.NET 2.0</A></LI></UL>
+      <P>This article covers a custom notification query using 
+      SqlNotificationRequest, Service Broker, and Queues.</P>
+      <H2>Sample</H2>
+      <P>The following sample code snippet uses the SQL Server notification 
+      feature:</P><PRE lang=cs><SPAN class=code-keyword>using</SPAN> System.Data.SqlClient;
+<SPAN class=code-keyword>public</SPAN> <SPAN class=code-keyword>void</SPAN> button1_Click(<SPAN class=code-keyword>object</SPAN> sender, EventArgs e)
+{
+    <SPAN class=code-keyword>string</SPAN> connstring = <SPAN class=code-string>@"</SPAN><SPAN class=code-string>Data Source=SQLServer2005;"</SPAN> + 
+       <SPAN class=code-string>@"</SPAN><SPAN class=code-string>Initial Catalog=TestDB;Persist Security Info"</SPAN> + 
+       <SPAN class=code-string>@"</SPAN><SPAN class=code-string>=True;User ID=username;Password=password;"</SPAN> + 
+       <SPAN class=code-string>@"</SPAN><SPAN class=code-string>Pooling=True;Min Pool Size=5;Max Pool Size=100;"</SPAN> + 
+       <SPAN class=code-string>@"</SPAN><SPAN class=code-string>Asynchronous Processing=True;"</SPAN> + 
+       <SPAN class=code-string>@"</SPAN><SPAN class=code-string>MultipleActiveResultSets=True;Connect Timeout=15"</SPAN>;
+    List&lt;string&gt; list = <SPAN class=code-keyword>new</SPAN> List&lt;string&gt;();
+    <SPAN class=code-keyword>using</SPAN> (SqlConnection conn = <SPAN class=code-keyword>new</SPAN> SqlConnection(connstring))
+        <SPAN class=code-keyword>using</SPAN> (SqlCommand cmd = <SPAN class=code-keyword>new</SPAN> SqlCommand(<SPAN class=code-string>"</SPAN><SPAN class=code-string>SELECT"</SPAN> + 
+               <SPAN class=code-string>"</SPAN><SPAN class=code-string> SELECT ID, Name, Address"</SPAN> + 
+               <SPAN class=code-string>"</SPAN><SPAN class=code-string> FROM dbo.employee"</SPAN>, conn))
+        {
+            <SPAN class=code-keyword>try</SPAN>
+            {
+                SqlDependency depend = <SPAN class=code-keyword>new</SPAN> SqlDependency(cmd);
+                SqlDependency.Start(connstring);
+                depend.OnChange += <SPAN class=code-keyword>new</SPAN> 
+                  OnChangeEventHandler(MyOnChanged);
+                conn.Open();
+                SqlDataReader rdr = cmd.ExecuteReader();
+                <SPAN class=code-comment>//</SPAN><SPAN class=code-comment>perform any operation here
+</SPAN>                <SPAN class=code-keyword>while</SPAN> (rdr.Read())
+                    list.Add(rdr[<SPAN class=code-digit>0</SPAN>].ToString());
+                rdr.Close();
+            }
+            <SPAN class=code-keyword>catch</SPAN> (Exception ee)
+            {
+                    <SPAN class=code-keyword>string</SPAN> msg = ee.Message;
+            }
+        }
+}
+
+<SPAN class=code-keyword>static</SPAN> <SPAN class=code-keyword>void</SPAN> MyOnChanged(<SPAN class=code-keyword>object</SPAN> caller, SqlNotificationEventArgs e)
+{
+    <SPAN class=code-comment>//</SPAN><SPAN class=code-comment>to test place a break point here 
+</SPAN>    <SPAN class=code-comment>//</SPAN><SPAN class=code-comment>and change any data in the specified table
+</SPAN>    <SPAN class=code-keyword>string</SPAN> msg = <SPAN class=code-string>"</SPAN><SPAN class=code-string>Notified"</SPAN>;
+}</PRE><!-- Article Ends --><!-- Main Page Contents End --></DIV></SPAN>
+      <FORM id=aspnetForm 
+      style="PADDING-RIGHT: 0px; PADDING-LEFT: 0px; PADDING-BOTTOM: 0px; MARGIN: 0px; PADDING-TOP: 0px" 
+      name=aspnetForm action=QueryNotifications.aspx method=post>
+      <DIV><INPUT id=__VIEWSTATE type=hidden 
+      value=/wEPDwULLTEwMDUyNjYzMjhkZPv5ct9k36e3KawO8tQHOzE3g2hP 
+      name=__VIEWSTATE> </DIV>
+      <H2>License</H2>
+      <DIV id=ctl00_LicenseTerms>
+      <P>This article has no explicit license attached to it but may contain 
+      usage terms in the article text or the download files themselves. If in 
+      doubt please contact the author via the discussion board below.</P>
+      <P>A list of licenses authors might use can be found <A 
+      href="http://www.codeproject.com/info/Licenses.aspx">here</A></P></DIV>
+      <H2>About the Author</H2>
+      <TABLE cellSpacing=5 cellPadding=0 width="100%" border=0>
+        <TBODY>
+        <TR vAlign=top>
+          <TD id=ctl00_AboutAuthorRptr_ctl00_AboutAuthor_memberPhotoTable 
+          style="WIDTH: 155px" vAlign=top><B><A 
+            id=ctl00_AboutAuthorRptr_ctl00_AboutAuthor_memberProfileLink 
+            href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=1768231">rajiv404</A></B><BR><BR>
+            <CENTER></CENTER><BR><SPAN class=SmallText 
+            id=ctl00_AboutAuthorRptr_ctl00_AboutAuthor_memberType></SPAN></TD>
+          <TD><BR>
+            <TABLE>
+              <TBODY>
+              <TR id=ctl00_AboutAuthorRptr_ctl00_AboutAuthor_locationRow>
+                <TD class=SmallText>Location: </TD>
+                <TD width="100%"><SPAN class=SmallText 
+                  id=ctl00_AboutAuthorRptr_ctl00_AboutAuthor_memberLocation><IMG 
+                  height=11 alt=India 
+                  src="CodeProject Using Query Notifications in _NET 2_0 to handle ad-hoc data refreshes_ Free source code and programming help_files/IN.gif" 
+                  width=16> 
+      India</SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE><BR>
+      <TABLE id=ctl00_PopularArticlesRow cellSpacing=0 cellPadding=0 
+      width="100%" border=0>
+        <TBODY>
+        <TR vAlign=top>
+          <TD style="WIDTH: 100%">
+            <H2>Other popular Database articles:</H2>
+            <UL>
+              <LI><A 
+              href="http://www.codeproject.com/KB/database/caaadoclass1.aspx">A 
+              set of ADO classes - version 2.20</A>
+              <DIV class=SmallText>Simple database access using an ADO 
+              class.</DIV>
+              <LI><A 
+              href="http://www.codeproject.com/KB/database/filehelpers.aspx">FileHelpers 
+              v2.0 - Delimited (CSV) or Fixed Data Import/Export Framework</A>
+              <DIV class=SmallText>An easy to use .NET library to read/write 
+              strong typed data from files with fixed length or delimited 
+              records (CSV). Also has support to import/export data from 
+              different data storages (Excel, Acces, SqlServer, MySql)</DIV>
+              <LI><A 
+              href="http://www.codeproject.com/KB/database/sqldodont.aspx">SQL 
+              Server DO's and DONT's</A>
+              <DIV class=SmallText>SQL Server database best practices</DIV>
+              <LI><A 
+              href="http://www.codeproject.com/KB/database/connectionstrings.aspx">ADO 
+              Connection Strings</A>
+              <DIV class=SmallText>A list of ODBC DSN Connection Strings.</DIV>
+              <LI><A 
+              href="http://www.codeproject.com/KB/database/DynamicMethod_ILGenerator.aspx">Dynamic... 
+              but fast: The tale of three monkeys, a wolf and the DynamicMethod 
+              and ILGenerator classes</A>
+              <DIV class=SmallText>How to use the DynamicMethod and ILGenerator 
+              classes to create dynamic code at runtime that out performs 
+              reflection</DIV></LI></UL>
+            <H2></H2></TD>
+          <TD>
+            <SCRIPT type=text/javascript>document.write(unescape("%3ca%20href%3d%22http%3a%2f%2fwww.codeproject.com%2fRedir.aspx%3fadid%3d6421%26way%3dban%22%20target%3d%22_blank%22%20rel%3d%22nofollow%22%3e%3cimg%20src%3d%22http%3a%2f%2fwww.codeproject.com%2fscript%2fAnn%2fServeImg.aspx%3fFile%3d%252fscript%252fadmentor%252fimages%252f300x250.png%26C%3dFalse%26id%3d6421%22%20alt%3d%22%22%20border%3d%220%22%20width%3d%22300%22%20height%3d%22250%22%3e%3c%2fa%3e"));</SCRIPT>
+          </TD></TR></TBODY></TABLE>
+      <DIV id=ctl00_AddTo_AddTo style="MARGIN: 10px">
+      <SCRIPT language=JavaScript type=text/javascript>
+var addtoMethod=1;
+var AddURL = document.location.href;
+var AddTitle = escape(document.title);
+DrawLinks(100, 0, "SmallText Bold", "AddTo") 
+</SCRIPT>
+      </DIV>
+      <TABLE class=RatingBar id=ctl00_RateArticleRow cellSpacing=0 cellPadding=0 
+      width="100%" border=0>
+        <TBODY>
+        <TR>
+          <TD><A 
+            href="http://www.codeproject.com/KB/database/QueryNotifications.aspx#_top">Article 
+            Top</A></TD>
+          <TD align=right>
+            <TABLE cellSpacing=0 cellPadding=0 width="100%">
+              <TBODY>
+              <TR>
+                <TD id=ctl00_RateArticle_VoteResultDiv noWrap align=right 
+                width="100%"><SPAN id=voteRes></SPAN><IMG id=loaderImg 
+                  style="DISPLAY: none" height=16 alt=loading... 
+                  src="CodeProject Using Query Notifications in _NET 2_0 to handle ad-hoc data refreshes_ Free source code and programming help_files/ajax-loader.gif" 
+                  width=16> </TD>
+                <TD class=SmallText id=voteTbl style="WHITE-SPACE: nowrap" 
+                align=right>
+                  <TABLE>
+                    <TBODY>
+                    <TR>
+                      <TD id=ctl00_RateArticle_RateText 
+                      style="PADDING-RIGHT: 5px; WHITE-SPACE: nowrap"><I><B>Rate 
+                        this Article for us!</B></I></TD>
+                      <TD id=ctl00_RateArticle_StartForm 
+                        align=right><I>&nbsp;&nbsp;Poor</I></TD>
+                      <TD id=ctl00_RateArticle_VoteFormDiv 
+                      style="WHITE-SPACE: nowrap" align=left>
+                        <TABLE id=ctl00_RateArticle_VoteRBL border=0>
+                          <TBODY>
+                          <TR>
+                            <TD><INPUT id=ctl00_RateArticle_VoteRBL_0 
+                              type=radio value=1 
+                            name=ctl00$RateArticle$VoteRBL></TD>
+                            <TD><INPUT id=ctl00_RateArticle_VoteRBL_1 
+                              type=radio value=2 
+                            name=ctl00$RateArticle$VoteRBL></TD>
+                            <TD><INPUT id=ctl00_RateArticle_VoteRBL_2 
+                              type=radio value=3 
+                            name=ctl00$RateArticle$VoteRBL></TD>
+                            <TD><INPUT id=ctl00_RateArticle_VoteRBL_3 
+                              type=radio value=4 
+                            name=ctl00$RateArticle$VoteRBL></TD>
+                            <TD><INPUT id=ctl00_RateArticle_VoteRBL_4 
+                              type=radio value=5 
+                            name=ctl00$RateArticle$VoteRBL></TD></TR></TBODY></TABLE></TD>
+                      <TD id=ctl00_RateArticle_EndForm noWrap 
+                        align=left><I>Excellent</I> <INPUT class=FormButton id=ctl00_RateArticle_SubmitRateBtn onclick="return rateItem(12918,2);" type=submit value=Vote name=ctl00$RateArticle$SubmitRateBtn> 
+                      </TD>
+                      <TD><SPAN 
+                    id=ctl00_RateArticle_ErrorMessage></SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE>
+      <DIV><INPUT id=__EVENTVALIDATION type=hidden 
+      value=/wEWCAKz6OriCgLAlMXDBwLBlMXDBwLClMXDBwLDlMXDBwLElMXDBwLP+++tCwK5upDkC4MaWkhjw2ZmHWxBt+lK+9ElY7T9 
+      name=__EVENTVALIDATION> </DIV></FORM>
+      <DIV 
+      style="PADDING-RIGHT: 10px; PADDING-LEFT: 10px; PADDING-BOTTOM: 10px; OVERFLOW: hidden; PADDING-TOP: 10px; WHITE-SPACE: nowrap; TEXT-ALIGN: center"><IFRAME 
+      src="C:\Documents and Settings\valley\Desktop\New Folder\CodeProject Using Query Notifications in _NET 2_0 to handle ad-hoc data refreshes_ Free source code and programming help_files\ServeHTML(1).htm" 
+      frameBorder=0 width=468 scrolling=no height=60></IFRAME><IFRAME 
+      src="CodeProject Using Query Notifications in _NET 2_0 to handle ad-hoc data refreshes_ Free source code and programming help_files/ServeLinks.htm" 
+      frameBorder=0 width=300 scrolling=no height=60></IFRAME></DIV><A 
+      name=_comments></A><!-- Forum Start -->
+      <DIV id=_MessageBoard onclick="return SwitchMessage(event, null)">
+      <TABLE class=Frm_MainTable id=ForumTable cellSpacing=0 cellPadding=0>
+        <TBODY>
+        <TR>
+          <TD>
+            <FORM 
+            style="PADDING-RIGHT: 0px; PADDING-LEFT: 0px; PADDING-BOTTOM: 0px; MARGIN: 0px; PADDING-TOP: 0px" 
+            action=/script/Forums/SetOptions.aspx?floc=%2fKB%2fdatabase%2fQueryNotifications.aspx&amp;fid=263386 
+            method=get><INPUT type=hidden value=263386 name=fid><INPUT 
+            type=hidden 
+            value=?floc=%2fKB%2fdatabase%2fQueryNotifications.aspx&amp;fid=263386 
+            name=currentQS><INPUT type=hidden 
+            value=/KB/database/QueryNotifications.aspx name=floc>
+            <TABLE cellSpacing=0 cellPadding=3 width="100%" border=0>
+              <TBODY>
+              <TR class=Frm_HeaderRow1>
+                <TD style="WHITE-SPACE: nowrap"><IMG height=16 alt=FAQ 
+                  src="CodeProject Using Query Notifications in _NET 2_0 to handle ad-hoc data refreshes_ Free source code and programming help_files/forum_faq.gif" 
+                  width=16 align=middle border=0>&nbsp;<A 
+                  href="http://www.codeproject.com/script/Forums/FAQ.aspx"><B>FAQ</B></A>&nbsp;</TD>
+                <TD style="WHITE-SPACE: nowrap; TEXT-ALIGN: right">Noise 
+                  Tolerance<SELECT class=Frm_DropDown size=1 name=noise> 
+                    <OPTION value=1>Very High</OPTION><OPTION 
+                    value=2>High</OPTION><OPTION value=3 
+                    selected>Medium</OPTION><OPTION value=4>Low</OPTION><OPTION 
+                    value=5>Very Low</OPTION></SELECT></TD>
+                <TD style="WHITE-SPACE: nowrap; TEXT-ALIGN: right" 
+                  colSpan=2><IMG height=15 alt=Search 
+                  src="CodeProject Using Query Notifications in _NET 2_0 to handle ad-hoc data refreshes_ Free source code and programming help_files/forum_search.gif" 
+                  width=16 align=top border=0>&nbsp;<A 
+                  href="http://www.codeproject.com/script/Forums/Search.aspx?fid=263386">Search 
+                  Messages</A>&nbsp;</TD>
+                <TD style="TEXT-ALIGN: right"><INPUT class=Frm_Button type=submit value="Set Options" name=submit></TD></TR>
+              <TR class=Frm_HeaderRow2>
+                <TD style="WIDTH: 100%">&nbsp;</TD>
+                <TD 
+                  style="WHITE-SPACE: nowrap; TEXT-ALIGN: right">Layout<SELECT 
+                  class=Frm_DropDown size=1 name=view> <OPTION value=Quick 
+                    selected>Normal</OPTION><OPTION value=Topic>Expand Root 
+                    Messages</OPTION><OPTION value=Expanded>Expand All 
+                    Messages</OPTION><OPTION value=Thread>Thread 
+                    View</OPTION><OPTION value=Normal>No Javascript 
+                    (slow)</OPTION><OPTION value=Preview>No Javascript 
+                    Preview</OPTION></SELECT>&nbsp;&nbsp;</TD>
+                <TD style="WHITE-SPACE: nowrap">Per page<SELECT 
+                  class=Frm_DropDown size=1 name=mpp> <OPTION 
+                    value=10>10</OPTION><OPTION value=25 
+                    selected>25</OPTION><OPTION 
+                  value=50>50</OPTION></SELECT>&nbsp;&nbsp;</TD>
+                <TD colSpan=2>&nbsp;</TD></TR></TBODY></TABLE></FORM></TD></TR>
+        <TR>
+          <TD><A name=xx0xx></A>
+            <TABLE cellSpacing=0 cellPadding=2 width="100%" border=0>
+              <TBODY>
+              <TR class=Frm_NavigationBar>
+                <TD><IMG height=16 alt=new 
+                  src="CodeProject Using Query Notifications in _NET 2_0 to handle ad-hoc data refreshes_ Free source code and programming help_files/forum_newmsg.gif" 
+                  width=16 align=top border=0><A class=Frm_HL 
+                  title="Create a new message thread" 
+                  href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=263386&amp;floc=/KB/database/QueryNotifications.aspx" 
+                  target=_top name=Frm_HoverNL><B>New Message</B></A></TD>
+                <TD>Msgs 1 to 9 of 9 (Total in Forum: 9) (<A 
+                  href="http://www.codeproject.com/KB/database/QueryNotifications.aspx?fid=263386">Refresh</A>)</TD>
+                <TD style="WHITE-SPACE: nowrap; TEXT-ALIGN: right"><SPAN 
+                  class=Frm_HL>First</SPAN><SPAN class=Frm_HL>Prev</SPAN><SPAN 
+                  class=Frm_HL>Next</SPAN></TD></TR></TBODY></TABLE></TD></TR>
+        <TR>
+          <TD>
+            <TABLE class=Frm_MsgTable cellSpacing=0 cellPadding=0 width="100%" 
+            border=0><!-- Column Headers -->
+              <TBODY>
+              <TR class=Frm_ColumnHeaders>
+                <TD style="WIDTH: 100%">
+                  <TABLE cellSpacing=0 cellPadding=2 width="100%" border=0>
+                    <TBODY>
+                    <TR>
+                      <TD>Subject&nbsp;</TD>
+                      <TD class=Frm_MsgAuthor>&nbsp;Author&nbsp;</TD>
+                      <TD 
+              class=Frm_MsgDate>Date&nbsp;</TD></TR></TBODY></TABLE></TD></TR>
+              <TR>
+                <TD><IMG height=5 alt="" 
+                  src="C:\Documents and Settings\valley\Desktop\New Folder\CodeProject Using Query Notifications in _NET 2_0 to handle ad-hoc data refreshes_ Free source code and programming help_files\t(1).gif" 
+                  width=1 border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd Rt HdUnSel " id=F1794789_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=16><A 
+                        name=xx1794789xx></A><IMG height=16 alt=General 
+                        src="CodeProject Using Query Notifications in _NET 2_0 to handle ad-hoc data refreshes_ Free source code and programming help_files/msg_general.gif" 
+                        width=16 align=top></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/database/QueryNotifications.aspx?fid=263386&amp;select=1794789#xx1794789xx" 
+                        name=1794789>Works (sort-of) in SQL Server Express 2005 
+                        (aka SSE)</A></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        title=member height=16 alt=member 
+                        src="CodeProject Using Query Notifications in _NET 2_0 to handle ad-hoc data refreshes_ Free source code and programming help_files/member_sm.gif" 
+                        border=0></TD>
+                      <TD class=Frm_MsgAuthor><A 
+                        href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=262875">wwalseth</A></TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">17:57 7 
+                        Dec '06 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=F1794789_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 16px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2>I have this working in SQL Server 
+                                2005 Express.<BR><BR>It works for a while, (the 
+                                Cache is cleaned out and re-populated when I 
+                                change the table), but after a minute or two, my 
+                                .NET app is out of date... UGH!<BR><BR>Check-out 
+                                Jeff Prosise's BLOG. Creating an ENDPOINT for 
+                                the Service Broker enables appears to enable it 
+                                in SQL Server 2005 Express<BR><BR><A 
+                                href="http://www.wintellect.com/Weblogs/CommentView,guid,fe9a1322-6375-471c-9384-5070498d108e.aspx">http://www.wintellect.com/Weblogs/CommentView,guid,fe9a1322-6375-471c-9384-5070498d108e.aspx</A>[<A 
+                                title="New Window" 
+                                href="http://www.wintellect.com/Weblogs/CommentView,guid,fe9a1322-6375-471c-9384-5070498d108e.aspx" 
+                                target=_blank>^</A>]<BR><BR>USE 
+                                master;<BR>GO<BR><BR>CREATE ENDPOINT 
+                                BrokerEndpoint<BR>STATE = STARTED<BR>AS TCP ( 
+                                LISTENER_PORT = 4037 )<BR>FOR SERVICE_BROKER ( 
+                                AUTHENTICATION = WINDOWS 
+                                );<BR>GO<BR><BR><BR><BR><BR><BR>You can always 
+                                tell a Texan, but you can't tell him 
+                                anything<BR></TD></TR>
+                                <TR style="VERTICAL-ALIGN: middle">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL title=Reply 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=263386&amp;select=1794789&amp;floc=/KB/database/QueryNotifications.aspx&amp;fa=r">Reply</A>·<A 
+                                class=Frm_MHL title=Email 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=263386&amp;select=1794789&amp;floc=/KB/database/QueryNotifications.aspx&amp;fa=e">Email</A>·<A 
+                                class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/database/QueryNotifications.aspx?fid=263386&amp;tid=1794789">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=263386&amp;msg=1794789">PermaLink</A>·<A 
+                                class=Frm_MHL title="Bookmark this post" 
+                                href="http://www.codeproject.com/script/Bookmarks/Add.aspx?&amp;obid=1794789&amp;obtid=3&amp;bma=AddBookmark">Bookmark</A></TD>
+                                <TD class=Frm_MsgFt 
+                                style="TEXT-ALIGN: right"><SPAN id=MVF1794789 
+                                style="WHITE-SPACE: nowrap">
+                                <SCRIPT type=text/javascript>
+												MsgVoteForm(262875,1794789,false,"","","");
+											</SCRIPT>
+                                </SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR class=Quick>
+                <TD class=Frm_MsgRtDivide><IMG height=1 alt="" 
+                  src="C:\Documents and Settings\valley\Desktop\New Folder\CodeProject Using Query Notifications in _NET 2_0 to handle ad-hoc data refreshes_ Free source code and programming help_files\t(1).gif" 
+                  width=1 border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd LoVote Rt HdUnSel " id=F1409576_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=16><A 
+                        name=xx1409576xx></A><IMG height=16 alt=General 
+                        src="CodeProject Using Query Notifications in _NET 2_0 to handle ad-hoc data refreshes_ Free source code and programming help_files/msg_general.gif" 
+                        width=16 align=top></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/database/QueryNotifications.aspx?fid=263386&amp;select=1409576#xx1409576xx" 
+                        name=1409576>help please</A></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        title=member height=16 alt=member 
+                        src="CodeProject Using Query Notifications in _NET 2_0 to handle ad-hoc data refreshes_ Free source code and programming help_files/member_sm.gif" 
+                        border=0></TD>
+                      <TD class=Frm_MsgAuthor><A 
+                        href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=408106">csmba</A></TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">16:10 
+                        15 Mar '06 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=F1409576_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 16px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2>I did a small sample... <BR>It 
+                                works great at first, I manualy change the DB 
+                                and I get a notification...<BR>BUT, if I don't 
+                                change anyting in my application for 10 minuts, 
+                                and then change the DB, I do not get a 
+                                notification! how can I debug this? what is the 
+                                reason? <BR></TD></TR>
+                                <TR style="VERTICAL-ALIGN: middle">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL title=Reply 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=263386&amp;select=1409576&amp;floc=/KB/database/QueryNotifications.aspx&amp;fa=r">Reply</A>·<A 
+                                class=Frm_MHL title=Email 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=263386&amp;select=1409576&amp;floc=/KB/database/QueryNotifications.aspx&amp;fa=e">Email</A>·<A 
+                                class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/database/QueryNotifications.aspx?fid=263386&amp;tid=1409576">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=263386&amp;msg=1409576">PermaLink</A>·<A 
+                                class=Frm_MHL title="Bookmark this post" 
+                                href="http://www.codeproject.com/script/Bookmarks/Add.aspx?&amp;obid=1409576&amp;obtid=3&amp;bma=AddBookmark">Bookmark</A></TD>
+                                <TD class=Frm_MsgFt 
+                                style="TEXT-ALIGN: right"><SPAN id=MVF1409576 
+                                style="WHITE-SPACE: nowrap">1.00/5 (1 vote)
+                                <SCRIPT type=text/javascript>
+												MsgVoteForm(408106,1409576,false,"","","");
+											</SCRIPT>
+                                 
+                        </SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR class=Quick>
+                <TD class=Frm_MsgDivide><IMG height=1 alt="" 
+                  src="C:\Documents and Settings\valley\Desktop\New Folder\CodeProject Using Query Notifications in _NET 2_0 to handle ad-hoc data refreshes_ Free source code and programming help_files\t(1).gif" 
+                  width=1 border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd HdUnSel " id=F1409879_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=34><A 
+                        name=xx1409879xx></A><IMG height=16 alt=General 
+                        src="CodeProject Using Query Notifications in _NET 2_0 to handle ad-hoc data refreshes_ Free source code and programming help_files/msg_general.gif" 
+                        width=16 align=top></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/database/QueryNotifications.aspx?fid=263386&amp;select=1409879#xx1409879xx" 
+                        name=1409879>Re: help please</A></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        title=member height=16 alt=member 
+                        src="CodeProject Using Query Notifications in _NET 2_0 to handle ad-hoc data refreshes_ Free source code and programming help_files/member_sm.gif" 
+                        border=0></TD>
+                      <TD class=Frm_MsgAuthor><A 
+                        href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=1768231">rajiv404</A></TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">22:39 
+                        15 Mar '06 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=F1409879_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 34px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2>Hello,<BR><BR>I am not very clear 
+                                about your problem.. but i guess u got a 
+                                notification first time you changed the table 
+                                and you didnt get the notification second time.. 
+                                this is because notification is just done once 
+                                and after every single notification the 
+                                notification expires.. u will have to recreate 
+                                the notification using the sqldependency every 
+                                time u get the first 
+                                notification.<BR><BR><BR><BR><BR><BR><BR>Bye,<BR>Rajiv<BR></TD></TR>
+                                <TR style="VERTICAL-ALIGN: middle">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL title=Reply 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=263386&amp;select=1409879&amp;floc=/KB/database/QueryNotifications.aspx&amp;fa=r">Reply</A>·<A 
+                                class=Frm_MHL title=Email 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=263386&amp;select=1409879&amp;floc=/KB/database/QueryNotifications.aspx&amp;fa=e">Email</A>·<A 
+                                class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/database/QueryNotifications.aspx?fid=263386&amp;tid=1409576">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=263386&amp;msg=1409879">PermaLink</A>·<A 
+                                class=Frm_MHL title="Bookmark this post" 
+                                href="http://www.codeproject.com/script/Bookmarks/Add.aspx?&amp;obid=1409879&amp;obtid=3&amp;bma=AddBookmark">Bookmark</A></TD>
+                                <TD class=Frm_MsgFt 
+                                style="TEXT-ALIGN: right"><SPAN id=MVF1409879 
+                                style="WHITE-SPACE: nowrap">
+                                <SCRIPT type=text/javascript>
+												MsgVoteForm(1768231,1409879,false,"","","");
+											</SCRIPT>
+                                </SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR class=Quick>
+                <TD class=Frm_MsgDivide><IMG height=1 alt="" 
+                  src="C:\Documents and Settings\valley\Desktop\New Folder\CodeProject Using Query Notifications in _NET 2_0 to handle ad-hoc data refreshes_ Free source code and programming help_files\t(1).gif" 
+                  width=1 border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd HdUnSel " id=F1409898_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=52><A 
+                        name=xx1409898xx></A><IMG height=16 alt=General 
+                        src="CodeProject Using Query Notifications in _NET 2_0 to handle ad-hoc data refreshes_ Free source code and programming help_files/msg_general.gif" 
+                        width=16 align=top></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/database/QueryNotifications.aspx?fid=263386&amp;select=1409898#xx1409898xx" 
+                        name=1409898>Re: help please</A></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        title=member height=16 alt=member 
+                        src="CodeProject Using Query Notifications in _NET 2_0 to handle ad-hoc data refreshes_ Free source code and programming help_files/member_sm.gif" 
+                        border=0></TD>
+                      <TD class=Frm_MsgAuthor><A 
+                        href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=408106">csmba</A></TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">23:13 
+                        15 Mar '06 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=F1409898_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 52px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2>nice try, but it will not be that 
+                                simple...<BR><BR>I did my home work. it is not a 
+                                trivial mistake like that.. well, it might be, 
+                                but that this one. to be more detailed:<BR>I can 
+                                repeat this action many times:<BR>1. change data 
+                                in DB<BR>2. watch log line "call back function 
+                                called, reloading" being written<BR>3. go back 
+                                to step 1.<BR><BR>It works great! BUT, if I walk 
+                                away from the computer for 6-10 minuts without 
+                                repeating step 1-3, then after 10 minuts I do 
+                                step 1 and...<BR>nothing happens!<BR><BR>Where 
+                                the H%^% is the notification? what happens to 
+                                it? <BR></TD></TR>
+                                <TR style="VERTICAL-ALIGN: middle">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL title=Reply 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=263386&amp;select=1409898&amp;floc=/KB/database/QueryNotifications.aspx&amp;fa=r">Reply</A>·<A 
+                                class=Frm_MHL title=Email 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=263386&amp;select=1409898&amp;floc=/KB/database/QueryNotifications.aspx&amp;fa=e">Email</A>·<A 
+                                class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/database/QueryNotifications.aspx?fid=263386&amp;tid=1409576">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=263386&amp;msg=1409898">PermaLink</A>·<A 
+                                class=Frm_MHL title="Bookmark this post" 
+                                href="http://www.codeproject.com/script/Bookmarks/Add.aspx?&amp;obid=1409898&amp;obtid=3&amp;bma=AddBookmark">Bookmark</A></TD>
+                                <TD class=Frm_MsgFt 
+                                style="TEXT-ALIGN: right"><SPAN id=MVF1409898 
+                                style="WHITE-SPACE: nowrap">
+                                <SCRIPT type=text/javascript>
+												MsgVoteForm(408106,1409898,false,"","","");
+											</SCRIPT>
+                                </SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR class=Quick>
+                <TD class=Frm_MsgDivide><IMG height=1 alt="" 
+                  src="C:\Documents and Settings\valley\Desktop\New Folder\CodeProject Using Query Notifications in _NET 2_0 to handle ad-hoc data refreshes_ Free source code and programming help_files\t(1).gif" 
+                  width=1 border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd HdUnSel " id=F1623278_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=70><A 
+                        name=xx1623278xx></A><IMG height=16 alt=General 
+                        src="CodeProject Using Query Notifications in _NET 2_0 to handle ad-hoc data refreshes_ Free source code and programming help_files/msg_general.gif" 
+                        width=16 align=top></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/database/QueryNotifications.aspx?fid=263386&amp;select=1623278#xx1623278xx" 
+                        name=1623278>Re: help please</A></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        title=member height=16 alt=member 
+                        src="CodeProject Using Query Notifications in _NET 2_0 to handle ad-hoc data refreshes_ Free source code and programming help_files/member_sm.gif" 
+                        border=0></TD>
+                      <TD class=Frm_MsgAuthor><A 
+                        href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=3091744">CoderQue</A></TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">10:19 
+                        13 Aug '06 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=F1623278_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 70px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2>Looks like there is a timeout that 
+                                you need to 
+                                define:<BR><BR>e.g.<BR><BR>SqlDependency depend 
+                                = new 
+                                SqlDependency(cmd,<BR>null,<BR>SqlNotificationAuthType.None,<BR>SqlNotificationEncryptionType.None,<BR>SqlNotificationTransports.Tcp,<BR>10000);<BR><BR>10000 
+                                in this case is 10000 seconds.<BR><BR><BR><BR>
+                                <DIV class=ForumSig>Coder 
+Que</DIV><BR></TD></TR>
+                                <TR style="VERTICAL-ALIGN: middle">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL title=Reply 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=263386&amp;select=1623278&amp;floc=/KB/database/QueryNotifications.aspx&amp;fa=r">Reply</A>·<A 
+                                class=Frm_MHL title=Email 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=263386&amp;select=1623278&amp;floc=/KB/database/QueryNotifications.aspx&amp;fa=e">Email</A>·<A 
+                                class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/database/QueryNotifications.aspx?fid=263386&amp;tid=1409576">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=263386&amp;msg=1623278">PermaLink</A>·<A 
+                                class=Frm_MHL title="Bookmark this post" 
+                                href="http://www.codeproject.com/script/Bookmarks/Add.aspx?&amp;obid=1623278&amp;obtid=3&amp;bma=AddBookmark">Bookmark</A></TD>
+                                <TD class=Frm_MsgFt 
+                                style="TEXT-ALIGN: right"><SPAN id=MVF1623278 
+                                style="WHITE-SPACE: nowrap">
+                                <SCRIPT type=text/javascript>
+												MsgVoteForm(3091744,1623278,false,"","","");
+											</SCRIPT>
+                                </SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR class=Quick>
+                <TD class=Frm_MsgDivide><IMG height=1 alt="" 
+                  src="C:\Documents and Settings\valley\Desktop\New Folder\CodeProject Using Query Notifications in _NET 2_0 to handle ad-hoc data refreshes_ Free source code and programming help_files\t(1).gif" 
+                  width=1 border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd LoVote HdUnSel " id=F2022991_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=88><A 
+                        name=xx2022991xx></A><IMG height=16 alt=General 
+                        src="CodeProject Using Query Notifications in _NET 2_0 to handle ad-hoc data refreshes_ Free source code and programming help_files/msg_general.gif" 
+                        width=16 align=top></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/database/QueryNotifications.aspx?fid=263386&amp;select=2022991#xx2022991xx" 
+                        name=2022991>Re: help please</A></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        title=member height=16 alt=member 
+                        src="CodeProject Using Query Notifications in _NET 2_0 to handle ad-hoc data refreshes_ Free source code and programming help_files/member_sm.gif" 
+                        border=0></TD>
+                      <TD class=Frm_MsgAuthor><A 
+                        href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=4103596">grumpy-wan</A></TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">19:12 6 
+                        May '07 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=F2022991_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 88px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2>The suggestion above might work, 
+                                but not necessarily for the right reasons. 
+                                There's also an issue with ADO.NET referred to 
+                                (with a fix) at <BR><A 
+                                href="http://support.microsoft.com/Default.aspx?kbid=913364" 
+                                rel=nofollow>http://support.microsoft.com/Default.aspx?kbid=913364</A><BR><BR>This 
+                                refers specifically to notifications which seem 
+                                to get lost (or ignored, as you can see them 
+                                firing at the SQL end) after waiting for a few 
+                                minutes after first setting the dependency up. 
+                                <BR></TD></TR>
+                                <TR style="VERTICAL-ALIGN: middle">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL title=Reply 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=263386&amp;select=2022991&amp;floc=/KB/database/QueryNotifications.aspx&amp;fa=r">Reply</A>·<A 
+                                class=Frm_MHL title=Email 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=263386&amp;select=2022991&amp;floc=/KB/database/QueryNotifications.aspx&amp;fa=e">Email</A>·<A 
+                                class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/database/QueryNotifications.aspx?fid=263386&amp;tid=1409576">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=263386&amp;msg=2022991">PermaLink</A>·<A 
+                                class=Frm_MHL title="Bookmark this post" 
+                                href="http://www.codeproject.com/script/Bookmarks/Add.aspx?&amp;obid=2022991&amp;obtid=3&amp;bma=AddBookmark">Bookmark</A></TD>
+                                <TD class=Frm_MsgFt 
+                                style="TEXT-ALIGN: right"><SPAN id=MVF2022991 
+                                style="WHITE-SPACE: nowrap">2.00/5 (1 vote)
+                                <SCRIPT type=text/javascript>
+												MsgVoteForm(4103596,2022991,false,"","","");
+											</SCRIPT>
+                                 
+                        </SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR class=Quick>
+                <TD class=Frm_MsgDivide><IMG height=1 alt="" 
+                  src="C:\Documents and Settings\valley\Desktop\New Folder\CodeProject Using Query Notifications in _NET 2_0 to handle ad-hoc data refreshes_ Free source code and programming help_files\t(1).gif" 
+                  width=1 border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd LoVote HdUnSel " id=F2044980_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=106><A 
+                        name=xx2044980xx></A><IMG height=16 alt=General 
+                        src="CodeProject Using Query Notifications in _NET 2_0 to handle ad-hoc data refreshes_ Free source code and programming help_files/msg_general.gif" 
+                        width=16 align=top></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/database/QueryNotifications.aspx?fid=263386&amp;select=2044980#xx2044980xx" 
+                        name=2044980>Re: help please</A></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        title=member height=16 alt=member 
+                        src="CodeProject Using Query Notifications in _NET 2_0 to handle ad-hoc data refreshes_ Free source code and programming help_files/member_sm.gif" 
+                        border=0></TD>
+                      <TD class=Frm_MsgAuthor><A 
+                        href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=3178644">shimesrle</A></TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">14:41 
+                        19 May '07 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=F2044980_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 106px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2>Dear 
+                                grumpy-wan.<BR><BR>Many,many,many 
+                                thanks.<BR><BR>I have this problem for more than 
+                                a year. I have tried everything that I can to 
+                                find out why after 5 minutes of inactivity in 
+                                database my sqldependency stops. Countless hours 
+                                of searching on internet produce nothing.<BR>The 
+                                only thing that I found to work is to set 
+                                dependency timeout to no more than 3 min.<IMG 
+                                title=Smile 
+                                src="CodeProject Using Query Notifications in _NET 2_0 to handle ad-hoc data refreshes_ Free source code and programming help_files/smiley_smile.gif" 
+                                align=top><BR><BR>Once again thanks. 
+                                <BR></TD></TR>
+                                <TR style="VERTICAL-ALIGN: middle">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL title=Reply 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=263386&amp;select=2044980&amp;floc=/KB/database/QueryNotifications.aspx&amp;fa=r">Reply</A>·<A 
+                                class=Frm_MHL title=Email 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=263386&amp;select=2044980&amp;floc=/KB/database/QueryNotifications.aspx&amp;fa=e">Email</A>·<A 
+                                class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/database/QueryNotifications.aspx?fid=263386&amp;tid=1409576">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=263386&amp;msg=2044980">PermaLink</A>·<A 
+                                class=Frm_MHL title="Bookmark this post" 
+                                href="http://www.codeproject.com/script/Bookmarks/Add.aspx?&amp;obid=2044980&amp;obtid=3&amp;bma=AddBookmark">Bookmark</A></TD>
+                                <TD class=Frm_MsgFt 
+                                style="TEXT-ALIGN: right"><SPAN id=MVF2044980 
+                                style="WHITE-SPACE: nowrap">1.00/5 (2 votes)
+                                <SCRIPT type=text/javascript>
+												MsgVoteForm(3178644,2044980,false,"","","");
+											</SCRIPT>
+                                 
+                        </SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR class=Quick>
+                <TD class=Frm_MsgRtDivide><IMG height=1 alt="" 
+                  src="C:\Documents and Settings\valley\Desktop\New Folder\CodeProject Using Query Notifications in _NET 2_0 to handle ad-hoc data refreshes_ Free source code and programming help_files\t(1).gif" 
+                  width=1 border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd LoVote Rt HdUnSel " id=F1365253_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=16><A 
+                        name=xx1365253xx></A><IMG height=16 alt=Answer 
+                        src="CodeProject Using Query Notifications in _NET 2_0 to handle ad-hoc data refreshes_ Free source code and programming help_files/msg_answer.gif" 
+                        width=16 align=top></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/database/QueryNotifications.aspx?fid=263386&amp;select=1365253#xx1365253xx" 
+                        name=1365253>Some mistakes</A></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        title=member height=16 alt=member 
+                        src="CodeProject Using Query Notifications in _NET 2_0 to handle ad-hoc data refreshes_ Free source code and programming help_files/member_sm.gif" 
+                        border=0></TD>
+                      <TD class=Frm_MsgAuthor><A 
+                        href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=2141949">Marcel 
+                        87654</A></TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">5:53 9 
+                        Feb '06 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=F1365253_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 16px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2>Hi, there are some 
+                                mistakes<BR><BR>1. Query Notifications has 
+                                nothing common with SQL Server Notification 
+                                Services<BR>- you dont need install Notification 
+                                Services<BR>- it should also work on SQL Server 
+                                Express<BR><BR>2. Query Notifications dont need 
+                                CLR support enabled<BR><BR>The base technologies 
+                                are <BR>- Service Broker (and must be enabled), 
+                                check also the SQL Server Surface Area 
+                                Configuration - Tool<BR><BR>- Change detection 
+                                mechanism for indexed views<BR>- thats why be 
+                                care full with your select statements<BR>- no 
+                                Select * , you need to specify every column<BR>- 
+                                no <CODE>Select Name From customer</CODE> you 
+                                need <CODE>Select Name From 
+                                <B>dbo.</B>customer</CODE><BR><BR>An article (in 
+                                german) is here: <A 
+                                href="http://www.gnoth.net/Job/Publikationen.htm" 
+                                rel=nofollow>Yukon is calling</A>[<A 
+                                title="New Window" 
+                                href="http://www.gnoth.net/Job/Publikationen.htm" 
+                                target=_blank rel=nofollow>^</A>]<BR><BR>There 
+                                are also two articles about Service 
+                                Broker<BR><BR>Marcel<BR><BR>-------------------------<BR><A 
+                                href="http://www.gnoth.net/" 
+                                rel=nofollow>http://www.gnoth.net/</A><BR><BR><BR></TD></TR>
+                                <TR style="VERTICAL-ALIGN: middle">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL title=Reply 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=263386&amp;select=1365253&amp;floc=/KB/database/QueryNotifications.aspx&amp;fa=r">Reply</A>·<A 
+                                class=Frm_MHL title=Email 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=263386&amp;select=1365253&amp;floc=/KB/database/QueryNotifications.aspx&amp;fa=e">Email</A>·<A 
+                                class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/database/QueryNotifications.aspx?fid=263386&amp;tid=1365253">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=263386&amp;msg=1365253">PermaLink</A>·<A 
+                                class=Frm_MHL title="Bookmark this post" 
+                                href="http://www.codeproject.com/script/Bookmarks/Add.aspx?&amp;obid=1365253&amp;obtid=3&amp;bma=AddBookmark">Bookmark</A></TD>
+                                <TD class=Frm_MsgFt 
+                                style="TEXT-ALIGN: right"><SPAN id=MVF1365253 
+                                style="WHITE-SPACE: nowrap">2.00/5 (1 vote)
+                                <SCRIPT type=text/javascript>
+												MsgVoteForm(2141949,1365253,false,"","","");
+											</SCRIPT>
+                                 
+                        </SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR class=Quick>
+                <TD class=Frm_MsgDivide><IMG height=1 alt="" 
+                  src="C:\Documents and Settings\valley\Desktop\New Folder\CodeProject Using Query Notifications in _NET 2_0 to handle ad-hoc data refreshes_ Free source code and programming help_files\t(1).gif" 
+                  width=1 border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd HdUnSel " id=F1409880_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=34><A 
+                        name=xx1409880xx></A><IMG height=16 alt=General 
+                        src="CodeProject Using Query Notifications in _NET 2_0 to handle ad-hoc data refreshes_ Free source code and programming help_files/msg_general.gif" 
+                        width=16 align=top></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/database/QueryNotifications.aspx?fid=263386&amp;select=1409880#xx1409880xx" 
+                        name=1409880>Re: Some mistakes</A></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        title=member height=16 alt=member 
+                        src="CodeProject Using Query Notifications in _NET 2_0 to handle ad-hoc data refreshes_ Free source code and programming help_files/member_sm.gif" 
+                        border=0></TD>
+                      <TD class=Frm_MsgAuthor><A 
+                        href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=1768231">rajiv404</A></TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">22:42 
+                        15 Mar '06 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=F1409880_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 34px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2>Thanks Marcel for correcting the 
+                                mistakes.. though i havent checked it but it 
+                                would certainly help the readers.. well others 
+                                can go through the msdn link i have provided in 
+                                the article for more clarifications because i 
+                                did as it was specified by this article.. 
+                                <BR><BR>Rajiv<BR></TD></TR>
+                                <TR style="VERTICAL-ALIGN: middle">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL title=Reply 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=263386&amp;select=1409880&amp;floc=/KB/database/QueryNotifications.aspx&amp;fa=r">Reply</A>·<A 
+                                class=Frm_MHL title=Email 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=263386&amp;select=1409880&amp;floc=/KB/database/QueryNotifications.aspx&amp;fa=e">Email</A>·<A 
+                                class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/database/QueryNotifications.aspx?fid=263386&amp;tid=1365253">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=263386&amp;msg=1409880">PermaLink</A>·<A 
+                                class=Frm_MHL title="Bookmark this post" 
+                                href="http://www.codeproject.com/script/Bookmarks/Add.aspx?&amp;obid=1409880&amp;obtid=3&amp;bma=AddBookmark">Bookmark</A></TD>
+                                <TD class=Frm_MsgFt 
+                                style="TEXT-ALIGN: right"><SPAN id=MVF1409880 
+                                style="WHITE-SPACE: nowrap">4.00/5 (2 votes)
+                                <SCRIPT type=text/javascript>
+												MsgVoteForm(1768231,1409880,false,"","","");
+											</SCRIPT>
+                                 
+                        </SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR>
+                <TD><IMG height=5 alt="" 
+                  src="C:\Documents and Settings\valley\Desktop\New Folder\CodeProject Using Query Notifications in _NET 2_0 to handle ad-hoc data refreshes_ Free source code and programming help_files\t(1).gif" 
+                  width=1 border=0></TD></TR></TBODY></TABLE></TD></TR>
+        <TR>
+          <TD>
+            <TABLE cellSpacing=0 cellPadding=2 width="100%">
+              <TBODY>
+              <TR class=Frm_Footer>
+                <TD>Last Visit: Monday, June 9, 2008 5:35 AM &nbsp; &nbsp; 
+                  Last Update:Thursday, June 12, 2008 8:52 AM</TD>
+                <TD 
+              style="WHITE-SPACE: nowrap; TEXT-ALIGN: right"></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></DIV>
+      <P class=SmallText><IMG height=16 alt=General 
+      src="CodeProject Using Query Notifications in _NET 2_0 to handle ad-hoc data refreshes_ Free source code and programming help_files/msg_general.gif" 
+      width=16 align=top> General &nbsp;&nbsp; <IMG height=16 alt=News 
+      src="CodeProject Using Query Notifications in _NET 2_0 to handle ad-hoc data refreshes_ Free source code and programming help_files/msg_news.gif" 
+      width=16 align=top> News &nbsp;&nbsp; <IMG height=16 alt=Question 
+      src="CodeProject Using Query Notifications in _NET 2_0 to handle ad-hoc data refreshes_ Free source code and programming help_files/msg_question.gif" 
+      width=16 align=top> Question &nbsp;&nbsp; <IMG height=16 alt=Answer 
+      src="CodeProject Using Query Notifications in _NET 2_0 to handle ad-hoc data refreshes_ Free source code and programming help_files/msg_answer.gif" 
+      width=16 align=top> Answer &nbsp;&nbsp; <IMG height=16 alt=Joke 
+      src="CodeProject Using Query Notifications in _NET 2_0 to handle ad-hoc data refreshes_ Free source code and programming help_files/msg_joke.gif" 
+      width=16 align=top> Joke &nbsp;&nbsp; <IMG height=16 alt=Rant 
+      src="CodeProject Using Query Notifications in _NET 2_0 to handle ad-hoc data refreshes_ Free source code and programming help_files/msg_rant.gif" 
+      width=16 align=top> Rant &nbsp;&nbsp; <IMG height=16 alt=Admin 
+      src="CodeProject Using Query Notifications in _NET 2_0 to handle ad-hoc data refreshes_ Free source code and programming help_files/msg_admin.gif" 
+      width=16 align=top> Admin &nbsp;&nbsp; </P><!-- Forum End --></DIV>
+      <TABLE width="100%">
+        <TBODY>
+        <TR vAlign=top>
+          <TD class=TinyText align=left><A id=ctl00_PermaLink 
+            href="http://www.codeproject.com/script/Articles/Article.aspx?aid=12918">PermaLink</A> 
+            | <A id=ctl00_PrivacyLink 
+            href="http://www.codeproject.com/info/privacy.aspx">Privacy </A>| <A 
+            id=ctl00_TermsOfUseLink 
+            href="http://www.codeproject.com/info/TermsOfUse.aspx">Terms of 
+            Use</A> <BR>Last Updated: 1 Feb 2006<BR>Editor: <A 
+            id=ctl00_ArticleEditor 
+            href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=28970">Smitha 
+            Vijayan</A><BR></TD>
+          <TD class=TinyText vAlign=top align=right>Copyright 2006 by 
+            rajiv404<BR>Everything else Copyright © <A 
+            href="mailto:webmaster@codeproject.com">CodeProject</A>, 1999-2008 
+            <BR>Web08 | <A id=ctl00_AdvertiseLink 
+            href="http://www.codeproject.com/info/MediaKit.aspx">Advertise on 
+            the Code Project </A></TD></TR></TBODY></TABLE>
+      <CENTER></CENTER></TD></TR>
+  <TR>
+    <TD align=middle colSpan=2></TD></TR></TBODY></TABLE><BR>
+<SCRIPT language=Javascript type=text/javascript>//<![CDATA[
+if (document.all) try {window.attachEvent("oncopy",copyCode);}catch(e){};
+//]]></SCRIPT>
+
+<SCRIPT language=Javascript 
+src="CodeProject Using Query Notifications in _NET 2_0 to handle ad-hoc data refreshes_ Free source code and programming help_files/TogglePre.js" 
+type=text/javascript></SCRIPT>
+
+<SCRIPT language=Javascript 
+src="CodeProject Using Query Notifications in _NET 2_0 to handle ad-hoc data refreshes_ Free source code and programming help_files/menu132_com.js" 
+type=text/javascript></SCRIPT>
+
+<SCRIPT language=Javascript 
+src="CodeProject Using Query Notifications in _NET 2_0 to handle ad-hoc data refreshes_ Free source code and programming help_files/TopNavBar.js" 
+type=text/javascript></SCRIPT>
+
+<SCRIPT language=Javascript type=text/javascript>//<![CDATA[
+new HVMenu(new menu_NavbarConfig());
+//]]></SCRIPT>
+</BODY></HTML>

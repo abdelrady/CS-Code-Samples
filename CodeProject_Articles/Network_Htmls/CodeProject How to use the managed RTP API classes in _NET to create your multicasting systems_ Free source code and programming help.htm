@@ -1,0 +1,2401 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!-- saved from url=(0063)http://www.codeproject.com/KB/IP/Using_RTP_in_Multicasting.aspx -->
+<HTML><HEAD><TITLE>CodeProject: How to use the managed RTP API classes in .NET to create your multicasting systems. Free source code and programming help</TITLE>
+<META http-equiv=Content-Type content="text/html; charset=utf-8">
+<META 
+content="Create an RTP multicasting presenter (with motion detection).; Author: Fadi M. Abdel-qader; Section: Internet / Network; Chapter: Web Development" 
+name=Description>
+<META 
+content=".NET 1.1, .NET 2.0, VS.NET2003, VS2005, C# 1.0, C# 2.0, ASP.NET, Windows, Dev, Advanced,Internet / Network,Web Development,Free source code, tutorials" 
+name=Keywords>
+<META content="The Code Project" name=Author>
+<META content=General name=Rating>
+<META content="index, follow" name=Robots>
+<META content="1 days" name=Revisit-After><LINK 
+title="CodeProject Latest articles - All topics" 
+href="http://www.codeproject.com/webservices/articlerss.aspx?cat=1" 
+type=application/rss+xml rel=alternate><LINK 
+title="CodeProject Latest articles - MFC / C++" 
+href="http://www.codeproject.com/webservices/articlerss.aspx?cat=2" 
+type=application/rss+xml rel=alternate><LINK 
+title="CodeProject Latest articles - C#" 
+href="http://www.codeproject.com/webservices/articlerss.aspx?cat=3" 
+type=application/rss+xml rel=alternate><LINK 
+title="CodeProject Latest articles - ASP.NET" 
+href="http://www.codeproject.com/webservices/articlerss.aspx?cat=4" 
+type=application/rss+xml rel=alternate><LINK 
+title="CodeProject Latest articles - .NET" 
+href="http://www.codeproject.com/webservices/articlerss.aspx?cat=5" 
+type=application/rss+xml rel=alternate><LINK 
+title="CodeProject Latest articles - VB.NET" 
+href="http://www.codeproject.com/webservices/articlerss.aspx?cat=6" 
+type=application/rss+xml rel=alternate><LINK title="CodeProject Lounge Postings" 
+href="http://www.codeproject.com/webservices/LoungeRSS.aspx" 
+type=application/rss+xml rel=alternate><LINK title=CodeProject 
+href="http://www.codeproject.com/info/OpenSearch.xml" 
+type=application/opensearchdescription+xml rel=search><LINK 
+href="CodeProject How to use the managed RTP API classes in _NET to create your multicasting systems_ Free source code and programming help_files/CodeProject.css" 
+type=text/css rel=stylesheet><LINK 
+href="CodeProject How to use the managed RTP API classes in _NET to create your multicasting systems_ Free source code and programming help_files/ForumClassic.css" 
+type=text/css rel=stylesheet>
+<SCRIPT type=text/javascript>
+  var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+  document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</SCRIPT>
+
+<SCRIPT type=text/javascript>
+   var pageTracker = _gat._getTracker("UA-1735123-1");
+   pageTracker._setDomainName("www.codeproject.com");
+   pageTracker._setSessionTimeout("1200"); // 20 mins
+   pageTracker._initData();
+   pageTracker._trackPageview();
+</SCRIPT>
+
+<SCRIPT language=Javascript 
+src="CodeProject How to use the managed RTP API classes in _NET to create your multicasting systems_ Free source code and programming help_files/oncopy.js" 
+type=text/javascript></SCRIPT>
+
+<SCRIPT language=Javascript 
+src="CodeProject How to use the managed RTP API classes in _NET to create your multicasting systems_ Free source code and programming help_files/jxs.js" 
+type=text/javascript></SCRIPT>
+
+<SCRIPT language=Javascript 
+src="CodeProject How to use the managed RTP API classes in _NET to create your multicasting systems_ Free source code and programming help_files/bookmark.js" 
+type=text/javascript></SCRIPT>
+
+<SCRIPT language=Javascript 
+src="CodeProject How to use the managed RTP API classes in _NET to create your multicasting systems_ Free source code and programming help_files/rateitem.js" 
+type=text/javascript></SCRIPT>
+
+<SCRIPT language=Javascript type=text/javascript>//<![CDATA[
+function ToggleMenu(itemName)
+{
+	var elm = document.getElementById(itemName);
+	var i,others = document.getElementById('SectionMenu');
+	for(i=0; i < others.childNodes.length; i++)
+	{
+		var other = others.childNodes[i];
+		if ((other.className == 'MenuSectionBlock') && (other != elm))
+			other.style.display='none';
+	}
+	if (elm.style.display == 'block') elm.style.display='none';
+	else elm.style.display='block';
+	return false;
+}
+
+//]]></SCRIPT>
+
+<SCRIPT language=Javascript 
+src="CodeProject How to use the managed RTP API classes in _NET to create your multicasting systems_ Free source code and programming help_files/addto.js" 
+type=text/javascript></SCRIPT>
+
+<SCRIPT language=Javascript type=text/javascript>//<![CDATA[
+function MarkAns(MemberID,MsgID,QID) {
+ document.write(unescape("%3Cdiv class=\"CallOut\"%3E"));
+ document.write("Was this a good answer to your question? ");
+ document.write(unescape("%3Ca href=\"#xx" + MsgID.toString() + "xx\" "));
+ document.write("onclick=\"RateMsg("+MemberID.toString()+", "+MsgID.toString()+",6,"+QID.toString()+");\"");
+ document.write(unescape("%3E"));
+ document.write(unescape("%3Cimg height=\"20\" width=\"20\" src=\"/script/Forums/Images/good.png\" alt=\"correct\" border=\"0\" align=\"absmiddle\" /%3E Yes%3C/a%3E"));
+ document.write(unescape("%3Ca href=\"#xx" + MsgID.toString() + "xx\" "));
+ document.write("onclick=\"RateMsg("+MemberID.toString()+","+MsgID.toString()+",7,"+QID.toString()+");\"");
+ document.write(unescape("%3E"));
+ document.write(unescape("%3Cimg height=\"20\" width=\"20\" src=\"/script/Forums/Images/bad.png\" alt=\"correct\" style=\"margin-left:10px\" border=\"0\" align=\"absmiddle\" /%3E No%3C/a%3E"));
+ document.write(unescape("%3C/div%3E"));
+}
+function MsgVFrm(MemberID,MsgID,GB,gp,bp,mt){
+ if(!GB)document.write("Rate this message: ");
+ document.write(unescape("%3Ca href=\"#xx" + MsgID.toString() + "xx\" onclick=\"RateMsg(" + MemberID.toString() + ", " + MsgID.toString() + ","));document.write((GB?"5":"1")+unescape(",0);\"%3E"));
+ if(GB) document.write(unescape("%3Cimg height=\"20\" width=\"20\" src=\"/script/Forums/Images/good.png\" alt=\"good\" border=\"0\" align=\"absmiddle\" /%3E "+gp+" "+mt+"%3C/a%3E "));
+ else document.write(unescape("%3Cimg height=\"14\" width=\"14\" src=\"/script/Forums/Images/thumbs_down.gif\" alt=\"vote 1\" border=\"0\" align=\"middle\" /%3E%3C/a%3E "));
+ if(GB)document.write(" &nbsp;"); else for(var i=1; i<=5;i++)
+  document.write(unescape("%3Ca class=\"Frm_MHL\" href=\"#xx" + MsgID.toString() + "xx\" title=\"vote this message a " + i.toString() + "\" onclick=\"RateMsg(" + MemberID.toString() + ", " + MsgID.toString() + ", " + i.toString() + ",0)\"%3E%3Cb%3E" + i.toString() + "%3C/b%3E%3C/a%3E "));
+ document.write(unescape("%3Ca href=\"#xx" + MsgID.toString() + "xx\" onclick=\"RateMsg(" + MemberID.toString() + ", " + MsgID.toString() + ","));document.write((GB?"1":"5")+unescape(",0);\"%3E"));
+ if(GB)document.write(unescape("%3Cimg height=\"20\" width=\"20\" src=\"/script/Forums/Images/bad.png\" alt=\"bad\" border=\"0\" align=\"absmiddle\" /%3E "+bp+" "+mt+"%3C/a%3E"));
+ else document.write(unescape("%3Cimg height=\"14\" width=\"14\" src=\"/script/Forums/Images/thumbs_up.gif\" border=\"0\" alt=\"vote 5\" align=\"middle\" /%3E%3C/a%3E "));
+ if(GB)document.write(" &nbsp;&nbsp; "); else document.write(unescape("%3Cbr /%3E")); document.writeln(unescape("[%3Ca href='#xx") + MsgID.toString() +"xx' title='Report as Abuse' onclick='return ReportMsg(" + MemberID.toString());
+ document.writeln(", " + MsgID.toString() + unescape(",-2)'%3EReport Message%3C/a%3E]"));
+}
+
+function ReportMsg(userid, msgid, score) {
+ if (confirm("Are you sure you want to report this message?"))
+  return RateMsg(userid, msgid, score, 0);
+ else return false;
+}
+function RateMsg(memberid, msgid, score, questionId) {
+ var req = new ActiveXObject("MSXML2.XMLHTTP");
+ req.onreadystatechange = function() {
+  if (req.readyState == 4){
+   if (req.status == 200){
+    var respText = req.responseText;
+    var re = new RegExp(unescape("\%3Cdiv\%3E([^\%3C]*)\%3C/div\%3E"), "g");
+    var match = re.exec(respText);
+    voteStatus.innerHTML = unescape("%3Cb%3E") + (match&&match[1])?match[1]:"An error occured" + unescape("%3C/b%3E");
+   } else
+    voteStatus.innerHTML = unescape("%3Cb style='color:red'%3EFailed!") + req.statusText + unescape("%3C/b%3E");
+  }
+ }
+ var voteStatus = document.getElementById("MVF" + msgid);
+ if (!voteStatus) return;
+ voteStatus.innerHTML = unescape("%3Cb style='color:green'%3EVoting...%3C/b%3E");
+ var strAction = "/script/Forums/Vote.aspx?js=1&fmid="+memberid.toString()+"&select="+msgid.toString()+"&score="+score.toString()+"&qid="+questionId.toString();
+ req.open("GET", strAction, true);
+ req.send(null);
+  return false;
+}
+//]]></SCRIPT>
+
+<SCRIPT language=Javascript type=text/javascript>//<![CDATA[
+var Selected = "-1";
+
+function SwitchMessage(e, msgId)
+{
+  if (!msgId) {
+    if(!e)e=window.event;
+    var target=e.target?e.target:e.srcElement;
+    while(target&&target.id!='DynMessLink')target=target.parentNode;
+    if(!target||target.id!='DynMessLink')return;
+    msgId=target.name;
+  }
+  if(Selected&&Selected!=""){
+    var body=eval("document.getElementById('F" + Selected + "_h1')");
+    if(body) body.style.display = 'none';
+    var head=eval("document.getElementById('F" + Selected + "_h0')");
+    if(head) head.className = head.className.replace("Sel", "UnSel");
+  }
+  if(Selected==msgId.toString())
+    Selected="";
+  else {
+    Selected=msgId.toString();
+    var body=eval("document.getElementById('F" + Selected + "_h1')");
+    if(body){
+      if(body.style.display=='none') body.style.display='';
+      else body.style.display = 'none';
+    }
+    var head=eval("document.getElementById('F" + Selected + "_h0')");
+    if (head) 
+      head.className = head.className.replace("UnSel", "Sel");
+    if(body&&head&&body.style.display!='none'){
+      document.body.scrollTop = getRealPos(head, "Top") - document.body.clientHeight/10;
+      EnsureMessageVisible(Selected, true);
+    }
+  }
+  if (e){if(e.preventDefault)e.preventDefault;else e.returnValue=false;}
+  return false;
+}
+
+//]]></SCRIPT>
+
+<SCRIPT language=Javascript 
+src="CodeProject How to use the managed RTP API classes in _NET to create your multicasting systems_ Free source code and programming help_files/ShortCuts.js" 
+type=text/javascript></SCRIPT>
+<LINK 
+href="CodeProject How to use the managed RTP API classes in _NET to create your multicasting systems_ Free source code and programming help_files/ForumClassicIE6.css" 
+type=text/css rel=stylesheet><LINK href="/favicon.ico" type=image/ico 
+rel=icon><LINK href="/favicon.ico" type=image/ico rel="shortcut icon">
+<META content="MSHTML 6.00.2900.2180" name=GENERATOR></HEAD>
+<BODY>
+<TABLE id=ctl00_AT cellSpacing=0 cellPadding=0 border=0>
+  <TBODY>
+  <TR vAlign=top>
+    <TD colSpan=2>
+      <TABLE cellSpacing=0 cellPadding=0 border=0>
+        <TBODY>
+        <TR>
+          <TD class=HeaderLogo><A href="http://www.codeproject.com/"><IMG 
+            id=ctl00_Logo 
+            style="BORDER-TOP-WIDTH: 0px; BORDER-LEFT-WIDTH: 0px; BORDER-BOTTOM-WIDTH: 0px; WIDTH: 225px; HEIGHT: 90px; BORDER-RIGHT-WIDTH: 0px" 
+            alt="The Code Project" 
+            src="CodeProject How to use the managed RTP API classes in _NET to create your multicasting systems_ Free source code and programming help_files/logo225x90.gif"></A></TD>
+          <TD class=HeaderBanner align=right width="100%">
+            <SCRIPT type=text/javascript>document.write(unescape("%3ca%20href%3d%22http%3a%2f%2fwww.codeproject.com%2fRedir.aspx%3fadid%3d6877%26way%3dban%22%20target%3d%22_blank%22%20rel%3d%22nofollow%22%3e%3cimg%20src%3d%22http%3a%2f%2fwww.codeproject.com%2fscript%2fAnn%2fServeImg.aspx%3fFile%3d%252fscript%252fadmentor%252fimages%252fHEX_728x90.gif%26C%3dFalse%26id%3d6877%22%20alt%3d%22%22%20border%3d%220%22%20width%3d%22728%22%20height%3d%2290%22%3e%3c%2fa%3e"));</SCRIPT>
+          </TD></TR>
+        <TR>
+          <TD colSpan=2>
+            <TABLE class=MemberNavBar cellSpacing=0 cellPadding=5 
+              width="100%"><TBODY>
+              <TR>
+                <TD class=SmallText style="FONT-WEIGHT: bold">5,340,831 
+                  members and growing! (18,039 online)</TD>
+                <TD align=right>
+                  <DIV class=MemberNavBarText 
+                  id=ctl00_MemberMenu_LoggedOnOptions><A 
+                  id=ctl00_MemberMenu_MyProfile 
+                  href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=2959938">Abdelrady_FCIS</A> 
+                  | <A id=ctl00_MemberMenu_MySettings 
+                  href="http://www.codeproject.com/script/Membership/Modify.aspx">My 
+                  Settings</A> | <A id=ctl00_MemberMenu_MyCodeProject 
+                  href="http://www.codeproject.com/script/Membership/MyCodeProject.aspx"><B>My 
+                  CodeProject</B></A> | <A id=ctl00_MemberMenu_MyBookmarks 
+                  href="http://www.codeproject.com/script/Bookmarks/List.aspx?obtid=2"><IMG 
+                  height=16 
+                  src="CodeProject How to use the managed RTP API classes in _NET to create your multicasting systems_ Free source code and programming help_files/fave.gif" 
+                  width=16 align=absMiddle border=0> My Bookmarks</A> | <A 
+                  id=ctl00_MemberMenu_MyArticles 
+                  href="http://www.codeproject.com/script/Articles/MemberArticles.aspx?amid=2959938">My 
+                  Articles</A> | <A id=ctl00_MemberMenu_Signout 
+                  href="http://www.codeproject.com/script/Membership/LogOff.aspx?rp=%2fKB%2fIP%2fUsing_RTP_in_Multicasting.aspx">Sign 
+                  out</A> </DIV></TD></TR></TBODY></TABLE></TD></TR>
+        <TR>
+          <TD colSpan=2>
+            <TABLE class=SiteNavBar id=tblSiteToolbar cellSpacing=0 
+            cellPadding=0>
+              <TBODY>
+              <TR>
+                <TD noWrap><A href="http://www.codeproject.com/">Home</A></TD>
+                <TD>&nbsp; </TD>
+                <TD style="FONT-WEIGHT: normal" noWrap align=right>Current 
+                  Site:</TD>
+                <TD class=SelCat noWrap><A 
+                  href="http://www.codeproject.com/">Main Site</A></TD>
+                <TD noWrap><A href="http://java.codeproject.com/">Java</A></TD>
+                <TD noWrap><A href="http://lamp.codeproject.com/">Linux Apache 
+                  MySQL PHP</A></TD>
+                <TD width="100%">&nbsp;</TD>
+                <TD id=ctl00_TopNavBar_RightMenus>
+                  <DIV id=MenuPos 
+                  style="WIDTH: 380px; POSITION: relative; TOP: 1px; HEIGHT: 22px">
+                  <TABLE 
+                  style="BORDER-TOP-WIDTH: 0px; BORDER-LEFT-WIDTH: 0px; BORDER-BOTTOM-WIDTH: 0px; HEIGHT: 20px; BORDER-RIGHT-WIDTH: 0px" 
+                  cellSpacing=0 cellPadding=0 width=380>
+                    <TBODY>
+                    <TR vAlign=center>
+                      <TD 
+                      style="BORDER-TOP-WIDTH: 0px; BORDER-LEFT-WIDTH: 0px; BORDER-BOTTOM-WIDTH: 0px; BORDER-RIGHT-WIDTH: 0px" 
+                      noWrap><A 
+                        href="http://www.codeproject.com/info/FAQ.aspx">Help!</A></TD>
+                      <TD 
+                      style="BORDER-TOP-WIDTH: 0px; BORDER-LEFT-WIDTH: 0px; BORDER-BOTTOM-WIDTH: 0px; BORDER-RIGHT-WIDTH: 0px" 
+                      noWrap><A 
+                        href="http://www.codeproject.com/script/Articles/Latest.aspx">Articles</A></TD>
+                      <TD 
+                      style="BORDER-TOP-WIDTH: 0px; BORDER-LEFT-WIDTH: 0px; BORDER-BOTTOM-WIDTH: 0px; BORDER-RIGHT-WIDTH: 0px" 
+                      noWrap><A 
+                        href="http://www.codeproject.com/script/Forums/List.aspx">Message 
+                        Boards</A></TD>
+                      <TD 
+                      style="BORDER-TOP-WIDTH: 0px; BORDER-LEFT-WIDTH: 0px; BORDER-BOTTOM-WIDTH: 0px; BORDER-RIGHT-WIDTH: 0px" 
+                      noWrap><A 
+                        href="http://www.codeproject.com/script/Jobs/List.aspx">Job 
+                        Board</A></TD>
+                      <TD 
+                      style="BORDER-TOP-WIDTH: 0px; BORDER-LEFT-WIDTH: 0px; BORDER-BOTTOM-WIDTH: 0px; BORDER-RIGHT-WIDTH: 0px" 
+                      noWrap><A 
+                        href="http://www.codeproject.com/Lounge.aspx">Lounge</A></TD></TR></TBODY></TABLE></DIV></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+  <TR>
+    <TD vAlign=top colSpan=2><A name=_top></A>
+      <TABLE class=ArticleHeader id=ctl00_ArticleTopHeader_HeaderTable 
+      cellSpacing=0 cellPadding=3 width="100%" border=0>
+        <TBODY>
+        <TR vAlign=top>
+          <TD class=SmallText><A id=ctl00_ArticleTopHeader_ChapterLink 
+            href="http://www.codeproject.com/script/Content/Chapter.aspx?chptId=2">Web 
+            Development</A> » <A id=ctl00_ArticleTopHeader_SectionLink 
+            href="http://www.codeproject.com/KB/IP/">Internet / Network</A> » <A 
+            id=ctl00_ArticleTopHeader_SubsectionLink 
+            href="http://www.codeproject.com/KB/IP/index.aspx?#Internet / Network - General">General</A> 
+            <SPAN class=ArticleAdvanced 
+            id=ctl00_ArticleTopHeader_SkillLevel>&nbsp;&nbsp;&nbsp; 
+            Advanced</SPAN> <SPAN class=SmallText 
+            id=ctl00_ArticleTopHeader_LicenceTerms 
+            style="MARGIN-LEFT: 40px">License: <A 
+            href="http://www.codeproject.com/info/cpol10.aspx">The Code Project 
+            Open License (CPOL)</A></SPAN> <BR><BR>
+            <H1><SPAN class=ArticleTopTitle 
+            id=ctl00_ArticleTopHeader_ArticleTitle>How to use the managed RTP 
+            API classes in .NET to create your multicasting 
+            systems</SPAN></H1><B>By <A 
+            href="http://www.codeproject.com/script/Articles/MemberArticles.aspx?amid=1742903">Fadi 
+            M. Abdel-qader</A></B><BR><BR><SPAN class=ArticleTopDescr 
+            id=ctl00_ArticleTopHeader_ArticleDescr>Create an RTP multicasting 
+            presenter (with motion detection).</SPAN> </TD>
+          <TD class=SmallText style="WIDTH: 210px"><SPAN 
+            id=ctl00_ArticleTopHeader_ArticleAttributes>C# 1.0, C# 2.0, C#, 
+            Windows, .NET, .NET 1.1, .NET 2.0, ASP.NET, VS.NET2003, VS2005, 
+            Visual Studio, Dev</SPAN><BR><BR><SPAN 
+            style="PADDING-RIGHT: 2ex">Posted</SPAN>: <B>28 May 
+            2007</B><BR><SPAN style="PADDING-RIGHT: 0.5ex">Updated</SPAN>: <B>3 
+            May 2008</B> <BR><SPAN style="PADDING-RIGHT: 3.2ex">Views</SPAN>: 
+            <B>18,516</B><BR></TD></TR>
+        <TR>
+          <TD colSpan=2>
+            <TABLE width="100%">
+              <TBODY>
+              <TR>
+                <TD></TD>
+                <TD class=SmallText style="WHITE-SPACE: nowrap" 
+              align=right></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+  <TR vAlign=top>
+    <TD class=LHNavBar id=ctl00_LeftNavCell>
+      <DIV class=FeatureBlockHeader>Announcements</DIV>
+      <DIV class="FeatureBlockContent RHFeatureBar" 
+      style="PADDING-RIGHT: 0px; PADDING-LEFT: 0px; PADDING-BOTTOM: 0px; MARGIN: 0px; PADDING-TOP: 0px">
+      <TABLE cellPadding=2>
+        <TBODY>
+        <TR vAlign=center>
+          <TD><IMG height=10 alt=Comp 
+            src="CodeProject How to use the managed RTP API classes in _NET to create your multicasting systems_ Free source code and programming help_files/startrek.gif" 
+            width=24></TD>
+          <TD><A 
+            href="http://www.codeproject.com/script/Awards/Competition.aspx?cid=274">Summer 
+            Code Competition!</A></TD></TR>
+        <TR vAlign=center>
+          <TD><IMG height=24 alt=Comp 
+            src="CodeProject How to use the managed RTP API classes in _NET to create your multicasting systems_ Free source code and programming help_files/info_24.png" 
+            width=24></TD>
+          <TD><A 
+            href="http://www.codeproject.com/script/Awards/Competition.aspx?cid=270">New 
+            thawte <BR>Scavenger Hunt!</A></TD></TR>
+        <TR vAlign=center>
+          <TD><IMG height=24 alt=Comp 
+            src="CodeProject How to use the managed RTP API classes in _NET to create your multicasting systems_ Free source code and programming help_files/coffee_24.png" 
+            width=24 align=middle></TD>
+          <TD><A href="http://www.codeproject.com/Zones/IBM/">Win CodeProject 
+            Coffee!</A></TD></TR>
+        <TR vAlign=center>
+          <TD><IMG height=24 alt=Comp 
+            src="CodeProject How to use the managed RTP API classes in _NET to create your multicasting systems_ Free source code and programming help_files/info_24.png" 
+            width=24 align=middle></TD>
+          <TD><A id=ctl00_Announcements_CompLink 
+            href="http://www.codeproject.com/Feature/ArticleCompetition/">Monthly 
+            Competition</A></TD></TR></TBODY></TABLE></DIV>
+      <DIV class=FeatureBlockHeader style="MARGIN-TOP: 7px">Want a new 
+Job?</DIV>
+      <DIV class="FeatureBlockContent RHFeatureBar">
+      <UL class=InfoList>
+        <LI><A 
+        href="http://www.codeproject.com/script/Jobs/View.aspx?jid=68">Graphic 
+        and Web Designer</A> at ComponentOne in United States
+        <LI><A 
+        href="http://www.codeproject.com/script/Jobs/View.aspx?jid=22">Product 
+        Planner, Visual Studio</A> at Microsoft in United States
+        <LI><A 
+        href="http://www.codeproject.com/script/Jobs/View.aspx?jid=50">Senior 
+        .NET Programmer/Architect</A> at Greater Than Solutions in United States
+        <LI><A href="http://www.codeproject.com/script/Jobs/List.aspx">View 
+        Latest Jobs...</A></LI></UL></DIV>
+      <DIV id=SectionMenu>
+      <DIV class=MenuCat>Chapters</DIV>
+      <DIV class=MenuChapter><A onclick="return ToggleMenu('Chapter1');" 
+      href="http://www.codeproject.com/script/Content/Chapter.aspx?chptId=1">Desktop 
+      Development</A></DIV>
+      <DIV class=MenuSectionBlock id=Chapter1 style="DISPLAY: none">
+      <DIV class=MI id=Section1><A 
+      href="http://www.codeproject.com/KB/buttons/">Button Controls</A></DIV>
+      <DIV class=MI id=Section15><A 
+      href="http://www.codeproject.com/KB/clipboard/">Clipboard</A></DIV>
+      <DIV class=MI id=Section2><A 
+      href="http://www.codeproject.com/KB/combobox/">Combo &amp; List 
+      Boxes</A></DIV>
+      <DIV class=MI id=Section67><A 
+      href="http://www.codeproject.com/KB/dialog/">Dialogs and Windows</A></DIV>
+      <DIV class=MI id=Section107><A 
+      href="http://www.codeproject.com/KB/gadgets/">Desktop Gadgets</A></DIV>
+      <DIV class=MI id=Section16><A 
+      href="http://www.codeproject.com/KB/docview/">Document / View</A></DIV>
+      <DIV class=MI id=Section4><A 
+      href="http://www.codeproject.com/KB/edit/">Edit Controls</A></DIV>
+      <DIV class=MI id=Section17><A 
+      href="http://www.codeproject.com/KB/files/">Files and Folders</A></DIV>
+      <DIV class=MI id=Section3><A 
+      href="http://www.codeproject.com/KB/grid/">Grid &amp; Data 
+      Controls</A></DIV>
+      <DIV class=MI id=Section5><A 
+      href="http://www.codeproject.com/KB/list/">List Controls</A></DIV>
+      <DIV class=MI id=Section6><A 
+      href="http://www.codeproject.com/KB/menus/">Menus</A></DIV>
+      <DIV class=MI id=Section14><A 
+      href="http://www.codeproject.com/KB/miscctrl/">Miscellaneous</A></DIV>
+      <DIV class=MI id=Section18><A 
+      href="http://www.codeproject.com/KB/printing/">Printing</A></DIV>
+      <DIV class=MI id=Section95><A 
+      href="http://www.codeproject.com/KB/progress/">Progress Controls</A></DIV>
+      <DIV class=MI id=Section11><A 
+      href="http://www.codeproject.com/KB/selection/">Selection 
+      Controls</A></DIV>
+      <DIV class=MI id=Section19><A 
+      href="http://www.codeproject.com/KB/shell/">Shell and IE 
+      programming</A></DIV>
+      <DIV class=MI id=Section68><A 
+      href="http://www.codeproject.com/KB/smart/">Smart Client</A></DIV>
+      <DIV class=MI id=Section8><A 
+      href="http://www.codeproject.com/KB/splitter/">Splitter Windows</A></DIV>
+      <DIV class=MI id=Section9><A 
+      href="http://www.codeproject.com/KB/static/">Static &amp; Panel 
+      Controls</A></DIV>
+      <DIV class=MI id=Section10><A 
+      href="http://www.codeproject.com/KB/statusbar/">Status Bar</A></DIV>
+      <DIV class=MI id=Section7><A 
+      href="http://www.codeproject.com/KB/tabs/">Tabs &amp; Property 
+      Pages</A></DIV>
+      <DIV class=MI id=Section12><A 
+      href="http://www.codeproject.com/KB/toolbars/">Toolbars &amp; Docking 
+      windows</A></DIV>
+      <DIV class=MI id=Section13><A 
+      href="http://www.codeproject.com/KB/tree/">Tree Controls</A></DIV></DIV>
+      <DIV class=MenuChapter><A onclick="return ToggleMenu('Chapter2');" 
+      href="http://www.codeproject.com/script/Content/Chapter.aspx?chptId=2">Web 
+      Development</A></DIV>
+      <DIV class=MenuSectionBlock id=Chapter2>
+      <DIV class=MI id=Section70><A 
+      href="http://www.codeproject.com/KB/ajax/">Ajax and Atlas</A></DIV>
+      <DIV class=MI id=Section27><A 
+      href="http://www.codeproject.com/KB/applications/">Applications &amp; 
+      Tools</A></DIV>
+      <DIV class=MI id=Section85><A 
+      href="http://www.codeproject.com/KB/asp/">ASP</A></DIV>
+      <DIV class=MI id=Section89><A 
+      href="http://www.codeproject.com/KB/aspnet/">ASP.NET</A></DIV>
+      <DIV class=MI id=Section28><A 
+      href="http://www.codeproject.com/KB/webforms/">ASP.NET Controls</A></DIV>
+      <DIV class=MI id=Section38><A 
+      href="http://www.codeproject.com/KB/ATL-Server/">ATL Server</A></DIV>
+      <DIV class=MI id=Section29><A 
+      href="http://www.codeproject.com/KB/web-cache/">Caching</A></DIV>
+      <DIV class=MI id=Section91><A 
+      href="http://www.codeproject.com/KB/web-image/">Charts, Graphs and 
+      Images</A></DIV>
+      <DIV class=MI id=Section25><A 
+      href="http://www.codeproject.com/KB/scripting/">Client side 
+      scripting</A></DIV>
+      <DIV class=MI id=Section30><A 
+      href="http://www.codeproject.com/KB/custom-controls/">Custom 
+      Controls</A></DIV>
+      <DIV class=MI id=Section23><A 
+      href="http://www.codeproject.com/KB/HTML/">HTML / CSS</A></DIV>
+      <DIV class=MIS id=Section22><A 
+      href="http://www.codeproject.com/KB/IP/">Internet / Network</A></DIV>
+      <DIV class=MI id=Section24><A 
+      href="http://www.codeproject.com/KB/ISAPI/">ISAPI</A></DIV>
+      <DIV class=MI id=Section33><A 
+      href="http://www.codeproject.com/KB/server-management/">Site &amp; Server 
+      Management</A></DIV>
+      <DIV class=MI id=Section34><A 
+      href="http://www.codeproject.com/KB/session/">Session State</A></DIV>
+      <DIV class=MI id=Section113><A 
+      href="http://www.codeproject.com/KB/silverlight/">Silverlight</A></DIV>
+      <DIV class=MI id=Section36><A 
+      href="http://www.codeproject.com/KB/trace/">Trace and Logs</A></DIV>
+      <DIV class=MI id=Section31><A 
+      href="http://www.codeproject.com/KB/user-controls/">User 
+Controls</A></DIV>
+      <DIV class=MI id=Section37><A 
+      href="http://www.codeproject.com/KB/validation/">Validation</A></DIV>
+      <DIV class=MI id=Section35><A 
+      href="http://www.codeproject.com/KB/viewstate/">View State</A></DIV>
+      <DIV class=MI id=Section26><A 
+      href="http://www.codeproject.com/KB/WAP/">WAP / WML</A></DIV>
+      <DIV class=MI id=Section32><A 
+      href="http://www.codeproject.com/KB/web-security/">Web Security</A></DIV>
+      <DIV class=MI id=Section20><A 
+      href="http://www.codeproject.com/KB/webservices/">Web 
+      Services</A></DIV></DIV>
+      <DIV class=MenuChapter><A onclick="return ToggleMenu('Chapter9');" 
+      href="http://www.codeproject.com/script/Content/Chapter.aspx?chptId=9">Enterprise 
+      Systems</A></DIV>
+      <DIV class=MenuSectionBlock id=Chapter9 style="DISPLAY: none">
+      <DIV class=MI id=Section98><A 
+      href="http://www.codeproject.com/KB/MCMS/">Content Management 
+      Server</A></DIV>
+      <DIV class=MI id=Section99><A 
+      href="http://www.codeproject.com/KB/biztalk/">Microsoft BizTalk 
+      Server</A></DIV>
+      <DIV class=MI id=Section102><A 
+      href="http://www.codeproject.com/KB/exchange/">Microsoft 
+Exchange</A></DIV>
+      <DIV class=MI id=Section90><A 
+      href="http://www.codeproject.com/KB/office/">Office Development</A></DIV>
+      <DIV class=MI id=Section101><A 
+      href="http://www.codeproject.com/KB/sharepoint/">SharePoint 
+      Server</A></DIV></DIV>
+      <DIV class=MenuChapter><A onclick="return ToggleMenu('Chapter3');" 
+      href="http://www.codeproject.com/script/Content/Chapter.aspx?chptId=3">Multimedia</A></DIV>
+      <DIV class=MenuSectionBlock id=Chapter3 style="DISPLAY: none">
+      <DIV class=MI id=Section42><A 
+      href="http://www.codeproject.com/KB/audio-video/">Audio and 
+Video</A></DIV>
+      <DIV class=MI id=Section44><A 
+      href="http://www.codeproject.com/KB/directx/">DirectX</A></DIV>
+      <DIV class=MI id=Section46><A 
+      href="http://www.codeproject.com/KB/GDI/">GDI</A></DIV>
+      <DIV class=MI id=Section47><A 
+      href="http://www.codeproject.com/KB/GDI-plus/">GDI+</A></DIV>
+      <DIV class=MI id=Section43><A 
+      href="http://www.codeproject.com/KB/graphics/">General Graphics</A></DIV>
+      <DIV class=MI id=Section45><A 
+      href="http://www.codeproject.com/KB/openGL/">OpenGL</A></DIV></DIV>
+      <DIV class=MenuChapter><A onclick="return ToggleMenu('Chapter4');" 
+      href="http://www.codeproject.com/script/Content/Chapter.aspx?chptId=4">Database</A></DIV>
+      <DIV class=MenuSectionBlock id=Chapter4 style="DISPLAY: none">
+      <DIV class=MI id=Section66><A 
+      href="http://www.codeproject.com/KB/database/">Database</A></DIV>
+      <DIV class=MI id=Section100><A 
+      href="http://www.codeproject.com/KB/reporting-services/">SQL Reporting 
+      Services</A></DIV></DIV>
+      <DIV class=MenuChapter><A onclick="return ToggleMenu('Chapter8');" 
+      href="http://www.codeproject.com/script/Content/Chapter.aspx?chptId=8">Platforms, 
+      Frameworks &amp; Libraries</A></DIV>
+      <DIV class=MenuSectionBlock id=Chapter8 style="DISPLAY: none">
+      <DIV class=MI id=Section83><A 
+      href="http://www.codeproject.com/KB/atl/">ATL</A></DIV>
+      <DIV class=MI id=Section117><A 
+      href="http://www.codeproject.com/KB/MFC/">MFC</A></DIV>
+      <DIV class=MI id=Section88><A 
+      href="http://www.codeproject.com/KB/stl/">STL</A></DIV>
+      <DIV class=MI id=Section84><A 
+      href="http://www.codeproject.com/KB/wtl/">WTL</A></DIV>
+      <DIV class=MI id=Section49><A 
+      href="http://www.codeproject.com/KB/COM/">COM / COM+</A></DIV>
+      <DIV class=MI id=Section76><A 
+      href="http://www.codeproject.com/KB/dotnet/">.NET Framework</A></DIV>
+      <DIV class=MI id=Section92><A 
+      href="http://www.codeproject.com/KB/winsdk/">Win32/64 SDK &amp; 
+      OS</A></DIV>
+      <DIV class=MI id=Section108><A 
+      href="http://www.codeproject.com/KB/vista/">Vista API</A></DIV>
+      <DIV class=MI id=Section110><A 
+      href="http://www.codeproject.com/KB/vista-security/">Vista 
+      Security</A></DIV>
+      <DIV class=MI id=Section82><A 
+      href="http://www.codeproject.com/KB/cross-platform/">Cross 
+      Platform</A></DIV>
+      <DIV class=MI id=Section69><A 
+      href="http://www.codeproject.com/KB/game/">Game Development</A></DIV>
+      <DIV class=MI id=Section73><A 
+      href="http://www.codeproject.com/KB/mobile/">Mobile Development</A></DIV>
+      <DIV class=MI id=Section106><A 
+      href="http://www.codeproject.com/KB/WC/">Windows CardSpace</A></DIV>
+      <DIV class=MI id=Section103><A 
+      href="http://www.codeproject.com/KB/WCF/">Windows Communication 
+      Foundation</A></DIV>
+      <DIV class=MI id=Section104><A 
+      href="http://www.codeproject.com/KB/WPF/">Windows Presentation 
+      Foundation</A></DIV>
+      <DIV class=MI id=Section105><A 
+      href="http://www.codeproject.com/KB/WF/">Windows Workflow 
+      Foundation</A></DIV>
+      <DIV class=MI id=Section119><A 
+      href="http://www.codeproject.com/KB/library/">Libraries</A></DIV>
+      <DIV class=MI id=Section122><A 
+      href="http://www.codeproject.com/KB/powershell/">Windows 
+      Powershell</A></DIV>
+      <DIV class=MI id=Section123><A 
+      href="http://www.codeproject.com/KB/linq/">LINQ</A></DIV></DIV>
+      <DIV class=MenuChapter><A onclick="return ToggleMenu('Chapter5');" 
+      href="http://www.codeproject.com/script/Content/Chapter.aspx?chptId=5">Languages</A></DIV>
+      <DIV class=MenuSectionBlock id=Chapter5 style="DISPLAY: none">
+      <DIV class=MI id=Section71><A href="http://www.codeproject.com/KB/cpp/">C 
+      / C++ Language</A></DIV>
+      <DIV class=MI id=Section72><A 
+      href="http://www.codeproject.com/KB/mcpp/">C++ / CLI</A></DIV>
+      <DIV class=MI id=Section93><A 
+      href="http://www.codeproject.com/KB/cs/">C#</A></DIV>
+      <DIV class=MI id=Section78><A 
+      href="http://www.codeproject.com/KB/msil/">MSIL</A></DIV>
+      <DIV class=MI id=Section86><A 
+      href="http://www.codeproject.com/KB/vbscript/">VBScript</A></DIV>
+      <DIV class=MI id=Section87><A 
+      href="http://www.codeproject.com/KB/vb/">VB.NET</A></DIV>
+      <DIV class=MI id=Section115><A 
+      href="http://www.codeproject.com/KB/vb-interop/">VB6 Interop</A></DIV>
+      <DIV class=MI id=Section77><A 
+      href="http://www.codeproject.com/KB/net-languages/">Other .NET 
+      Languages</A></DIV>
+      <DIV class=MI id=Section21><A 
+      href="http://www.codeproject.com/KB/XML/">XML</A></DIV>
+      <DIV class=MI id=Section96><A 
+      href="http://www.codeproject.com/KB/java/">Java</A></DIV></DIV>
+      <DIV class=MenuChapter><A onclick="return ToggleMenu('Chapter6');" 
+      href="http://www.codeproject.com/script/Content/Chapter.aspx?chptId=6">General 
+      Programming</A></DIV>
+      <DIV class=MenuSectionBlock id=Chapter6 style="DISPLAY: none">
+      <DIV class=MI id=Section57><A 
+      href="http://www.codeproject.com/KB/recipes/">Algorithms &amp; 
+      Recipes</A></DIV>
+      <DIV class=MI id=Section64><A 
+      href="http://www.codeproject.com/KB/bugs/">Bugs &amp; 
+Workarounds</A></DIV>
+      <DIV class=MI id=Section79><A 
+      href="http://www.codeproject.com/KB/collections/">Collections</A></DIV>
+      <DIV class=MI id=Section56><A 
+      href="http://www.codeproject.com/KB/security/">Cryptography &amp; 
+      Security</A></DIV>
+      <DIV class=MI id=Section50><A 
+      href="http://www.codeproject.com/KB/datetime/">Date and Time</A></DIV>
+      <DIV class=MI id=Section52><A 
+      href="http://www.codeproject.com/KB/DLL/">DLLs &amp; Assemblies</A></DIV>
+      <DIV class=MI id=Section80><A 
+      href="http://www.codeproject.com/KB/exception/">Exception 
+      Handling</A></DIV>
+      <DIV class=MI id=Section81><A 
+      href="http://www.codeproject.com/KB/locale/">Localisation</A></DIV>
+      <DIV class=MI id=Section53><A 
+      href="http://www.codeproject.com/KB/macros/">Macros and Add-ins</A></DIV>
+      <DIV class=MI id=Section54><A 
+      href="http://www.codeproject.com/KB/tips/">Programming Tips</A></DIV>
+      <DIV class=MI id=Section55><A 
+      href="http://www.codeproject.com/KB/string/">String handling</A></DIV>
+      <DIV class=MI id=Section58><A 
+      href="http://www.codeproject.com/KB/threads/">Threads, Processes &amp; 
+      IPC</A></DIV>
+      <DIV class=MI id=Section59><A 
+      href="http://www.codeproject.com/KB/winhelp/">WinHelp / 
+      HTMLHelp</A></DIV></DIV>
+      <DIV class=MenuChapter><A onclick="return ToggleMenu('Chapter10');" 
+      href="http://www.codeproject.com/script/Content/Chapter.aspx?chptId=10">Graphics 
+      / Design</A></DIV>
+      <DIV class=MenuSectionBlock id=Chapter10 style="DISPLAY: none">
+      <DIV class=MI id=Section40><A 
+      href="http://www.codeproject.com/KB/expression/">Expression</A></DIV>
+      <DIV class=MI id=Section114><A 
+      href="http://www.codeproject.com/KB/usability/">Usability</A></DIV></DIV>
+      <DIV class=MenuChapter><A onclick="return ToggleMenu('Chapter11');" 
+      href="http://www.codeproject.com/script/Content/Chapter.aspx?chptId=11">Development 
+      Lifecycle</A></DIV>
+      <DIV class=MenuSectionBlock id=Chapter11 style="DISPLAY: none">
+      <DIV class=MI id=Section51><A 
+      href="http://www.codeproject.com/KB/debug/">Debug Tips</A></DIV>
+      <DIV class=MI id=Section39><A 
+      href="http://www.codeproject.com/KB/architecture/">Design and 
+      Architecture</A></DIV>
+      <DIV class=MI id=Section112><A 
+      href="http://www.codeproject.com/KB/install/">Installation</A></DIV>
+      <DIV class=MI id=Section41><A 
+      href="http://www.codeproject.com/KB/work/">Work Issues</A></DIV>
+      <DIV class=MI id=Section126><A 
+      href="http://www.codeproject.com/KB/codegen/">Code 
+      Generation</A></DIV></DIV>
+      <DIV class=MenuChapter><A onclick="return ToggleMenu('Chapter7');" 
+      href="http://www.codeproject.com/script/Content/Chapter.aspx?chptId=7">General 
+      Reading</A></DIV>
+      <DIV class=MenuSectionBlock id=Chapter7 style="DISPLAY: none">
+      <DIV class=MI id=Section60><A 
+      href="http://www.codeproject.com/KB/books/">Book Chapters</A></DIV>
+      <DIV class=MI id=Section61><A 
+      href="http://www.codeproject.com/KB/book-reviews/">Book Reviews</A></DIV>
+      <DIV class=MI id=Section109><A 
+      href="http://www.codeproject.com/KB/hardware-review/">Hardware 
+      Reviews</A></DIV>
+      <DIV class=MI id=Section63><A 
+      href="http://www.codeproject.com/KB/interviews/">Interviews</A></DIV>
+      <DIV class=MI id=Section62><A 
+      href="http://www.codeproject.com/KB/scrapbook/">Scrapbook</A></DIV>
+      <DIV class=MI id=Section48><A 
+      href="http://www.codeproject.com/KB/system/">Hardware &amp; 
+      System</A></DIV></DIV>
+      <DIV class=MenuChapter><A onclick="return ToggleMenu('Chapter12');" 
+      href="http://www.codeproject.com/script/Content/Chapter.aspx?chptId=12">Third 
+      Party Products</A></DIV>
+      <DIV class=MenuSectionBlock id=Chapter12 style="DISPLAY: none">
+      <DIV class=MI id=Section65><A 
+      href="http://www.codeproject.com/KB/showcase/">Product Showcase</A></DIV>
+      <DIV class=MI id=Section124><A 
+      href="http://www.codeproject.com/KB/solution-center/">Solution 
+      Center</A></DIV></DIV></DIV><BR>
+      <DIV class=MenuCat>Services</DIV>
+      <DIV class=MenuChapter><A 
+      href="http://www.codeproject.com/script/Jobs/List.aspx">Job 
+Board</A></DIV>
+      <DIV class=MenuChapter><A 
+      href="http://www.codeproject.com/Services/coffee.aspx">Code Project 
+      Coffee</A></DIV>
+      <DIV class=MenuChapter><A 
+      href="http://www.codeproject.com/Services/TradePub.aspx">Free 
+      Magazines</A></DIV><BR>
+      <DIV class=MenuCat>Feature Zones</DIV>
+      <DIV class=MenuChapter><A href="http://www.codeproject.com/Zones/IBM">IBM 
+      DeveloperWorks</A></DIV>
+      <DIV class=MenuChapter><A 
+      href="http://www.codeproject.com/Zones/WhitePapers">WhitePapers</A></DIV>
+      <DIV class=MenuChapter><A 
+      href="http://www.codeproject.com/Zones/QuestSQL">Quest SQL 
+      Zone</A></DIV><BR>
+      <DIV style="MARGIN-BOTTOM: 10px; TEXT-ALIGN: center">
+      <SCRIPT type=text/javascript>document.write(unescape("%3ca%20href%3d%22http%3a%2f%2fwww.codeproject.com%2fRedir.aspx%3fadid%3d3487%26way%3dban%22%20target%3d%22_blank%22%20rel%3d%22nofollow%22%3e%3cimg%20src%3d%22http%3a%2f%2fwww.codeproject.com%2fscript%2fAnn%2fServeImg.aspx%3fFile%3d%252fscript%252fadmentor%252fimages%252fcp_daily_150x80.gif%26C%3dFalse%26id%3d3487%22%20alt%3d%22%22%20border%3d%220%22%20width%3d%22150%22%20height%3d%2280%22%3e%3c%2fa%3e"));</SCRIPT>
+      </DIV>
+      <SCRIPT type=text/javascript>document.write(unescape("%3ca%20href%3d%22http%3a%2f%2fwww.codeproject.com%2fRedir.aspx%3fadid%3d6902%26way%3dban%22%20target%3d%22_blank%22%20rel%3d%22nofollow%22%3e%3cimg%20src%3d%22http%3a%2f%2fwww.codeproject.com%2fscript%2fAnn%2fServeImg.aspx%3fFile%3d%252fscript%252fadmentor%252fimages%252fc1se08v2_amazing_160x600.jpg%26C%3dFalse%26id%3d6902%22%20alt%3d%22%22%20border%3d%220%22%20width%3d%22160%22%20height%3d%22600%22%3e%3c%2fa%3e"));</SCRIPT>
+    </TD>
+    <TD class=ArticlePane vAlign=top>
+      <TABLE class=SearchHeaderBar cellSpacing=0 width="100%">
+        <TBODY>
+        <TR>
+          <TD style="WIDTH: 60%; WHITE-SPACE: nowrap" vAlign=center 
+            align=right><FORM style="MARGIN: 0px" name=Search 
+            action=/info/search.aspx method=get><B>Search &nbsp;</B> <INPUT 
+            class=SmallText style="WIDTH: 200px" name=artkw> <SELECT 
+            class=SmallText style="FONT-WEIGHT: bold" name=sbo> <OPTION 
+              value=kw selected>Articles</OPTION> <OPTION 
+              value=fm>Messages</OPTION> <OPTION value=s>Jobs</OPTION></SELECT> <INPUT class=SmallText style="FONT-WEIGHT: bold" type=submit value=" Go! "> 
+            &nbsp; </FORM></TD>
+          <TD class=TinyText style="WHITE-SPACE: nowrap"><A 
+            href="http://www.codeproject.com/info/search.aspx">Advanced 
+            Search</A><BR><A 
+            href="http://www.codeproject.com/script/Content/SiteMap.aspx">Sitemap</A> 
+            | <A id=ctl00_SearchBarCtrl_AddToIESearchLnk 
+            title="Add The Code Project to your IE search Providers" 
+            onclick="window.external.AddSearchProvider('http://www.codeproject.com/info/OpenSearch.xml');return false;" 
+            href="http://www.codeproject.com/">Add to IE Search</A> 
+        </TD></TR></TBODY></TABLE><SPAN id=ctl00_ResultMessage></SPAN>
+      <DIV id=ctl00_ArtDiv>
+      <TABLE cellSpacing=0 cellPadding=0 width="100%" border=0>
+        <TBODY>
+        <TR vAlign=top>
+          <TD vAlign=top>
+            <TABLE>
+              <TBODY></TBODY></TABLE>
+            <DIV class=SmallText><IMG style="VERTICAL-ALIGN: middle" height=16 
+            alt=print 
+            src="CodeProject How to use the managed RTP API classes in _NET to create your multicasting systems_ Free source code and programming help_files/print.gif" 
+            width=16> <A id=ctl00_ArticleHeaderLinks_PrintLnk 
+            href="http://www.codeproject.com/KB/IP/Using_RTP_in_Multicasting.aspx?display=Print">Print</A> 
+            &nbsp; <IMG style="VERTICAL-ALIGN: middle" height=16 
+            alt="Broken Article?" 
+            src="CodeProject How to use the managed RTP API classes in _NET to create your multicasting systems_ Free source code and programming help_files/report.gif" 
+            width=16> <A id=ctl00_ArticleHeaderLinks_BrokenLnk 
+            href="http://www.codeproject.com/script/Articles/Report.aspx?aid=18977">Report 
+            Article</A> &nbsp; <IMG style="VERTICAL-ALIGN: middle" alt=Watch 
+            src="CodeProject How to use the managed RTP API classes in _NET to create your multicasting systems_ Free source code and programming help_files/watchon.png"> 
+            <A class="" id=bmw_18977,2 onclick="return watchMe(18977, 2);" 
+            href="http://www.codeproject.com/script/Bookmarks/Add.aspx?&amp;obid=18977&amp;obtid=2&amp;bma=AddWatch" 
+            name=ajaxBookmarkWatchLink>Watch</A> <SPAN class=TinyText 
+            style="VISIBILITY: hidden"></SPAN><SPAN 
+            id=ctl00_ArticleHeaderLinks_ArticleBmkWatch_Message></SPAN>&nbsp; 
+            <IMG style="VERTICAL-ALIGN: middle" height=16 alt=Bookmark 
+            src="CodeProject How to use the managed RTP API classes in _NET to create your multicasting systems_ Free source code and programming help_files/link.png" 
+            width=16> <A class="" id=bm_18977,2 
+            onclick="return bookmarkMe(18977, 2);" 
+            href="http://www.codeproject.com/script/Bookmarks/Add.aspx?&amp;obid=18977&amp;obtid=2&amp;bma=AddBookmark" 
+            name=ajaxBookmarkLink>Bookmark</A> <SPAN class=TinyText 
+            style="VISIBILITY: hidden"></SPAN><SPAN 
+            id=ctl00_ArticleHeaderLinks_ArticleBmk_Message></SPAN>&nbsp; <IMG 
+            style="VERTICAL-ALIGN: middle" height=16 alt=Discuss 
+            src="CodeProject How to use the managed RTP API classes in _NET to create your multicasting systems_ Free source code and programming help_files/discuss.gif" 
+            width=15> <A 
+            href="http://www.codeproject.com/KB/IP/Using_RTP_in_Multicasting.aspx#_comments">Discuss</A> 
+            &nbsp; <IMG style="VERTICAL-ALIGN: middle" height=16 
+            alt="Recommend Article" 
+            src="CodeProject How to use the managed RTP API classes in _NET to create your multicasting systems_ Free source code and programming help_files/mail.gif" 
+            width=16>&nbsp;<A id=ctl00_ArticleHeaderLinks_Recommend 
+            href="http://www.codeproject.com/script/common/TellFriend.aspx?obtid=2&amp;obid=18977">Send&nbsp;to&nbsp;a&nbsp;friend</A> 
+            </DIV></TD>
+          <TD style="WIDTH: 100px; WHITE-SPACE: nowrap; TEXT-ALIGN: right">
+            <TABLE id=CurRat>
+              <TBODY>
+              <TR>
+                <TD>
+                  <TABLE>
+                    <TBODY>
+                    <TR>
+                      <TD class=SmallText id=ctl00_ArticleRating_VL 
+                      style="WHITE-SPACE: nowrap" align=right><SPAN 
+                        id=ctl00_ArticleRating_VoteLabel>14 votes for this 
+                        Article.</SPAN></TD>
+                      <TD>
+                        <TABLE cellSpacing=0 cellPadding=0 border=1>
+                          <TBODY>
+                          <TR>
+                            <TD width=20 bgColor=white height=7><IMG height=7 
+                              src="CodeProject How to use the managed RTP API classes in _NET to create your multicasting systems_ Free source code and programming help_files/red.gif" 
+                              width=20 align=center border=0></TD>
+                            <TD width=20 bgColor=white height=7><IMG height=7 
+                              src="CodeProject How to use the managed RTP API classes in _NET to create your multicasting systems_ Free source code and programming help_files/red.gif" 
+                              width=20 align=center border=0></TD>
+                            <TD width=20 bgColor=white height=7><IMG height=7 
+                              src="CodeProject How to use the managed RTP API classes in _NET to create your multicasting systems_ Free source code and programming help_files/red.gif" 
+                              width=20 align=center border=0></TD>
+                            <TD width=20 bgColor=white height=7><IMG height=7 
+                              src="CodeProject How to use the managed RTP API classes in _NET to create your multicasting systems_ Free source code and programming help_files/red.gif" 
+                              width=20 align=center border=0></TD>
+                            <TD noWrap width=20 bgColor=white height=7><IMG 
+                              height=7 
+                              src="CodeProject How to use the managed RTP API classes in _NET to create your multicasting systems_ Free source code and programming help_files/red.gif" 
+                              width=6 align=center 
+                      border=0></TD></TR></TBODY></TABLE></TD></TR>
+                    <TR id=ctl00_ArticleRating_PopularityRow>
+                      <TD class=SmallText align=right colSpan=2><A 
+                        id=ctl00_ArticleRating_PopularityLnk 
+                        title="Calculated as rating x Log10(# votes)" 
+                        href="http://www.codeproject.com/script/Articles/TopArticles.aspx?ta_so=1">Popularity: 
+                        4.93</A> <SPAN 
+                        id=ctl00_ArticleRating_PopularityLbl></SPAN><SPAN 
+                        id=ratingVal>Rating: <B>4.30</B> out of 
+                    5</SPAN></TD></TR></TBODY></TABLE></TD>
+                <TD>
+                  <DIV>
+                  <TABLE class=HistTable 
+                  title="Voting Distribution. Recent data only">
+                    <TBODY>
+                    <TR>
+                      <TD><IMG title="1 vote, 7.1%" height=2 
+                        alt="1 vote, 7.1%" 
+                        src="CodeProject How to use the managed RTP API classes in _NET to create your multicasting systems_ Free source code and programming help_files/pollcol.gif" 
+                        width=10 border=0><BR>1</TD>
+                      <TD><IMG title="0 votes, 0.0%" height=1 
+                        alt="0 votes, 0.0%" src="" width=10 border=0><BR>2</TD>
+                      <TD><IMG title="0 votes, 0.0%" height=1 
+                        alt="0 votes, 0.0%" src="" width=10 border=0><BR>3</TD>
+                      <TD><IMG title="3 votes, 21.4%" height=6 
+                        alt="3 votes, 21.4%" 
+                        src="CodeProject How to use the managed RTP API classes in _NET to create your multicasting systems_ Free source code and programming help_files/pollcol.gif" 
+                        width=10 border=0><BR>4</TD>
+                      <TD><IMG title="10 votes, 71.4%" height=20 
+                        alt="10 votes, 71.4%" 
+                        src="CodeProject How to use the managed RTP API classes in _NET to create your multicasting systems_ Free source code and programming help_files/pollcol.gif" 
+                        width=10 
+              border=0><BR>5</TD></TD></TR></TBODY></TABLE></DIV></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE><SPAN 
+      id=intelliTXT>
+      <DIV id=contentdiv><!-- Main Page Contents Start --><!-- Article Starts -->
+      <UL class=download>
+        <LI><A 
+        href="http://www.codeproject.com/KB/IP/Using_RTP_in_Multicasting/PDFArticle_RTP_Programming_P1.zip">Download 
+        this article as PDF - 178.33 KB</A> 
+        <LI><A 
+        href="http://www.codeproject.com/KB/IP/Using_RTP_in_Multicasting/RTP_Presenter.zip">Download 
+        RTP Presenter source code - 973 KB</A> </LI></UL>
+      <P><IMG height=388 alt="Screenshot - Presenter.jpg" 
+      src="CodeProject How to use the managed RTP API classes in _NET to create your multicasting systems_ Free source code and programming help_files/Presenter.jpg" 
+      width=571></P>
+      <H2>Introduction</H2>
+      <P>In this article, I will describe the architecture of RTP – Real Time 
+      Transport Protocol, and discuss the RTP managed classes for the Microsoft 
+      Conference XP Project to multicast JPEG images. For more examples of RTP 
+      programming, see <A href="http://www.socketcoder.com/" 
+      target=_blank>http://www.socketcoder.com/</A>.</P>
+      <P>The key standard for data audio/video transport in IP networks is the 
+      Real-time Transport Protocol (RTP), along with its associated profiles and 
+      payload formats. RTP aims to provide services useful for the transport of 
+      real-time media, such as audio and video, over IP networks. These services 
+      include timing recovery, loss detection and correction, payload and source 
+      identification, reception quality feedback, media synchronization, and 
+      membership management. RTP was originally designed for use in multicast 
+      conferences, using the lightweight sessions model. Since that time, it has 
+      proven useful for a range of other applications: in H.323 video 
+      conferencing, webcasting, and TV distribution; and in both wired and 
+      cellular telephony. The protocol has been demonstrated to scale from 
+      point-to-point use to multicast sessions with thousands of users.</P>
+      <H2>Background</H2>
+      <P><STRONG>How does RTP work?</STRONG></P>
+      <P>A sender is responsible for capturing and transforming audiovisual data 
+      for transmission, as well as for generating RTP packets. It may also 
+      participate in error correction and congestion control by adapting the 
+      transmitted media stream in response to receiver feedback. The frames will 
+      be loaded into RTP packets, ready for sending. If frames are large, they 
+      may be fragmented into several RTP packets; if they are small, several 
+      frames may be bundled into a single RTP packet. Depending on the error 
+      correction scheme in use, a channel coder may be used to generate error 
+      correction packets or to reorder packets before transmission. After the 
+      RTP packets have been sent, the buffered media data corresponding to those 
+      packets is eventually freed. The sender must not discard data that might 
+      be needed for error correction or for the encoding process. This 
+      requirement may mean that the sender must buffer data for some time after 
+      the corresponding packets have been sent, depending on the codec and error 
+      correction scheme used. The sender is responsible for generating periodic 
+      status reports for the media streams it is generating, including those 
+      required for lip synchronization. It also receives reception quality 
+      feedback from other participants, and may use that information to adapt 
+      its transmission. A receiver is responsible for collecting RTP packets 
+      from the network, correcting any losses, recovering the timing, 
+      decompressing the media, and presenting the result to the user. It also 
+      sends reception quality feedback, allowing the sender to adapt the 
+      transmission to the receiver, and it maintains a database of participants 
+      in the session. A possible block diagram for the receiving process is 
+      shown in the figure below; implementations sometimes perform the 
+      operations in a different order depending on their needs.</P>
+      <P><IMG height=217 
+      src="CodeProject How to use the managed RTP API classes in _NET to create your multicasting systems_ Free source code and programming help_files/RTPencoding.gif" 
+      width=538 align=middle border=0></P>
+      <P>In my next article, I will provide more info about the RTP architecture 
+      to transmit audio and video. For more information about RTP, see the 
+      following links:</P>
+      <UL>
+        <LI><A href="http://www.socketcoder.com/OnlineArticles.aspx?index=2" 
+        target=_blank>http://www.socketcoder.com/OnlineArticles.aspx?index=2</A> 
+
+        <LI><A href="http://www.faqs.org/rfcs/rfc3550.html" target=_blank>RFC 
+        3550 (RFC3550)</A> </LI></UL>
+      <H2>Using the code</H2>
+      <P>Microsoft has implemented the RTP in its Conference XP project. The 
+      following diagram illustrates the architecture design of the RTP in 
+      Conference XP 3.0:</P>
+      <P><IMG height=313 
+      src="CodeProject How to use the managed RTP API classes in _NET to create your multicasting systems_ Free source code and programming help_files/RTPClasses.gif" 
+      width=444 align=middle border=0></P>
+      <P>These steps will give you a brief of how to use the RTP on your 
+      multicasting projects:</P>
+      <OL>
+        <LI>Using <CODE>RtpSession</CODE> and <CODE>RtpParticipant</CODE>: A 
+        session consists of a group of participants who are communicating using 
+        RTP. A participant may be active in multiple RTP sessions—for instance, 
+        one session for exchanging audio data, and another session for 
+        exchanging video data. For each participant, the session is identified 
+        by a network address, and a port pair to which data should be sent and a 
+        port pair on which data is received. The send and receive ports may be 
+        the same. Each port pair comprises of two adjacent ports: an 
+        even-numbered port for RTP data packets, and the next higher 
+        (odd-numbered) port for RTCP control packets. The default port pair is 
+        5004 and 5005 for UDP/IP, but many applications dynamically allocate 
+        ports during session setup and ignore the default. RTP sessions are 
+        designed to transport a single type of media; in a multimedia 
+        communication, each media type should be carried in a separate RTP 
+        session. We will use the <CODE>RtpSession</CODE> and 
+        <CODE>RtpParticipant</CODE> classes to: 
+        <UL>
+          <LI>Manages all of the RTP objects and data. 
+          <LI>Hold information about a user. 
+          <LI>To send or receive RTP data. </LI></UL>
+        <P>We have first hook some RTP events to communicate for what is 
+        happening in the RTP API process. These are:</P><PRE lang=cs><SPAN class=code-comment>//</SPAN><SPAN class=code-comment> Manage the join to the session Ex.Add/Remove a User To/From the RTP Session</SPAN>
+RtpEvents.RtpParticipantAdded += <SPAN class=code-keyword>new</SPAN> 
+   RtpEvents.RtpParticipantAddedEventHandler(RtpParticipantAdded);
+RtpEvents.RtpParticipantRemoved += <SPAN class=code-keyword>new</SPAN> 
+   RtpEvents.RtpParticipantRemovedEventHandler(RtpParticipantRemoved);</PRE>
+        <UL>
+          <P><STRONG>Examples of using the above event 
+declarations:</STRONG></P><PRE lang=cs><SPAN class=code-keyword>private</SPAN> <SPAN class=code-keyword>void</SPAN> RtpParticipantAdded(<SPAN class=code-keyword>object</SPAN> sender, RtpEvents.RtpParticipantEventArgs ea)
+{
+  MessageBox.Show (ea.RtpParticipant.Name + <SPAN class=code-string>"</SPAN><SPAN class=code-string> has joined to the session"</SPAN>);
+}
+
+<SPAN class=code-keyword>private</SPAN> <SPAN class=code-keyword>void</SPAN> RtpParticipantRemoved(<SPAN class=code-keyword>object</SPAN> sender, 
+             RtpEvents.RtpParticipantEventArgs ea)
+{
+  MessageBox.Show(ea.RtpParticipant.Name + <SPAN class=code-string>"</SPAN><SPAN class=code-string> has left the session"</SPAN>);
+}
+
+<SPAN class=code-comment>//</SPAN><SPAN class=code-comment> Manage (Add/Remove)Sessions Ex.Activeate multiple RTP sessions </SPAN>
+RtpEvents.RtpStreamAdded += 
+  <SPAN class=code-keyword>new</SPAN> RtpEvents.RtpStreamAddedEventHandler(RtpStreamAdded);
+RtpEvents.RtpStreamRemoved += 
+  <SPAN class=code-keyword>new</SPAN> RtpEvents.RtpStreamRemovedEventHandler(RtpStreamRemoved);
+<SPAN class=code-keyword>private</SPAN> <SPAN class=code-keyword>void</SPAN> RtpStreamAdded(<SPAN class=code-keyword>object</SPAN> sender, RtpEvents.RtpStreamEventArgs ea)
+{
+    ea.RtpStream.FrameReceived += 
+       <SPAN class=code-keyword>new</SPAN> RtpStream.FrameReceivedEventHandler(FrameReceived);
+}
+
+<SPAN class=code-keyword>private</SPAN> <SPAN class=code-keyword>void</SPAN> RtpStreamRemoved(<SPAN class=code-keyword>object</SPAN> sender, RtpEvents.RtpStreamEventArgs ea)
+{
+    ea.RtpStream.FrameReceived -= 
+       <SPAN class=code-keyword>new</SPAN> RtpStream.FrameReceivedEventHandler(FrameReceived);
+}</PRE>
+          <P>Then to join the RTP session, we have to specify the type of the 
+          RTP packet payload. Each session can contain only payload type:</P><PRE lang=cs>RtpSession rtpSession;
+
+<SPAN class=code-keyword>private</SPAN> <SPAN class=code-keyword>void</SPAN> JoinRtpSession(<SPAN class=code-keyword>string</SPAN> SessionName,<SPAN class=code-keyword>string</SPAN> name)
+{
+  rtpSession = <SPAN class=code-keyword>new</SPAN> RtpSession(ep, <SPAN class=code-keyword>new</SPAN> RtpParticipant(SessionName, name), 
+                              <SPAN class=code-keyword>true</SPAN>, <SPAN class=code-keyword>true</SPAN>);
+  rtpSender = rtpSession.CreateRtpSenderFec(name, PayloadType.JPEG, <SPAN class=code-keyword>null</SPAN>, <SPAN class=code-digit>0</SPAN>, <SPAN class=code-digit>200</SPAN>);
+}
+<SPAN class=code-keyword>private</SPAN> <SPAN class=code-keyword>void</SPAN> LeaveRtpSession()
+{
+  <SPAN class=code-comment>//</SPAN><SPAN class=code-comment> Clean up all outstanding objects owned by the RtpSession</SPAN>
+  rtpSession.Dispose();
+}</PRE>
+          <P>Finally, after joining the session, we can get the RTP stream 
+          buffer, as below:</P><PRE lang=cs><SPAN class=code-keyword>private</SPAN> <SPAN class=code-keyword>void</SPAN> FrameReceived(<SPAN class=code-keyword>object</SPAN> sender, RtpStream.FrameReceivedEventArgs ea)
+{
+  System.IO.MemoryStream ms = <SPAN class=code-keyword>new</SPAN> MemoryStream(ea.Frame.Buffer);
+  pictureBox_Receive.Image = Image.FromStream(ms);
+}</PRE>
+          <LI>Using <CODE>RtpSender</CODE> and <CODE>RtpListener</CODE>: The 
+          sender is responsible for sending the captured data and generating RTP 
+          packets - the data can be from live capturing or from a file - 
+          compressing it for transmission. For example, converting a bitmap 
+          image to a JPEG compressed image, as I used in my example. The sender 
+          starts by reading media data, such as video frames, into a buffer from 
+          which encoded frames are produced. In the Managed RTP Library, the 
+          <CODE>RtpSender</CODE> is used for: 
+          <UL>
+            <LI>Sending data across the network. 
+            <LI>Send with or without data being forward error corrected. 
+</LI></UL>
+          <P>And, in the <CODE>RTPListener</CODE>:</P>
+          <UL>
+            <LI>One thread receives data off the network. 
+            <LI>One thread distributes packets to the appropriate stream for 
+            processing. </LI></UL>
+          <P>Use the <CODE>RTPSender</CODE> as shown below:</P><PRE lang=cs>RtpSender rtpSender;
+
+MemoryStream ms = <SPAN class=code-keyword>new</SPAN> MemoryStream();
+<SPAN class=code-comment>//</SPAN><SPAN class=code-comment> Compressed  the captured image as JPEG image format</SPAN>
+pictureBox_sender.Image.Save(ms, ImageFormat.Jpeg);
+<SPAN class=code-comment>//</SPAN><SPAN class=code-comment> Send The The Comressed Image as Bytes stream</SPAN>
+rtpSender.Send(ms.GetBuffer());</PRE>
+          <P><STRONG>RTCP Management:</STRONG> RTCP packets are defined in the 
+          RTP specification: receiver report (RR), sender report (SR), source 
+          description (SDES), membership management (BYE), and 
+          application-defined (APP). The RTCP Sender is used for outgoing RTCP 
+          data where:</P>
+          <UL>
+            <LI>Local participants and streams are joining or leaving. 
+            <LI>Sender and receiver reports for network status. </LI></UL>
+          <P><CODE>RtcpListener</CODE> is used to:</P>
+          <UL>
+            <LI>Processes incoming RTCP (RTP Control Protocol) data. 
+            <LI>Participants and streams join or leave. 
+            <LI>Sender and receiver reports for network status. </LI></UL>
+          <LI>Performance Counters 
+          <P>Used to keep track of interesting network statistics, such as 
+          bytes, packets, frames per second, lost bytes, and recovered bytes. 
+          All of these are contained in the RTP API class properties.</P>
+          <H4>Increase network usage performance:</H4>
+          <P>To increase the performance in my example, I used a mechanism to 
+          send just only the new screen-captured image that is different than 
+          the previous captured image. This will reduce the usage of the network 
+          resources so I compare the pixels of the image before sending it, and 
+          to speed up the comparison, I resize the image to 100X100 and then I 
+          compare it pixel by pixel, as shown below:</P><PRE lang=cs><SPAN class=code-keyword>public</SPAN> <SPAN class=code-keyword>float</SPAN> difference(Image OrginalImage, Image SecoundImage) 
+{
+    <SPAN class=code-keyword>float</SPAN> percent = <SPAN class=code-digit>0</SPAN>; 
+    <SPAN class=code-keyword>try</SPAN>
+    { 
+        <SPAN class=code-keyword>float</SPAN> counter = <SPAN class=code-digit>0</SPAN>; 
+        Bitmap bt1 = <SPAN class=code-keyword>new</SPAN> Bitmap(OrginalImage); 
+        Bitmap bt2 = <SPAN class=code-keyword>new</SPAN> Bitmap(SecoundImage); 
+        <SPAN class=code-keyword>int</SPAN> size_H = bt1.Size.Height; 
+        <SPAN class=code-keyword>int</SPAN> size_W = bt1.Size.Width; 
+        <SPAN class=code-keyword>float</SPAN> total = size_H * size_W; Color pixel_image1; 
+        Color pixel_image2; 
+        <SPAN class=code-keyword>for</SPAN> (<SPAN class=code-keyword>int</SPAN> x = <SPAN class=code-digit>0</SPAN>; x != size_W; x++) 
+        { 
+            <SPAN class=code-keyword>for</SPAN> (<SPAN class=code-keyword>int</SPAN> y = <SPAN class=code-digit>0</SPAN>; y != size_H; y++) 
+            { 
+                pixel_image1 = bt1.GetPixel(x, y); 
+                pixel_image2 = bt2.GetPixel(x, y);
+                <SPAN class=code-keyword>if</SPAN> (pixel_image1 != pixel_image2) 
+                {counter++; } 
+            } 
+        } 
+        percent = (counter / total) * <SPAN class=code-digit>100</SPAN>; 
+    } 
+    <SPAN class=code-keyword>catch</SPAN> (Exception) {percent=100;} 
+    <SPAN class=code-keyword>return</SPAN> percent;
+}</PRE>
+          <P>The above method will calculate the difference pixels in the new 
+          captured image so we can decide to send it or not depending on the 
+          returned difference percentage.</P></LI></UL></LI></OL>
+      <H2>References</H2>
+      <UL>
+        <LI><A href="http://www.conferencexp.net/" target=_blank>Microsoft 
+        Conference XP Project</A> 
+        <LI>RTP: Audio and Video for the Internet, Addison Wesley 2003. 
+        <LI>The Complete Reference to Network Programming, FADI Abdelqader 
+        (under writing). See: <A 
+        href="http://www.socketcoder.com/">http://www.socketcoder.com/</A>. 
+        <LI><A href="http://www.ietf.org/rfc/rfc3550.txt" 
+        target=_blank>RFC3550</A>. </LI></UL><!-- Article Ends --><!-- Main Page Contents End --></DIV></SPAN>
+      <FORM id=aspnetForm 
+      style="PADDING-RIGHT: 0px; PADDING-LEFT: 0px; PADDING-BOTTOM: 0px; MARGIN: 0px; PADDING-TOP: 0px" 
+      name=aspnetForm action=Using_RTP_in_Multicasting.aspx method=post>
+      <DIV><INPUT id=__VIEWSTATE type=hidden 
+      value=/wEPDwULLTEwMDUyNjYzMjhkZMF4EDbg3grzIrqIH86J9GLGMwOq 
+      name=__VIEWSTATE> </DIV>
+      <H2>License</H2>
+      <DIV id=ctl00_LicenseTerms>
+      <P>This article, along with any associated source code and files, is 
+      licensed under <A href="http://www.codeproject.com/info/cpol10.aspx">The 
+      Code Project Open License (CPOL)</A></P></DIV>
+      <H2>About the Author</H2>
+      <TABLE cellSpacing=5 cellPadding=0 width="100%" border=0>
+        <TBODY>
+        <TR vAlign=top>
+          <TD id=ctl00_AboutAuthorRptr_ctl00_AboutAuthor_memberPhotoTable 
+          style="WIDTH: 155px" vAlign=top><B><A 
+            id=ctl00_AboutAuthorRptr_ctl00_AboutAuthor_memberProfileLink 
+            href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=1742903">Fadi 
+            M. Abdel-qader</A></B><BR><BR>
+            <CENTER><IMG id=ctl00_AboutAuthorRptr_ctl00_AboutAuthor_memberPhoto 
+            style="BORDER-TOP-WIDTH: 0px; BORDER-LEFT-WIDTH: 0px; BORDER-BOTTOM-WIDTH: 0px; BORDER-RIGHT-WIDTH: 0px" 
+            src="CodeProject How to use the managed RTP API classes in _NET to create your multicasting systems_ Free source code and programming help_files/{69767AF7-E6E2-42F7-83B7-D4123CEF6063}.jpg"></CENTER><BR><SPAN 
+            class=SmallText 
+            id=ctl00_AboutAuthorRptr_ctl00_AboutAuthor_memberType></SPAN></TD>
+          <TD>Fadi M. Abdelqader Amman/Jordan<BR>Personal Site: 
+            www.SocketCoder.com<BR><BR>Education:<BR>- MA. Degree In CINS DePaul 
+            University <BR><BR>- Bsc. In Computer Networking From Phildelphia 
+            University Graduate With Honor 2005.<BR><BR>Researches: <BR>He 
+            Published a Set of Researches to Develop a Set of Advanced Systems 
+            Such as Remote Monitoring System, Remote Controlling System, Voice 
+            Communication &amp; Voice Conferencing Systems , Remote Classroom 
+            &amp; Distance Learning Systems<BR><BR>Books:<BR>He Authored a Book 
+            in .Net Network, Distributed Systems &amp; TCP/IP Programming ; Read 
+            all information about this book in his site 
+            http://www.socketcoder.com/ReleasedBooks.aspx?index=1<BR>
+            <TABLE>
+              <TBODY>
+              <TR id=ctl00_AboutAuthorRptr_ctl00_AboutAuthor_jobTitleRow>
+                <TD class=SmallText noWrap>Occupation: </TD>
+                <TD width="100%"><SPAN class=SmallText 
+                  id=ctl00_AboutAuthorRptr_ctl00_AboutAuthor_memberJobTitle>Systems 
+                  Engineer</SPAN></TD></TR>
+              <TR id=ctl00_AboutAuthorRptr_ctl00_AboutAuthor_companyRow>
+                <TD class=SmallText>Company: </TD>
+                <TD width="100%"><SPAN class=SmallText 
+                  id=ctl00_AboutAuthorRptr_ctl00_AboutAuthor_memberCompany>SocketCoder.Com</SPAN></TD></TR>
+              <TR id=ctl00_AboutAuthorRptr_ctl00_AboutAuthor_locationRow>
+                <TD class=SmallText>Location: </TD>
+                <TD width="100%"><SPAN class=SmallText 
+                  id=ctl00_AboutAuthorRptr_ctl00_AboutAuthor_memberLocation><IMG 
+                  height=11 alt=Jordan 
+                  src="CodeProject How to use the managed RTP API classes in _NET to create your multicasting systems_ Free source code and programming help_files/JO.gif" 
+                  width=16> 
+      Jordan</SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE><BR>
+      <TABLE id=ctl00_PopularArticlesRow cellSpacing=0 cellPadding=0 
+      width="100%" border=0>
+        <TBODY>
+        <TR vAlign=top>
+          <TD style="WIDTH: 100%">
+            <H2>Other popular Internet / Network articles:</H2>
+            <UL>
+              <LI><A 
+              href="http://www.codeproject.com/KB/IP/AsyncSocketServerandClien.aspx">An 
+              Asynchronous Socket Server and Client</A>
+              <DIV class=SmallText>An asynchronous socket server and client with 
+              encryption and compression.</DIV>
+              <LI><A 
+              href="http://www.codeproject.com/KB/IP/MyDownloader.aspx">MyDownloader: 
+              A Multi-thread C# Segmented Download Manager</A>
+              <DIV class=SmallText>Sample application that manages multiple 
+              segmented downloads and supports HTTP, FTP and YouTube video 
+              downloads</DIV>
+              <LI><A href="http://www.codeproject.com/KB/IP/ndk.aspx">Network 
+              Development Kit 2.0</A>
+              <DIV class=SmallText>Network Development Kit is a set of simple 
+              classes for a client-server architecture.</DIV>
+              <LI><A 
+              href="http://www.codeproject.com/KB/IP/drvfltip.aspx">Developing 
+              Firewalls for Windows 2000/XP</A>
+              <DIV class=SmallText>An article about developing Firewalls for 
+              Windows 2000/XP</DIV>
+              <LI><A 
+              href="http://www.codeproject.com/KB/IP/iocp_server_client.aspx">A 
+              simple IOCP Server/Client Class</A>
+              <DIV class=SmallText>This source code uses the advanced IOCP 
+              technology which can efficiently serve multiple clients. It also 
+              presents some solutions to practical problems that arise with the 
+              IOCP programming API, and provides a simple echo client/server 
+              with file transfer.</DIV></LI></UL>
+            <H2></H2></TD>
+          <TD><IFRAME 
+            src="CodeProject How to use the managed RTP API classes in _NET to create your multicasting systems_ Free source code and programming help_files/ServeHTML.htm" 
+            frameBorder=0 width=300 scrolling=no 
+        height=250></IFRAME></TD></TR></TBODY></TABLE>
+      <DIV id=ctl00_AddTo_AddTo style="MARGIN: 10px">
+      <SCRIPT language=JavaScript type=text/javascript>
+var addtoMethod=1;
+var AddURL = document.location.href;
+var AddTitle = escape(document.title);
+DrawLinks(100, 0, "SmallText Bold", "AddTo") 
+</SCRIPT>
+      </DIV>
+      <TABLE class=RatingBar id=ctl00_RateArticleRow cellSpacing=0 cellPadding=0 
+      width="100%" border=0>
+        <TBODY>
+        <TR>
+          <TD><A 
+            href="http://www.codeproject.com/KB/IP/Using_RTP_in_Multicasting.aspx#_top">Article 
+            Top</A></TD>
+          <TD align=right>
+            <TABLE cellSpacing=0 cellPadding=0 width="100%">
+              <TBODY>
+              <TR>
+                <TD id=ctl00_RateArticle_VoteResultDiv noWrap align=right 
+                width="100%"><SPAN id=voteRes></SPAN><IMG id=loaderImg 
+                  style="DISPLAY: none" height=16 alt=loading... 
+                  src="CodeProject How to use the managed RTP API classes in _NET to create your multicasting systems_ Free source code and programming help_files/ajax-loader.gif" 
+                  width=16> </TD>
+                <TD class=SmallText id=voteTbl style="WHITE-SPACE: nowrap" 
+                align=right>
+                  <TABLE>
+                    <TBODY>
+                    <TR>
+                      <TD id=ctl00_RateArticle_RateText 
+                      style="PADDING-RIGHT: 5px; WHITE-SPACE: nowrap"><I><B>Rate 
+                        this Article for us!</B></I></TD>
+                      <TD id=ctl00_RateArticle_StartForm 
+                        align=right><I>&nbsp;&nbsp;Poor</I></TD>
+                      <TD id=ctl00_RateArticle_VoteFormDiv 
+                      style="WHITE-SPACE: nowrap" align=left>
+                        <TABLE id=ctl00_RateArticle_VoteRBL border=0>
+                          <TBODY>
+                          <TR>
+                            <TD><INPUT id=ctl00_RateArticle_VoteRBL_0 
+                              type=radio value=1 
+                            name=ctl00$RateArticle$VoteRBL></TD>
+                            <TD><INPUT id=ctl00_RateArticle_VoteRBL_1 
+                              type=radio value=2 
+                            name=ctl00$RateArticle$VoteRBL></TD>
+                            <TD><INPUT id=ctl00_RateArticle_VoteRBL_2 
+                              type=radio value=3 
+                            name=ctl00$RateArticle$VoteRBL></TD>
+                            <TD><INPUT id=ctl00_RateArticle_VoteRBL_3 
+                              type=radio value=4 
+                            name=ctl00$RateArticle$VoteRBL></TD>
+                            <TD><INPUT id=ctl00_RateArticle_VoteRBL_4 
+                              type=radio value=5 
+                            name=ctl00$RateArticle$VoteRBL></TD></TR></TBODY></TABLE></TD>
+                      <TD id=ctl00_RateArticle_EndForm noWrap 
+                        align=left><I>Excellent</I> <INPUT class=FormButton id=ctl00_RateArticle_SubmitRateBtn onclick="return rateItem(18977,2);" type=submit value=Vote name=ctl00$RateArticle$SubmitRateBtn> 
+                      </TD>
+                      <TD><SPAN 
+                    id=ctl00_RateArticle_ErrorMessage></SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE>
+      <DIV><INPUT id=__EVENTVALIDATION type=hidden 
+      value=/wEWCAKCspnaBALAlMXDBwLBlMXDBwLClMXDBwLDlMXDBwLElMXDBwLP+++tCwK5upDkC//oUS1WhPcIxFrIiP4CSJVFLtqS 
+      name=__EVENTVALIDATION> </DIV></FORM>
+      <DIV 
+      style="PADDING-RIGHT: 10px; PADDING-LEFT: 10px; PADDING-BOTTOM: 10px; OVERFLOW: hidden; PADDING-TOP: 10px; WHITE-SPACE: nowrap; TEXT-ALIGN: center">
+      <SCRIPT type=text/javascript>document.write(unescape("%3ca%20href%3d%22http%3a%2f%2fwww.codeproject.com%2fRedir.aspx%3fadid%3d6281%26way%3dban%22%20target%3d%22_blank%22%20rel%3d%22nofollow%22%3e%3cimg%20src%3d%22http%3a%2f%2fwww.codeproject.com%2fscript%2fAnn%2fServeImg.aspx%3fFile%3d%252fscript%252fadmentor%252fimages%252fCodeProject20080421_468x60_ReportingApps.gif%26C%3dFalse%26id%3d6281%22%20alt%3d%22%22%20border%3d%220%22%20width%3d%22468%22%20height%3d%2260%22%3e%3c%2fa%3e"));</SCRIPT>
+      <IFRAME 
+      src="CodeProject How to use the managed RTP API classes in _NET to create your multicasting systems_ Free source code and programming help_files/ServeLinks.htm" 
+      frameBorder=0 width=300 scrolling=no height=60></IFRAME></DIV><A 
+      name=_comments></A><!-- Forum Start -->
+      <DIV id=_MessageBoard onclick="return SwitchMessage(event, null)">
+      <TABLE class=Frm_MainTable id=ForumTable cellSpacing=0 cellPadding=0>
+        <TBODY>
+        <TR>
+          <TD>
+            <FORM 
+            style="PADDING-RIGHT: 0px; PADDING-LEFT: 0px; PADDING-BOTTOM: 0px; MARGIN: 0px; PADDING-TOP: 0px" 
+            action=/script/Forums/SetOptions.aspx?floc=%2fKB%2fIP%2fUsing_RTP_in_Multicasting.aspx&amp;fid=422922&amp;df=90&amp;mpp=25&amp;noise=3&amp;sort=Position&amp;view=Quick 
+            method=get><INPUT type=hidden value=422922 name=fid><INPUT 
+            type=hidden 
+            value=?floc=%2fKB%2fIP%2fUsing_RTP_in_Multicasting.aspx&amp;fid=422922&amp;df=90&amp;mpp=25&amp;noise=3&amp;sort=Position&amp;view=Quick 
+            name=currentQS><INPUT type=hidden 
+            value=/KB/IP/Using_RTP_in_Multicasting.aspx name=floc>
+            <TABLE cellSpacing=0 cellPadding=3 width="100%" border=0>
+              <TBODY>
+              <TR class=Frm_HeaderRow1>
+                <TD style="WHITE-SPACE: nowrap"><IMG height=16 alt=FAQ 
+                  src="CodeProject How to use the managed RTP API classes in _NET to create your multicasting systems_ Free source code and programming help_files/forum_faq.gif" 
+                  width=16 align=middle border=0>&nbsp;<A 
+                  href="http://www.codeproject.com/script/Forums/FAQ.aspx"><B>FAQ</B></A>&nbsp;</TD>
+                <TD style="WHITE-SPACE: nowrap; TEXT-ALIGN: right">Noise 
+                  Tolerance<SELECT class=Frm_DropDown size=1 name=noise> 
+                    <OPTION value=1>Very High</OPTION><OPTION 
+                    value=2>High</OPTION><OPTION value=3 
+                    selected>Medium</OPTION><OPTION value=4>Low</OPTION><OPTION 
+                    value=5>Very Low</OPTION></SELECT></TD>
+                <TD style="WHITE-SPACE: nowrap; TEXT-ALIGN: right" 
+                  colSpan=2><IMG height=15 alt=Search 
+                  src="CodeProject How to use the managed RTP API classes in _NET to create your multicasting systems_ Free source code and programming help_files/forum_search.gif" 
+                  width=16 align=top border=0>&nbsp;<A 
+                  href="http://www.codeproject.com/script/Forums/Search.aspx?fid=422922">Search 
+                  Messages</A>&nbsp;</TD>
+                <TD style="TEXT-ALIGN: right"><INPUT class=Frm_Button type=submit value="Set Options" name=submit></TD></TR>
+              <TR class=Frm_HeaderRow2>
+                <TD style="WIDTH: 100%">&nbsp;</TD>
+                <TD 
+                  style="WHITE-SPACE: nowrap; TEXT-ALIGN: right">Layout<SELECT 
+                  class=Frm_DropDown size=1 name=view> <OPTION value=Quick 
+                    selected>Normal</OPTION><OPTION value=Topic>Expand Root 
+                    Messages</OPTION><OPTION value=Expanded>Expand All 
+                    Messages</OPTION><OPTION value=Thread>Thread 
+                    View</OPTION><OPTION value=Normal>No Javascript 
+                    (slow)</OPTION><OPTION value=Preview>No Javascript 
+                    Preview</OPTION></SELECT>&nbsp;&nbsp;</TD>
+                <TD style="WHITE-SPACE: nowrap">Per page<SELECT 
+                  class=Frm_DropDown size=1 name=mpp> <OPTION 
+                    value=10>10</OPTION><OPTION value=25 
+                    selected>25</OPTION><OPTION 
+                  value=50>50</OPTION></SELECT>&nbsp;&nbsp;</TD>
+                <TD colSpan=2>&nbsp;</TD></TR></TBODY></TABLE></FORM></TD></TR>
+        <TR>
+          <TD><A name=xx0xx></A>
+            <TABLE cellSpacing=0 cellPadding=2 width="100%" border=0>
+              <TBODY>
+              <TR class=Frm_NavigationBar>
+                <TD><IMG height=16 alt=new 
+                  src="CodeProject How to use the managed RTP API classes in _NET to create your multicasting systems_ Free source code and programming help_files/forum_newmsg.gif" 
+                  width=16 align=top border=0><A class=Frm_HL 
+                  title="Create a new message thread" 
+                  href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=422922&amp;floc=/KB/IP/Using_RTP_in_Multicasting.aspx" 
+                  target=_top name=Frm_HoverNL><B>New Message</B></A></TD>
+                <TD>Msgs 1 to 14 of 14 (Total in Forum: 14) (<A 
+                  href="http://www.codeproject.com/KB/IP/Using_RTP_in_Multicasting.aspx?fid=422922&amp;df=90&amp;mpp=25&amp;noise=3&amp;sort=Position&amp;view=Quick">Refresh</A>)</TD>
+                <TD style="WHITE-SPACE: nowrap; TEXT-ALIGN: right"><SPAN 
+                  class=Frm_HL>First</SPAN><SPAN class=Frm_HL>Prev</SPAN><SPAN 
+                  class=Frm_HL>Next</SPAN></TD></TR></TBODY></TABLE></TD></TR>
+        <TR>
+          <TD>
+            <TABLE class=Frm_MsgTable cellSpacing=0 cellPadding=0 width="100%" 
+            border=0><!-- Column Headers -->
+              <TBODY>
+              <TR class=Frm_ColumnHeaders>
+                <TD style="WIDTH: 100%">
+                  <TABLE cellSpacing=0 cellPadding=2 width="100%" border=0>
+                    <TBODY>
+                    <TR>
+                      <TD>Subject&nbsp;</TD>
+                      <TD class=Frm_MsgAuthor>&nbsp;Author&nbsp;</TD>
+                      <TD 
+              class=Frm_MsgDate>Date&nbsp;</TD></TR></TBODY></TABLE></TD></TR>
+              <TR>
+                <TD><IMG height=5 alt="" 
+                  src="CodeProject How to use the managed RTP API classes in _NET to create your multicasting systems_ Free source code and programming help_files/t.gif" 
+                  width=1 border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd Rt HdUnSel " id=F2648793_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=16><A 
+                        name=xx2648793xx></A><IMG height=16 alt=Question 
+                        src="CodeProject How to use the managed RTP API classes in _NET to create your multicasting systems_ Free source code and programming help_files/msg_question.gif" 
+                        width=16 align=top></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/IP/Using_RTP_in_Multicasting.aspx?fid=422922&amp;df=90&amp;mpp=25&amp;noise=3&amp;sort=Position&amp;view=Quick&amp;select=2648793#xx2648793xx" 
+                        name=2648793>LSR.NET.RTP to receive RTP-Packets from a 
+                        VoIP UA</A></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        title=member height=16 alt=member 
+                        src="CodeProject How to use the managed RTP API classes in _NET to create your multicasting systems_ Free source code and programming help_files/member_sm.gif" 
+                        border=0></TD>
+                      <TD class=Frm_MsgAuthor><A 
+                        href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=4304050">Member 
+                        4304050</A></TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">4:38 23 
+                        Jul '08 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=F2648793_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 16px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2>Hi Fadi,<BR>first things first: 
+                                That is a great Article. Well done! Espcially 
+                                since it is pretty hard to find a good 
+                                documentation for the LSR.NET.RTP.<BR><BR>Now my 
+                                question:<BR>I'm trying to use the 
+                                MSR.LSR.NET.RTP.dll in a small VoIP Client, 
+                                coded in C#. My problem is: Im not able to 
+                                receive RTP Data. Here's what i'm 
+                                doing:<BR><BR>-I initialize a VoIP Session via 
+                                SIP / SDP. The Counterpart is the SIP Server of 
+                                an random VoIP Provider. Everything is working 
+                                fine up to this point. The Server is now sending 
+                                RTP Packets to my PC on Port 5062.<BR>And this 
+                                is where i'm stuck. I've setup a RTPSession with 
+                                the follwing IPEndpoint: <BR>new 
+                                IPEndPoint(IPAddress("192.168.0.118"),5062);<BR>192.168.0.118 
+                                is the IPV4 Address of my PC where the VoIP 
+                                Server is sending the packets to.<BR>But i don't 
+                                get the FrameReceived Event in my Programm. I'm 
+                                using pretty much your code for the RTP-Part of 
+                                the program.<BR><BR>Thanks in 
+                                advance.<BR>Michael<BR></TD></TR>
+                                <TR style="VERTICAL-ALIGN: middle">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL title=Reply 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=422922&amp;select=2648793&amp;floc=/KB/IP/Using_RTP_in_Multicasting.aspx&amp;fa=r">Reply</A>·<A 
+                                class=Frm_MHL title=Email 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=422922&amp;select=2648793&amp;floc=/KB/IP/Using_RTP_in_Multicasting.aspx&amp;fa=e">Email</A>·<A 
+                                class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/IP/Using_RTP_in_Multicasting.aspx?fid=422922&amp;df=90&amp;mpp=25&amp;sort=Position&amp;tid=2648793">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=422922&amp;msg=2648793">PermaLink</A>·<A 
+                                class=Frm_MHL title="Bookmark this post" 
+                                href="http://www.codeproject.com/script/Bookmarks/Add.aspx?&amp;obid=2648793&amp;obtid=3&amp;bma=AddBookmark">Bookmark</A></TD>
+                                <TD class=Frm_MsgFt 
+                                style="TEXT-ALIGN: right"><SPAN id=MVF2648793 
+                                style="WHITE-SPACE: nowrap">
+                                <SCRIPT type=text/javascript>
+												MsgVFrm(4304050,2648793,false,"","","");
+											</SCRIPT>
+                                </SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR class=Quick>
+                <TD class=Frm_MsgRtDivide><IMG height=1 alt="" 
+                  src="CodeProject How to use the managed RTP API classes in _NET to create your multicasting systems_ Free source code and programming help_files/t.gif" 
+                  width=1 border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd Rt HdUnSel " id=F2624608_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=16><A 
+                        name=xx2624608xx></A><IMG height=16 alt=General 
+                        src="CodeProject How to use the managed RTP API classes in _NET to create your multicasting systems_ Free source code and programming help_files/msg_general.gif" 
+                        width=16 align=top></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/IP/Using_RTP_in_Multicasting.aspx?fid=422922&amp;df=90&amp;mpp=25&amp;noise=3&amp;sort=Position&amp;view=Quick&amp;select=2624608#xx2624608xx" 
+                        name=2624608>RTP on Pocket PC</A></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        title=member height=16 alt=member 
+                        src="CodeProject How to use the managed RTP API classes in _NET to create your multicasting systems_ Free source code and programming help_files/member_sm.gif" 
+                        border=0></TD>
+                      <TD class=Frm_MsgAuthor><A 
+                        href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=2107386">Member 
+                        2107386</A></TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">4:32 4 
+                        Jul '08 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=F2624608_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 16px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2>Hey, I wanted to ask if i can 
+                                implement this code on Pocket pc 2003 using VS 
+                                2005. because when i run this code on compact 
+                                framework it gives some errors 
+                                like;<BR><BR>Error 1 No overload for method 
+                                'JoinRtpSession' takes '1' arguments 
+                                C:\Users\snl\Documents\Visual Studio 
+                                2005\Projects\ppc\ppc\Form1.cs 80 17 
+                                ppc<BR><BR><BR>Error 2 The type 
+                                'System.Net.IPEndPoint' is defined in an 
+                                assembly that is not referenced. You must add a 
+                                reference to assembly 'System, Version=2.0.0.0, 
+                                Culture=neutral, 
+                                PublicKeyToken=b77a5c561934e089'. 
+                                C:\Users\snl\Documents\Visual Studio 
+                                2005\Projects\ppc\ppc\Form1.cs 119 11 ppc 
+                                <BR><BR>plzzz help!! i want to remove these 
+                                errors ASAP.<BR><BR>Thanx.<BR></TD></TR>
+                                <TR style="VERTICAL-ALIGN: middle">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL title=Reply 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=422922&amp;select=2624608&amp;floc=/KB/IP/Using_RTP_in_Multicasting.aspx&amp;fa=r">Reply</A>·<A 
+                                class=Frm_MHL title=Email 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=422922&amp;select=2624608&amp;floc=/KB/IP/Using_RTP_in_Multicasting.aspx&amp;fa=e">Email</A>·<A 
+                                class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/IP/Using_RTP_in_Multicasting.aspx?fid=422922&amp;df=90&amp;mpp=25&amp;sort=Position&amp;tid=2624608">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=422922&amp;msg=2624608">PermaLink</A>·<A 
+                                class=Frm_MHL title="Bookmark this post" 
+                                href="http://www.codeproject.com/script/Bookmarks/Add.aspx?&amp;obid=2624608&amp;obtid=3&amp;bma=AddBookmark">Bookmark</A></TD>
+                                <TD class=Frm_MsgFt 
+                                style="TEXT-ALIGN: right"><SPAN id=MVF2624608 
+                                style="WHITE-SPACE: nowrap">
+                                <SCRIPT type=text/javascript>
+												MsgVFrm(2107386,2624608,false,"","","");
+											</SCRIPT>
+                                </SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR class=Quick>
+                <TD class=Frm_MsgDivide><IMG height=1 alt="" 
+                  src="CodeProject How to use the managed RTP API classes in _NET to create your multicasting systems_ Free source code and programming help_files/t.gif" 
+                  width=1 border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd HdUnSel " id=F2645667_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=34><A 
+                        name=xx2645667xx></A><IMG height=16 alt=Answer 
+                        src="CodeProject How to use the managed RTP API classes in _NET to create your multicasting systems_ Free source code and programming help_files/msg_answer.gif" 
+                        width=16 align=top></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/IP/Using_RTP_in_Multicasting.aspx?fid=422922&amp;df=90&amp;mpp=25&amp;noise=3&amp;sort=Position&amp;view=Quick&amp;select=2645667#xx2645667xx" 
+                        name=2645667>Re: RTP on Pocket PC</A></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        title=member height=16 alt=member 
+                        src="CodeProject How to use the managed RTP API classes in _NET to create your multicasting systems_ Free source code and programming help_files/member_sm.gif" 
+                        border=0></TD>
+                      <TD class=Frm_MsgAuthor><A 
+                        href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=1742903">Fadi 
+                        M. Abdel-qader</A></TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">4:39 21 
+                        Jul '08 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=F2645667_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 34px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2>Hello, <BR><BR>Yes you 
+                                can.<BR><BR>Error 1 No overload for method 
+                                'JoinRtpSession' takes '1' arguments 
+                                C:\Users\snl\Documents\Visual Studio 
+                                2005\Projects\ppc\ppc\Form1.cs 80 17 
+                                ppc<BR><BR>post your code here so i can check 
+                                and correct that error <BR><BR><BR>Error 2 The 
+                                type 'System.Net.IPEndPoint' is defined in an 
+                                assembly that is not referenced. You must add a 
+                                reference to assembly 'System, Version=2.0.0.0, 
+                                Culture=neutral, 
+                                PublicKeyToken=b77a5c561934e089'. 
+                                C:\Users\snl\Documents\Visual Studio 
+                                2005\Projects\ppc\ppc\Form1.cs 119 11 ppc 
+                                <BR><BR>Just add System.Net to your references ! 
+                                <BR><BR>
+                                <DIV 
+                                class=ForumSig>------------------------<BR>FADI 
+                                Abdelqader,<BR>Every thing In Network 
+                                Programming Just in www.SocketCoder.com Where 
+                                The Socket Experts Being!<BR><BR>Good Luck For 
+                                All</DIV><BR></TD></TR>
+                                <TR style="VERTICAL-ALIGN: middle">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL title=Reply 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=422922&amp;select=2645667&amp;floc=/KB/IP/Using_RTP_in_Multicasting.aspx&amp;fa=r">Reply</A>·<A 
+                                class=Frm_MHL title=Email 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=422922&amp;select=2645667&amp;floc=/KB/IP/Using_RTP_in_Multicasting.aspx&amp;fa=e">Email</A>·<A 
+                                class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/IP/Using_RTP_in_Multicasting.aspx?fid=422922&amp;df=90&amp;mpp=25&amp;sort=Position&amp;tid=2624608">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=422922&amp;msg=2645667">PermaLink</A>·<A 
+                                class=Frm_MHL title="Bookmark this post" 
+                                href="http://www.codeproject.com/script/Bookmarks/Add.aspx?&amp;obid=2645667&amp;obtid=3&amp;bma=AddBookmark">Bookmark</A></TD>
+                                <TD class=Frm_MsgFt 
+                                style="TEXT-ALIGN: right"><SPAN id=MVF2645667 
+                                style="WHITE-SPACE: nowrap">
+                                <SCRIPT type=text/javascript>
+												MsgVFrm(1742903,2645667,false,"","","");
+											</SCRIPT>
+                                </SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR class=Quick>
+                <TD class=Frm_MsgRtDivide><IMG height=1 alt="" 
+                  src="CodeProject How to use the managed RTP API classes in _NET to create your multicasting systems_ Free source code and programming help_files/t.gif" 
+                  width=1 border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd Rt HdUnSel " id=F2258180_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=16><A 
+                        name=xx2258180xx></A><IMG height=16 alt=Question 
+                        src="CodeProject How to use the managed RTP API classes in _NET to create your multicasting systems_ Free source code and programming help_files/msg_question.gif" 
+                        width=16 align=top></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/IP/Using_RTP_in_Multicasting.aspx?fid=422922&amp;df=90&amp;mpp=25&amp;noise=3&amp;sort=Position&amp;view=Quick&amp;select=2258180#xx2258180xx" 
+                        name=2258180>RTP audio multicasting sample.</A></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        title=member height=16 alt=member 
+                        src="CodeProject How to use the managed RTP API classes in _NET to create your multicasting systems_ Free source code and programming help_files/member_sm.gif" 
+                        border=0></TD>
+                      <TD class=Frm_MsgAuthor><A 
+                        href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=100389">Bigbermusa</A></TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">22:46 4 
+                        Oct '07 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=F2258180_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 16px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2>Hi,<BR><BR>Could you suggest for 
+                                RTP audio multicasting in the same time 
+                                ?<BR><BR>Bigbermusa <BR></TD></TR>
+                                <TR style="VERTICAL-ALIGN: middle">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL title=Reply 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=422922&amp;select=2258180&amp;floc=/KB/IP/Using_RTP_in_Multicasting.aspx&amp;fa=r">Reply</A>·<A 
+                                class=Frm_MHL title=Email 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=422922&amp;select=2258180&amp;floc=/KB/IP/Using_RTP_in_Multicasting.aspx&amp;fa=e">Email</A>·<A 
+                                class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/IP/Using_RTP_in_Multicasting.aspx?fid=422922&amp;df=90&amp;mpp=25&amp;sort=Position&amp;tid=2258180">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=422922&amp;msg=2258180">PermaLink</A>·<A 
+                                class=Frm_MHL title="Bookmark this post" 
+                                href="http://www.codeproject.com/script/Bookmarks/Add.aspx?&amp;obid=2258180&amp;obtid=3&amp;bma=AddBookmark">Bookmark</A></TD>
+                                <TD class=Frm_MsgFt 
+                                style="TEXT-ALIGN: right"><SPAN id=MVF2258180 
+                                style="WHITE-SPACE: nowrap">3.17/5 (3 votes)
+                                <SCRIPT type=text/javascript>
+												MsgVFrm(100389,2258180,false,"","","");
+											</SCRIPT>
+                                 
+                        </SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR class=Quick>
+                <TD class=Frm_MsgDivide><IMG height=1 alt="" 
+                  src="CodeProject How to use the managed RTP API classes in _NET to create your multicasting systems_ Free source code and programming help_files/t.gif" 
+                  width=1 border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd HdUnSel " id=F2645658_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=34><A 
+                        name=xx2645658xx></A><IMG height=16 alt=Answer 
+                        src="CodeProject How to use the managed RTP API classes in _NET to create your multicasting systems_ Free source code and programming help_files/msg_answer.gif" 
+                        width=16 align=top></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/IP/Using_RTP_in_Multicasting.aspx?fid=422922&amp;df=90&amp;mpp=25&amp;noise=3&amp;sort=Position&amp;view=Quick&amp;select=2645658#xx2645658xx" 
+                        name=2645658>Re: RTP audio multicasting sample.</A></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        title=member height=16 alt=member 
+                        src="CodeProject How to use the managed RTP API classes in _NET to create your multicasting systems_ Free source code and programming help_files/member_sm.gif" 
+                        border=0></TD>
+                      <TD class=Frm_MsgAuthor><A 
+                        href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=1742903">Fadi 
+                        M. Abdel-qader</A></TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">4:33 21 
+                        Jul '08 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=F2645658_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 34px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2>Hello, <BR><BR><A 
+                                href="http://www.socketcoder.com/ArticleFile.aspx?index=2&amp;ArticleID=64">Check 
+                                our free library project here</A>[<A 
+                                title="New Window" 
+                                href="http://www.socketcoder.com/ArticleFile.aspx?index=2&amp;ArticleID=64" 
+                                target=_blank>^</A>] <BR><BR>
+                                <DIV 
+                                class=ForumSig>------------------------<BR>FADI 
+                                Abdelqader,<BR>Every thing In Network 
+                                Programming Just in www.SocketCoder.com Where 
+                                The Socket Experts Being!<BR><BR>Good Luck For 
+                                All</DIV><BR></TD></TR>
+                                <TR style="VERTICAL-ALIGN: middle">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL title=Reply 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=422922&amp;select=2645658&amp;floc=/KB/IP/Using_RTP_in_Multicasting.aspx&amp;fa=r">Reply</A>·<A 
+                                class=Frm_MHL title=Email 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=422922&amp;select=2645658&amp;floc=/KB/IP/Using_RTP_in_Multicasting.aspx&amp;fa=e">Email</A>·<A 
+                                class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/IP/Using_RTP_in_Multicasting.aspx?fid=422922&amp;df=90&amp;mpp=25&amp;sort=Position&amp;tid=2258180">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=422922&amp;msg=2645658">PermaLink</A>·<A 
+                                class=Frm_MHL title="Bookmark this post" 
+                                href="http://www.codeproject.com/script/Bookmarks/Add.aspx?&amp;obid=2645658&amp;obtid=3&amp;bma=AddBookmark">Bookmark</A></TD>
+                                <TD class=Frm_MsgFt 
+                                style="TEXT-ALIGN: right"><SPAN id=MVF2645658 
+                                style="WHITE-SPACE: nowrap">
+                                <SCRIPT type=text/javascript>
+												MsgVFrm(1742903,2645658,false,"","","");
+											</SCRIPT>
+                                </SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR class=Quick>
+                <TD class=Frm_MsgDivide><IMG height=1 alt="" 
+                  src="CodeProject How to use the managed RTP API classes in _NET to create your multicasting systems_ Free source code and programming help_files/t.gif" 
+                  width=1 border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd HdUnSel " id=F2645831_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=52><A 
+                        name=xx2645831xx></A><IMG height=16 alt=General 
+                        src="CodeProject How to use the managed RTP API classes in _NET to create your multicasting systems_ Free source code and programming help_files/msg_general.gif" 
+                        width=16 align=top></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/IP/Using_RTP_in_Multicasting.aspx?fid=422922&amp;df=90&amp;mpp=25&amp;noise=3&amp;sort=Position&amp;view=Quick&amp;select=2645831#xx2645831xx" 
+                        name=2645831>Re: RTP audio multicasting sample.</A></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        title=member height=16 alt=member 
+                        src="CodeProject How to use the managed RTP API classes in _NET to create your multicasting systems_ Free source code and programming help_files/member_sm.gif" 
+                        border=0></TD>
+                      <TD class=Frm_MsgAuthor><A 
+                        href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=100389">Bigbermusa</A></TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">6:20 21 
+                        Jul '08 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=F2645831_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 52px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2>Thank 
+                                you.<BR><BR>Bigbermusa<BR></TD></TR>
+                                <TR style="VERTICAL-ALIGN: middle">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL title=Reply 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=422922&amp;select=2645831&amp;floc=/KB/IP/Using_RTP_in_Multicasting.aspx&amp;fa=r">Reply</A>·<A 
+                                class=Frm_MHL title=Email 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=422922&amp;select=2645831&amp;floc=/KB/IP/Using_RTP_in_Multicasting.aspx&amp;fa=e">Email</A>·<A 
+                                class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/IP/Using_RTP_in_Multicasting.aspx?fid=422922&amp;df=90&amp;mpp=25&amp;sort=Position&amp;tid=2258180">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=422922&amp;msg=2645831">PermaLink</A>·<A 
+                                class=Frm_MHL title="Bookmark this post" 
+                                href="http://www.codeproject.com/script/Bookmarks/Add.aspx?&amp;obid=2645831&amp;obtid=3&amp;bma=AddBookmark">Bookmark</A></TD>
+                                <TD class=Frm_MsgFt 
+                                style="TEXT-ALIGN: right"><SPAN id=MVF2645831 
+                                style="WHITE-SPACE: nowrap">
+                                <SCRIPT type=text/javascript>
+												MsgVFrm(100389,2645831,false,"","","");
+											</SCRIPT>
+                                </SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR class=Quick>
+                <TD class=Frm_MsgDivide><IMG height=1 alt="" 
+                  src="CodeProject How to use the managed RTP API classes in _NET to create your multicasting systems_ Free source code and programming help_files/t.gif" 
+                  width=1 border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd HdUnSel " id=F2645904_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=70><A 
+                        name=xx2645904xx></A><IMG height=16 alt=General 
+                        src="CodeProject How to use the managed RTP API classes in _NET to create your multicasting systems_ Free source code and programming help_files/msg_general.gif" 
+                        width=16 align=top></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/IP/Using_RTP_in_Multicasting.aspx?fid=422922&amp;df=90&amp;mpp=25&amp;noise=3&amp;sort=Position&amp;view=Quick&amp;select=2645904#xx2645904xx" 
+                        name=2645904>Re: RTP audio multicasting sample.</A></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        title=member height=16 alt=member 
+                        src="CodeProject How to use the managed RTP API classes in _NET to create your multicasting systems_ Free source code and programming help_files/member_sm.gif" 
+                        border=0></TD>
+                      <TD class=Frm_MsgAuthor><A 
+                        href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=100389">Bigbermusa</A></TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">7:06 21 
+                        Jul '08 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=F2645904_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 70px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2>I could not open your sample 
+                                project,as it's new version of VS.studio i use 
+                                VS2005 Express,can you turn down the project 
+                                solution to VS2005 ?<BR><BR>Thank 
+                                you.<BR><BR>Bermusa<BR></TD></TR>
+                                <TR style="VERTICAL-ALIGN: middle">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL title=Reply 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=422922&amp;select=2645904&amp;floc=/KB/IP/Using_RTP_in_Multicasting.aspx&amp;fa=r">Reply</A>·<A 
+                                class=Frm_MHL title=Email 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=422922&amp;select=2645904&amp;floc=/KB/IP/Using_RTP_in_Multicasting.aspx&amp;fa=e">Email</A>·<A 
+                                class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/IP/Using_RTP_in_Multicasting.aspx?fid=422922&amp;df=90&amp;mpp=25&amp;sort=Position&amp;tid=2258180">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=422922&amp;msg=2645904">PermaLink</A>·<A 
+                                class=Frm_MHL title="Bookmark this post" 
+                                href="http://www.codeproject.com/script/Bookmarks/Add.aspx?&amp;obid=2645904&amp;obtid=3&amp;bma=AddBookmark">Bookmark</A></TD>
+                                <TD class=Frm_MsgFt 
+                                style="TEXT-ALIGN: right"><SPAN id=MVF2645904 
+                                style="WHITE-SPACE: nowrap">
+                                <SCRIPT type=text/javascript>
+												MsgVFrm(100389,2645904,false,"","","");
+											</SCRIPT>
+                                </SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR class=Quick>
+                <TD class=Frm_MsgDivide><IMG height=1 alt="" 
+                  src="CodeProject How to use the managed RTP API classes in _NET to create your multicasting systems_ Free source code and programming help_files/t.gif" 
+                  width=1 border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd HdUnSel " id=F2645943_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=88><A 
+                        name=xx2645943xx></A><IMG height=16 alt=General 
+                        src="CodeProject How to use the managed RTP API classes in _NET to create your multicasting systems_ Free source code and programming help_files/msg_general.gif" 
+                        width=16 align=top></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/IP/Using_RTP_in_Multicasting.aspx?fid=422922&amp;df=90&amp;mpp=25&amp;noise=3&amp;sort=Position&amp;view=Quick&amp;select=2645943#xx2645943xx" 
+                        name=2645943>Re: RTP audio multicasting sample.</A></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        title=member height=16 alt=member 
+                        src="CodeProject How to use the managed RTP API classes in _NET to create your multicasting systems_ Free source code and programming help_files/member_sm.gif" 
+                        border=0></TD>
+                      <TD class=Frm_MsgAuthor><A 
+                        href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=100389">Bigbermusa</A></TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">7:39 21 
+                        Jul '08 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=F2645943_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 88px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2>Ok,that's successful i could 
+                                already turn down to 
+                                VS2005.<BR><BR>Bigbermusa<BR></TD></TR>
+                                <TR style="VERTICAL-ALIGN: middle">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL title=Reply 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=422922&amp;select=2645943&amp;floc=/KB/IP/Using_RTP_in_Multicasting.aspx&amp;fa=r">Reply</A>·<A 
+                                class=Frm_MHL title=Email 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=422922&amp;select=2645943&amp;floc=/KB/IP/Using_RTP_in_Multicasting.aspx&amp;fa=e">Email</A>·<A 
+                                class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/IP/Using_RTP_in_Multicasting.aspx?fid=422922&amp;df=90&amp;mpp=25&amp;sort=Position&amp;tid=2258180">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=422922&amp;msg=2645943">PermaLink</A>·<A 
+                                class=Frm_MHL title="Bookmark this post" 
+                                href="http://www.codeproject.com/script/Bookmarks/Add.aspx?&amp;obid=2645943&amp;obtid=3&amp;bma=AddBookmark">Bookmark</A></TD>
+                                <TD class=Frm_MsgFt 
+                                style="TEXT-ALIGN: right"><SPAN id=MVF2645943 
+                                style="WHITE-SPACE: nowrap">
+                                <SCRIPT type=text/javascript>
+												MsgVFrm(100389,2645943,false,"","","");
+											</SCRIPT>
+                                </SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR class=Quick>
+                <TD class=Frm_MsgDivide><IMG height=1 alt="" 
+                  src="CodeProject How to use the managed RTP API classes in _NET to create your multicasting systems_ Free source code and programming help_files/t.gif" 
+                  width=1 border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd HdUnSel " id=F2645978_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=52><A 
+                        name=xx2645978xx></A><IMG height=16 alt=General 
+                        src="CodeProject How to use the managed RTP API classes in _NET to create your multicasting systems_ Free source code and programming help_files/msg_general.gif" 
+                        width=16 align=top></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/IP/Using_RTP_in_Multicasting.aspx?fid=422922&amp;df=90&amp;mpp=25&amp;noise=3&amp;sort=Position&amp;view=Quick&amp;select=2645978#xx2645978xx" 
+                        name=2645978>Re: RTP audio multicasting sample.</A></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        title=member height=16 alt=member 
+                        src="CodeProject How to use the managed RTP API classes in _NET to create your multicasting systems_ Free source code and programming help_files/member_sm.gif" 
+                        border=0></TD>
+                      <TD class=Frm_MsgAuthor><A 
+                        href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=100389">Bigbermusa</A></TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">8:12 21 
+                        Jul '08 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=F2645978_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 52px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2>Let me ask you a little bit,what's 
+                                the Reflecter Service and how it work 
+                                ?<BR><BR>Thank 
+                                you.<BR><BR>Bigbermusa<BR></TD></TR>
+                                <TR style="VERTICAL-ALIGN: middle">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL title=Reply 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=422922&amp;select=2645978&amp;floc=/KB/IP/Using_RTP_in_Multicasting.aspx&amp;fa=r">Reply</A>·<A 
+                                class=Frm_MHL title=Email 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=422922&amp;select=2645978&amp;floc=/KB/IP/Using_RTP_in_Multicasting.aspx&amp;fa=e">Email</A>·<A 
+                                class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/IP/Using_RTP_in_Multicasting.aspx?fid=422922&amp;df=90&amp;mpp=25&amp;sort=Position&amp;tid=2258180">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=422922&amp;msg=2645978">PermaLink</A>·<A 
+                                class=Frm_MHL title="Bookmark this post" 
+                                href="http://www.codeproject.com/script/Bookmarks/Add.aspx?&amp;obid=2645978&amp;obtid=3&amp;bma=AddBookmark">Bookmark</A></TD>
+                                <TD class=Frm_MsgFt 
+                                style="TEXT-ALIGN: right"><SPAN id=MVF2645978 
+                                style="WHITE-SPACE: nowrap">
+                                <SCRIPT type=text/javascript>
+												MsgVFrm(100389,2645978,false,"","","");
+											</SCRIPT>
+                                </SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR class=Quick>
+                <TD class=Frm_MsgDivide><IMG height=1 alt="" 
+                  src="CodeProject How to use the managed RTP API classes in _NET to create your multicasting systems_ Free source code and programming help_files/t.gif" 
+                  width=1 border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd HdUnSel " id=F2646786_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=70><A 
+                        name=xx2646786xx></A><IMG height=16 alt=Answer 
+                        src="CodeProject How to use the managed RTP API classes in _NET to create your multicasting systems_ Free source code and programming help_files/msg_answer.gif" 
+                        width=16 align=top></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/IP/Using_RTP_in_Multicasting.aspx?fid=422922&amp;df=90&amp;mpp=25&amp;noise=3&amp;sort=Position&amp;view=Quick&amp;select=2646786#xx2646786xx" 
+                        name=2646786>Re: RTP audio multicasting sample.</A></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        title=member height=16 alt=member 
+                        src="CodeProject How to use the managed RTP API classes in _NET to create your multicasting systems_ Free source code and programming help_files/member_sm.gif" 
+                        border=0></TD>
+                      <TD class=Frm_MsgAuthor><A 
+                        href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=1742903">Fadi 
+                        M. Abdel-qader</A></TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">22:52 
+                        21 Jul '08 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=F2646786_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 70px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2>Hello,<BR><BR>The Reflector 
+                                Service is a multicast RTP service this service 
+                                will receive the unicast signal and reflect it 
+                                to specific multicast group but this service is 
+                                under construction right now. it will release 
+                                with Version 0.2 of our Free RTP VOIP Library 
+                                <BR><BR>
+                                <DIV 
+                                class=ForumSig>------------------------<BR>FADI 
+                                Abdelqader,<BR>Every thing In Network 
+                                Programming Just in www.SocketCoder.com Where 
+                                The Socket Experts Being!<BR><BR>Good Luck For 
+                                All</DIV><BR></TD></TR>
+                                <TR style="VERTICAL-ALIGN: middle">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL title=Reply 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=422922&amp;select=2646786&amp;floc=/KB/IP/Using_RTP_in_Multicasting.aspx&amp;fa=r">Reply</A>·<A 
+                                class=Frm_MHL title=Email 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=422922&amp;select=2646786&amp;floc=/KB/IP/Using_RTP_in_Multicasting.aspx&amp;fa=e">Email</A>·<A 
+                                class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/IP/Using_RTP_in_Multicasting.aspx?fid=422922&amp;df=90&amp;mpp=25&amp;sort=Position&amp;tid=2258180">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=422922&amp;msg=2646786">PermaLink</A>·<A 
+                                class=Frm_MHL title="Bookmark this post" 
+                                href="http://www.codeproject.com/script/Bookmarks/Add.aspx?&amp;obid=2646786&amp;obtid=3&amp;bma=AddBookmark">Bookmark</A></TD>
+                                <TD class=Frm_MsgFt 
+                                style="TEXT-ALIGN: right"><SPAN id=MVF2646786 
+                                style="WHITE-SPACE: nowrap">
+                                <SCRIPT type=text/javascript>
+												MsgVFrm(1742903,2646786,false,"","","");
+											</SCRIPT>
+                                </SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR class=Quick>
+                <TD class=Frm_MsgDivide><IMG height=1 alt="" 
+                  src="CodeProject How to use the managed RTP API classes in _NET to create your multicasting systems_ Free source code and programming help_files/t.gif" 
+                  width=1 border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd HdUnSel " id=F2646964_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=88><A 
+                        name=xx2646964xx></A><IMG height=16 alt=General 
+                        src="CodeProject How to use the managed RTP API classes in _NET to create your multicasting systems_ Free source code and programming help_files/msg_general.gif" 
+                        width=16 align=top></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/IP/Using_RTP_in_Multicasting.aspx?fid=422922&amp;df=90&amp;mpp=25&amp;noise=3&amp;sort=Position&amp;view=Quick&amp;select=2646964#xx2646964xx" 
+                        name=2646964>Re: RTP audio multicasting sample.</A></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        title=member height=16 alt=member 
+                        src="CodeProject How to use the managed RTP API classes in _NET to create your multicasting systems_ Free source code and programming help_files/member_sm.gif" 
+                        border=0></TD>
+                      <TD class=Frm_MsgAuthor><A 
+                        href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=100389">Bigbermusa</A></TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">2:10 22 
+                        Jul '08 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=F2646964_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 88px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2>Ok,thank you for 
+                                information.<BR><BR>Bigbermusa<BR></TD></TR>
+                                <TR style="VERTICAL-ALIGN: middle">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL title=Reply 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=422922&amp;select=2646964&amp;floc=/KB/IP/Using_RTP_in_Multicasting.aspx&amp;fa=r">Reply</A>·<A 
+                                class=Frm_MHL title=Email 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=422922&amp;select=2646964&amp;floc=/KB/IP/Using_RTP_in_Multicasting.aspx&amp;fa=e">Email</A>·<A 
+                                class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/IP/Using_RTP_in_Multicasting.aspx?fid=422922&amp;df=90&amp;mpp=25&amp;sort=Position&amp;tid=2258180">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=422922&amp;msg=2646964">PermaLink</A>·<A 
+                                class=Frm_MHL title="Bookmark this post" 
+                                href="http://www.codeproject.com/script/Bookmarks/Add.aspx?&amp;obid=2646964&amp;obtid=3&amp;bma=AddBookmark">Bookmark</A></TD>
+                                <TD class=Frm_MsgFt 
+                                style="TEXT-ALIGN: right"><SPAN id=MVF2646964 
+                                style="WHITE-SPACE: nowrap">
+                                <SCRIPT type=text/javascript>
+												MsgVFrm(100389,2646964,false,"","","");
+											</SCRIPT>
+                                </SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR class=Quick>
+                <TD class=Frm_MsgRtDivide><IMG height=1 alt="" 
+                  src="CodeProject How to use the managed RTP API classes in _NET to create your multicasting systems_ Free source code and programming help_files/t.gif" 
+                  width=1 border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd LoVote Rt HdUnSel " id=F2111926_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=16><A 
+                        name=xx2111926xx></A><IMG height=16 alt=General 
+                        src="CodeProject How to use the managed RTP API classes in _NET to create your multicasting systems_ Free source code and programming help_files/msg_general.gif" 
+                        width=16 align=top></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/IP/Using_RTP_in_Multicasting.aspx?fid=422922&amp;df=90&amp;mpp=25&amp;noise=3&amp;sort=Position&amp;view=Quick&amp;select=2111926#xx2111926xx" 
+                        name=2111926>Can I use the code to my application 
+                        program?</A></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        title=member height=16 alt=member 
+                        src="CodeProject How to use the managed RTP API classes in _NET to create your multicasting systems_ Free source code and programming help_files/member_sm.gif" 
+                        border=0></TD>
+                      <TD class=Frm_MsgAuthor><A 
+                        href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=2160714">nenith</A></TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">18:10 3 
+                        Jul '07 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=F2111926_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 16px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2><BR><BR>?? <BR></TD></TR>
+                                <TR style="VERTICAL-ALIGN: middle">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL title=Reply 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=422922&amp;select=2111926&amp;floc=/KB/IP/Using_RTP_in_Multicasting.aspx&amp;fa=r">Reply</A>·<A 
+                                class=Frm_MHL title=Email 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=422922&amp;select=2111926&amp;floc=/KB/IP/Using_RTP_in_Multicasting.aspx&amp;fa=e">Email</A>·<A 
+                                class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/IP/Using_RTP_in_Multicasting.aspx?fid=422922&amp;df=90&amp;mpp=25&amp;sort=Position&amp;tid=2111926">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=422922&amp;msg=2111926">PermaLink</A>·<A 
+                                class=Frm_MHL title="Bookmark this post" 
+                                href="http://www.codeproject.com/script/Bookmarks/Add.aspx?&amp;obid=2111926&amp;obtid=3&amp;bma=AddBookmark">Bookmark</A></TD>
+                                <TD class=Frm_MsgFt 
+                                style="TEXT-ALIGN: right"><SPAN id=MVF2111926 
+                                style="WHITE-SPACE: nowrap">1.83/5 (3 votes)
+                                <SCRIPT type=text/javascript>
+												MsgVFrm(2160714,2111926,false,"","","");
+											</SCRIPT>
+                                 
+                        </SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR class=Quick>
+                <TD class=Frm_MsgDivide><IMG height=1 alt="" 
+                  src="CodeProject How to use the managed RTP API classes in _NET to create your multicasting systems_ Free source code and programming help_files/t.gif" 
+                  width=1 border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd HdUnSel " id=F2645672_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=34><A 
+                        name=xx2645672xx></A><IMG height=16 alt=Answer 
+                        src="CodeProject How to use the managed RTP API classes in _NET to create your multicasting systems_ Free source code and programming help_files/msg_answer.gif" 
+                        width=16 align=top></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/IP/Using_RTP_in_Multicasting.aspx?fid=422922&amp;df=90&amp;mpp=25&amp;noise=3&amp;sort=Position&amp;view=Quick&amp;select=2645672#xx2645672xx" 
+                        name=2645672>Re: Can I use the code to my application 
+                        program?</A></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        title=member height=16 alt=member 
+                        src="CodeProject How to use the managed RTP API classes in _NET to create your multicasting systems_ Free source code and programming help_files/member_sm.gif" 
+                        border=0></TD>
+                      <TD class=Frm_MsgAuthor><A 
+                        href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=1742903">Fadi 
+                        M. Abdel-qader</A></TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">4:42 21 
+                        Jul '08 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=F2645672_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 34px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2>Sure,<BR><BR>Read <A 
+                                href="http://www.codeproject.com/info/cpol10.aspx">The 
+                                Code Project Open License (CPOL)</A>[<A 
+                                title="New Window" 
+                                href="http://www.codeproject.com/info/cpol10.aspx" 
+                                target=_blank>^</A>] <BR><BR>
+                                <DIV 
+                                class=ForumSig>------------------------<BR>FADI 
+                                Abdelqader,<BR>Every thing In Network 
+                                Programming Just in www.SocketCoder.com Where 
+                                The Socket Experts Being!<BR><BR>Good Luck For 
+                                All</DIV><BR></TD></TR>
+                                <TR style="VERTICAL-ALIGN: middle">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL title=Reply 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=422922&amp;select=2645672&amp;floc=/KB/IP/Using_RTP_in_Multicasting.aspx&amp;fa=r">Reply</A>·<A 
+                                class=Frm_MHL title=Email 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=422922&amp;select=2645672&amp;floc=/KB/IP/Using_RTP_in_Multicasting.aspx&amp;fa=e">Email</A>·<A 
+                                class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/IP/Using_RTP_in_Multicasting.aspx?fid=422922&amp;df=90&amp;mpp=25&amp;sort=Position&amp;tid=2111926">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=422922&amp;msg=2645672">PermaLink</A>·<A 
+                                class=Frm_MHL title="Bookmark this post" 
+                                href="http://www.codeproject.com/script/Bookmarks/Add.aspx?&amp;obid=2645672&amp;obtid=3&amp;bma=AddBookmark">Bookmark</A></TD>
+                                <TD class=Frm_MsgFt 
+                                style="TEXT-ALIGN: right"><SPAN id=MVF2645672 
+                                style="WHITE-SPACE: nowrap">
+                                <SCRIPT type=text/javascript>
+												MsgVFrm(1742903,2645672,false,"","","");
+											</SCRIPT>
+                                </SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR class=Quick>
+                <TD class=Frm_MsgRtDivide><IMG height=1 alt="" 
+                  src="CodeProject How to use the managed RTP API classes in _NET to create your multicasting systems_ Free source code and programming help_files/t.gif" 
+                  width=1 border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd HiVote Rt HdUnSel " id=F2059128_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=16><A 
+                        name=xx2059128xx></A><IMG height=16 alt=General 
+                        src="CodeProject How to use the managed RTP API classes in _NET to create your multicasting systems_ Free source code and programming help_files/msg_general.gif" 
+                        width=16 align=top></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/IP/Using_RTP_in_Multicasting.aspx?fid=422922&amp;df=90&amp;mpp=25&amp;noise=3&amp;sort=Position&amp;view=Quick&amp;select=2059128#xx2059128xx" 
+                        name=2059128>Exellent!</A></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        title=member height=16 alt=member 
+                        src="CodeProject How to use the managed RTP API classes in _NET to create your multicasting systems_ Free source code and programming help_files/member_sm.gif" 
+                        border=0></TD>
+                      <TD class=Frm_MsgAuthor><A 
+                        href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=831998">ChernoDV</A></TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">0:04 30 
+                        May '07 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=F2059128_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 16px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2>Exellent article! <BR></TD></TR>
+                                <TR style="VERTICAL-ALIGN: middle">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL title=Reply 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=422922&amp;select=2059128&amp;floc=/KB/IP/Using_RTP_in_Multicasting.aspx&amp;fa=r">Reply</A>·<A 
+                                class=Frm_MHL title=Email 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=422922&amp;select=2059128&amp;floc=/KB/IP/Using_RTP_in_Multicasting.aspx&amp;fa=e">Email</A>·<A 
+                                class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/IP/Using_RTP_in_Multicasting.aspx?fid=422922&amp;df=90&amp;mpp=25&amp;sort=Position&amp;tid=2059128">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=422922&amp;msg=2059128">PermaLink</A>·<A 
+                                class=Frm_MHL title="Bookmark this post" 
+                                href="http://www.codeproject.com/script/Bookmarks/Add.aspx?&amp;obid=2059128&amp;obtid=3&amp;bma=AddBookmark">Bookmark</A></TD>
+                                <TD class=Frm_MsgFt 
+                                style="TEXT-ALIGN: right"><SPAN id=MVF2059128 
+                                style="WHITE-SPACE: nowrap">5.00/5 (2 votes)
+                                <SCRIPT type=text/javascript>
+												MsgVFrm(831998,2059128,false,"","","");
+											</SCRIPT>
+                                 
+                        </SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR>
+                <TD><IMG height=5 alt="" 
+                  src="CodeProject How to use the managed RTP API classes in _NET to create your multicasting systems_ Free source code and programming help_files/t.gif" 
+                  width=1 border=0></TD></TR></TBODY></TABLE></TD></TR>
+        <TR>
+          <TD>
+            <TABLE cellSpacing=0 cellPadding=2 width="100%">
+              <TBODY>
+              <TR class=Frm_Footer>
+                <TD>Last Visit: Monday, July 28, 2008 9:27 PM &nbsp; &nbsp; 
+                  Last Update:Monday, July 28, 2008 11:23 PM</TD>
+                <TD 
+              style="WHITE-SPACE: nowrap; TEXT-ALIGN: right"></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></DIV>
+      <P class=SmallText><IMG height=16 alt=General 
+      src="CodeProject How to use the managed RTP API classes in _NET to create your multicasting systems_ Free source code and programming help_files/msg_general.gif" 
+      width=16 align=top> General &nbsp;&nbsp; <IMG height=16 alt=News 
+      src="CodeProject How to use the managed RTP API classes in _NET to create your multicasting systems_ Free source code and programming help_files/msg_news.gif" 
+      width=16 align=top> News &nbsp;&nbsp; <IMG height=16 alt=Question 
+      src="CodeProject How to use the managed RTP API classes in _NET to create your multicasting systems_ Free source code and programming help_files/msg_question.gif" 
+      width=16 align=top> Question &nbsp;&nbsp; <IMG height=16 alt=Answer 
+      src="CodeProject How to use the managed RTP API classes in _NET to create your multicasting systems_ Free source code and programming help_files/msg_answer.gif" 
+      width=16 align=top> Answer &nbsp;&nbsp; <IMG height=16 alt=Joke 
+      src="CodeProject How to use the managed RTP API classes in _NET to create your multicasting systems_ Free source code and programming help_files/msg_joke.gif" 
+      width=16 align=top> Joke &nbsp;&nbsp; <IMG height=16 alt=Rant 
+      src="CodeProject How to use the managed RTP API classes in _NET to create your multicasting systems_ Free source code and programming help_files/msg_rant.gif" 
+      width=16 align=top> Rant &nbsp;&nbsp; <IMG height=16 alt=Admin 
+      src="CodeProject How to use the managed RTP API classes in _NET to create your multicasting systems_ Free source code and programming help_files/msg_admin.gif" 
+      width=16 align=top> Admin &nbsp;&nbsp; </P><!-- Forum End --></DIV>
+      <TABLE width="100%">
+        <TBODY>
+        <TR vAlign=top>
+          <TD class=TinyText align=left><A id=ctl00_PermaLink 
+            href="http://www.codeproject.com/script/Articles/Article.aspx?aid=18977">PermaLink</A> 
+            | <A id=ctl00_PrivacyLink 
+            href="http://www.codeproject.com/info/privacy.aspx">Privacy </A>| <A 
+            id=ctl00_TermsOfUseLink 
+            href="http://www.codeproject.com/info/TermsOfUse.aspx">Terms of 
+            Use</A> <BR>Last Updated: 3 May 2008<BR>Editor: <A 
+            id=ctl00_ArticleEditor 
+            href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=3873871">Sean 
+            Ewington</A><BR></TD>
+          <TD class=TinyText vAlign=top align=right>Copyright 2007 by Fadi M. 
+            Abdel-qader<BR>Everything else Copyright © <A 
+            href="mailto:webmaster@codeproject.com">CodeProject</A>, 1999-2008 
+            <BR>Web20 | <A id=ctl00_AdvertiseLink 
+            href="http://www.codeproject.com/info/MediaKit.aspx">Advertise on 
+            the Code Project </A></TD></TR></TBODY></TABLE>
+      <CENTER></CENTER></TD></TR>
+  <TR>
+    <TD align=middle colSpan=2></TD></TR></TBODY></TABLE><BR>
+<SCRIPT language=Javascript type=text/javascript>//<![CDATA[
+if (document.all) try {window.attachEvent("oncopy",copyCode);}catch(e){};
+//]]></SCRIPT>
+
+<SCRIPT language=Javascript 
+src="CodeProject How to use the managed RTP API classes in _NET to create your multicasting systems_ Free source code and programming help_files/TogglePre.js" 
+type=text/javascript></SCRIPT>
+
+<SCRIPT language=Javascript 
+src="CodeProject How to use the managed RTP API classes in _NET to create your multicasting systems_ Free source code and programming help_files/menu132_com.js" 
+type=text/javascript></SCRIPT>
+
+<SCRIPT language=Javascript 
+src="CodeProject How to use the managed RTP API classes in _NET to create your multicasting systems_ Free source code and programming help_files/TopNavBar.js" 
+type=text/javascript></SCRIPT>
+
+<SCRIPT language=Javascript type=text/javascript>//<![CDATA[
+new HVMenu(new menu_NavbarConfig());
+//]]></SCRIPT>
+</BODY></HTML>

@@ -1,0 +1,95 @@
+From: "Saved by Windows Internet Explorer 7"
+Subject: Operating Systems: The Boot Sector
+Date: Tue, 30 Dec 2008 01:40:27 +0200
+MIME-Version: 1.0
+Content-Type: text/html;
+	charset="windows-1256"
+Content-Transfer-Encoding: quoted-printable
+Content-Location: http://www.nondot.org/sabre/os/files/Booting/BootSector.html
+X-MimeOLE: Produced By Microsoft MimeOLE V6.0.6000.16669
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD><TITLE>Operating Systems: The Boot Sector</TITLE>
+<META http-equiv=3DContent-Type content=3D"text/html; =
+charset=3Dwindows-1256">
+<META content=3D"MSHTML 6.00.6000.16788" name=3DGENERATOR></HEAD>
+<BODY text=3D#000000 bgColor=3D#ffffff>
+<CENTER><FONT face=3DVerdana size=3D7><B>The Boot =
+Sector</B></FONT></CENTER>
+<HR>
+
+<P>The boot sector on a disk is always the first sector on the first =
+track on=20
+the first head. When the computer is powered on (or reset), the BIOS =
+starts up=20
+and does the POST. It initializes all of it's data, then it looks for a =
+valid=20
+boot sector. First it looks at the A: drive, then it looks to C:. If it =
+doesn't=20
+find it then interrupt 18h is called, which, on original IBM PCs, =
+started the=20
+ROM BASIC. A valid boot sector (to the BIOS) is one that has 0AA55h at =
+offset=20
+510 in the boot sector.
+<P>When the BIOS finds the boot sector, it reads that sector (512 bytes) =
+off of=20
+the disk and into memory at 0:7C00h. Then it jumps to 0:7C00h and the =
+boot=20
+sector code gets control. At this point, all that has been initialized =
+is the=20
+BIOS data area (40h:0) and the BIOS interrupts (10h - 1Ah). At this =
+point,=20
+memory is mostly unused, but not neccesarily cleared to 0.
+<P>Below is an example shell that I use when writing boot sector code: =
+<PRE>;Generic boot sector shell.  Written by Chris Lattner 1995
+;Code+Data MUST be less than 510 bytes long!
+
+_Text SEGMENT PUBLIC USE16
+  assume CS:_Text, DS:_Text
+  org 0
+
+EntryPoint:
+  db 0EAh  ;jmp far SEG:OFS    ;Currently we are at 0:7C00
+  dw OFFSET AfterData, 7C0h    ;This makes us be at 7C0:0
+
+;Put any data here!
+
+
+AfterData:=20
+  push CS
+  pop DS     ; update DS to be 7C0 instead of 0
+
+;Put code here!
+
+      =20
+  jmp $    ; Hang out...
+
+org 510    ; Make the file 512 bytes long
+  dw 0AA55h  ; Add the boot signature
+_Text ENDS
+  END
+</PRE>To use this code, you must compile it with either MASM or TASM. =
+Link it=20
+together as a COM file if you can (Tasm v4 complains about illegal COM =
+entry=20
+point). Then write the 512 byte file in sector 1 of a floppy (With some =
+suitable=20
+disk tool) to test it out... If you can't compile it as a COM file, =
+compile it=20
+as an EXE, but only write out the last 512 bytes of the file (eg. skip =
+the EXE=20
+file header). Pop the disk in, reset you computer, and watch the magic!=20
+<P>
+<HR>
+<FONT size=3D4>
+<TABLE align=3Dright border=3D0>
+  <TBODY>
+  <TR>
+    <TD>
+      <CENTER>Copyright =A9 1994-8 <I><A =
+href=3D"mailto:sabre@nondot.org">Chris=20
+      Lattner</A></I><BR>Corrections and suggestions by <A=20
+      href=3D"mailto:murf@perftech.com">John Murphy</A><BR>Last =
+modified:=20
+      Wednesday, 13-Sep-2000 12:10:31 PDT=20
+</CENTER></TD></TR></TBODY></TABLE></FONT></BODY></HTML>

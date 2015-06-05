@@ -1,0 +1,2515 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!-- saved from url=(0049)http://www.codeproject.com/KB/IP/ssl_sockets.aspx -->
+<HTML><HEAD><TITLE>CodeProject: SSL : Convert your Plain Sockets to SSL Sockets in an Easy Way. Free source code and programming help</TITLE>
+<SCRIPT language=javascript src=""></SCRIPT>
+
+<META http-equiv=Content-Type content="text/html; charset=utf-8">
+<META 
+content="A simple class that allows you to convert an existing SOCKET handle to SSL under Windows; Author: Michael Chourdakis; Section: Internet / Network; Chapter: Web Development" 
+name=Description>
+<META 
+content="C++, Win32, Dev, Intermediate,Internet / Network,Web Development,Free source code, tutorials" 
+name=Keywords>
+<META content="The Code Project" name=Author>
+<META content=General name=Rating>
+<META content="index, follow" name=Robots>
+<META content="1 days" name=Revisit-After><LINK 
+title="CodeProject Latest articles - All topics" 
+href="http://www.codeproject.com/webservices/articlerss.aspx?cat=1" 
+type=application/rss+xml rel=alternate><LINK 
+title="CodeProject Latest articles - MFC / C++" 
+href="http://www.codeproject.com/webservices/articlerss.aspx?cat=2" 
+type=application/rss+xml rel=alternate><LINK 
+title="CodeProject Latest articles - C#" 
+href="http://www.codeproject.com/webservices/articlerss.aspx?cat=3" 
+type=application/rss+xml rel=alternate><LINK 
+title="CodeProject Latest articles - ASP.NET" 
+href="http://www.codeproject.com/webservices/articlerss.aspx?cat=4" 
+type=application/rss+xml rel=alternate><LINK 
+title="CodeProject Latest articles - .NET" 
+href="http://www.codeproject.com/webservices/articlerss.aspx?cat=5" 
+type=application/rss+xml rel=alternate><LINK 
+title="CodeProject Latest articles - VB.NET" 
+href="http://www.codeproject.com/webservices/articlerss.aspx?cat=6" 
+type=application/rss+xml rel=alternate><LINK title="CodeProject Lounge Postings" 
+href="http://www.codeproject.com/webservices/LoungeRSS.aspx" 
+type=application/rss+xml rel=alternate><LINK title=CodeProject 
+href="http://www.codeproject.com/info/OpenSearch.xml" 
+type=application/opensearchdescription+xml rel=search><LINK 
+href="CodeProject SSL  Convert your Plain Sockets to SSL Sockets in an Easy Way_ Free source code and programming help_files/CodeProject.css" 
+type=text/css rel=stylesheet><LINK 
+href="CodeProject SSL  Convert your Plain Sockets to SSL Sockets in an Easy Way_ Free source code and programming help_files/ForumClassic.css" 
+type=text/css rel=stylesheet>
+<SCRIPT type=text/javascript>
+  var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+  document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</SCRIPT>
+
+<SCRIPT type=text/javascript>
+   var pageTracker = _gat._getTracker("UA-1735123-1");
+   pageTracker._setDomainName("www.codeproject.com");
+   pageTracker._setSessionTimeout("1200"); // 20 mins
+   pageTracker._initData();
+   pageTracker._trackPageview();
+</SCRIPT>
+
+<SCRIPT language=Javascript 
+src="CodeProject SSL  Convert your Plain Sockets to SSL Sockets in an Easy Way_ Free source code and programming help_files/oncopy.js" 
+type=text/javascript></SCRIPT>
+
+<SCRIPT language=Javascript 
+src="CodeProject SSL  Convert your Plain Sockets to SSL Sockets in an Easy Way_ Free source code and programming help_files/jxs.js" 
+type=text/javascript></SCRIPT>
+
+<SCRIPT language=Javascript 
+src="CodeProject SSL  Convert your Plain Sockets to SSL Sockets in an Easy Way_ Free source code and programming help_files/bookmark.js" 
+type=text/javascript></SCRIPT>
+
+<SCRIPT language=Javascript 
+src="CodeProject SSL  Convert your Plain Sockets to SSL Sockets in an Easy Way_ Free source code and programming help_files/rateitem.js" 
+type=text/javascript></SCRIPT>
+
+<SCRIPT language=Javascript type=text/javascript>//<![CDATA[
+function ToggleMenu(itemName)
+{
+	var elm = document.getElementById(itemName);
+	var i,others = document.getElementById('SectionMenu');
+	for(i=0; i < others.childNodes.length; i++)
+	{
+		var other = others.childNodes[i];
+		if ((other.className == 'MenuSectionBlock') && (other != elm))
+			other.style.display='none';
+	}
+	if (elm.style.display == 'block') elm.style.display='none';
+	else elm.style.display='block';
+	return false;
+}
+
+//]]></SCRIPT>
+
+<SCRIPT language=Javascript 
+src="CodeProject SSL  Convert your Plain Sockets to SSL Sockets in an Easy Way_ Free source code and programming help_files/addto.js" 
+type=text/javascript></SCRIPT>
+
+<SCRIPT language=Javascript type=text/javascript>//<![CDATA[
+function MarkAns(MemberID,MsgID,QID) {
+ document.write(unescape("%3Cdiv class=\"CallOut\"%3E"));
+ document.write("Was this a good answer to your question? ");
+ document.write(unescape("%3Ca href=\"#xx" + MsgID.toString() + "xx\" "));
+ document.write("onclick=\"RateMsg("+MemberID.toString()+", "+MsgID.toString()+",6,"+QID.toString()+");\"");
+ document.write(unescape("%3E"));
+ document.write(unescape("%3Cimg height=\"20\" width=\"20\" src=\"/script/Forums/Images/good.png\" alt=\"correct\" border=\"0\" align=\"absmiddle\" /%3E Yes%3C/a%3E"));
+ document.write(unescape("%3Ca href=\"#xx" + MsgID.toString() + "xx\" "));
+ document.write("onclick=\"RateMsg("+MemberID.toString()+","+MsgID.toString()+",7,"+QID.toString()+");\"");
+ document.write(unescape("%3E"));
+ document.write(unescape("%3Cimg height=\"20\" width=\"20\" src=\"/script/Forums/Images/bad.png\" alt=\"correct\" style=\"margin-left:10px\" border=\"0\" align=\"absmiddle\" /%3E No%3C/a%3E"));
+ document.write(unescape("%3C/div%3E"));
+}
+function MsgVFrm(MemberID,MsgID,GB,gp,bp,mt){
+ if(!GB)document.write("Rate this message: ");
+ document.write(unescape("%3Ca href=\"#xx" + MsgID.toString() + "xx\" onclick=\"RateMsg(" + MemberID.toString() + ", " + MsgID.toString() + ","));document.write((GB?"5":"1")+unescape(",0);\"%3E"));
+ if(GB) document.write(unescape("%3Cimg height=\"20\" width=\"20\" src=\"/script/Forums/Images/good.png\" alt=\"good\" border=\"0\" align=\"absmiddle\" /%3E "+gp+" "+mt+"%3C/a%3E "));
+ else document.write(unescape("%3Cimg height=\"14\" width=\"14\" src=\"/script/Forums/Images/thumbs_down.gif\" alt=\"vote 1\" border=\"0\" align=\"middle\" /%3E%3C/a%3E "));
+ if(GB)document.write(" &nbsp;"); else for(var i=1; i<=5;i++)
+  document.write(unescape("%3Ca class=\"Frm_MHL\" href=\"#xx" + MsgID.toString() + "xx\" title=\"vote this message a " + i.toString() + "\" onclick=\"RateMsg(" + MemberID.toString() + ", " + MsgID.toString() + ", " + i.toString() + ",0)\"%3E%3Cb%3E" + i.toString() + "%3C/b%3E%3C/a%3E "));
+ document.write(unescape("%3Ca href=\"#xx" + MsgID.toString() + "xx\" onclick=\"RateMsg(" + MemberID.toString() + ", " + MsgID.toString() + ","));document.write((GB?"1":"5")+unescape(",0);\"%3E"));
+ if(GB)document.write(unescape("%3Cimg height=\"20\" width=\"20\" src=\"/script/Forums/Images/bad.png\" alt=\"bad\" border=\"0\" align=\"absmiddle\" /%3E "+bp+" "+mt+"%3C/a%3E"));
+ else document.write(unescape("%3Cimg height=\"14\" width=\"14\" src=\"/script/Forums/Images/thumbs_up.gif\" border=\"0\" alt=\"vote 5\" align=\"middle\" /%3E%3C/a%3E "));
+ if(GB)document.write(" &nbsp;&nbsp; "); else document.write(unescape("%3Cbr /%3E")); document.writeln(unescape("[%3Ca href='#xx") + MsgID.toString() +"xx' title='Report as Abuse' onclick='return ReportMsg(" + MemberID.toString());
+ document.writeln(", " + MsgID.toString() + unescape(",-2)'%3EReport Message%3C/a%3E]"));
+}
+
+function ReportMsg(userid, msgid, score) {
+ if (confirm("Are you sure you want to report this message?"))
+  return RateMsg(userid, msgid, score, 0);
+ else return false;
+}
+function RateMsg(memberid, msgid, score, questionId) {
+ var req = new ActiveXObject("MSXML2.XMLHTTP");
+ req.onreadystatechange = function() {
+  if (req.readyState == 4){
+   if (req.status == 200){
+    var respText = req.responseText;
+    var re = new RegExp(unescape("\%3Cdiv\%3E([^\%3C]*)\%3C/div\%3E"), "g");
+    var match = re.exec(respText);
+    voteStatus.innerHTML = unescape("%3Cb%3E") + (match&&match[1])?match[1]:"An error occured" + unescape("%3C/b%3E");
+   } else
+    voteStatus.innerHTML = unescape("%3Cb style='color:red'%3EFailed!") + req.statusText + unescape("%3C/b%3E");
+  }
+ }
+ var voteStatus = document.getElementById("MVF" + msgid);
+ if (!voteStatus) return;
+ voteStatus.innerHTML = unescape("%3Cb style='color:green'%3EVoting...%3C/b%3E");
+ var strAction = "/script/Forums/Vote.aspx?js=1&fmid="+memberid.toString()+"&select="+msgid.toString()+"&score="+score.toString()+"&qid="+questionId.toString();
+ req.open("GET", strAction, true);
+ req.send(null);
+  return false;
+}
+//]]></SCRIPT>
+
+<SCRIPT language=Javascript type=text/javascript>//<![CDATA[
+var Selected = "-1";
+
+function SwitchMessage(e, msgId)
+{
+  if (!msgId) {
+    if(!e)e=window.event;
+    var target=e.target?e.target:e.srcElement;
+    while(target&&target.id!='DynMessLink')target=target.parentNode;
+    if(!target||target.id!='DynMessLink')return;
+    msgId=target.name;
+  }
+  if(Selected&&Selected!=""){
+    var body=eval("document.getElementById('F" + Selected + "_h1')");
+    if(body) body.style.display = 'none';
+    var head=eval("document.getElementById('F" + Selected + "_h0')");
+    if(head) head.className = head.className.replace("Sel", "UnSel");
+  }
+  if(Selected==msgId.toString())
+    Selected="";
+  else {
+    Selected=msgId.toString();
+    var body=eval("document.getElementById('F" + Selected + "_h1')");
+    if(body){
+      if(body.style.display=='none') body.style.display='';
+      else body.style.display = 'none';
+    }
+    var head=eval("document.getElementById('F" + Selected + "_h0')");
+    if (head) 
+      head.className = head.className.replace("UnSel", "Sel");
+    if(body&&head&&body.style.display!='none'){
+      document.body.scrollTop = getRealPos(head, "Top") - document.body.clientHeight/10;
+      EnsureMessageVisible(Selected, true);
+    }
+  }
+  if (e){if(e.preventDefault)e.preventDefault;else e.returnValue=false;}
+  return false;
+}
+
+//]]></SCRIPT>
+
+<SCRIPT language=Javascript 
+src="CodeProject SSL  Convert your Plain Sockets to SSL Sockets in an Easy Way_ Free source code and programming help_files/ShortCuts.js" 
+type=text/javascript></SCRIPT>
+<LINK 
+href="CodeProject SSL  Convert your Plain Sockets to SSL Sockets in an Easy Way_ Free source code and programming help_files/ForumClassicIE6.css" 
+type=text/css rel=stylesheet><LINK href="/favicon.ico" type=image/ico 
+rel=icon><LINK href="/favicon.ico" type=image/ico rel="shortcut icon">
+<META content="MSHTML 6.00.2900.2180" name=GENERATOR></HEAD>
+<BODY>
+<TABLE id=ctl00_AT cellSpacing=0 cellPadding=0 border=0>
+  <TBODY>
+  <TR vAlign=top>
+    <TD colSpan=2>
+      <TABLE cellSpacing=0 cellPadding=0 border=0>
+        <TBODY>
+        <TR>
+          <TD class=HeaderLogo><A href="http://www.codeproject.com/"><IMG 
+            id=ctl00_Logo 
+            style="BORDER-TOP-WIDTH: 0px; BORDER-LEFT-WIDTH: 0px; BORDER-BOTTOM-WIDTH: 0px; WIDTH: 225px; HEIGHT: 90px; BORDER-RIGHT-WIDTH: 0px" 
+            alt="The Code Project" 
+            src="CodeProject SSL  Convert your Plain Sockets to SSL Sockets in an Easy Way_ Free source code and programming help_files/logo225x90.gif"></A></TD>
+          <TD class=HeaderBanner align=right width="100%"><IFRAME 
+            src="CodeProject SSL  Convert your Plain Sockets to SSL Sockets in an Easy Way_ Free source code and programming help_files/ServeHTML.htm" 
+            frameBorder=0 width=728 scrolling=no height=90></IFRAME></TD></TR>
+        <TR>
+          <TD colSpan=2>
+            <TABLE class=MemberNavBar cellSpacing=0 cellPadding=5 
+              width="100%"><TBODY>
+              <TR>
+                <TD class=SmallText style="FONT-WEIGHT: bold">5,386,863 
+                  members and growing! (14,799 online)</TD>
+                <TD align=right>
+                  <DIV class=MemberNavBarText 
+                  id=ctl00_MemberMenu_LoggedOnOptions><A 
+                  id=ctl00_MemberMenu_MyProfile 
+                  href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=2959938">Abdelrady_FCIS</A> 
+                  | <A id=ctl00_MemberMenu_MySettings 
+                  href="http://www.codeproject.com/script/Membership/Modify.aspx">My 
+                  Settings</A> | <A id=ctl00_MemberMenu_MyCodeProject 
+                  href="http://www.codeproject.com/script/Membership/MyCodeProject.aspx"><B>My 
+                  CodeProject</B></A> | <A id=ctl00_MemberMenu_MyBookmarks 
+                  href="http://www.codeproject.com/script/Bookmarks/List.aspx?obtid=2"><IMG 
+                  height=16 
+                  src="CodeProject SSL  Convert your Plain Sockets to SSL Sockets in an Easy Way_ Free source code and programming help_files/fave.gif" 
+                  width=16 align=absMiddle border=0> My Bookmarks</A> | <A 
+                  id=ctl00_MemberMenu_MyArticles 
+                  href="http://www.codeproject.com/script/Articles/MemberArticles.aspx?amid=2959938">My 
+                  Articles</A> | <A id=ctl00_MemberMenu_Signout 
+                  href="http://www.codeproject.com/script/Membership/LogOff.aspx?rp=%2fKB%2fIP%2fssl_sockets.aspx">Sign 
+                  out</A> </DIV></TD></TR></TBODY></TABLE></TD></TR>
+        <TR>
+          <TD colSpan=2>
+            <TABLE class=SiteNavBar id=tblSiteToolbar cellSpacing=0 
+            cellPadding=0>
+              <TBODY>
+              <TR>
+                <TD noWrap><A href="http://www.codeproject.com/">Home</A></TD>
+                <TD>&nbsp; </TD>
+                <TD style="FONT-WEIGHT: normal" noWrap align=right>Current 
+                  Site:</TD>
+                <TD class=SelCat noWrap><A 
+                  href="http://www.codeproject.com/">C++ / .NET</A></TD>
+                <TD noWrap><A href="http://java.codeproject.com/">Java</A></TD>
+                <TD noWrap><A href="http://sql.codeproject.com/">SQL</A></TD>
+                <TD noWrap><A href="http://lamp.codeproject.com/">Linux / 
+                  Unix</A></TD>
+                <TD width="100%">&nbsp;</TD>
+                <TD id=ctl00_TopNavBar_RightMenus>
+                  <DIV id=MenuPos 
+                  style="WIDTH: 380px; POSITION: relative; TOP: 1px; HEIGHT: 22px">
+                  <TABLE 
+                  style="BORDER-TOP-WIDTH: 0px; BORDER-LEFT-WIDTH: 0px; BORDER-BOTTOM-WIDTH: 0px; HEIGHT: 20px; BORDER-RIGHT-WIDTH: 0px" 
+                  cellSpacing=0 cellPadding=0 width=380>
+                    <TBODY>
+                    <TR vAlign=center>
+                      <TD 
+                      style="BORDER-TOP-WIDTH: 0px; BORDER-LEFT-WIDTH: 0px; BORDER-BOTTOM-WIDTH: 0px; BORDER-RIGHT-WIDTH: 0px" 
+                      noWrap><A 
+                        href="http://www.codeproject.com/info/FAQ.aspx">Help!</A></TD>
+                      <TD 
+                      style="BORDER-TOP-WIDTH: 0px; BORDER-LEFT-WIDTH: 0px; BORDER-BOTTOM-WIDTH: 0px; BORDER-RIGHT-WIDTH: 0px" 
+                      noWrap><A 
+                        href="http://www.codeproject.com/script/Articles/Latest.aspx">Articles</A></TD>
+                      <TD 
+                      style="BORDER-TOP-WIDTH: 0px; BORDER-LEFT-WIDTH: 0px; BORDER-BOTTOM-WIDTH: 0px; BORDER-RIGHT-WIDTH: 0px" 
+                      noWrap><A 
+                        href="http://www.codeproject.com/script/Forums/List.aspx">Message 
+                        Boards</A></TD>
+                      <TD 
+                      style="BORDER-TOP-WIDTH: 0px; BORDER-LEFT-WIDTH: 0px; BORDER-BOTTOM-WIDTH: 0px; BORDER-RIGHT-WIDTH: 0px" 
+                      noWrap><A 
+                        href="http://www.codeproject.com/script/Jobs/List.aspx">Job 
+                        Board</A></TD>
+                      <TD 
+                      style="BORDER-TOP-WIDTH: 0px; BORDER-LEFT-WIDTH: 0px; BORDER-BOTTOM-WIDTH: 0px; BORDER-RIGHT-WIDTH: 0px" 
+                      noWrap><A 
+                        href="http://www.codeproject.com/Lounge.aspx">Lounge</A></TD></TR></TBODY></TABLE></DIV></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+  <TR>
+    <TD vAlign=top colSpan=2><A name=_top></A>
+      <TABLE class=ArticleHeader id=ctl00_ArticleTopHeader_HeaderTable 
+      cellSpacing=0 cellPadding=3 width="100%" border=0>
+        <TBODY>
+        <TR vAlign=top>
+          <TD class=SmallText><A id=ctl00_ArticleTopHeader_ChapterLink 
+            href="http://www.codeproject.com/script/Content/Chapter.aspx?chptId=2">Web 
+            Development</A> » <A id=ctl00_ArticleTopHeader_SectionLink 
+            href="http://www.codeproject.com/KB/IP/">Internet / Network</A> » <A 
+            id=ctl00_ArticleTopHeader_SubsectionLink 
+            href="http://www.codeproject.com/KB/IP/index.aspx?#Internet / Network - General">General</A> 
+            <SPAN class=ArticleIntermediate 
+            id=ctl00_ArticleTopHeader_SkillLevel>&nbsp;&nbsp;&nbsp; 
+            Intermediate</SPAN> <SPAN class=SmallText 
+            id=ctl00_ArticleTopHeader_LicenceTerms 
+            style="MARGIN-LEFT: 40px">License: <A 
+            href="http://www.codeproject.com/info/cpol10.aspx">The Code Project 
+            Open License (CPOL)</A></SPAN> <BR><BR>
+            <H1><SPAN class=ArticleTopTitle 
+            id=ctl00_ArticleTopHeader_ArticleTitle>SSL : Convert your Plain 
+            Sockets to SSL Sockets in an Easy Way</SPAN></H1><B>By <A 
+            href="http://www.codeproject.com/script/Articles/MemberArticles.aspx?amid=358302">Michael 
+            Chourdakis</A></B><BR><BR><SPAN class=ArticleTopDescr 
+            id=ctl00_ArticleTopHeader_ArticleDescr>A simple class that allows 
+            you to convert an existing SOCKET handle to SSL under Windows</SPAN> 
+          </TD>
+          <TD class=SmallText style="WIDTH: 210px"><SPAN 
+            id=ctl00_ArticleTopHeader_ArticleAttributes>C++, Win32, 
+            Dev</SPAN><BR><BR><SPAN style="WIDTH: 14ex">Posted</SPAN>: <B>14 Mar 
+            2008</B><BR><SPAN style="WIDTH: 14ex">Updated</SPAN>: <B>14 Mar 
+            2008</B> <BR><SPAN style="WIDTH: 14ex">Views</SPAN>: 
+            <B>5,750</B><BR><SPAN style="WIDTH: 14ex">Bookmarked</SPAN>: <B>7 
+            times</B><BR></TD></TR>
+        <TR>
+          <TD colSpan=2>
+            <TABLE width="100%">
+              <TBODY>
+              <TR>
+                <TD></TD>
+                <TD class=SmallText style="WHITE-SPACE: nowrap" 
+              align=right></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+  <TR vAlign=top>
+    <TD class=LHNavBar id=ctl00_LeftNavCell>
+      <DIV class=FeatureBlockHeader>Announcements</DIV>
+      <DIV class="FeatureBlockContent RHFeatureBar" 
+      style="PADDING-RIGHT: 0px; PADDING-LEFT: 0px; PADDING-BOTTOM: 0px; MARGIN: 0px; PADDING-TOP: 0px">
+      <TABLE cellPadding=2>
+        <TBODY>
+        <TR vAlign=center>
+          <TD><IMG height=10 alt=Comp 
+            src="CodeProject SSL  Convert your Plain Sockets to SSL Sockets in an Easy Way_ Free source code and programming help_files/startrek.gif" 
+            width=24></TD>
+          <TD><A 
+            href="http://www.codeproject.com/script/Awards/Competition.aspx?cid=274">Summer 
+            Code Competition!</A></TD></TR>
+        <TR vAlign=center>
+          <TD><IMG height=24 alt=Comp 
+            src="CodeProject SSL  Convert your Plain Sockets to SSL Sockets in an Easy Way_ Free source code and programming help_files/info_24.png" 
+            width=24></TD>
+          <TD><A 
+            href="http://www.codeproject.com/script/Awards/Competition.aspx?cid=270">New 
+            thawte <BR>Scavenger Hunt!</A></TD></TR>
+        <TR vAlign=center>
+          <TD><IMG height=24 alt=Comp 
+            src="CodeProject SSL  Convert your Plain Sockets to SSL Sockets in an Easy Way_ Free source code and programming help_files/info_24.png" 
+            width=24 align=middle></TD>
+          <TD><A id=ctl00_Announcements_CompLink 
+            href="http://www.codeproject.com/Feature/ArticleCompetition/">Monthly 
+            Competition</A></TD></TR></TBODY></TABLE></DIV>
+      <DIV class=FeatureBlockHeader style="MARGIN-TOP: 7px">Want a new 
+Job?</DIV>
+      <DIV class="FeatureBlockContent RHFeatureBar">
+      <UL class=InfoList>
+        <LI><A 
+        href="http://www.codeproject.com/script/Jobs/View.aspx?jid=31">Product 
+        Manager: Visual Studio Web Development</A> at Microsoft in United States
+        <LI><A 
+        href="http://www.codeproject.com/script/Jobs/View.aspx?jid=112">Software 
+        Engineer (C# Windows .NET)</A> at Memeo Inc. in United States
+        <LI><A 
+        href="http://www.codeproject.com/script/Jobs/View.aspx?jid=153">Senior 
+        Software Engineer - Server Solutions</A> at Vital Images in United 
+States
+        <LI><A href="http://www.codeproject.com/script/Jobs/List.aspx">View 
+        Latest Jobs...</A></LI></UL></DIV>
+      <DIV id=SectionMenu>
+      <DIV class=MenuCat>Chapters</DIV>
+      <DIV class=MenuChapter><A onclick="return ToggleMenu('Chapter1');" 
+      href="http://www.codeproject.com/script/Content/Chapter.aspx?chptId=1">Desktop 
+      Development</A></DIV>
+      <DIV class=MenuSectionBlock id=Chapter1 style="DISPLAY: none">
+      <DIV class=MI id=Section1><A 
+      href="http://www.codeproject.com/KB/buttons/">Button Controls</A></DIV>
+      <DIV class=MI id=Section15><A 
+      href="http://www.codeproject.com/KB/clipboard/">Clipboard</A></DIV>
+      <DIV class=MI id=Section2><A 
+      href="http://www.codeproject.com/KB/combobox/">Combo &amp; List 
+      Boxes</A></DIV>
+      <DIV class=MI id=Section67><A 
+      href="http://www.codeproject.com/KB/dialog/">Dialogs and Windows</A></DIV>
+      <DIV class=MI id=Section107><A 
+      href="http://www.codeproject.com/KB/gadgets/">Desktop Gadgets</A></DIV>
+      <DIV class=MI id=Section16><A 
+      href="http://www.codeproject.com/KB/docview/">Document / View</A></DIV>
+      <DIV class=MI id=Section4><A 
+      href="http://www.codeproject.com/KB/edit/">Edit Controls</A></DIV>
+      <DIV class=MI id=Section17><A 
+      href="http://www.codeproject.com/KB/files/">Files and Folders</A></DIV>
+      <DIV class=MI id=Section3><A 
+      href="http://www.codeproject.com/KB/grid/">Grid &amp; Data 
+      Controls</A></DIV>
+      <DIV class=MI id=Section5><A 
+      href="http://www.codeproject.com/KB/list/">List Controls</A></DIV>
+      <DIV class=MI id=Section6><A 
+      href="http://www.codeproject.com/KB/menus/">Menus</A></DIV>
+      <DIV class=MI id=Section14><A 
+      href="http://www.codeproject.com/KB/miscctrl/">Miscellaneous</A></DIV>
+      <DIV class=MI id=Section18><A 
+      href="http://www.codeproject.com/KB/printing/">Printing</A></DIV>
+      <DIV class=MI id=Section95><A 
+      href="http://www.codeproject.com/KB/progress/">Progress Controls</A></DIV>
+      <DIV class=MI id=Section11><A 
+      href="http://www.codeproject.com/KB/selection/">Selection 
+      Controls</A></DIV>
+      <DIV class=MI id=Section19><A 
+      href="http://www.codeproject.com/KB/shell/">Shell and IE 
+      programming</A></DIV>
+      <DIV class=MI id=Section68><A 
+      href="http://www.codeproject.com/KB/smart/">Smart Client</A></DIV>
+      <DIV class=MI id=Section8><A 
+      href="http://www.codeproject.com/KB/splitter/">Splitter Windows</A></DIV>
+      <DIV class=MI id=Section9><A 
+      href="http://www.codeproject.com/KB/static/">Static &amp; Panel 
+      Controls</A></DIV>
+      <DIV class=MI id=Section10><A 
+      href="http://www.codeproject.com/KB/statusbar/">Status Bar</A></DIV>
+      <DIV class=MI id=Section7><A 
+      href="http://www.codeproject.com/KB/tabs/">Tabs &amp; Property 
+      Pages</A></DIV>
+      <DIV class=MI id=Section12><A 
+      href="http://www.codeproject.com/KB/toolbars/">Toolbars &amp; Docking 
+      windows</A></DIV>
+      <DIV class=MI id=Section13><A 
+      href="http://www.codeproject.com/KB/tree/">Tree Controls</A></DIV></DIV>
+      <DIV class=MenuChapter><A onclick="return ToggleMenu('Chapter2');" 
+      href="http://www.codeproject.com/script/Content/Chapter.aspx?chptId=2">Web 
+      Development</A></DIV>
+      <DIV class=MenuSectionBlock id=Chapter2>
+      <DIV class=MI id=Section70><A 
+      href="http://www.codeproject.com/KB/ajax/">Ajax and Atlas</A></DIV>
+      <DIV class=MI id=Section27><A 
+      href="http://www.codeproject.com/KB/applications/">Applications &amp; 
+      Tools</A></DIV>
+      <DIV class=MI id=Section85><A 
+      href="http://www.codeproject.com/KB/asp/">ASP</A></DIV>
+      <DIV class=MI id=Section89><A 
+      href="http://www.codeproject.com/KB/aspnet/">ASP.NET</A></DIV>
+      <DIV class=MI id=Section28><A 
+      href="http://www.codeproject.com/KB/webforms/">ASP.NET Controls</A></DIV>
+      <DIV class=MI id=Section38><A 
+      href="http://www.codeproject.com/KB/ATL-Server/">ATL Server</A></DIV>
+      <DIV class=MI id=Section29><A 
+      href="http://www.codeproject.com/KB/web-cache/">Caching</A></DIV>
+      <DIV class=MI id=Section91><A 
+      href="http://www.codeproject.com/KB/web-image/">Charts, Graphs and 
+      Images</A></DIV>
+      <DIV class=MI id=Section25><A 
+      href="http://www.codeproject.com/KB/scripting/">Client side 
+      scripting</A></DIV>
+      <DIV class=MI id=Section30><A 
+      href="http://www.codeproject.com/KB/custom-controls/">Custom 
+      Controls</A></DIV>
+      <DIV class=MI id=Section23><A 
+      href="http://www.codeproject.com/KB/HTML/">HTML / CSS</A></DIV>
+      <DIV class=MIS id=Section22><A 
+      href="http://www.codeproject.com/KB/IP/">Internet / Network</A></DIV>
+      <DIV class=MI id=Section24><A 
+      href="http://www.codeproject.com/KB/ISAPI/">ISAPI</A></DIV>
+      <DIV class=MI id=Section33><A 
+      href="http://www.codeproject.com/KB/server-management/">Site &amp; Server 
+      Management</A></DIV>
+      <DIV class=MI id=Section34><A 
+      href="http://www.codeproject.com/KB/session/">Session State</A></DIV>
+      <DIV class=MI id=Section113><A 
+      href="http://www.codeproject.com/KB/silverlight/">Silverlight</A></DIV>
+      <DIV class=MI id=Section36><A 
+      href="http://www.codeproject.com/KB/trace/">Trace and Logs</A></DIV>
+      <DIV class=MI id=Section31><A 
+      href="http://www.codeproject.com/KB/user-controls/">User 
+Controls</A></DIV>
+      <DIV class=MI id=Section37><A 
+      href="http://www.codeproject.com/KB/validation/">Validation</A></DIV>
+      <DIV class=MI id=Section35><A 
+      href="http://www.codeproject.com/KB/viewstate/">View State</A></DIV>
+      <DIV class=MI id=Section26><A 
+      href="http://www.codeproject.com/KB/WAP/">WAP / WML</A></DIV>
+      <DIV class=MI id=Section32><A 
+      href="http://www.codeproject.com/KB/web-security/">Web Security</A></DIV>
+      <DIV class=MI id=Section20><A 
+      href="http://www.codeproject.com/KB/webservices/">Web 
+      Services</A></DIV></DIV>
+      <DIV class=MenuChapter><A onclick="return ToggleMenu('Chapter9');" 
+      href="http://www.codeproject.com/script/Content/Chapter.aspx?chptId=9">Enterprise 
+      Systems</A></DIV>
+      <DIV class=MenuSectionBlock id=Chapter9 style="DISPLAY: none">
+      <DIV class=MI id=Section98><A 
+      href="http://www.codeproject.com/KB/MCMS/">Content Management 
+      Server</A></DIV>
+      <DIV class=MI id=Section99><A 
+      href="http://www.codeproject.com/KB/biztalk/">Microsoft BizTalk 
+      Server</A></DIV>
+      <DIV class=MI id=Section102><A 
+      href="http://www.codeproject.com/KB/exchange/">Microsoft 
+Exchange</A></DIV>
+      <DIV class=MI id=Section90><A 
+      href="http://www.codeproject.com/KB/office/">Office Development</A></DIV>
+      <DIV class=MI id=Section101><A 
+      href="http://www.codeproject.com/KB/sharepoint/">SharePoint 
+      Server</A></DIV></DIV>
+      <DIV class=MenuChapter><A onclick="return ToggleMenu('Chapter3');" 
+      href="http://www.codeproject.com/script/Content/Chapter.aspx?chptId=3">Multimedia</A></DIV>
+      <DIV class=MenuSectionBlock id=Chapter3 style="DISPLAY: none">
+      <DIV class=MI id=Section42><A 
+      href="http://www.codeproject.com/KB/audio-video/">Audio and 
+Video</A></DIV>
+      <DIV class=MI id=Section44><A 
+      href="http://www.codeproject.com/KB/directx/">DirectX</A></DIV>
+      <DIV class=MI id=Section46><A 
+      href="http://www.codeproject.com/KB/GDI/">GDI</A></DIV>
+      <DIV class=MI id=Section47><A 
+      href="http://www.codeproject.com/KB/GDI-plus/">GDI+</A></DIV>
+      <DIV class=MI id=Section43><A 
+      href="http://www.codeproject.com/KB/graphics/">General Graphics</A></DIV>
+      <DIV class=MI id=Section45><A 
+      href="http://www.codeproject.com/KB/openGL/">OpenGL</A></DIV></DIV>
+      <DIV class=MenuChapter><A onclick="return ToggleMenu('Chapter4');" 
+      href="http://www.codeproject.com/script/Content/Chapter.aspx?chptId=4">Database</A></DIV>
+      <DIV class=MenuSectionBlock id=Chapter4 style="DISPLAY: none">
+      <DIV class=MI id=Section66><A 
+      href="http://www.codeproject.com/KB/database/">Database</A></DIV>
+      <DIV class=MI id=Section100><A 
+      href="http://www.codeproject.com/KB/reporting-services/">SQL Reporting 
+      Services</A></DIV></DIV>
+      <DIV class=MenuChapter><A onclick="return ToggleMenu('Chapter8');" 
+      href="http://www.codeproject.com/script/Content/Chapter.aspx?chptId=8">Platforms, 
+      Frameworks &amp; Libraries</A></DIV>
+      <DIV class=MenuSectionBlock id=Chapter8 style="DISPLAY: none">
+      <DIV class=MI id=Section83><A 
+      href="http://www.codeproject.com/KB/atl/">ATL</A></DIV>
+      <DIV class=MI id=Section117><A 
+      href="http://www.codeproject.com/KB/MFC/">MFC</A></DIV>
+      <DIV class=MI id=Section88><A 
+      href="http://www.codeproject.com/KB/stl/">STL</A></DIV>
+      <DIV class=MI id=Section84><A 
+      href="http://www.codeproject.com/KB/wtl/">WTL</A></DIV>
+      <DIV class=MI id=Section49><A 
+      href="http://www.codeproject.com/KB/COM/">COM / COM+</A></DIV>
+      <DIV class=MI id=Section76><A 
+      href="http://www.codeproject.com/KB/dotnet/">.NET Framework</A></DIV>
+      <DIV class=MI id=Section92><A 
+      href="http://www.codeproject.com/KB/winsdk/">Win32/64 SDK &amp; 
+      OS</A></DIV>
+      <DIV class=MI id=Section108><A 
+      href="http://www.codeproject.com/KB/vista/">Vista API</A></DIV>
+      <DIV class=MI id=Section110><A 
+      href="http://www.codeproject.com/KB/vista-security/">Vista 
+      Security</A></DIV>
+      <DIV class=MI id=Section82><A 
+      href="http://www.codeproject.com/KB/cross-platform/">Cross 
+      Platform</A></DIV>
+      <DIV class=MI id=Section69><A 
+      href="http://www.codeproject.com/KB/game/">Game Development</A></DIV>
+      <DIV class=MI id=Section73><A 
+      href="http://www.codeproject.com/KB/mobile/">Mobile Development</A></DIV>
+      <DIV class=MI id=Section106><A 
+      href="http://www.codeproject.com/KB/WC/">Windows CardSpace</A></DIV>
+      <DIV class=MI id=Section103><A 
+      href="http://www.codeproject.com/KB/WCF/">Windows Communication 
+      Foundation</A></DIV>
+      <DIV class=MI id=Section104><A 
+      href="http://www.codeproject.com/KB/WPF/">Windows Presentation 
+      Foundation</A></DIV>
+      <DIV class=MI id=Section105><A 
+      href="http://www.codeproject.com/KB/WF/">Windows Workflow 
+      Foundation</A></DIV>
+      <DIV class=MI id=Section119><A 
+      href="http://www.codeproject.com/KB/library/">Libraries</A></DIV>
+      <DIV class=MI id=Section122><A 
+      href="http://www.codeproject.com/KB/powershell/">Windows 
+      Powershell</A></DIV>
+      <DIV class=MI id=Section123><A 
+      href="http://www.codeproject.com/KB/linq/">LINQ</A></DIV></DIV>
+      <DIV class=MenuChapter><A onclick="return ToggleMenu('Chapter5');" 
+      href="http://www.codeproject.com/script/Content/Chapter.aspx?chptId=5">Languages</A></DIV>
+      <DIV class=MenuSectionBlock id=Chapter5 style="DISPLAY: none">
+      <DIV class=MI id=Section71><A href="http://www.codeproject.com/KB/cpp/">C 
+      / C++ Language</A></DIV>
+      <DIV class=MI id=Section72><A 
+      href="http://www.codeproject.com/KB/mcpp/">C++ / CLI</A></DIV>
+      <DIV class=MI id=Section93><A 
+      href="http://www.codeproject.com/KB/cs/">C#</A></DIV>
+      <DIV class=MI id=Section78><A 
+      href="http://www.codeproject.com/KB/msil/">MSIL</A></DIV>
+      <DIV class=MI id=Section86><A 
+      href="http://www.codeproject.com/KB/vbscript/">VBScript</A></DIV>
+      <DIV class=MI id=Section87><A 
+      href="http://www.codeproject.com/KB/vb/">VB.NET</A></DIV>
+      <DIV class=MI id=Section115><A 
+      href="http://www.codeproject.com/KB/vb-interop/">VB6 Interop</A></DIV>
+      <DIV class=MI id=Section77><A 
+      href="http://www.codeproject.com/KB/net-languages/">Other .NET 
+      Languages</A></DIV>
+      <DIV class=MI id=Section21><A 
+      href="http://www.codeproject.com/KB/XML/">XML</A></DIV>
+      <DIV class=MI id=Section96><A 
+      href="http://www.codeproject.com/KB/java/">Java</A></DIV></DIV>
+      <DIV class=MenuChapter><A onclick="return ToggleMenu('Chapter6');" 
+      href="http://www.codeproject.com/script/Content/Chapter.aspx?chptId=6">General 
+      Programming</A></DIV>
+      <DIV class=MenuSectionBlock id=Chapter6 style="DISPLAY: none">
+      <DIV class=MI id=Section57><A 
+      href="http://www.codeproject.com/KB/recipes/">Algorithms &amp; 
+      Recipes</A></DIV>
+      <DIV class=MI id=Section64><A 
+      href="http://www.codeproject.com/KB/bugs/">Bugs &amp; 
+Workarounds</A></DIV>
+      <DIV class=MI id=Section79><A 
+      href="http://www.codeproject.com/KB/collections/">Collections</A></DIV>
+      <DIV class=MI id=Section56><A 
+      href="http://www.codeproject.com/KB/security/">Cryptography &amp; 
+      Security</A></DIV>
+      <DIV class=MI id=Section50><A 
+      href="http://www.codeproject.com/KB/datetime/">Date and Time</A></DIV>
+      <DIV class=MI id=Section52><A 
+      href="http://www.codeproject.com/KB/DLL/">DLLs &amp; Assemblies</A></DIV>
+      <DIV class=MI id=Section80><A 
+      href="http://www.codeproject.com/KB/exception/">Exception 
+      Handling</A></DIV>
+      <DIV class=MI id=Section81><A 
+      href="http://www.codeproject.com/KB/locale/">Localisation</A></DIV>
+      <DIV class=MI id=Section53><A 
+      href="http://www.codeproject.com/KB/macros/">Macros and Add-ins</A></DIV>
+      <DIV class=MI id=Section54><A 
+      href="http://www.codeproject.com/KB/tips/">Programming Tips</A></DIV>
+      <DIV class=MI id=Section55><A 
+      href="http://www.codeproject.com/KB/string/">String handling</A></DIV>
+      <DIV class=MI id=Section58><A 
+      href="http://www.codeproject.com/KB/threads/">Threads, Processes &amp; 
+      IPC</A></DIV>
+      <DIV class=MI id=Section59><A 
+      href="http://www.codeproject.com/KB/winhelp/">WinHelp / 
+      HTMLHelp</A></DIV></DIV>
+      <DIV class=MenuChapter><A onclick="return ToggleMenu('Chapter10');" 
+      href="http://www.codeproject.com/script/Content/Chapter.aspx?chptId=10">Graphics 
+      / Design</A></DIV>
+      <DIV class=MenuSectionBlock id=Chapter10 style="DISPLAY: none">
+      <DIV class=MI id=Section40><A 
+      href="http://www.codeproject.com/KB/expression/">Expression</A></DIV>
+      <DIV class=MI id=Section114><A 
+      href="http://www.codeproject.com/KB/usability/">Usability</A></DIV></DIV>
+      <DIV class=MenuChapter><A onclick="return ToggleMenu('Chapter11');" 
+      href="http://www.codeproject.com/script/Content/Chapter.aspx?chptId=11">Development 
+      Lifecycle</A></DIV>
+      <DIV class=MenuSectionBlock id=Chapter11 style="DISPLAY: none">
+      <DIV class=MI id=Section51><A 
+      href="http://www.codeproject.com/KB/debug/">Debug Tips</A></DIV>
+      <DIV class=MI id=Section39><A 
+      href="http://www.codeproject.com/KB/architecture/">Design and 
+      Architecture</A></DIV>
+      <DIV class=MI id=Section112><A 
+      href="http://www.codeproject.com/KB/install/">Installation</A></DIV>
+      <DIV class=MI id=Section41><A 
+      href="http://www.codeproject.com/KB/work/">Work Issues</A></DIV>
+      <DIV class=MI id=Section126><A 
+      href="http://www.codeproject.com/KB/codegen/">Code 
+      Generation</A></DIV></DIV>
+      <DIV class=MenuChapter><A onclick="return ToggleMenu('Chapter7');" 
+      href="http://www.codeproject.com/script/Content/Chapter.aspx?chptId=7">General 
+      Reading</A></DIV>
+      <DIV class=MenuSectionBlock id=Chapter7 style="DISPLAY: none">
+      <DIV class=MI id=Section60><A 
+      href="http://www.codeproject.com/KB/books/">Book Chapters</A></DIV>
+      <DIV class=MI id=Section61><A 
+      href="http://www.codeproject.com/KB/book-reviews/">Book Reviews</A></DIV>
+      <DIV class=MI id=Section109><A 
+      href="http://www.codeproject.com/KB/hardware-review/">Hardware 
+      Reviews</A></DIV>
+      <DIV class=MI id=Section63><A 
+      href="http://www.codeproject.com/KB/interviews/">Interviews</A></DIV>
+      <DIV class=MI id=Section62><A 
+      href="http://www.codeproject.com/KB/scrapbook/">Scrapbook</A></DIV>
+      <DIV class=MI id=Section48><A 
+      href="http://www.codeproject.com/KB/system/">Hardware &amp; 
+      System</A></DIV></DIV>
+      <DIV class=MenuChapter><A onclick="return ToggleMenu('Chapter12');" 
+      href="http://www.codeproject.com/script/Content/Chapter.aspx?chptId=12">Third 
+      Party Products</A></DIV>
+      <DIV class=MenuSectionBlock id=Chapter12 style="DISPLAY: none">
+      <DIV class=MI id=Section65><A 
+      href="http://www.codeproject.com/KB/showcase/">Product Showcase</A></DIV>
+      <DIV class=MI id=Section124><A 
+      href="http://www.codeproject.com/KB/solution-center/">Solution 
+      Center</A></DIV></DIV></DIV><BR>
+      <DIV class=MenuCat>Services</DIV>
+      <DIV class=MenuChapter><A 
+      href="http://www.codeproject.com/script/Jobs/List.aspx">Job 
+Board</A></DIV>
+      <DIV class=MenuChapter><A 
+      href="http://www.codeproject.com/Services/coffee.aspx">Code Project 
+      Coffee</A></DIV>
+      <DIV class=MenuChapter><A 
+      href="http://www.codeproject.com/Services/TradePub.aspx">Free 
+      Magazines</A></DIV><BR>
+      <DIV class=MenuCat>Feature Zones</DIV>
+      <DIV class=MenuChapter><A 
+      href="http://www.codeproject.com/kb/Showcase/">Product Showcase</A></DIV>
+      <DIV class=MenuChapter><A href="http://www.codeproject.com/Zones/IBM">IBM 
+      DeveloperWorks</A></DIV>
+      <DIV class=MenuChapter><A 
+      href="http://www.codeproject.com/Zones/WhitePapers">WhitePapers / 
+      Webcasts</A></DIV>
+      <DIV class=MenuChapter><A 
+      href="http://www.codeproject.com/Zones/QuestSQL">Quest SQL Zone</A></DIV>
+      <DIV class=MenuChapter><A 
+      href="http://www.codeproject.com/Zones/Acresso">InstallShield 
+      2009</A></DIV><BR>
+      <DIV style="MARGIN-BOTTOM: 10px; TEXT-ALIGN: center"><IFRAME 
+      src="C:\Documents and Settings\Administrator\Desktop\asqw\CodeProject SSL  Convert your Plain Sockets to SSL Sockets in an Easy Way_ Free source code and programming help_files\ServeHTML(1).htm" 
+      frameBorder=0 width=150 scrolling=no height=80></IFRAME></DIV><IFRAME 
+      src="C:\Documents and Settings\Administrator\Desktop\asqw\CodeProject SSL  Convert your Plain Sockets to SSL Sockets in an Easy Way_ Free source code and programming help_files\ServeHTML(2).htm" 
+      frameBorder=0 width=160 scrolling=no height=600></IFRAME></TD>
+    <TD class=ArticlePane vAlign=top>
+      <TABLE class=SearchHeaderBar cellSpacing=0 width="100%">
+        <TBODY>
+        <TR>
+          <TD style="WIDTH: 60%; WHITE-SPACE: nowrap" vAlign=center 
+            align=right><FORM style="MARGIN: 0px" name=Search 
+            action=/info/search.aspx method=get><B>Search &nbsp;</B> <INPUT 
+            class=SmallText style="WIDTH: 200px" name=artkw> <SELECT 
+            class=SmallText style="FONT-WEIGHT: bold" name=sbo> <OPTION 
+              value=kw selected>Articles</OPTION> <OPTION 
+              value=fm>Messages</OPTION> <OPTION value=s>Jobs</OPTION></SELECT> <INPUT class=SmallText style="FONT-WEIGHT: bold" type=submit value=" Go! "> 
+            &nbsp; </FORM></TD>
+          <TD class=TinyText style="WHITE-SPACE: nowrap"><A 
+            href="http://www.codeproject.com/info/search.aspx">Advanced 
+            Search</A><BR><A 
+            href="http://www.codeproject.com/script/Content/SiteMap.aspx">Sitemap</A> 
+            | <A id=ctl00_SearchBarCtrl_AddToIESearchLnk 
+            title="Add The Code Project to your IE search Providers" 
+            onclick="window.external.AddSearchProvider('http://www.codeproject.com/info/OpenSearch.xml');return false;" 
+            href="http://www.codeproject.com/">Add to IE Search</A> 
+        </TD></TR></TBODY></TABLE><SPAN id=ctl00_ResultMessage></SPAN>
+      <DIV id=ctl00_ArtDiv>
+      <TABLE cellSpacing=0 cellPadding=0 width="100%" border=0>
+        <TBODY>
+        <TR vAlign=top>
+          <TD vAlign=top>
+            <TABLE>
+              <TBODY></TBODY></TABLE>
+            <DIV class=SmallText><IMG style="VERTICAL-ALIGN: middle" height=16 
+            alt=print 
+            src="CodeProject SSL  Convert your Plain Sockets to SSL Sockets in an Easy Way_ Free source code and programming help_files/print.gif" 
+            width=16> <A id=ctl00_ArticleHeaderLinks_PrintLnk 
+            href="http://www.codeproject.com/KB/IP/ssl_sockets.aspx?display=Print">Print</A> 
+            &nbsp; <IMG style="VERTICAL-ALIGN: middle" height=16 
+            alt="Broken Article?" 
+            src="CodeProject SSL  Convert your Plain Sockets to SSL Sockets in an Easy Way_ Free source code and programming help_files/report.gif" 
+            width=16> <A id=ctl00_ArticleHeaderLinks_BrokenLnk 
+            href="http://www.codeproject.com/script/Articles/Report.aspx?aid=24379">Report 
+            Article</A> &nbsp; <IMG style="VERTICAL-ALIGN: middle" alt=Watch 
+            src="CodeProject SSL  Convert your Plain Sockets to SSL Sockets in an Easy Way_ Free source code and programming help_files/watchon.png"> 
+            <A class="" id=bmw_24379,2 onclick="return watchMe(24379, 2);" 
+            href="http://www.codeproject.com/script/Bookmarks/Add.aspx?&amp;obid=24379&amp;obtid=2&amp;bma=AddWatch" 
+            name=ajaxBookmarkWatchLink>Watch</A> <SPAN class=TinyText 
+            style="VISIBILITY: hidden"></SPAN><SPAN 
+            id=ctl00_ArticleHeaderLinks_ArticleBmkWatch_Message></SPAN>&nbsp; 
+            <IMG style="VERTICAL-ALIGN: middle" height=16 alt=Bookmark 
+            src="CodeProject SSL  Convert your Plain Sockets to SSL Sockets in an Easy Way_ Free source code and programming help_files/link.png" 
+            width=16> <A class="" id=bm_24379,2 
+            onclick="return bookmarkMe(24379, 2);" 
+            href="http://www.codeproject.com/script/Bookmarks/Add.aspx?&amp;obid=24379&amp;obtid=2&amp;bma=AddBookmark" 
+            name=ajaxBookmarkLink>Bookmark</A> <SPAN class=TinyText 
+            style="VISIBILITY: hidden"></SPAN><SPAN 
+            id=ctl00_ArticleHeaderLinks_ArticleBmk_Message></SPAN>&nbsp; <IMG 
+            style="VERTICAL-ALIGN: middle" height=16 alt=Discuss 
+            src="CodeProject SSL  Convert your Plain Sockets to SSL Sockets in an Easy Way_ Free source code and programming help_files/discuss.gif" 
+            width=15> <A 
+            href="http://www.codeproject.com/KB/IP/ssl_sockets.aspx#_comments">Discuss</A> 
+            &nbsp; <IMG style="VERTICAL-ALIGN: middle" height=16 
+            alt="Recommend Article" 
+            src="CodeProject SSL  Convert your Plain Sockets to SSL Sockets in an Easy Way_ Free source code and programming help_files/mail.gif" 
+            width=16>&nbsp;<A id=ctl00_ArticleHeaderLinks_Recommend 
+            href="http://www.codeproject.com/script/common/TellFriend.aspx?obtid=2&amp;obid=24379">Send&nbsp;to&nbsp;a&nbsp;friend</A> 
+            </DIV></TD>
+          <TD style="WIDTH: 100px; WHITE-SPACE: nowrap; TEXT-ALIGN: right">
+            <TABLE id=CurRat>
+              <TBODY>
+              <TR>
+                <TD>
+                  <TABLE>
+                    <TBODY>
+                    <TR>
+                      <TD class=SmallText id=ctl00_ArticleRating_VL 
+                      style="WHITE-SPACE: nowrap" align=right><SPAN 
+                        id=ctl00_ArticleRating_VoteLabel>8 votes for this 
+                        Article.</SPAN></TD>
+                      <TD>
+                        <TABLE cellSpacing=0 cellPadding=0 border=1>
+                          <TBODY>
+                          <TR>
+                            <TD width=20 bgColor=white height=7><IMG height=7 
+                              src="CodeProject SSL  Convert your Plain Sockets to SSL Sockets in an Easy Way_ Free source code and programming help_files/red.gif" 
+                              width=20 align=center border=0></TD>
+                            <TD width=20 bgColor=white height=7><IMG height=7 
+                              src="CodeProject SSL  Convert your Plain Sockets to SSL Sockets in an Easy Way_ Free source code and programming help_files/red.gif" 
+                              width=20 align=center border=0></TD>
+                            <TD width=20 bgColor=white height=7><IMG height=7 
+                              src="CodeProject SSL  Convert your Plain Sockets to SSL Sockets in an Easy Way_ Free source code and programming help_files/red.gif" 
+                              width=20 align=center border=0></TD>
+                            <TD noWrap width=20 bgColor=white height=7><IMG 
+                              height=7 
+                              src="CodeProject SSL  Convert your Plain Sockets to SSL Sockets in an Easy Way_ Free source code and programming help_files/red.gif" 
+                              width=14 align=center border=0></TD>
+                            <TD width=20 bgColor=white height=7><IMG height=7 
+                              src="CodeProject SSL  Convert your Plain Sockets to SSL Sockets in an Easy Way_ Free source code and programming help_files/white.gif" 
+                              width=20 align=center 
+                      border=0></TD></TR></TBODY></TABLE></TD></TR>
+                    <TR id=ctl00_ArticleRating_PopularityRow>
+                      <TD class=SmallText align=right colSpan=2><A 
+                        id=ctl00_ArticleRating_PopularityLnk 
+                        title="Calculated as rating x Log10(# votes)" 
+                        href="http://www.codeproject.com/script/Articles/TopArticles.aspx?ta_so=1">Popularity: 
+                        3.34</A> <SPAN 
+                        id=ctl00_ArticleRating_PopularityLbl></SPAN><SPAN 
+                        id=ratingVal>Rating: <B>3.70</B> out of 
+                    5</SPAN></TD></TR></TBODY></TABLE></TD>
+                <TD>
+                  <DIV>
+                  <TABLE class=HistTable 
+                  title="Voting Distribution. Recent data only">
+                    <TBODY>
+                    <TR>
+                      <TD><IMG title="1 vote, 12.5%" height=5 
+                        alt="1 vote, 12.5%" 
+                        src="CodeProject SSL  Convert your Plain Sockets to SSL Sockets in an Easy Way_ Free source code and programming help_files/pollcol.gif" 
+                        width=10 border=0><BR>1</TD>
+                      <TD><IMG title="0 votes, 0.0%" height=1 
+                        alt="0 votes, 0.0%" src="" width=10 border=0><BR>2</TD>
+                      <TD><IMG title="1 vote, 12.5%" height=5 
+                        alt="1 vote, 12.5%" 
+                        src="CodeProject SSL  Convert your Plain Sockets to SSL Sockets in an Easy Way_ Free source code and programming help_files/pollcol.gif" 
+                        width=10 border=0><BR>3</TD>
+                      <TD><IMG title="2 votes, 25.0%" height=10 
+                        alt="2 votes, 25.0%" 
+                        src="CodeProject SSL  Convert your Plain Sockets to SSL Sockets in an Easy Way_ Free source code and programming help_files/pollcol.gif" 
+                        width=10 border=0><BR>4</TD>
+                      <TD><IMG title="4 votes, 50.0%" height=20 
+                        alt="4 votes, 50.0%" 
+                        src="CodeProject SSL  Convert your Plain Sockets to SSL Sockets in an Easy Way_ Free source code and programming help_files/pollcol.gif" 
+                        width=10 
+              border=0><BR>5</TD></TD></TR></TBODY></TABLE></DIV></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE><SPAN 
+      id=intelliTXT>
+      <DIV id=contentdiv><!-- Main Page Contents Start --><!-- Article Starts -->
+      <UL class=Download>
+        <LI><A 
+        href="http://www.codeproject.com/KB/IP/ssl_sockets/sslsource.zip">Download 
+        source - 42.77 KB</A> </LI></UL>
+      <P>Includes: </P>
+      <UL>
+        <LI>SSL class soucre files (<EM>SSL.CPP</EM>, <EM>Z.H</EM>, 
+        <EM>SSL.H</EM>) 
+        <LI>Testing project TEL, telnet client and server with SSL ability. 
+      </LI></UL>
+      <H2>Introduction</H2>
+      <P>A lot of SSL stuff already exists, but it is in either MFC, NET or some 
+      other non-native format. Here is a simple class <CODE>SSL_SOCKET</CODE> 
+      that allows you to convert an existing SOCKET handle to SSL under Windows. 
+      I got much information from the great <A 
+      href="http://www.codeproject.com/KB/IP/sslsocket.aspx">CSslSocket - 
+      SSL/TLS enabled CSocket</A> MFC article, but I need a plain Win32 one</P>
+      <H2>Features </H2>
+      <UL>
+        <LI>x86 / x64 compatible. 
+        <LI>HTML help. 
+        <LI>Supports Server and Client. </LI></UL>
+      <H2>License</H2>
+      <P>Free, for any kind or freeware, shareware, commercial, or whateverware 
+      project, as long as you give me credit for the library in your 'about box' 
+      or your application's documentation.</P>
+      <H2>Creating the SSL Client</H2>
+      <P>First, create and connect your socket using the normal socket functions 
+      (<CODE>socket()</CODE>, and <CODE>connect()</CODE>). Then construct an 
+      <CODE>SSL_SOCKET</CODE>:</P><PRE lang=c++><SPAN class=code-comment>//</SPAN><SPAN class=code-comment> Say that X is a socket</SPAN>
+SSL_SOCKET* SX = <SPAN class=code-keyword>new</SPAN> SSL_SOCKET(X,<SPAN class=code-digit>0</SPAN>,<SPAN class=code-digit>0</SPAN>);
+
+</PRE>
+      <P>This creates an <CODE>SSL_SOCKET</CODE> object for an 
+      <CODE>SSL_CLIENT</CODE>. The last parameter to the constructor indicates 
+      that the object will create a tempora self-signed certificate to 
+      authenticate itself with the SSL server. If you want, you can pass your 
+      own <CODE>PCERT_CONTEXT</CODE>.</P>
+      <P>Next step is to call <CODE>SSL_SOCKET::ClientInit()</CODE></P><PRE lang=c++><SPAN class=code-comment>//</SPAN><SPAN class=code-comment> Initialize the Security Session</SPAN>
+sX-<SPAN class=code-keyword>&gt;</SPAN>ClientInit();
+
+</PRE>
+      <P>This also calls <CODE>SSL_SOCKET::ClientLoop()</CODE> to initialize the 
+      SSL Session. (If you don't want to initialize the SSL session at this 
+      time, call <CODE>ClientInit(<SPAN class=code-keyword>true</SPAN>)</CODE> 
+      and then later call <CODE>ClientLoop()</CODE>). Once the loop returns 0 
+      (success), you can then use the following functions:</P>
+      <UL>
+        <LI><CODE><SPAN class=code-keyword>int</SPAN> SSL_SOCKET:: s_send(<SPAN 
+        class=code-keyword>char</SPAN>* b, <SPAN class=code-keyword>int</SPAN> 
+        sz);</CODE> // Sends data, returns 0 or -1 on error (like normal 
+        send()). 
+        <LI><CODE><SPAN class=code-keyword>int</SPAN> SSL_SOCKET:: s_ssend(<SPAN 
+        class=code-keyword>char</SPAN>* b, <SPAN class=code-keyword>int</SPAN> 
+        sz);</CODE> // Sends data, returns 0 or -1 on error (like normal 
+        send()). Does not return until all the bytes have been sent or an error 
+        occurs. 
+        <LI><CODE><SPAN class=code-keyword>int</SPAN> SSL_SOCKET:: s_recv(<SPAN 
+        class=code-keyword>char</SPAN>* b, <SPAN class=code-keyword>int</SPAN> 
+        sz);</CODE> // Receives data, returns 0 or -1 on error (like normal 
+        recv()). 
+        <LI><CODE><SPAN class=code-keyword>int</SPAN> SSL_SOCKET:: s_ssend(<SPAN 
+        class=code-keyword>char</SPAN>* b, <SPAN class=code-keyword>int</SPAN> 
+        sz);</CODE> // Receives data, returns 0 or -1 on error (like normal 
+        recv()). Does not return until all the bytes have been received or an 
+        error occurs. </LI></UL>
+      <P>If you like, you can call also <CODE>send_p</CODE>, 
+      <CODE>ssend_p</CODE>, <CODE>recv_p</CODE>, <CODE>rrecv_p</CODE> to 
+      send/receive raw bytes (without messaging encryption/decryption), if you 
+      can encrypt/decrypt the stuff yourself.</P>
+      <P>Polite shutdown of the client connection is calling <CODE>SSL_SOCKET :: 
+      ClientOff()</CODE> before calling <CODE>closesocket()</CODE>. </P>
+      <H2>Creating the SSL Server </H2>
+      <P>First, create and accept your socket using the normal socket functions 
+      (<CODE>socket()</CODE>, <CODE>bind()</CODE>, <CODE>listen()</CODE> and 
+      <CODE>accept()</CODE>). Then construct a <CODE>SSL_SOCKET</CODE>:</P><PRE lang=c++><SPAN class=code-comment>//</SPAN><SPAN class=code-comment> Say that X is a socket</SPAN>
+SSL_SOCKET* SX = <SPAN class=code-keyword>new</SPAN> SSL_SOCKET(X,<SPAN class=code-digit>1</SPAN>,<SPAN class=code-digit>0</SPAN>);
+
+</PRE>
+      <P>This creates an <CODE>SSL_SOCKET</CODE> object for a 
+      <CODE>SSL_CLIENT</CODE>. The last parameter to the constructor indicates 
+      that the object will create a tempora self-signed certificate to 
+      authenticate itself with the SSL server. If you want, you can pass your 
+      own <CODE>PCERT_CONTEXT</CODE>. Note that some clients will test the 
+      certificate and reject it or warn it, so you may want to pass a trusted 
+      certificate.</P>
+      <P>Next step is to call <CODE>SSL_SOCKET::ServerInit()</CODE></P><PRE lang=c++><SPAN class=code-comment>//</SPAN><SPAN class=code-comment> Initialize the Security Session</SPAN>
+sX-<SPAN class=code-keyword>&gt;</SPAN>ServerInit();
+
+</PRE>
+      <P>This also calls <CODE>SSL_SOCKET::ServerLoop()</CODE> to initialize the 
+      SSL Session. (If you don't want to initialize the SSL session at this 
+      time, call <CODE>ServerInit(<SPAN class=code-keyword>true</SPAN>)</CODE> 
+      and then later call <CODE>ServerLoop()</CODE>). Once the loop returns 0 
+      (success), you can then use the send/recv functions discussed above.</P>
+      <P>Shutdown the server by calling <CODE>SSL_Socket :: 
+      ServerOff()</CODE>.</P>
+      <H2>Other Features </H2>
+      <P>These are some features I'd like to implement in the future:</P>
+      <UL>
+        <LI>Certificate verification (not yet completed) 
+        <LI>Documentation (<EM>SSL.CHM</EM>) is pending. </LI></UL>
+      <P>Please leave your questions and comments! </P>
+      <H2>History</H2>
+      <UL>
+        <LI>March 13, 2007 - Original version posted </LI></UL><!-- Article Ends --><!-- Main Page Contents End --></DIV></SPAN>
+      <FORM id=aspnetForm 
+      style="PADDING-RIGHT: 0px; PADDING-LEFT: 0px; PADDING-BOTTOM: 0px; MARGIN: 0px; PADDING-TOP: 0px" 
+      name=aspnetForm action=ssl_sockets.aspx method=post>
+      <DIV><INPUT id=__VIEWSTATE type=hidden 
+      value=/wEPDwULLTEwMDUyNjYzMjhkZI9X+SzrLI9ZfMWo8DfISPGq8xXH 
+      name=__VIEWSTATE> </DIV>
+      <H2>License</H2>
+      <DIV id=ctl00_LicenseTerms>
+      <P>This article, along with any associated source code and files, is 
+      licensed under <A href="http://www.codeproject.com/info/cpol10.aspx">The 
+      Code Project Open License (CPOL)</A></P></DIV>
+      <H2>About the Author</H2>
+      <TABLE cellSpacing=5 cellPadding=0 width="100%" border=0>
+        <TBODY>
+        <TR vAlign=top>
+          <TD id=ctl00_AboutAuthorRptr_ctl00_AboutAuthor_memberPhotoTable 
+          style="WIDTH: 155px" vAlign=top><B><A 
+            id=ctl00_AboutAuthorRptr_ctl00_AboutAuthor_memberProfileLink 
+            href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=358302">Michael 
+            Chourdakis</A></B><BR><BR>
+            <CENTER></CENTER><BR><SPAN class=SmallText 
+            id=ctl00_AboutAuthorRptr_ctl00_AboutAuthor_memberType></SPAN></TD>
+          <TD>I am a professional in C++/PHP/DSP 
+            Developement.<BR>http://www.turboirc.com<BR>
+            <TABLE>
+              <TBODY>
+              <TR id=ctl00_AboutAuthorRptr_ctl00_AboutAuthor_jobTitleRow>
+                <TD class=SmallText noWrap>Occupation: </TD>
+                <TD width="100%"><SPAN class=SmallText 
+                  id=ctl00_AboutAuthorRptr_ctl00_AboutAuthor_memberJobTitle>Software 
+                  Developer (Senior)</SPAN></TD></TR>
+              <TR id=ctl00_AboutAuthorRptr_ctl00_AboutAuthor_locationRow>
+                <TD class=SmallText>Location: </TD>
+                <TD width="100%"><SPAN class=SmallText 
+                  id=ctl00_AboutAuthorRptr_ctl00_AboutAuthor_memberLocation><IMG 
+                  height=11 alt=Greece 
+                  src="CodeProject SSL  Convert your Plain Sockets to SSL Sockets in an Easy Way_ Free source code and programming help_files/GR.gif" 
+                  width=16> 
+      Greece</SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE><BR>
+      <TABLE id=ctl00_PopularArticlesRow cellSpacing=0 cellPadding=0 
+      width="100%" border=0>
+        <TBODY>
+        <TR vAlign=top>
+          <TD style="WIDTH: 100%">
+            <H2>Other popular Internet / Network articles:</H2>
+            <UL>
+              <LI><A 
+              href="http://www.codeproject.com/KB/IP/AsyncSocketServerandClien.aspx">An 
+              Asynchronous Socket Server and Client</A>
+              <DIV class=SmallText>An asynchronous socket server and client with 
+              encryption and compression.</DIV>
+              <LI><A 
+              href="http://www.codeproject.com/KB/IP/MyDownloader.aspx">MyDownloader: 
+              A Multi-thread C# Segmented Download Manager</A>
+              <DIV class=SmallText>Sample application that manages multiple 
+              segmented downloads and supports HTTP, FTP and YouTube video 
+              downloads</DIV>
+              <LI><A href="http://www.codeproject.com/KB/IP/ndk.aspx">Network 
+              Development Kit 2.0</A>
+              <DIV class=SmallText>Network Development Kit is a set of simple 
+              classes for a client-server architecture.</DIV>
+              <LI><A 
+              href="http://www.codeproject.com/KB/IP/drvfltip.aspx">Developing 
+              Firewalls for Windows 2000/XP</A>
+              <DIV class=SmallText>An article about developing Firewalls for 
+              Windows 2000/XP</DIV>
+              <LI><A 
+              href="http://www.codeproject.com/KB/IP/iocp_server_client.aspx">A 
+              simple IOCP Server/Client Class</A>
+              <DIV class=SmallText>This source code uses the advanced IOCP 
+              technology which can efficiently serve multiple clients. It also 
+              presents some solutions to practical problems that arise with the 
+              IOCP programming API, and provides a simple echo client/server 
+              with file transfer.</DIV></LI></UL>
+            <H2></H2></TD>
+          <TD>
+            <SCRIPT type=text/javascript>document.write(unescape("%3ca%20href%3d%22http%3a%2f%2fwww.codeproject.com%2fRedir.aspx%3fadid%3d6421%26way%3dban%22%20target%3d%22_blank%22%20rel%3d%22nofollow%22%3e%3cimg%20src%3d%22http%3a%2f%2fwww.codeproject.com%2fscript%2fAdm%2fServeImg.aspx%3fFile%3d%252fscript%252fadmentor%252fimages%252f300x250.png%26C%3dFalse%26adid%3d6421%22%20alt%3d%22%22%20border%3d%220%22%20width%3d%22300%22%20height%3d%22250%22%3e%3c%2fa%3e"));</SCRIPT>
+          </TD></TR></TBODY></TABLE>
+      <DIV id=ctl00_AddTo_AddTo style="MARGIN: 10px">
+      <SCRIPT language=JavaScript type=text/javascript>
+var socialLinks = new social();
+socialLinks.addtoMethod=1;
+socialLinks.DrawLinks("socialLinks", document.location.href, escape(document.title), 100, 0, "SmallText Bold", "AddTo");
+</SCRIPT>
+      </DIV>
+      <TABLE class=RatingBar id=ctl00_RateArticleRow cellSpacing=0 cellPadding=0 
+      width="100%" border=0>
+        <TBODY>
+        <TR>
+          <TD><A 
+            href="http://www.codeproject.com/KB/IP/ssl_sockets.aspx#_top">Article 
+            Top</A></TD>
+          <TD align=right>
+            <TABLE cellSpacing=0 cellPadding=0 width="100%">
+              <TBODY>
+              <TR>
+                <TD id=ctl00_RateArticle_VoteResultDiv noWrap align=right 
+                width="100%"><SPAN id=voteRes></SPAN><IMG id=loaderImg 
+                  style="DISPLAY: none" height=16 alt=loading... 
+                  src="CodeProject SSL  Convert your Plain Sockets to SSL Sockets in an Easy Way_ Free source code and programming help_files/ajax-loader.gif" 
+                  width=16> </TD>
+                <TD class=SmallText id=voteTbl style="WHITE-SPACE: nowrap" 
+                align=right>
+                  <TABLE>
+                    <TBODY>
+                    <TR>
+                      <TD id=ctl00_RateArticle_RateText 
+                      style="PADDING-RIGHT: 5px; WHITE-SPACE: nowrap"><I><B>Rate 
+                        this Article for us!</B></I></TD>
+                      <TD id=ctl00_RateArticle_StartForm 
+                        align=right><I>&nbsp;&nbsp;Poor</I></TD>
+                      <TD id=ctl00_RateArticle_VoteFormDiv 
+                      style="WHITE-SPACE: nowrap" align=left>
+                        <TABLE id=ctl00_RateArticle_VoteRBL border=0>
+                          <TBODY>
+                          <TR>
+                            <TD><INPUT id=ctl00_RateArticle_VoteRBL_0 
+                              type=radio value=1 
+                            name=ctl00$RateArticle$VoteRBL></TD>
+                            <TD><INPUT id=ctl00_RateArticle_VoteRBL_1 
+                              type=radio value=2 
+                            name=ctl00$RateArticle$VoteRBL></TD>
+                            <TD><INPUT id=ctl00_RateArticle_VoteRBL_2 
+                              type=radio value=3 
+                            name=ctl00$RateArticle$VoteRBL></TD>
+                            <TD><INPUT id=ctl00_RateArticle_VoteRBL_3 
+                              type=radio value=4 
+                            name=ctl00$RateArticle$VoteRBL></TD>
+                            <TD><INPUT id=ctl00_RateArticle_VoteRBL_4 
+                              type=radio value=5 
+                            name=ctl00$RateArticle$VoteRBL></TD></TR></TBODY></TABLE></TD>
+                      <TD id=ctl00_RateArticle_EndForm noWrap 
+                        align=left><I>Excellent</I> <INPUT class=FormButton id=ctl00_RateArticle_SubmitRateBtn onclick="return rateItem(24379,2);" type=submit value=Vote name=ctl00$RateArticle$SubmitRateBtn> 
+                      </TD>
+                      <TD><SPAN 
+                    id=ctl00_RateArticle_ErrorMessage></SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE>
+      <DIV><INPUT id=__EVENTVALIDATION type=hidden 
+      value=/wEWCAKX59nLAwLAlMXDBwLBlMXDBwLClMXDBwLDlMXDBwLElMXDBwLP+++tCwK5upDkCwuiMd8FuSpTurQaWLpWRGfKmwPb 
+      name=__EVENTVALIDATION> </DIV></FORM>
+      <DIV 
+      style="PADDING-RIGHT: 10px; PADDING-LEFT: 10px; PADDING-BOTTOM: 10px; OVERFLOW: hidden; PADDING-TOP: 10px; WHITE-SPACE: nowrap; TEXT-ALIGN: center">
+      <SCRIPT type=text/javascript>document.write(unescape("%3ca%20href%3d%22http%3a%2f%2fwww.codeproject.com%2fRedir.aspx%3fadid%3d6422%26way%3dban%22%20target%3d%22_blank%22%20rel%3d%22nofollow%22%3e%3cimg%20src%3d%22http%3a%2f%2fwww.codeproject.com%2fscript%2fAdm%2fServeImg.aspx%3fFile%3d%252fscript%252fadmentor%252fimages%252f468x60.png%26C%3dFalse%26adid%3d6422%22%20alt%3d%22%22%20border%3d%220%22%20width%3d%22468%22%20height%3d%2260%22%3e%3c%2fa%3e"));</SCRIPT>
+      <IFRAME 
+      src="CodeProject SSL  Convert your Plain Sockets to SSL Sockets in an Easy Way_ Free source code and programming help_files/ServeLinks.htm" 
+      frameBorder=0 width=300 scrolling=no height=60></IFRAME></DIV><A 
+      name=_comments></A><!-- Forum Start -->
+      <DIV id=_MessageBoard onclick="return SwitchMessage(event, null)">
+      <TABLE class=Frm_MainTable id=ForumTable cellSpacing=0 cellPadding=0>
+        <TBODY>
+        <TR>
+          <TD>
+            <FORM 
+            style="PADDING-RIGHT: 0px; PADDING-LEFT: 0px; PADDING-BOTTOM: 0px; MARGIN: 0px; PADDING-TOP: 0px" 
+            action=/script/Forums/SetOptions.aspx?floc=%2fKB%2fIP%2fssl_sockets.aspx&amp;fid=1110887 
+            method=get><INPUT type=hidden value=1110887 name=fid><INPUT 
+            type=hidden 
+            value=?floc=%2fKB%2fIP%2fssl_sockets.aspx&amp;fid=1110887 
+            name=currentQS><INPUT type=hidden value=/KB/IP/ssl_sockets.aspx 
+            name=floc>
+            <TABLE cellSpacing=0 cellPadding=3 width="100%" border=0>
+              <TBODY>
+              <TR class=Frm_HeaderRow1>
+                <TD style="WHITE-SPACE: nowrap"><IMG height=16 alt=FAQ 
+                  src="CodeProject SSL  Convert your Plain Sockets to SSL Sockets in an Easy Way_ Free source code and programming help_files/forum_faq.gif" 
+                  width=16 align=middle border=0>&nbsp;<A 
+                  href="http://www.codeproject.com/script/Forums/FAQ.aspx"><B>FAQ</B></A>&nbsp;</TD>
+                <TD style="WHITE-SPACE: nowrap; TEXT-ALIGN: right">Noise 
+                  Tolerance<SELECT class=Frm_DropDown size=1 name=noise> 
+                    <OPTION value=1>Very High</OPTION><OPTION 
+                    value=2>High</OPTION><OPTION value=3 
+                    selected>Medium</OPTION><OPTION value=4>Low</OPTION><OPTION 
+                    value=5>Very Low</OPTION></SELECT></TD>
+                <TD style="WHITE-SPACE: nowrap; TEXT-ALIGN: right" 
+                  colSpan=2><IMG height=15 alt=Search 
+                  src="CodeProject SSL  Convert your Plain Sockets to SSL Sockets in an Easy Way_ Free source code and programming help_files/forum_search.gif" 
+                  width=16 align=top border=0>&nbsp;<A 
+                  href="http://www.codeproject.com/script/Forums/Search.aspx?fid=1110887">Search 
+                  Messages</A>&nbsp;</TD>
+                <TD style="TEXT-ALIGN: right"><INPUT class=Frm_Button type=submit value="Set Options" name=SetOpt></TD></TR>
+              <TR class=Frm_HeaderRow2>
+                <TD style="WIDTH: 100%">&nbsp;</TD>
+                <TD 
+                  style="WHITE-SPACE: nowrap; TEXT-ALIGN: right">Layout<SELECT 
+                  class=Frm_DropDown size=1 name=view> <OPTION value=Quick 
+                    selected>Normal</OPTION><OPTION value=Topic>Expand Root 
+                    Messages</OPTION><OPTION value=Expanded>Expand All 
+                    Messages</OPTION><OPTION value=Thread>Thread 
+                    View</OPTION><OPTION value=Normal>No Javascript 
+                    (slow)</OPTION><OPTION value=Preview>No Javascript 
+                    Preview</OPTION></SELECT>&nbsp;&nbsp;</TD>
+                <TD style="WHITE-SPACE: nowrap">Per page<SELECT 
+                  class=Frm_DropDown size=1 name=mpp> <OPTION 
+                    value=10>10</OPTION><OPTION value=25 
+                    selected>25</OPTION><OPTION 
+                  value=50>50</OPTION></SELECT>&nbsp;&nbsp;</TD>
+                <TD colSpan=2>&nbsp;</TD></TR></TBODY></TABLE></FORM></TD></TR>
+        <TR>
+          <TD><A name=xx0xx></A>
+            <TABLE cellSpacing=0 cellPadding=2 width="100%" border=0>
+              <TBODY>
+              <TR class=Frm_NavigationBar>
+                <TD><IMG height=16 alt=new 
+                  src="CodeProject SSL  Convert your Plain Sockets to SSL Sockets in an Easy Way_ Free source code and programming help_files/forum_newmsg.gif" 
+                  width=16 align=top border=0><A class=Frm_HL 
+                  title="Create a new message thread" 
+                  href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=1110887&amp;floc=/KB/IP/ssl_sockets.aspx" 
+                  target=_top name=Frm_HoverNL><B>New Message</B></A></TD>
+                <TD>Msgs 1 to 12 of 12 (Total in Forum: 12) (<A 
+                  href="http://www.codeproject.com/KB/IP/ssl_sockets.aspx?fid=1110887">Refresh</A>)</TD>
+                <TD style="WHITE-SPACE: nowrap; TEXT-ALIGN: right"><SPAN 
+                  class=Frm_HL>First</SPAN><SPAN class=Frm_HL>Prev</SPAN><SPAN 
+                  class=Frm_HL>Next</SPAN></TD></TR></TBODY></TABLE></TD></TR>
+        <TR>
+          <TD>
+            <TABLE class=Frm_MsgTable cellSpacing=0 cellPadding=0 width="100%" 
+            border=0><!-- Column Headers -->
+              <TBODY>
+              <TR class=Frm_ColumnHeaders>
+                <TD style="WIDTH: 100%">
+                  <TABLE cellSpacing=0 cellPadding=2 width="100%" border=0>
+                    <TBODY>
+                    <TR>
+                      <TD>Subject&nbsp;</TD>
+                      <TD class=Frm_MsgAuthor>&nbsp;Author&nbsp;</TD>
+                      <TD 
+              class=Frm_MsgDate>Date&nbsp;</TD></TR></TBODY></TABLE></TD></TR>
+              <TR>
+                <TD><IMG height=5 alt="" 
+                  src="CodeProject SSL  Convert your Plain Sockets to SSL Sockets in an Easy Way_ Free source code and programming help_files/t.gif" 
+                  width=1 border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd Rt HdUnSel " id=F2626653_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=16><A 
+                        name=xx2626653xx></A><IMG height=16 alt=Question 
+                        src="CodeProject SSL  Convert your Plain Sockets to SSL Sockets in an Easy Way_ Free source code and programming help_files/msg_question.gif" 
+                        width=16 align=top></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/IP/ssl_sockets.aspx?fid=1110887&amp;select=2626653#xx2626653xx" 
+                        name=2626653>Works Well except...</A></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        title=member height=16 alt=member 
+                        src="CodeProject SSL  Convert your Plain Sockets to SSL Sockets in an Easy Way_ Free source code and programming help_files/member_sm.gif" 
+                        border=0></TD>
+                      <TD class=Frm_MsgAuthor><A 
+                        href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=208798">Rasch</A></TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">22:20 6 
+                        Jul '08 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=F2626653_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 16px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2>It works well for the most part. 
+                                <BR><BR>I ran into a problem and I'm a bit 
+                                stumped. Here is some background. <BR><BR>I have 
+                                a java server. I also have an older .net client 
+                                that uses the ssl .net libraries. <BR><BR>My old 
+                                client can connect to test and production. 
+                                <BR><BR>My new win32 client can connect using 
+                                this library to test but not production. This 
+                                eliminates a huge swath of possible problems. 
+                                <BR><BR>when connecting to production it appears 
+                                that the handshake works correctly and that the 
+                                client_loop works. I do actually connect as I 
+                                can see the connection on the server. 
+                                <BR><BR>Once the thread that handles the receive 
+                                issues the call to s_recv it returns with a -1. 
+                                This is from the result from the call to 
+                                DecryptMessage. And the code returns 
+                                from:<BR><BR><PRE>if (ss != SEC_E_OK &amp;&amp; ss != SEC_I_RENEGOTIATE &amp;&amp; ss != SEC_I_CONTEXT_EXPIRED)<BR>	return -1;<BR></PRE><BR><BR>The 
+                                value I get back is not one of the ten 
+                                predefined constants for DecryptMessage. The 
+                                actual value is -2146893008.<BR><BR>If I comment 
+                                this line out I get some garbage and part of my 
+                                expected response at the end. <BR><BR>So for 
+                                some reason it works against a test server and 
+                                fails against a production server.<BR>Some 
+                                possible reasons are:<BR><BR>I'm running 
+                                production on Linux and perhaps there is some 
+                                difference in packet sizes or timing, etc. and 
+                                the cryptographic negotiation fails in some way 
+                                silently. <BR><BR>I know it would be very 
+                                difficult to figure this out from this post. If 
+                                anyone can point me in the right direction or 
+                                right process to troubleshoot this issue I would 
+                                really appreciate it!<BR></TD></TR>
+                                <TR style="VERTICAL-ALIGN: middle">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL title=Reply 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=1110887&amp;select=2626653&amp;floc=/KB/IP/ssl_sockets.aspx&amp;fa=r">Reply</A>·<A 
+                                class=Frm_MHL title=Email 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=1110887&amp;select=2626653&amp;floc=/KB/IP/ssl_sockets.aspx&amp;fa=e">Email</A>·<A 
+                                class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/IP/ssl_sockets.aspx?fid=1110887&amp;tid=2626653">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=1110887&amp;msg=2626653">PermaLink</A>·<A 
+                                class=Frm_MHL title="Bookmark this post" 
+                                href="http://www.codeproject.com/script/Bookmarks/Add.aspx?&amp;obid=2626653&amp;obtid=3&amp;bma=AddBookmark">Bookmark</A></TD>
+                                <TD class=Frm_MsgFt 
+                                style="TEXT-ALIGN: right"><SPAN id=MVF2626653 
+                                style="WHITE-SPACE: nowrap">
+                                <SCRIPT type=text/javascript>
+												MsgVFrm(208798,2626653,false,"","","");
+											</SCRIPT>
+                                </SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR class=Quick>
+                <TD class=Frm_MsgRtDivide><IMG height=1 alt="" 
+                  src="CodeProject SSL  Convert your Plain Sockets to SSL Sockets in an Easy Way_ Free source code and programming help_files/t.gif" 
+                  width=1 border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd Rt HdUnSel " id=F2552876_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=16><A 
+                        name=xx2552876xx></A><IMG height=16 alt=General 
+                        src="CodeProject SSL  Convert your Plain Sockets to SSL Sockets in an Easy Way_ Free source code and programming help_files/msg_general.gif" 
+                        width=16 align=top></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/IP/ssl_sockets.aspx?fid=1110887&amp;select=2552876#xx2552876xx" 
+                        name=2552876>SSL Socket</A></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        title=member height=16 alt=member 
+                        src="CodeProject SSL  Convert your Plain Sockets to SSL Sockets in an Easy Way_ Free source code and programming help_files/member_sm.gif" 
+                        border=0></TD>
+                      <TD class=Frm_MsgAuthor><A 
+                        href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=3661614">ms 
+                        raj</A></TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">9:38 14 
+                        May '08 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=F2552876_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 16px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2>Hi All,<BR>looking good concept of 
+                                SSL , After downloading the code ,all the files 
+                                , i have added into Win32 Console 
+                                Application,But it is producing error at compile 
+                                time . Plz help me , that am i missing some 
+                                cnfigration with this project or i have to chose 
+                                some other wizard. Thank you............. <IMG 
+                                title=Sigh 
+                                src="CodeProject SSL  Convert your Plain Sockets to SSL Sockets in an Easy Way_ Free source code and programming help_files/smiley_sigh.gif" 
+                                align=top> <BR><BR>
+                                <DIV class=ForumSig>Hi manish 
+                                Here.</DIV><BR></TD></TR>
+                                <TR style="VERTICAL-ALIGN: middle">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL title=Reply 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=1110887&amp;select=2552876&amp;floc=/KB/IP/ssl_sockets.aspx&amp;fa=r">Reply</A>·<A 
+                                class=Frm_MHL title=Email 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=1110887&amp;select=2552876&amp;floc=/KB/IP/ssl_sockets.aspx&amp;fa=e">Email</A>·<A 
+                                class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/IP/ssl_sockets.aspx?fid=1110887&amp;tid=2552876">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=1110887&amp;msg=2552876">PermaLink</A>·<A 
+                                class=Frm_MHL title="Bookmark this post" 
+                                href="http://www.codeproject.com/script/Bookmarks/Add.aspx?&amp;obid=2552876&amp;obtid=3&amp;bma=AddBookmark">Bookmark</A></TD>
+                                <TD class=Frm_MsgFt 
+                                style="TEXT-ALIGN: right"><SPAN id=MVF2552876 
+                                style="WHITE-SPACE: nowrap">
+                                <SCRIPT type=text/javascript>
+												MsgVFrm(3661614,2552876,false,"","","");
+											</SCRIPT>
+                                </SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR class=Quick>
+                <TD class=Frm_MsgDivide><IMG height=1 alt="" 
+                  src="CodeProject SSL  Convert your Plain Sockets to SSL Sockets in an Easy Way_ Free source code and programming help_files/t.gif" 
+                  width=1 border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd HdUnSel " id=F2553183_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=34><A 
+                        name=xx2553183xx></A><IMG height=16 alt=General 
+                        src="CodeProject SSL  Convert your Plain Sockets to SSL Sockets in an Easy Way_ Free source code and programming help_files/msg_general.gif" 
+                        width=16 align=top></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/IP/ssl_sockets.aspx?fid=1110887&amp;select=2553183#xx2553183xx" 
+                        name=2553183>Re: SSL Socket</A></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        title=member height=16 alt=member 
+                        src="CodeProject SSL  Convert your Plain Sockets to SSL Sockets in an Easy Way_ Free source code and programming help_files/member_sm.gif" 
+                        border=0></TD>
+                      <TD class=Frm_MsgAuthor><A 
+                        href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=358302">Michael 
+                        Chourdakis</A></TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">12:34 
+                        14 May '08 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=F2553183_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 34px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2>What error ? <BR></TD></TR>
+                                <TR style="VERTICAL-ALIGN: middle">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL title=Reply 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=1110887&amp;select=2553183&amp;floc=/KB/IP/ssl_sockets.aspx&amp;fa=r">Reply</A>·<A 
+                                class=Frm_MHL title=Email 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=1110887&amp;select=2553183&amp;floc=/KB/IP/ssl_sockets.aspx&amp;fa=e">Email</A>·<A 
+                                class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/IP/ssl_sockets.aspx?fid=1110887&amp;tid=2552876">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=1110887&amp;msg=2553183">PermaLink</A>·<A 
+                                class=Frm_MHL title="Bookmark this post" 
+                                href="http://www.codeproject.com/script/Bookmarks/Add.aspx?&amp;obid=2553183&amp;obtid=3&amp;bma=AddBookmark">Bookmark</A></TD>
+                                <TD class=Frm_MsgFt 
+                                style="TEXT-ALIGN: right"><SPAN id=MVF2553183 
+                                style="WHITE-SPACE: nowrap">
+                                <SCRIPT type=text/javascript>
+												MsgVFrm(358302,2553183,false,"","","");
+											</SCRIPT>
+                                </SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR class=Quick>
+                <TD class=Frm_MsgDivide><IMG height=1 alt="" 
+                  src="CodeProject SSL  Convert your Plain Sockets to SSL Sockets in an Easy Way_ Free source code and programming help_files/t.gif" 
+                  width=1 border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd LoVote HdUnSel " id=F2553921_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=52><A 
+                        name=xx2553921xx></A><IMG height=16 alt=General 
+                        src="CodeProject SSL  Convert your Plain Sockets to SSL Sockets in an Easy Way_ Free source code and programming help_files/msg_general.gif" 
+                        width=16 align=top></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/IP/ssl_sockets.aspx?fid=1110887&amp;select=2553921#xx2553921xx" 
+                        name=2553921>SSL Socket</A></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        title=member height=16 alt=member 
+                        src="CodeProject SSL  Convert your Plain Sockets to SSL Sockets in an Easy Way_ Free source code and programming help_files/member_sm.gif" 
+                        border=0></TD>
+                      <TD class=Frm_MsgAuthor><A 
+                        href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=3661614">ms 
+                        raj</A></TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">1:23 15 
+                        May '08 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=F2553921_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 52px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2>Hi,<BR>ther is displaying too many 
+                                error....<BR>its almost peoducing error in VC++ 
+                                header file name schnlsp.h and its unable to 
+                                idetify windows crypto api and security API 
+                                .<BR><BR>error C2143: syntax error : missing ';' 
+                                before '*'<BR>error C2501: 'ALG_ID' : missing 
+                                storage-class or type specifiers<BR>error C2501: 
+                                'palgSupportedAlgs' : missing storage-class or 
+                                type specifiers<BR>error C2146: syntax error : 
+                                missing ';' before identifier 
+                                'aIssuers'<BR>error C2501: 'PCERT_NAME_BLOB' : 
+                                missing storage-class or type 
+                                specifiers<BR>error C2501: 'aIssuers' : missing 
+                                storage-class or type specifiers<BR>error C2146: 
+                                syntax error : missing ';' before identifier 
+                                'aiCipher'<BR>error C2501: 'ALG_ID' : missing 
+                                storage-class or type specifiers<BR>error C2501: 
+                                'aiCipher' : missing storage-class or type 
+                                specifiers<BR>error C2146: syntax error : 
+                                missing ';' before identifier 'aiHash'<BR>error 
+                                C2501: 'ALG_ID' : missing storage-class or type 
+                                specifiers<BR>error C2501: 'aiHash' : missing 
+                                storage-class or type specifiers<BR>error C2146: 
+                                syntax error : missing ';' before identifier 
+                                'aiExch'<BR>error C2501: 'ALG_ID' : missing 
+                                storage-class or type specifiers<BR>error C2501: 
+                                'aiExch' : missing storage-class or type 
+                                specifiers<BR>error C2143: syntax error : 
+                                missing ';' before '*'<BR>error C2501: 
+                                'PCCERT_CONTEXT' : missing storage-class or type 
+                                specifiers<BR>error C2501: 'paCred' : missing 
+                                storage-class or type specifiers<BR>error C2146: 
+                                syntax error : missing ';' before identifier 
+                                'hRootStore'<BR>error C2501: 'HCERTSTORE' : 
+                                missing storage-class or type 
+                                specifiers<BR>error C2501: 'hRootStore' : 
+                                missing storage-class or type 
+                                specifiers<BR>error C2143: syntax error : 
+                                missing ';' before '*'<BR>error C2501: 'ALG_ID' 
+                                : missing storage-class or type 
+                                specifiers<BR>error C2501: 'palgSupportedAlgs' : 
+                                missing storage-class or type 
+                                specifiers<BR>error C2146: syntax error : 
+                                missing ';' before identifier 'hProv'<BR>error 
+                                C2501: 'HCRYPTPROV' : missing storage-class or 
+                                type specifiers<BR>error C2501: 'hProv' : 
+                                missing storage-class or type 
+                                specifiers<BR>error C2146: syntax error : 
+                                missing ';' before identifier 'hProv'<BR>error 
+                                C2501: 'HCRYPTPROV' : missing storage-class or 
+                                type specifiers<BR>error C2501: 'hProv' : 
+                                missing storage-class or type 
+                                specifiers<BR>error C2146: syntax error : 
+                                missing ';' before identifier 
+                                'SignatureAlgorithm'<BR>error C2501: 'ALG_ID' : 
+                                missing storage-class or type 
+                                specifiers<BR>error C2501: 'SignatureAlgorithm' 
+                                : missing storage-class or type 
+                                specifiers<BR>C2629: unexpected 'class 
+                                SSL_SOCKET ('<BR>d:\e-drive\manish\desktop 
+                                shairing code\sslserver\ssl.h(20) : error C2238: 
+                                unexpected token(s) preceding 
+                                ';'<BR>d:\e-drive\manish\desktop shairing 
+                                code\sslserver\ssl.h(40) : error C2061: syntax 
+                                error : identifier 
+                                'PCCERT_CONTEXT'<BR>d:\e-drive\manish\desktop 
+                                shairing code\sslserver\ssl.h(43) : error C2146: 
+                                syntax error : missing ';' before identifier 
+                                'CreateOurCertificate'<BR>d:\e-drive\manish\desktop 
+                                shairing code\sslserver\ssl.h(43) : error C2501: 
+                                'PCCERT_CONTEXT' : missing storage-class or type 
+                                specifiers<BR>d:\e-drive\manish\desktop shairing 
+                                code\sslserver\ssl.h(52) : error C2146: syntax 
+                                error : missing ';' before identifier 
+                                'hCS'<BR>d:\e-drive\manish\desktop shairing 
+                                code\sslserver\ssl.h(52) : error C2501: 
+                                'HCERTSTORE' : missing storage-class or type 
+                                specifiers<BR>d:\e-drive\manish\desktop shairing 
+                                code\sslserver\ssl.h(52) : error C2501: 'hCS' : 
+                                missing storage-class or type 
+                                specifiers<BR>d:\e-drive\manish\desktop shairing 
+                                code\sslserver\ssl.h(64) : error C2146: syntax 
+                                error : missing ';' before identifier 
+                                'OurCertificate'<BR>d:\e-drive\manish\desktop 
+                                shairing code\sslserver\ssl.h(64) : error C2501: 
+                                'PCCERT_CONTEXT' : missing storage-class or type 
+                                specifiers<BR>d:\e-drive\manish\desktop shairing 
+                                code\sslserver\ssl.h(64) : error C2501: 
+                                'OurCertificate' : missing storage-class or type 
+                                specifiers<BR>d:\e-drive\manish\desktop shairing 
+                                code\sslserver\ssl.cpp(12) : error C2061: syntax 
+                                error : identifier 
+                                'PCCERT_CONTEXT'<BR>d:\e-drive\manish\desktop 
+                                shairing code\sslserver\ssl.cpp(13) : error 
+                                C2511: 'SSL_SOCKET::SSL_SOCKET' : overloaded 
+                                member function 'void (unsigned int,int)' not 
+                                found in 
+                                'SSL_SOCKET'<BR>d:\e-drive\manish\desktop 
+                                shairing code\sslserver\ssl.h(17) : see 
+                                declaration of 
+                                'SSL_SOCKET'<BR>d:\e-drive\manish\desktop 
+                                shairing code\sslserver\ssl.cpp(48) : error 
+                                C2065: 'FreeCredentialHandle' : undeclared 
+                                identifier<BR>d:\e-drive\manish\desktop shairing 
+                                code\sslserver\ssl.cpp(51) : error C2065: 
+                                'OurCertificate' : undeclared 
+                                identifier<BR>d:\e-drive\manish\desktop shairing 
+                                code\sslserver\ssl.cpp(53) : error C2065: 
+                                'CertFreeCertificateContext' : undeclared 
+                                identifier<BR>d:\e-drive\manish\desktop shairing 
+                                code\sslserver\ssl.cpp(57) : error C2065: 'hCS' 
+                                : undeclared 
+                                identifier<BR>d:\e-drive\manish\desktop shairing 
+                                code\sslserver\ssl.cpp(58) : error C2065: 
+                                'CertCloseStore' : undeclared 
+                                identifier<BR>d:\e-drive\manish\desktop shairing 
+                                code\sslserver\ssl.cpp(303) : error C2065: 
+                                'SEC_I_CONTEXT_EXPIRED' : undeclared 
+                                identifier<BR>d:\e-drive\manish\desktop shairing 
+                                code\sslserver\ssl.cpp(420) : warning C4018: 
+                                '!=' : signed/unsigned 
+                                mismatch<BR>d:\e-drive\manish\desktop shairing 
+                                code\sslserver\ssl.cpp(423) : warning C4018: 
+                                '!=' : signed/unsigned 
+                                mismatch<BR>d:\e-drive\manish\desktop shairing 
+                                code\sslserver\ssl.cpp(426) : warning C4018: 
+                                '!=' : signed/unsigned 
+                                mismatch<BR>d:\e-drive\manish\desktop shairing 
+                                code\sslserver\ssl.cpp(456) : error C2065: 
+                                'ISC_REQ_MANUAL_CRED_VALIDATION' : undeclared 
+                                identifier<BR>d:\e-drive\manish\desktop shairing 
+                                code\sslserver\ssl.cpp(550) : warning C4018: 
+                                '!=' : signed/unsigned 
+                                mismatch<BR>d:\e-drive\manish\desktop shairing 
+                                code\sslserver\ssl.cpp(559) : warning C4018: 
+                                '!=' : signed/unsigned 
+                                mismatch<BR>d:\e-drive\manish\desktop shairing 
+                                code\sslserver\ssl.cpp(585) : error C2039: 
+                                'dwFlags' : is not a member of 
+                                '_SCHANNEL_CRED'<BR>c:\program files\microsoft 
+                                visual studio\vc98\include\schnlsp.h(129) : see 
+                                declaration of 
+                                '_SCHANNEL_CRED'<BR>d:\e-drive\manish\desktop 
+                                shairing code\sslserver\ssl.cpp(585) : error 
+                                C2065: 'SCH_CRED_NO_DEFAULT_CREDS' : undeclared 
+                                identifier<BR>d:\e-drive\manish\desktop shairing 
+                                code\sslserver\ssl.cpp(586) : error C2039: 
+                                'dwFlags' : is not a member of 
+                                '_SCHANNEL_CRED'<BR>c:\program files\microsoft 
+                                visual studio\vc98\include\schnlsp.h(129) : see 
+                                declaration of 
+                                '_SCHANNEL_CRED'<BR>d:\e-drive\manish\desktop 
+                                shairing code\sslserver\ssl.cpp(586) : error 
+                                C2065: 'SCH_CRED_NO_SYSTEM_MAPPER' : undeclared 
+                                identifier<BR>d:\e-drive\manish\desktop shairing 
+                                code\sslserver\ssl.cpp(586) : error C2065: 
+                                'SCH_CRED_REVOCATION_CHECK_CHAIN' : undeclared 
+                                identifier<BR>d:\e-drive\manish\desktop shairing 
+                                code\sslserver\ssl.cpp(591) : error C2039: 
+                                'paCred' : is not a member of 
+                                '_SCHANNEL_CRED'<BR>c:\program files\microsoft 
+                                visual studio\vc98\include\schnlsp.h(129) : see 
+                                declaration of 
+                                '_SCHANNEL_CRED'<BR>d:\e-drive\manish\desktop 
+                                shairing code\sslserver\ssl.cpp(596) : error 
+                                C2065: 'SCHANNEL_NAME' : undeclared 
+                                identifier<BR>d:\e-drive\manish\desktop shairing 
+                                code\sslserver\ssl.cpp(686) : warning C4018: 
+                                '!=' : signed/unsigned 
+                                mismatch<BR>d:\e-drive\manish\desktop shairing 
+                                code\sslserver\ssl.cpp(696) : error C2065: 
+                                'PCCERT_CONTEXT' : undeclared 
+                                identifier<BR>d:\e-drive\manish\desktop shairing 
+                                code\sslserver\ssl.cpp(696) : error C2146: 
+                                syntax error : missing ')' before identifier 
+                                'px'<BR>d:\e-drive\manish\desktop shairing 
+                                code\sslserver\ssl.cpp(696) : error C2350: 
+                                'SSL_SOCKET::Verify' is not a static 
+                                member<BR>d:\e-drive\manish\desktop shairing 
+                                code\sslserver\ssl.cpp(696) : error C2059: 
+                                syntax error : ')'<BR>d:\e-drive\manish\desktop 
+                                shairing code\sslserver\ssl.cpp(697) : error 
+                                C2143: syntax error : missing ';' before 
+                                '{'<BR>d:\e-drive\manish\desktop shairing 
+                                code\sslserver\ssl.cpp(697) : error C2447: 
+                                missing function header (old-style formal 
+                                list?)<BR>d:\e-drive\manish\desktop shairing 
+                                code\sslserver\ssl.cpp(758) : error C2146: 
+                                syntax error : missing ';' before identifier 
+                                'pRemoteCertContext'<BR>d:\e-drive\manish\desktop 
+                                shairing code\sslserver\ssl.cpp(758) : error 
+                                C2065: 'pRemoteCertContext' : undeclared 
+                                identifier<BR>d:\e-drive\manish\desktop shairing 
+                                code\sslserver\ssl.cpp(763) : error C2065: 
+                                'CertGetNameString' : undeclared 
+                                identifier<BR>d:\e-drive\manish\desktop shairing 
+                                code\sslserver\ssl.cpp(765) : error C2065: 
+                                'CERT_NAME_FRIENDLY_DISPLAY_TYPE' : undeclared 
+                                identifier<BR>d:\e-drive\manish\desktop shairing 
+                                code\sslserver\ssl.cpp(775) : error C2146: 
+                                syntax error : missing ';' before identifier 
+                                'pRemoteCertContext'<BR>d:\e-drive\manish\desktop 
+                                shairing code\sslserver\ssl.cpp(790) : error 
+                                C2143: syntax error : missing ';' before 
+                                'tag::id'<BR>d:\e-drive\manish\desktop shairing 
+                                code\sslserver\ssl.cpp(790) : error C2501: 
+                                'PCCERT_CONTEXT' : missing storage-class or type 
+                                specifiers<BR>d:\e-drive\manish\desktop shairing 
+                                code\sslserver\ssl.cpp(790) : fatal error C1004: 
+                                unexpected end of file 
+                                found<BR>tel.cpp<BR>c:\program files\microsoft 
+                                visual studio\vc98\include\schnlsp.h(91) : error 
+                                C2143: syntax error : missing ';' before 
+                                '*'<BR>c:\program files\microsoft visual 
+                                studio\vc98\include\schnlsp.h(91) : error C2501: 
+                                'ALG_ID' : missing storage-class or type 
+                                specifiers<BR>c:\program files\microsoft visual 
+                                studio\vc98\include\schnlsp.h(91) : error C2501: 
+                                'palgSupportedAlgs' : missing storage-class or 
+                                type specifiers<BR>c:\program files\microsoft 
+                                visual studio\vc98\include\schnlsp.h(107) : 
+                                error C2146: syntax error : missing ';' before 
+                                identifier 'aIssuers'<BR>c:\program 
+                                files\microsoft visual 
+                                studio\vc98\include\schnlsp.h(107) : error 
+                                C2501: 'PCERT_NAME_BLOB' : missing storage-class 
+                                or type specifiers<BR>c:\program files\microsoft 
+                                visual studio\vc98\include\schnlsp.h(107) : 
+                                error C2501: 'aIssuers' : missing storage-class 
+                                or type specifiers<BR>c:\program files\microsoft 
+                                visual studio\vc98\include\schnlsp.h(114) : 
+                                error C2146: syntax error : missing ';' before 
+                                identifier 'aiCipher'<BR>c:\program 
+                                files\microsoft visual 
+                                studio\vc98\include\schnlsp.h(114) : error 
+                                C2501: 'ALG_ID' : missing storage-class or type 
+                                specifiers<BR>c:\program files\microsoft visual 
+                                studio\vc98\include\schnlsp.h(114) : error 
+                                C2501: 'aiCipher' : missing storage-class or 
+                                type specifiers<BR>c:\program files\microsoft 
+                                visual studio\vc98\include\schnlsp.h(116) : 
+                                error C2146: syntax error : missing ';' before 
+                                identifier 'aiHash'<BR>c:\program 
+                                files\microsoft visual 
+                                studio\vc98\include\schnlsp.h(116) : error 
+                                C2501: 'ALG_ID' : missing storage-class or type 
+                                specifiers<BR>c:\program files\microsoft visual 
+                                studio\vc98\include\schnlsp.h(116) : error 
+                                C2501: 'aiHash' : missing storage-class or type 
+                                specifiers<BR>c:\program files\microsoft visual 
+                                studio\vc98\include\schnlsp.h(118) : error 
+                                C2146: syntax error : missing ';' before 
+                                identifier 'aiExch'<BR>c:\program 
+                                files\microsoft visual 
+                                studio\vc98\include\schnlsp.h(118) : error 
+                                C2501: 'ALG_ID' : missing storage-class or type 
+                                specifiers<BR>c:\program files\microsoft visual 
+                                studio\vc98\include\schnlsp.h(118) : error 
+                                C2501: 'aiExch' : missing storage-class or type 
+                                specifiers<BR>c:\program files\microsoft visual 
+                                studio\vc98\include\schnlsp.h(132) : error 
+                                C2143: syntax error : missing ';' before 
+                                '*'<BR>c:\program files\microsoft visual 
+                                studio\vc98\include\schnlsp.h(132) : error 
+                                C2501: 'PCCERT_CONTEXT' : missing storage-class 
+                                or type specifiers<BR>c:\program files\microsoft 
+                                visual studio\vc98\include\schnlsp.h(132) : 
+                                error C2501: 'paCred' : missing storage-class or 
+                                type specifiers<BR>c:\program files\microsoft 
+                                visual studio\vc98\include\schnlsp.h(133) : 
+                                error C2146: syntax error : missing ';' before 
+                                identifier 'hRootStore'<BR>c:\program 
+                                files\microsoft visual 
+                                studio\vc98\include\schnlsp.h(133) : error 
+                                C2501: 'HCERTSTORE' : missing storage-class or 
+                                type specifiers<BR>c:\program files\microsoft 
+                                visual studio\vc98\include\schnlsp.h(133) : 
+                                error C2501: 'hRootStore' : missing 
+                                storage-class or type specifiers<BR>c:\program 
+                                files\microsoft visual 
+                                studio\vc98\include\schnlsp.h(139) : error 
+                                C2143: syntax error : missing ';' before 
+                                '*'<BR>c:\program files\microsoft visual 
+                                studio\vc98\include\schnlsp.h(139) : error 
+                                C2501: 'ALG_ID' : missing storage-class or type 
+                                specifiers<BR>c:\program files\microsoft visual 
+                                studio\vc98\include\schnlsp.h(139) : error 
+                                C2501: 'palgSupportedAlgs' : missing 
+                                storage-class or type specifiers<BR>c:\program 
+                                files\microsoft visual 
+                                studio\vc98\include\schnlsp.h(350) : error 
+                                C2146: syntax error : missing ';' before 
+                                identifier 'hProv'<BR>c:\program files\microsoft 
+                                visual studio\vc98\include\schnlsp.h(350) : 
+                                error C2501: 'HCRYPTPROV' : missing 
+                                storage-class or type specifiers<BR>c:\program 
+                                files\microsoft visual 
+                                studio\vc98\include\schnlsp.h(350) : error 
+                                C2501: 'hProv' : missing storage-class or type 
+                                specifiers<BR>c:\program files\microsoft visual 
+                                studio\vc98\include\schnlsp.h(384) : error 
+                                C2146: syntax error : missing ';' before 
+                                identifier 'hProv'<BR>c:\program files\microsoft 
+                                visual studio\vc98\include\schnlsp.h(384) : 
+                                error C2501: 'HCRYPTPROV' : missing 
+                                storage-class or type specifiers<BR>c:\program 
+                                files\microsoft visual 
+                                studio\vc98\include\schnlsp.h(384) : error 
+                                C2501: 'hProv' : missing storage-class or type 
+                                specifiers<BR>c:\program files\microsoft visual 
+                                studio\vc98\include\schnlsp.h(453) : error 
+                                C2146: syntax error : missing ';' before 
+                                identifier 'SignatureAlgorithm'<BR>c:\program 
+                                files\microsoft visual 
+                                studio\vc98\include\schnlsp.h(453) : error 
+                                C2501: 'ALG_ID' : missing storage-class or type 
+                                specifiers<BR>c:\program files\microsoft visual 
+                                studio\vc98\include\schnlsp.h(453) : error 
+                                C2501: 'SignatureAlgorithm' : missing 
+                                storage-class or type 
+                                specifiers<BR>d:\e-drive\manish\desktop shairing 
+                                code\sslserver\ssl.h(20) : error C2629: 
+                                unexpected 'class SSL_SOCKET 
+                                ('<BR>d:\e-drive\manish\desktop shairing 
+                                code\sslserver\ssl.h(20) : error C2238: 
+                                unexpected token(s) preceding 
+                                ';'<BR>d:\e-drive\manish\desktop shairing 
+                                code\sslserver\ssl.h(40) : error C2061: syntax 
+                                error : identifier 
+                                'PCCERT_CONTEXT'<BR>d:\e-drive\manish\desktop 
+                                shairing code\sslserver\ssl.h(43) : error C2146: 
+                                syntax error : missing ';' before identifier 
+                                'CreateOurCertificate'<BR>d:\e-drive\manish\desktop 
+                                shairing code\sslserver\ssl.h(43) : error C2501: 
+                                'PCCERT_CONTEXT' : missing storage-class or type 
+                                specifiers<BR>d:\e-drive\manish\desktop shairing 
+                                code\sslserver\ssl.h(52) : error C2146: syntax 
+                                error : missing ';' before identifier 
+                                'hCS'<BR>d:\e-drive\manish\desktop shairing 
+                                code\sslserver\ssl.h(52) : error C2501: 
+                                'HCERTSTORE' : missing storage-class or type 
+                                specifiers<BR>d:\e-drive\manish\desktop shairing 
+                                code\sslserver\ssl.h(52) : error C2501: 'hCS' : 
+                                missing storage-class or type 
+                                specifiers<BR>d:\e-drive\manish\desktop shairing 
+                                code\sslserver\ssl.h(64) : error C2146: syntax 
+                                error : missing ';' before identifier 
+                                'OurCertificate'<BR>d:\e-drive\manish\desktop 
+                                shairing code\sslserver\ssl.h(64) : error C2501: 
+                                'PCCERT_CONTEXT' : missing storage-class or type 
+                                specifiers<BR>d:\e-drive\manish\desktop shairing 
+                                code\sslserver\ssl.h(64) : error C2501: 
+                                'OurCertificate' : missing storage-class or type 
+                                specifiers<BR>d:\e-drive\manish\desktop shairing 
+                                code\sslserver\tel.cpp(56) : error C2661: 
+                                'SSL_SOCKET::SSL_SOCKET' : no overloaded 
+                                function takes 2 
+                                parameters<BR>d:\e-drive\manish\desktop shairing 
+                                code\sslserver\tel.cpp(61) : error C2661: 
+                                'SSL_SOCKET::SSL_SOCKET' : no overloaded 
+                                function takes 2 
+                                parameters<BR>d:\e-drive\manish\desktop shairing 
+                                code\sslserver\tel.cpp(66) : error C2065: 
+                                '_beginthread' : undeclared 
+                                identifier<BR>d:\e-drive\manish\desktop shairing 
+                                code\sslserver\tel.cpp(112) : error C2065: 
+                                'ADDRINFO' : undeclared 
+                                identifier<BR>d:\e-drive\manish\desktop shairing 
+                                code\sslserver\tel.cpp(112) : error C2146: 
+                                syntax error : missing ';' before identifier 
+                                'a'<BR>d:\e-drive\manish\desktop shairing 
+                                code\sslserver\tel.cpp(112) : error C2065: 'a' : 
+                                undeclared 
+                                identifier<BR>d:\e-drive\manish\desktop shairing 
+                                code\sslserver\tel.cpp(112) : error C2059: 
+                                syntax error : '{'<BR>d:\e-drive\manish\desktop 
+                                shairing code\sslserver\tel.cpp(112) : error 
+                                C2143: syntax error : missing ';' before 
+                                '{'<BR>d:\e-drive\manish\desktop shairing 
+                                code\sslserver\tel.cpp(112) : error C2143: 
+                                syntax error : missing ';' before 
+                                '}'<BR>d:\e-drive\manish\desktop shairing 
+                                code\sslserver\tel.cpp(113) : error C2065: 'b' : 
+                                undeclared 
+                                identifier<BR>d:\e-drive\manish\desktop shairing 
+                                code\sslserver\tel.cpp(113) : error C2106: '=' : 
+                                left operand must be 
+                                l-value<BR>d:\e-drive\manish\desktop shairing 
+                                code\sslserver\tel.cpp(118) : error C2228: left 
+                                of '.ai_flags' must have class/struct/union 
+                                type<BR>d:\e-drive\manish\desktop shairing 
+                                code\sslserver\tel.cpp(119) : error C2228: left 
+                                of '.ai_family' must have class/struct/union 
+                                type<BR>d:\e-drive\manish\desktop shairing 
+                                code\sslserver\tel.cpp(120) : error C2228: left 
+                                of '.ai_socktype' must have class/struct/union 
+                                type<BR>d:\e-drive\manish\desktop shairing 
+                                code\sslserver\tel.cpp(121) : error C2228: left 
+                                of '.ai_protocol' must have class/struct/union 
+                                type<BR>d:\e-drive\manish\desktop shairing 
+                                code\sslserver\tel.cpp(123) : error C2065: 
+                                'getaddrinfo' : undeclared 
+                                identifier<BR>d:\e-drive\manish\desktop shairing 
+                                code\sslserver\tel.cpp(125) : error C2227: left 
+                                of '-&gt;ai_addr' must point to 
+                                class/struct/union<BR>d:\e-drive\manish\desktop 
+                                shairing code\sslserver\tel.cpp(125) : error 
+                                C2227: left of '-&gt;ai_addrlen' must point to 
+                                class/struct/union <BR><BR>
+                                <DIV class=ForumSig>Hi manish 
+                                Here.</DIV><BR></TD></TR>
+                                <TR style="VERTICAL-ALIGN: middle">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL title=Reply 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=1110887&amp;select=2553921&amp;floc=/KB/IP/ssl_sockets.aspx&amp;fa=r">Reply</A>·<A 
+                                class=Frm_MHL title=Email 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=1110887&amp;select=2553921&amp;floc=/KB/IP/ssl_sockets.aspx&amp;fa=e">Email</A>·<A 
+                                class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/IP/ssl_sockets.aspx?fid=1110887&amp;tid=2552876">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=1110887&amp;msg=2553921">PermaLink</A>·<A 
+                                class=Frm_MHL title="Bookmark this post" 
+                                href="http://www.codeproject.com/script/Bookmarks/Add.aspx?&amp;obid=2553921&amp;obtid=3&amp;bma=AddBookmark">Bookmark</A></TD>
+                                <TD class=Frm_MsgFt 
+                                style="TEXT-ALIGN: right"><SPAN id=MVF2553921 
+                                style="WHITE-SPACE: nowrap">2.00/5 (1 vote)
+                                <SCRIPT type=text/javascript>
+												MsgVFrm(3661614,2553921,false,"","","");
+											</SCRIPT>
+                                 
+                        </SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR class=Quick>
+                <TD class=Frm_MsgDivide><IMG height=1 alt="" 
+                  src="CodeProject SSL  Convert your Plain Sockets to SSL Sockets in an Easy Way_ Free source code and programming help_files/t.gif" 
+                  width=1 border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd HdUnSel " id=F2554009_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=70><A 
+                        name=xx2554009xx></A><IMG height=16 alt=General 
+                        src="CodeProject SSL  Convert your Plain Sockets to SSL Sockets in an Easy Way_ Free source code and programming help_files/msg_general.gif" 
+                        width=16 align=top></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/IP/ssl_sockets.aspx?fid=1110887&amp;select=2554009#xx2554009xx" 
+                        name=2554009>Re: SSL Socket</A></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        title=member height=16 alt=member 
+                        src="CodeProject SSL  Convert your Plain Sockets to SSL Sockets in an Easy Way_ Free source code and programming help_files/member_sm.gif" 
+                        border=0></TD>
+                      <TD class=Frm_MsgAuthor><A 
+                        href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=358302">Michael 
+                        Chourdakis</A></TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">2:03 15 
+                        May '08 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=F2554009_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 70px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2>Hmm , some old visual studio 
+                                version I guess ? <BR></TD></TR>
+                                <TR style="VERTICAL-ALIGN: middle">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL title=Reply 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=1110887&amp;select=2554009&amp;floc=/KB/IP/ssl_sockets.aspx&amp;fa=r">Reply</A>·<A 
+                                class=Frm_MHL title=Email 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=1110887&amp;select=2554009&amp;floc=/KB/IP/ssl_sockets.aspx&amp;fa=e">Email</A>·<A 
+                                class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/IP/ssl_sockets.aspx?fid=1110887&amp;tid=2552876">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=1110887&amp;msg=2554009">PermaLink</A>·<A 
+                                class=Frm_MHL title="Bookmark this post" 
+                                href="http://www.codeproject.com/script/Bookmarks/Add.aspx?&amp;obid=2554009&amp;obtid=3&amp;bma=AddBookmark">Bookmark</A></TD>
+                                <TD class=Frm_MsgFt 
+                                style="TEXT-ALIGN: right"><SPAN id=MVF2554009 
+                                style="WHITE-SPACE: nowrap">
+                                <SCRIPT type=text/javascript>
+												MsgVFrm(358302,2554009,false,"","","");
+											</SCRIPT>
+                                </SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR class=Quick>
+                <TD class=Frm_MsgDivide><IMG height=1 alt="" 
+                  src="CodeProject SSL  Convert your Plain Sockets to SSL Sockets in an Easy Way_ Free source code and programming help_files/t.gif" 
+                  width=1 border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd HdUnSel " id=F2554356_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=88><A 
+                        name=xx2554356xx></A><IMG height=16 alt=General 
+                        src="CodeProject SSL  Convert your Plain Sockets to SSL Sockets in an Easy Way_ Free source code and programming help_files/msg_general.gif" 
+                        width=16 align=top></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/IP/ssl_sockets.aspx?fid=1110887&amp;select=2554356#xx2554356xx" 
+                        name=2554356>Re: SSL Socket</A></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        title=member height=16 alt=member 
+                        src="CodeProject SSL  Convert your Plain Sockets to SSL Sockets in an Easy Way_ Free source code and programming help_files/member_sm.gif" 
+                        border=0></TD>
+                      <TD class=Frm_MsgAuthor><A 
+                        href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=3661614">ms 
+                        raj</A></TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">4:46 15 
+                        May '08 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=F2554356_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 88px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2>Yup Michael..........<BR>when i 
+                                compiled the same code in Visual Studio 
+                                2005,then its running smoothely. 
+                                <BR><BR><BR>thanks Michael........... <BR><BR>
+                                <DIV class=ForumSig>Hi manish 
+                                Here.</DIV><BR></TD></TR>
+                                <TR style="VERTICAL-ALIGN: middle">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL title=Reply 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=1110887&amp;select=2554356&amp;floc=/KB/IP/ssl_sockets.aspx&amp;fa=r">Reply</A>·<A 
+                                class=Frm_MHL title=Email 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=1110887&amp;select=2554356&amp;floc=/KB/IP/ssl_sockets.aspx&amp;fa=e">Email</A>·<A 
+                                class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/IP/ssl_sockets.aspx?fid=1110887&amp;tid=2552876">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=1110887&amp;msg=2554356">PermaLink</A>·<A 
+                                class=Frm_MHL title="Bookmark this post" 
+                                href="http://www.codeproject.com/script/Bookmarks/Add.aspx?&amp;obid=2554356&amp;obtid=3&amp;bma=AddBookmark">Bookmark</A></TD>
+                                <TD class=Frm_MsgFt 
+                                style="TEXT-ALIGN: right"><SPAN id=MVF2554356 
+                                style="WHITE-SPACE: nowrap">
+                                <SCRIPT type=text/javascript>
+												MsgVFrm(3661614,2554356,false,"","","");
+											</SCRIPT>
+                                </SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR class=Quick>
+                <TD class=Frm_MsgRtDivide><IMG height=1 alt="" 
+                  src="CodeProject SSL  Convert your Plain Sockets to SSL Sockets in an Easy Way_ Free source code and programming help_files/t.gif" 
+                  width=1 border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd Rt HdUnSel " id=F2467302_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=16><A 
+                        name=xx2467302xx></A><IMG height=16 alt=General 
+                        src="CodeProject SSL  Convert your Plain Sockets to SSL Sockets in an Easy Way_ Free source code and programming help_files/msg_general.gif" 
+                        width=16 align=top></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/IP/ssl_sockets.aspx?fid=1110887&amp;select=2467302#xx2467302xx" 
+                        name=2467302>Vista known problem</A></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        title=member height=16 alt=member 
+                        src="CodeProject SSL  Convert your Plain Sockets to SSL Sockets in an Easy Way_ Free source code and programming help_files/member_sm.gif" 
+                        border=0></TD>
+                      <TD class=Frm_MsgAuthor><A 
+                        href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=358302">Michael 
+                        Chourdakis</A></TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">14:52 
+                        14 Mar '08 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=F2467302_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 16px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2>When non admin in vista, the code 
+                                doesn't work, InitializeSecurityContent() fails 
+                                with an invalid token error.<BR><BR>Anyone that 
+                                could help me resolve this issue ? I 'd 
+                                appreciate it.<BR>Thanks. <BR></TD></TR>
+                                <TR style="VERTICAL-ALIGN: middle">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL title=Reply 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=1110887&amp;select=2467302&amp;floc=/KB/IP/ssl_sockets.aspx&amp;fa=r">Reply</A>·<A 
+                                class=Frm_MHL title=Email 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=1110887&amp;select=2467302&amp;floc=/KB/IP/ssl_sockets.aspx&amp;fa=e">Email</A>·<A 
+                                class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/IP/ssl_sockets.aspx?fid=1110887&amp;tid=2467302">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=1110887&amp;msg=2467302">PermaLink</A>·<A 
+                                class=Frm_MHL title="Bookmark this post" 
+                                href="http://www.codeproject.com/script/Bookmarks/Add.aspx?&amp;obid=2467302&amp;obtid=3&amp;bma=AddBookmark">Bookmark</A></TD>
+                                <TD class=Frm_MsgFt 
+                                style="TEXT-ALIGN: right"><SPAN id=MVF2467302 
+                                style="WHITE-SPACE: nowrap">
+                                <SCRIPT type=text/javascript>
+												MsgVFrm(358302,2467302,false,"","","");
+											</SCRIPT>
+                                </SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR class=Quick>
+                <TD class=Frm_MsgDivide><IMG height=1 alt="" 
+                  src="CodeProject SSL  Convert your Plain Sockets to SSL Sockets in an Easy Way_ Free source code and programming help_files/t.gif" 
+                  width=1 border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd LoVote HdUnSel " id=F2470741_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=34><A 
+                        name=xx2470741xx></A><IMG height=16 alt=Answer 
+                        src="CodeProject SSL  Convert your Plain Sockets to SSL Sockets in an Easy Way_ Free source code and programming help_files/msg_answer.gif" 
+                        width=16 align=top></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/IP/ssl_sockets.aspx?fid=1110887&amp;select=2470741#xx2470741xx" 
+                        name=2470741>Re: Vista known problem</A></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        title=member height=16 alt=member 
+                        src="CodeProject SSL  Convert your Plain Sockets to SSL Sockets in an Easy Way_ Free source code and programming help_files/member_sm.gif" 
+                        border=0></TD>
+                      <TD class=Frm_MsgAuthor><A 
+                        href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=456344">Mohammed 
+                        Anees</A></TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">21:21 
+                        17 Mar '08 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=F2470741_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 34px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2>Run as administrator, i think i 
+                                should work <BR></TD></TR>
+                                <TR style="VERTICAL-ALIGN: middle">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL title=Reply 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=1110887&amp;select=2470741&amp;floc=/KB/IP/ssl_sockets.aspx&amp;fa=r">Reply</A>·<A 
+                                class=Frm_MHL title=Email 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=1110887&amp;select=2470741&amp;floc=/KB/IP/ssl_sockets.aspx&amp;fa=e">Email</A>·<A 
+                                class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/IP/ssl_sockets.aspx?fid=1110887&amp;tid=2467302">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=1110887&amp;msg=2470741">PermaLink</A>·<A 
+                                class=Frm_MHL title="Bookmark this post" 
+                                href="http://www.codeproject.com/script/Bookmarks/Add.aspx?&amp;obid=2470741&amp;obtid=3&amp;bma=AddBookmark">Bookmark</A></TD>
+                                <TD class=Frm_MsgFt 
+                                style="TEXT-ALIGN: right"><SPAN id=MVF2470741 
+                                style="WHITE-SPACE: nowrap">1.00/5 (1 vote)
+                                <SCRIPT type=text/javascript>
+												MsgVFrm(456344,2470741,false,"","","");
+											</SCRIPT>
+                                 
+                        </SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR class=Quick>
+                <TD class=Frm_MsgDivide><IMG height=1 alt="" 
+                  src="CodeProject SSL  Convert your Plain Sockets to SSL Sockets in an Easy Way_ Free source code and programming help_files/t.gif" 
+                  width=1 border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd HdUnSel " id=F2475813_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=52><A 
+                        name=xx2475813xx></A><IMG height=16 alt=General 
+                        src="CodeProject SSL  Convert your Plain Sockets to SSL Sockets in an Easy Way_ Free source code and programming help_files/msg_general.gif" 
+                        width=16 align=top></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/IP/ssl_sockets.aspx?fid=1110887&amp;select=2475813#xx2475813xx" 
+                        name=2475813>Re: Vista known problem</A></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        title=member height=16 alt=member 
+                        src="CodeProject SSL  Convert your Plain Sockets to SSL Sockets in an Easy Way_ Free source code and programming help_files/member_sm.gif" 
+                        border=0></TD>
+                      <TD class=Frm_MsgAuthor><A 
+                        href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=358302">Michael 
+                        Chourdakis</A></TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">7:38 21 
+                        Mar '08 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=F2475813_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 52px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2>Yea as admin it works, but not 
+                                everyone is an administrator. <BR></TD></TR>
+                                <TR style="VERTICAL-ALIGN: middle">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL title=Reply 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=1110887&amp;select=2475813&amp;floc=/KB/IP/ssl_sockets.aspx&amp;fa=r">Reply</A>·<A 
+                                class=Frm_MHL title=Email 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=1110887&amp;select=2475813&amp;floc=/KB/IP/ssl_sockets.aspx&amp;fa=e">Email</A>·<A 
+                                class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/IP/ssl_sockets.aspx?fid=1110887&amp;tid=2467302">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=1110887&amp;msg=2475813">PermaLink</A>·<A 
+                                class=Frm_MHL title="Bookmark this post" 
+                                href="http://www.codeproject.com/script/Bookmarks/Add.aspx?&amp;obid=2475813&amp;obtid=3&amp;bma=AddBookmark">Bookmark</A></TD>
+                                <TD class=Frm_MsgFt 
+                                style="TEXT-ALIGN: right"><SPAN id=MVF2475813 
+                                style="WHITE-SPACE: nowrap">
+                                <SCRIPT type=text/javascript>
+												MsgVFrm(358302,2475813,false,"","","");
+											</SCRIPT>
+                                </SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR class=Quick>
+                <TD class=Frm_MsgDivide><IMG height=1 alt="" 
+                  src="CodeProject SSL  Convert your Plain Sockets to SSL Sockets in an Easy Way_ Free source code and programming help_files/t.gif" 
+                  width=1 border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd HdUnSel " id=F2610681_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=70><A 
+                        name=xx2610681xx></A><IMG height=16 alt=General 
+                        src="CodeProject SSL  Convert your Plain Sockets to SSL Sockets in an Easy Way_ Free source code and programming help_files/msg_general.gif" 
+                        width=16 align=top></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/IP/ssl_sockets.aspx?fid=1110887&amp;select=2610681#xx2610681xx" 
+                        name=2610681>Re: Vista known problem</A></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        title=member height=16 alt=member 
+                        src="CodeProject SSL  Convert your Plain Sockets to SSL Sockets in an Easy Way_ Free source code and programming help_files/member_sm.gif" 
+                        border=0></TD>
+                      <TD class=Frm_MsgAuthor><A 
+                        href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=1263723">CodeBlaster98765</A></TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">11:45 
+                        24 Jun '08 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=F2610681_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 70px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2>I may have figured out your Vista 
+                                non-admin problem; I was able to remote debug 
+                                our Vista machine, and my call was failing to 
+                                “CryptAcquireContext”. I don’t know if it is an 
+                                acceptable solution, but I granted full control 
+                                rights for a couple of files 
+                                in<BR><BR>C:\programData\Microsoft\Crypto\RSA\MachineKeys 
+                                folder to the non-admin user, and it seems to 
+                                work.<BR></TD></TR>
+                                <TR style="VERTICAL-ALIGN: middle">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL title=Reply 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=1110887&amp;select=2610681&amp;floc=/KB/IP/ssl_sockets.aspx&amp;fa=r">Reply</A>·<A 
+                                class=Frm_MHL title=Email 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=1110887&amp;select=2610681&amp;floc=/KB/IP/ssl_sockets.aspx&amp;fa=e">Email</A>·<A 
+                                class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/IP/ssl_sockets.aspx?fid=1110887&amp;tid=2467302">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=1110887&amp;msg=2610681">PermaLink</A>·<A 
+                                class=Frm_MHL title="Bookmark this post" 
+                                href="http://www.codeproject.com/script/Bookmarks/Add.aspx?&amp;obid=2610681&amp;obtid=3&amp;bma=AddBookmark">Bookmark</A></TD>
+                                <TD class=Frm_MsgFt 
+                                style="TEXT-ALIGN: right"><SPAN id=MVF2610681 
+                                style="WHITE-SPACE: nowrap">
+                                <SCRIPT type=text/javascript>
+												MsgVFrm(1263723,2610681,false,"","","");
+											</SCRIPT>
+                                </SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR class=Quick>
+                <TD class=Frm_MsgRtDivide><IMG height=1 alt="" 
+                  src="CodeProject SSL  Convert your Plain Sockets to SSL Sockets in an Easy Way_ Free source code and programming help_files/t.gif" 
+                  width=1 border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd LoVote Rt HdUnSel " id=F2467223_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=16><A 
+                        name=xx2467223xx></A><IMG height=16 alt=General 
+                        src="CodeProject SSL  Convert your Plain Sockets to SSL Sockets in an Easy Way_ Free source code and programming help_files/msg_general.gif" 
+                        width=16 align=top></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/IP/ssl_sockets.aspx?fid=1110887&amp;select=2467223#xx2467223xx" 
+                        name=2467223>Nice work - looks very promising</A></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        title=member height=16 alt=member 
+                        src="CodeProject SSL  Convert your Plain Sockets to SSL Sockets in an Easy Way_ Free source code and programming help_files/member_sm.gif" 
+                        border=0></TD>
+                      <TD class=Frm_MsgAuthor><A 
+                        href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=4905509">crackseller</A></TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">13:33 
+                        14 Mar '08 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=F2467223_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 16px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2>Hi and thanks for this. It looks 
+                                very promising and I can't wait to play around 
+                                with it. There's a small typo (if you will). In 
+                                the article (Creating the client) you mention 
+                                the methods to use for sending and receiving 
+                                data. It's lists s_ssend() twice (clearly the 
+                                2nd s_ssend() should be s_srecv()). Sorry if I'm 
+                                being picky... <IMG title=Smile 
+                                src="CodeProject SSL  Convert your Plain Sockets to SSL Sockets in an Easy Way_ Free source code and programming help_files/smiley_smile.gif" 
+                                align=top> <BR></TD></TR>
+                                <TR style="VERTICAL-ALIGN: middle">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL title=Reply 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=1110887&amp;select=2467223&amp;floc=/KB/IP/ssl_sockets.aspx&amp;fa=r">Reply</A>·<A 
+                                class=Frm_MHL title=Email 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=1110887&amp;select=2467223&amp;floc=/KB/IP/ssl_sockets.aspx&amp;fa=e">Email</A>·<A 
+                                class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/IP/ssl_sockets.aspx?fid=1110887&amp;tid=2467223">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=1110887&amp;msg=2467223">PermaLink</A>·<A 
+                                class=Frm_MHL title="Bookmark this post" 
+                                href="http://www.codeproject.com/script/Bookmarks/Add.aspx?&amp;obid=2467223&amp;obtid=3&amp;bma=AddBookmark">Bookmark</A></TD>
+                                <TD class=Frm_MsgFt 
+                                style="TEXT-ALIGN: right"><SPAN id=MVF2467223 
+                                style="WHITE-SPACE: nowrap">2.00/5 (1 vote)
+                                <SCRIPT type=text/javascript>
+												MsgVFrm(4905509,2467223,false,"","","");
+											</SCRIPT>
+                                 
+                        </SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR class=Quick>
+                <TD class=Frm_MsgDivide><IMG height=1 alt="" 
+                  src="CodeProject SSL  Convert your Plain Sockets to SSL Sockets in an Easy Way_ Free source code and programming help_files/t.gif" 
+                  width=1 border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd LoVote HdUnSel " id=F2467301_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=34><A 
+                        name=xx2467301xx></A><IMG height=16 alt=General 
+                        src="CodeProject SSL  Convert your Plain Sockets to SSL Sockets in an Easy Way_ Free source code and programming help_files/msg_general.gif" 
+                        width=16 align=top></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/IP/ssl_sockets.aspx?fid=1110887&amp;select=2467301#xx2467301xx" 
+                        name=2467301>Re: Nice work - looks very promising</A></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        title=member height=16 alt=member 
+                        src="CodeProject SSL  Convert your Plain Sockets to SSL Sockets in an Easy Way_ Free source code and programming help_files/member_sm.gif" 
+                        border=0></TD>
+                      <TD class=Frm_MsgAuthor><A 
+                        href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=358302">Michael 
+                        Chourdakis</A></TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">14:51 
+                        14 Mar '08 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=F2467301_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 34px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2>Thanks, its a new article and 
+                                normally bugs will be here and there; hopefully 
+                                I will fix all of them soon.<BR><BR>As you see, 
+                                there are 2 functions: s_send() and s_ssend() 
+                                (and also s_recv and s_rrecv).<BR>The difference 
+                                is that ssend() and rrecv() do not return until 
+                                ALL the bytes you have specified have been 
+                                transferred. So, while send(s,"ha",2,0); might 
+                                return 0/-1 (error) , 1 or 2 (bytes sent), 
+                                ssend(s,"ha",2,0) will either return an error, 
+                                or 2. <BR></TD></TR>
+                                <TR style="VERTICAL-ALIGN: middle">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL title=Reply 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=1110887&amp;select=2467301&amp;floc=/KB/IP/ssl_sockets.aspx&amp;fa=r">Reply</A>·<A 
+                                class=Frm_MHL title=Email 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=1110887&amp;select=2467301&amp;floc=/KB/IP/ssl_sockets.aspx&amp;fa=e">Email</A>·<A 
+                                class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/IP/ssl_sockets.aspx?fid=1110887&amp;tid=2467223">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=1110887&amp;msg=2467301">PermaLink</A>·<A 
+                                class=Frm_MHL title="Bookmark this post" 
+                                href="http://www.codeproject.com/script/Bookmarks/Add.aspx?&amp;obid=2467301&amp;obtid=3&amp;bma=AddBookmark">Bookmark</A></TD>
+                                <TD class=Frm_MsgFt 
+                                style="TEXT-ALIGN: right"><SPAN id=MVF2467301 
+                                style="WHITE-SPACE: nowrap">2.00/5 (1 vote)
+                                <SCRIPT type=text/javascript>
+												MsgVFrm(358302,2467301,false,"","","");
+											</SCRIPT>
+                                 
+                        </SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR>
+                <TD><IMG height=5 alt="" 
+                  src="CodeProject SSL  Convert your Plain Sockets to SSL Sockets in an Easy Way_ Free source code and programming help_files/t.gif" 
+                  width=1 border=0></TD></TR></TBODY></TABLE></TD></TR>
+        <TR>
+          <TD>
+            <TABLE cellSpacing=0 cellPadding=2 width="100%">
+              <TBODY>
+              <TR class=Frm_Footer>
+                <TD>Last Visit: Tuesday, July 29, 2008 12:24 AM &nbsp; &nbsp; 
+                  Last Update:Thursday, August 14, 2008 10:52 AM</TD>
+                <TD 
+              style="WHITE-SPACE: nowrap; TEXT-ALIGN: right"></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></DIV>
+      <P class=SmallText><IMG height=16 alt=General 
+      src="CodeProject SSL  Convert your Plain Sockets to SSL Sockets in an Easy Way_ Free source code and programming help_files/msg_general.gif" 
+      width=16 align=top> General &nbsp;&nbsp; <IMG height=16 alt=News 
+      src="CodeProject SSL  Convert your Plain Sockets to SSL Sockets in an Easy Way_ Free source code and programming help_files/msg_news.gif" 
+      width=16 align=top> News &nbsp;&nbsp; <IMG height=16 alt=Question 
+      src="CodeProject SSL  Convert your Plain Sockets to SSL Sockets in an Easy Way_ Free source code and programming help_files/msg_question.gif" 
+      width=16 align=top> Question &nbsp;&nbsp; <IMG height=16 alt=Answer 
+      src="CodeProject SSL  Convert your Plain Sockets to SSL Sockets in an Easy Way_ Free source code and programming help_files/msg_answer.gif" 
+      width=16 align=top> Answer &nbsp;&nbsp; <IMG height=16 alt=Joke 
+      src="CodeProject SSL  Convert your Plain Sockets to SSL Sockets in an Easy Way_ Free source code and programming help_files/msg_joke.gif" 
+      width=16 align=top> Joke &nbsp;&nbsp; <IMG height=16 alt=Rant 
+      src="CodeProject SSL  Convert your Plain Sockets to SSL Sockets in an Easy Way_ Free source code and programming help_files/msg_rant.gif" 
+      width=16 align=top> Rant &nbsp;&nbsp; <IMG height=16 alt=Admin 
+      src="CodeProject SSL  Convert your Plain Sockets to SSL Sockets in an Easy Way_ Free source code and programming help_files/msg_admin.gif" 
+      width=16 align=top> Admin &nbsp;&nbsp; </P><!-- Forum End --></DIV>
+      <TABLE width="100%">
+        <TBODY>
+        <TR vAlign=top>
+          <TD class=TinyText align=left><A id=ctl00_PermaLink 
+            href="http://www.codeproject.com/script/Articles/Article.aspx?aid=24379">PermaLink</A> 
+            | <A id=ctl00_PrivacyLink 
+            href="http://www.codeproject.com/info/privacy.aspx">Privacy </A>| <A 
+            id=ctl00_TermsOfUseLink 
+            href="http://www.codeproject.com/info/TermsOfUse.aspx">Terms of 
+            Use</A> <BR>Last Updated: 14 Mar 2008<BR>Editor: <A 
+            id=ctl00_ArticleEditor 
+            href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=3873871">Sean 
+            Ewington</A><BR></TD>
+          <TD class=TinyText vAlign=top align=right>Copyright 2008 by Michael 
+            Chourdakis<BR>Everything else Copyright © <A 
+            href="mailto:webmaster@codeproject.com">CodeProject</A>, 1999-2008 
+            <BR>Web10 | <A id=ctl00_AdvertiseLink 
+            href="http://www.codeproject.com/info/MediaKit.aspx">Advertise on 
+            the Code Project </A></TD></TR></TBODY></TABLE>
+      <CENTER></CENTER></TD></TR>
+  <TR>
+    <TD align=middle colSpan=2></TD></TR></TBODY></TABLE><BR>
+<SCRIPT language=Javascript type=text/javascript>//<![CDATA[
+if (document.all) try {window.attachEvent("oncopy",copyCode);}catch(e){};
+//]]></SCRIPT>
+
+<SCRIPT language=Javascript 
+src="CodeProject SSL  Convert your Plain Sockets to SSL Sockets in an Easy Way_ Free source code and programming help_files/TogglePre.js" 
+type=text/javascript></SCRIPT>
+
+<SCRIPT language=Javascript 
+src="CodeProject SSL  Convert your Plain Sockets to SSL Sockets in an Easy Way_ Free source code and programming help_files/menu132_com.js" 
+type=text/javascript></SCRIPT>
+
+<SCRIPT language=Javascript 
+src="CodeProject SSL  Convert your Plain Sockets to SSL Sockets in an Easy Way_ Free source code and programming help_files/TopNavBar.js" 
+type=text/javascript></SCRIPT>
+
+<SCRIPT language=Javascript type=text/javascript>//<![CDATA[
+new HVMenu(new menu_NavbarConfig());
+//]]></SCRIPT>
+</BODY></HTML>

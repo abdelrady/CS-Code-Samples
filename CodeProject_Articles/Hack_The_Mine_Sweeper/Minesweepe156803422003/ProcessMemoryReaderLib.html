@@ -1,0 +1,304 @@
+
+<h2>Introduction</h2>
+
+<p>Ever wanted to know what is happening in the Minesweeper game behind the 
+scenes? <br>
+Well, I did, and I decided to investigate it. This article is the result of 
+my research, brought here just for you.<h2>Main Concepts</h2>
+
+<p>1. Using P/Invoke to invoke Win32 API's.</p>
+
+<p>2. <b>Direct reading another process memory</b>.</p>
+
+<p>NOTE: the first part of this article involves some assembly code, if there 
+something you don't understand it's NOT important to the goal of this article. 
+you CAN skip it. Nevertheless, if you want to ask me about it, you're more then 
+welcome to mail me your question.</p>
+
+<p>NOTE 2: The program was tested on Windows XP, so if you got some other system 
+it might not work.. if you got some other system, and it did worked, comment 
+this article with your system info so we all could enjoy that knowledge.</p>
+
+<p>Update to NOTE 2: the code is now fixed in order to work on Windows 2000 as well. thanks goes to Ryan Schreiber for finding the addresses in Win2K.
+
+<h2 dir="ltr">Step 1 - Investigate winmine.exe </h2>
+
+<p>If you're not an assembly fan, you might want to skip to the end of this 
+step, to the conclusions.. 
+
+<p>So, in order to know better what is happening behind the scenes of 
+Minesweeper I've started by opening the file in a debugger. My personally 
+favorite debugger is <a href="http://home.t-online.de/home/Ollydbg/odbg108b.zip">Olly Debugger v1.08</a>, this is a very simple and intuitive 
+debugger. Anyway, I've open winmine.exe in the debugger and looked a bit on the 
+file. I've found in the Import section (a section that lists all the dll 
+functions that are used in the program) the following entry:    
+<p><pre lang=text>010011B0  8D52C377 DD msvcrt.rand</pre>
+which means that the Minesweeper uses the randomize function of the MicroSoft 
+Visual C RunTime dll, So I thought it might help me. I've search the file to 
+find where the rand() function is being called, I've found only one such place:<p>
+<pre lang=text>01003940  FF15 B0110001 CALL DWORD PTR DS:[&lt;&amp;msvcrt.rand&gt;] </pre>
+<p>Then I've put a breakpoint on this single call and ran the program. I've 
+discovered that every time you click the smiley a new mines map is generated. 
+the mines map is created as follows: </p>
+
+1. Allocate a block of memory for the mines map and set all the memory bytes 
+to 0x0F, which means that there is no mine in that "cell". 
+<br>2. second, loop over the number of mines and for each mine:
+<br>2.1. randomize x position (1 .. width).<br>2.2. randomize y position (1 .. height).<br>2.3. set the correct cell in the memory block to 0x8F, which represents a 
+mine in this cell.<br>
+<p>
+here is the original code, I've added some remarks, and bolded the important parts:</p>
+<p dir="ltr">
+<pre lang=asm>010036A7  MOV DWORD PTR DS:[1005334],EAX    ; <b>[0x1005334] = Width</b>
+010036AC  MOV DWORD PTR DS:[1005338],ECX    ; <b>[0x1005338] = Height</b>
+010036B2  CALL winmine.01002ED5  ; Generate empty block of memory and clears it
+010036B7  MOV EAX,DWORD PTR DS:[10056A4]
+010036BC  MOV DWORD PTR DS:[1005160],EDI
+010036C2  MOV DWORD PTR DS:[1005330],EAX    ; <b>[0x1005330] = number of mines</b>
+                    ; loop over the number of mines
+010036C7  PUSH DWORD PTR DS:[1005334] ; push Max Width into the stack 
+010036CD  CALL winmine.01003940       ; Mine_Width  = randomize x position (0 .. max width-1)
+010036D2  PUSH DWORD PTR DS:[1005338] ; push Max Height into the stack
+010036D8  MOV ESI,EAX
+010036DA  INC ESI                ; Mine_Width = Mine_Width + 1
+010036DB  CALL winmine.01003940  ; Mine_Height = randomize y position 
+                                 ; (0 .. max height-1)
+010036E0  INC EAX                ; Mine_Height = Mine_Height +1
+010036E1  MOV ECX,EAX            ; calculate the address of the cell in the memory block 
+                                 ; (the map)
+010036E3  SHL ECX,5              ; the calculation goes:
+                                 ; <b>cell_memory_address = 0x1005340 + 32 * height + width</b>
+010036E6  TEST BYTE PTR DS:[ECX+ESI+1005340],80 ; [cell_memory_address] == is already mine?
+010036EE  JNZ SHORT winmine.010036C7   ; if already mine start over this iteration
+010036F0  SHL EAX,5                    ; otherwise, set this cell as mine
+010036F3  LEA EAX,DWORD PTR DS:[EAX+ESI+1005340]
+010036FA  OR BYTE PTR DS:[EAX],80
+010036FD  DEC DWORD PTR DS:[1005330]        
+01003703  JNZ SHORT winmine.010036C7   ; go to next iteration </pre>
+As you can see from the code I've discovered 4 important things:
+<ol>
+  <li>Reading 
+the memory in address [0x1005334] gives me the Width of the map.</li>
+  <li>Reading the memory in address [0x1005338] gives me the Height of the map.</li>
+  <li>Reading the memory in address [0x1005330] gives me the number of mines in 
+the map.</li>
+  <li>Given x,y that represents a cell in the map, in column x, row y, the address [0x1005340 + 32 * 
+y + x] gives me the cell value.</li>
+</ol>
+<p>Which brings us to the next step..</p>
+<h2 dir="ltr">Step 2 - Design a solution </h2>
+<p>
+You might wonder, what kind of solution am I talking about? Well, after 
+discovering that all the mine information is available for me, and all I need to 
+do is read the data from the memory I've decided to write a small app that reads 
+this information and present it for you. It can even draw a map of its own, with 
+a picture of a mine wherever I find one..</p>
+<p>
+So, what is to design about that? all I need to do is put the address into a 
+pointer (yes, they exist even in C#) and read the pointed data, right? well, not 
+exactly, the reason why this is not the case is that the memory where this data is 
+stored is not in my application. You see, each process has its own address space 
+so it could not access "by accident" memory that belongs to another program, so 
+in order to read this data I need to find a way to read the memory of another 
+process, in this case, its the Minesweeper process.</p>
+<p>
+I've decided to write a small class library, that will receive a process and 
+will give me the functionality of reading a memory address from this process. 
+the reason I've decided to make it a class library is because there is allot of 
+cases you might want to use it so why develop it again and again? That way, you 
+could easily take the class and use it in your own application, and you are free 
+to do so. An example for where this class can help  is if you write a debugger. 
+All the debuggers I know have the ability to read memory of the debugged 
+application.. </p>
+<p>
+So, how do we read another process memory? the answer resides in an API called 
+ReadProcessMemory. this API actually let you read a process memory at a specific 
+address. Only before you do it you must open the process in a special read mode 
+and when you finish you must close the process handle, to avoid resource leaks. 
+The following operations are performed with the help of two more API called 
+OpenProcess and CloseHandle.</p>
+<p>
+In order to use API's with C# you must use the P/Invoke, meaning you need to 
+declare the API you're going to use, which is basically quite simple, but you 
+need to do it in the .NET way, which is not that simple sometimes.. I've found 
+the API declarations in the MSDN:</p>
+<pre lang=c++>HANDLE OpenProcess(
+    DWORD dwDesiredAccess,       // access flag
+    BOOL bInheritHandle,         // handle inheritance option
+    DWORD dwProcessId            // process identifier
+    );
+
+BOOL ReadProcessMemory(
+    HANDLE hProcess,            // handle to the process
+    LPCVOID lpBaseAddress,      // base of memory area
+    LPVOID lpBuffer,            // data buffer
+    SIZE_T nSize,               // number of bytes to read
+    SIZE_T * lpNumberOfBytesRead  // number of bytes read
+    );
+
+BOOL CloseHandle(
+    HANDLE hObject              // handle to object
+    );</pre>
+<p>Well this declaration transformed to the following C# declarations:</p>
+<pre lang=cs>[DllImport("kernel32.dll")]
+public static extern IntPtr OpenProcess(
+    UInt32 dwDesiredAccess, 
+    Int32 bInheritHandle, 
+    UInt32 dwProcessId
+    );
+
+[DllImport("kernel32.dll")]
+public static extern Int32 ReadProcessMemory(
+    IntPtr hProcess, 
+    IntPtr lpBaseAddress,
+    [In, Out] byte[] buffer, 
+    UInt32 size, 
+    out IntPtr lpNumberOfBytesRead
+    );
+
+[DllImport("kernel32.dll")] public static extern Int32 CloseHandle(
+    IntPtr hObject
+    );</pre>
+If you want to know more information on the types conversions between c++ and 
+c#, I suggest you searched msdn.microsoft.com for the topics: "Marshaling Data 
+with Platform Invoke". Basically, if you put there what is logically true, it 
+will work. sometimes, a bit tuning is requested. 
+<p>After I have these functions declared, all I need to do is wrap them with a 
+simple class and use it. I've put the declarations in a separate class called <b>
+ProcessMemoryReaderApi</b>, only to be more organized. The main utility class is 
+called <b>ProcessMemoryReader</b>. This class has a property named <b>
+ReadProcess</b>, this property is from the type <b>System.Diagnostics.Process</b>, 
+this is where you put the process you want to read its memory.</p>
+<p>The class has a method which opens the process in the read memory mode:</p>
+<pre lang=cs>public void OpenProcess()
+
+{
+    m_hProcess = ProcessMemoryReaderApi.OpenProcess(
+                         ProcessMemoryReaderApi.PROCESS_VM_READ, 1, 
+                         (uint)m_ReadProcess.Id);
+
+}</pre>The <u> PROCESS_VM_READ</u> constant tell the system to open the process in read 
+mode, and the <u> m_ReadProcess.Id</u> states what process do I want to open.<p>The most 
+important method in the class is the one that reads the memory from the process:</p>
+<p><pre lang=cs>public byte[] ReadProcessMemory(IntPtr MemoryAddress, uint bytesToRead, 
+                                out int bytesReaded)
+{
+    byte[] buffer = new byte[bytesToRead];
+
+    IntPtr ptrBytesReaded;
+    ProcessMemoryReaderApi.ReadProcessMemory(m_hProcess,MemoryAddress,buffer,
+                                             bytesToRead,out ptrBytesReaded);
+
+    bytesReaded = ptrBytesReaded.ToInt32();
+
+    return buffer;
+
+}</pre>This function declares a byte array in the requested size and read the 
+memory with the API. Simple as that.<p>And finally, the method that close it 
+all:</p>
+<pre lang=cs>public void CloseHandle()
+
+{
+    int iRetValue;
+    iRetValue = ProcessMemoryReaderApi.CloseHandle(m_hProcess);
+    if (iRetValue == 0)
+        throw new Exception("CloseHandle failed");
+
+}</pre>
+<h2 dir="ltr">Step 3 - Using the class</h2>
+<p>
+Well, here comes the fun part. Using the class in order to read Minesweeper 
+memory and reveal the map. In order to use the class you must first instantiate 
+it:</p>
+<pre lang=cs>ProcessMemoryReaderLib.ProcessMemoryReader pReader
+                   = new ProcessMemoryReaderLib.ProcessMemoryReader();</pre>
+
+<p>then, you need to set the process you want to read its memory, here is an 
+example of how to get the Minesweeper progress, once it is loaded, and set it as 
+the ReadProcess property:
+<pre lang=cs>System.Diagnostics.Process[] myProcesses
+                   = System.Diagnostics.Process.GetProcessesByName("winmine");
+pReader.ReadProcess = myProcesses[0];</pre>
+
+and all we need to do now is Open the process, read the memory, and close it 
+when we finish. Again, here is an example of how its been done. Here I read the 
+memory address that represent the Width of the map.<pre lang=cs>pReader.OpenProcess();
+
+int iWidth;
+byte[] memory;
+memory = pReader.ReadProcessMemory((IntPtr)0x1005334,1,out bytesReaded);
+iWidth = memory[0];
+
+pReader.CloseHandle(); </pre>
+<p>that simple!</p>
+<p>In conclusion I present you the full code that reveals the map of mines. 
+Don't forget, all the memory places I'm accessing are places  found in the 
+first section of this article..</p>
+<pre lang=cs>// resource manager for the picture of the mine
+System.Resources.ResourceManager resources = new System.Resources.ResourceManager(typeof(Form1));
+
+ProcessMemoryReaderLib.ProcessMemoryReader pReader
+                   = new ProcessMemoryReaderLib.ProcessMemoryReader();
+
+System.Diagnostics.Process[] myProcesses
+               = System.Diagnostics.Process.GetProcessesByName("winmine");
+
+// take first instance of minesweeper you find
+if (myProcesses.Length == 0)
+{
+    MessageBox.Show("No MineSweeper process found!");
+    return;
+}
+pReader.ReadProcess = myProcesses[0];
+
+// open process in read memory mode
+pReader.OpenProcess();
+
+int bytesReaded;
+int iWidth, iHeight, iMines;
+int iIsMine;
+int iCellAddress;
+byte[] memory;
+
+memory = pReader.ReadProcessMemory((IntPtr)0x1005334,1,out bytesReaded);
+iWidth = memory[0];
+txtWidth.Text = iWidth.ToString();
+
+memory = pReader.ReadProcessMemory((IntPtr)0x1005338,1,out bytesReaded);
+iHeight = memory[0];
+txtHeight.Text = iHeight.ToString();
+
+memory = pReader.ReadProcessMemory((IntPtr)0x1005330,1,out bytesReaded);
+iMines = memory[0];
+txtMines.Text = iMines.ToString();
+
+// delete the previous button array
+this.Controls.Clear();
+this.Controls.AddRange(MainControls);
+
+// create new button array, for drawing the mine map
+ButtonArray = new System.Windows.Forms.Button[iWidth,iHeight];
+
+int x,y;
+for (y=0 ; y&lt;iHeight ; y++)
+    for (x=0 ; x&lt;iWidth ; x++)
+    {
+        ButtonArray[x,y] = new System.Windows.Forms.Button();
+        ButtonArray[x,y].Location = new System.Drawing.Point(20 + x*16, 70 + y*16);
+        ButtonArray[x,y].Name = "";
+        ButtonArray[x,y].Size = new System.Drawing.Size(16,16);
+
+        iCellAddress = (0x1005340) + (32 * (y+1)) + (x+1);
+        memory = pReader.ReadProcessMemory((IntPtr)iCellAddress,1,out bytesReaded);
+        iIsMine = memory[0];
+
+        if (iIsMine == 0x8f)
+            ButtonArray[x,y].Image = ((System.Drawing.Bitmap)
+                                     (resources.GetObject("button1.Image")));
+
+        this.Controls.Add(ButtonArray[x,y]);
+    }
+
+// close process handle
+pReader.CloseHandle();</pre>
+<p>That's it. Hope you leaned something new.</p>

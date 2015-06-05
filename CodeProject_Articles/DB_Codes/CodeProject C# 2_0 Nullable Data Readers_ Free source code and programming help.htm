@@ -1,0 +1,2634 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!-- saved from url=(0059)http://www.codeproject.com/KB/database/NullableReaders.aspx -->
+<HTML><HEAD><TITLE>CodeProject: C# 2.0 Nullable Data Readers. Free source code and programming help</TITLE>
+<META http-equiv=Content-Type content="text/html; charset=utf-8">
+<META 
+content="An article on nullable data readers for .NET 2.0 nullable types.; Author: Steve Michelotti; Section: Database; Chapter: Database" 
+name=Description>
+<META 
+content=".NET 2.0, VS2005, C#, Windows, DBA, Dev, ADO.NET, Intermediate,Database,Database,Free source code, tutorials" 
+name=Keywords>
+<META content="The Code Project" name=Author>
+<META content=General name=Rating>
+<META content="index, follow" name=Robots>
+<META content="1 days" name=Revisit-After><LINK 
+title="CodeProject Latest articles - All topics" 
+href="http://www.codeproject.com/webservices/articlerss.aspx?cat=1" 
+type=application/rss+xml rel=alternate><LINK 
+title="CodeProject Latest articles - MFC / C++" 
+href="http://www.codeproject.com/webservices/articlerss.aspx?cat=2" 
+type=application/rss+xml rel=alternate><LINK 
+title="CodeProject Latest articles - C#" 
+href="http://www.codeproject.com/webservices/articlerss.aspx?cat=3" 
+type=application/rss+xml rel=alternate><LINK 
+title="CodeProject Latest articles - ASP.NET" 
+href="http://www.codeproject.com/webservices/articlerss.aspx?cat=4" 
+type=application/rss+xml rel=alternate><LINK 
+title="CodeProject Latest articles - .NET" 
+href="http://www.codeproject.com/webservices/articlerss.aspx?cat=5" 
+type=application/rss+xml rel=alternate><LINK 
+title="CodeProject Latest articles - VB.NET" 
+href="http://www.codeproject.com/webservices/articlerss.aspx?cat=6" 
+type=application/rss+xml rel=alternate><LINK title="CodeProject Lounge Postings" 
+href="http://www.codeproject.com/webservices/LoungeRSS.aspx" 
+type=application/rss+xml rel=alternate><LINK title=CodeProject 
+href="http://www.codeproject.com/info/OpenSearch.xml" 
+type=application/opensearchdescription+xml rel=search><LINK 
+href="CodeProject C# 2_0 Nullable Data Readers_ Free source code and programming help_files/CodeProject.css" 
+type=text/css rel=stylesheet><LINK 
+href="CodeProject C# 2_0 Nullable Data Readers_ Free source code and programming help_files/ForumClassic.css" 
+type=text/css rel=stylesheet>
+<SCRIPT type=text/javascript>
+  var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+  document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</SCRIPT>
+
+<SCRIPT type=text/javascript>
+   var pageTracker = _gat._getTracker("UA-1735123-1");
+   pageTracker._setDomainName("www.codeproject.com");
+   pageTracker._setSessionTimeout("1200"); // 20 mins
+   pageTracker._initData();
+   pageTracker._trackPageview();
+</SCRIPT>
+
+<SCRIPT language=Javascript 
+src="CodeProject C# 2_0 Nullable Data Readers_ Free source code and programming help_files/oncopy.js" 
+type=text/javascript></SCRIPT>
+
+<SCRIPT language=Javascript 
+src="CodeProject C# 2_0 Nullable Data Readers_ Free source code and programming help_files/jxs.js" 
+type=text/javascript></SCRIPT>
+
+<SCRIPT language=Javascript 
+src="CodeProject C# 2_0 Nullable Data Readers_ Free source code and programming help_files/bookmark.js" 
+type=text/javascript></SCRIPT>
+
+<SCRIPT language=Javascript 
+src="CodeProject C# 2_0 Nullable Data Readers_ Free source code and programming help_files/rateitem.js" 
+type=text/javascript></SCRIPT>
+
+<SCRIPT language=Javascript type=text/javascript>//<![CDATA[
+function ToggleMenu(itemName)
+{
+	var elm = document.getElementById(itemName);
+	var i,others = document.getElementById('SectionMenu');
+	for(i=0; i < others.childNodes.length; i++)
+	{
+		var other = others.childNodes[i];
+		if ((other.className == 'MenuSectionBlock') && (other != elm))
+			other.style.display='none';
+	}
+	if (elm.style.display == 'block') elm.style.display='none';
+	else elm.style.display='block';
+	return false;
+}
+
+//]]></SCRIPT>
+
+<SCRIPT language=Javascript 
+src="CodeProject C# 2_0 Nullable Data Readers_ Free source code and programming help_files/addto.js" 
+type=text/javascript></SCRIPT>
+
+<SCRIPT language=Javascript type=text/javascript>//<![CDATA[
+function MsgVoteForm(MemberID,MsgID,GB,gp,bp,mt) {
+ if(!GB)document.write("Rate this message: ");
+ document.write(unescape("%3Ca href=\"#xx" + MsgID.toString() + "xx\" onclick=\"RateMsg(" + MemberID.toString() + ", " + MsgID.toString() + ","));document.write((GB?"5":"1")+unescape(");\"%3E"));
+ if(GB) document.write(unescape("%3Cimg height=\"24\" width=\"24\" src=\"/script/Forums/Images/good.png\" alt=\"good\" border=\"0\" align=\"absmiddle\" /%3E "+gp+" "+mt+"%3C/a%3E "));
+ else document.write(unescape("%3Cimg height=\"14\" width=\"14\" src=\"/script/Forums/Images/thumbs_down.gif\" alt=\"vote 1\" border=\"0\" align=\"middle\" /%3E%3C/a%3E "));
+ if(GB)document.write(" &nbsp;"); else for(var i=1; i<=5;i++)
+  document.write(unescape("%3Ca class=\"Frm_MHL\" href=\"#xx" + MsgID.toString() + "xx\" title=\"vote this message a " + i.toString() + "\" onclick=\"RateMsg(" + MemberID.toString() + ", " + MsgID.toString() + ", " + i.toString() + ")\"%3E%3Cb%3E" + i.toString() + "%3C/b%3E%3C/a%3E "));
+ document.write(unescape("%3Ca href=\"#xx" + MsgID.toString() + "xx\" onclick=\"RateMsg(" + MemberID.toString() + ", " + MsgID.toString() + ","));document.write((GB?"1":"5")+unescape(");\"%3E"));
+ if(GB)document.write(unescape("%3Cimg height=\"24\" width=\"24\" src=\"/script/Forums/Images/bad.png\" alt=\"bad\" border=\"0\" align=\"absmiddle\" /%3E "+bp+" "+mt+"%3C/a%3E"));
+ else document.write(unescape("%3Cimg height=\"14\" width=\"14\" src=\"/script/Forums/Images/thumbs_up.gif\" border=\"0\" alt=\"vote 5\" align=\"middle\" /%3E%3C/a%3E "));
+}
+
+function ReportMsg(userid, msgid, score) {
+ if (confirm("Are you sure you want to report this message?") == true)
+  return RateMsg(userid, msgid, score);
+ else return false;
+}
+function RateMsg(memberid, msgid, score) {
+ var req = new ActiveXObject("MSXML2.XMLHTTP");
+ req.onreadystatechange = function() {
+  if (req.readyState == 4) {
+   if ( req.status == 200 ) {
+    var respText = req.responseText;
+    var re = new RegExp(unescape("\%3Cdiv\%3E([^\%3C]*)\%3C/div\%3E"), "g");
+    var match = re.exec(respText);
+    voteStatus.innerHTML = unescape("%3Cb%3E") + (match)?match[1]:"An error occured" + unescape("%3C/b%3E");
+   }
+   else
+   {
+    voteStatus.innerHTML = unescape("%3Cb style='color:red'%3EFailed!") + req.statusText + unescape("%3C/b%3E");
+   }
+  }
+ }
+ var voteStatus = document.getElementById("MVF" + msgid);
+ if (!voteStatus) return;
+ voteStatus.innerHTML = unescape("%3Cb style='color:green'%3EVoting...%3C/b%3E");
+ var strAction = "/script/Forums/Vote.aspx?js=1&fmid="+memberid.toString()+"&select="+msgid.toString()+"&score="+score.toString();
+ req.open("GET", strAction, true);
+ req.send(null);
+  return false;
+}
+//]]></SCRIPT>
+
+<SCRIPT language=Javascript type=text/javascript>//<![CDATA[
+var Selected = "-1";
+
+function SwitchMessage(e, msgId)
+{
+  if (!msgId) {
+    if(!e)e=window.event;
+    var target=e.target?e.target:e.srcElement;
+    while(target&&target.id!='DynMessLink')target=target.parentNode;
+    if(!target||target.id!='DynMessLink')return;
+    msgId=target.name;
+  }
+  if(Selected&&Selected!=""){
+    var body=eval("document.getElementById('F" + Selected + "_h1')");
+    if(body) body.style.display = 'none';
+    var head=eval("document.getElementById('F" + Selected + "_h0')");
+    if(head) head.className = head.className.replace("Sel", "UnSel");
+  }
+  if(Selected==msgId.toString())
+    Selected="";
+  else {
+    Selected=msgId.toString();
+    var body=eval("document.getElementById('F" + Selected + "_h1')");
+    if(body){
+      if(body.style.display=='none') body.style.display='';
+      else body.style.display = 'none';
+    }
+    var head=eval("document.getElementById('F" + Selected + "_h0')");
+    if (head) 
+      head.className = head.className.replace("UnSel", "Sel");
+    if(body&&head&&body.style.display!='none'){
+      document.body.scrollTop = getRealPos(head, "Top") - document.body.clientHeight/10;
+      EnsureMessageVisible(Selected, true);
+    }
+  }
+  if (e){if(e.preventDefault)e.preventDefault;else e.returnValue=false;}
+  return false;
+}
+
+//]]></SCRIPT>
+
+<SCRIPT language=Javascript 
+src="CodeProject C# 2_0 Nullable Data Readers_ Free source code and programming help_files/ShortCuts.js" 
+type=text/javascript></SCRIPT>
+<LINK 
+href="CodeProject C# 2_0 Nullable Data Readers_ Free source code and programming help_files/ForumClassicIE6.css" 
+type=text/css rel=stylesheet><LINK href="/favicon.ico" type=image/ico 
+rel=icon><LINK href="/favicon.ico" type=image/ico rel="shortcut icon">
+<META content="MSHTML 6.00.2900.2180" name=GENERATOR></HEAD>
+<BODY>
+<TABLE id=ctl00_AT cellSpacing=0 cellPadding=0 border=0>
+  <TBODY>
+  <TR vAlign=top>
+    <TD colSpan=2>
+      <TABLE cellSpacing=0 cellPadding=0 border=0>
+        <TBODY>
+        <TR>
+          <TD class=HeaderLogo><A href="http://www.codeproject.com/"><IMG 
+            id=ctl00_Logo 
+            style="BORDER-TOP-WIDTH: 0px; BORDER-LEFT-WIDTH: 0px; BORDER-BOTTOM-WIDTH: 0px; WIDTH: 225px; HEIGHT: 90px; BORDER-RIGHT-WIDTH: 0px" 
+            alt="The Code Project" 
+            src="CodeProject C# 2_0 Nullable Data Readers_ Free source code and programming help_files/logo225x90.gif"></A></TD>
+          <TD class=HeaderBanner align=right width="100%"><IFRAME 
+            src="CodeProject C# 2_0 Nullable Data Readers_ Free source code and programming help_files/ServeHTML.htm" 
+            frameBorder=0 width=728 scrolling=no height=90></IFRAME></TD></TR>
+        <TR>
+          <TD colSpan=2>
+            <TABLE class=MemberNavBar cellSpacing=0 cellPadding=5 
+              width="100%"><TBODY>
+              <TR>
+                <TD class=SmallText style="FONT-WEIGHT: bold">5,215,143 
+                  members and growing! (19,237 online)</TD>
+                <TD align=right>
+                  <DIV class=MemberNavBarText 
+                  id=ctl00_MemberMenu_LoggedOnOptions><A 
+                  id=ctl00_MemberMenu_MyProfile 
+                  href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=2959938">abdelrady2030</A> 
+                  | <A id=ctl00_MemberMenu_MySettings 
+                  href="http://www.codeproject.com/script/Membership/Modify.aspx">My 
+                  Settings</A> | <A id=ctl00_MemberMenu_MyCodeProject 
+                  href="http://www.codeproject.com/script/Membership/MyCodeProject.aspx"><B>My 
+                  CodeProject</B></A> | <A id=ctl00_MemberMenu_MyBookmarks 
+                  href="http://www.codeproject.com/script/Bookmarks/List.aspx?obtid=2"><IMG 
+                  height=16 
+                  src="CodeProject C# 2_0 Nullable Data Readers_ Free source code and programming help_files/fave.gif" 
+                  width=16 align=absMiddle border=0> My Bookmarks</A> | <A 
+                  id=ctl00_MemberMenu_MyArticles 
+                  href="http://www.codeproject.com/script/Articles/MemberArticles.aspx?amid=2959938">My 
+                  Articles</A> | <A id=ctl00_MemberMenu_Signout 
+                  href="http://www.codeproject.com/script/Membership/LogOff.aspx?rp=%2fKB%2fdatabase%2fNullableReaders.aspx">Sign 
+                  out</A> </DIV></TD></TR></TBODY></TABLE></TD></TR>
+        <TR>
+          <TD colSpan=2>
+            <TABLE class=SiteNavBar id=tblSiteToolbar cellSpacing=0 
+            cellPadding=0>
+              <TBODY>
+              <TR>
+                <TD noWrap><A href="http://www.codeproject.com/">Home</A></TD>
+                <TD>&nbsp; </TD>
+                <TD noWrap align=right>Current Site: </TD>
+                <TD class=SelCat noWrap><A 
+                  href="http://www.codeproject.com/">Main Site</A></TD>
+                <TD noWrap><A href="http://java.codeproject.com/">Java</A></TD>
+                <TD noWrap><A href="http://lamp.codeproject.com/">Linux Apache 
+                  MySQL PHP</A></TD>
+                <TD width="100%">&nbsp;</TD>
+                <TD id=ctl00_TopNavBar_RightMenus><!--380-->
+                  <DIV id=MenuPos 
+                  style="WIDTH: 305px; POSITION: relative; TOP: 1px; HEIGHT: 22px">
+                  <TABLE 
+                  style="BORDER-TOP-WIDTH: 0px; BORDER-LEFT-WIDTH: 0px; BORDER-BOTTOM-WIDTH: 0px; HEIGHT: 20px; BORDER-RIGHT-WIDTH: 0px" 
+                  cellSpacing=0 cellPadding=0 width=305>
+                    <TBODY>
+                    <TR vAlign=center>
+                      <TD 
+                      style="BORDER-TOP-WIDTH: 0px; BORDER-LEFT-WIDTH: 0px; BORDER-BOTTOM-WIDTH: 0px; BORDER-RIGHT-WIDTH: 0px" 
+                      noWrap><A 
+                        href="http://www.codeproject.com/info/FAQ.aspx">Help!</A></TD>
+                      <TD 
+                      style="BORDER-TOP-WIDTH: 0px; BORDER-LEFT-WIDTH: 0px; BORDER-BOTTOM-WIDTH: 0px; BORDER-RIGHT-WIDTH: 0px" 
+                      noWrap><A 
+                        href="http://www.codeproject.com/script/Articles/Latest.aspx">Articles</A></TD>
+                      <TD 
+                      style="BORDER-TOP-WIDTH: 0px; BORDER-LEFT-WIDTH: 0px; BORDER-BOTTOM-WIDTH: 0px; BORDER-RIGHT-WIDTH: 0px" 
+                      noWrap><A 
+                        href="http://www.codeproject.com/script/Forums/List.aspx">Message 
+                        Boards</A></TD>
+                      <TD 
+                      style="BORDER-TOP-WIDTH: 0px; BORDER-LEFT-WIDTH: 0px; BORDER-BOTTOM-WIDTH: 0px; BORDER-RIGHT-WIDTH: 0px" 
+                      noWrap><A 
+                        href="http://www.codeproject.com/Lounge.aspx">Lounge</A></TD></TR></TBODY></TABLE></DIV></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+  <TR>
+    <TD vAlign=top colSpan=2><A name=_top></A>
+      <TABLE class=ArticleHeader id=ctl00_ArticleTopHeader_HeaderTable 
+      cellSpacing=0 cellPadding=3 width="100%" border=0>
+        <TBODY>
+        <TR vAlign=top>
+          <TD class=SmallText><A id=ctl00_ArticleTopHeader_ChapterLink 
+            href="http://www.codeproject.com/script/Content/Chapter.aspx?chptId=4">Database</A> 
+            » <A id=ctl00_ArticleTopHeader_SectionLink 
+            href="http://www.codeproject.com/KB/database/">Database</A> » <A 
+            id=ctl00_ArticleTopHeader_SubsectionLink 
+            href="http://www.codeproject.com/KB/database/index.aspx?#Database - ADO.NET">ADO.NET</A> 
+            <SPAN class=ArticleIntermediate 
+            id=ctl00_ArticleTopHeader_SkillLevel>&nbsp;&nbsp;&nbsp; 
+            Intermediate</SPAN> <SPAN 
+            id=ctl00_ArticleTopHeader_LicenceTerms></SPAN><BR><BR>
+            <H1><SPAN class=ArticleTopTitle 
+            id=ctl00_ArticleTopHeader_ArticleTitle>C# 2.0 Nullable Data 
+            Readers</SPAN></H1><B>By <A 
+            href="http://www.codeproject.com/script/Articles/MemberArticles.aspx?amid=1074402">Steve 
+            Michelotti</A></B><BR><BR><SPAN class=ArticleTopDescr 
+            id=ctl00_ArticleTopHeader_ArticleDescr>An article on nullable data 
+            readers for .NET 2.0 nullable types.</SPAN> </TD>
+          <TD class=SmallText style="WIDTH: 210px"><SPAN 
+            id=ctl00_ArticleTopHeader_ArticleAttributes>C#, Windows, .NET 2.0, 
+            .NET, ADO.NET, VS, VS2005, DBA, Dev</SPAN><BR><BR><SPAN 
+            style="PADDING-RIGHT: 2ex">Posted</SPAN>: <B>20 Jan 
+            2006</B><BR><SPAN style="PADDING-RIGHT: 0.5ex">Updated</SPAN>: <B>20 
+            Jan 2006</B> <BR><SPAN style="PADDING-RIGHT: 3.2ex">Views</SPAN>: 
+            <B>52,063</B><BR></TD></TR>
+        <TR>
+          <TD colSpan=2>
+            <TABLE width="100%">
+              <TBODY>
+              <TR>
+                <TD></TD>
+                <TD class=SmallText style="WHITE-SPACE: nowrap" 
+              align=right></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+  <TR vAlign=top>
+    <TD class=LHNavBar id=ctl00_LeftNavCell>
+      <DIV style="PADDING-TOP: 5px; TEXT-ALIGN: center">
+      <SCRIPT type=text/javascript>document.write(unescape("%3ca%20href%3d%22http%3a%2f%2fwww.codeproject.com%2fRedir.aspx%3fadid%3d3487%26way%3dban%22%20target%3d%22_blank%22%20rel%3d%22nofollow%22%3e%3cimg%20src%3d%22http%3a%2f%2fwww.codeproject.com%2fscript%2fAnn%2fServeImg.aspx%3fFile%3d%252fscript%252fadmentor%252fimages%252fcp_daily_150x80.gif%26C%3dFalse%26id%3d3487%22%20alt%3d%22%22%20border%3d%220%22%20width%3d%22150%22%20height%3d%2280%22%3e%3c%2fa%3e"));</SCRIPT>
+      </DIV>
+      <DIV class=FeatureBlockHeader>Announcements</DIV>
+      <DIV class="FeatureBlockContent RHFeatureBar">
+      <DIV style="PADDING-TOP: 0px"><IMG 
+      style="FLOAT: left; MARGIN-LEFT: 8px; MARGIN-RIGHT: 9px" height=20 
+      alt=Comp 
+      src="CodeProject C# 2_0 Nullable Data Readers_ Free source code and programming help_files/prize_winner.gif" 
+      width=10> <A href="http://www.codeproject.com/Feature/CodeGenComp/">Code 
+      Generation<BR>comp. $1,000 prize!</A></DIV>
+      <DIV style="MARGIN-TOP: 4px; MARGIN-BOTTOM: 3px"><IMG 
+      style="FLOAT: left; MARGIN-LEFT: 6px; MARGIN-RIGHT: 6px" height=16 
+      alt=Comp 
+      src="CodeProject C# 2_0 Nullable Data Readers_ Free source code and programming help_files/coffee.gif" 
+      width=16> <A href="http://www.codeproject.com/Zones/IBM/">Win CodeProject 
+      Coffee!</A></DIV>
+      <DIV style="PADDING-TOP: 0px"><IMG 
+      style="FLOAT: left; MARGIN-LEFT: 8px; MARGIN-RIGHT: 9px" height=20 
+      alt=Comp 
+      src="CodeProject C# 2_0 Nullable Data Readers_ Free source code and programming help_files/prize_winner.gif" 
+      width=10> <A id=ctl00_Announcements_CompLink 
+      href="http://www.codeproject.com/Feature/ArticleCompetition/">Monthly 
+      Competition</A><BR clear=all>
+      <DIV style="PADDING-BOTTOM: 5px; PADDING-TOP: 3px"><IMG 
+      style="PADDING-RIGHT: 10px; FLOAT: left; MARGIN-LEFT: 7px; MARGIN-RIGHT: 8px" 
+      height=16 alt=Staff 
+      src="CodeProject C# 2_0 Nullable Data Readers_ Free source code and programming help_files/staff_sm.gif" 
+      width=12> <A href="http://www.codeproject.com/info/jobs/">We're 
+      Hiring</A></DIV></DIV></DIV>
+      <DIV class=MenuCat>Services</DIV>
+      <DIV class=MenuChapter><A 
+      href="http://www.codeproject.com/script/Jobs/List.aspx">Job 
+Board</A></DIV>
+      <DIV class=MenuChapter><A 
+      href="http://www.codeproject.com/Services/coffee.aspx">Code Project 
+      Coffee</A></DIV>
+      <DIV class=MenuChapter><A 
+      href="http://www.codeproject.com/Services/TradePub.aspx">Free 
+      Magazines</A></DIV><BR>
+      <DIV id=SectionMenu>
+      <DIV class=MenuCat>Chapters</DIV>
+      <DIV class=MenuChapter><A onclick="return ToggleMenu('Chapter1');" 
+      href="http://www.codeproject.com/script/Content/Chapter.aspx?chptId=1">Desktop 
+      Development</A></DIV>
+      <DIV class=MenuSectionBlock id=Chapter1 style="DISPLAY: none">
+      <DIV class=MI id=Section1><A 
+      href="http://www.codeproject.com/KB/buttons/">Button Controls</A></DIV>
+      <DIV class=MI id=Section15><A 
+      href="http://www.codeproject.com/KB/clipboard/">Clipboard</A></DIV>
+      <DIV class=MI id=Section2><A 
+      href="http://www.codeproject.com/KB/combobox/">Combo &amp; List 
+      Boxes</A></DIV>
+      <DIV class=MI id=Section67><A 
+      href="http://www.codeproject.com/KB/dialog/">Dialogs and Windows</A></DIV>
+      <DIV class=MI id=Section107><A 
+      href="http://www.codeproject.com/KB/gadgets/">Desktop Gadgets</A></DIV>
+      <DIV class=MI id=Section16><A 
+      href="http://www.codeproject.com/KB/docview/">Document / View</A></DIV>
+      <DIV class=MI id=Section4><A 
+      href="http://www.codeproject.com/KB/edit/">Edit Controls</A></DIV>
+      <DIV class=MI id=Section17><A 
+      href="http://www.codeproject.com/KB/files/">Files and Folders</A></DIV>
+      <DIV class=MI id=Section3><A 
+      href="http://www.codeproject.com/KB/grid/">Grid &amp; Data 
+      Controls</A></DIV>
+      <DIV class=MI id=Section5><A 
+      href="http://www.codeproject.com/KB/list/">List Controls</A></DIV>
+      <DIV class=MI id=Section6><A 
+      href="http://www.codeproject.com/KB/menus/">Menus</A></DIV>
+      <DIV class=MI id=Section14><A 
+      href="http://www.codeproject.com/KB/miscctrl/">Miscellaneous</A></DIV>
+      <DIV class=MI id=Section18><A 
+      href="http://www.codeproject.com/KB/printing/">Printing</A></DIV>
+      <DIV class=MI id=Section95><A 
+      href="http://www.codeproject.com/KB/progress/">Progress Controls</A></DIV>
+      <DIV class=MI id=Section11><A 
+      href="http://www.codeproject.com/KB/selection/">Selection 
+      Controls</A></DIV>
+      <DIV class=MI id=Section19><A 
+      href="http://www.codeproject.com/KB/shell/">Shell and IE 
+      programming</A></DIV>
+      <DIV class=MI id=Section68><A 
+      href="http://www.codeproject.com/KB/smart/">Smart Client</A></DIV>
+      <DIV class=MI id=Section8><A 
+      href="http://www.codeproject.com/KB/splitter/">Splitter Windows</A></DIV>
+      <DIV class=MI id=Section9><A 
+      href="http://www.codeproject.com/KB/static/">Static &amp; Panel 
+      Controls</A></DIV>
+      <DIV class=MI id=Section10><A 
+      href="http://www.codeproject.com/KB/statusbar/">Status Bar</A></DIV>
+      <DIV class=MI id=Section7><A 
+      href="http://www.codeproject.com/KB/tabs/">Tabs &amp; Property 
+      Pages</A></DIV>
+      <DIV class=MI id=Section12><A 
+      href="http://www.codeproject.com/KB/toolbars/">Toolbars &amp; Docking 
+      windows</A></DIV>
+      <DIV class=MI id=Section13><A 
+      href="http://www.codeproject.com/KB/tree/">Tree Controls</A></DIV></DIV>
+      <DIV class=MenuChapter><A onclick="return ToggleMenu('Chapter2');" 
+      href="http://www.codeproject.com/script/Content/Chapter.aspx?chptId=2">Web 
+      Development</A></DIV>
+      <DIV class=MenuSectionBlock id=Chapter2 style="DISPLAY: none">
+      <DIV class=MI id=Section70><A 
+      href="http://www.codeproject.com/KB/ajax/">Ajax and Atlas</A></DIV>
+      <DIV class=MI id=Section27><A 
+      href="http://www.codeproject.com/KB/applications/">Applications &amp; 
+      Tools</A></DIV>
+      <DIV class=MI id=Section85><A 
+      href="http://www.codeproject.com/KB/asp/">ASP</A></DIV>
+      <DIV class=MI id=Section89><A 
+      href="http://www.codeproject.com/KB/aspnet/">ASP.NET</A></DIV>
+      <DIV class=MI id=Section28><A 
+      href="http://www.codeproject.com/KB/webforms/">ASP.NET Controls</A></DIV>
+      <DIV class=MI id=Section38><A 
+      href="http://www.codeproject.com/KB/ATL-Server/">ATL Server</A></DIV>
+      <DIV class=MI id=Section29><A 
+      href="http://www.codeproject.com/KB/web-cache/">Caching</A></DIV>
+      <DIV class=MI id=Section91><A 
+      href="http://www.codeproject.com/KB/web-image/">Charts, Graphs and 
+      Images</A></DIV>
+      <DIV class=MI id=Section25><A 
+      href="http://www.codeproject.com/KB/scripting/">Client side 
+      scripting</A></DIV>
+      <DIV class=MI id=Section30><A 
+      href="http://www.codeproject.com/KB/custom-controls/">Custom 
+      Controls</A></DIV>
+      <DIV class=MI id=Section23><A 
+      href="http://www.codeproject.com/KB/HTML/">HTML / CSS</A></DIV>
+      <DIV class=MI id=Section22><A 
+      href="http://www.codeproject.com/KB/IP/">Internet / Network</A></DIV>
+      <DIV class=MI id=Section24><A 
+      href="http://www.codeproject.com/KB/ISAPI/">ISAPI</A></DIV>
+      <DIV class=MI id=Section33><A 
+      href="http://www.codeproject.com/KB/server-management/">Site &amp; Server 
+      Management</A></DIV>
+      <DIV class=MI id=Section34><A 
+      href="http://www.codeproject.com/KB/session/">Session State</A></DIV>
+      <DIV class=MI id=Section113><A 
+      href="http://www.codeproject.com/KB/silverlight/">Silverlight</A></DIV>
+      <DIV class=MI id=Section36><A 
+      href="http://www.codeproject.com/KB/trace/">Trace and Logs</A></DIV>
+      <DIV class=MI id=Section31><A 
+      href="http://www.codeproject.com/KB/user-controls/">User 
+Controls</A></DIV>
+      <DIV class=MI id=Section37><A 
+      href="http://www.codeproject.com/KB/validation/">Validation</A></DIV>
+      <DIV class=MI id=Section35><A 
+      href="http://www.codeproject.com/KB/viewstate/">View State</A></DIV>
+      <DIV class=MI id=Section26><A 
+      href="http://www.codeproject.com/KB/WAP/">WAP / WML</A></DIV>
+      <DIV class=MI id=Section32><A 
+      href="http://www.codeproject.com/KB/web-security/">Web Security</A></DIV>
+      <DIV class=MI id=Section20><A 
+      href="http://www.codeproject.com/KB/webservices/">Web 
+      Services</A></DIV></DIV>
+      <DIV class=MenuChapter><A onclick="return ToggleMenu('Chapter9');" 
+      href="http://www.codeproject.com/script/Content/Chapter.aspx?chptId=9">Enterprise 
+      Systems</A></DIV>
+      <DIV class=MenuSectionBlock id=Chapter9 style="DISPLAY: none">
+      <DIV class=MI id=Section98><A 
+      href="http://www.codeproject.com/KB/MCMS/">Content Management 
+      Server</A></DIV>
+      <DIV class=MI id=Section99><A 
+      href="http://www.codeproject.com/KB/biztalk/">Microsoft BizTalk 
+      Server</A></DIV>
+      <DIV class=MI id=Section102><A 
+      href="http://www.codeproject.com/KB/exchange/">Microsoft 
+Exchange</A></DIV>
+      <DIV class=MI id=Section90><A 
+      href="http://www.codeproject.com/KB/office/">Office Development</A></DIV>
+      <DIV class=MI id=Section101><A 
+      href="http://www.codeproject.com/KB/sharepoint/">SharePoint 
+      Server</A></DIV></DIV>
+      <DIV class=MenuChapter><A onclick="return ToggleMenu('Chapter3');" 
+      href="http://www.codeproject.com/script/Content/Chapter.aspx?chptId=3">Multimedia</A></DIV>
+      <DIV class=MenuSectionBlock id=Chapter3 style="DISPLAY: none">
+      <DIV class=MI id=Section42><A 
+      href="http://www.codeproject.com/KB/audio-video/">Audio and 
+Video</A></DIV>
+      <DIV class=MI id=Section44><A 
+      href="http://www.codeproject.com/KB/directx/">DirectX</A></DIV>
+      <DIV class=MI id=Section46><A 
+      href="http://www.codeproject.com/KB/GDI/">GDI</A></DIV>
+      <DIV class=MI id=Section47><A 
+      href="http://www.codeproject.com/KB/GDI-plus/">GDI+</A></DIV>
+      <DIV class=MI id=Section43><A 
+      href="http://www.codeproject.com/KB/graphics/">General Graphics</A></DIV>
+      <DIV class=MI id=Section45><A 
+      href="http://www.codeproject.com/KB/openGL/">OpenGL</A></DIV></DIV>
+      <DIV class=MenuChapter><A onclick="return ToggleMenu('Chapter4');" 
+      href="http://www.codeproject.com/script/Content/Chapter.aspx?chptId=4">Database</A></DIV>
+      <DIV class=MenuSectionBlock id=Chapter4>
+      <DIV class=MIS id=Section66><A 
+      href="http://www.codeproject.com/KB/database/">Database</A></DIV>
+      <DIV class=MI id=Section100><A 
+      href="http://www.codeproject.com/KB/reporting-services/">SQL Reporting 
+      Services</A></DIV></DIV>
+      <DIV class=MenuChapter><A onclick="return ToggleMenu('Chapter8');" 
+      href="http://www.codeproject.com/script/Content/Chapter.aspx?chptId=8">Platforms, 
+      Frameworks &amp; Libraries</A></DIV>
+      <DIV class=MenuSectionBlock id=Chapter8 style="DISPLAY: none">
+      <DIV class=MI id=Section83><A 
+      href="http://www.codeproject.com/KB/atl/">ATL</A></DIV>
+      <DIV class=MI id=Section117><A 
+      href="http://www.codeproject.com/KB/MFC/">MFC</A></DIV>
+      <DIV class=MI id=Section88><A 
+      href="http://www.codeproject.com/KB/stl/">STL</A></DIV>
+      <DIV class=MI id=Section84><A 
+      href="http://www.codeproject.com/KB/wtl/">WTL</A></DIV>
+      <DIV class=MI id=Section49><A 
+      href="http://www.codeproject.com/KB/COM/">COM / COM+</A></DIV>
+      <DIV class=MI id=Section76><A 
+      href="http://www.codeproject.com/KB/dotnet/">.NET Framework</A></DIV>
+      <DIV class=MI id=Section92><A 
+      href="http://www.codeproject.com/KB/winsdk/">Win32/64 SDK &amp; 
+      OS</A></DIV>
+      <DIV class=MI id=Section108><A 
+      href="http://www.codeproject.com/KB/vista/">Vista API</A></DIV>
+      <DIV class=MI id=Section110><A 
+      href="http://www.codeproject.com/KB/vista-security/">Vista 
+      Security</A></DIV>
+      <DIV class=MI id=Section82><A 
+      href="http://www.codeproject.com/KB/cross-platform/">Cross 
+      Platform</A></DIV>
+      <DIV class=MI id=Section69><A 
+      href="http://www.codeproject.com/KB/game/">Game Development</A></DIV>
+      <DIV class=MI id=Section73><A 
+      href="http://www.codeproject.com/KB/mobile/">Mobile Development</A></DIV>
+      <DIV class=MI id=Section106><A 
+      href="http://www.codeproject.com/KB/WC/">Windows CardSpace</A></DIV>
+      <DIV class=MI id=Section103><A 
+      href="http://www.codeproject.com/KB/WCF/">Windows Communication 
+      Foundation</A></DIV>
+      <DIV class=MI id=Section104><A 
+      href="http://www.codeproject.com/KB/WPF/">Windows Presentation 
+      Foundation</A></DIV>
+      <DIV class=MI id=Section105><A 
+      href="http://www.codeproject.com/KB/WF/">Windows Workflow 
+      Foundation</A></DIV>
+      <DIV class=MI id=Section119><A 
+      href="http://www.codeproject.com/KB/library/">Libraries</A></DIV>
+      <DIV class=MI id=Section122><A 
+      href="http://www.codeproject.com/KB/powershell/">Windows 
+      Powershell</A></DIV>
+      <DIV class=MI id=Section123><A 
+      href="http://www.codeproject.com/KB/linq/">LINQ</A></DIV></DIV>
+      <DIV class=MenuChapter><A onclick="return ToggleMenu('Chapter5');" 
+      href="http://www.codeproject.com/script/Content/Chapter.aspx?chptId=5">Languages</A></DIV>
+      <DIV class=MenuSectionBlock id=Chapter5 style="DISPLAY: none">
+      <DIV class=MI id=Section71><A href="http://www.codeproject.com/KB/cpp/">C 
+      / C++ Language</A></DIV>
+      <DIV class=MI id=Section72><A 
+      href="http://www.codeproject.com/KB/mcpp/">C++ / CLI</A></DIV>
+      <DIV class=MI id=Section93><A 
+      href="http://www.codeproject.com/KB/cs/">C#</A></DIV>
+      <DIV class=MI id=Section78><A 
+      href="http://www.codeproject.com/KB/msil/">MSIL</A></DIV>
+      <DIV class=MI id=Section86><A 
+      href="http://www.codeproject.com/KB/vbscript/">VBScript</A></DIV>
+      <DIV class=MI id=Section87><A 
+      href="http://www.codeproject.com/KB/vb/">VB.NET</A></DIV>
+      <DIV class=MI id=Section115><A 
+      href="http://www.codeproject.com/KB/vb-interop/">VB6 Interop</A></DIV>
+      <DIV class=MI id=Section77><A 
+      href="http://www.codeproject.com/KB/net-languages/">Other .NET 
+      Languages</A></DIV>
+      <DIV class=MI id=Section21><A 
+      href="http://www.codeproject.com/KB/XML/">XML</A></DIV>
+      <DIV class=MI id=Section96><A 
+      href="http://www.codeproject.com/KB/java/">Java</A></DIV></DIV>
+      <DIV class=MenuChapter><A onclick="return ToggleMenu('Chapter6');" 
+      href="http://www.codeproject.com/script/Content/Chapter.aspx?chptId=6">General 
+      Programming</A></DIV>
+      <DIV class=MenuSectionBlock id=Chapter6 style="DISPLAY: none">
+      <DIV class=MI id=Section57><A 
+      href="http://www.codeproject.com/KB/recipes/">Algorithms &amp; 
+      Recipes</A></DIV>
+      <DIV class=MI id=Section64><A 
+      href="http://www.codeproject.com/KB/bugs/">Bugs &amp; 
+Workarounds</A></DIV>
+      <DIV class=MI id=Section79><A 
+      href="http://www.codeproject.com/KB/collections/">Collections</A></DIV>
+      <DIV class=MI id=Section56><A 
+      href="http://www.codeproject.com/KB/security/">Cryptography &amp; 
+      Security</A></DIV>
+      <DIV class=MI id=Section50><A 
+      href="http://www.codeproject.com/KB/datetime/">Date and Time</A></DIV>
+      <DIV class=MI id=Section52><A 
+      href="http://www.codeproject.com/KB/DLL/">DLLs &amp; Assemblies</A></DIV>
+      <DIV class=MI id=Section80><A 
+      href="http://www.codeproject.com/KB/exception/">Exception 
+      Handling</A></DIV>
+      <DIV class=MI id=Section81><A 
+      href="http://www.codeproject.com/KB/locale/">Localisation</A></DIV>
+      <DIV class=MI id=Section53><A 
+      href="http://www.codeproject.com/KB/macros/">Macros and Add-ins</A></DIV>
+      <DIV class=MI id=Section54><A 
+      href="http://www.codeproject.com/KB/tips/">Programming Tips</A></DIV>
+      <DIV class=MI id=Section55><A 
+      href="http://www.codeproject.com/KB/string/">String handling</A></DIV>
+      <DIV class=MI id=Section58><A 
+      href="http://www.codeproject.com/KB/threads/">Threads, Processes &amp; 
+      IPC</A></DIV>
+      <DIV class=MI id=Section59><A 
+      href="http://www.codeproject.com/KB/winhelp/">WinHelp / 
+      HTMLHelp</A></DIV></DIV>
+      <DIV class=MenuChapter><A onclick="return ToggleMenu('Chapter10');" 
+      href="http://www.codeproject.com/script/Content/Chapter.aspx?chptId=10">Graphics 
+      / Design</A></DIV>
+      <DIV class=MenuSectionBlock id=Chapter10 style="DISPLAY: none">
+      <DIV class=MI id=Section40><A 
+      href="http://www.codeproject.com/KB/expression/">Expression</A></DIV>
+      <DIV class=MI id=Section114><A 
+      href="http://www.codeproject.com/KB/usability/">Usability</A></DIV></DIV>
+      <DIV class=MenuChapter><A onclick="return ToggleMenu('Chapter11');" 
+      href="http://www.codeproject.com/script/Content/Chapter.aspx?chptId=11">Development 
+      Lifecycle</A></DIV>
+      <DIV class=MenuSectionBlock id=Chapter11 style="DISPLAY: none">
+      <DIV class=MI id=Section51><A 
+      href="http://www.codeproject.com/KB/debug/">Debug Tips</A></DIV>
+      <DIV class=MI id=Section39><A 
+      href="http://www.codeproject.com/KB/architecture/">Design and 
+      Architecture</A></DIV>
+      <DIV class=MI id=Section112><A 
+      href="http://www.codeproject.com/KB/install/">Installation</A></DIV>
+      <DIV class=MI id=Section41><A 
+      href="http://www.codeproject.com/KB/work/">Work Issues</A></DIV>
+      <DIV class=MI id=Section126><A 
+      href="http://www.codeproject.com/KB/codegen/">Code 
+      Generation</A></DIV></DIV>
+      <DIV class=MenuChapter><A onclick="return ToggleMenu('Chapter7');" 
+      href="http://www.codeproject.com/script/Content/Chapter.aspx?chptId=7">General 
+      Reading</A></DIV>
+      <DIV class=MenuSectionBlock id=Chapter7 style="DISPLAY: none">
+      <DIV class=MI id=Section60><A 
+      href="http://www.codeproject.com/KB/books/">Book Chapters</A></DIV>
+      <DIV class=MI id=Section61><A 
+      href="http://www.codeproject.com/KB/book-reviews/">Book Reviews</A></DIV>
+      <DIV class=MI id=Section109><A 
+      href="http://www.codeproject.com/KB/hardware-review/">Hardware 
+      Reviews</A></DIV>
+      <DIV class=MI id=Section63><A 
+      href="http://www.codeproject.com/KB/interviews/">Interviews</A></DIV>
+      <DIV class=MI id=Section62><A 
+      href="http://www.codeproject.com/KB/scrapbook/">Scrapbook</A></DIV>
+      <DIV class=MI id=Section48><A 
+      href="http://www.codeproject.com/KB/system/">Hardware &amp; 
+      System</A></DIV></DIV>
+      <DIV class=MenuChapter><A onclick="return ToggleMenu('Chapter12');" 
+      href="http://www.codeproject.com/script/Content/Chapter.aspx?chptId=12">Third 
+      Party Products</A></DIV>
+      <DIV class=MenuSectionBlock id=Chapter12 style="DISPLAY: none">
+      <DIV class=MI id=Section65><A 
+      href="http://www.codeproject.com/KB/showcase/">Product Showcase</A></DIV>
+      <DIV class=MI id=Section124><A 
+      href="http://www.codeproject.com/KB/solution-center/">Solution 
+      Center</A></DIV></DIV></DIV><BR>
+      <DIV class=MenuCat>Feature Zones</DIV>
+      <DIV class=MenuChapter><A href="http://www.codeproject.com/Zones/IBM">IBM 
+      DeveloperWorks</A></DIV>
+      <DIV class=MenuChapter><A 
+      href="http://www.codeproject.com/Zones/WhitePapers">WhitePapers</A></DIV>
+      <DIV class=MenuChapter><A 
+      href="http://www.codeproject.com/Zones/CodeGeneration">Code 
+      Generation</A></DIV>
+      <DIV class=MenuChapter><A 
+      href="http://www.codeproject.com/Zones/QuestSQL">Quest SQL 
+      Zone</A></DIV><BR>
+      <SCRIPT type=text/javascript>document.write(unescape("%3ca%20href%3d%22http%3a%2f%2fwww.codeproject.com%2fRedir.aspx%3fadid%3d6207%26way%3dban%22%20target%3d%22_blank%22%20rel%3d%22nofollow%22%3e%3cimg%20src%3d%22http%3a%2f%2fwww.codeproject.com%2fscript%2fAnn%2fServeImg.aspx%3fFile%3d%252fscript%252fadmentor%252fimages%252fInfragistics_dotNET_newLook_160-600.jpg%26C%3dFalse%26id%3d6207%22%20alt%3d%22%22%20border%3d%220%22%20width%3d%22160%22%20height%3d%22600%22%3e%3c%2fa%3e"));</SCRIPT>
+      <IMG height=1 alt="" 
+      src="CodeProject C# 2_0 Nullable Data Readers_ Free source code and programming help_files/t.gif" 
+      width=160> </TD>
+    <TD class=ArticlePane vAlign=top>
+      <TABLE class=SearchHeaderBar cellSpacing=0 width="100%">
+        <TBODY>
+        <TR>
+          <TD style="WIDTH: 60%; WHITE-SPACE: nowrap" vAlign=center 
+            align=right><FORM style="MARGIN: 0px" name=Search 
+            action=/info/search.aspx method=get><B>Search &nbsp;</B> <INPUT 
+            class=SmallText style="WIDTH: 200px" name=artkw> <SELECT 
+            class=SmallText style="FONT-WEIGHT: bold" name=sbo> <OPTION 
+              value=kw selected>Articles</OPTION> <OPTION 
+              value=fm>Messages</OPTION></SELECT> <INPUT class=SmallText style="FONT-WEIGHT: bold" type=submit value=" Go! "> 
+            &nbsp; </FORM></TD>
+          <TD class=TinyText style="WHITE-SPACE: nowrap"><A 
+            href="http://www.codeproject.com/info/search.aspx">Advanced 
+            Search</A><BR><A 
+            href="http://www.codeproject.com/script/Content/SiteMap.aspx">Sitemap</A> 
+            | <A id=ctl00_SearchBarCtrl_AddToIESearchLnk 
+            title="Add The Code Project to your IE search Providers" 
+            onclick="window.external.AddSearchProvider('http://www.codeproject.com/info/OpenSearch.xml');return false;" 
+            href="http://www.codeproject.com/">Add to IE Search</A> 
+        </TD></TR></TBODY></TABLE><SPAN id=ctl00_ResultMessage></SPAN>
+      <DIV id=ctl00_ArtDiv>
+      <TABLE cellSpacing=0 cellPadding=0 width="100%" border=0>
+        <TBODY>
+        <TR vAlign=top>
+          <TD vAlign=top>
+            <TABLE>
+              <TBODY></TBODY></TABLE>
+            <DIV class=SmallText><IMG style="VERTICAL-ALIGN: middle" height=16 
+            alt=print 
+            src="CodeProject C# 2_0 Nullable Data Readers_ Free source code and programming help_files/print.gif" 
+            width=16> <A id=ctl00_ArticleHeaderLinks_PrintLnk 
+            href="http://www.codeproject.com/KB/database/NullableReaders.aspx?display=Print">Print</A> 
+            &nbsp; <IMG style="VERTICAL-ALIGN: middle" height=16 
+            alt="Broken Article?" 
+            src="CodeProject C# 2_0 Nullable Data Readers_ Free source code and programming help_files/report.gif" 
+            width=16> <A id=ctl00_ArticleHeaderLinks_BrokenLnk 
+            href="http://www.codeproject.com/script/Articles/Report.aspx?aid=12778">Report 
+            Article</A> &nbsp; <IMG style="VERTICAL-ALIGN: middle" alt=Watch 
+            src="CodeProject C# 2_0 Nullable Data Readers_ Free source code and programming help_files/watchon.png"> 
+            <A class="" id=bmw_12778,2 onclick="return watchMe(12778, 2);" 
+            href="http://www.codeproject.com/script/Bookmarks/Add.aspx?&amp;obid=12778&amp;obtid=2&amp;bma=AddWatch" 
+            name=ajaxBookmarkWatchLink>Watch</A> <SPAN class=TinyText 
+            style="VISIBILITY: hidden"></SPAN><SPAN 
+            id=ctl00_ArticleHeaderLinks_ArticleBmkWatch_Message></SPAN>&nbsp; 
+            <IMG style="VERTICAL-ALIGN: middle" height=16 alt=Bookmark 
+            src="CodeProject C# 2_0 Nullable Data Readers_ Free source code and programming help_files/link.png" 
+            width=16> <A class="" id=bm_12778,2 
+            onclick="return bookmarkMe(12778, 2);" 
+            href="http://www.codeproject.com/script/Bookmarks/Add.aspx?&amp;obid=12778&amp;obtid=2&amp;bma=AddBookmark" 
+            name=ajaxBookmarkLink>Bookmark</A> <SPAN class=TinyText 
+            style="VISIBILITY: hidden"></SPAN><SPAN 
+            id=ctl00_ArticleHeaderLinks_ArticleBmk_Message></SPAN>&nbsp; <IMG 
+            style="VERTICAL-ALIGN: middle" height=16 alt=Discuss 
+            src="CodeProject C# 2_0 Nullable Data Readers_ Free source code and programming help_files/discuss.gif" 
+            width=15> <A 
+            href="http://www.codeproject.com/KB/database/NullableReaders.aspx#_comments">Discuss</A> 
+            &nbsp; <IMG style="VERTICAL-ALIGN: middle" height=16 
+            alt="Recommend Article" 
+            src="CodeProject C# 2_0 Nullable Data Readers_ Free source code and programming help_files/mail.gif" 
+            width=16>&nbsp;<A id=ctl00_ArticleHeaderLinks_Recommend 
+            href="http://www.codeproject.com/script/common/TellFriend.aspx?obtid=2&amp;obid=12778">Send&nbsp;to&nbsp;a&nbsp;friend</A> 
+            </DIV></TD>
+          <TD style="WIDTH: 100px; WHITE-SPACE: nowrap; TEXT-ALIGN: right">
+            <TABLE id=CurRat>
+              <TBODY>
+              <TR>
+                <TD>
+                  <TABLE>
+                    <TBODY>
+                    <TR>
+                      <TD class=SmallText style="WHITE-SPACE: nowrap" 
+                      align=right><SPAN id=ctl00_ArticleRating_VoteLabel>34 
+                        votes for this Article.</SPAN></TD>
+                      <TD>
+                        <TABLE cellSpacing=0 cellPadding=0 border=1>
+                          <TBODY>
+                          <TR>
+                            <TD width=20 bgColor=white height=7><IMG height=7 
+                              src="CodeProject C# 2_0 Nullable Data Readers_ Free source code and programming help_files/red.gif" 
+                              width=20 align=center border=0></TD>
+                            <TD width=20 bgColor=white height=7><IMG height=7 
+                              src="CodeProject C# 2_0 Nullable Data Readers_ Free source code and programming help_files/red.gif" 
+                              width=20 align=center border=0></TD>
+                            <TD width=20 bgColor=white height=7><IMG height=7 
+                              src="CodeProject C# 2_0 Nullable Data Readers_ Free source code and programming help_files/red.gif" 
+                              width=20 align=center border=0></TD>
+                            <TD width=20 bgColor=white height=7><IMG height=7 
+                              src="CodeProject C# 2_0 Nullable Data Readers_ Free source code and programming help_files/red.gif" 
+                              width=20 align=center border=0></TD>
+                            <TD noWrap width=20 bgColor=white height=7><IMG 
+                              height=7 
+                              src="CodeProject C# 2_0 Nullable Data Readers_ Free source code and programming help_files/red.gif" 
+                              width=12 align=center 
+                      border=0></TD></TR></TBODY></TABLE></TD></TR>
+                    <TR id=ctl00_ArticleRating_PopularityRow>
+                      <TD class=SmallText align=right colSpan=2><A 
+                        id=ctl00_ArticleRating_PopularityLnk 
+                        title="Calculated as rating x Log10(# votes)" 
+                        href="http://www.codeproject.com/script/Articles/TopArticles.aspx?ta_so=1">Popularity: 
+                        7.04</A> <SPAN 
+                        id=ctl00_ArticleRating_PopularityLbl></SPAN><SPAN 
+                        id=ratingVal>Rating: <B>4.60</B> out of 
+                    5</SPAN></TD></TR></TBODY></TABLE></TD>
+                <TD>
+                  <DIV>
+                  <TABLE class=HistTable 
+                  title="Voting Distribution. Recent data only">
+                    <TBODY>
+                    <TR>
+                      <TD><IMG title="0 votes, 0.0%" height=1 
+                        alt="0 votes, 0.0%" src="" width=10 border=0><BR>1</TD>
+                      <TD><IMG title="1 vote, 2.9%" height=1 
+                        alt="1 vote, 2.9%" 
+                        src="CodeProject C# 2_0 Nullable Data Readers_ Free source code and programming help_files/pollcol.gif" 
+                        width=10 border=0><BR>2</TD>
+                      <TD><IMG title="2 votes, 5.9%" height=1 
+                        alt="2 votes, 5.9%" 
+                        src="CodeProject C# 2_0 Nullable Data Readers_ Free source code and programming help_files/pollcol.gif" 
+                        width=10 border=0><BR>3</TD>
+                      <TD><IMG title="3 votes, 8.8%" height=2 
+                        alt="3 votes, 8.8%" 
+                        src="CodeProject C# 2_0 Nullable Data Readers_ Free source code and programming help_files/pollcol.gif" 
+                        width=10 border=0><BR>4</TD>
+                      <TD><IMG title="28 votes, 82.4%" height=20 
+                        alt="28 votes, 82.4%" 
+                        src="CodeProject C# 2_0 Nullable Data Readers_ Free source code and programming help_files/pollcol.gif" 
+                        width=10 
+              border=0><BR>5</TD></TD></TR></TBODY></TABLE></DIV></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE>
+      <UL class=Callout id=ctl00_confirmError style="MARGIN-RIGHT: 20px">
+        <LI class=SmallText 
+        style="LIST-STYLE-IMAGE: url(/images/warning.gif)">You are signed up for 
+        one or more <A id=ctl00_SubscribeLink2 
+        href="http://www.codeproject.com/script/Membership/Subscribe.aspx?rp=%2fKB%2fdatabase%2fNullableReaders.aspx">newsletters</A> 
+        but your email address is either unconfirmed, or has not been 
+        reconfirmed in a long time. Please click <A id=ctl00_RequestConfirmLink2 
+        href="http://www.codeproject.com/script/Membership/SendConfirmRequest.aspx?rp=%2fKB%2fdatabase%2fNullableReaders.aspx">here</A> 
+        to have an email sent that will allow us to confirm your email address 
+        and start sending you newsletters again.</LI></UL><SPAN id=intelliTXT>
+      <DIV id=contentdiv><!-- Main Page Contents Start --><!-- Article Starts -->
+      <UL class=download>
+        <LI><A 
+        href="http://www.codeproject.com/KB/database/NullableReaders/NullableReaders.zip">Download 
+        source - 6.75 Kb</A> </LI></UL>
+      <H2>Introduction</H2>
+      <P>.NET 2.0 introduced nullable types into the CLR which, for the first 
+      time, provided the ability for value types to be assigned a null value. 
+      However, ADO.NET 2.0 did not introduce any new features specifically for 
+      dealing with nullable types. Therefore, one of the primary goals for the 
+      classes presented in this article is to provide a simple API for working 
+      with nullable types within the persistence layer.</P>
+      <P>There are three primary goals that the data readers will address.</P>
+      <UL>
+        <LI>Goal #1: Provide a simple, strongly-typed API for dealing with 
+        non-nullable types for <B>both</B> an <CODE>IDataReader</CODE> and a 
+        <CODE>DataRow</CODE>. 
+        <LI>Goal #2: Provide a simple, strongly-typed API for dealing with 
+        nullable types for <B>both</B> an <CODE>IDataReader</CODE> and a 
+        <CODE>DataRow</CODE>. 
+        <LI>Goal #3: Provide a unified interface so that the same code can be 
+        used polymorphically to consumer either an <CODE>IDataReader</CODE> or a 
+        <CODE>DataRow</CODE>. </LI></UL>
+      <H4>Goal #1</H4>
+      <P>Goal #1 is to provide a simple, unified, strongly-typed API for dealing 
+      with non-nullable types for <B>both</B> an <CODE>IDataReader</CODE> and a 
+      <CODE>DataRow</CODE>. The two features of the API are:</P>
+      <OL>
+        <LI>to be able to reference everything with a readable column name 
+        (rather than an ordinal), and 
+        <LI>have strongly-typed methods for everything to avoid 
+        casting/conversion code. </LI></OL>
+      <P>The <CODE>IDataReader</CODE> interface provides several convenient 
+      strongly-typed <CODE>GetXXX()</CODE> methods to access the data. The 
+      problem is that these methods require a cryptic ordinal rather than a 
+      readable column name. This results in data access code that looks like 
+      this:</P><PRE lang=cs>person.Age = reader.GetInt32(reader.GetOrdinal(<SPAN class=code-string>"</SPAN><SPAN class=code-string>Age"</SPAN>));</PRE>
+      <P>It would be much more convenient to write the method like this:</P><PRE lang=cs>person.Age = reader.GetInt32(<SPAN class=code-string>"</SPAN><SPAN class=code-string>Age"</SPAN>);</PRE>
+      <P>When working with a <CODE>DataRow</CODE>, the value returned is 
+      <CODE>System.<SPAN class=code-SDKkeyword>Object</SPAN></CODE> which means 
+      that you have to either pay the unboxing penalty by casting like this:</P><PRE lang=cs>person.Age = (<SPAN class=code-keyword>int</SPAN>)row[<SPAN class=code-string>"</SPAN><SPAN class=code-string>Age"</SPAN>];</PRE>
+      <P>or you have to using the <CODE>Convert</CODE> class like this:</P><PRE lang=cs>person.Age = Convert.ToInt32(row[<SPAN class=code-string>"</SPAN><SPAN class=code-string>Age"</SPAN>]);</PRE>
+      <P>It would be more convenient if you could access data from the 
+      <CODE>DataRow</CODE> via strongly-typed methods similar to the 
+      <CODE>IDataReader</CODE> without having to code the monotonous 
+      casting/conversion code.</P>
+      <H4>Goal #2</H4>
+      <P>Goal #2 is to provide a simple, strongly-typed API for dealing with 
+      nullable types. 
+      <P>The <CODE>IDataReader</CODE> provides no methods for dealing with 
+      nullable types. Therefore, to correctly populate nullable types, the data 
+      access code would have to be littered with procedural, error-prone code 
+      like this:</P><PRE lang=cs><SPAN class=code-keyword>if</SPAN> (reader.IsDBNull(reader.GetOrdinal(<SPAN class=code-string>"</SPAN><SPAN class=code-string>FiredDate"</SPAN>)))
+    person.FiredDate = <SPAN class=code-keyword>null</SPAN>;
+<SPAN class=code-keyword>else</SPAN>
+    person.FiredDate = 
+      reader.GetDateTime(reader.GetOrdinal(<SPAN class=code-string>"</SPAN><SPAN class=code-string>FiredDate"</SPAN>));</PRE>
+      <P>This is clearly not ideal – it would be best to have the same 
+      strongly-typed <CODE>GetXXX()</CODE> methods for nullable types.</P>
+      <H4>Goal #3</H4>
+      <P>Goal #3 is to provide a unified interface so that the same code can be 
+      used polymorphically to consume either an <CODE>IDataReader</CODE> or a 
+      <CODE>DataRow</CODE>.</P>
+      <P>The <CODE>IDataReader</CODE> and <CODE>DataRow</CODE> have very 
+      different APIs. In some instances, an application might require an object 
+      to be retrieved via an <CODE>IDataReader</CODE> for optimal performance. 
+      In other cases, the data might be retrieved as part of a 
+      <CODE>DataSet</CODE> (if it is part of a larger query). It would be ideal 
+      to be able to program against the same interface polymorphically in either 
+      case.</P>
+      <H2>INullableReader</H2>
+      <P>The <CODE>INullableReader</CODE> interface defines a contract that a 
+      class must implement in order to read both nullable and non-nullable data. 
+      This will not only provide a unified interface between an 
+      <CODE>IDataReader</CODE> and a <CODE>DataRow</CODE> but also it will allow 
+      the classes to be used polymorphically. The interface definition ensures 
+      that all of the <CODE>GetXXX()</CODE> methods from the 
+      <CODE>IDataReader</CODE> have corresponding <CODE>GetXXX()</CODE> methods 
+      that take a string (for the column name) instead of an ordinal. 
+      Additionally, each of these <CODE>GetXXX()</CODE> methods have 
+      <CODE>GetNullableXXX()</CODE> counterparts.</P>
+      <P>Interface definition:</P><PRE lang=cs><SPAN class=code-keyword>public</SPAN> <SPAN class=code-keyword>interface</SPAN> INullableReader
+{
+    <SPAN class=code-keyword>bool</SPAN> GetBoolean(<SPAN class=code-keyword>string</SPAN> name);
+    Nullable&lt;bool&gt; GetNullableBoolean(<SPAN class=code-keyword>string</SPAN> name);
+    <SPAN class=code-keyword>byte</SPAN> GetByte(<SPAN class=code-keyword>string</SPAN> name);
+    Nullable&lt;byte&gt; GetNullableByte(<SPAN class=code-keyword>string</SPAN> name);
+    <SPAN class=code-keyword>char</SPAN> GetChar(<SPAN class=code-keyword>string</SPAN> name);
+    Nullable&lt;char&gt; GetNullableChar(<SPAN class=code-keyword>string</SPAN> name);
+    DateTime GetDateTime(<SPAN class=code-keyword>string</SPAN> name);
+    Nullable&lt;DateTime&gt; GetNullableDateTime(<SPAN class=code-keyword>string</SPAN> name);
+    <SPAN class=code-keyword>decimal</SPAN> GetDecimal(<SPAN class=code-keyword>string</SPAN> name);
+    Nullable&lt;Decimal&gt; GetNullableDecimal(<SPAN class=code-keyword>string</SPAN> name);
+    <SPAN class=code-keyword>double</SPAN> GetDouble(<SPAN class=code-keyword>string</SPAN> name);
+    Nullable&lt;double&gt; GetNullableDouble(<SPAN class=code-keyword>string</SPAN> name);
+    <SPAN class=code-keyword>float</SPAN> GetFloat(<SPAN class=code-keyword>string</SPAN> name);
+    Nullable&lt;float&gt; GetNullableFloat(<SPAN class=code-keyword>string</SPAN> name);
+    Guid GetGuid(<SPAN class=code-keyword>string</SPAN> name);
+    Nullable&lt;Guid&gt; GetNullableGuid(<SPAN class=code-keyword>string</SPAN> name);
+    <SPAN class=code-keyword>short</SPAN> GetInt16(<SPAN class=code-keyword>string</SPAN> name);
+    Nullable&lt;short&gt; GetNullableInt16(<SPAN class=code-keyword>string</SPAN> name);
+    <SPAN class=code-keyword>int</SPAN> GetInt32(<SPAN class=code-keyword>string</SPAN> name);
+    Nullable&lt;int&gt; GetNullableInt32(<SPAN class=code-keyword>string</SPAN> name);
+    <SPAN class=code-keyword>long</SPAN> GetInt64(<SPAN class=code-keyword>string</SPAN> name);
+    Nullable&lt;long&gt; GetNullableInt64(<SPAN class=code-keyword>string</SPAN> name);
+    <SPAN class=code-keyword>string</SPAN> GetString(<SPAN class=code-keyword>string</SPAN> name);
+    <SPAN class=code-keyword>string</SPAN> GetNullableString(<SPAN class=code-keyword>string</SPAN> name);
+    <SPAN class=code-keyword>object</SPAN> GetValue(<SPAN class=code-keyword>string</SPAN> name);
+    <SPAN class=code-keyword>bool</SPAN> IsDBNull(<SPAN class=code-keyword>string</SPAN> name);
+}</PRE>
+      <P>Although this interface provides <CODE>GetValue()</CODE> and 
+      <CODE>IsDBNull()</CODE> methods, these are more for completeness, and will 
+      typically not be used in code.</P>
+      <H2>NullableDataReader</H2>
+      <P>The <CODE>NullableDataReader</CODE> implements the 
+      <CODE>INullableReader</CODE> interface and provides a wrapper around an 
+      <CODE>IDataReader</CODE> object. Therefore, this works with 
+      <CODE>SqlDataReader</CODE>, <CODE>OracleDataReader</CODE>, etc. There is 
+      even a new class in ADO.NET 2.0, called <CODE>DataTableReader</CODE>, 
+      which can be wrapped as well.</P>
+      <P>To instantiate a <CODE>NullableDataReader</CODE>, simply pass the 
+      <CODE>IDataReader</CODE> to the constructor. Example with the Enterprise 
+      Library Data Access block:</P><PRE lang=cs>dr = <SPAN class=code-keyword>new</SPAN> NullableDataReader(db.ExecuteReader(cmd));</PRE>
+      <P>Example with raw ADO.NET:</P><PRE lang=cs>dr = <SPAN class=code-keyword>new</SPAN> NullableDataReader(cmd.ExecuteReader());</PRE>
+      <P>To read values, simply refer to the column names:</P><PRE lang=cs>person.Age = dr.GetInt32(<SPAN class=code-string>"</SPAN><SPAN class=code-string>Age"</SPAN>);
+person.FiredDate = dr.GetNullableDateTime(<SPAN class=code-string>"</SPAN><SPAN class=code-string>FiredDate"</SPAN>);</PRE>
+      <P>The <CODE>NullableDataReader</CODE> also implements 
+      <CODE>IDataReader</CODE>. Therefore, the <CODE>NullableDataReader</CODE> 
+      can be used like any other data reader. For example:</P><PRE lang=cs><SPAN class=code-keyword>try</SPAN>
+{
+    <SPAN class=code-keyword>while</SPAN> (dr.Read())
+    {
+      Person person = <SPAN class=code-keyword>new</SPAN> Person();
+      person.Age = dr.GetInt32(<SPAN class=code-string>"</SPAN><SPAN class=code-string>Age"</SPAN>);
+      person.FiredDate = 
+        dr.GetNullableDateTime(<SPAN class=code-string>"</SPAN><SPAN class=code-string>FiredDate"</SPAN>);
+      personList.Add(person);
+    }
+}
+<SPAN class=code-keyword>finally</SPAN>
+{
+    dr.Dispose();
+}</PRE>
+      <P>The above code looks no different than that of any other data reader 
+      except:</P>
+      <OL>
+        <LI>the <CODE>GetInt32()</CODE> methods take a column name instead of an 
+        ordinal, and 
+        <LI>a <CODE>GetNullableDateTime()</CODE> method is available which is 
+        not present on a normal data reader. </LI></OL>
+      <H2>NullableDataRowReader</H2>
+      <P>The <CODE>NullableDataReader</CODE> also implements the 
+      <CODE>INullableReader</CODE> interface and provides a wrapper around a 
+      <CODE>DataRow</CODE> object. Because it provides all of the strongly-typed 
+      methods, the access code need not contain casts and conversions.</P>
+      <P>Instantiate a <CODE>NullableDataRow</CODE>, by passing a 
+      <CODE>DataRow</CODE> to the constructor, or by assigning the 
+      <CODE>DataRow</CODE> to the <CODE>Row</CODE> property.</P>
+      <P>If reading a single row, then passing a <CODE>DataRow</CODE> to the 
+      constructor is the simplest:</P><PRE lang=cs>NullableDataRowReader dr = <SPAN class=code-keyword>new</SPAN> NullableDataRowReader(row);
+person.Age = dr.GetInt32(<SPAN class=code-string>"</SPAN><SPAN class=code-string>Age"</SPAN>);
+person.FiredDate = dr.GetNullableDateTime(<SPAN class=code-string>"</SPAN><SPAN class=code-string>FiredDate"</SPAN>);</PRE>
+      <P>Notice, the access methods look identical to that of the 
+      <CODE>DataReader</CODE>.</P>
+      <P>If reading multiple rows (e.g., while iterating through a loop), then 
+      assigning the <CODE>DataRow</CODE> to the <CODE>Row</CODE> property is the 
+      simplest:</P><PRE lang=cs>NullableDataRowReader dr = <SPAN class=code-keyword>new</SPAN> NullableDataRowReader();
+<SPAN class=code-keyword>foreach</SPAN> (DataRow row <SPAN class=code-keyword>in</SPAN> dataTable.Rows)
+{
+    dr.Row = row;
+    Person person = <SPAN class=code-keyword>new</SPAN> Person();
+    person.Age = dr.GetInt32(<SPAN class=code-string>"</SPAN><SPAN class=code-string>Age"</SPAN>);
+    person.FiredDate = dr.GetNullableDateTime(<SPAN class=code-string>"</SPAN><SPAN class=code-string>FiredDate"</SPAN>);
+    personList.Add(person);
+}</PRE>
+      <P>In the above example, we just iterated all the rows of a 
+      <CODE>DataTable</CODE> for the sake of a simplistic example. In fact, in 
+      that example, you could simply use a <CODE>NullableDataReader</CODE> in 
+      conjunction with the new <CODE>DataTableReader</CODE>, like this:</P><PRE lang=cs>NullableDataReader dr = <SPAN class=code-keyword>new</SPAN> 
+   NullableDataReader(dataTable.CreateDataReader());</PRE>
+      <P>However, when working with <CODE>DataTable</CODE>s, we often want to 
+      filter and also utilize <CODE>GetChildRows()</CODE>, which makes the 
+      <CODE>NullableDataRowReader</CODE> extremely convenient.</P>
+      <H2>Polymorphic NullableReader</H2>
+      <P>In some cases, we may need to populate a business object with a 
+      <CODE>DataReader</CODE> (for optimal performance), and other times 
+      populate the same object with a <CODE>DataRow</CODE> (e.g., if retrieved 
+      in a multi-resultset <CODE>DataSet</CODE>). Rather than having to write 
+      two separate methods (one for the <CODE>NullableDataReader</CODE> and 
+      another for the <CODE>NullableDataRowReader</CODE>), one can program 
+      against the <CODE>INullableReader</CODE> interface polymorphically and 
+      write just a single method.</P><PRE lang=cs><SPAN class=code-keyword>public</SPAN> Address BuildItem(INullableReader dr)
+{
+    Address address = <SPAN class=code-keyword>new</SPAN> Address();
+
+    address.ID = dr.GetInt32(Params.AddressID);
+    address.StreetAddress1 = dr.GetString(Params.StreetAddress1);
+    address.StreetAddress2 = dr.GetString(Params.StreetAddress2);
+    address.City = dr.GetString(Params.City);
+    address.State = dr.GetString(Params.State);
+    address.ZipCode = dr.GetString(Params.ZipCode);
+
+    <SPAN class=code-keyword>return</SPAN> address;
+}</PRE>
+      <P>The <CODE>BuildItem()</CODE> method can be called in two different 
+      ways. First, with a <CODE>NullableDataReader</CODE>:</P><PRE lang=cs>NullableDataReader dr = <SPAN class=code-keyword>new</SPAN> 
+       NullableDataReader(db.ExecuteReader(cmd));
+person.Address = addressMapper.BuildItem(dr);</PRE>
+      <P>And secondly, with a <CODE>NullableDataRowReader</CODE>:</P><PRE lang=cs>NullableDataRowReader dr = <SPAN class=code-keyword>new</SPAN> 
+      NullableDataRowReader(addressTable.Rows[<SPAN class=code-digit>0</SPAN>]);
+person.Address = addressMapper.BuildItem(dr);</PRE>
+      <H2>Implementation Details</H2>
+      <P>Internally, the <CODE>NullableDataReader</CODE> and the 
+      <CODE>NullableDataRowReader</CODE> use many of the new C# 2.0 language 
+      features to produce concise, high-performance code. Specifically, they 
+      utilize:</P>
+      <OL>
+        <LI>generics, 
+        <LI>delegate inference, and of course 
+        <LI>nullable types. </LI></OL>
+      <P>Of course, to consume the data readers, the developer is not required 
+      to be aware of any of these implementation details.</P>
+      <P>To illustrate the internal implementation, we will examine the 
+      <CODE>GetInt32()</CODE> and <CODE>GetNullableInt32()</CODE> methods of the 
+      <CODE>NullableDataReader</CODE> class. Since the 
+      <CODE>NullableDataReader</CODE> wraps an <CODE>IDataReader</CODE> via its 
+      constructor as a private member, the <CODE>GetInt32()</CODE> method simply 
+      delegates this method call to the wrapped reader:</P><PRE lang=cs><SPAN class=code-keyword>public</SPAN> <SPAN class=code-keyword>int</SPAN> GetInt32(<SPAN class=code-keyword>int</SPAN> i)
+{
+    <SPAN class=code-keyword>return</SPAN> reader.GetInt32(i);
+}</PRE>
+      <P>To provide an overloaded method that takes a column name instead of an 
+      ordinal, the standard approach is used while shielding the implementation 
+      from the consumer:</P><PRE lang=cs><SPAN class=code-keyword>public</SPAN> <SPAN class=code-keyword>int</SPAN> GetInt32(<SPAN class=code-keyword>string</SPAN> name)
+{
+    <SPAN class=code-keyword>return</SPAN> reader.GetInt32(reader.GetOrdinal(name));
+}</PRE>
+      <P>Up to this point, we haven't done anything terribly interesting 
+      (although the new overload has provided considerable convenience). To 
+      provide two overloads to the <CODE>GetNullableInt32()</CODE> method, we 
+      could do this:</P><PRE lang=cs><SPAN class=code-keyword>public</SPAN> Nullable&lt;int&gt; GetNullableInt32(<SPAN class=code-keyword>string</SPAN> name)
+{
+    <SPAN class=code-keyword>return</SPAN> <SPAN class=code-keyword>this</SPAN>.GetNullableInt32(reader.GetOrdinal(name));
+}
+
+<SPAN class=code-keyword>public</SPAN> Nullable&lt;int&gt; GetNullableInt32(<SPAN class=code-keyword>int</SPAN> index)
+{
+    Nullable&lt;int&gt; nullable;
+    <SPAN class=code-keyword>if</SPAN> (reader.IsDBNull(index))
+    {
+        nullable = <SPAN class=code-keyword>null</SPAN>;
+    }
+    <SPAN class=code-keyword>else</SPAN>
+    {
+        nullable = GetInt32(index);
+    }
+    <SPAN class=code-keyword>return</SPAN> nullable;
+}</PRE>
+      <P>However, the problem here is that, while not complicated, the nullable 
+      assignment with the <CODE lang=cs><SPAN 
+      class=code-keyword>if</SPAN></CODE> statement in the second overload will 
+      essentially have to be duplicated in each <CODE>GetNullableXXX()</CODE> 
+      method for each of the different data types – the only differences 
+      being:</P>
+      <OL>
+        <LI>the type of nullable, and 
+        <LI>the method called (e.g., the <CODE>GetInt32()</CODE> method in the 
+        <CODE lang=cs><SPAN class=code-keyword>else</SPAN></CODE> block above). 
+        </LI></OL>
+      <P>To address this issue and produce code that is more concise and 
+      elegant, we can utilize a generic method that includes passing a delegate 
+      which we now have available as part of the C# 2.0 anonymous methods 
+      functionality. Therefore, we can simply create <B>one</B> method that 
+      performs the assignment:</P><PRE lang=cs><SPAN class=code-keyword>private</SPAN> Nullable&lt;T&gt; GetNullable&lt;T&gt;(<SPAN class=code-keyword>int</SPAN> ordinal, 
+            Conversion&lt;T&gt; convert) where T : <SPAN class=code-keyword>struct</SPAN>
+{
+    Nullable&lt;T&gt; nullable;
+    <SPAN class=code-keyword>if</SPAN> (reader.IsDBNull(ordinal))
+    {
+        nullable = <SPAN class=code-keyword>null</SPAN>;
+    }
+    <SPAN class=code-keyword>else</SPAN>
+    {
+        nullable = convert(ordinal);
+    }
+    <SPAN class=code-keyword>return</SPAN> nullable;
+}</PRE>
+      <P>First, notice that we are using a generic type and specified the 
+      constraint that <CODE>T</CODE> must be a value type (i.e., <CODE 
+      lang=cs><SPAN class=code-keyword>struct</SPAN></CODE>). Secondly, notice 
+      that the second argument of the method is actually a custom private 
+      delegate that was defined for our purposes:</P><PRE lang=cs><SPAN class=code-keyword>private</SPAN> <SPAN class=code-keyword>delegate</SPAN> T Conversion&lt;T&gt;(<SPAN class=code-keyword>int</SPAN> ordinal);</PRE>
+      <P>This makes it possible for all of the <CODE>GetNullableXXX()</CODE> 
+      methods to simply require a single line of code (rather than its own <CODE 
+      lang=cs><SPAN class=code-keyword>if</SPAN></CODE> statement):</P><PRE lang=cs><SPAN class=code-keyword>public</SPAN> Nullable<INT> GetNullableInt32(<SPAN class=code-keyword>int</SPAN> index)
+{
+    <SPAN class=code-keyword>return</SPAN> GetNullable<INT>(index, GetInt32);
+}</PRE>
+      <P>Notice that the second argument called is actually utilizing C# 2.0 
+      delegate inference, and specifying that the normal <CODE>GetInt32()</CODE> 
+      method should be invoked in order to make the assignment in the case where 
+      the value is not <CODE>DBNull</CODE>.</P>
+      <P>Having the ability to utilize the same method for every 
+      <CODE>GetNullableXXX()</CODE> method results in code that is more concise, 
+      less error-prone, and more maintainable.</P><!-- Article Ends --><!-- Main Page Contents End --></DIV></SPAN>
+      <FORM id=aspnetForm 
+      style="PADDING-RIGHT: 0px; PADDING-LEFT: 0px; PADDING-BOTTOM: 0px; MARGIN: 0px; PADDING-TOP: 0px" 
+      name=aspnetForm action=NullableReaders.aspx method=post>
+      <DIV><INPUT id=__VIEWSTATE type=hidden 
+      value=/wEPDwULLTEwMDUyNjYzMjhkZGodHLF62JHj05Fgp2dmuXRkdCuY 
+      name=__VIEWSTATE> </DIV>
+      <H2>License</H2>
+      <DIV id=ctl00_LicenseTerms>
+      <P>This article has no explicit license attached to it but may contain 
+      usage terms in the article text or the download files themselves. If in 
+      doubt please contact the author via the discussion board below.</P>
+      <P>A list of licenses authors might use can be found <A 
+      href="http://www.codeproject.com/info/Licenses.aspx">here</A></P></DIV>
+      <H2>About the Author</H2>
+      <TABLE cellSpacing=5 cellPadding=0 width="100%" border=0>
+        <TBODY>
+        <TR vAlign=top>
+          <TD id=ctl00_AboutAuthorRptr_ctl00_AboutAuthor_memberPhotoTable 
+          style="WIDTH: 155px" vAlign=top><B><A 
+            id=ctl00_AboutAuthorRptr_ctl00_AboutAuthor_memberProfileLink 
+            href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=1074402">Steve 
+            Michelotti</A></B><BR><BR>
+            <CENTER></CENTER><BR><SPAN class=SmallText 
+            id=ctl00_AboutAuthorRptr_ctl00_AboutAuthor_memberType></SPAN></TD>
+          <TD>Steve Michelotti, MCSD, MCT is Principal Developer at 
+            e.magination in Baltimore - www.emagination.com.<BR><BR>
+            <TABLE>
+              <TBODY>
+              <TR id=ctl00_AboutAuthorRptr_ctl00_AboutAuthor_jobTitleRow>
+                <TD class=SmallText noWrap>Occupation: </TD>
+                <TD width="100%"><SPAN class=SmallText 
+                  id=ctl00_AboutAuthorRptr_ctl00_AboutAuthor_memberJobTitle>Web 
+                  Developer</SPAN></TD></TR>
+              <TR id=ctl00_AboutAuthorRptr_ctl00_AboutAuthor_locationRow>
+                <TD class=SmallText>Location: </TD>
+                <TD width="100%"><SPAN class=SmallText 
+                  id=ctl00_AboutAuthorRptr_ctl00_AboutAuthor_memberLocation><IMG 
+                  height=11 alt="United States" 
+                  src="CodeProject C# 2_0 Nullable Data Readers_ Free source code and programming help_files/US.gif" 
+                  width=16> United 
+        States</SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE><BR>
+      <TABLE id=ctl00_PopularArticlesRow cellSpacing=0 cellPadding=0 
+      width="100%" border=0>
+        <TBODY>
+        <TR vAlign=top>
+          <TD style="WIDTH: 100%">
+            <H2>Other popular Database articles:</H2>
+            <UL>
+              <LI><A 
+              href="http://www.codeproject.com/KB/database/caaadoclass1.aspx">A 
+              set of ADO classes - version 2.20</A>
+              <DIV class=SmallText>Simple database access using an ADO 
+              class.</DIV>
+              <LI><A 
+              href="http://www.codeproject.com/KB/database/filehelpers.aspx">FileHelpers 
+              v2.0 - Delimited (CSV) or Fixed Data Import/Export Framework</A>
+              <DIV class=SmallText>An easy to use .NET library to read/write 
+              strong typed data from files with fixed length or delimited 
+              records (CSV). Also has support to import/export data from 
+              different data storages (Excel, Acces, SqlServer, MySql)</DIV>
+              <LI><A 
+              href="http://www.codeproject.com/KB/database/sqldodont.aspx">SQL 
+              Server DO's and DONT's</A>
+              <DIV class=SmallText>SQL Server database best practices</DIV>
+              <LI><A 
+              href="http://www.codeproject.com/KB/database/connectionstrings.aspx">ADO 
+              Connection Strings</A>
+              <DIV class=SmallText>A list of ODBC DSN Connection Strings.</DIV>
+              <LI><A 
+              href="http://www.codeproject.com/KB/database/DynamicMethod_ILGenerator.aspx">Dynamic... 
+              but fast: The tale of three monkeys, a wolf and the DynamicMethod 
+              and ILGenerator classes</A>
+              <DIV class=SmallText>How to use the DynamicMethod and ILGenerator 
+              classes to create dynamic code at runtime that out performs 
+              reflection</DIV></LI></UL>
+            <H2></H2></TD>
+          <TD><IFRAME 
+            src="C:\Documents and Settings\valley\Desktop\New Folder\CodeProject C# 2_0 Nullable Data Readers_ Free source code and programming help_files\ServeHTML(1).htm" 
+            frameBorder=0 width=300 scrolling=no 
+        height=250></IFRAME></TD></TR></TBODY></TABLE>
+      <DIV id=ctl00_AddTo_AddTo style="MARGIN: 10px">
+      <SCRIPT language=JavaScript type=text/javascript>
+var addtoMethod=1;
+var AddURL = document.location.href;
+var AddTitle = escape(document.title);
+DrawLinks(100, 0, "SmallText Bold", "AddTo") 
+</SCRIPT>
+      </DIV>
+      <TABLE class=RatingBar id=ctl00_RateArticleRow cellSpacing=0 cellPadding=0 
+      width="100%" border=0>
+        <TBODY>
+        <TR>
+          <TD><A 
+            href="http://www.codeproject.com/KB/database/NullableReaders.aspx#_top">Article 
+            Top</A></TD>
+          <TD align=right>
+            <TABLE cellSpacing=0 cellPadding=0 width="100%">
+              <TBODY>
+              <TR>
+                <TD id=ctl00_RateArticle_VoteResultDiv noWrap align=right 
+                width="100%"><SPAN id=voteRes></SPAN><IMG id=loaderImg 
+                  style="DISPLAY: none" height=16 alt=loading... 
+                  src="CodeProject C# 2_0 Nullable Data Readers_ Free source code and programming help_files/ajax-loader.gif" 
+                  width=16> </TD>
+                <TD class=SmallText id=voteTbl style="WHITE-SPACE: nowrap" 
+                align=right>
+                  <TABLE>
+                    <TBODY>
+                    <TR>
+                      <TD id=ctl00_RateArticle_RateText 
+                      style="PADDING-RIGHT: 5px; WHITE-SPACE: nowrap"><I><B>Rate 
+                        this Article for us!</B></I></TD>
+                      <TD id=ctl00_RateArticle_StartForm 
+                        align=right><I>&nbsp;&nbsp;Poor</I></TD>
+                      <TD id=ctl00_RateArticle_VoteFormDiv 
+                      style="WHITE-SPACE: nowrap" align=left>
+                        <TABLE id=ctl00_RateArticle_VoteRBL border=0>
+                          <TBODY>
+                          <TR>
+                            <TD><INPUT id=ctl00_RateArticle_VoteRBL_0 
+                              type=radio value=1 
+                            name=ctl00$RateArticle$VoteRBL></TD>
+                            <TD><INPUT id=ctl00_RateArticle_VoteRBL_1 
+                              type=radio value=2 
+                            name=ctl00$RateArticle$VoteRBL></TD>
+                            <TD><INPUT id=ctl00_RateArticle_VoteRBL_2 
+                              type=radio value=3 
+                            name=ctl00$RateArticle$VoteRBL></TD>
+                            <TD><INPUT id=ctl00_RateArticle_VoteRBL_3 
+                              type=radio value=4 
+                            name=ctl00$RateArticle$VoteRBL></TD>
+                            <TD><INPUT id=ctl00_RateArticle_VoteRBL_4 
+                              type=radio value=5 
+                            name=ctl00$RateArticle$VoteRBL></TD></TR></TBODY></TABLE></TD>
+                      <TD id=ctl00_RateArticle_EndForm noWrap 
+                        align=left><I>Excellent</I> <INPUT class=FormButton id=ctl00_RateArticle_SubmitRateBtn onclick="return rateItem(12778,2);" type=submit value=Vote name=ctl00$RateArticle$SubmitRateBtn> 
+                      </TD>
+                      <TD><SPAN 
+                    id=ctl00_RateArticle_ErrorMessage></SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE>
+      <DIV><INPUT id=__EVENTVALIDATION type=hidden 
+      value=/wEWCALL05WzBgLAlMXDBwLBlMXDBwLClMXDBwLDlMXDBwLElMXDBwLP+++tCwK5upDkC2lVJEic3ILn4JmmxDfHyd8BpAXs 
+      name=__EVENTVALIDATION> </DIV></FORM>
+      <DIV 
+      style="PADDING-RIGHT: 10px; PADDING-LEFT: 10px; PADDING-BOTTOM: 10px; OVERFLOW: hidden; PADDING-TOP: 10px; WHITE-SPACE: nowrap; TEXT-ALIGN: center">
+      <SCRIPT type=text/javascript>document.write(unescape("%3ca%20href%3d%22http%3a%2f%2fwww.codeproject.com%2fRedir.aspx%3fadid%3d6400%26way%3dban%22%20target%3d%22_blank%22%20rel%3d%22nofollow%22%3e%3cimg%20src%3d%22http%3a%2f%2fwww.codeproject.com%2fscript%2fAnn%2fServeImg.aspx%3fFile%3d%252fscript%252fadmentor%252fimages%252fteleatlas_46860.gif%26C%3dFalse%26id%3d6400%22%20alt%3d%22%22%20border%3d%220%22%20width%3d%22468%22%20height%3d%2260%22%3e%3c%2fa%3e"));</SCRIPT>
+      <IFRAME 
+      src="CodeProject C# 2_0 Nullable Data Readers_ Free source code and programming help_files/ServeLinks.htm" 
+      frameBorder=0 width=300 scrolling=no height=60></IFRAME></DIV><A 
+      name=_comments></A><!-- Forum Start -->
+      <DIV id=_MessageBoard onclick="return SwitchMessage(event, null)">
+      <TABLE class=Frm_MainTable id=ForumTable cellSpacing=0 cellPadding=0>
+        <TBODY>
+        <TR>
+          <TD>
+            <FORM 
+            style="PADDING-RIGHT: 0px; PADDING-LEFT: 0px; PADDING-BOTTOM: 0px; MARGIN: 0px; PADDING-TOP: 0px" 
+            action=/script/Forums/SetOptions.aspx?floc=%2fKB%2fdatabase%2fNullableReaders.aspx&amp;fid=258682 
+            method=get><INPUT type=hidden value=258682 name=fid><INPUT 
+            type=hidden 
+            value=?floc=%2fKB%2fdatabase%2fNullableReaders.aspx&amp;fid=258682 
+            name=currentQS><INPUT type=hidden 
+            value=/KB/database/NullableReaders.aspx name=floc>
+            <TABLE cellSpacing=0 cellPadding=3 width="100%" border=0>
+              <TBODY>
+              <TR class=Frm_HeaderRow1>
+                <TD style="WHITE-SPACE: nowrap"><IMG height=16 alt=FAQ 
+                  src="CodeProject C# 2_0 Nullable Data Readers_ Free source code and programming help_files/forum_faq.gif" 
+                  width=16 align=middle border=0>&nbsp;<A 
+                  href="http://www.codeproject.com/script/Forums/FAQ.aspx"><B>FAQ</B></A>&nbsp;</TD>
+                <TD style="WHITE-SPACE: nowrap; TEXT-ALIGN: right">Noise 
+                  Tolerance<SELECT class=Frm_DropDown size=1 name=noise> 
+                    <OPTION value=1>Very High</OPTION><OPTION 
+                    value=2>High</OPTION><OPTION value=3 
+                    selected>Medium</OPTION><OPTION value=4>Low</OPTION><OPTION 
+                    value=5>Very Low</OPTION></SELECT></TD>
+                <TD style="WHITE-SPACE: nowrap; TEXT-ALIGN: right" 
+                  colSpan=2><IMG height=15 alt=Search 
+                  src="CodeProject C# 2_0 Nullable Data Readers_ Free source code and programming help_files/forum_search.gif" 
+                  width=16 align=top border=0>&nbsp;<A 
+                  href="http://www.codeproject.com/script/Forums/Search.aspx?fid=258682">Search 
+                  Messages</A>&nbsp;</TD>
+                <TD style="TEXT-ALIGN: right"><INPUT class=Frm_Button type=submit value="Set Options" name=submit></TD></TR>
+              <TR class=Frm_HeaderRow2>
+                <TD style="WIDTH: 100%">&nbsp;</TD>
+                <TD 
+                  style="WHITE-SPACE: nowrap; TEXT-ALIGN: right">Layout<SELECT 
+                  class=Frm_DropDown size=1 name=view> <OPTION value=Quick 
+                    selected>Normal</OPTION><OPTION value=Topic>Expand Root 
+                    Messages</OPTION><OPTION value=Expanded>Expand All 
+                    Messages</OPTION><OPTION value=Thread>Thread 
+                    View</OPTION><OPTION value=Normal>No Javascript 
+                    (slow)</OPTION><OPTION value=Preview>No Javascript 
+                    Preview</OPTION></SELECT>&nbsp;&nbsp;</TD>
+                <TD style="WHITE-SPACE: nowrap">Per page<SELECT 
+                  class=Frm_DropDown size=1 name=mpp> <OPTION 
+                    value=10>10</OPTION><OPTION value=25 
+                    selected>25</OPTION><OPTION 
+                  value=50>50</OPTION></SELECT>&nbsp;&nbsp;</TD>
+                <TD colSpan=2>&nbsp;</TD></TR></TBODY></TABLE></FORM></TD></TR>
+        <TR>
+          <TD><A name=xx0xx></A>
+            <TABLE cellSpacing=0 cellPadding=2 width="100%" border=0>
+              <TBODY>
+              <TR class=Frm_NavigationBar>
+                <TD><IMG height=16 alt=new 
+                  src="CodeProject C# 2_0 Nullable Data Readers_ Free source code and programming help_files/forum_newmsg.gif" 
+                  width=16 align=top border=0><A class=Frm_HL 
+                  title="Create a new message thread" 
+                  href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=258682&amp;floc=/KB/database/NullableReaders.aspx" 
+                  target=_top name=Frm_HoverNL><B>New Message</B></A></TD>
+                <TD>Msgs 1 to 15 of 15 (Total in Forum: 15) (<A 
+                  href="http://www.codeproject.com/KB/database/NullableReaders.aspx?fid=258682">Refresh</A>)</TD>
+                <TD style="WHITE-SPACE: nowrap; TEXT-ALIGN: right"><SPAN 
+                  class=Frm_HL>First</SPAN><SPAN class=Frm_HL>Prev</SPAN><SPAN 
+                  class=Frm_HL>Next</SPAN></TD></TR></TBODY></TABLE></TD></TR>
+        <TR>
+          <TD>
+            <TABLE class=Frm_MsgTable cellSpacing=0 cellPadding=0 width="100%" 
+            border=0><!-- Column Headers -->
+              <TBODY>
+              <TR class=Frm_ColumnHeaders>
+                <TD style="WIDTH: 100%">
+                  <TABLE cellSpacing=0 cellPadding=2 width="100%" border=0>
+                    <TBODY>
+                    <TR>
+                      <TD>Subject&nbsp;</TD>
+                      <TD class=Frm_MsgAuthor>&nbsp;Author&nbsp;</TD>
+                      <TD 
+              class=Frm_MsgDate>Date&nbsp;</TD></TR></TBODY></TABLE></TD></TR>
+              <TR>
+                <TD><IMG height=5 alt="" 
+                  src="C:\Documents and Settings\valley\Desktop\New Folder\CodeProject C# 2_0 Nullable Data Readers_ Free source code and programming help_files\t(1).gif" 
+                  width=1 border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd HiVote Rt HdUnSel " id=F2059066_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=16><A 
+                        name=xx2059066xx></A><IMG height=16 alt=General 
+                        src="CodeProject C# 2_0 Nullable Data Readers_ Free source code and programming help_files/msg_general.gif" 
+                        width=16 align=top></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/database/NullableReaders.aspx?fid=258682&amp;select=2059066#xx2059066xx" 
+                        name=2059066>Nullable writer</A></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        title=member height=16 alt=member 
+                        src="CodeProject C# 2_0 Nullable Data Readers_ Free source code and programming help_files/member_sm.gif" 
+                        border=0></TD>
+                      <TD class=Frm_MsgAuthor><A 
+                        href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=958791">Edwin 
+                        Engelen</A></TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">23:14 
+                        29 May '07 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=F2059066_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 16px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2>This INullableReader interface 
+                                look great and I think I'm gonna use it to read 
+                                data from a database into my 
+                                application.<BR>However, I also want to 
+                                <B>write</B> nullables back to the database 
+                                using a DataTable/DataSet and a DataAdapter. 
+                                Should I write my own NullableWriter to 
+                                accomplish this, or is there a better solution? 
+                                <BR><BR>Thanks in 
+advance,<BR>Edwin<BR></TD></TR>
+                                <TR style="VERTICAL-ALIGN: middle">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL title=Reply 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=258682&amp;select=2059066&amp;floc=/KB/database/NullableReaders.aspx&amp;fa=r">Reply</A>·<A 
+                                class=Frm_MHL title=Email 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=258682&amp;select=2059066&amp;floc=/KB/database/NullableReaders.aspx&amp;fa=e">Email</A>·<A 
+                                class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/database/NullableReaders.aspx?fid=258682&amp;tid=2059066">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=258682&amp;msg=2059066">PermaLink</A>·<A 
+                                class=Frm_MHL title="Bookmark this post" 
+                                href="http://www.codeproject.com/script/Bookmarks/Add.aspx?&amp;obid=2059066&amp;obtid=3&amp;bma=AddBookmark">Bookmark</A></TD>
+                                <TD class=Frm_MsgFt 
+                                style="TEXT-ALIGN: right"><SPAN id=MVF2059066 
+                                style="WHITE-SPACE: nowrap">5.00/5 (1 vote)
+                                <SCRIPT type=text/javascript>
+												MsgVoteForm(958791,2059066,false,"","","");
+											</SCRIPT>
+                                 
+                        </SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR class=Quick>
+                <TD class=Frm_MsgRtDivide><IMG height=1 alt="" 
+                  src="C:\Documents and Settings\valley\Desktop\New Folder\CodeProject C# 2_0 Nullable Data Readers_ Free source code and programming help_files\t(1).gif" 
+                  width=1 border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd LoVote Rt HdUnSel " id=F1944225_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=16><A 
+                        name=xx1944225xx></A><IMG height=16 alt=General 
+                        src="CodeProject C# 2_0 Nullable Data Readers_ Free source code and programming help_files/msg_general.gif" 
+                        width=16 align=top></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/database/NullableReaders.aspx?fid=258682&amp;select=1944225#xx1944225xx" 
+                        name=1944225>SafeDataReader</A></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        title=member height=16 alt=member 
+                        src="CodeProject C# 2_0 Nullable Data Readers_ Free source code and programming help_files/member_sm.gif" 
+                        border=0></TD>
+                      <TD class=Frm_MsgAuthor><A 
+                        href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=89420">rohancragg</A></TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">3:06 16 
+                        Mar '07 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=F1944225_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 16px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2>Readers<IMG title="Poke tongue" 
+                                src="CodeProject C# 2_0 Nullable Data Readers_ Free source code and programming help_files/smiley_tongue.gif" 
+                                align=top>may be interested to know that Rocky 
+                                Lhotka does pretty much the same thing with the 
+                                'SafeDataReader' in his CSLA.Net framework. 
+                                Ineresting though that you've extended this to 
+                                DataRow... <BR></TD></TR>
+                                <TR style="VERTICAL-ALIGN: middle">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL title=Reply 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=258682&amp;select=1944225&amp;floc=/KB/database/NullableReaders.aspx&amp;fa=r">Reply</A>·<A 
+                                class=Frm_MHL title=Email 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=258682&amp;select=1944225&amp;floc=/KB/database/NullableReaders.aspx&amp;fa=e">Email</A>·<A 
+                                class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/database/NullableReaders.aspx?fid=258682&amp;tid=1944225">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=258682&amp;msg=1944225">PermaLink</A>·<A 
+                                class=Frm_MHL title="Bookmark this post" 
+                                href="http://www.codeproject.com/script/Bookmarks/Add.aspx?&amp;obid=1944225&amp;obtid=3&amp;bma=AddBookmark">Bookmark</A></TD>
+                                <TD class=Frm_MsgFt 
+                                style="TEXT-ALIGN: right"><SPAN id=MVF1944225 
+                                style="WHITE-SPACE: nowrap">1.80/5 (2 votes)
+                                <SCRIPT type=text/javascript>
+												MsgVoteForm(89420,1944225,false,"","","");
+											</SCRIPT>
+                                 
+                        </SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR class=Quick>
+                <TD class=Frm_MsgRtDivide><IMG height=1 alt="" 
+                  src="C:\Documents and Settings\valley\Desktop\New Folder\CodeProject C# 2_0 Nullable Data Readers_ Free source code and programming help_files\t(1).gif" 
+                  width=1 border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd LoVote Rt HdUnSel " id=F1824825_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=16><A 
+                        name=xx1824825xx></A><IMG height=16 alt=General 
+                        src="CodeProject C# 2_0 Nullable Data Readers_ Free source code and programming help_files/msg_general.gif" 
+                        width=16 align=top></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/database/NullableReaders.aspx?fid=258682&amp;select=1824825#xx1824825xx" 
+                        name=1824825>Datetime</A></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        title=member height=16 alt=member 
+                        src="CodeProject C# 2_0 Nullable Data Readers_ Free source code and programming help_files/member_sm.gif" 
+                        border=0></TD>
+                      <TD class=Frm_MsgAuthor><A 
+                        href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=2068219">aon14</A></TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">7:11 2 
+                        Jan '07 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=F1824825_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 16px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2>I just tried this out with a 
+                                sqldatareader<BR>I get an error for a datetime 
+                                field.<BR><BR>Cannot implicitly convert type 
+                                'System.DateTime?' to 'System.DateTime'. An 
+                                explicit conversion exists (are you missing a 
+                                cast?)<BR><BR>public IList<PEOPLE> 
+                                GetPeople()<BR>{<BR>IList<PEOPLE> People1 = new 
+                                List<PEOPLE>();<BR>using (SqlConnection sqlConn 
+                                = new 
+                                SqlConnection(DB.connString))<BR>{<BR>sqlConn.Open();<BR>SqlCommand 
+                                sqlCmd = 
+                                sqlConn.CreateCommand();<BR>sqlCmd.CommandText = 
+                                "select UserId, NetworkID, etc etc from 
+                                People";<BR>using (NullableDataReader reader = 
+                                new 
+                                NullableDataReader(sqlCmd.ExecuteReader()))<BR>{<BR>while 
+                                (reader.Read())<BR>{<BR>People c = new 
+                                People();<BR>c.UserId = 
+                                reader.GetString("UserId");<BR>c.NetworkID = 
+                                reader.GetString("NetworkID");<BR>//etc all fine 
+                                until compiler sees: <BR>c.LeavingDate = 
+                                reader.GetNullableDateTime("LeavingDate");<BR>^^^^^^<BR>People1.Add(c);<BR>}<BR>return 
+                                People1;<BR>}<BR>}<BR>}<BR>} <BR></TD></TR>
+                                <TR style="VERTICAL-ALIGN: middle">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL title=Reply 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=258682&amp;select=1824825&amp;floc=/KB/database/NullableReaders.aspx&amp;fa=r">Reply</A>·<A 
+                                class=Frm_MHL title=Email 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=258682&amp;select=1824825&amp;floc=/KB/database/NullableReaders.aspx&amp;fa=e">Email</A>·<A 
+                                class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/database/NullableReaders.aspx?fid=258682&amp;tid=1824825">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=258682&amp;msg=1824825">PermaLink</A>·<A 
+                                class=Frm_MHL title="Bookmark this post" 
+                                href="http://www.codeproject.com/script/Bookmarks/Add.aspx?&amp;obid=1824825&amp;obtid=3&amp;bma=AddBookmark">Bookmark</A></TD>
+                                <TD class=Frm_MsgFt 
+                                style="TEXT-ALIGN: right"><SPAN id=MVF1824825 
+                                style="WHITE-SPACE: nowrap">1.20/5 (2 votes)
+                                <SCRIPT type=text/javascript>
+												MsgVoteForm(2068219,1824825,false,"","","");
+											</SCRIPT>
+                                 
+                        </SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR class=Quick>
+                <TD class=Frm_MsgDivide><IMG height=1 alt="" 
+                  src="C:\Documents and Settings\valley\Desktop\New Folder\CodeProject C# 2_0 Nullable Data Readers_ Free source code and programming help_files\t(1).gif" 
+                  width=1 border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd HdUnSel " id=F1824877_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=34><A 
+                        name=xx1824877xx></A><IMG height=16 alt=General 
+                        src="CodeProject C# 2_0 Nullable Data Readers_ Free source code and programming help_files/msg_general.gif" 
+                        width=16 align=top></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/database/NullableReaders.aspx?fid=258682&amp;select=1824877#xx1824877xx" 
+                        name=1824877>Re: Datetime</A></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        title=member height=16 alt=member 
+                        src="CodeProject C# 2_0 Nullable Data Readers_ Free source code and programming help_files/member_sm.gif" 
+                        border=0></TD>
+                      <TD class=Frm_MsgAuthor><A 
+                        href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=2068219">aon14</A></TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">7:47 2 
+                        Jan '07 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=F1824877_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 34px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2>Damn, Found the problem.<BR>Helps 
+                                if your fields are declared as nullable..... 
+                                <IMG title=Sniff 
+                                src="CodeProject C# 2_0 Nullable Data Readers_ Free source code and programming help_files/smiley_sniff.gif" 
+                                align=top> <BR></TD></TR>
+                                <TR style="VERTICAL-ALIGN: middle">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL title=Reply 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=258682&amp;select=1824877&amp;floc=/KB/database/NullableReaders.aspx&amp;fa=r">Reply</A>·<A 
+                                class=Frm_MHL title=Email 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=258682&amp;select=1824877&amp;floc=/KB/database/NullableReaders.aspx&amp;fa=e">Email</A>·<A 
+                                class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/database/NullableReaders.aspx?fid=258682&amp;tid=1824825">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=258682&amp;msg=1824877">PermaLink</A>·<A 
+                                class=Frm_MHL title="Bookmark this post" 
+                                href="http://www.codeproject.com/script/Bookmarks/Add.aspx?&amp;obid=1824877&amp;obtid=3&amp;bma=AddBookmark">Bookmark</A></TD>
+                                <TD class=Frm_MsgFt 
+                                style="TEXT-ALIGN: right"><SPAN id=MVF1824877 
+                                style="WHITE-SPACE: nowrap">
+                                <SCRIPT type=text/javascript>
+												MsgVoteForm(2068219,1824877,false,"","","");
+											</SCRIPT>
+                                </SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR class=Quick>
+                <TD class=Frm_MsgRtDivide><IMG height=1 alt="" 
+                  src="C:\Documents and Settings\valley\Desktop\New Folder\CodeProject C# 2_0 Nullable Data Readers_ Free source code and programming help_files\t(1).gif" 
+                  width=1 border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd Rt HdUnSel " id=F1694634_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=16><A 
+                        name=xx1694634xx></A><IMG height=16 alt=General 
+                        src="CodeProject C# 2_0 Nullable Data Readers_ Free source code and programming help_files/msg_general.gif" 
+                        width=16 align=top></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/database/NullableReaders.aspx?fid=258682&amp;select=1694634#xx1694634xx" 
+                        name=1694634>Thanks! EOM</A></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        title=member height=16 alt=member 
+                        src="CodeProject C# 2_0 Nullable Data Readers_ Free source code and programming help_files/member_sm.gif" 
+                        border=0></TD>
+                      <TD class=Frm_MsgAuthor><A 
+                        href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=2069195">jonpdar</A></TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">15:22 2 
+                        Oct '06 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=F1694634_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 16px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2>- <BR></TD></TR>
+                                <TR style="VERTICAL-ALIGN: middle">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL title=Reply 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=258682&amp;select=1694634&amp;floc=/KB/database/NullableReaders.aspx&amp;fa=r">Reply</A>·<A 
+                                class=Frm_MHL title=Email 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=258682&amp;select=1694634&amp;floc=/KB/database/NullableReaders.aspx&amp;fa=e">Email</A>·<A 
+                                class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/database/NullableReaders.aspx?fid=258682&amp;tid=1694634">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=258682&amp;msg=1694634">PermaLink</A>·<A 
+                                class=Frm_MHL title="Bookmark this post" 
+                                href="http://www.codeproject.com/script/Bookmarks/Add.aspx?&amp;obid=1694634&amp;obtid=3&amp;bma=AddBookmark">Bookmark</A></TD>
+                                <TD class=Frm_MsgFt 
+                                style="TEXT-ALIGN: right"><SPAN id=MVF1694634 
+                                style="WHITE-SPACE: nowrap">
+                                <SCRIPT type=text/javascript>
+												MsgVoteForm(2069195,1694634,false,"","","");
+											</SCRIPT>
+                                </SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR class=Quick>
+                <TD class=Frm_MsgRtDivide><IMG height=1 alt="" 
+                  src="C:\Documents and Settings\valley\Desktop\New Folder\CodeProject C# 2_0 Nullable Data Readers_ Free source code and programming help_files\t(1).gif" 
+                  width=1 border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd Rt HdUnSel " id=F1370439_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=16><A 
+                        name=xx1370439xx></A><IMG height=16 alt=General 
+                        src="CodeProject C# 2_0 Nullable Data Readers_ Free source code and programming help_files/msg_general.gif" 
+                        width=16 align=top></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/database/NullableReaders.aspx?fid=258682&amp;select=1370439#xx1370439xx" 
+                        name=1370439>Life...</A></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        title=member height=16 alt=member 
+                        src="CodeProject C# 2_0 Nullable Data Readers_ Free source code and programming help_files/member_sm.gif" 
+                        border=0></TD>
+                      <TD class=Frm_MsgAuthor><A 
+                        href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=1923645">Brentlee</A></TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">5:37 14 
+                        Feb '06 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=F1370439_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 16px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2>...saver! <BR></TD></TR>
+                                <TR style="VERTICAL-ALIGN: middle">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL title=Reply 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=258682&amp;select=1370439&amp;floc=/KB/database/NullableReaders.aspx&amp;fa=r">Reply</A>·<A 
+                                class=Frm_MHL title=Email 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=258682&amp;select=1370439&amp;floc=/KB/database/NullableReaders.aspx&amp;fa=e">Email</A>·<A 
+                                class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/database/NullableReaders.aspx?fid=258682&amp;tid=1370439">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=258682&amp;msg=1370439">PermaLink</A>·<A 
+                                class=Frm_MHL title="Bookmark this post" 
+                                href="http://www.codeproject.com/script/Bookmarks/Add.aspx?&amp;obid=1370439&amp;obtid=3&amp;bma=AddBookmark">Bookmark</A></TD>
+                                <TD class=Frm_MsgFt 
+                                style="TEXT-ALIGN: right"><SPAN id=MVF1370439 
+                                style="WHITE-SPACE: nowrap">
+                                <SCRIPT type=text/javascript>
+												MsgVoteForm(1923645,1370439,false,"","","");
+											</SCRIPT>
+                                </SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR class=Quick>
+                <TD class=Frm_MsgRtDivide><IMG height=1 alt="" 
+                  src="C:\Documents and Settings\valley\Desktop\New Folder\CodeProject C# 2_0 Nullable Data Readers_ Free source code and programming help_files\t(1).gif" 
+                  width=1 border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd LoVote Rt HdUnSel " id=F1358852_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=16><A 
+                        name=xx1358852xx></A><IMG height=16 alt=General 
+                        src="CodeProject C# 2_0 Nullable Data Readers_ Free source code and programming help_files/msg_general.gif" 
+                        width=16 align=top></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/database/NullableReaders.aspx?fid=258682&amp;select=1358852#xx1358852xx" 
+                        name=1358852>How to handle row versions?</A></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        title=member height=16 alt=member 
+                        src="CodeProject C# 2_0 Nullable Data Readers_ Free source code and programming help_files/member_sm.gif" 
+                        border=0></TD>
+                      <TD class=Frm_MsgAuthor><A 
+                        href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=1697923">jaycgibson</A></TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">17:05 3 
+                        Feb '06 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=F1358852_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 16px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2>I currently have code that 
+                                enumerates changes in a row - 
+                                e.g:<BR><BR><CODE>CompareStatusID(DataRow dr, 
+                                out string msg){<BR>int originalStatusID = 
+                                Convert.ToInt32(dr["StatusID", 
+                                DataRowVersion.Original]);<BR>int 
+                                currentStatusID = Convert.ToInt32(dr["StatusID", 
+                                DataRowVersion.Current]);<BR><BR>if 
+                                (originalStatusID != currentStatusID){<BR>msg = 
+                                "StatusID changed from " 
+                                +<BR>originalStatusID.ToString() + " to " + 
+                                currentStatusID.ToString()<BR>}<BR>else {<BR>msg 
+                                = "StatusID has no 
+                                changes"<BR>}<BR>}</CODE><BR><BR>The above 
+                                doesn't handle nullable values. I've looked at 
+                                the NullableReader but do not see a way of 
+                                accessing the DataRowVersions. If it can be 
+                                done, please explain how.<BR><BR>If it isn't 
+                                supported, then consider this a request for 
+                                future versions <BR><BR>Jay<BR></TD></TR>
+                                <TR style="VERTICAL-ALIGN: middle">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL title=Reply 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=258682&amp;select=1358852&amp;floc=/KB/database/NullableReaders.aspx&amp;fa=r">Reply</A>·<A 
+                                class=Frm_MHL title=Email 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=258682&amp;select=1358852&amp;floc=/KB/database/NullableReaders.aspx&amp;fa=e">Email</A>·<A 
+                                class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/database/NullableReaders.aspx?fid=258682&amp;tid=1358852">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=258682&amp;msg=1358852">PermaLink</A>·<A 
+                                class=Frm_MHL title="Bookmark this post" 
+                                href="http://www.codeproject.com/script/Bookmarks/Add.aspx?&amp;obid=1358852&amp;obtid=3&amp;bma=AddBookmark">Bookmark</A></TD>
+                                <TD class=Frm_MsgFt 
+                                style="TEXT-ALIGN: right"><SPAN id=MVF1358852 
+                                style="WHITE-SPACE: nowrap">2.00/5 (1 vote)
+                                <SCRIPT type=text/javascript>
+												MsgVoteForm(1697923,1358852,false,"","","");
+											</SCRIPT>
+                                 
+                        </SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR class=Quick>
+                <TD class=Frm_MsgDivide><IMG height=1 alt="" 
+                  src="C:\Documents and Settings\valley\Desktop\New Folder\CodeProject C# 2_0 Nullable Data Readers_ Free source code and programming help_files\t(1).gif" 
+                  width=1 border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd HdUnSel " id=F1358859_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=34><A 
+                        name=xx1358859xx></A><IMG height=16 alt=Answer 
+                        src="CodeProject C# 2_0 Nullable Data Readers_ Free source code and programming help_files/msg_answer.gif" 
+                        width=16 align=top></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/database/NullableReaders.aspx?fid=258682&amp;select=1358859#xx1358859xx" 
+                        name=1358859>Re: How to handle row versions?</A></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        title=member height=16 alt=member 
+                        src="CodeProject C# 2_0 Nullable Data Readers_ Free source code and programming help_files/member_sm.gif" 
+                        border=0></TD>
+                      <TD class=Frm_MsgAuthor><A 
+                        href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=1697923">jaycgibson</A></TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">17:14 3 
+                        Feb '06 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=F1358859_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 34px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2>Unless I'm missing an easier way 
+                                do do this, one method I'm attepting is to add 
+                                additional methods that include a DataRowVersion 
+                                parameter <BR><BR>e.g:<BR><BR><CODE>public bool 
+                                GetBoolean(string name, DataRowVersion 
+                                version){<BR>return Convert.ToBoolean(row[name, 
+                                version]);<BR>}<BR></CODE><BR><BR>Is there a 
+                                better way? <BR><BR>Jay<BR></TD></TR>
+                                <TR style="VERTICAL-ALIGN: middle">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL title=Reply 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=258682&amp;select=1358859&amp;floc=/KB/database/NullableReaders.aspx&amp;fa=r">Reply</A>·<A 
+                                class=Frm_MHL title=Email 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=258682&amp;select=1358859&amp;floc=/KB/database/NullableReaders.aspx&amp;fa=e">Email</A>·<A 
+                                class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/database/NullableReaders.aspx?fid=258682&amp;tid=1358852">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=258682&amp;msg=1358859">PermaLink</A>·<A 
+                                class=Frm_MHL title="Bookmark this post" 
+                                href="http://www.codeproject.com/script/Bookmarks/Add.aspx?&amp;obid=1358859&amp;obtid=3&amp;bma=AddBookmark">Bookmark</A></TD>
+                                <TD class=Frm_MsgFt 
+                                style="TEXT-ALIGN: right"><SPAN id=MVF1358859 
+                                style="WHITE-SPACE: nowrap">
+                                <SCRIPT type=text/javascript>
+												MsgVoteForm(1697923,1358859,false,"","","");
+											</SCRIPT>
+                                </SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR class=Quick>
+                <TD class=Frm_MsgDivide><IMG height=1 alt="" 
+                  src="C:\Documents and Settings\valley\Desktop\New Folder\CodeProject C# 2_0 Nullable Data Readers_ Free source code and programming help_files\t(1).gif" 
+                  width=1 border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd HiVote HdUnSel " id=F1359538_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=52><A 
+                        name=xx1359538xx></A><IMG height=16 alt=General 
+                        src="CodeProject C# 2_0 Nullable Data Readers_ Free source code and programming help_files/msg_general.gif" 
+                        width=16 align=top></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/database/NullableReaders.aspx?fid=258682&amp;select=1359538#xx1359538xx" 
+                        name=1359538>Re: How to handle row versions?</A></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        title=member height=16 alt=member 
+                        src="CodeProject C# 2_0 Nullable Data Readers_ Free source code and programming help_files/member_sm.gif" 
+                        border=0></TD>
+                      <TD class=Frm_MsgAuthor><A 
+                        href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=1074402">Steve 
+                        Michelotti</A></TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">20:22 4 
+                        Feb '06 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=F1359538_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 52px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2>Thanks for the suggestion. I agree 
+                                that this is a good enhancement and it makes the 
+                                implementation more complete. Providing the 
+                                overload (as you've done in your example) is the 
+                                cleanest way to accomodate (and matches well 
+                                with the existing DataRow API). However, you'll 
+                                also have to add an overload 
+                                for:<BR><BR><CODE>public bool? 
+                                GetNullableBoolean(string name, DataRowVersion 
+                                version)</CODE><BR><BR>and all other 
+                                GetNullableXXX methods. Again, to do this, the 
+                                easiest way is to use a generic method with 
+                                delegate inference (where you pass the delegate 
+                                to the method). <BR><BR>I've already 
+                                re-submitted the updated code with all overloads 
+                                in it (hopefully the admins of the code project 
+                                will have this update up in the next couple of 
+                                days). If you can't wait, then you can implement 
+                                yourself by following these steps.<BR><BR>First, 
+                                define the delegate you'll use for the new 
+                                methods:<BR><CODE>private delegate T 
+                                ConversionWithVersion<T>(string name, 
+                                DataRowVersion version);</CODE><BR><BR>Next, 
+                                define the generic method that each new 
+                                GetNullableXXX method will call (note this is an 
+                                overload of this existing 
+                                method):<BR><BR><CODE>private Nullable<T> 
+                                GetNullable<T>(string name, DataRowVersion 
+                                version, ConversionWithVersion<T> convert) where 
+                                T : struct<BR>{<BR>Nullable<T> nullable;<BR>if 
+                                (row[name, version] == 
+                                DBNull.Value)<BR>{<BR>nullable = 
+                                null;<BR>}<BR>else<BR>{<BR>nullable = 
+                                convert(name, version);<BR>}<BR>return 
+                                nullable;<BR>}</CODE><BR><BR>Last, provides 
+                                GetNullableXXX(string name, DataRowVersion 
+                                version) for each datatype - use this is an 
+                                example:<BR><CODE>public bool? 
+                                GetNullableBoolean(string name, DataRowVersion 
+                                version)<BR>{<BR>return GetNullable<BOOL>(name, 
+                                version, GetBoolean);<BR>}</CODE><BR><BR>P.S. 
+                                The updated code that will soon be published for 
+                                the article also contains a performance 
+                                enhancement to the DataRowReader to cache the 
+                                ordinals in a generic dictionary. <BR></TD></TR>
+                                <TR style="VERTICAL-ALIGN: middle">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL title=Reply 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=258682&amp;select=1359538&amp;floc=/KB/database/NullableReaders.aspx&amp;fa=r">Reply</A>·<A 
+                                class=Frm_MHL title=Email 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=258682&amp;select=1359538&amp;floc=/KB/database/NullableReaders.aspx&amp;fa=e">Email</A>·<A 
+                                class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/database/NullableReaders.aspx?fid=258682&amp;tid=1358852">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=258682&amp;msg=1359538">PermaLink</A>·<A 
+                                class=Frm_MHL title="Bookmark this post" 
+                                href="http://www.codeproject.com/script/Bookmarks/Add.aspx?&amp;obid=1359538&amp;obtid=3&amp;bma=AddBookmark">Bookmark</A></TD>
+                                <TD class=Frm_MsgFt 
+                                style="TEXT-ALIGN: right"><SPAN id=MVF1359538 
+                                style="WHITE-SPACE: nowrap">5.00/5 (1 vote)
+                                <SCRIPT type=text/javascript>
+												MsgVoteForm(1074402,1359538,false,"","","");
+											</SCRIPT>
+                                 
+                        </SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR class=Quick>
+                <TD class=Frm_MsgRtDivide><IMG height=1 alt="" 
+                  src="C:\Documents and Settings\valley\Desktop\New Folder\CodeProject C# 2_0 Nullable Data Readers_ Free source code and programming help_files\t(1).gif" 
+                  width=1 border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd LoVote Rt HdUnSel " id=F1347154_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=16><A 
+                        name=xx1347154xx></A><IMG height=16 alt=General 
+                        src="CodeProject C# 2_0 Nullable Data Readers_ Free source code and programming help_files/msg_general.gif" 
+                        width=16 align=top></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/database/NullableReaders.aspx?fid=258682&amp;select=1347154#xx1347154xx" 
+                        name=1347154>Short form</A></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        title=member height=16 alt=member 
+                        src="CodeProject C# 2_0 Nullable Data Readers_ Free source code and programming help_files/member_sm.gif" 
+                        border=0></TD>
+                      <TD class=Frm_MsgAuthor><A 
+                        href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=1270938">ELh1</A></TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">4:52 25 
+                        Jan '06 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=F1347154_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 16px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2>There is a short form for 
+                                Nullable&lt;T&gt;, which I fancy a lot. For 
+                                instance:<BR><BR><CODE>private int? 
+                                _FieldName;</CODE><BR>or<BR><CODE>long? 
+                                GetSomeLong()</CODE><BR><BR>in place 
+                                of<BR><BR><CODE>private Nullable&lt;int&gt; 
+                                _FieldName;</CODE><BR>or<BR><CODE>Nullable&lt;long&gt; 
+                                GetSomeLong()</CODE><BR><BR>Pretty, isn't it ? 
+                                <IMG title=Cool 
+                                src="CodeProject C# 2_0 Nullable Data Readers_ Free source code and programming help_files/smiley_cool.gif" 
+                                align=top><BR><BR>Emmanuel<BR><BR>-- modified at 
+                                7:53 Wednesday 25th January, 2006<BR></TD></TR>
+                                <TR style="VERTICAL-ALIGN: middle">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL title=Reply 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=258682&amp;select=1347154&amp;floc=/KB/database/NullableReaders.aspx&amp;fa=r">Reply</A>·<A 
+                                class=Frm_MHL title=Email 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=258682&amp;select=1347154&amp;floc=/KB/database/NullableReaders.aspx&amp;fa=e">Email</A>·<A 
+                                class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/database/NullableReaders.aspx?fid=258682&amp;tid=1347154">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=258682&amp;msg=1347154">PermaLink</A>·<A 
+                                class=Frm_MHL title="Bookmark this post" 
+                                href="http://www.codeproject.com/script/Bookmarks/Add.aspx?&amp;obid=1347154&amp;obtid=3&amp;bma=AddBookmark">Bookmark</A></TD>
+                                <TD class=Frm_MsgFt 
+                                style="TEXT-ALIGN: right"><SPAN id=MVF1347154 
+                                style="WHITE-SPACE: nowrap">1.33/5 (2 votes)
+                                <SCRIPT type=text/javascript>
+												MsgVoteForm(1270938,1347154,false,"","","");
+											</SCRIPT>
+                                 
+                        </SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR class=Quick>
+                <TD class=Frm_MsgRtDivide><IMG height=1 alt="" 
+                  src="C:\Documents and Settings\valley\Desktop\New Folder\CodeProject C# 2_0 Nullable Data Readers_ Free source code and programming help_files\t(1).gif" 
+                  width=1 border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd LoVote Rt HdUnSel " id=F1343468_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=16><A 
+                        name=xx1343468xx></A><IMG height=16 alt=General 
+                        src="CodeProject C# 2_0 Nullable Data Readers_ Free source code and programming help_files/msg_general.gif" 
+                        width=16 align=top></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/database/NullableReaders.aspx?fid=258682&amp;select=1343468#xx1343468xx" 
+                        name=1343468>.GetOrdinal</A></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        title=member height=16 alt=member 
+                        src="CodeProject C# 2_0 Nullable Data Readers_ Free source code and programming help_files/member_sm.gif" 
+                        border=0></TD>
+                      <TD class=Frm_MsgAuthor><A 
+                        href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=1545213">XIUnin</A></TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">3:03 22 
+                        Jan '06 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=F1343468_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 16px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2>I've been writing an ORM (Object 
+                                Relational Mapper) for a school project and I 
+                                was using GetOrdinal like you do it. Once you 
+                                start reading 1000 rows and different collumns 
+                                per row the performance drops soo hard.<BR>So 
+                                what I did was use a wrapper for the GetOrdinal 
+                                method that caches the ordinals untill a new 
+                                query/stored procedure was called.<BR><BR>It 
+                                doesn't work with Nullable types which is pretty 
+                                cool but here is an 
+                                example:<BR><BR>&nbsp;&nbsp;&nbsp;&nbsp; 
+                                &nbsp;&nbsp;&nbsp;&nbsp; public int GetInt32(int 
+                                column)<BR>&nbsp;&nbsp;&nbsp;&nbsp; 
+                                &nbsp;&nbsp;&nbsp;&nbsp; 
+                                {<BR>&nbsp;&nbsp;&nbsp;&nbsp; 
+                                &nbsp;&nbsp;&nbsp;&nbsp; 
+                                &nbsp;&nbsp;&nbsp;&nbsp; int 
+                                data;<BR>&nbsp;&nbsp;&nbsp;&nbsp; 
+                                &nbsp;&nbsp;&nbsp;&nbsp; 
+                                &nbsp;&nbsp;&nbsp;&nbsp; if 
+                                (IsNull(column))<BR>&nbsp;&nbsp;&nbsp;&nbsp; 
+                                &nbsp;&nbsp;&nbsp;&nbsp; 
+                                &nbsp;&nbsp;&nbsp;&nbsp; 
+                                {<BR>&nbsp;&nbsp;&nbsp;&nbsp; 
+                                &nbsp;&nbsp;&nbsp;&nbsp; 
+                                &nbsp;&nbsp;&nbsp;&nbsp; 
+                                &nbsp;&nbsp;&nbsp;&nbsp; data = 
+                                0;<BR>&nbsp;&nbsp;&nbsp;&nbsp; 
+                                &nbsp;&nbsp;&nbsp;&nbsp; 
+                                &nbsp;&nbsp;&nbsp;&nbsp; 
+                                }<BR>&nbsp;&nbsp;&nbsp;&nbsp; 
+                                &nbsp;&nbsp;&nbsp;&nbsp; 
+                                &nbsp;&nbsp;&nbsp;&nbsp; 
+                                else<BR>&nbsp;&nbsp;&nbsp;&nbsp; 
+                                &nbsp;&nbsp;&nbsp;&nbsp; 
+                                &nbsp;&nbsp;&nbsp;&nbsp; {<BR>&nbsp;&nbsp; 
+                                &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; 
+                                &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; 
+                                &nbsp;&nbsp; data = 
+                                reader.GetInt32(column);<BR>&nbsp;&nbsp;&nbsp;&nbsp; 
+                                &nbsp;&nbsp;&nbsp;&nbsp; 
+                                &nbsp;&nbsp;&nbsp;&nbsp; 
+                                }<BR>&nbsp;&nbsp;&nbsp;&nbsp; 
+                                &nbsp;&nbsp;&nbsp;&nbsp; 
+                                &nbsp;&nbsp;&nbsp;&nbsp; return 
+                                data;<BR>&nbsp;&nbsp;&nbsp;&nbsp; 
+                                &nbsp;&nbsp;&nbsp;&nbsp; 
+                                }<BR><BR>&nbsp;&nbsp;&nbsp;&nbsp; 
+                                &nbsp;&nbsp;&nbsp;&nbsp; public int 
+                                GetInt32(string 
+                                column)<BR>&nbsp;&nbsp;&nbsp;&nbsp; 
+                                &nbsp;&nbsp;&nbsp;&nbsp; 
+                                {<BR>&nbsp;&nbsp;&nbsp;&nbsp; 
+                                &nbsp;&nbsp;&nbsp;&nbsp; 
+                                &nbsp;&nbsp;&nbsp;&nbsp; return 
+                                GetInt32(GetOrdinal(column));<BR>&nbsp;&nbsp;&nbsp;&nbsp; 
+                                &nbsp;&nbsp;&nbsp;&nbsp; 
+                                }<BR><BR>&nbsp;&nbsp;&nbsp;&nbsp; 
+                                &nbsp;&nbsp;&nbsp;&nbsp; protected int 
+                                GetOrdinal(string 
+                                column)<BR>&nbsp;&nbsp;&nbsp;&nbsp; 
+                                &nbsp;&nbsp;&nbsp;&nbsp; 
+                                {<BR>&nbsp;&nbsp;&nbsp;&nbsp; 
+                                &nbsp;&nbsp;&nbsp;&nbsp; 
+                                &nbsp;&nbsp;&nbsp;&nbsp; if 
+                                (columns.ContainsKey(column))<BR>&nbsp;&nbsp;&nbsp;&nbsp; 
+                                &nbsp;&nbsp;&nbsp;&nbsp; 
+                                &nbsp;&nbsp;&nbsp;&nbsp; 
+                                {<BR>&nbsp;&nbsp;&nbsp;&nbsp; 
+                                &nbsp;&nbsp;&nbsp;&nbsp; 
+                                &nbsp;&nbsp;&nbsp;&nbsp; 
+                                &nbsp;&nbsp;&nbsp;&nbsp; return 
+                                columns[column];<BR>&nbsp;&nbsp;&nbsp;&nbsp; 
+                                &nbsp;&nbsp;&nbsp;&nbsp; 
+                                &nbsp;&nbsp;&nbsp;&nbsp; 
+                                }<BR>&nbsp;&nbsp;&nbsp;&nbsp; 
+                                &nbsp;&nbsp;&nbsp;&nbsp; 
+                                &nbsp;&nbsp;&nbsp;&nbsp; 
+                                else<BR>&nbsp;&nbsp;&nbsp;&nbsp; 
+                                &nbsp;&nbsp;&nbsp;&nbsp; 
+                                &nbsp;&nbsp;&nbsp;&nbsp; 
+                                {<BR>&nbsp;&nbsp;&nbsp;&nbsp; 
+                                &nbsp;&nbsp;&nbsp;&nbsp; 
+                                &nbsp;&nbsp;&nbsp;&nbsp; 
+                                &nbsp;&nbsp;&nbsp;&nbsp; int ordinal = 
+                                reader.GetOrdinal(column);<BR>&nbsp;&nbsp;&nbsp;&nbsp; 
+                                &nbsp;&nbsp;&nbsp;&nbsp; 
+                                &nbsp;&nbsp;&nbsp;&nbsp; 
+                                &nbsp;&nbsp;&nbsp;&nbsp; columns[column] = 
+                                ordinal;<BR>&nbsp;&nbsp;&nbsp;&nbsp; 
+                                &nbsp;&nbsp;&nbsp;&nbsp; 
+                                &nbsp;&nbsp;&nbsp;&nbsp; 
+                                &nbsp;&nbsp;&nbsp;&nbsp; return 
+                                ordinal;<BR>&nbsp;&nbsp;&nbsp;&nbsp; 
+                                &nbsp;&nbsp;&nbsp;&nbsp; 
+                                &nbsp;&nbsp;&nbsp;&nbsp; 
+                                }<BR>&nbsp;&nbsp;&nbsp;&nbsp; 
+                                &nbsp;&nbsp;&nbsp;&nbsp; }<BR><BR>And the list 
+                                that holds it:<BR>private SortedList&lt;string, 
+                                int&gt; columns = new SortedList&lt;string, 
+                                int&gt;();<BR><BR>It helps the performance alot 
+                                once you start reading alot of rows <IMG 
+                                title=Smile 
+                                src="CodeProject C# 2_0 Nullable Data Readers_ Free source code and programming help_files/smiley_smile.gif" 
+                                align=top><BR></TD></TR>
+                                <TR style="VERTICAL-ALIGN: middle">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL title=Reply 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=258682&amp;select=1343468&amp;floc=/KB/database/NullableReaders.aspx&amp;fa=r">Reply</A>·<A 
+                                class=Frm_MHL title=Email 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=258682&amp;select=1343468&amp;floc=/KB/database/NullableReaders.aspx&amp;fa=e">Email</A>·<A 
+                                class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/database/NullableReaders.aspx?fid=258682&amp;tid=1343468">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=258682&amp;msg=1343468">PermaLink</A>·<A 
+                                class=Frm_MHL title="Bookmark this post" 
+                                href="http://www.codeproject.com/script/Bookmarks/Add.aspx?&amp;obid=1343468&amp;obtid=3&amp;bma=AddBookmark">Bookmark</A></TD>
+                                <TD class=Frm_MsgFt 
+                                style="TEXT-ALIGN: right"><SPAN id=MVF1343468 
+                                style="WHITE-SPACE: nowrap">2.40/5 (2 votes)
+                                <SCRIPT type=text/javascript>
+												MsgVoteForm(1545213,1343468,false,"","","");
+											</SCRIPT>
+                                 
+                        </SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR class=Quick>
+                <TD class=Frm_MsgDivide><IMG height=1 alt="" 
+                  src="C:\Documents and Settings\valley\Desktop\New Folder\CodeProject C# 2_0 Nullable Data Readers_ Free source code and programming help_files\t(1).gif" 
+                  width=1 border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd HiVote HdUnSel " id=F1359543_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=34><A 
+                        name=xx1359543xx></A><IMG height=16 alt=General 
+                        src="CodeProject C# 2_0 Nullable Data Readers_ Free source code and programming help_files/msg_general.gif" 
+                        width=16 align=top></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/database/NullableReaders.aspx?fid=258682&amp;select=1359543#xx1359543xx" 
+                        name=1359543>Re: .GetOrdinal</A></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        title=member height=16 alt=member 
+                        src="CodeProject C# 2_0 Nullable Data Readers_ Free source code and programming help_files/member_sm.gif" 
+                        border=0></TD>
+                      <TD class=Frm_MsgAuthor><A 
+                        href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=1074402">Steve 
+                        Michelotti</A></TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">20:26 4 
+                        Feb '06 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=F1359543_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 34px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2>Thanks for the suggestion. 
+                                Actually, this was an enhancement that I was 
+                                planning on making and I agree (I've benchmarked 
+                                it) and yes, there is a significant performance 
+                                increase especially when the number of rows get 
+                                large. I've submitted the updated code (will 
+                                probably be available in the next couple of 
+                                days) for the article and it does look quite 
+                                similar to your example except that I used a 
+                                System.Collections.Generic.Dictionary<STRING, 
+                                int> rather than a SortedList<STRING, int>. 
+                                <BR></TD></TR>
+                                <TR style="VERTICAL-ALIGN: middle">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL title=Reply 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=258682&amp;select=1359543&amp;floc=/KB/database/NullableReaders.aspx&amp;fa=r">Reply</A>·<A 
+                                class=Frm_MHL title=Email 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=258682&amp;select=1359543&amp;floc=/KB/database/NullableReaders.aspx&amp;fa=e">Email</A>·<A 
+                                class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/database/NullableReaders.aspx?fid=258682&amp;tid=1343468">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=258682&amp;msg=1359543">PermaLink</A>·<A 
+                                class=Frm_MHL title="Bookmark this post" 
+                                href="http://www.codeproject.com/script/Bookmarks/Add.aspx?&amp;obid=1359543&amp;obtid=3&amp;bma=AddBookmark">Bookmark</A></TD>
+                                <TD class=Frm_MsgFt 
+                                style="TEXT-ALIGN: right"><SPAN id=MVF1359543 
+                                style="WHITE-SPACE: nowrap">5.00/5 (2 votes)
+                                <SCRIPT type=text/javascript>
+												MsgVoteForm(1074402,1359543,false,"","","");
+											</SCRIPT>
+                                 
+                        </SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR class=Quick>
+                <TD class=Frm_MsgDivide><IMG height=1 alt="" 
+                  src="C:\Documents and Settings\valley\Desktop\New Folder\CodeProject C# 2_0 Nullable Data Readers_ Free source code and programming help_files\t(1).gif" 
+                  width=1 border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd HdUnSel " id=F1938851_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=52><A 
+                        name=xx1938851xx></A><IMG height=16 alt=General 
+                        src="CodeProject C# 2_0 Nullable Data Readers_ Free source code and programming help_files/msg_general.gif" 
+                        width=16 align=top></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/database/NullableReaders.aspx?fid=258682&amp;select=1938851#xx1938851xx" 
+                        name=1938851>Re: .GetOrdinal</A></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        title=member height=16 alt=member 
+                        src="CodeProject C# 2_0 Nullable Data Readers_ Free source code and programming help_files/member_sm.gif" 
+                        border=0></TD>
+                      <TD class=Frm_MsgAuthor><A 
+                        href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=587406">Vlad 
+                        Bezden</A></TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">10:57 
+                        13 Mar '07 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=F1938851_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 52px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2>Hi Steve,<BR><BR>Great code. I 
+                                like it and use it in my projects.<BR><BR>Did 
+                                you update your code for caching 
+                                GetOrdinal?<BR><BR>Thanks. <BR><BR>
+                                <DIV class=ForumSig>Vlad 
+                                Bezden</DIV><BR></TD></TR>
+                                <TR style="VERTICAL-ALIGN: middle">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL title=Reply 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=258682&amp;select=1938851&amp;floc=/KB/database/NullableReaders.aspx&amp;fa=r">Reply</A>·<A 
+                                class=Frm_MHL title=Email 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=258682&amp;select=1938851&amp;floc=/KB/database/NullableReaders.aspx&amp;fa=e">Email</A>·<A 
+                                class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/database/NullableReaders.aspx?fid=258682&amp;tid=1343468">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=258682&amp;msg=1938851">PermaLink</A>·<A 
+                                class=Frm_MHL title="Bookmark this post" 
+                                href="http://www.codeproject.com/script/Bookmarks/Add.aspx?&amp;obid=1938851&amp;obtid=3&amp;bma=AddBookmark">Bookmark</A></TD>
+                                <TD class=Frm_MsgFt 
+                                style="TEXT-ALIGN: right"><SPAN id=MVF1938851 
+                                style="WHITE-SPACE: nowrap">
+                                <SCRIPT type=text/javascript>
+												MsgVoteForm(587406,1938851,false,"","","");
+											</SCRIPT>
+                                </SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR class=Quick>
+                <TD class=Frm_MsgRtDivide><IMG height=1 alt="" 
+                  src="C:\Documents and Settings\valley\Desktop\New Folder\CodeProject C# 2_0 Nullable Data Readers_ Free source code and programming help_files\t(1).gif" 
+                  width=1 border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd Rt HdUnSel " id=F1342687_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=16><A 
+                        name=xx1342687xx></A><IMG height=16 alt=General 
+                        src="CodeProject C# 2_0 Nullable Data Readers_ Free source code and programming help_files/msg_general.gif" 
+                        width=16 align=top></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/database/NullableReaders.aspx?fid=258682&amp;select=1342687#xx1342687xx" 
+                        name=1342687>Is this a bug? (oops, no it's not)</A></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        title=supporter height=16 alt=supporter 
+                        src="CodeProject C# 2_0 Nullable Data Readers_ Free source code and programming help_files/supporter_sm.gif" 
+                        border=0></TD>
+                      <TD class=Frm_MsgAuthor><A 
+                        href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=36803">Marc 
+                        Clifton</A></TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">12:38 
+                        20 Jan '06 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=F1342687_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 16px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2>Should "int ordinal" be "T 
+                                ordinal"?<BR><BR>Never mind! I got confused 
+                                between the column index and the data type you 
+                                were converting in the example.<BR><BR>Marc 
+                                <BR><BR><A 
+                                href="http://www.pensieve.org/">Pensieve</A><BR><BR><BR>-- 
+                                modified at 15:44 Friday 20th January, 
+                                2006<BR></TD></TR>
+                                <TR style="VERTICAL-ALIGN: middle">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL title=Reply 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=258682&amp;select=1342687&amp;floc=/KB/database/NullableReaders.aspx&amp;fa=r">Reply</A>·<A 
+                                class=Frm_MHL title=Email 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=258682&amp;select=1342687&amp;floc=/KB/database/NullableReaders.aspx&amp;fa=e">Email</A>·<A 
+                                class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/database/NullableReaders.aspx?fid=258682&amp;tid=1342687">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=258682&amp;msg=1342687">PermaLink</A>·<A 
+                                class=Frm_MHL title="Bookmark this post" 
+                                href="http://www.codeproject.com/script/Bookmarks/Add.aspx?&amp;obid=1342687&amp;obtid=3&amp;bma=AddBookmark">Bookmark</A></TD>
+                                <TD class=Frm_MsgFt 
+                                style="TEXT-ALIGN: right"><SPAN id=MVF1342687 
+                                style="WHITE-SPACE: nowrap">
+                                <SCRIPT type=text/javascript>
+												MsgVoteForm(36803,1342687,false,"","","");
+											</SCRIPT>
+                                </SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR class=Quick>
+                <TD class=Frm_MsgDivide><IMG height=1 alt="" 
+                  src="C:\Documents and Settings\valley\Desktop\New Folder\CodeProject C# 2_0 Nullable Data Readers_ Free source code and programming help_files\t(1).gif" 
+                  width=1 border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd LoVote HdUnSel " id=F1346249_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=34><A 
+                        name=xx1346249xx></A><IMG height=16 alt=General 
+                        src="CodeProject C# 2_0 Nullable Data Readers_ Free source code and programming help_files/msg_general.gif" 
+                        width=16 align=top></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/database/NullableReaders.aspx?fid=258682&amp;select=1346249#xx1346249xx" 
+                        name=1346249>Re: Is this a bug? (oops, no it's 
+                      not)</A></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        title=member height=16 alt=member 
+                        src="CodeProject C# 2_0 Nullable Data Readers_ Free source code and programming help_files/member_sm.gif" 
+                        border=0></TD>
+                      <TD class=Frm_MsgAuthor><A 
+                        href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=2648524">What 
+                        were you thinking?</A></TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">10:45 
+                        24 Jan '06 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=F1346249_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 34px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2>Huh?<BR><BR>Why not press 
+                                Delete?<BR><BR>-- modified at 13:45 Tuesday 24th 
+                                January, 2006<BR></TD></TR>
+                                <TR style="VERTICAL-ALIGN: middle">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL title=Reply 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=258682&amp;select=1346249&amp;floc=/KB/database/NullableReaders.aspx&amp;fa=r">Reply</A>·<A 
+                                class=Frm_MHL title=Email 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=258682&amp;select=1346249&amp;floc=/KB/database/NullableReaders.aspx&amp;fa=e">Email</A>·<A 
+                                class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/database/NullableReaders.aspx?fid=258682&amp;tid=1342687">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=258682&amp;msg=1346249">PermaLink</A>·<A 
+                                class=Frm_MHL title="Bookmark this post" 
+                                href="http://www.codeproject.com/script/Bookmarks/Add.aspx?&amp;obid=1346249&amp;obtid=3&amp;bma=AddBookmark">Bookmark</A></TD>
+                                <TD class=Frm_MsgFt 
+                                style="TEXT-ALIGN: right"><SPAN id=MVF1346249 
+                                style="WHITE-SPACE: nowrap">2.82/5 (4 votes)
+                                <SCRIPT type=text/javascript>
+												MsgVoteForm(2648524,1346249,false,"","","");
+											</SCRIPT>
+                                 
+                        </SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR>
+                <TD><IMG height=5 alt="" 
+                  src="C:\Documents and Settings\valley\Desktop\New Folder\CodeProject C# 2_0 Nullable Data Readers_ Free source code and programming help_files\t(1).gif" 
+                  width=1 border=0></TD></TR></TBODY></TABLE></TD></TR>
+        <TR>
+          <TD>
+            <TABLE cellSpacing=0 cellPadding=2 width="100%">
+              <TBODY>
+              <TR class=Frm_Footer>
+                <TD>Last Visit: Monday, June 9, 2008 5:35 AM &nbsp; &nbsp; 
+                  Last Update:Thursday, June 12, 2008 8:22 AM</TD>
+                <TD 
+              style="WHITE-SPACE: nowrap; TEXT-ALIGN: right"></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></DIV>
+      <P class=SmallText><IMG height=16 alt=General 
+      src="CodeProject C# 2_0 Nullable Data Readers_ Free source code and programming help_files/msg_general.gif" 
+      width=16 align=top> General &nbsp;&nbsp; <IMG height=16 alt=News 
+      src="CodeProject C# 2_0 Nullable Data Readers_ Free source code and programming help_files/msg_news.gif" 
+      width=16 align=top> News &nbsp;&nbsp; <IMG height=16 alt=Question 
+      src="CodeProject C# 2_0 Nullable Data Readers_ Free source code and programming help_files/msg_question.gif" 
+      width=16 align=top> Question &nbsp;&nbsp; <IMG height=16 alt=Answer 
+      src="CodeProject C# 2_0 Nullable Data Readers_ Free source code and programming help_files/msg_answer.gif" 
+      width=16 align=top> Answer &nbsp;&nbsp; <IMG height=16 alt=Joke 
+      src="CodeProject C# 2_0 Nullable Data Readers_ Free source code and programming help_files/msg_joke.gif" 
+      width=16 align=top> Joke &nbsp;&nbsp; <IMG height=16 alt=Rant 
+      src="CodeProject C# 2_0 Nullable Data Readers_ Free source code and programming help_files/msg_rant.gif" 
+      width=16 align=top> Rant &nbsp;&nbsp; <IMG height=16 alt=Admin 
+      src="CodeProject C# 2_0 Nullable Data Readers_ Free source code and programming help_files/msg_admin.gif" 
+      width=16 align=top> Admin &nbsp;&nbsp; </P><!-- Forum End --></DIV>
+      <TABLE width="100%">
+        <TBODY>
+        <TR vAlign=top>
+          <TD class=TinyText align=left><A id=ctl00_PermaLink 
+            href="http://www.codeproject.com/script/Articles/Article.aspx?aid=12778">PermaLink</A> 
+            | <A id=ctl00_PrivacyLink 
+            href="http://www.codeproject.com/info/privacy.aspx">Privacy </A>| <A 
+            id=ctl00_TermsOfUseLink 
+            href="http://www.codeproject.com/info/TermsOfUse.aspx">Terms of 
+            Use</A> <BR>Last Updated: 20 Jan 2006<BR>Editor: <A 
+            id=ctl00_ArticleEditor 
+            href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=28970">Smitha 
+            Vijayan</A><BR></TD>
+          <TD class=TinyText vAlign=top align=right>Copyright 2006 by Steve 
+            Michelotti<BR>Everything else Copyright © <A 
+            href="mailto:webmaster@codeproject.com">CodeProject</A>, 1999-2008 
+            <BR>Web18 | <A id=ctl00_AdvertiseLink 
+            href="http://www.codeproject.com/info/MediaKit.aspx">Advertise on 
+            the Code Project </A></TD></TR></TBODY></TABLE>
+      <CENTER></CENTER></TD></TR>
+  <TR>
+    <TD align=middle colSpan=2></TD></TR></TBODY></TABLE><BR>
+<SCRIPT language=Javascript type=text/javascript>//<![CDATA[
+if (document.all) try {window.attachEvent("oncopy",copyCode);}catch(e){};
+//]]></SCRIPT>
+
+<SCRIPT language=Javascript 
+src="CodeProject C# 2_0 Nullable Data Readers_ Free source code and programming help_files/TogglePre.js" 
+type=text/javascript></SCRIPT>
+
+<SCRIPT language=Javascript 
+src="CodeProject C# 2_0 Nullable Data Readers_ Free source code and programming help_files/menu132_com.js" 
+type=text/javascript></SCRIPT>
+
+<SCRIPT language=Javascript 
+src="CodeProject C# 2_0 Nullable Data Readers_ Free source code and programming help_files/TopNavBar.js" 
+type=text/javascript></SCRIPT>
+
+<SCRIPT language=Javascript type=text/javascript>//<![CDATA[
+new HVMenu(new menu_NavbarConfig());
+//]]></SCRIPT>
+</BODY></HTML>

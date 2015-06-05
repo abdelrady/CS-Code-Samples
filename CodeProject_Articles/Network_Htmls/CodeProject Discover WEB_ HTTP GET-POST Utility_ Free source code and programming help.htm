@@ -1,0 +1,3041 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!-- saved from url=(0050)http://www.codeproject.com/KB/IP/httpget-post.aspx -->
+<HTML><HEAD><TITLE>CodeProject: Discover WEB. HTTP GET-POST Utility. Free source code and programming help</TITLE>
+<SCRIPT language=javascript src=""></SCRIPT>
+
+<META http-equiv=Content-Type content="text/html; charset=utf-8">
+<META 
+content="This article presents a utility that lets you retrieve raw information from web servers using&nbsp;HTTP's GET and POST commands.; Author: Adrian Bacaianu; Section: Internet / Network; Chapter: Web Development" 
+name=Description>
+<META 
+content="VC6, NT4, Win2K, WinXP, VS6, MFC, Dev, Intermediate,Internet / Network,Web Development,Free source code, tutorials" 
+name=Keywords>
+<META content="The Code Project" name=Author>
+<META content=General name=Rating>
+<META content="index, follow" name=Robots>
+<META content="1 days" name=Revisit-After><LINK 
+title="CodeProject Latest articles - All topics" 
+href="http://www.codeproject.com/webservices/articlerss.aspx?cat=1" 
+type=application/rss+xml rel=alternate><LINK 
+title="CodeProject Latest articles - MFC / C++" 
+href="http://www.codeproject.com/webservices/articlerss.aspx?cat=2" 
+type=application/rss+xml rel=alternate><LINK 
+title="CodeProject Latest articles - C#" 
+href="http://www.codeproject.com/webservices/articlerss.aspx?cat=3" 
+type=application/rss+xml rel=alternate><LINK 
+title="CodeProject Latest articles - ASP.NET" 
+href="http://www.codeproject.com/webservices/articlerss.aspx?cat=4" 
+type=application/rss+xml rel=alternate><LINK 
+title="CodeProject Latest articles - .NET" 
+href="http://www.codeproject.com/webservices/articlerss.aspx?cat=5" 
+type=application/rss+xml rel=alternate><LINK 
+title="CodeProject Latest articles - VB.NET" 
+href="http://www.codeproject.com/webservices/articlerss.aspx?cat=6" 
+type=application/rss+xml rel=alternate><LINK title="CodeProject Lounge Postings" 
+href="http://www.codeproject.com/webservices/LoungeRSS.aspx" 
+type=application/rss+xml rel=alternate><LINK title=CodeProject 
+href="http://www.codeproject.com/info/OpenSearch.xml" 
+type=application/opensearchdescription+xml rel=search><LINK 
+href="CodeProject Discover WEB_ HTTP GET-POST Utility_ Free source code and programming help_files/CodeProject.css" 
+type=text/css rel=stylesheet><LINK 
+href="CodeProject Discover WEB_ HTTP GET-POST Utility_ Free source code and programming help_files/ForumClassic.css" 
+type=text/css rel=stylesheet>
+<SCRIPT type=text/javascript>
+  var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+  document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</SCRIPT>
+
+<SCRIPT type=text/javascript>
+   var pageTracker = _gat._getTracker("UA-1735123-1");
+   pageTracker._setDomainName("www.codeproject.com");
+   pageTracker._setSessionTimeout("1200"); // 20 mins
+   pageTracker._initData();
+   pageTracker._trackPageview();
+</SCRIPT>
+
+<SCRIPT language=Javascript 
+src="CodeProject Discover WEB_ HTTP GET-POST Utility_ Free source code and programming help_files/oncopy.js" 
+type=text/javascript></SCRIPT>
+
+<SCRIPT language=Javascript 
+src="CodeProject Discover WEB_ HTTP GET-POST Utility_ Free source code and programming help_files/jxs.js" 
+type=text/javascript></SCRIPT>
+
+<SCRIPT language=Javascript 
+src="CodeProject Discover WEB_ HTTP GET-POST Utility_ Free source code and programming help_files/bookmark.js" 
+type=text/javascript></SCRIPT>
+
+<SCRIPT language=Javascript 
+src="CodeProject Discover WEB_ HTTP GET-POST Utility_ Free source code and programming help_files/rateitem.js" 
+type=text/javascript></SCRIPT>
+
+<SCRIPT language=Javascript type=text/javascript>//<![CDATA[
+function ToggleMenu(itemName)
+{
+	var elm = document.getElementById(itemName);
+	var i,others = document.getElementById('SectionMenu');
+	for(i=0; i < others.childNodes.length; i++)
+	{
+		var other = others.childNodes[i];
+		if ((other.className == 'MenuSectionBlock') && (other != elm))
+			other.style.display='none';
+	}
+	if (elm.style.display == 'block') elm.style.display='none';
+	else elm.style.display='block';
+	return false;
+}
+
+//]]></SCRIPT>
+
+<SCRIPT language=Javascript 
+src="CodeProject Discover WEB_ HTTP GET-POST Utility_ Free source code and programming help_files/addto.js" 
+type=text/javascript></SCRIPT>
+
+<SCRIPT language=Javascript type=text/javascript>//<![CDATA[
+function MarkAns(MemberID,MsgID,QID) {
+ document.write(unescape("%3Cdiv class=\"CallOut\"%3E"));
+ document.write("Was this a good answer to your question? ");
+ document.write(unescape("%3Ca href=\"#xx" + MsgID.toString() + "xx\" "));
+ document.write("onclick=\"RateMsg("+MemberID.toString()+", "+MsgID.toString()+",6,"+QID.toString()+");\"");
+ document.write(unescape("%3E"));
+ document.write(unescape("%3Cimg height=\"20\" width=\"20\" src=\"/script/Forums/Images/good.png\" alt=\"correct\" border=\"0\" align=\"absmiddle\" /%3E Yes%3C/a%3E"));
+ document.write(unescape("%3Ca href=\"#xx" + MsgID.toString() + "xx\" "));
+ document.write("onclick=\"RateMsg("+MemberID.toString()+","+MsgID.toString()+",7,"+QID.toString()+");\"");
+ document.write(unescape("%3E"));
+ document.write(unescape("%3Cimg height=\"20\" width=\"20\" src=\"/script/Forums/Images/bad.png\" alt=\"correct\" style=\"margin-left:10px\" border=\"0\" align=\"absmiddle\" /%3E No%3C/a%3E"));
+ document.write(unescape("%3C/div%3E"));
+}
+function MsgVFrm(MemberID,MsgID,GB,gp,bp,mt){
+ if(!GB)document.write("Rate this message: ");
+ document.write(unescape("%3Ca href=\"#xx" + MsgID.toString() + "xx\" onclick=\"RateMsg(" + MemberID.toString() + ", " + MsgID.toString() + ","));document.write((GB?"5":"1")+unescape(",0);\"%3E"));
+ if(GB) document.write(unescape("%3Cimg height=\"20\" width=\"20\" src=\"/script/Forums/Images/good.png\" alt=\"good\" border=\"0\" align=\"absmiddle\" /%3E "+gp+" "+mt+"%3C/a%3E "));
+ else document.write(unescape("%3Cimg height=\"14\" width=\"14\" src=\"/script/Forums/Images/thumbs_down.gif\" alt=\"vote 1\" border=\"0\" align=\"middle\" /%3E%3C/a%3E "));
+ if(GB)document.write(" &nbsp;"); else for(var i=1; i<=5;i++)
+  document.write(unescape("%3Ca class=\"Frm_MHL\" href=\"#xx" + MsgID.toString() + "xx\" title=\"vote this message a " + i.toString() + "\" onclick=\"RateMsg(" + MemberID.toString() + ", " + MsgID.toString() + ", " + i.toString() + ",0)\"%3E%3Cb%3E" + i.toString() + "%3C/b%3E%3C/a%3E "));
+ document.write(unescape("%3Ca href=\"#xx" + MsgID.toString() + "xx\" onclick=\"RateMsg(" + MemberID.toString() + ", " + MsgID.toString() + ","));document.write((GB?"1":"5")+unescape(",0);\"%3E"));
+ if(GB)document.write(unescape("%3Cimg height=\"20\" width=\"20\" src=\"/script/Forums/Images/bad.png\" alt=\"bad\" border=\"0\" align=\"absmiddle\" /%3E "+bp+" "+mt+"%3C/a%3E"));
+ else document.write(unescape("%3Cimg height=\"14\" width=\"14\" src=\"/script/Forums/Images/thumbs_up.gif\" border=\"0\" alt=\"vote 5\" align=\"middle\" /%3E%3C/a%3E "));
+ if(GB)document.write(" &nbsp;&nbsp; "); else document.write(unescape("%3Cbr /%3E")); document.writeln(unescape("[%3Ca href='#xx") + MsgID.toString() +"xx' title='Report as Abuse' onclick='return ReportMsg(" + MemberID.toString());
+ document.writeln(", " + MsgID.toString() + unescape(",-2)'%3EReport Message%3C/a%3E]"));
+}
+
+function ReportMsg(userid, msgid, score) {
+ if (confirm("Are you sure you want to report this message?"))
+  return RateMsg(userid, msgid, score, 0);
+ else return false;
+}
+function RateMsg(memberid, msgid, score, questionId) {
+ var req = new ActiveXObject("MSXML2.XMLHTTP");
+ req.onreadystatechange = function() {
+  if (req.readyState == 4){
+   if (req.status == 200){
+    var respText = req.responseText;
+    var re = new RegExp(unescape("\%3Cdiv\%3E([^\%3C]*)\%3C/div\%3E"), "g");
+    var match = re.exec(respText);
+    voteStatus.innerHTML = unescape("%3Cb%3E") + (match&&match[1])?match[1]:"An error occured" + unescape("%3C/b%3E");
+   } else
+    voteStatus.innerHTML = unescape("%3Cb style='color:red'%3EFailed!") + req.statusText + unescape("%3C/b%3E");
+  }
+ }
+ var voteStatus = document.getElementById("MVF" + msgid);
+ if (!voteStatus) return;
+ voteStatus.innerHTML = unescape("%3Cb style='color:green'%3EVoting...%3C/b%3E");
+ var strAction = "/script/Forums/Vote.aspx?js=1&fmid="+memberid.toString()+"&select="+msgid.toString()+"&score="+score.toString()+"&qid="+questionId.toString();
+ req.open("GET", strAction, true);
+ req.send(null);
+  return false;
+}
+//]]></SCRIPT>
+
+<SCRIPT language=Javascript type=text/javascript>//<![CDATA[
+var Selected = "-1";
+
+function SwitchMessage(e, msgId)
+{
+  if (!msgId) {
+    if(!e)e=window.event;
+    var target=e.target?e.target:e.srcElement;
+    while(target&&target.id!='DynMessLink')target=target.parentNode;
+    if(!target||target.id!='DynMessLink')return;
+    msgId=target.name;
+  }
+  if(Selected&&Selected!=""){
+    var body=eval("document.getElementById('F" + Selected + "_h1')");
+    if(body) body.style.display = 'none';
+    var head=eval("document.getElementById('F" + Selected + "_h0')");
+    if(head) head.className = head.className.replace("Sel", "UnSel");
+  }
+  if(Selected==msgId.toString())
+    Selected="";
+  else {
+    Selected=msgId.toString();
+    var body=eval("document.getElementById('F" + Selected + "_h1')");
+    if(body){
+      if(body.style.display=='none') body.style.display='';
+      else body.style.display = 'none';
+    }
+    var head=eval("document.getElementById('F" + Selected + "_h0')");
+    if (head) 
+      head.className = head.className.replace("UnSel", "Sel");
+    if(body&&head&&body.style.display!='none'){
+      document.body.scrollTop = getRealPos(head, "Top") - document.body.clientHeight/10;
+      EnsureMessageVisible(Selected, true);
+    }
+  }
+  if (e){if(e.preventDefault)e.preventDefault;else e.returnValue=false;}
+  return false;
+}
+
+//]]></SCRIPT>
+
+<SCRIPT language=Javascript 
+src="CodeProject Discover WEB_ HTTP GET-POST Utility_ Free source code and programming help_files/ShortCuts.js" 
+type=text/javascript></SCRIPT>
+<LINK 
+href="CodeProject Discover WEB_ HTTP GET-POST Utility_ Free source code and programming help_files/ForumClassicIE6.css" 
+type=text/css rel=stylesheet><LINK href="/favicon.ico" type=image/ico 
+rel=icon><LINK href="/favicon.ico" type=image/ico rel="shortcut icon">
+<META content="MSHTML 6.00.2900.2180" name=GENERATOR></HEAD>
+<BODY>
+<TABLE id=ctl00_AT cellSpacing=0 cellPadding=0 border=0>
+  <TBODY>
+  <TR vAlign=top>
+    <TD colSpan=2>
+      <TABLE cellSpacing=0 cellPadding=0 border=0>
+        <TBODY>
+        <TR>
+          <TD class=HeaderLogo><A href="http://www.codeproject.com/"><IMG 
+            id=ctl00_Logo 
+            style="BORDER-TOP-WIDTH: 0px; BORDER-LEFT-WIDTH: 0px; BORDER-BOTTOM-WIDTH: 0px; WIDTH: 225px; HEIGHT: 90px; BORDER-RIGHT-WIDTH: 0px" 
+            alt="The Code Project" 
+            src="CodeProject Discover WEB_ HTTP GET-POST Utility_ Free source code and programming help_files/logo225x90.gif"></A></TD>
+          <TD class=HeaderBanner align=right width="100%">
+            <SCRIPT type=text/javascript>document.write(unescape("%3ca%20href%3d%22http%3a%2f%2fwww.codeproject.com%2fRedir.aspx%3fadid%3d6721%26way%3dban%22%20target%3d%22_blank%22%20rel%3d%22nofollow%22%3e%3cimg%20src%3d%22http%3a%2f%2fwww.codeproject.com%2fscript%2fAdm%2fServeImg.aspx%3fFile%3d%252fscript%252fadmentor%252fimages%252fxoreax_808_leader_728x90.gif%26C%3dFalse%26adid%3d6721%22%20alt%3d%22%22%20border%3d%220%22%20width%3d%22728%22%20height%3d%2290%22%3e%3c%2fa%3e"));</SCRIPT>
+          </TD></TR>
+        <TR>
+          <TD colSpan=2>
+            <TABLE class=MemberNavBar cellSpacing=0 cellPadding=5 
+              width="100%"><TBODY>
+              <TR>
+                <TD class=SmallText style="FONT-WEIGHT: bold">5,386,863 
+                  members and growing! (14,146 online)</TD>
+                <TD align=right>
+                  <DIV class=MemberNavBarText 
+                  id=ctl00_MemberMenu_LoggedOnOptions><A 
+                  id=ctl00_MemberMenu_MyProfile 
+                  href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=2959938">Abdelrady_FCIS</A> 
+                  | <A id=ctl00_MemberMenu_MySettings 
+                  href="http://www.codeproject.com/script/Membership/Modify.aspx">My 
+                  Settings</A> | <A id=ctl00_MemberMenu_MyCodeProject 
+                  href="http://www.codeproject.com/script/Membership/MyCodeProject.aspx"><B>My 
+                  CodeProject</B></A> | <A id=ctl00_MemberMenu_MyBookmarks 
+                  href="http://www.codeproject.com/script/Bookmarks/List.aspx?obtid=2"><IMG 
+                  height=16 
+                  src="CodeProject Discover WEB_ HTTP GET-POST Utility_ Free source code and programming help_files/fave.gif" 
+                  width=16 align=absMiddle border=0> My Bookmarks</A> | <A 
+                  id=ctl00_MemberMenu_MyArticles 
+                  href="http://www.codeproject.com/script/Articles/MemberArticles.aspx?amid=2959938">My 
+                  Articles</A> | <A id=ctl00_MemberMenu_Signout 
+                  href="http://www.codeproject.com/script/Membership/LogOff.aspx?rp=%2fKB%2fIP%2fhttpget-post.aspx">Sign 
+                  out</A> </DIV></TD></TR></TBODY></TABLE></TD></TR>
+        <TR>
+          <TD colSpan=2>
+            <TABLE class=SiteNavBar id=tblSiteToolbar cellSpacing=0 
+            cellPadding=0>
+              <TBODY>
+              <TR>
+                <TD noWrap><A href="http://www.codeproject.com/">Home</A></TD>
+                <TD>&nbsp; </TD>
+                <TD style="FONT-WEIGHT: normal" noWrap align=right>Current 
+                  Site:</TD>
+                <TD class=SelCat noWrap><A 
+                  href="http://www.codeproject.com/">C++ / .NET</A></TD>
+                <TD noWrap><A href="http://java.codeproject.com/">Java</A></TD>
+                <TD noWrap><A href="http://sql.codeproject.com/">SQL</A></TD>
+                <TD noWrap><A href="http://lamp.codeproject.com/">Linux / 
+                  Unix</A></TD>
+                <TD width="100%">&nbsp;</TD>
+                <TD id=ctl00_TopNavBar_RightMenus>
+                  <DIV id=MenuPos 
+                  style="WIDTH: 380px; POSITION: relative; TOP: 1px; HEIGHT: 22px">
+                  <TABLE 
+                  style="BORDER-TOP-WIDTH: 0px; BORDER-LEFT-WIDTH: 0px; BORDER-BOTTOM-WIDTH: 0px; HEIGHT: 20px; BORDER-RIGHT-WIDTH: 0px" 
+                  cellSpacing=0 cellPadding=0 width=380>
+                    <TBODY>
+                    <TR vAlign=center>
+                      <TD 
+                      style="BORDER-TOP-WIDTH: 0px; BORDER-LEFT-WIDTH: 0px; BORDER-BOTTOM-WIDTH: 0px; BORDER-RIGHT-WIDTH: 0px" 
+                      noWrap><A 
+                        href="http://www.codeproject.com/info/FAQ.aspx">Help!</A></TD>
+                      <TD 
+                      style="BORDER-TOP-WIDTH: 0px; BORDER-LEFT-WIDTH: 0px; BORDER-BOTTOM-WIDTH: 0px; BORDER-RIGHT-WIDTH: 0px" 
+                      noWrap><A 
+                        href="http://www.codeproject.com/script/Articles/Latest.aspx">Articles</A></TD>
+                      <TD 
+                      style="BORDER-TOP-WIDTH: 0px; BORDER-LEFT-WIDTH: 0px; BORDER-BOTTOM-WIDTH: 0px; BORDER-RIGHT-WIDTH: 0px" 
+                      noWrap><A 
+                        href="http://www.codeproject.com/script/Forums/List.aspx">Message 
+                        Boards</A></TD>
+                      <TD 
+                      style="BORDER-TOP-WIDTH: 0px; BORDER-LEFT-WIDTH: 0px; BORDER-BOTTOM-WIDTH: 0px; BORDER-RIGHT-WIDTH: 0px" 
+                      noWrap><A 
+                        href="http://www.codeproject.com/script/Jobs/List.aspx">Job 
+                        Board</A></TD>
+                      <TD 
+                      style="BORDER-TOP-WIDTH: 0px; BORDER-LEFT-WIDTH: 0px; BORDER-BOTTOM-WIDTH: 0px; BORDER-RIGHT-WIDTH: 0px" 
+                      noWrap><A 
+                        href="http://www.codeproject.com/Lounge.aspx">Lounge</A></TD></TR></TBODY></TABLE></DIV></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+  <TR>
+    <TD vAlign=top colSpan=2><A name=_top></A>
+      <TABLE class=ArticleHeader id=ctl00_ArticleTopHeader_HeaderTable 
+      cellSpacing=0 cellPadding=3 width="100%" border=0>
+        <TBODY>
+        <TR vAlign=top>
+          <TD class=SmallText><A id=ctl00_ArticleTopHeader_ChapterLink 
+            href="http://www.codeproject.com/script/Content/Chapter.aspx?chptId=2">Web 
+            Development</A> » <A id=ctl00_ArticleTopHeader_SectionLink 
+            href="http://www.codeproject.com/KB/IP/">Internet / Network</A> » <A 
+            id=ctl00_ArticleTopHeader_SubsectionLink 
+            href="http://www.codeproject.com/KB/IP/index.aspx?#Internet / Network - HTTP / HTTPS">HTTP 
+            / HTTPS</A> <SPAN class=ArticleIntermediate 
+            id=ctl00_ArticleTopHeader_SkillLevel>&nbsp;&nbsp;&nbsp; 
+            Intermediate</SPAN> <SPAN 
+            id=ctl00_ArticleTopHeader_LicenceTerms></SPAN><BR><BR>
+            <H1><SPAN class=ArticleTopTitle 
+            id=ctl00_ArticleTopHeader_ArticleTitle>Discover WEB. HTTP GET-POST 
+            Utility</SPAN></H1><B>By <A 
+            href="http://www.codeproject.com/script/Articles/MemberArticles.aspx?amid=16327">Adrian 
+            Bacaianu</A></B><BR><BR><SPAN class=ArticleTopDescr 
+            id=ctl00_ArticleTopHeader_ArticleDescr>This article presents a 
+            utility that lets you retrieve raw information from web servers 
+            using&nbsp;HTTP's GET and POST commands.</SPAN> </TD>
+          <TD class=SmallText style="WIDTH: 210px"><SPAN 
+            id=ctl00_ArticleTopHeader_ArticleAttributes>VC6, C++Windows, NT4, 
+            Win2K, WinXP, MFC, VS6, Visual Studio, Dev</SPAN><BR><BR><SPAN 
+            style="WIDTH: 14ex">Posted</SPAN>: <B>25 Jun 2002</B><BR><SPAN 
+            style="WIDTH: 14ex">Updated</SPAN>: <B>25 Jun 2002</B> <BR><SPAN 
+            style="WIDTH: 14ex">Views</SPAN>: <B>410,164</B><BR><SPAN 
+            style="WIDTH: 14ex">Bookmarked</SPAN>: <B>108 times</B><BR></TD></TR>
+        <TR>
+          <TD colSpan=2>
+            <TABLE width="100%">
+              <TBODY>
+              <TR>
+                <TD></TD>
+                <TD class=SmallText style="WHITE-SPACE: nowrap" 
+              align=right></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+  <TR vAlign=top>
+    <TD class=LHNavBar id=ctl00_LeftNavCell>
+      <DIV class=FeatureBlockHeader>Announcements</DIV>
+      <DIV class="FeatureBlockContent RHFeatureBar" 
+      style="PADDING-RIGHT: 0px; PADDING-LEFT: 0px; PADDING-BOTTOM: 0px; MARGIN: 0px; PADDING-TOP: 0px">
+      <TABLE cellPadding=2>
+        <TBODY>
+        <TR vAlign=center>
+          <TD><IMG height=10 alt=Comp 
+            src="CodeProject Discover WEB_ HTTP GET-POST Utility_ Free source code and programming help_files/startrek.gif" 
+            width=24></TD>
+          <TD><A 
+            href="http://www.codeproject.com/script/Awards/Competition.aspx?cid=274">Summer 
+            Code Competition!</A></TD></TR>
+        <TR vAlign=center>
+          <TD><IMG height=24 alt=Comp 
+            src="CodeProject Discover WEB_ HTTP GET-POST Utility_ Free source code and programming help_files/info_24.png" 
+            width=24></TD>
+          <TD><A 
+            href="http://www.codeproject.com/script/Awards/Competition.aspx?cid=270">New 
+            thawte <BR>Scavenger Hunt!</A></TD></TR>
+        <TR vAlign=center>
+          <TD><IMG height=24 alt=Comp 
+            src="CodeProject Discover WEB_ HTTP GET-POST Utility_ Free source code and programming help_files/info_24.png" 
+            width=24 align=middle></TD>
+          <TD><A id=ctl00_Announcements_CompLink 
+            href="http://www.codeproject.com/Feature/ArticleCompetition/">Monthly 
+            Competition</A></TD></TR></TBODY></TABLE></DIV>
+      <DIV class=FeatureBlockHeader style="MARGIN-TOP: 7px">Want a new 
+Job?</DIV>
+      <DIV class="FeatureBlockContent RHFeatureBar">
+      <UL class=InfoList>
+        <LI><A 
+        href="http://www.codeproject.com/script/Jobs/View.aspx?jid=93">Lead 
+        Graphical User Interface Developer</A> at ECTPay in United States
+        <LI><A 
+        href="http://www.codeproject.com/script/Jobs/View.aspx?jid=44">Senior 
+        Software Developer</A> at MOC1 Solutions, LLC in United States
+        <LI><A 
+        href="http://www.codeproject.com/script/Jobs/View.aspx?jid=27">Senior 
+        ASP.NET Architect</A> at Atalasoft in United States
+        <LI><A href="http://www.codeproject.com/script/Jobs/List.aspx">View 
+        Latest Jobs...</A></LI></UL></DIV>
+      <DIV id=SectionMenu>
+      <DIV class=MenuCat>Chapters</DIV>
+      <DIV class=MenuChapter><A onclick="return ToggleMenu('Chapter1');" 
+      href="http://www.codeproject.com/script/Content/Chapter.aspx?chptId=1">Desktop 
+      Development</A></DIV>
+      <DIV class=MenuSectionBlock id=Chapter1 style="DISPLAY: none">
+      <DIV class=MI id=Section1><A 
+      href="http://www.codeproject.com/KB/buttons/">Button Controls</A></DIV>
+      <DIV class=MI id=Section15><A 
+      href="http://www.codeproject.com/KB/clipboard/">Clipboard</A></DIV>
+      <DIV class=MI id=Section2><A 
+      href="http://www.codeproject.com/KB/combobox/">Combo &amp; List 
+      Boxes</A></DIV>
+      <DIV class=MI id=Section67><A 
+      href="http://www.codeproject.com/KB/dialog/">Dialogs and Windows</A></DIV>
+      <DIV class=MI id=Section107><A 
+      href="http://www.codeproject.com/KB/gadgets/">Desktop Gadgets</A></DIV>
+      <DIV class=MI id=Section16><A 
+      href="http://www.codeproject.com/KB/docview/">Document / View</A></DIV>
+      <DIV class=MI id=Section4><A 
+      href="http://www.codeproject.com/KB/edit/">Edit Controls</A></DIV>
+      <DIV class=MI id=Section17><A 
+      href="http://www.codeproject.com/KB/files/">Files and Folders</A></DIV>
+      <DIV class=MI id=Section3><A 
+      href="http://www.codeproject.com/KB/grid/">Grid &amp; Data 
+      Controls</A></DIV>
+      <DIV class=MI id=Section5><A 
+      href="http://www.codeproject.com/KB/list/">List Controls</A></DIV>
+      <DIV class=MI id=Section6><A 
+      href="http://www.codeproject.com/KB/menus/">Menus</A></DIV>
+      <DIV class=MI id=Section14><A 
+      href="http://www.codeproject.com/KB/miscctrl/">Miscellaneous</A></DIV>
+      <DIV class=MI id=Section18><A 
+      href="http://www.codeproject.com/KB/printing/">Printing</A></DIV>
+      <DIV class=MI id=Section95><A 
+      href="http://www.codeproject.com/KB/progress/">Progress Controls</A></DIV>
+      <DIV class=MI id=Section11><A 
+      href="http://www.codeproject.com/KB/selection/">Selection 
+      Controls</A></DIV>
+      <DIV class=MI id=Section19><A 
+      href="http://www.codeproject.com/KB/shell/">Shell and IE 
+      programming</A></DIV>
+      <DIV class=MI id=Section68><A 
+      href="http://www.codeproject.com/KB/smart/">Smart Client</A></DIV>
+      <DIV class=MI id=Section8><A 
+      href="http://www.codeproject.com/KB/splitter/">Splitter Windows</A></DIV>
+      <DIV class=MI id=Section9><A 
+      href="http://www.codeproject.com/KB/static/">Static &amp; Panel 
+      Controls</A></DIV>
+      <DIV class=MI id=Section10><A 
+      href="http://www.codeproject.com/KB/statusbar/">Status Bar</A></DIV>
+      <DIV class=MI id=Section7><A 
+      href="http://www.codeproject.com/KB/tabs/">Tabs &amp; Property 
+      Pages</A></DIV>
+      <DIV class=MI id=Section12><A 
+      href="http://www.codeproject.com/KB/toolbars/">Toolbars &amp; Docking 
+      windows</A></DIV>
+      <DIV class=MI id=Section13><A 
+      href="http://www.codeproject.com/KB/tree/">Tree Controls</A></DIV></DIV>
+      <DIV class=MenuChapter><A onclick="return ToggleMenu('Chapter2');" 
+      href="http://www.codeproject.com/script/Content/Chapter.aspx?chptId=2">Web 
+      Development</A></DIV>
+      <DIV class=MenuSectionBlock id=Chapter2>
+      <DIV class=MI id=Section70><A 
+      href="http://www.codeproject.com/KB/ajax/">Ajax and Atlas</A></DIV>
+      <DIV class=MI id=Section27><A 
+      href="http://www.codeproject.com/KB/applications/">Applications &amp; 
+      Tools</A></DIV>
+      <DIV class=MI id=Section85><A 
+      href="http://www.codeproject.com/KB/asp/">ASP</A></DIV>
+      <DIV class=MI id=Section89><A 
+      href="http://www.codeproject.com/KB/aspnet/">ASP.NET</A></DIV>
+      <DIV class=MI id=Section28><A 
+      href="http://www.codeproject.com/KB/webforms/">ASP.NET Controls</A></DIV>
+      <DIV class=MI id=Section38><A 
+      href="http://www.codeproject.com/KB/ATL-Server/">ATL Server</A></DIV>
+      <DIV class=MI id=Section29><A 
+      href="http://www.codeproject.com/KB/web-cache/">Caching</A></DIV>
+      <DIV class=MI id=Section91><A 
+      href="http://www.codeproject.com/KB/web-image/">Charts, Graphs and 
+      Images</A></DIV>
+      <DIV class=MI id=Section25><A 
+      href="http://www.codeproject.com/KB/scripting/">Client side 
+      scripting</A></DIV>
+      <DIV class=MI id=Section30><A 
+      href="http://www.codeproject.com/KB/custom-controls/">Custom 
+      Controls</A></DIV>
+      <DIV class=MI id=Section23><A 
+      href="http://www.codeproject.com/KB/HTML/">HTML / CSS</A></DIV>
+      <DIV class=MIS id=Section22><A 
+      href="http://www.codeproject.com/KB/IP/">Internet / Network</A></DIV>
+      <DIV class=MI id=Section24><A 
+      href="http://www.codeproject.com/KB/ISAPI/">ISAPI</A></DIV>
+      <DIV class=MI id=Section33><A 
+      href="http://www.codeproject.com/KB/server-management/">Site &amp; Server 
+      Management</A></DIV>
+      <DIV class=MI id=Section34><A 
+      href="http://www.codeproject.com/KB/session/">Session State</A></DIV>
+      <DIV class=MI id=Section113><A 
+      href="http://www.codeproject.com/KB/silverlight/">Silverlight</A></DIV>
+      <DIV class=MI id=Section36><A 
+      href="http://www.codeproject.com/KB/trace/">Trace and Logs</A></DIV>
+      <DIV class=MI id=Section31><A 
+      href="http://www.codeproject.com/KB/user-controls/">User 
+Controls</A></DIV>
+      <DIV class=MI id=Section37><A 
+      href="http://www.codeproject.com/KB/validation/">Validation</A></DIV>
+      <DIV class=MI id=Section35><A 
+      href="http://www.codeproject.com/KB/viewstate/">View State</A></DIV>
+      <DIV class=MI id=Section26><A 
+      href="http://www.codeproject.com/KB/WAP/">WAP / WML</A></DIV>
+      <DIV class=MI id=Section32><A 
+      href="http://www.codeproject.com/KB/web-security/">Web Security</A></DIV>
+      <DIV class=MI id=Section20><A 
+      href="http://www.codeproject.com/KB/webservices/">Web 
+      Services</A></DIV></DIV>
+      <DIV class=MenuChapter><A onclick="return ToggleMenu('Chapter9');" 
+      href="http://www.codeproject.com/script/Content/Chapter.aspx?chptId=9">Enterprise 
+      Systems</A></DIV>
+      <DIV class=MenuSectionBlock id=Chapter9 style="DISPLAY: none">
+      <DIV class=MI id=Section98><A 
+      href="http://www.codeproject.com/KB/MCMS/">Content Management 
+      Server</A></DIV>
+      <DIV class=MI id=Section99><A 
+      href="http://www.codeproject.com/KB/biztalk/">Microsoft BizTalk 
+      Server</A></DIV>
+      <DIV class=MI id=Section102><A 
+      href="http://www.codeproject.com/KB/exchange/">Microsoft 
+Exchange</A></DIV>
+      <DIV class=MI id=Section90><A 
+      href="http://www.codeproject.com/KB/office/">Office Development</A></DIV>
+      <DIV class=MI id=Section101><A 
+      href="http://www.codeproject.com/KB/sharepoint/">SharePoint 
+      Server</A></DIV></DIV>
+      <DIV class=MenuChapter><A onclick="return ToggleMenu('Chapter3');" 
+      href="http://www.codeproject.com/script/Content/Chapter.aspx?chptId=3">Multimedia</A></DIV>
+      <DIV class=MenuSectionBlock id=Chapter3 style="DISPLAY: none">
+      <DIV class=MI id=Section42><A 
+      href="http://www.codeproject.com/KB/audio-video/">Audio and 
+Video</A></DIV>
+      <DIV class=MI id=Section44><A 
+      href="http://www.codeproject.com/KB/directx/">DirectX</A></DIV>
+      <DIV class=MI id=Section46><A 
+      href="http://www.codeproject.com/KB/GDI/">GDI</A></DIV>
+      <DIV class=MI id=Section47><A 
+      href="http://www.codeproject.com/KB/GDI-plus/">GDI+</A></DIV>
+      <DIV class=MI id=Section43><A 
+      href="http://www.codeproject.com/KB/graphics/">General Graphics</A></DIV>
+      <DIV class=MI id=Section45><A 
+      href="http://www.codeproject.com/KB/openGL/">OpenGL</A></DIV></DIV>
+      <DIV class=MenuChapter><A onclick="return ToggleMenu('Chapter4');" 
+      href="http://www.codeproject.com/script/Content/Chapter.aspx?chptId=4">Database</A></DIV>
+      <DIV class=MenuSectionBlock id=Chapter4 style="DISPLAY: none">
+      <DIV class=MI id=Section66><A 
+      href="http://www.codeproject.com/KB/database/">Database</A></DIV>
+      <DIV class=MI id=Section100><A 
+      href="http://www.codeproject.com/KB/reporting-services/">SQL Reporting 
+      Services</A></DIV></DIV>
+      <DIV class=MenuChapter><A onclick="return ToggleMenu('Chapter8');" 
+      href="http://www.codeproject.com/script/Content/Chapter.aspx?chptId=8">Platforms, 
+      Frameworks &amp; Libraries</A></DIV>
+      <DIV class=MenuSectionBlock id=Chapter8 style="DISPLAY: none">
+      <DIV class=MI id=Section83><A 
+      href="http://www.codeproject.com/KB/atl/">ATL</A></DIV>
+      <DIV class=MI id=Section117><A 
+      href="http://www.codeproject.com/KB/MFC/">MFC</A></DIV>
+      <DIV class=MI id=Section88><A 
+      href="http://www.codeproject.com/KB/stl/">STL</A></DIV>
+      <DIV class=MI id=Section84><A 
+      href="http://www.codeproject.com/KB/wtl/">WTL</A></DIV>
+      <DIV class=MI id=Section49><A 
+      href="http://www.codeproject.com/KB/COM/">COM / COM+</A></DIV>
+      <DIV class=MI id=Section76><A 
+      href="http://www.codeproject.com/KB/dotnet/">.NET Framework</A></DIV>
+      <DIV class=MI id=Section92><A 
+      href="http://www.codeproject.com/KB/winsdk/">Win32/64 SDK &amp; 
+      OS</A></DIV>
+      <DIV class=MI id=Section108><A 
+      href="http://www.codeproject.com/KB/vista/">Vista API</A></DIV>
+      <DIV class=MI id=Section110><A 
+      href="http://www.codeproject.com/KB/vista-security/">Vista 
+      Security</A></DIV>
+      <DIV class=MI id=Section82><A 
+      href="http://www.codeproject.com/KB/cross-platform/">Cross 
+      Platform</A></DIV>
+      <DIV class=MI id=Section69><A 
+      href="http://www.codeproject.com/KB/game/">Game Development</A></DIV>
+      <DIV class=MI id=Section73><A 
+      href="http://www.codeproject.com/KB/mobile/">Mobile Development</A></DIV>
+      <DIV class=MI id=Section106><A 
+      href="http://www.codeproject.com/KB/WC/">Windows CardSpace</A></DIV>
+      <DIV class=MI id=Section103><A 
+      href="http://www.codeproject.com/KB/WCF/">Windows Communication 
+      Foundation</A></DIV>
+      <DIV class=MI id=Section104><A 
+      href="http://www.codeproject.com/KB/WPF/">Windows Presentation 
+      Foundation</A></DIV>
+      <DIV class=MI id=Section105><A 
+      href="http://www.codeproject.com/KB/WF/">Windows Workflow 
+      Foundation</A></DIV>
+      <DIV class=MI id=Section119><A 
+      href="http://www.codeproject.com/KB/library/">Libraries</A></DIV>
+      <DIV class=MI id=Section122><A 
+      href="http://www.codeproject.com/KB/powershell/">Windows 
+      Powershell</A></DIV>
+      <DIV class=MI id=Section123><A 
+      href="http://www.codeproject.com/KB/linq/">LINQ</A></DIV></DIV>
+      <DIV class=MenuChapter><A onclick="return ToggleMenu('Chapter5');" 
+      href="http://www.codeproject.com/script/Content/Chapter.aspx?chptId=5">Languages</A></DIV>
+      <DIV class=MenuSectionBlock id=Chapter5 style="DISPLAY: none">
+      <DIV class=MI id=Section71><A href="http://www.codeproject.com/KB/cpp/">C 
+      / C++ Language</A></DIV>
+      <DIV class=MI id=Section72><A 
+      href="http://www.codeproject.com/KB/mcpp/">C++ / CLI</A></DIV>
+      <DIV class=MI id=Section93><A 
+      href="http://www.codeproject.com/KB/cs/">C#</A></DIV>
+      <DIV class=MI id=Section78><A 
+      href="http://www.codeproject.com/KB/msil/">MSIL</A></DIV>
+      <DIV class=MI id=Section86><A 
+      href="http://www.codeproject.com/KB/vbscript/">VBScript</A></DIV>
+      <DIV class=MI id=Section87><A 
+      href="http://www.codeproject.com/KB/vb/">VB.NET</A></DIV>
+      <DIV class=MI id=Section115><A 
+      href="http://www.codeproject.com/KB/vb-interop/">VB6 Interop</A></DIV>
+      <DIV class=MI id=Section77><A 
+      href="http://www.codeproject.com/KB/net-languages/">Other .NET 
+      Languages</A></DIV>
+      <DIV class=MI id=Section21><A 
+      href="http://www.codeproject.com/KB/XML/">XML</A></DIV>
+      <DIV class=MI id=Section96><A 
+      href="http://www.codeproject.com/KB/java/">Java</A></DIV></DIV>
+      <DIV class=MenuChapter><A onclick="return ToggleMenu('Chapter6');" 
+      href="http://www.codeproject.com/script/Content/Chapter.aspx?chptId=6">General 
+      Programming</A></DIV>
+      <DIV class=MenuSectionBlock id=Chapter6 style="DISPLAY: none">
+      <DIV class=MI id=Section57><A 
+      href="http://www.codeproject.com/KB/recipes/">Algorithms &amp; 
+      Recipes</A></DIV>
+      <DIV class=MI id=Section64><A 
+      href="http://www.codeproject.com/KB/bugs/">Bugs &amp; 
+Workarounds</A></DIV>
+      <DIV class=MI id=Section79><A 
+      href="http://www.codeproject.com/KB/collections/">Collections</A></DIV>
+      <DIV class=MI id=Section56><A 
+      href="http://www.codeproject.com/KB/security/">Cryptography &amp; 
+      Security</A></DIV>
+      <DIV class=MI id=Section50><A 
+      href="http://www.codeproject.com/KB/datetime/">Date and Time</A></DIV>
+      <DIV class=MI id=Section52><A 
+      href="http://www.codeproject.com/KB/DLL/">DLLs &amp; Assemblies</A></DIV>
+      <DIV class=MI id=Section80><A 
+      href="http://www.codeproject.com/KB/exception/">Exception 
+      Handling</A></DIV>
+      <DIV class=MI id=Section81><A 
+      href="http://www.codeproject.com/KB/locale/">Localisation</A></DIV>
+      <DIV class=MI id=Section53><A 
+      href="http://www.codeproject.com/KB/macros/">Macros and Add-ins</A></DIV>
+      <DIV class=MI id=Section54><A 
+      href="http://www.codeproject.com/KB/tips/">Programming Tips</A></DIV>
+      <DIV class=MI id=Section55><A 
+      href="http://www.codeproject.com/KB/string/">String handling</A></DIV>
+      <DIV class=MI id=Section58><A 
+      href="http://www.codeproject.com/KB/threads/">Threads, Processes &amp; 
+      IPC</A></DIV>
+      <DIV class=MI id=Section59><A 
+      href="http://www.codeproject.com/KB/winhelp/">WinHelp / 
+      HTMLHelp</A></DIV></DIV>
+      <DIV class=MenuChapter><A onclick="return ToggleMenu('Chapter10');" 
+      href="http://www.codeproject.com/script/Content/Chapter.aspx?chptId=10">Graphics 
+      / Design</A></DIV>
+      <DIV class=MenuSectionBlock id=Chapter10 style="DISPLAY: none">
+      <DIV class=MI id=Section40><A 
+      href="http://www.codeproject.com/KB/expression/">Expression</A></DIV>
+      <DIV class=MI id=Section114><A 
+      href="http://www.codeproject.com/KB/usability/">Usability</A></DIV></DIV>
+      <DIV class=MenuChapter><A onclick="return ToggleMenu('Chapter11');" 
+      href="http://www.codeproject.com/script/Content/Chapter.aspx?chptId=11">Development 
+      Lifecycle</A></DIV>
+      <DIV class=MenuSectionBlock id=Chapter11 style="DISPLAY: none">
+      <DIV class=MI id=Section51><A 
+      href="http://www.codeproject.com/KB/debug/">Debug Tips</A></DIV>
+      <DIV class=MI id=Section39><A 
+      href="http://www.codeproject.com/KB/architecture/">Design and 
+      Architecture</A></DIV>
+      <DIV class=MI id=Section112><A 
+      href="http://www.codeproject.com/KB/install/">Installation</A></DIV>
+      <DIV class=MI id=Section41><A 
+      href="http://www.codeproject.com/KB/work/">Work Issues</A></DIV>
+      <DIV class=MI id=Section126><A 
+      href="http://www.codeproject.com/KB/codegen/">Code 
+      Generation</A></DIV></DIV>
+      <DIV class=MenuChapter><A onclick="return ToggleMenu('Chapter7');" 
+      href="http://www.codeproject.com/script/Content/Chapter.aspx?chptId=7">General 
+      Reading</A></DIV>
+      <DIV class=MenuSectionBlock id=Chapter7 style="DISPLAY: none">
+      <DIV class=MI id=Section60><A 
+      href="http://www.codeproject.com/KB/books/">Book Chapters</A></DIV>
+      <DIV class=MI id=Section61><A 
+      href="http://www.codeproject.com/KB/book-reviews/">Book Reviews</A></DIV>
+      <DIV class=MI id=Section109><A 
+      href="http://www.codeproject.com/KB/hardware-review/">Hardware 
+      Reviews</A></DIV>
+      <DIV class=MI id=Section63><A 
+      href="http://www.codeproject.com/KB/interviews/">Interviews</A></DIV>
+      <DIV class=MI id=Section62><A 
+      href="http://www.codeproject.com/KB/scrapbook/">Scrapbook</A></DIV>
+      <DIV class=MI id=Section48><A 
+      href="http://www.codeproject.com/KB/system/">Hardware &amp; 
+      System</A></DIV></DIV>
+      <DIV class=MenuChapter><A onclick="return ToggleMenu('Chapter12');" 
+      href="http://www.codeproject.com/script/Content/Chapter.aspx?chptId=12">Third 
+      Party Products</A></DIV>
+      <DIV class=MenuSectionBlock id=Chapter12 style="DISPLAY: none">
+      <DIV class=MI id=Section65><A 
+      href="http://www.codeproject.com/KB/showcase/">Product Showcase</A></DIV>
+      <DIV class=MI id=Section124><A 
+      href="http://www.codeproject.com/KB/solution-center/">Solution 
+      Center</A></DIV></DIV></DIV><BR>
+      <DIV class=MenuCat>Services</DIV>
+      <DIV class=MenuChapter><A 
+      href="http://www.codeproject.com/script/Jobs/List.aspx">Job 
+Board</A></DIV>
+      <DIV class=MenuChapter><A 
+      href="http://www.codeproject.com/Services/coffee.aspx">Code Project 
+      Coffee</A></DIV>
+      <DIV class=MenuChapter><A 
+      href="http://www.codeproject.com/Services/TradePub.aspx">Free 
+      Magazines</A></DIV><BR>
+      <DIV class=MenuCat>Feature Zones</DIV>
+      <DIV class=MenuChapter><A 
+      href="http://www.codeproject.com/kb/Showcase/">Product Showcase</A></DIV>
+      <DIV class=MenuChapter><A href="http://www.codeproject.com/Zones/IBM">IBM 
+      DeveloperWorks</A></DIV>
+      <DIV class=MenuChapter><A 
+      href="http://www.codeproject.com/Zones/WhitePapers">WhitePapers / 
+      Webcasts</A></DIV>
+      <DIV class=MenuChapter><A 
+      href="http://www.codeproject.com/Zones/QuestSQL">Quest SQL Zone</A></DIV>
+      <DIV class=MenuChapter><A 
+      href="http://www.codeproject.com/Zones/Acresso">InstallShield 
+      2009</A></DIV><BR>
+      <DIV style="MARGIN-BOTTOM: 10px; TEXT-ALIGN: center"><IFRAME 
+      src="CodeProject Discover WEB_ HTTP GET-POST Utility_ Free source code and programming help_files/ServeHTML.htm" 
+      frameBorder=0 width=150 scrolling=no height=80></IFRAME></DIV>
+      <SCRIPT type=text/javascript>document.write(unescape("%3ca%20href%3d%22http%3a%2f%2fwww.codeproject.com%2fRedir.aspx%3fadid%3d6705%26way%3dban%22%20target%3d%22_blank%22%20rel%3d%22nofollow%22%3e%3cimg%20src%3d%22http%3a%2f%2fwww.codeproject.com%2fscript%2fAdm%2fServeImg.aspx%3fFile%3d%252fscript%252fadmentor%252fimages%252fsnowbound_160x600.gif%26C%3dFalse%26adid%3d6705%22%20alt%3d%22RasterMaster%20for%20.NET%22%20border%3d%220%22%20width%3d%22160%22%20height%3d%22600%22%3e%3c%2fa%3e"));</SCRIPT>
+    </TD>
+    <TD class=ArticlePane vAlign=top>
+      <TABLE class=SearchHeaderBar cellSpacing=0 width="100%">
+        <TBODY>
+        <TR>
+          <TD style="WIDTH: 60%; WHITE-SPACE: nowrap" vAlign=center 
+            align=right><FORM style="MARGIN: 0px" name=Search 
+            action=/info/search.aspx method=get><B>Search &nbsp;</B> <INPUT 
+            class=SmallText style="WIDTH: 200px" name=artkw> <SELECT 
+            class=SmallText style="FONT-WEIGHT: bold" name=sbo> <OPTION 
+              value=kw selected>Articles</OPTION> <OPTION 
+              value=fm>Messages</OPTION> <OPTION value=s>Jobs</OPTION></SELECT> <INPUT class=SmallText style="FONT-WEIGHT: bold" type=submit value=" Go! "> 
+            &nbsp; </FORM></TD>
+          <TD class=TinyText style="WHITE-SPACE: nowrap"><A 
+            href="http://www.codeproject.com/info/search.aspx">Advanced 
+            Search</A><BR><A 
+            href="http://www.codeproject.com/script/Content/SiteMap.aspx">Sitemap</A> 
+            | <A id=ctl00_SearchBarCtrl_AddToIESearchLnk 
+            title="Add The Code Project to your IE search Providers" 
+            onclick="window.external.AddSearchProvider('http://www.codeproject.com/info/OpenSearch.xml');return false;" 
+            href="http://www.codeproject.com/">Add to IE Search</A> 
+        </TD></TR></TBODY></TABLE><SPAN id=ctl00_ResultMessage></SPAN>
+      <DIV id=ctl00_ArtDiv>
+      <TABLE cellSpacing=0 cellPadding=0 width="100%" border=0>
+        <TBODY>
+        <TR vAlign=top>
+          <TD vAlign=top>
+            <TABLE>
+              <TBODY></TBODY></TABLE>
+            <DIV class=SmallText><IMG style="VERTICAL-ALIGN: middle" height=16 
+            alt=print 
+            src="CodeProject Discover WEB_ HTTP GET-POST Utility_ Free source code and programming help_files/print.gif" 
+            width=16> <A id=ctl00_ArticleHeaderLinks_PrintLnk 
+            href="http://www.codeproject.com/KB/IP/httpget-post.aspx?display=Print">Print</A> 
+            &nbsp; <IMG style="VERTICAL-ALIGN: middle" height=16 
+            alt="Broken Article?" 
+            src="CodeProject Discover WEB_ HTTP GET-POST Utility_ Free source code and programming help_files/report.gif" 
+            width=16> <A id=ctl00_ArticleHeaderLinks_BrokenLnk 
+            href="http://www.codeproject.com/script/Articles/Report.aspx?aid=2487">Report 
+            Article</A> &nbsp; <IMG style="VERTICAL-ALIGN: middle" alt=Watch 
+            src="CodeProject Discover WEB_ HTTP GET-POST Utility_ Free source code and programming help_files/watchon.png"> 
+            <A class="" id=bmw_2487,2 onclick="return watchMe(2487, 2);" 
+            href="http://www.codeproject.com/script/Bookmarks/Add.aspx?&amp;obid=2487&amp;obtid=2&amp;bma=AddWatch" 
+            name=ajaxBookmarkWatchLink>Watch</A> <SPAN class=TinyText 
+            style="VISIBILITY: hidden"></SPAN><SPAN 
+            id=ctl00_ArticleHeaderLinks_ArticleBmkWatch_Message></SPAN>&nbsp; 
+            <IMG style="VERTICAL-ALIGN: middle" height=16 alt=Bookmark 
+            src="CodeProject Discover WEB_ HTTP GET-POST Utility_ Free source code and programming help_files/link.png" 
+            width=16> <A class="" id=bm_2487,2 
+            onclick="return bookmarkMe(2487, 2);" 
+            href="http://www.codeproject.com/script/Bookmarks/Add.aspx?&amp;obid=2487&amp;obtid=2&amp;bma=AddBookmark" 
+            name=ajaxBookmarkLink>Bookmark</A> <SPAN class=TinyText 
+            style="VISIBILITY: hidden"></SPAN><SPAN 
+            id=ctl00_ArticleHeaderLinks_ArticleBmk_Message></SPAN>&nbsp; <IMG 
+            style="VERTICAL-ALIGN: middle" height=16 alt=Discuss 
+            src="CodeProject Discover WEB_ HTTP GET-POST Utility_ Free source code and programming help_files/discuss.gif" 
+            width=15> <A 
+            href="http://www.codeproject.com/KB/IP/httpget-post.aspx#_comments">Discuss</A> 
+            &nbsp; <IMG style="VERTICAL-ALIGN: middle" height=16 
+            alt="Recommend Article" 
+            src="CodeProject Discover WEB_ HTTP GET-POST Utility_ Free source code and programming help_files/mail.gif" 
+            width=16>&nbsp;<A id=ctl00_ArticleHeaderLinks_Recommend 
+            href="http://www.codeproject.com/script/common/TellFriend.aspx?obtid=2&amp;obid=2487">Send&nbsp;to&nbsp;a&nbsp;friend</A> 
+            </DIV></TD>
+          <TD style="WIDTH: 100px; WHITE-SPACE: nowrap; TEXT-ALIGN: right">
+            <TABLE id=CurRat>
+              <TBODY>
+              <TR>
+                <TD>
+                  <TABLE>
+                    <TBODY>
+                    <TR>
+                      <TD class=SmallText id=ctl00_ArticleRating_VL 
+                      style="WHITE-SPACE: nowrap" align=right><SPAN 
+                        id=ctl00_ArticleRating_VoteLabel>54 votes for this 
+                        Article.</SPAN></TD>
+                      <TD>
+                        <TABLE cellSpacing=0 cellPadding=0 border=1>
+                          <TBODY>
+                          <TR>
+                            <TD width=20 bgColor=white height=7><IMG height=7 
+                              src="CodeProject Discover WEB_ HTTP GET-POST Utility_ Free source code and programming help_files/red.gif" 
+                              width=20 align=center border=0></TD>
+                            <TD width=20 bgColor=white height=7><IMG height=7 
+                              src="CodeProject Discover WEB_ HTTP GET-POST Utility_ Free source code and programming help_files/red.gif" 
+                              width=20 align=center border=0></TD>
+                            <TD width=20 bgColor=white height=7><IMG height=7 
+                              src="CodeProject Discover WEB_ HTTP GET-POST Utility_ Free source code and programming help_files/red.gif" 
+                              width=20 align=center border=0></TD>
+                            <TD width=20 bgColor=white height=7><IMG height=7 
+                              src="CodeProject Discover WEB_ HTTP GET-POST Utility_ Free source code and programming help_files/red.gif" 
+                              width=20 align=center border=0></TD>
+                            <TD noWrap width=20 bgColor=white height=7><IMG 
+                              height=7 
+                              src="CodeProject Discover WEB_ HTTP GET-POST Utility_ Free source code and programming help_files/red.gif" 
+                              width=11 align=center 
+                      border=0></TD></TR></TBODY></TABLE></TD></TR>
+                    <TR id=ctl00_ArticleRating_PopularityRow>
+                      <TD class=SmallText align=right colSpan=2><A 
+                        id=ctl00_ArticleRating_PopularityLnk 
+                        title="Calculated as rating x Log10(# votes)" 
+                        href="http://www.codeproject.com/script/Articles/TopArticles.aspx?ta_so=1">Popularity: 
+                        7.85</A> <SPAN 
+                        id=ctl00_ArticleRating_PopularityLbl></SPAN><SPAN 
+                        id=ratingVal>Rating: <B>4.53</B> out of 
+                    5</SPAN></TD></TR></TBODY></TABLE></TD>
+                <TD>
+                  <DIV>
+                  <TABLE class=HistTable 
+                  title="Voting Distribution. Recent data only">
+                    <TBODY>
+                    <TR>
+                      <TD><IMG title="2 votes, 4.3%" height=1 
+                        alt="2 votes, 4.3%" 
+                        src="CodeProject Discover WEB_ HTTP GET-POST Utility_ Free source code and programming help_files/pollcol.gif" 
+                        width=10 border=0><BR>1</TD>
+                      <TD><IMG title="4 votes, 8.5%" height=2 
+                        alt="4 votes, 8.5%" 
+                        src="CodeProject Discover WEB_ HTTP GET-POST Utility_ Free source code and programming help_files/pollcol.gif" 
+                        width=10 border=0><BR>2</TD>
+                      <TD><IMG title="2 votes, 4.3%" height=1 
+                        alt="2 votes, 4.3%" 
+                        src="CodeProject Discover WEB_ HTTP GET-POST Utility_ Free source code and programming help_files/pollcol.gif" 
+                        width=10 border=0><BR>3</TD>
+                      <TD><IMG title="1 vote, 2.1%" height=1 
+                        alt="1 vote, 2.1%" 
+                        src="CodeProject Discover WEB_ HTTP GET-POST Utility_ Free source code and programming help_files/pollcol.gif" 
+                        width=10 border=0><BR>4</TD>
+                      <TD><IMG title="38 votes, 80.9%" height=20 
+                        alt="38 votes, 80.9%" 
+                        src="CodeProject Discover WEB_ HTTP GET-POST Utility_ Free source code and programming help_files/pollcol.gif" 
+                        width=10 
+              border=0><BR>5</TD></TD></TR></TBODY></TABLE></DIV></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE><SPAN 
+      id=intelliTXT>
+      <DIV id=contentdiv><!-- Main Page Contents Start --><!-- Article Starts -->
+      <UL class=download>
+        <LI><A 
+        href="http://www.codeproject.com/KB/IP/HTTPGet-Post/HTTPGetPost_src.zip">Download 
+        source files - 56 Kb</A> 
+        <LI><A 
+        href="http://www.codeproject.com/KB/IP/HTTPGet-Post/HTTPGetPost_demo.zip">Download 
+        demo project - 7 Kb</A> </LI></UL>
+      <P><IMG height=307 
+      src="CodeProject Discover WEB_ HTTP GET-POST Utility_ Free source code and programming help_files/Dialog.gif" 
+      width=548 border=0></P>
+      <P>This article presents a utility that lets you retrieve raw information 
+      from web servers using HTTP's <CODE>GET</CODE> and <CODE>POST</CODE> 
+      commands.</P>
+      <H2>Description</H2>This utility is just a wrapper around reusable 
+      functions that allow programmatic access to the web through a sort of 
+      'mini-browser' embedded inside your program.
+      <P></P>
+      <P>There are many uses for such code. Programs that look at a series of 
+      web pages, much like a user surfing from one page to the next, are often 
+      called <I>spiders</I>, <I>bots</I>, or <I>crawlers</I>. Such programs are 
+      often used to catalog websites, import external data from the Web, or 
+      simply to send commands to a web server. You could extend the 
+      functionality of the classes presented here to retrieve information from 
+      the Internet in a variety of ways.</P>
+      <P>There are many third-party DLLs and solutions which retrieve data from 
+      websites. The functions presented in this article are totally 
+      self-contained. There is no reliance on <CODE>WinInet</CODE>, Internet 
+      Explorer, Netscape, or any requirement that similar software be installed, 
+      apart from <B>WinSock</B>. WinSock is an integral part of the Windows 
+      TCP/IP stack and is available on any computer capable of running a 
+      browser.</P>
+      <P>Every Internet protocol is documented in an RFC (Request For Comments) 
+      document. HTTP is documented in RFC1945. Additionally, RFC1630, RFC1708 
+      and RFC1808 document the format of a URL.</P>
+      <P>A complete set of RFCs can be found at <A 
+      href="http://www.rfc-editor.org/">http://www.rfc-editor.org/</A>.</P>
+      <H2>Implementation</H2>
+      <P>The engine of the utility is in the <CODE>Request</CODE> class. The key 
+      function is <CODE>SendHTTP()</CODE>. This function accepts 5 parameters 
+      and returns one integer. The first parameter is the URL to 
+      <CODE>POST</CODE> to or <CODE>GET</CODE> from. The second parameter 
+      specifies any additional HTTP headers to be passed during this request. 
+      The third and fourth parameters specify the data and length of data to 
+      post. The fifth parameter is a pointer to an <CODE>HTTPRequest</CODE> 
+      structure that will hold the headers and messages sent and returned by the 
+      web server. <CODE>SendHTTP</CODE> return 0 if the POST or GET was 
+      succesful, otherwise 1 to indicate an error.</P>
+      <P><CODE>SendHTTP()</CODE> begins by parsing the URL string. A URL is an 
+      address that specifies the exact location of a resource on the Internet. A 
+      URL has several parts, some of which are optional. An example of a URL 
+      would be:</P>
+      <P align=center><A 
+      href="http://www.codetools.com/index.html">http://www.codetools.com/index.html</A></P>
+      <P>The first part of the URL is the <I>protocol</I> which specifies how to 
+      receive the resource. Following the protocol is the <I>host name</I>. This 
+      can be either a domain name or an IP address. Following the host is a 
+      <I>port number</I>. Every protocol has a default port number to be used if 
+      no port is specified. The default HTTP port is port 80. Following the port 
+      is the request being made of the specified web server. If not specified, 
+      it defaults to just '/', which requests the root document of the web 
+      server.</P>
+      <P>Next, <CODE>SendHTTP()</CODE> initializes the WinSock library by 
+      calling WinSock's <CODE>WSAStartup()</CODE>. After establishing a socket 
+      connection, <CODE>SendHTTP()</CODE> transmits a request to the server. 
+      There are 2 forms of HTTP requests. The first, and simpler form, is the 
+      HTTP <CODE>GET</CODE>.</P>
+      <P><IMG height=107 
+      src="CodeProject Discover WEB_ HTTP GET-POST Utility_ Free source code and programming help_files/HTTPsendGET.gif" 
+      width=500></P>
+      <P>An HTTP GET does not send any additional information to the web server 
+      other than the request headers and the URL. An HTTP GET often uses the URL 
+      itself to send additional information:</P>
+      <P><A 
+      href="http://localhost/projects/HTTP/TestGet.asp?name=fred&amp;age=22">http://localhost/projects/HTTP/TestGet.asp?name=fred&amp;age=22</A></P>
+      <P>The second form, an HTTP POST, sends data along with the request, 
+      separate from the URL.</P>
+      <P><IMG height=107 
+      src="CodeProject Discover WEB_ HTTP GET-POST Utility_ Free source code and programming help_files/HTTPsendPOST.gif" 
+      width=500></P>
+      <P>Usually, an HTTP POST include the header:</P>
+      <P><I>Content-Type:application/x-www-form-urlencoded</I></P>
+      <P>Without this header, some web servers (particularly ASP running on IIS) 
+      will not recognize your parameters. An HTTP POST has 2 parts. The first is 
+      the HTTP headers, just as in the GET. The headers contain the actual 
+      request and additional pieces of information. Unlike a GET, a POST 
+      contains data after the headers (separated from them by a blank line).</P>
+      <P>After the web server receives the GET or POST request, it sends back a 
+      response. The response has 2 parts: headers followed by data (with a blank 
+      line separating the two).</P>
+      <P><IMG height=158 
+      src="CodeProject Discover WEB_ HTTP GET-POST Utility_ Free source code and programming help_files/HTTPreceive.gif" 
+      width=533></P>
+      <P>The first line of the HTTP headers specifies the status of the request. 
+      It starts with a numeric error code. </P>
+      <P>100-199 is an informational message and is not generally 
+      used.<BR>200-299 means a successful request.<BR>300-399 indicates that the 
+      requested resource has been moved; web servers use this for 
+      redirection.<BR>400-499 indicates client errors.<BR>500-599 indicates 
+      server errors.</P>
+      <P>After the headers comes the data returned by the GET or POST request. 
+      This is usually seen on the browser screen.</P>
+      <H2>Dialog box wrapper</H2>The MFC dialog project is used like a wrapper 
+      to the <CODE>Request</CODE> class. In the dialog container is inserted a 
+      instance of the <B>Microsoft Web Browser</B> control. This makes it very 
+      easy to navigate the data, make commands like GET or POST. The control is 
+      used in 2 ways:
+      <P></P>
+      <P>1. When the user makes a request from the browser, the control fires 
+      the <CODE>OnBeforeNavigate2</CODE> event which is captured by the dialog 
+      program. In that way, in <CODE>OnBeforeNavigate2Explorer1</CODE> function 
+      is used to discover if is a GET or POST, the header sent to the web server 
+      and the posted data.</P>
+      <P>2. If the user wants to use the <CODE>SendHTTP</CODE> engine, enter the 
+      required URL, complete the 'SendHTTPrequest' and 'PostData' (if is a POST) 
+      fields, chack the radio button GET or POST and click on the 'Go' button. 
+      The IE control will load the HTML formatted data received from 
+      <CODE>SendHTTP()</CODE> function in the <CODE>m_HTTPbody</CODE> string 
+      variable. The HTML loading is done in <CODE>OnButtonViewHttp()</CODE>.</P><PRE>IHTMLDocument2* pHTMLDocument2;
+LPDISPATCH lpDispatch;
+lpDispatch = m_Browser.GetDocument();
+
+<SPAN class=code-keyword>if</SPAN> (lpDispatch)
+{
+    HRESULT hr;
+    hr = lpDispatch-<SPAN class=code-keyword>&gt;</SPAN>QueryInterface(IID_IHTMLDocument2,
+                                    (LPVOID*)&amp;pHTMLDocument2);
+    lpDispatch-<SPAN class=code-keyword>&gt;</SPAN>Release();
+    IHTMLElement* pBody;
+    hr = pHTMLDocument2-<SPAN class=code-keyword>&gt;</SPAN>get_body(&amp;pBody);
+
+    BSTR bstr;                
+    bstr = m_HTTPbody.AllocSysString();
+		
+    pBody-<SPAN class=code-keyword>&gt;</SPAN>put_innerHTML(bstr);	<SPAN class=code-comment>//</SPAN><SPAN class=code-comment>insert the html
+</SPAN>	   
+    SysFreeString(bstr);
+    pBody-<SPAN class=code-keyword>&gt;</SPAN>Release();
+}
+</PRE>
+      <H2>Usage</H2>
+      <P>Input the URL address and click on the Go button. On the right there is 
+      a mini-browser with your page. Navigating on links and buttons on this 
+      page and in the 'PostData', 'SendHTTPrequest' and 'ReceiveHTTPrequest' 
+      will receive the corresponding data. The radio buttons Get/Post are 
+      modified automatically - the IE instance knows if you make an GET (you 
+      push on a link) or POST (you push a button).</P>
+      <P>You are able to input your header in the 'SendHTTPrequest' edit box and 
+      your POST data in the 'PostData' edit box, and then push the 'Go' button. 
+      The browser will navigate to your address using the headers and data 
+      submitted from 'SendHTTPrequest' and 'PostData' fields.</P>
+      <P>Use the <I>TestGet.asp</I> and <I>TestPost.asp</I> files from Web 
+      directory to test your GET/POST utility :</P>
+      <P><IMG height=280 
+      src="CodeProject Discover WEB_ HTTP GET-POST Utility_ Free source code and programming help_files/DialogPost.gif" 
+      width=500 border=0></P><!-- Article Ends --><!-- Main Page Contents End --></DIV></SPAN>
+      <FORM id=aspnetForm 
+      style="PADDING-RIGHT: 0px; PADDING-LEFT: 0px; PADDING-BOTTOM: 0px; MARGIN: 0px; PADDING-TOP: 0px" 
+      name=aspnetForm action=httpget-post.aspx method=post>
+      <DIV><INPUT id=__VIEWSTATE type=hidden 
+      value=/wEPDwULLTEwMDUyNjYzMjhkZNO6h/54chj4FvgOpDvtxNqCvxGI 
+      name=__VIEWSTATE> </DIV>
+      <H2>License</H2>
+      <DIV id=ctl00_LicenseTerms>
+      <P>This article has no explicit license attached to it but may contain 
+      usage terms in the article text or the download files themselves. If in 
+      doubt please contact the author via the discussion board below.</P>
+      <P>A list of licenses authors might use can be found <A 
+      href="http://www.codeproject.com/info/Licenses.aspx">here</A></P></DIV>
+      <H2>About the Author</H2>
+      <TABLE cellSpacing=5 cellPadding=0 width="100%" border=0>
+        <TBODY>
+        <TR vAlign=top>
+          <TD id=ctl00_AboutAuthorRptr_ctl00_AboutAuthor_memberPhotoTable 
+          style="WIDTH: 155px" vAlign=top><B><A 
+            id=ctl00_AboutAuthorRptr_ctl00_AboutAuthor_memberProfileLink 
+            href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=16327">Adrian 
+            Bacaianu</A></B><BR><BR>
+            <CENTER></CENTER><BR><SPAN class=SmallText 
+            id=ctl00_AboutAuthorRptr_ctl00_AboutAuthor_memberType></SPAN></TD>
+          <TD>I make programming for over 4 years and extensive experience in 
+            C++, ASP, Pascal, MFC, COM+, ATL, TCP/IP, HTTP protocols, XML, XSL, 
+            SOAP and SQL.<BR>For the last 2 years i working extensively at the 
+            background of financial sites (databases, n tier 
+            architecture).<BR><BR>I’m available for contracts and/or outsourcing 
+            (<ADRIAN Bacaianu>adrian_bacaianu@yahoo.com).<BR>
+            <TABLE>
+              <TBODY>
+              <TR id=ctl00_AboutAuthorRptr_ctl00_AboutAuthor_jobTitleRow>
+                <TD class=SmallText noWrap>Occupation: </TD>
+                <TD width="100%"><SPAN class=SmallText 
+                  id=ctl00_AboutAuthorRptr_ctl00_AboutAuthor_memberJobTitle>Web 
+                  Developer</SPAN></TD></TR>
+              <TR id=ctl00_AboutAuthorRptr_ctl00_AboutAuthor_locationRow>
+                <TD class=SmallText>Location: </TD>
+                <TD width="100%"><SPAN class=SmallText 
+                  id=ctl00_AboutAuthorRptr_ctl00_AboutAuthor_memberLocation><IMG 
+                  height=11 alt=Romania 
+                  src="CodeProject Discover WEB_ HTTP GET-POST Utility_ Free source code and programming help_files/RO.gif" 
+                  width=16> 
+      Romania</SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE><BR>
+      <TABLE id=ctl00_PopularArticlesRow cellSpacing=0 cellPadding=0 
+      width="100%" border=0>
+        <TBODY>
+        <TR vAlign=top>
+          <TD style="WIDTH: 100%">
+            <H2>Other popular Internet / Network articles:</H2>
+            <UL>
+              <LI><A 
+              href="http://www.codeproject.com/KB/IP/AsyncSocketServerandClien.aspx">An 
+              Asynchronous Socket Server and Client</A>
+              <DIV class=SmallText>An asynchronous socket server and client with 
+              encryption and compression.</DIV>
+              <LI><A 
+              href="http://www.codeproject.com/KB/IP/MyDownloader.aspx">MyDownloader: 
+              A Multi-thread C# Segmented Download Manager</A>
+              <DIV class=SmallText>Sample application that manages multiple 
+              segmented downloads and supports HTTP, FTP and YouTube video 
+              downloads</DIV>
+              <LI><A href="http://www.codeproject.com/KB/IP/ndk.aspx">Network 
+              Development Kit 2.0</A>
+              <DIV class=SmallText>Network Development Kit is a set of simple 
+              classes for a client-server architecture.</DIV>
+              <LI><A 
+              href="http://www.codeproject.com/KB/IP/drvfltip.aspx">Developing 
+              Firewalls for Windows 2000/XP</A>
+              <DIV class=SmallText>An article about developing Firewalls for 
+              Windows 2000/XP</DIV>
+              <LI><A 
+              href="http://www.codeproject.com/KB/IP/iocp_server_client.aspx">A 
+              simple IOCP Server/Client Class</A>
+              <DIV class=SmallText>This source code uses the advanced IOCP 
+              technology which can efficiently serve multiple clients. It also 
+              presents some solutions to practical problems that arise with the 
+              IOCP programming API, and provides a simple echo client/server 
+              with file transfer.</DIV></LI></UL>
+            <H2></H2></TD>
+          <TD><IFRAME 
+            src="C:\Documents and Settings\Administrator\Desktop\asqw\CodeProject Discover WEB_ HTTP GET-POST Utility_ Free source code and programming help_files\ServeHTML(1).htm" 
+            frameBorder=0 width=300 scrolling=no 
+        height=250></IFRAME></TD></TR></TBODY></TABLE>
+      <DIV id=ctl00_AddTo_AddTo style="MARGIN: 10px">
+      <SCRIPT language=JavaScript type=text/javascript>
+var socialLinks = new social();
+socialLinks.addtoMethod=1;
+socialLinks.DrawLinks("socialLinks", document.location.href, escape(document.title), 100, 0, "SmallText Bold", "AddTo");
+</SCRIPT>
+      </DIV>
+      <TABLE class=RatingBar id=ctl00_RateArticleRow cellSpacing=0 cellPadding=0 
+      width="100%" border=0>
+        <TBODY>
+        <TR>
+          <TD><A 
+            href="http://www.codeproject.com/KB/IP/httpget-post.aspx#_top">Article 
+            Top</A></TD>
+          <TD align=right>
+            <TABLE cellSpacing=0 cellPadding=0 width="100%">
+              <TBODY>
+              <TR>
+                <TD id=ctl00_RateArticle_VoteResultDiv noWrap align=right 
+                width="100%"><SPAN id=voteRes></SPAN><IMG id=loaderImg 
+                  style="DISPLAY: none" height=16 alt=loading... 
+                  src="CodeProject Discover WEB_ HTTP GET-POST Utility_ Free source code and programming help_files/ajax-loader.gif" 
+                  width=16> </TD>
+                <TD class=SmallText id=voteTbl style="WHITE-SPACE: nowrap" 
+                align=right>
+                  <TABLE>
+                    <TBODY>
+                    <TR>
+                      <TD id=ctl00_RateArticle_RateText 
+                      style="PADDING-RIGHT: 5px; WHITE-SPACE: nowrap"><I><B>Rate 
+                        this Article for us!</B></I></TD>
+                      <TD id=ctl00_RateArticle_StartForm 
+                        align=right><I>&nbsp;&nbsp;Poor</I></TD>
+                      <TD id=ctl00_RateArticle_VoteFormDiv 
+                      style="WHITE-SPACE: nowrap" align=left>
+                        <TABLE id=ctl00_RateArticle_VoteRBL border=0>
+                          <TBODY>
+                          <TR>
+                            <TD><INPUT id=ctl00_RateArticle_VoteRBL_0 
+                              type=radio value=1 
+                            name=ctl00$RateArticle$VoteRBL></TD>
+                            <TD><INPUT id=ctl00_RateArticle_VoteRBL_1 
+                              type=radio value=2 
+                            name=ctl00$RateArticle$VoteRBL></TD>
+                            <TD><INPUT id=ctl00_RateArticle_VoteRBL_2 
+                              type=radio value=3 
+                            name=ctl00$RateArticle$VoteRBL></TD>
+                            <TD><INPUT id=ctl00_RateArticle_VoteRBL_3 
+                              type=radio value=4 
+                            name=ctl00$RateArticle$VoteRBL></TD>
+                            <TD><INPUT id=ctl00_RateArticle_VoteRBL_4 
+                              type=radio value=5 
+                            name=ctl00$RateArticle$VoteRBL></TD></TR></TBODY></TABLE></TD>
+                      <TD id=ctl00_RateArticle_EndForm noWrap 
+                        align=left><I>Excellent</I> <INPUT class=FormButton id=ctl00_RateArticle_SubmitRateBtn onclick="return rateItem(2487,2);" type=submit value=Vote name=ctl00$RateArticle$SubmitRateBtn> 
+                      </TD>
+                      <TD><SPAN 
+                    id=ctl00_RateArticle_ErrorMessage></SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE>
+      <DIV><INPUT id=__EVENTVALIDATION type=hidden 
+      value=/wEWCAKzyIfUAQLAlMXDBwLBlMXDBwLClMXDBwLDlMXDBwLElMXDBwLP+++tCwK5upDkC0kqs2AO0YQnHwpE0FtmBlDhaUl7 
+      name=__EVENTVALIDATION> </DIV></FORM>
+      <DIV 
+      style="PADDING-RIGHT: 10px; PADDING-LEFT: 10px; PADDING-BOTTOM: 10px; OVERFLOW: hidden; PADDING-TOP: 10px; WHITE-SPACE: nowrap; TEXT-ALIGN: center"><IFRAME 
+      src="C:\Documents and Settings\Administrator\Desktop\asqw\CodeProject Discover WEB_ HTTP GET-POST Utility_ Free source code and programming help_files\ServeHTML(2).htm" 
+      frameBorder=0 width=468 scrolling=no height=58></IFRAME><IFRAME 
+      src="CodeProject Discover WEB_ HTTP GET-POST Utility_ Free source code and programming help_files/ServeLinks.htm" 
+      frameBorder=0 width=300 scrolling=no height=60></IFRAME></DIV><A 
+      name=_comments></A><!-- Forum Start -->
+      <DIV id=_MessageBoard onclick="return SwitchMessage(event, null)">
+      <TABLE class=Frm_MainTable id=ForumTable cellSpacing=0 cellPadding=0>
+        <TBODY>
+        <TR>
+          <TD>
+            <FORM 
+            style="PADDING-RIGHT: 0px; PADDING-LEFT: 0px; PADDING-BOTTOM: 0px; MARGIN: 0px; PADDING-TOP: 0px" 
+            action=/script/Forums/SetOptions.aspx?floc=%2fKB%2fIP%2fhttpget-post.aspx&amp;fid=4167 
+            method=get><INPUT type=hidden value=4167 name=fid><INPUT type=hidden 
+            value=?floc=%2fKB%2fIP%2fhttpget-post.aspx&amp;fid=4167 
+            name=currentQS><INPUT type=hidden value=/KB/IP/httpget-post.aspx 
+            name=floc>
+            <TABLE cellSpacing=0 cellPadding=3 width="100%" border=0>
+              <TBODY>
+              <TR class=Frm_HeaderRow1>
+                <TD style="WHITE-SPACE: nowrap"><IMG height=16 alt=FAQ 
+                  src="CodeProject Discover WEB_ HTTP GET-POST Utility_ Free source code and programming help_files/forum_faq.gif" 
+                  width=16 align=middle border=0>&nbsp;<A 
+                  href="http://www.codeproject.com/script/Forums/FAQ.aspx"><B>FAQ</B></A>&nbsp;</TD>
+                <TD style="WHITE-SPACE: nowrap; TEXT-ALIGN: right">Noise 
+                  Tolerance<SELECT class=Frm_DropDown size=1 name=noise> 
+                    <OPTION value=1>Very High</OPTION><OPTION 
+                    value=2>High</OPTION><OPTION value=3 
+                    selected>Medium</OPTION><OPTION value=4>Low</OPTION><OPTION 
+                    value=5>Very Low</OPTION></SELECT></TD>
+                <TD style="WHITE-SPACE: nowrap; TEXT-ALIGN: right" 
+                  colSpan=2><IMG height=15 alt=Search 
+                  src="CodeProject Discover WEB_ HTTP GET-POST Utility_ Free source code and programming help_files/forum_search.gif" 
+                  width=16 align=top border=0>&nbsp;<A 
+                  href="http://www.codeproject.com/script/Forums/Search.aspx?fid=4167">Search 
+                  Messages</A>&nbsp;</TD>
+                <TD style="TEXT-ALIGN: right"><INPUT class=Frm_Button type=submit value="Set Options" name=SetOpt></TD></TR>
+              <TR class=Frm_HeaderRow2>
+                <TD style="WIDTH: 100%">&nbsp;</TD>
+                <TD 
+                  style="WHITE-SPACE: nowrap; TEXT-ALIGN: right">Layout<SELECT 
+                  class=Frm_DropDown size=1 name=view> <OPTION value=Quick 
+                    selected>Normal</OPTION><OPTION value=Topic>Expand Root 
+                    Messages</OPTION><OPTION value=Expanded>Expand All 
+                    Messages</OPTION><OPTION value=Thread>Thread 
+                    View</OPTION><OPTION value=Normal>No Javascript 
+                    (slow)</OPTION><OPTION value=Preview>No Javascript 
+                    Preview</OPTION></SELECT>&nbsp;&nbsp;</TD>
+                <TD style="WHITE-SPACE: nowrap">Per page<SELECT 
+                  class=Frm_DropDown size=1 name=mpp> <OPTION 
+                    value=10>10</OPTION><OPTION value=25 
+                    selected>25</OPTION><OPTION 
+                  value=50>50</OPTION></SELECT>&nbsp;&nbsp;</TD>
+                <TD colSpan=2>&nbsp;</TD></TR></TBODY></TABLE></FORM></TD></TR>
+        <TR>
+          <TD><A name=xx0xx></A>
+            <TABLE cellSpacing=0 cellPadding=2 width="100%" border=0>
+              <TBODY>
+              <TR class=Frm_NavigationBar>
+                <TD><IMG height=16 alt=new 
+                  src="CodeProject Discover WEB_ HTTP GET-POST Utility_ Free source code and programming help_files/forum_newmsg.gif" 
+                  width=16 align=top border=0><A class=Frm_HL 
+                  title="Create a new message thread" 
+                  href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=4167&amp;floc=/KB/IP/httpget-post.aspx" 
+                  target=_top name=Frm_HoverNL><B>New Message</B></A></TD>
+                <TD>Msgs 1 to 25 of 92 (Total in Forum: 92) (<A 
+                  href="http://www.codeproject.com/KB/IP/httpget-post.aspx?fid=4167">Refresh</A>)</TD>
+                <TD style="WHITE-SPACE: nowrap; TEXT-ALIGN: right"><SPAN 
+                  class=Frm_HL>First</SPAN><SPAN class=Frm_HL>Prev</SPAN><A 
+                  class=Frm_HL 
+                  href="http://www.codeproject.com/KB/IP/httpget-post.aspx?fid=4167&amp;fr=26#xx0xx" 
+                  name=Frm_HoverNL>Next</A></TD></TR></TBODY></TABLE></TD></TR>
+        <TR>
+          <TD>
+            <TABLE class=Frm_MsgTable cellSpacing=0 cellPadding=0 width="100%" 
+            border=0><!-- Column Headers -->
+              <TBODY>
+              <TR class=Frm_ColumnHeaders>
+                <TD style="WIDTH: 100%">
+                  <TABLE cellSpacing=0 cellPadding=2 width="100%" border=0>
+                    <TBODY>
+                    <TR>
+                      <TD>Subject&nbsp;</TD>
+                      <TD class=Frm_MsgAuthor>&nbsp;Author&nbsp;</TD>
+                      <TD 
+              class=Frm_MsgDate>Date&nbsp;</TD></TR></TBODY></TABLE></TD></TR>
+              <TR>
+                <TD><IMG height=5 alt="" 
+                  src="CodeProject Discover WEB_ HTTP GET-POST Utility_ Free source code and programming help_files/t.gif" 
+                  width=1 border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd Rt HdUnSel " id=F2551520_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=16><A 
+                        name=xx2551520xx></A><IMG height=16 alt=Question 
+                        src="CodeProject Discover WEB_ HTTP GET-POST Utility_ Free source code and programming help_files/msg_question.gif" 
+                        width=16 align=top></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/IP/httpget-post.aspx?fid=4167&amp;select=2551520#xx2551520xx" 
+                        name=2551520>Problem viewing Multipart/form-data 
+                        pages</A></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        title=member height=16 alt=member 
+                        src="CodeProject Discover WEB_ HTTP GET-POST Utility_ Free source code and programming help_files/member_sm.gif" 
+                        border=0></TD>
+                      <TD class=Frm_MsgAuthor><A 
+                        href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=3687968">MaJic_Tan</A></TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">20:24 
+                        13 May '08 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=F2551520_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 16px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2>Hi,<BR><BR>When I try viewing a 
+                                Multipart/form-data page on my PDA version of 
+                                this program, that page has no event triggered. 
+                                Events as in the buttons on the page do not 
+                                work. Any idea what went 
+                                wrong?<BR><BR><BR>Cheers<BR>MJ <BR></TD></TR>
+                                <TR style="VERTICAL-ALIGN: middle">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL title=Reply 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=4167&amp;select=2551520&amp;floc=/KB/IP/httpget-post.aspx&amp;fa=r">Reply</A>·<A 
+                                class=Frm_MHL title=Email 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=4167&amp;select=2551520&amp;floc=/KB/IP/httpget-post.aspx&amp;fa=e">Email</A>·<A 
+                                class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/IP/httpget-post.aspx?fid=4167&amp;tid=2551520">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=4167&amp;msg=2551520">PermaLink</A>·<A 
+                                class=Frm_MHL title="Bookmark this post" 
+                                href="http://www.codeproject.com/script/Bookmarks/Add.aspx?&amp;obid=2551520&amp;obtid=3&amp;bma=AddBookmark">Bookmark</A></TD>
+                                <TD class=Frm_MsgFt 
+                                style="TEXT-ALIGN: right"><SPAN id=MVF2551520 
+                                style="WHITE-SPACE: nowrap">
+                                <SCRIPT type=text/javascript>
+												MsgVFrm(3687968,2551520,false,"","","");
+											</SCRIPT>
+                                </SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR class=Quick>
+                <TD class=Frm_MsgRtDivide><IMG height=1 alt="" 
+                  src="CodeProject Discover WEB_ HTTP GET-POST Utility_ Free source code and programming help_files/t.gif" 
+                  width=1 border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd LoVote Rt HdUnSel " id=F2526544_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=16><A 
+                        name=xx2526544xx></A><IMG height=16 alt=Question 
+                        src="CodeProject Discover WEB_ HTTP GET-POST Utility_ Free source code and programming help_files/msg_question.gif" 
+                        width=16 align=top></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/IP/httpget-post.aspx?fid=4167&amp;select=2526544#xx2526544xx" 
+                        name=2526544>Hi Everyone!!</A></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        title=member height=16 alt=member 
+                        src="CodeProject Discover WEB_ HTTP GET-POST Utility_ Free source code and programming help_files/member_sm.gif" 
+                        border=0></TD>
+                      <TD class=Frm_MsgAuthor><A 
+                        href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=5113420">seema_arian</A></TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">3:04 28 
+                        Apr '08 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=F2526544_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 16px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2>This piece of code is real 
+                                encourage to go ahead and code soem protocols... 
+                                but am every new to this part of coding..<BR>Can 
+                                anyone please answer my question...<BR>am 
+                                totally confused...<BR><BR>first of 
+                                all..<BR><BR>1. what the are basic nescessities 
+                                to implement a Http POST and GET.. [like should 
+                                thr be a Server etc etc..]<BR><BR>2. I want to 
+                                build an application to post a vedio file on to 
+                                Server after establishing GRPS connection and 
+                                also i shud be able to get the file back from 
+                                the server[ is it possible]<BR><BR>3. can anyone 
+                                ellaborate on the basic funda behind 
+                                implementing the above query.. <BR><BR>4. i am 
+                                totally confused!!??<IMG title=Confused 
+                                src="CodeProject Discover WEB_ HTTP GET-POST Utility_ Free source code and programming help_files/smiley_confused.gif" 
+                                align=top><BR><BR><BR>PLEASE HELP!!<BR><BR>Many 
+                                Thanks in advance!!! <BR></TD></TR>
+                                <TR style="VERTICAL-ALIGN: middle">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL title=Reply 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=4167&amp;select=2526544&amp;floc=/KB/IP/httpget-post.aspx&amp;fa=r">Reply</A>·<A 
+                                class=Frm_MHL title=Email 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=4167&amp;select=2526544&amp;floc=/KB/IP/httpget-post.aspx&amp;fa=e">Email</A>·<A 
+                                class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/IP/httpget-post.aspx?fid=4167&amp;tid=2526544">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=4167&amp;msg=2526544">PermaLink</A>·<A 
+                                class=Frm_MHL title="Bookmark this post" 
+                                href="http://www.codeproject.com/script/Bookmarks/Add.aspx?&amp;obid=2526544&amp;obtid=3&amp;bma=AddBookmark">Bookmark</A></TD>
+                                <TD class=Frm_MsgFt 
+                                style="TEXT-ALIGN: right"><SPAN id=MVF2526544 
+                                style="WHITE-SPACE: nowrap">1.00/5 (1 vote)
+                                <SCRIPT type=text/javascript>
+												MsgVFrm(5113420,2526544,false,"","","");
+											</SCRIPT>
+                                 
+                        </SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR class=Quick>
+                <TD class=Frm_MsgRtDivide><IMG height=1 alt="" 
+                  src="CodeProject Discover WEB_ HTTP GET-POST Utility_ Free source code and programming help_files/t.gif" 
+                  width=1 border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd LoVote Rt HdUnSel " id=F1894230_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=16><A 
+                        name=xx1894230xx></A><IMG height=16 alt=General 
+                        src="CodeProject Discover WEB_ HTTP GET-POST Utility_ Free source code and programming help_files/msg_general.gif" 
+                        width=16 align=top></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/IP/httpget-post.aspx?fid=4167&amp;select=1894230#xx1894230xx" 
+                        name=1894230>memory leak</A></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        title=member height=16 alt=member 
+                        src="CodeProject Discover WEB_ HTTP GET-POST Utility_ Free source code and programming help_files/member_sm.gif" 
+                        border=0></TD>
+                      <TD class=Frm_MsgAuthor><A 
+                        href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=1245999"></A></TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">7:55 14 
+                        Feb '07 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=F1894230_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 16px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2>while(!done)<BR>{<BR>l = 
+                                recv(sock,buffer,1,0);<BR>if(l&lt;0) 
+                                //&lt;----------------------------- memory leak 
+                                when the connection has been 
+                                closed!<BR>done=TRUE;<BR><BR>switch(*buffer)<BR>{<BR>case 
+                                '\r':<BR>break;<BR>case 
+                                '\n':<BR>if(chars==0)<BR>done = 
+                                TRUE;<BR>chars=0;<BR>break;<BR>default:<BR>chars++;<BR>break;<BR>}<BR><BR>MemBufferAddByte(&amp;headersBuffer,*buffer);<BR>}<BR><BR><BR><BR>5982<BR></TD></TR>
+                                <TR style="VERTICAL-ALIGN: middle">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL title=Reply 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=4167&amp;select=1894230&amp;floc=/KB/IP/httpget-post.aspx&amp;fa=r">Reply</A>·<A 
+                                class=Frm_MHL title=Email 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=4167&amp;select=1894230&amp;floc=/KB/IP/httpget-post.aspx&amp;fa=e">Email</A>·<A 
+                                class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/IP/httpget-post.aspx?fid=4167&amp;tid=1894230">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=4167&amp;msg=1894230">PermaLink</A>·<A 
+                                class=Frm_MHL title="Bookmark this post" 
+                                href="http://www.codeproject.com/script/Bookmarks/Add.aspx?&amp;obid=1894230&amp;obtid=3&amp;bma=AddBookmark">Bookmark</A></TD>
+                                <TD class=Frm_MsgFt 
+                                style="TEXT-ALIGN: right"><SPAN id=MVF1894230 
+                                style="WHITE-SPACE: nowrap">1.75/5 (4 votes)
+                                <SCRIPT type=text/javascript>
+												MsgVFrm(1245999,1894230,false,"","","");
+											</SCRIPT>
+                                 
+                        </SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR class=Quick>
+                <TD class=Frm_MsgRtDivide><IMG height=1 alt="" 
+                  src="CodeProject Discover WEB_ HTTP GET-POST Utility_ Free source code and programming help_files/t.gif" 
+                  width=1 border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd HiVote Rt HdUnSel " id=F1894229_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=16><A 
+                        name=xx1894229xx></A><IMG height=16 alt=General 
+                        src="CodeProject Discover WEB_ HTTP GET-POST Utility_ Free source code and programming help_files/msg_general.gif" 
+                        width=16 align=top></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/IP/httpget-post.aspx?fid=4167&amp;select=1894229#xx1894229xx" 
+                        name=1894229>memory leak</A></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        title=member height=16 alt=member 
+                        src="CodeProject Discover WEB_ HTTP GET-POST Utility_ Free source code and programming help_files/member_sm.gif" 
+                        border=0></TD>
+                      <TD class=Frm_MsgAuthor><A 
+                        href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=1245999"></A></TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">7:55 14 
+                        Feb '07 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=F1894229_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 16px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2>while(!done)<BR>{<BR>l = 
+                                recv(sock,buffer,1,0);<BR>if(l&lt;0) 
+                                //&lt;----------------------------- memory leak 
+                                when the connection has been 
+                                closed!<BR>done=TRUE;<BR><BR>switch(*buffer)<BR>{<BR>case 
+                                '\r':<BR>break;<BR>case 
+                                '\n':<BR>if(chars==0)<BR>done = 
+                                TRUE;<BR>chars=0;<BR>break;<BR>default:<BR>chars++;<BR>break;<BR>}<BR><BR>MemBufferAddByte(&amp;headersBuffer,*buffer);<BR>}<BR><BR><BR></TD></TR>
+                                <TR style="VERTICAL-ALIGN: middle">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL title=Reply 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=4167&amp;select=1894229&amp;floc=/KB/IP/httpget-post.aspx&amp;fa=r">Reply</A>·<A 
+                                class=Frm_MHL title=Email 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=4167&amp;select=1894229&amp;floc=/KB/IP/httpget-post.aspx&amp;fa=e">Email</A>·<A 
+                                class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/IP/httpget-post.aspx?fid=4167&amp;tid=1894229">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=4167&amp;msg=1894229">PermaLink</A>·<A 
+                                class=Frm_MHL title="Bookmark this post" 
+                                href="http://www.codeproject.com/script/Bookmarks/Add.aspx?&amp;obid=1894229&amp;obtid=3&amp;bma=AddBookmark">Bookmark</A></TD>
+                                <TD class=Frm_MsgFt 
+                                style="TEXT-ALIGN: right"><SPAN id=MVF1894229 
+                                style="WHITE-SPACE: nowrap">5.00/5 (1 vote)
+                                <SCRIPT type=text/javascript>
+												MsgVFrm(1245999,1894229,false,"","","");
+											</SCRIPT>
+                                 
+                        </SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR class=Quick>
+                <TD class=Frm_MsgRtDivide><IMG height=1 alt="" 
+                  src="CodeProject Discover WEB_ HTTP GET-POST Utility_ Free source code and programming help_files/t.gif" 
+                  width=1 border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd LoVote Rt HdUnSel " id=F1462317_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=16><A 
+                        name=xx1462317xx></A><IMG height=16 alt=General 
+                        src="CodeProject Discover WEB_ HTTP GET-POST Utility_ Free source code and programming help_files/msg_general.gif" 
+                        width=16 align=top></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/IP/httpget-post.aspx?fid=4167&amp;select=1462317#xx1462317xx" 
+                        name=1462317>i can't download source files</A></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        title=member height=16 alt=member 
+                        src="CodeProject Discover WEB_ HTTP GET-POST Utility_ Free source code and programming help_files/member_sm.gif" 
+                        border=0></TD>
+                      <TD class=Frm_MsgAuthor><A 
+                        href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=1964994">langisser</A></TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">10:08 
+                        25 Apr '06 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=F1462317_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 16px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2>i can't download source 
+                                files<BR><BR>please check link or sent source 
+                                files ot oat_au@hotmail.com<BR><BR>thank you. 
+                                <BR><BR>oat_au@hotmail.com<BR></TD></TR>
+                                <TR style="VERTICAL-ALIGN: middle">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL title=Reply 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=4167&amp;select=1462317&amp;floc=/KB/IP/httpget-post.aspx&amp;fa=r">Reply</A>·<A 
+                                class=Frm_MHL title=Email 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=4167&amp;select=1462317&amp;floc=/KB/IP/httpget-post.aspx&amp;fa=e">Email</A>·<A 
+                                class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/IP/httpget-post.aspx?fid=4167&amp;tid=1462317">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=4167&amp;msg=1462317">PermaLink</A>·<A 
+                                class=Frm_MHL title="Bookmark this post" 
+                                href="http://www.codeproject.com/script/Bookmarks/Add.aspx?&amp;obid=1462317&amp;obtid=3&amp;bma=AddBookmark">Bookmark</A></TD>
+                                <TD class=Frm_MsgFt 
+                                style="TEXT-ALIGN: right"><SPAN id=MVF1462317 
+                                style="WHITE-SPACE: nowrap">2.00/5 (1 vote)
+                                <SCRIPT type=text/javascript>
+												MsgVFrm(1964994,1462317,false,"","","");
+											</SCRIPT>
+                                 
+                        </SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR class=Quick>
+                <TD class=Frm_MsgRtDivide><IMG height=1 alt="" 
+                  src="CodeProject Discover WEB_ HTTP GET-POST Utility_ Free source code and programming help_files/t.gif" 
+                  width=1 border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd LoVote Rt HdUnSel " id=F1452007_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=16><A 
+                        name=xx1452007xx></A><IMG height=16 alt=General 
+                        src="CodeProject Discover WEB_ HTTP GET-POST Utility_ Free source code and programming help_files/msg_general.gif" 
+                        width=16 align=top></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/IP/httpget-post.aspx?fid=4167&amp;select=1452007#xx1452007xx" 
+                        name=1452007>POST-MultiPartFormData.</A></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        title=member height=16 alt=member 
+                        src="CodeProject Discover WEB_ HTTP GET-POST Utility_ Free source code and programming help_files/member_sm.gif" 
+                        border=0></TD>
+                      <TD class=Frm_MsgAuthor><A 
+                        href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=61743">henryMSh</A></TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">6:23 17 
+                        Apr '06 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=F1452007_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 16px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2>hi,<BR>how to send 
+                                POST-MultiPartFormData with your 
+                                class.<BR><BR><BR>thanks.<BR><BR>Henry 
+                                <BR><BR>hENRY maRCA sALVATIERRA<BR></TD></TR>
+                                <TR style="VERTICAL-ALIGN: middle">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL title=Reply 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=4167&amp;select=1452007&amp;floc=/KB/IP/httpget-post.aspx&amp;fa=r">Reply</A>·<A 
+                                class=Frm_MHL title=Email 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=4167&amp;select=1452007&amp;floc=/KB/IP/httpget-post.aspx&amp;fa=e">Email</A>·<A 
+                                class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/IP/httpget-post.aspx?fid=4167&amp;tid=1452007">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=4167&amp;msg=1452007">PermaLink</A>·<A 
+                                class=Frm_MHL title="Bookmark this post" 
+                                href="http://www.codeproject.com/script/Bookmarks/Add.aspx?&amp;obid=1452007&amp;obtid=3&amp;bma=AddBookmark">Bookmark</A></TD>
+                                <TD class=Frm_MsgFt 
+                                style="TEXT-ALIGN: right"><SPAN id=MVF1452007 
+                                style="WHITE-SPACE: nowrap">1.50/5 (2 votes)
+                                <SCRIPT type=text/javascript>
+												MsgVFrm(61743,1452007,false,"","","");
+											</SCRIPT>
+                                 
+                        </SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR class=Quick>
+                <TD class=Frm_MsgRtDivide><IMG height=1 alt="" 
+                  src="CodeProject Discover WEB_ HTTP GET-POST Utility_ Free source code and programming help_files/t.gif" 
+                  width=1 border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd LoVote Rt HdUnSel " id=F1295867_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=16><A 
+                        name=xx1295867xx></A><IMG height=16 alt=Question 
+                        src="CodeProject Discover WEB_ HTTP GET-POST Utility_ Free source code and programming help_files/msg_question.gif" 
+                        width=16 align=top></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/IP/httpget-post.aspx?fid=4167&amp;select=1295867#xx1295867xx" 
+                        name=1295867>CreateThread</A></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        title=member height=16 alt=member 
+                        src="CodeProject Discover WEB_ HTTP GET-POST Utility_ Free source code and programming help_files/member_sm.gif" 
+                        border=0></TD>
+                      <TD class=Frm_MsgAuthor><A 
+                        href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=34313">muratmaman</A></TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">4:30 3 
+                        Dec '05 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=F1295867_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 16px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2>Hi I am using SendHTTP() function 
+                                in the CreateThread but approximately 5 hour 
+                                later it's closing. <BR><BR>what is the problem 
+                                can you give me some idea about how can I use in 
+                                thread your SendHTTP function<BR><BR></TD></TR>
+                                <TR style="VERTICAL-ALIGN: middle">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL title=Reply 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=4167&amp;select=1295867&amp;floc=/KB/IP/httpget-post.aspx&amp;fa=r">Reply</A>·<A 
+                                class=Frm_MHL title=Email 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=4167&amp;select=1295867&amp;floc=/KB/IP/httpget-post.aspx&amp;fa=e">Email</A>·<A 
+                                class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/IP/httpget-post.aspx?fid=4167&amp;tid=1295867">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=4167&amp;msg=1295867">PermaLink</A>·<A 
+                                class=Frm_MHL title="Bookmark this post" 
+                                href="http://www.codeproject.com/script/Bookmarks/Add.aspx?&amp;obid=1295867&amp;obtid=3&amp;bma=AddBookmark">Bookmark</A></TD>
+                                <TD class=Frm_MsgFt 
+                                style="TEXT-ALIGN: right"><SPAN id=MVF1295867 
+                                style="WHITE-SPACE: nowrap">1.00/5 (1 vote)
+                                <SCRIPT type=text/javascript>
+												MsgVFrm(34313,1295867,false,"","","");
+											</SCRIPT>
+                                 
+                        </SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR class=Quick>
+                <TD class=Frm_MsgRtDivide><IMG height=1 alt="" 
+                  src="CodeProject Discover WEB_ HTTP GET-POST Utility_ Free source code and programming help_files/t.gif" 
+                  width=1 border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd LoVote Rt HdUnSel " id=F1205328_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=16><A 
+                        name=xx1205328xx></A><IMG height=16 alt=General 
+                        src="CodeProject Discover WEB_ HTTP GET-POST Utility_ Free source code and programming help_files/msg_general.gif" 
+                        width=16 align=top></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/IP/httpget-post.aspx?fid=4167&amp;select=1205328#xx1205328xx" 
+                        name=1205328>how to post?</A></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        title=member height=16 alt=member 
+                        src="CodeProject Discover WEB_ HTTP GET-POST Utility_ Free source code and programming help_files/member_sm.gif" 
+                        border=0></TD>
+                      <TD class=Frm_MsgAuthor><A 
+                        href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=89065">http://www.codeproject.com/script/Membership/Profiles.aspx?mid=89065</A></TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">20:41 
+                        24 Aug '05 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=F1205328_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 16px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2>I used the class, it's very good. 
+                                But when some page need click the Enter button 
+                                to post, I find I can do nothing. I cannot click 
+                                the Enter button in your sample. How can I do? 
+                                <BR><BR>Thank you. <BR></TD></TR>
+                                <TR style="VERTICAL-ALIGN: middle">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL title=Reply 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=4167&amp;select=1205328&amp;floc=/KB/IP/httpget-post.aspx&amp;fa=r">Reply</A>·<A 
+                                class=Frm_MHL title=Email 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=4167&amp;select=1205328&amp;floc=/KB/IP/httpget-post.aspx&amp;fa=e">Email</A>·<A 
+                                class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/IP/httpget-post.aspx?fid=4167&amp;tid=1205328">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=4167&amp;msg=1205328">PermaLink</A>·<A 
+                                class=Frm_MHL title="Bookmark this post" 
+                                href="http://www.codeproject.com/script/Bookmarks/Add.aspx?&amp;obid=1205328&amp;obtid=3&amp;bma=AddBookmark">Bookmark</A></TD>
+                                <TD class=Frm_MsgFt 
+                                style="TEXT-ALIGN: right"><SPAN id=MVF1205328 
+                                style="WHITE-SPACE: nowrap">1.80/5 (5 votes)
+                                <SCRIPT type=text/javascript>
+												MsgVFrm(89065,1205328,false,"","","");
+											</SCRIPT>
+                                 
+                        </SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR class=Quick>
+                <TD class=Frm_MsgRtDivide><IMG height=1 alt="" 
+                  src="CodeProject Discover WEB_ HTTP GET-POST Utility_ Free source code and programming help_files/t.gif" 
+                  width=1 border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd LoVote Rt HdUnSel " id=F1194042_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=16><A 
+                        name=xx1194042xx></A><IMG height=16 alt=General 
+                        src="CodeProject Discover WEB_ HTTP GET-POST Utility_ Free source code and programming help_files/msg_general.gif" 
+                        width=16 align=top></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/IP/httpget-post.aspx?fid=4167&amp;select=1194042#xx1194042xx" 
+                        name=1194042>Request.obj : error LNK2001</A></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        title=member height=16 alt=member 
+                        src="CodeProject Discover WEB_ HTTP GET-POST Utility_ Free source code and programming help_files/member_sm.gif" 
+                        border=0></TD>
+                      <TD class=Frm_MsgAuthor><A 
+                        href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=871290">LowFly</A></TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">9:44 13 
+                        Aug '05 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=F1194042_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 16px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2>when i will use the Request.cpp/.h 
+                                file in my prog i get 9 
+                                errors<BR><BR>Request.obj : error LNK2001: Not 
+                                dissolved external symbol 
+                                __imp__gethostbyname@4<BR>Request.obj : error 
+                                LNK2001: Not dissolved external symbol 
+                                __imp__send@16<BR>Request.obj : error LNK2001: 
+                                Not dissolved external symbol 
+                                __imp__closesocket@4<BR>Request.obj : error 
+                                LNK2001: Not dissolved external symbol 
+                                __imp__recv@16<BR>Request.obj : error LNK2001: 
+                                Not dissolved external symbol 
+                                __imp__connect@12<BR>Request.obj : error 
+                                LNK2001: Not dissolved external symbol 
+                                __imp__htons@4<BR>Request.obj : error LNK2001: 
+                                Not dissolved external symbol 
+                                __imp__socket@12<BR>Request.obj : error LNK2001: 
+                                Not dissolved external symbol 
+                                __imp__WSAStartup@8<BR><BR>i have all files 
+                                include in my project how i find in HTTPrequest 
+                                project<BR><BR>knows anyone why i get this 
+                                errors <BR></TD></TR>
+                                <TR style="VERTICAL-ALIGN: middle">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL title=Reply 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=4167&amp;select=1194042&amp;floc=/KB/IP/httpget-post.aspx&amp;fa=r">Reply</A>·<A 
+                                class=Frm_MHL title=Email 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=4167&amp;select=1194042&amp;floc=/KB/IP/httpget-post.aspx&amp;fa=e">Email</A>·<A 
+                                class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/IP/httpget-post.aspx?fid=4167&amp;tid=1194042">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=4167&amp;msg=1194042">PermaLink</A>·<A 
+                                class=Frm_MHL title="Bookmark this post" 
+                                href="http://www.codeproject.com/script/Bookmarks/Add.aspx?&amp;obid=1194042&amp;obtid=3&amp;bma=AddBookmark">Bookmark</A></TD>
+                                <TD class=Frm_MsgFt 
+                                style="TEXT-ALIGN: right"><SPAN id=MVF1194042 
+                                style="WHITE-SPACE: nowrap">2.00/5 (1 vote)
+                                <SCRIPT type=text/javascript>
+												MsgVFrm(871290,1194042,false,"","","");
+											</SCRIPT>
+                                 
+                        </SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR class=Quick>
+                <TD class=Frm_MsgDivide><IMG height=1 alt="" 
+                  src="CodeProject Discover WEB_ HTTP GET-POST Utility_ Free source code and programming help_files/t.gif" 
+                  width=1 border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd HdUnSel " id=F1209573_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=34><A 
+                        name=xx1209573xx></A><IMG height=16 alt=General 
+                        src="CodeProject Discover WEB_ HTTP GET-POST Utility_ Free source code and programming help_files/msg_general.gif" 
+                        width=16 align=top></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/IP/httpget-post.aspx?fid=4167&amp;select=1209573#xx1209573xx" 
+                        name=1209573>Re: Request.obj : error LNK2001</A></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        title=member height=16 alt=member 
+                        src="CodeProject Discover WEB_ HTTP GET-POST Utility_ Free source code and programming help_files/member_sm.gif" 
+                        border=0></TD>
+                      <TD class=Frm_MsgAuthor><A 
+                        href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=1268227">joepsy</A></TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">12:52 
+                        29 Aug '05 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=F1209573_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 34px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2>You should add WS2_32.Lib 
+                                (Winsock2) to your linker input files.<BR><BR>If 
+                                you are using MSVC, you can also put<BR>#pragma 
+                                comment(lib, "WS2_32.Lib") somewhere in your 
+                                code. <BR></TD></TR>
+                                <TR style="VERTICAL-ALIGN: middle">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL title=Reply 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=4167&amp;select=1209573&amp;floc=/KB/IP/httpget-post.aspx&amp;fa=r">Reply</A>·<A 
+                                class=Frm_MHL title=Email 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=4167&amp;select=1209573&amp;floc=/KB/IP/httpget-post.aspx&amp;fa=e">Email</A>·<A 
+                                class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/IP/httpget-post.aspx?fid=4167&amp;tid=1194042">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=4167&amp;msg=1209573">PermaLink</A>·<A 
+                                class=Frm_MHL title="Bookmark this post" 
+                                href="http://www.codeproject.com/script/Bookmarks/Add.aspx?&amp;obid=1209573&amp;obtid=3&amp;bma=AddBookmark">Bookmark</A></TD>
+                                <TD class=Frm_MsgFt 
+                                style="TEXT-ALIGN: right"><SPAN id=MVF1209573 
+                                style="WHITE-SPACE: nowrap">
+                                <SCRIPT type=text/javascript>
+												MsgVFrm(1268227,1209573,false,"","","");
+											</SCRIPT>
+                                </SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR class=Quick>
+                <TD class=Frm_MsgRtDivide><IMG height=1 alt="" 
+                  src="CodeProject Discover WEB_ HTTP GET-POST Utility_ Free source code and programming help_files/t.gif" 
+                  width=1 border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd Rt HdUnSel " id=F1174936_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=16><A 
+                        name=xx1174936xx></A><IMG height=16 alt=General 
+                        src="CodeProject Discover WEB_ HTTP GET-POST Utility_ Free source code and programming help_files/msg_general.gif" 
+                        width=16 align=top></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/IP/httpget-post.aspx?fid=4167&amp;select=1174936#xx1174936xx" 
+                        name=1174936>"Error Parsing the GET/POST Data 
+                      Stream"</A></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        height=15 alt=suss 
+                        src="CodeProject Discover WEB_ HTTP GET-POST Utility_ Free source code and programming help_files/usersuss.gif" 
+                        width=14></TD>
+                      <TD class=Frm_MsgAuthor>Jim Coursey</TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">12:34 
+                        26 Jul '05 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=F1174936_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 16px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2><IMG title=Confused 
+                                src="CodeProject Discover WEB_ HTTP GET-POST Utility_ Free source code and programming help_files/smiley_confused.gif" 
+                                align=top>Can anyone post the cause(s) of the 
+                                subject error? <BR></TD></TR>
+                                <TR style="VERTICAL-ALIGN: middle">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL title=Reply 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=4167&amp;select=1174936&amp;floc=/KB/IP/httpget-post.aspx&amp;fa=r">Reply</A>·<A 
+                                class=Frm_MHL title=Email 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=4167&amp;select=1174936&amp;floc=/KB/IP/httpget-post.aspx&amp;fa=e">Email</A>·<A 
+                                class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/IP/httpget-post.aspx?fid=4167&amp;tid=1174936">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=4167&amp;msg=1174936">PermaLink</A>·<A 
+                                class=Frm_MHL title="Bookmark this post" 
+                                href="http://www.codeproject.com/script/Bookmarks/Add.aspx?&amp;obid=1174936&amp;obtid=3&amp;bma=AddBookmark">Bookmark</A></TD>
+                                <TD class=Frm_MsgFt style="TEXT-ALIGN: right"><A 
+                                class=Frm_MHL 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=4167&amp;select=1174936&amp;floc=/KB/IP/httpget-post.aspx&amp;fa=m">Edit</A>·<A 
+                                class=Frm_MHL 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=4167&amp;select=1174936&amp;floc=/KB/IP/httpget-post.aspx&amp;fa=d">Delete</A><BR><SPAN 
+                                id=MVF1174936 style="WHITE-SPACE: nowrap">
+                                <SCRIPT type=text/javascript>
+												MsgVFrm(0,1174936,false,"","","");
+											</SCRIPT>
+                                </SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR class=Quick>
+                <TD class=Frm_MsgRtDivide><IMG height=1 alt="" 
+                  src="CodeProject Discover WEB_ HTTP GET-POST Utility_ Free source code and programming help_files/t.gif" 
+                  width=1 border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd LoVote Rt HdUnSel " id=F1143107_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=16><A 
+                        name=xx1143107xx></A><IMG height=16 alt=General 
+                        src="CodeProject Discover WEB_ HTTP GET-POST Utility_ Free source code and programming help_files/msg_general.gif" 
+                        width=16 align=top></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/IP/httpget-post.aspx?fid=4167&amp;select=1143107#xx1143107xx" 
+                        name=1143107>Posting from the code</A></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        title=member height=16 alt=member 
+                        src="CodeProject Discover WEB_ HTTP GET-POST Utility_ Free source code and programming help_files/member_sm.gif" 
+                        border=0></TD>
+                      <TD class=Frm_MsgAuthor><A 
+                        href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=2048731">neverneverland</A></TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">8:20 22 
+                        Jun '05 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=F1143107_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 16px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2>Does anyone knows how to modify 
+                                the code to be able to hardcode the input 
+                                variable to be posted on the webiste. This means 
+                                not to type into the window where the website 
+                                is, but to insert variable into the code and to 
+                                get it inserted by the application. Tnaks. 
+                                <BR></TD></TR>
+                                <TR style="VERTICAL-ALIGN: middle">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL title=Reply 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=4167&amp;select=1143107&amp;floc=/KB/IP/httpget-post.aspx&amp;fa=r">Reply</A>·<A 
+                                class=Frm_MHL title=Email 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=4167&amp;select=1143107&amp;floc=/KB/IP/httpget-post.aspx&amp;fa=e">Email</A>·<A 
+                                class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/IP/httpget-post.aspx?fid=4167&amp;tid=1143107">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=4167&amp;msg=1143107">PermaLink</A>·<A 
+                                class=Frm_MHL title="Bookmark this post" 
+                                href="http://www.codeproject.com/script/Bookmarks/Add.aspx?&amp;obid=1143107&amp;obtid=3&amp;bma=AddBookmark">Bookmark</A></TD>
+                                <TD class=Frm_MsgFt 
+                                style="TEXT-ALIGN: right"><SPAN id=MVF1143107 
+                                style="WHITE-SPACE: nowrap">1.33/5 (3 votes)
+                                <SCRIPT type=text/javascript>
+												MsgVFrm(2048731,1143107,false,"","","");
+											</SCRIPT>
+                                 
+                        </SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR class=Quick>
+                <TD class=Frm_MsgRtDivide><IMG height=1 alt="" 
+                  src="CodeProject Discover WEB_ HTTP GET-POST Utility_ Free source code and programming help_files/t.gif" 
+                  width=1 border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd LoVote Rt HdUnSel " id=F1136592_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=16><A 
+                        name=xx1136592xx></A><IMG height=16 alt=General 
+                        src="CodeProject Discover WEB_ HTTP GET-POST Utility_ Free source code and programming help_files/msg_general.gif" 
+                        width=16 align=top></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/IP/httpget-post.aspx?fid=4167&amp;select=1136592#xx1136592xx" 
+                        name=1136592>HTTPS</A></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        height=15 alt=suss 
+                        src="CodeProject Discover WEB_ HTTP GET-POST Utility_ Free source code and programming help_files/usersuss.gif" 
+                        width=14></TD>
+                      <TD class=Frm_MsgAuthor>neverneverland</TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">9:34 15 
+                        Jun '05 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=F1136592_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 16px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2>Does anyone have application like 
+                                this that would support HTTPS??<BR>I tried this 
+                                one and it does not work. Please let me know. 
+                                Thanks. <BR></TD></TR>
+                                <TR style="VERTICAL-ALIGN: middle">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL title=Reply 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=4167&amp;select=1136592&amp;floc=/KB/IP/httpget-post.aspx&amp;fa=r">Reply</A>·<A 
+                                class=Frm_MHL title=Email 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=4167&amp;select=1136592&amp;floc=/KB/IP/httpget-post.aspx&amp;fa=e">Email</A>·<A 
+                                class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/IP/httpget-post.aspx?fid=4167&amp;tid=1136592">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=4167&amp;msg=1136592">PermaLink</A>·<A 
+                                class=Frm_MHL title="Bookmark this post" 
+                                href="http://www.codeproject.com/script/Bookmarks/Add.aspx?&amp;obid=1136592&amp;obtid=3&amp;bma=AddBookmark">Bookmark</A></TD>
+                                <TD class=Frm_MsgFt style="TEXT-ALIGN: right"><A 
+                                class=Frm_MHL 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=4167&amp;select=1136592&amp;floc=/KB/IP/httpget-post.aspx&amp;fa=m">Edit</A>·<A 
+                                class=Frm_MHL 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=4167&amp;select=1136592&amp;floc=/KB/IP/httpget-post.aspx&amp;fa=d">Delete</A><BR><SPAN 
+                                id=MVF1136592 style="WHITE-SPACE: nowrap">1.00/5 
+                                (1 vote)
+                                <SCRIPT type=text/javascript>
+												MsgVFrm(0,1136592,false,"","","");
+											</SCRIPT>
+                                 
+                        </SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR class=Quick>
+                <TD class=Frm_MsgDivide><IMG height=1 alt="" 
+                  src="CodeProject Discover WEB_ HTTP GET-POST Utility_ Free source code and programming help_files/t.gif" 
+                  width=1 border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd HdUnSel " id=F2067817_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=34><A 
+                        name=xx2067817xx></A><IMG height=16 alt=General 
+                        src="CodeProject Discover WEB_ HTTP GET-POST Utility_ Free source code and programming help_files/msg_general.gif" 
+                        width=16 align=top></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/IP/httpget-post.aspx?fid=4167&amp;select=2067817#xx2067817xx" 
+                        name=2067817>Re: HTTPS</A></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        title=member height=16 alt=member 
+                        src="CodeProject Discover WEB_ HTTP GET-POST Utility_ Free source code and programming help_files/member_sm.gif" 
+                        border=0></TD>
+                      <TD class=Frm_MsgAuthor><A 
+                        href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=521371">Isidor</A></TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">8:55 5 
+                        Jun '07 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=F2067817_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 34px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2>Look my reply down. <BR></TD></TR>
+                                <TR style="VERTICAL-ALIGN: middle">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL title=Reply 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=4167&amp;select=2067817&amp;floc=/KB/IP/httpget-post.aspx&amp;fa=r">Reply</A>·<A 
+                                class=Frm_MHL title=Email 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=4167&amp;select=2067817&amp;floc=/KB/IP/httpget-post.aspx&amp;fa=e">Email</A>·<A 
+                                class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/IP/httpget-post.aspx?fid=4167&amp;tid=1136592">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=4167&amp;msg=2067817">PermaLink</A>·<A 
+                                class=Frm_MHL title="Bookmark this post" 
+                                href="http://www.codeproject.com/script/Bookmarks/Add.aspx?&amp;obid=2067817&amp;obtid=3&amp;bma=AddBookmark">Bookmark</A></TD>
+                                <TD class=Frm_MsgFt 
+                                style="TEXT-ALIGN: right"><SPAN id=MVF2067817 
+                                style="WHITE-SPACE: nowrap">
+                                <SCRIPT type=text/javascript>
+												MsgVFrm(521371,2067817,false,"","","");
+											</SCRIPT>
+                                </SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR class=Quick>
+                <TD class=Frm_MsgRtDivide><IMG height=1 alt="" 
+                  src="CodeProject Discover WEB_ HTTP GET-POST Utility_ Free source code and programming help_files/t.gif" 
+                  width=1 border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd LoVote Rt HdUnSel " id=F1135924_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=16><A 
+                        name=xx1135924xx></A><IMG height=16 alt=General 
+                        src="CodeProject Discover WEB_ HTTP GET-POST Utility_ Free source code and programming help_files/msg_general.gif" 
+                        width=16 align=top></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/IP/httpget-post.aspx?fid=4167&amp;select=1135924#xx1135924xx" 
+                        name=1135924>Post Data</A></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        title=member height=16 alt=member 
+                        src="CodeProject Discover WEB_ HTTP GET-POST Utility_ Free source code and programming help_files/member_sm.gif" 
+                        border=0></TD>
+                      <TD class=Frm_MsgAuthor><A 
+                        href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=1416097">dex_ter11</A></TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">20:26 
+                        14 Jun '05 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=F1135924_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 16px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2>Great Code.<BR><BR>I have 
+                                encounter problem of posting data(string) to the 
+                                web page. I have connected to a an internal 
+                                network' web server. But I failed to post a 
+                                string to the web page. I have already known the 
+                                name of the text box but i have failed to post a 
+                                data. If the text box name is pp, how can i post 
+                                a data(string) to the text box. 
+                                <BR><BR>thanx<BR></TD></TR>
+                                <TR style="VERTICAL-ALIGN: middle">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL title=Reply 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=4167&amp;select=1135924&amp;floc=/KB/IP/httpget-post.aspx&amp;fa=r">Reply</A>·<A 
+                                class=Frm_MHL title=Email 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=4167&amp;select=1135924&amp;floc=/KB/IP/httpget-post.aspx&amp;fa=e">Email</A>·<A 
+                                class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/IP/httpget-post.aspx?fid=4167&amp;tid=1135924">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=4167&amp;msg=1135924">PermaLink</A>·<A 
+                                class=Frm_MHL title="Bookmark this post" 
+                                href="http://www.codeproject.com/script/Bookmarks/Add.aspx?&amp;obid=1135924&amp;obtid=3&amp;bma=AddBookmark">Bookmark</A></TD>
+                                <TD class=Frm_MsgFt 
+                                style="TEXT-ALIGN: right"><SPAN id=MVF1135924 
+                                style="WHITE-SPACE: nowrap">1.67/5 (2 votes)
+                                <SCRIPT type=text/javascript>
+												MsgVFrm(1416097,1135924,false,"","","");
+											</SCRIPT>
+                                 
+                        </SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR class=Quick>
+                <TD class=Frm_MsgRtDivide><IMG height=1 alt="" 
+                  src="CodeProject Discover WEB_ HTTP GET-POST Utility_ Free source code and programming help_files/t.gif" 
+                  width=1 border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd Rt HdUnSel " id=F1130692_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=16><A 
+                        name=xx1130692xx></A><IMG height=16 alt=General 
+                        src="CodeProject Discover WEB_ HTTP GET-POST Utility_ Free source code and programming help_files/msg_general.gif" 
+                        width=16 align=top></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/IP/httpget-post.aspx?fid=4167&amp;select=1130692#xx1130692xx" 
+                        name=1130692>nice code</A></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        title=member height=16 alt=member 
+                        src="CodeProject Discover WEB_ HTTP GET-POST Utility_ Free source code and programming help_files/member_sm.gif" 
+                        border=0></TD>
+                      <TD class=Frm_MsgAuthor><A 
+                        href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=1511754">kimo_helmy</A></TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">23:57 8 
+                        Jun '05 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=F1130692_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 16px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2>Dear sir<BR>your code is so good 
+                                but for sorry it is C++ and i need a help to 
+                                change it to C# <BR></TD></TR>
+                                <TR style="VERTICAL-ALIGN: middle">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL title=Reply 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=4167&amp;select=1130692&amp;floc=/KB/IP/httpget-post.aspx&amp;fa=r">Reply</A>·<A 
+                                class=Frm_MHL title=Email 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=4167&amp;select=1130692&amp;floc=/KB/IP/httpget-post.aspx&amp;fa=e">Email</A>·<A 
+                                class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/IP/httpget-post.aspx?fid=4167&amp;tid=1130692">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=4167&amp;msg=1130692">PermaLink</A>·<A 
+                                class=Frm_MHL title="Bookmark this post" 
+                                href="http://www.codeproject.com/script/Bookmarks/Add.aspx?&amp;obid=1130692&amp;obtid=3&amp;bma=AddBookmark">Bookmark</A></TD>
+                                <TD class=Frm_MsgFt 
+                                style="TEXT-ALIGN: right"><SPAN id=MVF1130692 
+                                style="WHITE-SPACE: nowrap">
+                                <SCRIPT type=text/javascript>
+												MsgVFrm(1511754,1130692,false,"","","");
+											</SCRIPT>
+                                </SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR class=Quick>
+                <TD class=Frm_MsgRtDivide><IMG height=1 alt="" 
+                  src="CodeProject Discover WEB_ HTTP GET-POST Utility_ Free source code and programming help_files/t.gif" 
+                  width=1 border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd Rt HdUnSel " id=F1125892_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=16><A 
+                        name=xx1125892xx></A><IMG height=16 alt=General 
+                        src="CodeProject Discover WEB_ HTTP GET-POST Utility_ Free source code and programming help_files/msg_general.gif" 
+                        width=16 align=top></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/IP/httpget-post.aspx?fid=4167&amp;select=1125892#xx1125892xx" 
+                        name=1125892>https</A></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        height=15 alt=suss 
+                        src="CodeProject Discover WEB_ HTTP GET-POST Utility_ Free source code and programming help_files/usersuss.gif" 
+                        width=14></TD>
+                      <TD class=Frm_MsgAuthor>Anonymous</TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">17:22 3 
+                        Jun '05 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=F1125892_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 16px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2>any chance of a follow up article 
+                                showing how to implement https? <BR></TD></TR>
+                                <TR style="VERTICAL-ALIGN: middle">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL title=Reply 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=4167&amp;select=1125892&amp;floc=/KB/IP/httpget-post.aspx&amp;fa=r">Reply</A>·<A 
+                                class=Frm_MHL title=Email 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=4167&amp;select=1125892&amp;floc=/KB/IP/httpget-post.aspx&amp;fa=e">Email</A>·<A 
+                                class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/IP/httpget-post.aspx?fid=4167&amp;tid=1125892">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=4167&amp;msg=1125892">PermaLink</A>·<A 
+                                class=Frm_MHL title="Bookmark this post" 
+                                href="http://www.codeproject.com/script/Bookmarks/Add.aspx?&amp;obid=1125892&amp;obtid=3&amp;bma=AddBookmark">Bookmark</A></TD>
+                                <TD class=Frm_MsgFt style="TEXT-ALIGN: right"><A 
+                                class=Frm_MHL 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=4167&amp;select=1125892&amp;floc=/KB/IP/httpget-post.aspx&amp;fa=m">Edit</A>·<A 
+                                class=Frm_MHL 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=4167&amp;select=1125892&amp;floc=/KB/IP/httpget-post.aspx&amp;fa=d">Delete</A><BR><SPAN 
+                                id=MVF1125892 style="WHITE-SPACE: nowrap">3.00/5 
+                                (2 votes)
+                                <SCRIPT type=text/javascript>
+												MsgVFrm(0,1125892,false,"","","");
+											</SCRIPT>
+                                 
+                        </SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR class=Quick>
+                <TD class=Frm_MsgDivide><IMG height=1 alt="" 
+                  src="CodeProject Discover WEB_ HTTP GET-POST Utility_ Free source code and programming help_files/t.gif" 
+                  width=1 border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd HdUnSel " id=F2067814_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=34><A 
+                        name=xx2067814xx></A><IMG height=16 alt=General 
+                        src="CodeProject Discover WEB_ HTTP GET-POST Utility_ Free source code and programming help_files/msg_general.gif" 
+                        width=16 align=top></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/IP/httpget-post.aspx?fid=4167&amp;select=2067814#xx2067814xx" 
+                        name=2067814>Re: https</A></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        title=member height=16 alt=member 
+                        src="CodeProject Discover WEB_ HTTP GET-POST Utility_ Free source code and programming help_files/member_sm.gif" 
+                        border=0></TD>
+                      <TD class=Frm_MsgAuthor><A 
+                        href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=521371">Isidor</A></TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">8:54 5 
+                        Jun '07 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=F2067814_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 34px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2>changing http string to https in 
+                                request.cpp is enough. It works. <BR></TD></TR>
+                                <TR style="VERTICAL-ALIGN: middle">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL title=Reply 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=4167&amp;select=2067814&amp;floc=/KB/IP/httpget-post.aspx&amp;fa=r">Reply</A>·<A 
+                                class=Frm_MHL title=Email 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=4167&amp;select=2067814&amp;floc=/KB/IP/httpget-post.aspx&amp;fa=e">Email</A>·<A 
+                                class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/IP/httpget-post.aspx?fid=4167&amp;tid=1125892">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=4167&amp;msg=2067814">PermaLink</A>·<A 
+                                class=Frm_MHL title="Bookmark this post" 
+                                href="http://www.codeproject.com/script/Bookmarks/Add.aspx?&amp;obid=2067814&amp;obtid=3&amp;bma=AddBookmark">Bookmark</A></TD>
+                                <TD class=Frm_MsgFt 
+                                style="TEXT-ALIGN: right"><SPAN id=MVF2067814 
+                                style="WHITE-SPACE: nowrap">
+                                <SCRIPT type=text/javascript>
+												MsgVFrm(521371,2067814,false,"","","");
+											</SCRIPT>
+                                </SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR class=Quick>
+                <TD class=Frm_MsgRtDivide><IMG height=1 alt="" 
+                  src="CodeProject Discover WEB_ HTTP GET-POST Utility_ Free source code and programming help_files/t.gif" 
+                  width=1 border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd HiVote Rt HdUnSel " id=F1097648_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=16><A 
+                        name=xx1097648xx></A><IMG height=16 alt=General 
+                        src="CodeProject Discover WEB_ HTTP GET-POST Utility_ Free source code and programming help_files/msg_general.gif" 
+                        width=16 align=top></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/IP/httpget-post.aspx?fid=4167&amp;select=1097648#xx1097648xx" 
+                        name=1097648>Security</A></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        title=member height=16 alt=member 
+                        src="CodeProject Discover WEB_ HTTP GET-POST Utility_ Free source code and programming help_files/member_sm.gif" 
+                        border=0></TD>
+                      <TD class=Frm_MsgAuthor><A 
+                        href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=63691">LAT</A></TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">0:25 3 
+                        May '05 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=F1097648_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 16px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2>Hi,<BR><BR>Thanks for saving your 
+                                works. <BR>Because it uses Activex, is this code 
+                                reliable ? Could we use it with Web pages that 
+                                require password ?<BR><BR>Best 
+                                regards.<BR><BR><BR>Always look on the bright 
+                                side of life.<BR></TD></TR>
+                                <TR style="VERTICAL-ALIGN: middle">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL title=Reply 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=4167&amp;select=1097648&amp;floc=/KB/IP/httpget-post.aspx&amp;fa=r">Reply</A>·<A 
+                                class=Frm_MHL title=Email 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=4167&amp;select=1097648&amp;floc=/KB/IP/httpget-post.aspx&amp;fa=e">Email</A>·<A 
+                                class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/IP/httpget-post.aspx?fid=4167&amp;tid=1097648">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=4167&amp;msg=1097648">PermaLink</A>·<A 
+                                class=Frm_MHL title="Bookmark this post" 
+                                href="http://www.codeproject.com/script/Bookmarks/Add.aspx?&amp;obid=1097648&amp;obtid=3&amp;bma=AddBookmark">Bookmark</A></TD>
+                                <TD class=Frm_MsgFt 
+                                style="TEXT-ALIGN: right"><SPAN id=MVF1097648 
+                                style="WHITE-SPACE: nowrap">5.00/5 (1 vote)
+                                <SCRIPT type=text/javascript>
+												MsgVFrm(63691,1097648,false,"","","");
+											</SCRIPT>
+                                 
+                        </SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR class=Quick>
+                <TD class=Frm_MsgDivide><IMG height=1 alt="" 
+                  src="CodeProject Discover WEB_ HTTP GET-POST Utility_ Free source code and programming help_files/t.gif" 
+                  width=1 border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd HiVote HdUnSel " id=F1435882_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=34><A 
+                        name=xx1435882xx></A><IMG height=16 alt=General 
+                        src="CodeProject Discover WEB_ HTTP GET-POST Utility_ Free source code and programming help_files/msg_general.gif" 
+                        width=16 align=top></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/IP/httpget-post.aspx?fid=4167&amp;select=1435882#xx1435882xx" 
+                        name=1435882>Re: Security</A></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        title=member height=16 alt=member 
+                        src="CodeProject Discover WEB_ HTTP GET-POST Utility_ Free source code and programming help_files/member_sm.gif" 
+                        border=0></TD>
+                      <TD class=Frm_MsgAuthor><A 
+                        href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=2875490">nroeding</A></TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">7:46 4 
+                        Apr '06 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=F1435882_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 34px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2>I have the samve problem. Is there 
+                                a solution for it ? <BR></TD></TR>
+                                <TR style="VERTICAL-ALIGN: middle">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL title=Reply 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=4167&amp;select=1435882&amp;floc=/KB/IP/httpget-post.aspx&amp;fa=r">Reply</A>·<A 
+                                class=Frm_MHL title=Email 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=4167&amp;select=1435882&amp;floc=/KB/IP/httpget-post.aspx&amp;fa=e">Email</A>·<A 
+                                class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/IP/httpget-post.aspx?fid=4167&amp;tid=1097648">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=4167&amp;msg=1435882">PermaLink</A>·<A 
+                                class=Frm_MHL title="Bookmark this post" 
+                                href="http://www.codeproject.com/script/Bookmarks/Add.aspx?&amp;obid=1435882&amp;obtid=3&amp;bma=AddBookmark">Bookmark</A></TD>
+                                <TD class=Frm_MsgFt 
+                                style="TEXT-ALIGN: right"><SPAN id=MVF1435882 
+                                style="WHITE-SPACE: nowrap">5.00/5 (1 vote)
+                                <SCRIPT type=text/javascript>
+												MsgVFrm(2875490,1435882,false,"","","");
+											</SCRIPT>
+                                 
+                        </SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR class=Quick>
+                <TD class=Frm_MsgDivide><IMG height=1 alt="" 
+                  src="CodeProject Discover WEB_ HTTP GET-POST Utility_ Free source code and programming help_files/t.gif" 
+                  width=1 border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd HdUnSel " id=F2556987_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=52><A 
+                        name=xx2556987xx></A><IMG height=16 alt=General 
+                        src="CodeProject Discover WEB_ HTTP GET-POST Utility_ Free source code and programming help_files/msg_general.gif" 
+                        width=16 align=top></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/IP/httpget-post.aspx?fid=4167&amp;select=2556987#xx2556987xx" 
+                        name=2556987>Re: Security</A></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        title=member height=16 alt=member 
+                        src="CodeProject Discover WEB_ HTTP GET-POST Utility_ Free source code and programming help_files/member_sm.gif" 
+                        border=0></TD>
+                      <TD class=Frm_MsgAuthor><A 
+                        href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=4983822">Spyderbyte</A></TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">11:35 
+                        16 May '08 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=F2556987_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 52px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2>Same here <BR></TD></TR>
+                                <TR style="VERTICAL-ALIGN: middle">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL title=Reply 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=4167&amp;select=2556987&amp;floc=/KB/IP/httpget-post.aspx&amp;fa=r">Reply</A>·<A 
+                                class=Frm_MHL title=Email 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=4167&amp;select=2556987&amp;floc=/KB/IP/httpget-post.aspx&amp;fa=e">Email</A>·<A 
+                                class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/IP/httpget-post.aspx?fid=4167&amp;tid=1097648">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=4167&amp;msg=2556987">PermaLink</A>·<A 
+                                class=Frm_MHL title="Bookmark this post" 
+                                href="http://www.codeproject.com/script/Bookmarks/Add.aspx?&amp;obid=2556987&amp;obtid=3&amp;bma=AddBookmark">Bookmark</A></TD>
+                                <TD class=Frm_MsgFt 
+                                style="TEXT-ALIGN: right"><SPAN id=MVF2556987 
+                                style="WHITE-SPACE: nowrap">
+                                <SCRIPT type=text/javascript>
+												MsgVFrm(4983822,2556987,false,"","","");
+											</SCRIPT>
+                                </SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR class=Quick>
+                <TD class=Frm_MsgRtDivide><IMG height=1 alt="" 
+                  src="CodeProject Discover WEB_ HTTP GET-POST Utility_ Free source code and programming help_files/t.gif" 
+                  width=1 border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd LoVote Rt HdUnSel " id=F1085176_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=16><A 
+                        name=xx1085176xx></A><IMG height=16 alt=General 
+                        src="CodeProject Discover WEB_ HTTP GET-POST Utility_ Free source code and programming help_files/msg_general.gif" 
+                        width=16 align=top></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/IP/httpget-post.aspx?fid=4167&amp;select=1085176#xx1085176xx" 
+                        name=1085176>https works and dont...</A></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        title=member height=16 alt=member 
+                        src="CodeProject Discover WEB_ HTTP GET-POST Utility_ Free source code and programming help_files/member_sm.gif" 
+                        border=0></TD>
+                      <TD class=Frm_MsgAuthor><A 
+                        href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=1888084">spaciane</A></TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">8:36 16 
+                        Apr '05 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=F1085176_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 16px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2>When I use the application and put 
+                                a https like this one 
+                                <BR>"https://aserver.com/myfile.jpg"<BR><BR>On 
+                                button "Go", the dialogbox "retrieve failed" 
+                                appears <BR>BUT THE IMAGE APPEAR IN THE BROWSER 
+                                WINDOW.<BR><BR>I use request.h and request.cpp 
+                                in my prog , using your function<BR>"sendHTTP()" 
+                                and it works fine with http but not with 
+                                https<BR><BR>"InsertHTML();" must be the 
+                                function that makes it work with https 
+                                ?<BR><BR>Looking for a 
+                                lead<BR><BR><BR><BR></TD></TR>
+                                <TR style="VERTICAL-ALIGN: middle">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL title=Reply 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=4167&amp;select=1085176&amp;floc=/KB/IP/httpget-post.aspx&amp;fa=r">Reply</A>·<A 
+                                class=Frm_MHL title=Email 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=4167&amp;select=1085176&amp;floc=/KB/IP/httpget-post.aspx&amp;fa=e">Email</A>·<A 
+                                class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/IP/httpget-post.aspx?fid=4167&amp;tid=1085176">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=4167&amp;msg=1085176">PermaLink</A>·<A 
+                                class=Frm_MHL title="Bookmark this post" 
+                                href="http://www.codeproject.com/script/Bookmarks/Add.aspx?&amp;obid=1085176&amp;obtid=3&amp;bma=AddBookmark">Bookmark</A></TD>
+                                <TD class=Frm_MsgFt 
+                                style="TEXT-ALIGN: right"><SPAN id=MVF1085176 
+                                style="WHITE-SPACE: nowrap">1.00/5 (1 vote)
+                                <SCRIPT type=text/javascript>
+												MsgVFrm(1888084,1085176,false,"","","");
+											</SCRIPT>
+                                 
+                        </SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR class=Quick>
+                <TD class=Frm_MsgRtDivide><IMG height=1 alt="" 
+                  src="CodeProject Discover WEB_ HTTP GET-POST Utility_ Free source code and programming help_files/t.gif" 
+                  width=1 border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd LoVote Rt HdUnSel " id=F911869_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=16><A 
+                        name=xx911869xx></A><IMG height=16 alt=General 
+                        src="CodeProject Discover WEB_ HTTP GET-POST Utility_ Free source code and programming help_files/msg_general.gif" 
+                        width=16 align=top></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/IP/httpget-post.aspx?fid=4167&amp;select=911869#xx911869xx" 
+                        name=911869>The parameter is incorrect</A></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        title=member height=16 alt=member 
+                        src="CodeProject Discover WEB_ HTTP GET-POST Utility_ Free source code and programming help_files/member_sm.gif" 
+                        border=0></TD>
+                      <TD class=Frm_MsgAuthor><A 
+                        href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=27993">wujun</A></TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">19:35 
+                        30 Aug '04 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=F911869_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 16px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2>when i used the get method 
+                                everything is ok.but i used post method ,the 
+                                browser control will tell me "the parameter is 
+                                incorrect" error ,what wrong with i process the 
+                                program <BR></TD></TR>
+                                <TR style="VERTICAL-ALIGN: middle">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL title=Reply 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=4167&amp;select=911869&amp;floc=/KB/IP/httpget-post.aspx&amp;fa=r">Reply</A>·<A 
+                                class=Frm_MHL title=Email 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=4167&amp;select=911869&amp;floc=/KB/IP/httpget-post.aspx&amp;fa=e">Email</A>·<A 
+                                class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/IP/httpget-post.aspx?fid=4167&amp;tid=911869">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=4167&amp;msg=911869">PermaLink</A>·<A 
+                                class=Frm_MHL title="Bookmark this post" 
+                                href="http://www.codeproject.com/script/Bookmarks/Add.aspx?&amp;obid=911869&amp;obtid=3&amp;bma=AddBookmark">Bookmark</A></TD>
+                                <TD class=Frm_MsgFt 
+                                style="TEXT-ALIGN: right"><SPAN id=MVF911869 
+                                style="WHITE-SPACE: nowrap">1.50/5 (2 votes)
+                                <SCRIPT type=text/javascript>
+												MsgVFrm(27993,911869,false,"","","");
+											</SCRIPT>
+                                 
+                        </SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR class=Quick>
+                <TD class=Frm_MsgRtDivide><IMG height=1 alt="" 
+                  src="CodeProject Discover WEB_ HTTP GET-POST Utility_ Free source code and programming help_files/t.gif" 
+                  width=1 border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd LoVote Rt HdUnSel " id=F911858_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=16><A 
+                        name=xx911858xx></A><IMG height=16 alt=General 
+                        src="CodeProject Discover WEB_ HTTP GET-POST Utility_ Free source code and programming help_files/msg_general.gif" 
+                        width=16 align=top></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/IP/httpget-post.aspx?fid=4167&amp;select=911858#xx911858xx" 
+                        name=911858>browseran error occured</A></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        title=member height=16 alt=member 
+                        src="CodeProject Discover WEB_ HTTP GET-POST Utility_ Free source code and programming help_files/member_sm.gif" 
+                        border=0></TD>
+                      <TD class=Frm_MsgAuthor><A 
+                        href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=27993">wujun</A></TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">19:17 
+                        30 Aug '04 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=F911858_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 16px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2>when i used get method is ok,but i 
+                                use post method,the browser will tell me<BR>The 
+                                parameter is incorrect. why? <BR></TD></TR>
+                                <TR style="VERTICAL-ALIGN: middle">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL title=Reply 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=4167&amp;select=911858&amp;floc=/KB/IP/httpget-post.aspx&amp;fa=r">Reply</A>·<A 
+                                class=Frm_MHL title=Email 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=4167&amp;select=911858&amp;floc=/KB/IP/httpget-post.aspx&amp;fa=e">Email</A>·<A 
+                                class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/IP/httpget-post.aspx?fid=4167&amp;tid=911858">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=4167&amp;msg=911858">PermaLink</A>·<A 
+                                class=Frm_MHL title="Bookmark this post" 
+                                href="http://www.codeproject.com/script/Bookmarks/Add.aspx?&amp;obid=911858&amp;obtid=3&amp;bma=AddBookmark">Bookmark</A></TD>
+                                <TD class=Frm_MsgFt 
+                                style="TEXT-ALIGN: right"><SPAN id=MVF911858 
+                                style="WHITE-SPACE: nowrap">2.00/5 (2 votes)
+                                <SCRIPT type=text/javascript>
+												MsgVFrm(27993,911858,false,"","","");
+											</SCRIPT>
+                                 
+                        </SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR class=Quick>
+                <TD class=Frm_MsgRtDivide><IMG height=1 alt="" 
+                  src="CodeProject Discover WEB_ HTTP GET-POST Utility_ Free source code and programming help_files/t.gif" 
+                  width=1 border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd LoVote Rt HdUnSel " id=F911856_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=16><A 
+                        name=xx911856xx></A><IMG height=16 alt=General 
+                        src="CodeProject Discover WEB_ HTTP GET-POST Utility_ Free source code and programming help_files/msg_general.gif" 
+                        width=16 align=top></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/IP/httpget-post.aspx?fid=4167&amp;select=911856#xx911856xx" 
+                        name=911856>browseran error occured</A></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        title=member height=16 alt=member 
+                        src="CodeProject Discover WEB_ HTTP GET-POST Utility_ Free source code and programming help_files/member_sm.gif" 
+                        border=0></TD>
+                      <TD class=Frm_MsgAuthor><A 
+                        href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=27993">wujun</A></TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">19:13 
+                        30 Aug '04 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=F911856_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 16px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2>when i used get method is ok,but i 
+                                use post method,the <BR></TD></TR>
+                                <TR style="VERTICAL-ALIGN: middle">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL title=Reply 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=4167&amp;select=911856&amp;floc=/KB/IP/httpget-post.aspx&amp;fa=r">Reply</A>·<A 
+                                class=Frm_MHL title=Email 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=4167&amp;select=911856&amp;floc=/KB/IP/httpget-post.aspx&amp;fa=e">Email</A>·<A 
+                                class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/IP/httpget-post.aspx?fid=4167&amp;tid=911856">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=4167&amp;msg=911856">PermaLink</A>·<A 
+                                class=Frm_MHL title="Bookmark this post" 
+                                href="http://www.codeproject.com/script/Bookmarks/Add.aspx?&amp;obid=911856&amp;obtid=3&amp;bma=AddBookmark">Bookmark</A></TD>
+                                <TD class=Frm_MsgFt 
+                                style="TEXT-ALIGN: right"><SPAN id=MVF911856 
+                                style="WHITE-SPACE: nowrap">1.00/5 (1 vote)
+                                <SCRIPT type=text/javascript>
+												MsgVFrm(27993,911856,false,"","","");
+											</SCRIPT>
+                                 
+                        </SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR>
+                <TD><IMG height=5 alt="" 
+                  src="CodeProject Discover WEB_ HTTP GET-POST Utility_ Free source code and programming help_files/t.gif" 
+                  width=1 border=0></TD></TR></TBODY></TABLE></TD></TR>
+        <TR>
+          <TD>
+            <TABLE cellSpacing=0 cellPadding=2 width="100%">
+              <TBODY>
+              <TR class=Frm_Footer>
+                <TD>Last Visit: Tuesday, July 29, 2008 12:24 AM &nbsp; &nbsp; 
+                  Last Update:Thursday, August 14, 2008 10:58 AM</TD>
+                <TD style="WHITE-SPACE: nowrap; TEXT-ALIGN: right"><B>1</B><A 
+                  class=Frm_HL 
+                  href="http://www.codeproject.com/KB/IP/httpget-post.aspx?fid=4167&amp;fr=26#xx0xx" 
+                  name=Frm_HoverNL>2</A><A class=Frm_HL 
+                  href="http://www.codeproject.com/KB/IP/httpget-post.aspx?fid=4167&amp;fr=51#xx0xx" 
+                  name=Frm_HoverNL>3</A> <A class=Frm_HL 
+                  href="http://www.codeproject.com/KB/IP/httpget-post.aspx?fid=4167&amp;fr=26#xx0xx" 
+                  name=Frm_HoverNL>Next 
+      »</A></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></DIV>
+      <P class=SmallText><IMG height=16 alt=General 
+      src="CodeProject Discover WEB_ HTTP GET-POST Utility_ Free source code and programming help_files/msg_general.gif" 
+      width=16 align=top> General &nbsp;&nbsp; <IMG height=16 alt=News 
+      src="CodeProject Discover WEB_ HTTP GET-POST Utility_ Free source code and programming help_files/msg_news.gif" 
+      width=16 align=top> News &nbsp;&nbsp; <IMG height=16 alt=Question 
+      src="CodeProject Discover WEB_ HTTP GET-POST Utility_ Free source code and programming help_files/msg_question.gif" 
+      width=16 align=top> Question &nbsp;&nbsp; <IMG height=16 alt=Answer 
+      src="CodeProject Discover WEB_ HTTP GET-POST Utility_ Free source code and programming help_files/msg_answer.gif" 
+      width=16 align=top> Answer &nbsp;&nbsp; <IMG height=16 alt=Joke 
+      src="CodeProject Discover WEB_ HTTP GET-POST Utility_ Free source code and programming help_files/msg_joke.gif" 
+      width=16 align=top> Joke &nbsp;&nbsp; <IMG height=16 alt=Rant 
+      src="CodeProject Discover WEB_ HTTP GET-POST Utility_ Free source code and programming help_files/msg_rant.gif" 
+      width=16 align=top> Rant &nbsp;&nbsp; <IMG height=16 alt=Admin 
+      src="CodeProject Discover WEB_ HTTP GET-POST Utility_ Free source code and programming help_files/msg_admin.gif" 
+      width=16 align=top> Admin &nbsp;&nbsp; </P><!-- Forum End --></DIV>
+      <TABLE width="100%">
+        <TBODY>
+        <TR vAlign=top>
+          <TD class=TinyText align=left><A id=ctl00_PermaLink 
+            href="http://www.codeproject.com/script/Articles/Article.aspx?aid=2487">PermaLink</A> 
+            | <A id=ctl00_PrivacyLink 
+            href="http://www.codeproject.com/info/privacy.aspx">Privacy </A>| <A 
+            id=ctl00_TermsOfUseLink 
+            href="http://www.codeproject.com/info/TermsOfUse.aspx">Terms of 
+            Use</A> <BR>Last Updated: 25 Jun 2002<BR>Editor: <A 
+            id=ctl00_ArticleEditor 
+            href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=98">James 
+            Spibey</A><BR></TD>
+          <TD class=TinyText vAlign=top align=right>Copyright 2002 by Adrian 
+            Bacaianu<BR>Everything else Copyright © <A 
+            href="mailto:webmaster@codeproject.com">CodeProject</A>, 1999-2008 
+            <BR>Web16 | <A id=ctl00_AdvertiseLink 
+            href="http://www.codeproject.com/info/MediaKit.aspx">Advertise on 
+            the Code Project </A></TD></TR></TBODY></TABLE>
+      <CENTER></CENTER></TD></TR>
+  <TR>
+    <TD align=middle colSpan=2></TD></TR></TBODY></TABLE><BR>
+<SCRIPT language=Javascript type=text/javascript>//<![CDATA[
+if (document.all) try {window.attachEvent("oncopy",copyCode);}catch(e){};
+//]]></SCRIPT>
+
+<SCRIPT language=Javascript 
+src="CodeProject Discover WEB_ HTTP GET-POST Utility_ Free source code and programming help_files/TogglePre.js" 
+type=text/javascript></SCRIPT>
+
+<SCRIPT language=Javascript 
+src="CodeProject Discover WEB_ HTTP GET-POST Utility_ Free source code and programming help_files/menu132_com.js" 
+type=text/javascript></SCRIPT>
+
+<SCRIPT language=Javascript 
+src="CodeProject Discover WEB_ HTTP GET-POST Utility_ Free source code and programming help_files/TopNavBar.js" 
+type=text/javascript></SCRIPT>
+
+<SCRIPT language=Javascript type=text/javascript>//<![CDATA[
+new HVMenu(new menu_NavbarConfig());
+//]]></SCRIPT>
+</BODY></HTML>

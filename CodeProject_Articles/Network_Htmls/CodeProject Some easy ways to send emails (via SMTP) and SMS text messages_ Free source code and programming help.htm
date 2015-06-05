@@ -1,0 +1,2926 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!-- saved from url=(0054)http://www.codeproject.com/KB/tips/easysmtpandsms.aspx -->
+<HTML><HEAD><TITLE>CodeProject: Some easy ways to send emails (via SMTP) and SMS text messages. Free source code and programming help</TITLE>
+<META http-equiv=Content-Type content="text/html; charset=utf-8">
+<META 
+content="A beginner's guide on how to send emails (via SMTP) and SMS text messages when you don't have adequate access to the necessary resources; Author: daluu; Section: Programming Tips; Chapter: General Programming" 
+name=Description>
+<META 
+content="VC7, .NET 1.1, .NET 2.0, Win2K, WinXP, Win2003, VS.NET2003, VS2005, C++/CLI, C, VB, ASP, ASP.NET, VBScript, Perl, HTML, MFC, DBA, Dev, QA, Intermediate,Programming Tips,General Programming,Free source code, tutorials" 
+name=Keywords>
+<META content="The Code Project" name=Author>
+<META content=General name=Rating>
+<META content="index, follow" name=Robots>
+<META content="1 days" name=Revisit-After><LINK 
+title="CodeProject Latest articles - All topics" 
+href="http://www.codeproject.com/webservices/articlerss.aspx?cat=1" 
+type=application/rss+xml rel=alternate><LINK 
+title="CodeProject Latest articles - MFC / C++" 
+href="http://www.codeproject.com/webservices/articlerss.aspx?cat=2" 
+type=application/rss+xml rel=alternate><LINK 
+title="CodeProject Latest articles - C#" 
+href="http://www.codeproject.com/webservices/articlerss.aspx?cat=3" 
+type=application/rss+xml rel=alternate><LINK 
+title="CodeProject Latest articles - ASP.NET" 
+href="http://www.codeproject.com/webservices/articlerss.aspx?cat=4" 
+type=application/rss+xml rel=alternate><LINK 
+title="CodeProject Latest articles - .NET" 
+href="http://www.codeproject.com/webservices/articlerss.aspx?cat=5" 
+type=application/rss+xml rel=alternate><LINK 
+title="CodeProject Latest articles - VB.NET" 
+href="http://www.codeproject.com/webservices/articlerss.aspx?cat=6" 
+type=application/rss+xml rel=alternate><LINK title="CodeProject Lounge Postings" 
+href="http://www.codeproject.com/webservices/LoungeRSS.aspx" 
+type=application/rss+xml rel=alternate><LINK title=CodeProject 
+href="http://www.codeproject.com/info/OpenSearch.xml" 
+type=application/opensearchdescription+xml rel=search><LINK 
+href="CodeProject Some easy ways to send emails (via SMTP) and SMS text messages_ Free source code and programming help_files/CodeProject.css" 
+type=text/css rel=stylesheet><LINK 
+href="CodeProject Some easy ways to send emails (via SMTP) and SMS text messages_ Free source code and programming help_files/ForumClassic.css" 
+type=text/css rel=stylesheet>
+<SCRIPT type=text/javascript>
+  var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+  document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</SCRIPT>
+
+<SCRIPT type=text/javascript>
+   var pageTracker = _gat._getTracker("UA-1735123-1");
+   pageTracker._setDomainName("www.codeproject.com");
+   pageTracker._setSessionTimeout("1200"); // 20 mins
+   pageTracker._initData();
+   pageTracker._trackPageview();
+</SCRIPT>
+
+<SCRIPT language=Javascript 
+src="CodeProject Some easy ways to send emails (via SMTP) and SMS text messages_ Free source code and programming help_files/oncopy.js" 
+type=text/javascript></SCRIPT>
+
+<SCRIPT language=Javascript 
+src="CodeProject Some easy ways to send emails (via SMTP) and SMS text messages_ Free source code and programming help_files/jxs.js" 
+type=text/javascript></SCRIPT>
+
+<SCRIPT language=Javascript 
+src="CodeProject Some easy ways to send emails (via SMTP) and SMS text messages_ Free source code and programming help_files/bookmark.js" 
+type=text/javascript></SCRIPT>
+
+<SCRIPT language=Javascript 
+src="CodeProject Some easy ways to send emails (via SMTP) and SMS text messages_ Free source code and programming help_files/rateitem.js" 
+type=text/javascript></SCRIPT>
+
+<SCRIPT language=Javascript type=text/javascript>//<![CDATA[
+function ToggleMenu(itemName)
+{
+	var elm = document.getElementById(itemName);
+	var i,others = document.getElementById('SectionMenu');
+	for(i=0; i < others.childNodes.length; i++)
+	{
+		var other = others.childNodes[i];
+		if ((other.className == 'MenuSectionBlock') && (other != elm))
+			other.style.display='none';
+	}
+	if (elm.style.display == 'block') elm.style.display='none';
+	else elm.style.display='block';
+	return false;
+}
+
+//]]></SCRIPT>
+
+<SCRIPT language=Javascript 
+src="CodeProject Some easy ways to send emails (via SMTP) and SMS text messages_ Free source code and programming help_files/addto.js" 
+type=text/javascript></SCRIPT>
+
+<SCRIPT language=Javascript type=text/javascript>//<![CDATA[
+var Selected = "-1";
+
+function SwitchMessage(e, msgId)
+{
+  if (!msgId) {
+    if(!e)e=window.event;
+    var target=e.target?e.target:e.srcElement;
+    while(target&&target.id!='DynMessLink')target=target.parentNode;
+    if(!target||target.id!='DynMessLink')return;
+    msgId=target.name;
+  }
+  if(Selected&&Selected!=""){
+    var body=eval("document.getElementById('F" + Selected + "_h1')");
+    if(body) body.style.display = 'none';
+    var head=eval("document.getElementById('F" + Selected + "_h0')");
+    if(head) head.className = head.className.replace("Sel", "UnSel");
+  }
+  if(Selected==msgId.toString())
+    Selected="";
+  else {
+    Selected=msgId.toString();
+    var body=eval("document.getElementById('F" + Selected + "_h1')");
+    if(body){
+      if(body.style.display=='none') body.style.display='';
+      else body.style.display = 'none';
+    }
+    var head=eval("document.getElementById('F" + Selected + "_h0')");
+    if (head) 
+      head.className = head.className.replace("UnSel", "Sel");
+    if(body&&head&&body.style.display!='none'){
+      document.body.scrollTop = getRealPos(head, "Top") - document.body.clientHeight/10;
+      EnsureMessageVisible(Selected, true);
+    }
+  }
+  if (e){if(e.preventDefault)e.preventDefault;else e.returnValue=false;}
+  return false;
+}
+
+//]]></SCRIPT>
+
+<SCRIPT language=Javascript 
+src="CodeProject Some easy ways to send emails (via SMTP) and SMS text messages_ Free source code and programming help_files/ShortCuts.js" 
+type=text/javascript></SCRIPT>
+<LINK 
+href="CodeProject Some easy ways to send emails (via SMTP) and SMS text messages_ Free source code and programming help_files/ForumClassicIE6.css" 
+type=text/css rel=stylesheet><LINK href="/favicon.ico" type=image/ico 
+rel=icon><LINK href="/favicon.ico" type=image/ico rel="shortcut icon">
+<META content="MSHTML 6.00.2900.2180" name=GENERATOR></HEAD>
+<BODY>
+<TABLE id=ctl00_AT cellSpacing=0 cellPadding=0 border=0>
+  <TBODY>
+  <TR vAlign=top>
+    <TD colSpan=2>
+      <TABLE cellSpacing=0 cellPadding=0 border=0>
+        <TBODY>
+        <TR>
+          <TD class=HeaderLogo><A href="http://www.codeproject.com/"><IMG 
+            id=ctl00_Logo 
+            style="BORDER-TOP-WIDTH: 0px; BORDER-LEFT-WIDTH: 0px; BORDER-BOTTOM-WIDTH: 0px; WIDTH: 225px; HEIGHT: 90px; BORDER-RIGHT-WIDTH: 0px" 
+            alt="The Code Project" 
+            src="CodeProject Some easy ways to send emails (via SMTP) and SMS text messages_ Free source code and programming help_files/logo225x90.gif"></A></TD>
+          <TD class=HeaderBanner align=right width="100%">
+            <SCRIPT type=text/javascript>document.write(unescape("%3ca%20href%3d%22http%3a%2f%2fwww.codeproject.com%2fRedir.aspx%3fadid%3d6901%26way%3dban%22%20target%3d%22_blank%22%20rel%3d%22nofollow%22%3e%3cimg%20src%3d%22http%3a%2f%2fwww.codeproject.com%2fscript%2fAnn%2fServeImg.aspx%3fFile%3d%252fscript%252fadmentor%252fimages%252fc1se08v2_amazing_728x90.gif%26C%3dFalse%26id%3d6901%22%20alt%3d%22%22%20border%3d%220%22%20width%3d%22728%22%20height%3d%2290%22%3e%3c%2fa%3e"));</SCRIPT>
+          </TD></TR>
+        <TR>
+          <TD colSpan=2>
+            <TABLE class=MemberNavBar cellSpacing=0 cellPadding=5 
+              width="100%"><TBODY>
+              <TR>
+                <TD class=SmallText style="FONT-WEIGHT: bold">5,321,531 
+                  members and growing! (17,772 online)</TD>
+                <TD align=right>
+                  <DIV class=MemberNavBarText 
+                  id=ctl00_MemberMenu_LoggedOffOptions 
+                  style="PADDING-RIGHT: 0px; PADDING-LEFT: 0px; PADDING-BOTTOM: 0px; MARGIN: 0px; PADDING-TOP: 0px"><A 
+                  name=SignUp></A>
+                  <FORM id=subForm 
+                  style="PADDING-RIGHT: 0px; PADDING-LEFT: 0px; PADDING-BOTTOM: 0px; MARGIN: 0px; PADDING-TOP: 0px" 
+                  name=subForm 
+                  action=/script/Membership/LogOn.aspx?rp=%2fKB%2ftips%2feasysmtpandsms.aspx 
+                  method=post>Email <INPUT class=SmallText id=Email 
+                  style="WIDTH: 100px" name=Email> Password <INPUT 
+                  class=SmallText id=Password style="WIDTH: 60px" type=password 
+                  name=Password> <INPUT class=FormButton type=submit value="Sign in">
+                  <SCRIPT type=text/javascript>
+function Join(){document.location.href='/script/Membership/Modify.aspx';return false;}
+document.write('<input type="button" class="FormButton" onclick="return Join();" value="Join"');
+document.write('<input type="hidden" name="fld_quicksign" value="true" />');
+</SCRIPT>
+                   <INPUT id=RememberMeCheck type=checkbox CHECKED name=cookie> 
+                  <LABEL for=RememberMeCheck>Remember me?</LABEL>&nbsp; <A 
+                  id=ctl00_MemberMenu_SendPassword 
+                  href="http://www.codeproject.com/script/Membership/SendPassword.aspx?rp=%2fKB%2ftips%2feasysmtpandsms.aspx"><IMG 
+                  height=16 alt=help 
+                  src="CodeProject Some easy ways to send emails (via SMTP) and SMS text messages_ Free source code and programming help_files/help.gif" 
+                  width=16 align=middle border=0>Lost your password?</A> 
+                  </FORM></DIV></TD></TR></TBODY></TABLE></TD></TR>
+        <TR>
+          <TD colSpan=2>
+            <TABLE class=SiteNavBar id=tblSiteToolbar cellSpacing=0 
+            cellPadding=0>
+              <TBODY>
+              <TR>
+                <TD noWrap><A href="http://www.codeproject.com/">Home</A></TD>
+                <TD>&nbsp; </TD>
+                <TD noWrap align=right>Current Site: </TD>
+                <TD class=SelCat noWrap><A 
+                  href="http://www.codeproject.com/">Main Site</A></TD>
+                <TD noWrap><A href="http://java.codeproject.com/">Java</A></TD>
+                <TD noWrap><A href="http://lamp.codeproject.com/">Linux Apache 
+                  MySQL PHP</A></TD>
+                <TD width="100%">&nbsp;</TD>
+                <TD id=ctl00_TopNavBar_RightMenus>
+                  <DIV id=MenuPos 
+                  style="WIDTH: 380px; POSITION: relative; TOP: 1px; HEIGHT: 22px">
+                  <TABLE 
+                  style="BORDER-TOP-WIDTH: 0px; BORDER-LEFT-WIDTH: 0px; BORDER-BOTTOM-WIDTH: 0px; HEIGHT: 20px; BORDER-RIGHT-WIDTH: 0px" 
+                  cellSpacing=0 cellPadding=0 width=380>
+                    <TBODY>
+                    <TR vAlign=center>
+                      <TD 
+                      style="BORDER-TOP-WIDTH: 0px; BORDER-LEFT-WIDTH: 0px; BORDER-BOTTOM-WIDTH: 0px; BORDER-RIGHT-WIDTH: 0px" 
+                      noWrap><A 
+                        href="http://www.codeproject.com/info/FAQ.aspx">Help!</A></TD>
+                      <TD 
+                      style="BORDER-TOP-WIDTH: 0px; BORDER-LEFT-WIDTH: 0px; BORDER-BOTTOM-WIDTH: 0px; BORDER-RIGHT-WIDTH: 0px" 
+                      noWrap><A 
+                        href="http://www.codeproject.com/script/Articles/Latest.aspx">Articles</A></TD>
+                      <TD 
+                      style="BORDER-TOP-WIDTH: 0px; BORDER-LEFT-WIDTH: 0px; BORDER-BOTTOM-WIDTH: 0px; BORDER-RIGHT-WIDTH: 0px" 
+                      noWrap><A 
+                        href="http://www.codeproject.com/script/Forums/List.aspx">Message 
+                        Boards</A></TD>
+                      <TD 
+                      style="BORDER-TOP-WIDTH: 0px; BORDER-LEFT-WIDTH: 0px; BORDER-BOTTOM-WIDTH: 0px; BORDER-RIGHT-WIDTH: 0px" 
+                      noWrap><A 
+                        href="http://www.codeproject.com/script/Jobs/List.aspx">Job 
+                        Board</A></TD>
+                      <TD 
+                      style="BORDER-TOP-WIDTH: 0px; BORDER-LEFT-WIDTH: 0px; BORDER-BOTTOM-WIDTH: 0px; BORDER-RIGHT-WIDTH: 0px" 
+                      noWrap><A 
+                        href="http://www.codeproject.com/Lounge.aspx">Lounge</A></TD></TR></TBODY></TABLE></DIV></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+  <TR>
+    <TD vAlign=top colSpan=2><A name=_top></A>
+      <TABLE class=ArticleUneditedHeader id=ctl00_ArticleTopHeader_HeaderTable 
+      cellSpacing=0 cellPadding=3 width="100%" border=0>
+        <TBODY>
+        <TR vAlign=top>
+          <TD class=SmallText><A id=ctl00_ArticleTopHeader_ChapterLink 
+            href="http://www.codeproject.com/script/Content/Chapter.aspx?chptId=6">General 
+            Programming</A> » <A id=ctl00_ArticleTopHeader_SectionLink 
+            href="http://www.codeproject.com/KB/tips/">Programming Tips</A> » <A 
+            id=ctl00_ArticleTopHeader_SubsectionLink 
+            href="http://www.codeproject.com/KB/tips/index.aspx?#Programming Tips - Design and Strategy">Design 
+            and Strategy</A> <SPAN class=ArticleIntermediate 
+            id=ctl00_ArticleTopHeader_SkillLevel>&nbsp;&nbsp;&nbsp; 
+            Intermediate</SPAN> <SPAN class=SmallText 
+            id=ctl00_ArticleTopHeader_LicenceTerms 
+            style="MARGIN-LEFT: 40px">License: <A 
+            href="http://www.codeproject.com/info/cpol10.aspx">The Code Project 
+            Open License (CPOL)</A></SPAN> <BR><BR>
+            <H1><SPAN class=ArticleTopTitle 
+            id=ctl00_ArticleTopHeader_ArticleTitle>Some easy ways to send emails 
+            (via SMTP) and SMS text messages</SPAN></H1><B>By <A 
+            href="http://www.codeproject.com/script/Articles/MemberArticles.aspx?amid=850321">daluu</A></B><BR><BR><SPAN 
+            class=ArticleTopDescr id=ctl00_ArticleTopHeader_ArticleDescr>A 
+            beginner's guide on how to send emails (via SMTP) and SMS text 
+            messages when you don't have adequate access to the necessary 
+            resources</SPAN> </TD>
+          <TD class=SmallText style="WIDTH: 210px"><SPAN 
+            id=ctl00_ArticleTopHeader_ArticleAttributes>VBScript, Perl, HTML, 
+            C++/CLI, C, VB, VC7, C++Windows, .NET, .NET 1.1, .NET 2.0, Win2K, 
+            WinXP, Win2003, MFC, ASP, ASP.NET, VS.NET2003, VS2005, Visual 
+            Studio, DBA, Dev, QA</SPAN><BR><BR><SPAN 
+            style="PADDING-RIGHT: 2ex">Posted</SPAN>: <B>4 Nov 2006</B><BR><SPAN 
+            style="PADDING-RIGHT: 0.5ex">Updated</SPAN>: <B>30 Dec 2007</B> 
+            <BR><SPAN style="PADDING-RIGHT: 3.2ex">Views</SPAN>: 
+            <B>61,501</B><BR></TD></TR>
+        <TR>
+          <TD colSpan=2>
+            <TABLE width="100%">
+              <TBODY>
+              <TR>
+                <TD>
+                  <DIV id=ctl00_ArticleTopHeader_UneditedDiv><B>Note: <A 
+                  id=ctl00_ArticleTopHeader_UneditedLnk 
+                  href="http://www.codeproject.com/script/Articles/Unedited.aspx">This 
+                  is an unedited reader contribution</A></B> </DIV></TD>
+                <TD class=SmallText style="WHITE-SPACE: nowrap" 
+              align=right></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+  <TR vAlign=top>
+    <TD class=LHNavBar id=ctl00_LeftNavCell>
+      <DIV class=FeatureBlockHeader>Announcements</DIV>
+      <DIV class="FeatureBlockContent RHFeatureBar" 
+      style="PADDING-RIGHT: 0px; PADDING-LEFT: 0px; PADDING-BOTTOM: 0px; MARGIN: 0px; PADDING-TOP: 0px">
+      <TABLE cellPadding=2>
+        <TBODY>
+        <TR vAlign=center>
+          <TD><IMG height=10 alt=Comp 
+            src="CodeProject Some easy ways to send emails (via SMTP) and SMS text messages_ Free source code and programming help_files/startrek.gif" 
+            width=24></TD>
+          <TD><A 
+            href="http://www.codeproject.com/script/Awards/Competition.aspx?cid=274">Summer 
+            Code Competition!</A></TD></TR>
+        <TR vAlign=center>
+          <TD><IMG height=24 alt=Comp 
+            src="CodeProject Some easy ways to send emails (via SMTP) and SMS text messages_ Free source code and programming help_files/info_24.png" 
+            width=24></TD>
+          <TD><A 
+            href="http://www.codeproject.com/script/Awards/Competition.aspx?cid=270">New 
+            thawte <BR>Scavenger Hunt!</A></TD></TR>
+        <TR vAlign=center>
+          <TD><IMG height=24 alt=Comp 
+            src="CodeProject Some easy ways to send emails (via SMTP) and SMS text messages_ Free source code and programming help_files/coffee_24.png" 
+            width=24 align=middle></TD>
+          <TD><A href="http://www.codeproject.com/Zones/IBM/">Win CodeProject 
+            Coffee!</A></TD></TR>
+        <TR vAlign=center>
+          <TD><IMG height=24 alt=Comp 
+            src="CodeProject Some easy ways to send emails (via SMTP) and SMS text messages_ Free source code and programming help_files/info_24.png" 
+            width=24 align=middle></TD>
+          <TD><A id=ctl00_Announcements_CompLink 
+            href="http://www.codeproject.com/Feature/ArticleCompetition/">Monthly 
+            Competition</A></TD></TR></TBODY></TABLE></DIV>
+      <DIV class=FeatureBlockHeader style="MARGIN-TOP: 7px">Want a new 
+Job?</DIV>
+      <DIV class="FeatureBlockContent RHFeatureBar">
+      <UL class=InfoList>
+        <LI><A 
+        href="http://www.codeproject.com/script/Jobs/View.aspx?jid=51">.NET 
+        Software Developer / Engineer</A> at Market rate in United States
+        <LI><A 
+        href="http://www.codeproject.com/script/Jobs/View.aspx?jid=31">Product 
+        Manager: Visual Studio Web Development</A> at Market rate in United 
+        States
+        <LI><A 
+        href="http://www.codeproject.com/script/Jobs/View.aspx?jid=77">ASP.NET 
+        C# VB.NET SQL Developer</A> at Market rate in United States
+        <LI><A href="http://www.codeproject.com/script/Jobs/List.aspx">View 
+        Latest Jobs...</A></LI></UL></DIV>
+      <DIV id=SectionMenu>
+      <DIV class=MenuCat>Chapters</DIV>
+      <DIV class=MenuChapter><A onclick="return ToggleMenu('Chapter1');" 
+      href="http://www.codeproject.com/script/Content/Chapter.aspx?chptId=1">Desktop 
+      Development</A></DIV>
+      <DIV class=MenuSectionBlock id=Chapter1 style="DISPLAY: none">
+      <DIV class=MI id=Section1><A 
+      href="http://www.codeproject.com/KB/buttons/">Button Controls</A></DIV>
+      <DIV class=MI id=Section15><A 
+      href="http://www.codeproject.com/KB/clipboard/">Clipboard</A></DIV>
+      <DIV class=MI id=Section2><A 
+      href="http://www.codeproject.com/KB/combobox/">Combo &amp; List 
+      Boxes</A></DIV>
+      <DIV class=MI id=Section67><A 
+      href="http://www.codeproject.com/KB/dialog/">Dialogs and Windows</A></DIV>
+      <DIV class=MI id=Section107><A 
+      href="http://www.codeproject.com/KB/gadgets/">Desktop Gadgets</A></DIV>
+      <DIV class=MI id=Section16><A 
+      href="http://www.codeproject.com/KB/docview/">Document / View</A></DIV>
+      <DIV class=MI id=Section4><A 
+      href="http://www.codeproject.com/KB/edit/">Edit Controls</A></DIV>
+      <DIV class=MI id=Section17><A 
+      href="http://www.codeproject.com/KB/files/">Files and Folders</A></DIV>
+      <DIV class=MI id=Section3><A 
+      href="http://www.codeproject.com/KB/grid/">Grid &amp; Data 
+      Controls</A></DIV>
+      <DIV class=MI id=Section5><A 
+      href="http://www.codeproject.com/KB/list/">List Controls</A></DIV>
+      <DIV class=MI id=Section6><A 
+      href="http://www.codeproject.com/KB/menus/">Menus</A></DIV>
+      <DIV class=MI id=Section14><A 
+      href="http://www.codeproject.com/KB/miscctrl/">Miscellaneous</A></DIV>
+      <DIV class=MI id=Section18><A 
+      href="http://www.codeproject.com/KB/printing/">Printing</A></DIV>
+      <DIV class=MI id=Section95><A 
+      href="http://www.codeproject.com/KB/progress/">Progress Controls</A></DIV>
+      <DIV class=MI id=Section11><A 
+      href="http://www.codeproject.com/KB/selection/">Selection 
+      Controls</A></DIV>
+      <DIV class=MI id=Section19><A 
+      href="http://www.codeproject.com/KB/shell/">Shell and IE 
+      programming</A></DIV>
+      <DIV class=MI id=Section68><A 
+      href="http://www.codeproject.com/KB/smart/">Smart Client</A></DIV>
+      <DIV class=MI id=Section8><A 
+      href="http://www.codeproject.com/KB/splitter/">Splitter Windows</A></DIV>
+      <DIV class=MI id=Section9><A 
+      href="http://www.codeproject.com/KB/static/">Static &amp; Panel 
+      Controls</A></DIV>
+      <DIV class=MI id=Section10><A 
+      href="http://www.codeproject.com/KB/statusbar/">Status Bar</A></DIV>
+      <DIV class=MI id=Section7><A 
+      href="http://www.codeproject.com/KB/tabs/">Tabs &amp; Property 
+      Pages</A></DIV>
+      <DIV class=MI id=Section12><A 
+      href="http://www.codeproject.com/KB/toolbars/">Toolbars &amp; Docking 
+      windows</A></DIV>
+      <DIV class=MI id=Section13><A 
+      href="http://www.codeproject.com/KB/tree/">Tree Controls</A></DIV></DIV>
+      <DIV class=MenuChapter><A onclick="return ToggleMenu('Chapter2');" 
+      href="http://www.codeproject.com/script/Content/Chapter.aspx?chptId=2">Web 
+      Development</A></DIV>
+      <DIV class=MenuSectionBlock id=Chapter2 style="DISPLAY: none">
+      <DIV class=MI id=Section70><A 
+      href="http://www.codeproject.com/KB/ajax/">Ajax and Atlas</A></DIV>
+      <DIV class=MI id=Section27><A 
+      href="http://www.codeproject.com/KB/applications/">Applications &amp; 
+      Tools</A></DIV>
+      <DIV class=MI id=Section85><A 
+      href="http://www.codeproject.com/KB/asp/">ASP</A></DIV>
+      <DIV class=MI id=Section89><A 
+      href="http://www.codeproject.com/KB/aspnet/">ASP.NET</A></DIV>
+      <DIV class=MI id=Section28><A 
+      href="http://www.codeproject.com/KB/webforms/">ASP.NET Controls</A></DIV>
+      <DIV class=MI id=Section38><A 
+      href="http://www.codeproject.com/KB/ATL-Server/">ATL Server</A></DIV>
+      <DIV class=MI id=Section29><A 
+      href="http://www.codeproject.com/KB/web-cache/">Caching</A></DIV>
+      <DIV class=MI id=Section91><A 
+      href="http://www.codeproject.com/KB/web-image/">Charts, Graphs and 
+      Images</A></DIV>
+      <DIV class=MI id=Section25><A 
+      href="http://www.codeproject.com/KB/scripting/">Client side 
+      scripting</A></DIV>
+      <DIV class=MI id=Section30><A 
+      href="http://www.codeproject.com/KB/custom-controls/">Custom 
+      Controls</A></DIV>
+      <DIV class=MI id=Section23><A 
+      href="http://www.codeproject.com/KB/HTML/">HTML / CSS</A></DIV>
+      <DIV class=MI id=Section22><A 
+      href="http://www.codeproject.com/KB/IP/">Internet / Network</A></DIV>
+      <DIV class=MI id=Section24><A 
+      href="http://www.codeproject.com/KB/ISAPI/">ISAPI</A></DIV>
+      <DIV class=MI id=Section33><A 
+      href="http://www.codeproject.com/KB/server-management/">Site &amp; Server 
+      Management</A></DIV>
+      <DIV class=MI id=Section34><A 
+      href="http://www.codeproject.com/KB/session/">Session State</A></DIV>
+      <DIV class=MI id=Section113><A 
+      href="http://www.codeproject.com/KB/silverlight/">Silverlight</A></DIV>
+      <DIV class=MI id=Section36><A 
+      href="http://www.codeproject.com/KB/trace/">Trace and Logs</A></DIV>
+      <DIV class=MI id=Section31><A 
+      href="http://www.codeproject.com/KB/user-controls/">User 
+Controls</A></DIV>
+      <DIV class=MI id=Section37><A 
+      href="http://www.codeproject.com/KB/validation/">Validation</A></DIV>
+      <DIV class=MI id=Section35><A 
+      href="http://www.codeproject.com/KB/viewstate/">View State</A></DIV>
+      <DIV class=MI id=Section26><A 
+      href="http://www.codeproject.com/KB/WAP/">WAP / WML</A></DIV>
+      <DIV class=MI id=Section32><A 
+      href="http://www.codeproject.com/KB/web-security/">Web Security</A></DIV>
+      <DIV class=MI id=Section20><A 
+      href="http://www.codeproject.com/KB/webservices/">Web 
+      Services</A></DIV></DIV>
+      <DIV class=MenuChapter><A onclick="return ToggleMenu('Chapter9');" 
+      href="http://www.codeproject.com/script/Content/Chapter.aspx?chptId=9">Enterprise 
+      Systems</A></DIV>
+      <DIV class=MenuSectionBlock id=Chapter9 style="DISPLAY: none">
+      <DIV class=MI id=Section98><A 
+      href="http://www.codeproject.com/KB/MCMS/">Content Management 
+      Server</A></DIV>
+      <DIV class=MI id=Section99><A 
+      href="http://www.codeproject.com/KB/biztalk/">Microsoft BizTalk 
+      Server</A></DIV>
+      <DIV class=MI id=Section102><A 
+      href="http://www.codeproject.com/KB/exchange/">Microsoft 
+Exchange</A></DIV>
+      <DIV class=MI id=Section90><A 
+      href="http://www.codeproject.com/KB/office/">Office Development</A></DIV>
+      <DIV class=MI id=Section101><A 
+      href="http://www.codeproject.com/KB/sharepoint/">SharePoint 
+      Server</A></DIV></DIV>
+      <DIV class=MenuChapter><A onclick="return ToggleMenu('Chapter3');" 
+      href="http://www.codeproject.com/script/Content/Chapter.aspx?chptId=3">Multimedia</A></DIV>
+      <DIV class=MenuSectionBlock id=Chapter3 style="DISPLAY: none">
+      <DIV class=MI id=Section42><A 
+      href="http://www.codeproject.com/KB/audio-video/">Audio and 
+Video</A></DIV>
+      <DIV class=MI id=Section44><A 
+      href="http://www.codeproject.com/KB/directx/">DirectX</A></DIV>
+      <DIV class=MI id=Section46><A 
+      href="http://www.codeproject.com/KB/GDI/">GDI</A></DIV>
+      <DIV class=MI id=Section47><A 
+      href="http://www.codeproject.com/KB/GDI-plus/">GDI+</A></DIV>
+      <DIV class=MI id=Section43><A 
+      href="http://www.codeproject.com/KB/graphics/">General Graphics</A></DIV>
+      <DIV class=MI id=Section45><A 
+      href="http://www.codeproject.com/KB/openGL/">OpenGL</A></DIV></DIV>
+      <DIV class=MenuChapter><A onclick="return ToggleMenu('Chapter4');" 
+      href="http://www.codeproject.com/script/Content/Chapter.aspx?chptId=4">Database</A></DIV>
+      <DIV class=MenuSectionBlock id=Chapter4 style="DISPLAY: none">
+      <DIV class=MI id=Section66><A 
+      href="http://www.codeproject.com/KB/database/">Database</A></DIV>
+      <DIV class=MI id=Section100><A 
+      href="http://www.codeproject.com/KB/reporting-services/">SQL Reporting 
+      Services</A></DIV></DIV>
+      <DIV class=MenuChapter><A onclick="return ToggleMenu('Chapter8');" 
+      href="http://www.codeproject.com/script/Content/Chapter.aspx?chptId=8">Platforms, 
+      Frameworks &amp; Libraries</A></DIV>
+      <DIV class=MenuSectionBlock id=Chapter8 style="DISPLAY: none">
+      <DIV class=MI id=Section83><A 
+      href="http://www.codeproject.com/KB/atl/">ATL</A></DIV>
+      <DIV class=MI id=Section117><A 
+      href="http://www.codeproject.com/KB/MFC/">MFC</A></DIV>
+      <DIV class=MI id=Section88><A 
+      href="http://www.codeproject.com/KB/stl/">STL</A></DIV>
+      <DIV class=MI id=Section84><A 
+      href="http://www.codeproject.com/KB/wtl/">WTL</A></DIV>
+      <DIV class=MI id=Section49><A 
+      href="http://www.codeproject.com/KB/COM/">COM / COM+</A></DIV>
+      <DIV class=MI id=Section76><A 
+      href="http://www.codeproject.com/KB/dotnet/">.NET Framework</A></DIV>
+      <DIV class=MI id=Section92><A 
+      href="http://www.codeproject.com/KB/winsdk/">Win32/64 SDK &amp; 
+      OS</A></DIV>
+      <DIV class=MI id=Section108><A 
+      href="http://www.codeproject.com/KB/vista/">Vista API</A></DIV>
+      <DIV class=MI id=Section110><A 
+      href="http://www.codeproject.com/KB/vista-security/">Vista 
+      Security</A></DIV>
+      <DIV class=MI id=Section82><A 
+      href="http://www.codeproject.com/KB/cross-platform/">Cross 
+      Platform</A></DIV>
+      <DIV class=MI id=Section69><A 
+      href="http://www.codeproject.com/KB/game/">Game Development</A></DIV>
+      <DIV class=MI id=Section73><A 
+      href="http://www.codeproject.com/KB/mobile/">Mobile Development</A></DIV>
+      <DIV class=MI id=Section106><A 
+      href="http://www.codeproject.com/KB/WC/">Windows CardSpace</A></DIV>
+      <DIV class=MI id=Section103><A 
+      href="http://www.codeproject.com/KB/WCF/">Windows Communication 
+      Foundation</A></DIV>
+      <DIV class=MI id=Section104><A 
+      href="http://www.codeproject.com/KB/WPF/">Windows Presentation 
+      Foundation</A></DIV>
+      <DIV class=MI id=Section105><A 
+      href="http://www.codeproject.com/KB/WF/">Windows Workflow 
+      Foundation</A></DIV>
+      <DIV class=MI id=Section119><A 
+      href="http://www.codeproject.com/KB/library/">Libraries</A></DIV>
+      <DIV class=MI id=Section122><A 
+      href="http://www.codeproject.com/KB/powershell/">Windows 
+      Powershell</A></DIV>
+      <DIV class=MI id=Section123><A 
+      href="http://www.codeproject.com/KB/linq/">LINQ</A></DIV></DIV>
+      <DIV class=MenuChapter><A onclick="return ToggleMenu('Chapter5');" 
+      href="http://www.codeproject.com/script/Content/Chapter.aspx?chptId=5">Languages</A></DIV>
+      <DIV class=MenuSectionBlock id=Chapter5 style="DISPLAY: none">
+      <DIV class=MI id=Section71><A href="http://www.codeproject.com/KB/cpp/">C 
+      / C++ Language</A></DIV>
+      <DIV class=MI id=Section72><A 
+      href="http://www.codeproject.com/KB/mcpp/">C++ / CLI</A></DIV>
+      <DIV class=MI id=Section93><A 
+      href="http://www.codeproject.com/KB/cs/">C#</A></DIV>
+      <DIV class=MI id=Section78><A 
+      href="http://www.codeproject.com/KB/msil/">MSIL</A></DIV>
+      <DIV class=MI id=Section86><A 
+      href="http://www.codeproject.com/KB/vbscript/">VBScript</A></DIV>
+      <DIV class=MI id=Section87><A 
+      href="http://www.codeproject.com/KB/vb/">VB.NET</A></DIV>
+      <DIV class=MI id=Section115><A 
+      href="http://www.codeproject.com/KB/vb-interop/">VB6 Interop</A></DIV>
+      <DIV class=MI id=Section77><A 
+      href="http://www.codeproject.com/KB/net-languages/">Other .NET 
+      Languages</A></DIV>
+      <DIV class=MI id=Section21><A 
+      href="http://www.codeproject.com/KB/XML/">XML</A></DIV>
+      <DIV class=MI id=Section96><A 
+      href="http://www.codeproject.com/KB/java/">Java</A></DIV></DIV>
+      <DIV class=MenuChapter><A onclick="return ToggleMenu('Chapter6');" 
+      href="http://www.codeproject.com/script/Content/Chapter.aspx?chptId=6">General 
+      Programming</A></DIV>
+      <DIV class=MenuSectionBlock id=Chapter6>
+      <DIV class=MI id=Section57><A 
+      href="http://www.codeproject.com/KB/recipes/">Algorithms &amp; 
+      Recipes</A></DIV>
+      <DIV class=MI id=Section64><A 
+      href="http://www.codeproject.com/KB/bugs/">Bugs &amp; 
+Workarounds</A></DIV>
+      <DIV class=MI id=Section79><A 
+      href="http://www.codeproject.com/KB/collections/">Collections</A></DIV>
+      <DIV class=MI id=Section56><A 
+      href="http://www.codeproject.com/KB/security/">Cryptography &amp; 
+      Security</A></DIV>
+      <DIV class=MI id=Section50><A 
+      href="http://www.codeproject.com/KB/datetime/">Date and Time</A></DIV>
+      <DIV class=MI id=Section52><A 
+      href="http://www.codeproject.com/KB/DLL/">DLLs &amp; Assemblies</A></DIV>
+      <DIV class=MI id=Section80><A 
+      href="http://www.codeproject.com/KB/exception/">Exception 
+      Handling</A></DIV>
+      <DIV class=MI id=Section81><A 
+      href="http://www.codeproject.com/KB/locale/">Localisation</A></DIV>
+      <DIV class=MI id=Section53><A 
+      href="http://www.codeproject.com/KB/macros/">Macros and Add-ins</A></DIV>
+      <DIV class=MIS id=Section54><A 
+      href="http://www.codeproject.com/KB/tips/">Programming Tips</A></DIV>
+      <DIV class=MI id=Section55><A 
+      href="http://www.codeproject.com/KB/string/">String handling</A></DIV>
+      <DIV class=MI id=Section58><A 
+      href="http://www.codeproject.com/KB/threads/">Threads, Processes &amp; 
+      IPC</A></DIV>
+      <DIV class=MI id=Section59><A 
+      href="http://www.codeproject.com/KB/winhelp/">WinHelp / 
+      HTMLHelp</A></DIV></DIV>
+      <DIV class=MenuChapter><A onclick="return ToggleMenu('Chapter10');" 
+      href="http://www.codeproject.com/script/Content/Chapter.aspx?chptId=10">Graphics 
+      / Design</A></DIV>
+      <DIV class=MenuSectionBlock id=Chapter10 style="DISPLAY: none">
+      <DIV class=MI id=Section40><A 
+      href="http://www.codeproject.com/KB/expression/">Expression</A></DIV>
+      <DIV class=MI id=Section114><A 
+      href="http://www.codeproject.com/KB/usability/">Usability</A></DIV></DIV>
+      <DIV class=MenuChapter><A onclick="return ToggleMenu('Chapter11');" 
+      href="http://www.codeproject.com/script/Content/Chapter.aspx?chptId=11">Development 
+      Lifecycle</A></DIV>
+      <DIV class=MenuSectionBlock id=Chapter11 style="DISPLAY: none">
+      <DIV class=MI id=Section51><A 
+      href="http://www.codeproject.com/KB/debug/">Debug Tips</A></DIV>
+      <DIV class=MI id=Section39><A 
+      href="http://www.codeproject.com/KB/architecture/">Design and 
+      Architecture</A></DIV>
+      <DIV class=MI id=Section112><A 
+      href="http://www.codeproject.com/KB/install/">Installation</A></DIV>
+      <DIV class=MI id=Section41><A 
+      href="http://www.codeproject.com/KB/work/">Work Issues</A></DIV>
+      <DIV class=MI id=Section126><A 
+      href="http://www.codeproject.com/KB/codegen/">Code 
+      Generation</A></DIV></DIV>
+      <DIV class=MenuChapter><A onclick="return ToggleMenu('Chapter7');" 
+      href="http://www.codeproject.com/script/Content/Chapter.aspx?chptId=7">General 
+      Reading</A></DIV>
+      <DIV class=MenuSectionBlock id=Chapter7 style="DISPLAY: none">
+      <DIV class=MI id=Section60><A 
+      href="http://www.codeproject.com/KB/books/">Book Chapters</A></DIV>
+      <DIV class=MI id=Section61><A 
+      href="http://www.codeproject.com/KB/book-reviews/">Book Reviews</A></DIV>
+      <DIV class=MI id=Section109><A 
+      href="http://www.codeproject.com/KB/hardware-review/">Hardware 
+      Reviews</A></DIV>
+      <DIV class=MI id=Section63><A 
+      href="http://www.codeproject.com/KB/interviews/">Interviews</A></DIV>
+      <DIV class=MI id=Section62><A 
+      href="http://www.codeproject.com/KB/scrapbook/">Scrapbook</A></DIV>
+      <DIV class=MI id=Section48><A 
+      href="http://www.codeproject.com/KB/system/">Hardware &amp; 
+      System</A></DIV></DIV>
+      <DIV class=MenuChapter><A onclick="return ToggleMenu('Chapter12');" 
+      href="http://www.codeproject.com/script/Content/Chapter.aspx?chptId=12">Third 
+      Party Products</A></DIV>
+      <DIV class=MenuSectionBlock id=Chapter12 style="DISPLAY: none">
+      <DIV class=MI id=Section65><A 
+      href="http://www.codeproject.com/KB/showcase/">Product Showcase</A></DIV>
+      <DIV class=MI id=Section124><A 
+      href="http://www.codeproject.com/KB/solution-center/">Solution 
+      Center</A></DIV></DIV></DIV><BR>
+      <DIV class=MenuCat>Services</DIV>
+      <DIV class=MenuChapter><A 
+      href="http://www.codeproject.com/script/Jobs/List.aspx">Job 
+Board</A></DIV>
+      <DIV class=MenuChapter><A 
+      href="http://www.codeproject.com/Services/coffee.aspx">Code Project 
+      Coffee</A></DIV>
+      <DIV class=MenuChapter><A 
+      href="http://www.codeproject.com/Services/TradePub.aspx">Free 
+      Magazines</A></DIV><BR>
+      <DIV class=MenuCat>Feature Zones</DIV>
+      <DIV class=MenuChapter><A href="http://www.codeproject.com/Zones/IBM">IBM 
+      DeveloperWorks</A></DIV>
+      <DIV class=MenuChapter><A 
+      href="http://www.codeproject.com/Zones/WhitePapers">WhitePapers</A></DIV>
+      <DIV class=MenuChapter><A 
+      href="http://www.codeproject.com/Zones/CodeGeneration">Code 
+      Generation</A></DIV>
+      <DIV class=MenuChapter><A 
+      href="http://www.codeproject.com/Zones/QuestSQL">Quest SQL 
+      Zone</A></DIV><BR>
+      <DIV style="MARGIN-BOTTOM: 10px; TEXT-ALIGN: center">
+      <SCRIPT type=text/javascript>document.write(unescape("%3ca%20href%3d%22http%3a%2f%2fwww.codeproject.com%2fRedir.aspx%3fadid%3d5302%26way%3dban%22%20target%3d%22_blank%22%20rel%3d%22nofollow%22%3e%3cimg%20src%3d%22http%3a%2f%2fwww.codeproject.com%2fscript%2fAnn%2fServeImg.aspx%3fFile%3d%252fscript%252fadmentor%252fimages%252fIBMdeveloperWorks_150x80.gif%26C%3dFalse%26id%3d5302%22%20alt%3d%22%22%20border%3d%220%22%20width%3d%22150%22%20height%3d%2280%22%3e%3c%2fa%3e"));</SCRIPT>
+      </DIV>
+      <SCRIPT type=text/javascript>document.write(unescape("%3ca%20href%3d%22http%3a%2f%2fwww.codeproject.com%2fRedir.aspx%3fadid%3d6909%26way%3dban%22%20target%3d%22_blank%22%20rel%3d%22nofollow%22%3e%3cimg%20src%3d%22http%3a%2f%2fwww.codeproject.com%2fscript%2fAnn%2fServeImg.aspx%3fFile%3d%252fscript%252fadmentor%252fimages%252f160-600_net_general.jpg%26C%3dFalse%26id%3d6909%22%20alt%3d%22%22%20border%3d%220%22%20width%3d%22160%22%20height%3d%22600%22%3e%3c%2fa%3e"));</SCRIPT>
+    </TD>
+    <TD class=ArticlePane vAlign=top>
+      <TABLE class=SearchHeaderBar cellSpacing=0 width="100%">
+        <TBODY>
+        <TR>
+          <TD style="WIDTH: 60%; WHITE-SPACE: nowrap" vAlign=center 
+            align=right><FORM style="MARGIN: 0px" name=Search 
+            action=/info/search.aspx method=get><B>Search &nbsp;</B> <INPUT 
+            class=SmallText style="WIDTH: 200px" name=artkw> <SELECT 
+            class=SmallText style="FONT-WEIGHT: bold" name=sbo> <OPTION 
+              value=kw selected>Articles</OPTION> <OPTION 
+              value=fm>Messages</OPTION> <OPTION value=s>Jobs</OPTION></SELECT> <INPUT class=SmallText style="FONT-WEIGHT: bold" type=submit value=" Go! "> 
+            &nbsp; </FORM></TD>
+          <TD class=TinyText style="WHITE-SPACE: nowrap"><A 
+            href="http://www.codeproject.com/info/search.aspx">Advanced 
+            Search</A><BR><A 
+            href="http://www.codeproject.com/script/Content/SiteMap.aspx">Sitemap</A> 
+            | <A id=ctl00_SearchBarCtrl_AddToIESearchLnk 
+            title="Add The Code Project to your IE search Providers" 
+            onclick="window.external.AddSearchProvider('http://www.codeproject.com/info/OpenSearch.xml');return false;" 
+            href="http://www.codeproject.com/">Add to IE Search</A> 
+        </TD></TR></TBODY></TABLE><SPAN id=ctl00_ResultMessage></SPAN>
+      <DIV id=ctl00_ArtDiv>
+      <TABLE cellSpacing=0 cellPadding=0 width="100%" border=0>
+        <TBODY>
+        <TR vAlign=top>
+          <TD vAlign=top>
+            <TABLE>
+              <TBODY></TBODY></TABLE>
+            <DIV class=SmallText><IMG style="VERTICAL-ALIGN: middle" height=16 
+            alt=print 
+            src="CodeProject Some easy ways to send emails (via SMTP) and SMS text messages_ Free source code and programming help_files/print.gif" 
+            width=16> <A id=ctl00_ArticleHeaderLinks_PrintLnk 
+            href="http://www.codeproject.com/KB/tips/easysmtpandsms.aspx?display=Print">Print</A> 
+            &nbsp; <IMG style="VERTICAL-ALIGN: middle" height=16 
+            alt="Broken Article?" 
+            src="CodeProject Some easy ways to send emails (via SMTP) and SMS text messages_ Free source code and programming help_files/report.gif" 
+            width=16> <A id=ctl00_ArticleHeaderLinks_BrokenLnk 
+            href="http://www.codeproject.com/script/Articles/Report.aspx?aid=16250">Report 
+            Article</A> &nbsp; &nbsp; &nbsp; <IMG style="VERTICAL-ALIGN: middle" 
+            height=16 alt=Discuss 
+            src="CodeProject Some easy ways to send emails (via SMTP) and SMS text messages_ Free source code and programming help_files/discuss.gif" 
+            width=15> <A 
+            href="http://www.codeproject.com/KB/tips/easysmtpandsms.aspx#_comments">Discuss</A> 
+            &nbsp; <IMG style="VERTICAL-ALIGN: middle" height=16 
+            alt="Recommend Article" 
+            src="CodeProject Some easy ways to send emails (via SMTP) and SMS text messages_ Free source code and programming help_files/mail.gif" 
+            width=16>&nbsp;<A id=ctl00_ArticleHeaderLinks_Recommend 
+            href="http://www.codeproject.com/script/common/TellFriend.aspx?obtid=2&amp;obid=16250">Send&nbsp;to&nbsp;a&nbsp;friend</A> 
+            </DIV></TD>
+          <TD style="WIDTH: 100px; WHITE-SPACE: nowrap; TEXT-ALIGN: right">
+            <TABLE id=CurRat>
+              <TBODY>
+              <TR>
+                <TD>
+                  <TABLE>
+                    <TBODY>
+                    <TR>
+                      <TD class=SmallText style="WHITE-SPACE: nowrap" 
+                      align=right><SPAN id=ctl00_ArticleRating_VoteLabel>21 
+                        votes for this Article.</SPAN></TD>
+                      <TD>
+                        <TABLE cellSpacing=0 cellPadding=0 border=1>
+                          <TBODY>
+                          <TR>
+                            <TD width=20 bgColor=white height=7><IMG height=7 
+                              src="CodeProject Some easy ways to send emails (via SMTP) and SMS text messages_ Free source code and programming help_files/red.gif" 
+                              width=20 align=center border=0></TD>
+                            <TD width=20 bgColor=white height=7><IMG height=7 
+                              src="CodeProject Some easy ways to send emails (via SMTP) and SMS text messages_ Free source code and programming help_files/red.gif" 
+                              width=20 align=center border=0></TD>
+                            <TD width=20 bgColor=white height=7><IMG height=7 
+                              src="CodeProject Some easy ways to send emails (via SMTP) and SMS text messages_ Free source code and programming help_files/red.gif" 
+                              width=20 align=center border=0></TD>
+                            <TD noWrap width=20 bgColor=white height=7><IMG 
+                              height=7 
+                              src="CodeProject Some easy ways to send emails (via SMTP) and SMS text messages_ Free source code and programming help_files/red.gif" 
+                              width=2 align=center border=0></TD>
+                            <TD width=20 bgColor=white height=7><IMG height=7 
+                              src="CodeProject Some easy ways to send emails (via SMTP) and SMS text messages_ Free source code and programming help_files/white.gif" 
+                              width=20 align=center 
+                      border=0></TD></TR></TBODY></TABLE></TD></TR>
+                    <TR id=ctl00_ArticleRating_PopularityRow>
+                      <TD class=SmallText align=right colSpan=2><A 
+                        id=ctl00_ArticleRating_PopularityLnk 
+                        title="Calculated as rating x Log10(# votes)" 
+                        href="http://www.codeproject.com/script/Articles/TopArticles.aspx?ta_so=1">Popularity: 
+                        4.08</A> <SPAN 
+                        id=ctl00_ArticleRating_PopularityLbl></SPAN><SPAN 
+                        id=ratingVal>Rating: <B>3.08</B> out of 
+                    5</SPAN></TD></TR></TBODY></TABLE></TD>
+                <TD>
+                  <DIV>
+                  <TABLE class=HistTable 
+                  title="Voting Distribution. Recent data only">
+                    <TBODY>
+                    <TR>
+                      <TD><IMG title="6 votes, 28.6%" height=20 
+                        alt="6 votes, 28.6%" 
+                        src="CodeProject Some easy ways to send emails (via SMTP) and SMS text messages_ Free source code and programming help_files/pollcol.gif" 
+                        width=10 border=0><BR>1</TD>
+                      <TD><IMG title="1 vote, 4.8%" height=3 
+                        alt="1 vote, 4.8%" 
+                        src="CodeProject Some easy ways to send emails (via SMTP) and SMS text messages_ Free source code and programming help_files/pollcol.gif" 
+                        width=10 border=0><BR>2</TD>
+                      <TD><IMG title="3 votes, 14.3%" height=10 
+                        alt="3 votes, 14.3%" 
+                        src="CodeProject Some easy ways to send emails (via SMTP) and SMS text messages_ Free source code and programming help_files/pollcol.gif" 
+                        width=10 border=0><BR>3</TD>
+                      <TD><IMG title="5 votes, 23.8%" height=16 
+                        alt="5 votes, 23.8%" 
+                        src="CodeProject Some easy ways to send emails (via SMTP) and SMS text messages_ Free source code and programming help_files/pollcol.gif" 
+                        width=10 border=0><BR>4</TD>
+                      <TD><IMG title="6 votes, 28.6%" height=20 
+                        alt="6 votes, 28.6%" 
+                        src="CodeProject Some easy ways to send emails (via SMTP) and SMS text messages_ Free source code and programming help_files/pollcol.gif" 
+                        width=10 
+              border=0><BR>5</TD></TD></TR></TBODY></TABLE></DIV></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE>
+      <DIV class=SmallText id=ctl00_UneditedRow 
+      style="PADDING-RIGHT: 5px; BORDER-TOP: #ff9900 1px dashed; PADDING-LEFT: 5px; PADDING-BOTTOM: 5px; MARGIN: 5px; PADDING-TOP: 5px; BORDER-BOTTOM: #ff9900 1px dashed"><B>Note:</B> 
+      This is an unedited contribution. If this article is inappropriate, needs 
+      attention or copies someone else's work without reference then please <A 
+      id=ctl00_ReportProblem 
+      href="http://www.codeproject.com/script/Articles/Report.aspx?aid=16250">Report 
+      This Article</A> </DIV><SPAN id=intelliTXT>
+      <DIV id=contentdiv><!-- Main Page Contents Start --><!-- Article Starts -->
+      <UL class=download>
+        <LI><A 
+        href="http://www.codeproject.com/KB/tips/easysmtpandsms/mxmail_source.zip">Download 
+        MX email tool with source - 91 Kb</A><BR>Requires Windows 2000 or above. 
+        Source requires Visual C++ 7.0. </LI></UL>
+      <P>
+      <H2>Introduction</H2>
+      <P>There may be times when you wish to send an email or SMS text message 
+      from your application but ran across any of the following obstacles: you 
+      don't have access to an SMTP server or SMS gateway, you can't setup your 
+      own SMTP server or SMS gateway, your own SMTP server or SMS gateway is 
+      blocked by your Internet Service Provider (ISP) or your organization's 
+      firewall, you don't have authorization to send external emails (emails can 
+      only be sent to addresses within the organization), etc.</P>
+      <P>There are several workarounds to such problems, which this article 
+      presents. You may or may not have heard of some of the workarounds. For 
+      the sake of brevity, this article only describes how the workarounds work. 
+      Generally, no source code or executable demos of the workarounds are given 
+      but links are included to articles that have the relevant source code or 
+      executable demos.</P>
+      <P>The article is divided into workarounds for sending emails and sending 
+      SMS text messages.</P><STRONG>SMTP Email Workarounds</STRONG> 
+      <UL>
+        <LI><A 
+        href="http://www.codeproject.com/KB/tips/easysmtpandsms.aspx#smtpauth">Use 
+        SMTP Authorization/Authentication</A> 
+        <LI><A 
+        href="http://www.codeproject.com/KB/tips/easysmtpandsms.aspx#dnsmtp">Use 
+        DNS MX (mail) server lookup</A> </LI></UL><STRONG>SMS Text Messaging 
+      Workarounds</STRONG> 
+      <UL>
+        <LI><A 
+        href="http://www.codeproject.com/KB/tips/easysmtpandsms.aspx#smsgateway">Use 
+        SMTP and mobile/cell phone carrier's SMS gateway</A> 
+        <LI><A 
+        href="http://www.codeproject.com/KB/tips/easysmtpandsms.aspx#smswebform">Use 
+        a "send SMS text message" web form</A> </LI></UL>
+      <H2>SMTP Email Workarounds</H2><A name=smtpauth></A>
+      <H3>Use SMTP Authorization/Authentication</H3>
+      <P>You may or may not know this, but when you connect to an SMTP server, 
+      you can provide login credentials (e.g. username and password) to 
+      authorize/authenticate yourself with the server. This allows you to send 
+      emails anywhere. This is how email clients work for retrieving POP3 or 
+      IMAP email and sending email via SMTP. However, standalone SMTP tools for 
+      application development or command line usage, etc. generally do not 
+      provide examples on using authorization when connecting to an SMTP server. 
+      Additionally, half or more of these tools do not include an option to 
+      provide the login credentials for authorization, which means it is likely 
+      that you can only send emails within your organization, etc. (no external 
+      emails). The tools just assume you don't need authorization.</P>
+      <P><STRONG>NOTE:</STRONG> Using SMTP authorization may jeopardize your 
+      email account since some tools use/require the login credentials as 
+      unencrypted plain text. Examples include the need to supply the account 
+      information on the command line or in a text configuration file. So use 
+      with caution. </P>
+      <P><STRONG>How to implement SMTP 
+      authentication/authorization:</STRONG><BR>Since there are numerous SMTP 
+      utilities out there and some of which do support SMTP authorization, this 
+      article does not provide any such tools. But some links are provided for 
+      reference. In building your application, follow the SMTP protocol (or its 
+      RFC specification) including the option for SMTP 
+      authentication/authorization, or use an SMTP library that has such 
+      support. If using .NET, the library has everything, you just need to 
+      implement it into your application (see reference links, particularly the 
+      first link).</P>
+      <P><STRONG>Example of how to use SMTP 
+      authentication/authorization:</STRONG><BR>You can use Blat on Windows or 
+      something like msmtp on Unix/Linux platforms. The example here is for Blat 
+      and only shows one use case. There are more options you can specify.</P>
+      <P><PRE lang=text>Blat -to recipient@addr.com -subject "theSubject" -body "theMessage" 
+
+-server SMTPServer@addr.com -u YourUsername -pw YourPassword</PRE>
+      <P>
+      <P><STRONG>References:</STRONG><BR><A 
+      href="http://www.codeproject.com/cs/internet/Email_Sending_in_C_.asp">Code 
+      Project article: Sending complex emails in .NET 1.1</A><BR><A 
+      href="http://www.codeproject.com/dotnet/SystemWeb_Mail_SMTP_AUTH.asp">Code 
+      Project article: SMTP Authentication using System.Web.Mail 
+      (CDOSYS)</A><BR><A 
+      href="http://www.codeproject.com/useritems/SendMailUsingGmailAccount.asp">Code 
+      Project article: Send E-Mail from your .NET application using your GMail 
+      Account</A><BR><A href="http://www.blat.net/">Blat - Windows command line 
+      SMTP tool with SMTP authetication option</A><BR><A name=dnsmtp></A></P>
+      <H3>Use DNS MX (mail) server lookup</H3>
+      <P>You can perform DNS MX (mail) server lookups of the mail servers for 
+      the domains of the email addresses you wish to send to. Then you can 
+      directly connect to those SMTP servers to send the email. Since the 
+      destination is within those server's domain/organization, no 
+      authentication is necessary. There may be some security and ethical issues 
+      with this approach and you may still be blocked from sending emails some 
+      of the time, but this is one alternative workaround.</P>
+      <P><STRONG>How to implement DNS MX lookup + SMTP to send 
+      emails:</STRONG><BR>There are not many tools that use this approach. I 
+      have included a Windows command line tool (with source code for Visual C++ 
+      7.0) that uses this approach and is based on the code of the first link in 
+      the following references. This tool requires Window 2000 or above, and can 
+      only send 1 email at a time. The tool also will not likely support unicode 
+      as I did not properly code the tool, though it should work fine for 
+      English in ASCII format. The code is simply a Windows console or command 
+      line executable wrapper to the main code snippet presented in the 
+      reference article mentioned. For details on the code of this tool, please 
+      download and look at the source as well as the reference article link. It 
+      would be nice if someone implemented a COM/ActiveX DLL wrapper to that 
+      code (I'm not familiar with building COM applications myself).</P>
+      <P><STRONG>Example of how to use DNS MX lookup + SMTP to send 
+      emails:</STRONG><BR>The example is based on the tool I built. The 
+      executable is located under the Bin/Release directory of the Visual C++ 
+      7.0 project that you can download from this article. The example only 
+      shows one use case. There are more options you can specify.</P>
+      <P><PRE lang=text>mxmail "fromName" from@addr.com to@addr.com "subject" -t 
+
+"message"</PRE>
+      <P>
+      <P><STRONG>References:</STRONG><BR><A 
+      href="http://www.codeproject.com/tips/CSMTPConnection2.asp">Code Project 
+      article: Send mail without specifying an SMTP server</A><BR><A 
+      href="http://www.hare.demon.co.uk/pysmtp.html">Simple SMTP Server tools 
+      for Python</A><BR></P>
+      <H2>SMS Text Messaging Workarounds</H2><A name=smsgateway></A>
+      <H3>Use SMTP and mobile/cell phone carrier's SMS gateway</H3>
+      <P>You can send SMS text messages as short email messages (long messages 
+      may be truncated). To do so, you send a normal short email message via 
+      SMTP but send to an address with the following pattern: 
+      <CODE>phoneNumber@carrierDomain.com</CODE> like 
+      <CODE>xxxxxxxxxx@vmobl.com</CODE>. This may require the SMTP email 
+      workarounds also since you are likely sending to an external email 
+      address. This method is easy to do but requires knowing the carrier SMS 
+      gateway email address format. You can find these in some of the URL 
+      references that follow, or by searching for something like "carrier SMS 
+      gateways".</P>
+      <P><STRONG>How to implement SMS via Carrier Gateway 
+      addressing:</STRONG><BR>Use an SMTP library or tool to send the SMS text 
+      message via email (see SMTP workarounds in this article). But you must 
+      first do a carrier to gateway email address translation - this should be 
+      easy to do. To get some translation mappings, search the web or try the 
+      reference links that follow.</P>
+      <P><STRONG>Example of how to use SMS via Carrier Gateway 
+      addressing:</STRONG><BR>The example is based on the tool I built. The 
+      executable is located under the Bin/Release directory of the Visual C++ 
+      7.0 project that you can download from this article. The example only 
+      shows one use case. The example assumes you have the translation already 
+      done.</P>
+      <P><PRE lang=text>mxmail "fromName" from@addr.com 2105211202@vmobl.com "subject" -t 
+
+"message"</PRE>
+      <P>
+      <P><STRONG>References:</STRONG><BR><A 
+      href="http://en.wikipedia.org/wiki/SMS_gateways">Wiki on SMS 
+      gateways</A><BR><A 
+      href="http://www.codeproject.com/aspnet/EasySMTP_package.asp">Code Project 
+      article: Easy SMTP Mail Using ASP.NET 2.0</A><BR>(article above has list 
+      of some common carrier addresses)<BR>And you can search for "SMS" on the 
+      Code Project site to find other articles with lists of common carrier 
+      addresses.<BR><A name=smswebform></A></P>
+      <H3>Use a "send SMS text message" web form</H3>
+      <P>There are numerous websites out there that allow you to send SMS text 
+      messages. They do the hard work for you. You just fill in the form and 
+      click send, etc. You don't need to know the carrier's SMS gateway email 
+      address format. You just need to know the destination phone number and 
+      maybe the carrier of that phone number. Some of these services are free, 
+      some of them are not. Some work well, some don't.</P>
+      <P>To make better use of these web forms, you can hack them in the 
+      following ways: have your application forward the data to the web form or 
+      have your application submit the data directly to the form's processing 
+      script (bypassing the form itself, using your own form, etc.). Using the 
+      latter approach, you can make HTTP POST requests to the form processing 
+      script.</P>
+      <P><STRONG>NOTE:</STRONG> Use of such hacks may be in violation of the 
+      service's terms of use. And the services may alter the service, which 
+      would require updating your code.</P>
+      <P><STRONG>How to implement SMS via SMS web form hack:</STRONG><BR>How you 
+      implement this depends on your preference and skills. Two techniques are 
+      given in the references that follow.</P>
+      <P><STRONG>Example of how to use SMS via SMS web form hack:</STRONG><BR>If 
+      you use the Perl automation method in the reference article link to record 
+      your form submission into a script, you can then edit the script to accept 
+      command line parameters, etc. for you to specify the recipients and 
+      message later on when you use the script.</P>
+      <P><STRONG>References:</STRONG><BR><A 
+      href="http://www.codeproject.com/useritems/AutomatedFormPosting.asp">Code 
+      Project article: Mobile sms mms / Web Form posting from your exe using 
+      minimalistic aproach</A><BR><A 
+      href="http://www.codeproject.com/perl/webautomaton.asp">Code Project 
+      article: Web/HTTP Automation with Perl</A><BR><A 
+      href="http://www.google.com/tools/firefox/sendtophone/index.html">Google 
+      Send to Phone</A><BR></P>
+      <H2>History</H2>
+      <P>11/04/06 - initial post. </P>
+      <P>11/24/06 - added information, for beginners, on how to implement or use 
+      some of the ideas presented in the article.</P><!-- Article Ends --><!-- Main Page Contents End --></DIV></SPAN>
+      <FORM id=aspnetForm 
+      style="PADDING-RIGHT: 0px; PADDING-LEFT: 0px; PADDING-BOTTOM: 0px; MARGIN: 0px; PADDING-TOP: 0px" 
+      name=aspnetForm action=easysmtpandsms.aspx method=post>
+      <DIV><INPUT id=__VIEWSTATE type=hidden 
+      value=/wEPDwULLTEwMDUyNjYzMjhkZCWLh+gQvcsSdyTuudU++4AatRtH 
+      name=__VIEWSTATE> </DIV>
+      <H2>License</H2>
+      <DIV id=ctl00_LicenseTerms>
+      <P>This article, along with any associated source code and files, is 
+      licensed under <A href="http://www.codeproject.com/info/cpol10.aspx">The 
+      Code Project Open License (CPOL)</A></P></DIV>
+      <H2>About the Author</H2>
+      <TABLE cellSpacing=5 cellPadding=0 width="100%" border=0>
+        <TBODY>
+        <TR vAlign=top>
+          <TD id=ctl00_AboutAuthorRptr_ctl00_AboutAuthor_memberPhotoTable 
+          style="WIDTH: 155px" vAlign=top><B><A 
+            id=ctl00_AboutAuthorRptr_ctl00_AboutAuthor_memberProfileLink 
+            href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=850321">daluu</A></B><BR><BR>
+            <CENTER><IMG id=ctl00_AboutAuthorRptr_ctl00_AboutAuthor_memberPhoto 
+            style="BORDER-TOP-WIDTH: 0px; BORDER-LEFT-WIDTH: 0px; BORDER-BOTTOM-WIDTH: 0px; BORDER-RIGHT-WIDTH: 0px" 
+            src="CodeProject Some easy ways to send emails (via SMTP) and SMS text messages_ Free source code and programming help_files/{DE98CA11-5DA1-4B2B-84DB-BED8CCA8537A}.jpg"></CENTER><BR><SPAN 
+            class=SmallText 
+            id=ctl00_AboutAuthorRptr_ctl00_AboutAuthor_memberType></SPAN></TD>
+          <TD>Practitioner of C#, .NET, C++, C, ASP, VBScript, Windows 
+            Scripting Host, JScript, Perl, Perlscript, ADO.<BR><BR>Interested in 
+            automation, systems &amp; application integration, web services 
+            &amp; applications, and mobile computing.<BR>
+            <TABLE>
+              <TBODY>
+              <TR id=ctl00_AboutAuthorRptr_ctl00_AboutAuthor_jobTitleRow>
+                <TD class=SmallText noWrap>Occupation: </TD>
+                <TD width="100%"><SPAN class=SmallText 
+                  id=ctl00_AboutAuthorRptr_ctl00_AboutAuthor_memberJobTitle>Software 
+                  Developer</SPAN></TD></TR>
+              <TR id=ctl00_AboutAuthorRptr_ctl00_AboutAuthor_locationRow>
+                <TD class=SmallText>Location: </TD>
+                <TD width="100%"><SPAN class=SmallText 
+                  id=ctl00_AboutAuthorRptr_ctl00_AboutAuthor_memberLocation><IMG 
+                  height=11 alt="United States" 
+                  src="CodeProject Some easy ways to send emails (via SMTP) and SMS text messages_ Free source code and programming help_files/US.gif" 
+                  width=16> United 
+        States</SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE><BR>
+      <TABLE id=ctl00_PopularArticlesRow cellSpacing=0 cellPadding=0 
+      width="100%" border=0>
+        <TBODY>
+        <TR vAlign=top>
+          <TD style="WIDTH: 100%">
+            <H2>Other popular Programming Tips articles:</H2>
+            <UL>
+              <LI><A 
+              href="http://www.codeproject.com/KB/tips/Self-generating-code.aspx">Programming 
+              Self-generating Code for Windows Applications</A>
+              <DIV class=SmallText>Executing VC++ codes in STACK or HEAP</DIV>
+              <LI><A href="http://www.codeproject.com/KB/tips/doxysetup.aspx">10 
+              Minutes to document your code</A>
+              <DIV class=SmallText>Setting up doxygen, a free tool to document 
+              your code, in a few simple steps.</DIV>
+              <LI><A 
+              href="http://www.codeproject.com/KB/tips/optimizationenemy.aspx">Optimization: 
+              Your Worst Enemy</A>
+              <DIV class=SmallText>Learn about the potential pitfalls of code 
+              optimization.</DIV>
+              <LI><A 
+              href="http://www.codeproject.com/KB/tips/HowToUseGoogle.aspx">How 
+              to use google and other tips for finding programming help</A>
+              <DIV class=SmallText>A primer for people looking to learn to help 
+              themselves find answers to programming questions</DIV>
+              <LI><A 
+              href="http://www.codeproject.com/KB/tips/aggressiveoptimize.aspx">Aggressive 
+              Optimizations for Visual C++</A>
+              <DIV class=SmallText>Save time and space in your release builds - 
+              fight bloatware!</DIV></LI></UL>
+            <H2></H2></TD>
+          <TD>
+            <SCRIPT type=text/javascript>document.write(unescape("%3ca%20href%3d%22http%3a%2f%2fwww.codeproject.com%2fRedir.aspx%3fadid%3d5240%26way%3dban%22%20target%3d%22_blank%22%20rel%3d%22nofollow%22%3e%3cimg%20src%3d%22http%3a%2f%2fwww.codeproject.com%2fscript%2fAnn%2fServeImg.aspx%3fFile%3d%252fscript%252fadmentor%252fimages%252fIBM_RationalAssetManagerV7_300x250.gif%26C%3dFalse%26id%3d5240%22%20alt%3d%22%22%20border%3d%220%22%20width%3d%22300%22%20height%3d%22250%22%3e%3c%2fa%3e"));</SCRIPT>
+          </TD></TR></TBODY></TABLE>
+      <DIV id=ctl00_AddTo_AddTo style="MARGIN: 10px">
+      <SCRIPT language=JavaScript type=text/javascript>
+var addtoMethod=1;
+var AddURL = document.location.href;
+var AddTitle = escape(document.title);
+DrawLinks(100, 0, "SmallText Bold", "AddTo") 
+</SCRIPT>
+      </DIV>
+      <TABLE class=ArticleUneditedHeader id=ctl00_RateArticleRow cellSpacing=0 
+      cellPadding=0 width="100%" border=0>
+        <TBODY>
+        <TR>
+          <TD><A 
+            href="http://www.codeproject.com/KB/tips/easysmtpandsms.aspx#_top">Article 
+            Top</A></TD>
+          <TD align=right>
+            <TABLE cellSpacing=0 cellPadding=0 width="100%">
+              <TBODY>
+              <TR>
+                <TD class=SmallText id=voteTbl style="WHITE-SPACE: nowrap" 
+                align=right>
+                  <TABLE>
+                    <TBODY>
+                    <TR>
+                      <TD id=ctl00_RateArticle_SignIn noWrap><A 
+                        href="http://www.codeproject.com/KB/tips/easysmtpandsms.aspx#SignUp">Sign 
+                        Up</A> to vote for this article</TD>
+                      <TD><SPAN 
+                    id=ctl00_RateArticle_ErrorMessage></SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></FORM>
+      <DIV 
+      style="PADDING-RIGHT: 10px; PADDING-LEFT: 10px; PADDING-BOTTOM: 10px; OVERFLOW: hidden; PADDING-TOP: 10px; WHITE-SPACE: nowrap; TEXT-ALIGN: center"><IFRAME 
+      src="CodeProject Some easy ways to send emails (via SMTP) and SMS text messages_ Free source code and programming help_files/ServeHTML.htm" 
+      frameBorder=0 width=468 scrolling=no height=58></IFRAME><IFRAME 
+      src="CodeProject Some easy ways to send emails (via SMTP) and SMS text messages_ Free source code and programming help_files/ServeLinks.htm" 
+      frameBorder=0 width=300 scrolling=no height=60></IFRAME></DIV><A 
+      name=_comments></A><!-- Forum Start -->
+      <DIV id=_MessageBoard onclick="return SwitchMessage(event, null)">
+      <TABLE class=Frm_MainTable id=ForumTable cellSpacing=0 cellPadding=0>
+        <TBODY>
+        <TR>
+          <TD class=Frm_MsgAlert><B>You must <A 
+            href="http://www.codeproject.com/script/Membership/LogOn.aspx?rp=%2fKB%2ftips%2feasysmtpandsms.aspx%3ffid%3d355120">Sign 
+            In</A> to use this message board.</B></TD></TR>
+        <TR>
+          <TD>
+            <FORM 
+            style="PADDING-RIGHT: 0px; PADDING-LEFT: 0px; PADDING-BOTTOM: 0px; MARGIN: 0px; PADDING-TOP: 0px" 
+            action=/script/Forums/SetOptions.aspx?floc=%2fKB%2ftips%2feasysmtpandsms.aspx&amp;fid=355120 
+            method=get><INPUT type=hidden value=355120 name=fid><INPUT 
+            type=hidden 
+            value=?floc=%2fKB%2ftips%2feasysmtpandsms.aspx&amp;fid=355120 
+            name=currentQS><INPUT type=hidden value=/KB/tips/easysmtpandsms.aspx 
+            name=floc>
+            <TABLE cellSpacing=0 cellPadding=3 width="100%" border=0>
+              <TBODY>
+              <TR class=Frm_HeaderRow1>
+                <TD style="WHITE-SPACE: nowrap"><IMG height=16 alt=FAQ 
+                  src="CodeProject Some easy ways to send emails (via SMTP) and SMS text messages_ Free source code and programming help_files/forum_faq.gif" 
+                  width=16 align=middle border=0>&nbsp;<A 
+                  href="http://www.codeproject.com/script/Forums/FAQ.aspx"><B>FAQ</B></A>&nbsp;</TD>
+                <TD style="WHITE-SPACE: nowrap; TEXT-ALIGN: right">Noise 
+                  Tolerance<SELECT class=Frm_DropDown size=1 name=noise> 
+                    <OPTION value=1>Very High</OPTION><OPTION 
+                    value=2>High</OPTION><OPTION value=3 
+                    selected>Medium</OPTION><OPTION value=4>Low</OPTION><OPTION 
+                    value=5>Very Low</OPTION></SELECT></TD>
+                <TD style="WHITE-SPACE: nowrap; TEXT-ALIGN: right" 
+                  colSpan=2><IMG height=15 alt=Search 
+                  src="CodeProject Some easy ways to send emails (via SMTP) and SMS text messages_ Free source code and programming help_files/forum_search.gif" 
+                  width=16 align=top border=0>&nbsp;<A 
+                  href="http://www.codeproject.com/script/Forums/Search.aspx?fid=355120">Search 
+                  Messages</A>&nbsp;</TD>
+                <TD style="TEXT-ALIGN: right"><INPUT class=Frm_Button type=submit value="Set Options" name=submit></TD></TR>
+              <TR class=Frm_HeaderRow2>
+                <TD style="WIDTH: 100%">&nbsp;</TD>
+                <TD 
+                  style="WHITE-SPACE: nowrap; TEXT-ALIGN: right">Layout<SELECT 
+                  class=Frm_DropDown size=1 name=view> <OPTION value=Quick 
+                    selected>Normal</OPTION><OPTION value=Topic>Expand Root 
+                    Messages</OPTION><OPTION value=Expanded>Expand All 
+                    Messages</OPTION><OPTION value=Thread>Thread 
+                    View</OPTION><OPTION value=Normal>No Javascript 
+                    (slow)</OPTION><OPTION value=Preview>No Javascript 
+                    Preview</OPTION></SELECT>&nbsp;&nbsp;</TD>
+                <TD style="WHITE-SPACE: nowrap">Per page<SELECT 
+                  class=Frm_DropDown size=1 name=mpp> <OPTION 
+                    value=10>10</OPTION><OPTION value=25 
+                    selected>25</OPTION><OPTION 
+                  value=50>50</OPTION></SELECT>&nbsp;&nbsp;</TD>
+                <TD colSpan=2>&nbsp;</TD></TR></TBODY></TABLE></FORM></TD></TR>
+        <TR>
+          <TD><A name=xx0xx></A>
+            <TABLE cellSpacing=0 cellPadding=2 width="100%" border=0>
+              <TBODY>
+              <TR class=Frm_NavigationBar>
+                <TD>&nbsp;</TD>
+                <TD>Msgs 1 to 25 of 33 (Total in Forum: 33) (<A 
+                  href="http://www.codeproject.com/KB/tips/easysmtpandsms.aspx?fid=355120">Refresh</A>)</TD>
+                <TD style="WHITE-SPACE: nowrap; TEXT-ALIGN: right"><SPAN 
+                  class=Frm_HL>First</SPAN><SPAN class=Frm_HL>Prev</SPAN><A 
+                  class=Frm_HL 
+                  href="http://www.codeproject.com/KB/tips/easysmtpandsms.aspx?fid=355120&amp;fr=26#xx0xx" 
+                  name=Frm_HoverNL>Next</A></TD></TR></TBODY></TABLE></TD></TR>
+        <TR>
+          <TD>
+            <TABLE class=Frm_MsgTable cellSpacing=0 cellPadding=0 width="100%" 
+            border=0><!-- Column Headers -->
+              <TBODY>
+              <TR class=Frm_ColumnHeaders>
+                <TD style="WIDTH: 100%">
+                  <TABLE cellSpacing=0 cellPadding=2 width="100%" border=0>
+                    <TBODY>
+                    <TR>
+                      <TD>Subject&nbsp;</TD>
+                      <TD class=Frm_MsgAuthor>&nbsp;Author&nbsp;</TD>
+                      <TD 
+              class=Frm_MsgDate>Date&nbsp;</TD></TR></TBODY></TABLE></TD></TR>
+              <TR>
+                <TD><IMG height=5 alt="" 
+                  src="CodeProject Some easy ways to send emails (via SMTP) and SMS text messages_ Free source code and programming help_files/t.gif" 
+                  width=1 border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd Rt HdUnSel " id=F2642212_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=16><A 
+                        name=xx2642212xx></A><IMG height=16 alt=General 
+                        src="CodeProject Some easy ways to send emails (via SMTP) and SMS text messages_ Free source code and programming help_files/msg_general.gif" 
+                        width=16 align=top></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/tips/easysmtpandsms.aspx?fid=355120&amp;select=2642212#xx2642212xx" 
+                        name=2642212>Quite useless code!</A></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        title=member height=16 alt=member 
+                        src="CodeProject Some easy ways to send emails (via SMTP) and SMS text messages_ Free source code and programming help_files/member_sm.gif" 
+                        border=0></TD>
+                      <TD class=Frm_MsgAuthor><A 
+                        href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=480064">Elmue</A></TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">12:49 
+                        17 Jul '08 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=F2642212_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 16px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2>Hello<BR><BR>Although the code 
+                                which you have copied from Nish's article is 
+                                correct in theory, in practice it is 
+                                useless.<BR><BR>When opening the connection with 
+                                the SMTP server the client (your PC) sends the 
+                                SMTP command <BR><PRE>HELO &lt;Computername&gt;</PRE><BR>Nearly 
+                                all SMTP servers check in their whitelist that 
+                                the &lt;computername&gt; is a valid SMTP 
+                                server.<BR>So all the big email providers will 
+                                not allow you to send an email because they dont 
+                                know the name of your PC.<BR><BR>So you get an 
+                                error and the mail cannot be sent.<BR><BR>To see 
+                                the data transfer with the server install a 
+                                network spy tool like <A 
+                                href="http://www.packetyzer.com/" 
+                                target=_blank>Packetyzer</A>!<BR><BR>For example 
+                                GMX.NET responds:<BR><PRE>Sorry, your HELO has been denied... 550 (http://portal.gmx.net/serverrules)</PRE><BR><BR>If 
+                                you open this page you will read:<BR><BR><PRE>E-Mails must comply to the standards described in RFC 2822. http://www.rfc-editor.org/rfc/rfc2822.txt<BR><BR>E-mails should not be delivered from within dialup IP ranges. <BR>The default setting for each user is to not accept sucht e-mail in order to prevent the spreading of mail worms.<BR><BR>The delivering server must have a reverse DNS entry with a fully qualified domain name.<BR><BR>A complete and plausible HELO/EHLO as described in RFC 2821 must be sent. <BR>http://www.rfc-editor.org/rfc/rfc2821.txt<BR><BR>We check the sending server for SPF compliance if the user hasn't disabled this setting. <BR>The addresses of forwarded e-mail therefor MUST be rewritten using SRS standards.<BR><BR>The communicating server must not be an open proxy and must be protected against unauthorized access.<BR><BR>In case of any error we ALWAYS provide a error message in the SMTP dialog which cleary indicates <BR>the source of the problem. Please check you server logs if you experience problems. <BR>In case of reoccuring errors it is useful to identify the very first instance when the error occured.<BR><BR>We check several well established RBLs. Should one of them match our SMTP answer will tell you which, <BR>why and what to do.</PRE><BR><BR>If 
+                                it would be so easy as with your code you could 
+                                easily abuse it for spamming and writing 
+                                worms.<BR>But it is not that easy!<BR><BR>Your 
+                                code is blocked by the spam filters.<BR>No 
+                                chance!<BR><BR>Elmü<BR></TD></TR>
+                                <TR style="VERTICAL-ALIGN: middle">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL 
+                                href="http://www.codeproject.com/script/Membership/LogOn.aspx?rp=%2fKB%2ftips%2feasysmtpandsms.aspx">Sign 
+                                In</A>·<A class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/tips/easysmtpandsms.aspx?fid=355120&amp;tid=2642212">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=355120&amp;msg=2642212">PermaLink</A></TD>
+                                <TD class=Frm_MsgFt 
+                                style="TEXT-ALIGN: right"><SPAN id=MVF2642212 
+                                style="WHITE-SPACE: nowrap"></SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR class=Quick>
+                <TD class=Frm_MsgDivide><IMG height=1 alt="" 
+                  src="CodeProject Some easy ways to send emails (via SMTP) and SMS text messages_ Free source code and programming help_files/t.gif" 
+                  width=1 border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd HdUnSel " id=F2642262_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=34><A 
+                        name=xx2642262xx></A><IMG height=16 alt=General 
+                        src="CodeProject Some easy ways to send emails (via SMTP) and SMS text messages_ Free source code and programming help_files/msg_general.gif" 
+                        width=16 align=top></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/tips/easysmtpandsms.aspx?fid=355120&amp;select=2642262#xx2642262xx" 
+                        name=2642262>Re: Quite useless code!</A></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        title=member height=16 alt=member 
+                        src="CodeProject Some easy ways to send emails (via SMTP) and SMS text messages_ Free source code and programming help_files/member_sm.gif" 
+                        border=0></TD>
+                      <TD class=Frm_MsgAuthor><A 
+                        href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=850321">daluu</A></TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">14:28 
+                        17 Jul '08 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=F2642262_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 34px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2>Thank you for the reply. I also 
+                                see that you posted a duplicate message to 
+                                Nish's article that my mxmail tool is based 
+                                upon. That is indeed more appropriate to post 
+                                there.<BR><BR>I merely provide a command line 
+                                wrapper to the solution provided by that 
+                                reference article, so any issues or inquiries 
+                                about the tool beyond it's command line usage 
+                                should be directed there.<BR><BR>I would like to 
+                                note though, that I did mention emails sent out 
+                                from mxmail may potentially be 
+                                blocked/rejected/dropped at the destination 
+                                server, and there can be ethical issues using 
+                                the tool (~spamming). <BR><BR>And in my limited 
+                                testing of the tool, I was able to send emails 
+                                to Yahoo, Google mail, and my mobile phone 
+                                service provider's SMS email gateway from a 
+                                normal PC using the tool. The email recipients 
+                                did receive the emails.<BR><BR>So either your 
+                                comment isn't valid 100% of the time, or Nish's 
+                                solution (the referenced article) uses a 
+                                different implementation than you 
+                                thought.<BR><BR>I do get your point though. 
+                                <BR><BR>
+                                <DIV class=ForumSig>"A good scientist is a 
+                                person with original ideas. A good engineer is a 
+                                person who makes a design that works with as few 
+                                original ideas as possible." - Freeman 
+                                Dyson</DIV><BR></TD></TR>
+                                <TR style="VERTICAL-ALIGN: middle">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL 
+                                href="http://www.codeproject.com/script/Membership/LogOn.aspx?rp=%2fKB%2ftips%2feasysmtpandsms.aspx">Sign 
+                                In</A>·<A class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/tips/easysmtpandsms.aspx?fid=355120&amp;tid=2642212">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=355120&amp;msg=2642262">PermaLink</A></TD>
+                                <TD class=Frm_MsgFt 
+                                style="TEXT-ALIGN: right"><SPAN id=MVF2642262 
+                                style="WHITE-SPACE: nowrap"></SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR class=Quick>
+                <TD class=Frm_MsgRtDivide><IMG height=1 alt="" 
+                  src="CodeProject Some easy ways to send emails (via SMTP) and SMS text messages_ Free source code and programming help_files/t.gif" 
+                  width=1 border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd Rt HdUnSel " id=F2458020_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=16><A 
+                        name=xx2458020xx></A><IMG height=16 alt=General 
+                        src="CodeProject Some easy ways to send emails (via SMTP) and SMS text messages_ Free source code and programming help_files/msg_general.gif" 
+                        width=16 align=top></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/tips/easysmtpandsms.aspx?fid=355120&amp;select=2458020#xx2458020xx" 
+                        name=2458020>If you want to send SMS messages to 
+                        cellphones</A></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        title=member height=16 alt=member 
+                        src="CodeProject Some easy ways to send emails (via SMTP) and SMS text messages_ Free source code and programming help_files/member_sm.gif" 
+                        border=0></TD>
+                      <TD class=Frm_MsgAuthor><A 
+                        href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=4453779">William 
+                        Ike</A></TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">22:54 8 
+                        Mar '08 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=F2458020_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 16px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2>If you want to send SMS messages 
+                                from E-mail you can use an <A 
+                                href="http://www.ozekisms.com/index.php?owpn=405">E-mail 
+                                to SMS sending gateway</A> with an external SMTP 
+                                server or a built in SMTP server. <BR></TD></TR>
+                                <TR style="VERTICAL-ALIGN: middle">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL 
+                                href="http://www.codeproject.com/script/Membership/LogOn.aspx?rp=%2fKB%2ftips%2feasysmtpandsms.aspx">Sign 
+                                In</A>·<A class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/tips/easysmtpandsms.aspx?fid=355120&amp;tid=2458020">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=355120&amp;msg=2458020">PermaLink</A></TD>
+                                <TD class=Frm_MsgFt 
+                                style="TEXT-ALIGN: right"><SPAN id=MVF2458020 
+                                style="WHITE-SPACE: nowrap"></SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR class=Quick>
+                <TD class=Frm_MsgDivide><IMG height=1 alt="" 
+                  src="CodeProject Some easy ways to send emails (via SMTP) and SMS text messages_ Free source code and programming help_files/t.gif" 
+                  width=1 border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd HdUnSel " id=F2462256_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=34><A 
+                        name=xx2462256xx></A><IMG height=16 alt=General 
+                        src="CodeProject Some easy ways to send emails (via SMTP) and SMS text messages_ Free source code and programming help_files/msg_general.gif" 
+                        width=16 align=top></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/tips/easysmtpandsms.aspx?fid=355120&amp;select=2462256#xx2462256xx" 
+                        name=2462256>Re: If you want to send SMS messages to 
+                        cellphones</A></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        title=member height=16 alt=member 
+                        src="CodeProject Some easy ways to send emails (via SMTP) and SMS text messages_ Free source code and programming help_files/member_sm.gif" 
+                        border=0></TD>
+                      <TD class=Frm_MsgAuthor><A 
+                        href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=850321">daluu</A></TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">14:03 
+                        11 Mar '08 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=F2462256_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 34px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2>Thanks. This info will be helpful 
+                                for me and other users. It's too bad there 
+                                aren't many free email to SMS gateways out there 
+                                though. So users will generally need to know the 
+                                email address format and carrier domain to relay 
+                                email as SMS to cellphones, if they want all 
+                                this for free. <BR><BR>
+                                <DIV class=ForumSig>"A good scientist is a 
+                                person with original ideas. A good engineer is a 
+                                person who makes a design that works with as few 
+                                original ideas as possible." - Freeman 
+                                Dyson</DIV><BR></TD></TR>
+                                <TR style="VERTICAL-ALIGN: middle">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL 
+                                href="http://www.codeproject.com/script/Membership/LogOn.aspx?rp=%2fKB%2ftips%2feasysmtpandsms.aspx">Sign 
+                                In</A>·<A class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/tips/easysmtpandsms.aspx?fid=355120&amp;tid=2458020">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=355120&amp;msg=2462256">PermaLink</A></TD>
+                                <TD class=Frm_MsgFt 
+                                style="TEXT-ALIGN: right"><SPAN id=MVF2462256 
+                                style="WHITE-SPACE: nowrap"></SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR class=Quick>
+                <TD class=Frm_MsgRtDivide><IMG height=1 alt="" 
+                  src="CodeProject Some easy ways to send emails (via SMTP) and SMS text messages_ Free source code and programming help_files/t.gif" 
+                  width=1 border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd Rt HdUnSel " id=F2451590_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=16><A 
+                        name=xx2451590xx></A><IMG height=16 alt=General 
+                        src="CodeProject Some easy ways to send emails (via SMTP) and SMS text messages_ Free source code and programming help_files/msg_general.gif" 
+                        width=16 align=top></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/tips/easysmtpandsms.aspx?fid=355120&amp;select=2451590#xx2451590xx" 
+                        name=2451590>Great program !</A></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        title=member height=16 alt=member 
+                        src="CodeProject Some easy ways to send emails (via SMTP) and SMS text messages_ Free source code and programming help_files/member_sm.gif" 
+                        border=0></TD>
+                      <TD class=Frm_MsgAuthor><A 
+                        href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=4268090">John_Mann_JM</A></TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">9:55 4 
+                        Mar '08 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=F2451590_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 16px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2>Simple and great program. 
+                                Congratulations ! <BR></TD></TR>
+                                <TR style="VERTICAL-ALIGN: middle">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL 
+                                href="http://www.codeproject.com/script/Membership/LogOn.aspx?rp=%2fKB%2ftips%2feasysmtpandsms.aspx">Sign 
+                                In</A>·<A class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/tips/easysmtpandsms.aspx?fid=355120&amp;tid=2451590">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=355120&amp;msg=2451590">PermaLink</A></TD>
+                                <TD class=Frm_MsgFt 
+                                style="TEXT-ALIGN: right"><SPAN id=MVF2451590 
+                                style="WHITE-SPACE: nowrap"></SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR class=Quick>
+                <TD class=Frm_MsgRtDivide><IMG height=1 alt="" 
+                  src="CodeProject Some easy ways to send emails (via SMTP) and SMS text messages_ Free source code and programming help_files/t.gif" 
+                  width=1 border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd Rt HdUnSel " id=F2378290_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=16><A 
+                        name=xx2378290xx></A><IMG height=16 alt=General 
+                        src="CodeProject Some easy ways to send emails (via SMTP) and SMS text messages_ Free source code and programming help_files/msg_general.gif" 
+                        width=16 align=top></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/tips/easysmtpandsms.aspx?fid=355120&amp;select=2378290#xx2378290xx" 
+                        name=2378290>Stupidity</A></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        title=member height=16 alt=member 
+                        src="CodeProject Some easy ways to send emails (via SMTP) and SMS text messages_ Free source code and programming help_files/member_sm.gif" 
+                        border=0></TD>
+                      <TD class=Frm_MsgAuthor><A 
+                        href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=28158">Bob 
+                        Carter</A></TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">6:08 4 
+                        Jan '08 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=F2378290_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 16px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2>The only stupid question is the 
+                                one not asked.<BR>Nice work! <IMG title=Smile 
+                                src="CodeProject Some easy ways to send emails (via SMTP) and SMS text messages_ Free source code and programming help_files/smiley_smile.gif" 
+                                align=top> <BR></TD></TR>
+                                <TR style="VERTICAL-ALIGN: middle">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL 
+                                href="http://www.codeproject.com/script/Membership/LogOn.aspx?rp=%2fKB%2ftips%2feasysmtpandsms.aspx">Sign 
+                                In</A>·<A class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/tips/easysmtpandsms.aspx?fid=355120&amp;tid=2378290">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=355120&amp;msg=2378290">PermaLink</A></TD>
+                                <TD class=Frm_MsgFt 
+                                style="TEXT-ALIGN: right"><SPAN id=MVF2378290 
+                                style="WHITE-SPACE: nowrap"></SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR class=Quick>
+                <TD class=Frm_MsgRtDivide><IMG height=1 alt="" 
+                  src="CodeProject Some easy ways to send emails (via SMTP) and SMS text messages_ Free source code and programming help_files/t.gif" 
+                  width=1 border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd Rt HdUnSel " id=F2308970_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=16><A 
+                        name=xx2308970xx></A><IMG height=16 alt=General 
+                        src="CodeProject Some easy ways to send emails (via SMTP) and SMS text messages_ Free source code and programming help_files/msg_general.gif" 
+                        width=16 align=top></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/tips/easysmtpandsms.aspx?fid=355120&amp;select=2308970#xx2308970xx" 
+                        name=2308970>find the carrier based on the number</A></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        title=member height=16 alt=member 
+                        src="CodeProject Some easy ways to send emails (via SMTP) and SMS text messages_ Free source code and programming help_files/member_sm.gif" 
+                        border=0></TD>
+                      <TD class=Frm_MsgAuthor><A 
+                        href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=1467087">D.Sridhar</A></TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">9:32 7 
+                        Nov '07 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=F2308970_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 16px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2>Hi,<BR><BR>Is there a service that 
+                                I can use to get the carrier address if I pass 
+                                the phone number to it. we are trying to build a 
+                                database with the phonenumber and thier carrier 
+                                so that the user doesn't have to enter the 
+                                carrier. Please let me 
+                                know.<BR><BR>Thanks,<BR>sridhar. <BR></TD></TR>
+                                <TR style="VERTICAL-ALIGN: middle">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL 
+                                href="http://www.codeproject.com/script/Membership/LogOn.aspx?rp=%2fKB%2ftips%2feasysmtpandsms.aspx">Sign 
+                                In</A>·<A class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/tips/easysmtpandsms.aspx?fid=355120&amp;tid=2308970">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=355120&amp;msg=2308970">PermaLink</A></TD>
+                                <TD class=Frm_MsgFt 
+                                style="TEXT-ALIGN: right"><SPAN id=MVF2308970 
+                                style="WHITE-SPACE: nowrap"></SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR class=Quick>
+                <TD class=Frm_MsgDivide><IMG height=1 alt="" 
+                  src="CodeProject Some easy ways to send emails (via SMTP) and SMS text messages_ Free source code and programming help_files/t.gif" 
+                  width=1 border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd HdUnSel " id=F2309534_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=34><A 
+                        name=xx2309534xx></A><IMG height=16 alt=General 
+                        src="CodeProject Some easy ways to send emails (via SMTP) and SMS text messages_ Free source code and programming help_files/msg_general.gif" 
+                        width=16 align=top></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/tips/easysmtpandsms.aspx?fid=355120&amp;select=2309534#xx2309534xx" 
+                        name=2309534>Re: find the carrier based on the 
+                      number</A></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        title=member height=16 alt=member 
+                        src="CodeProject Some easy ways to send emails (via SMTP) and SMS text messages_ Free source code and programming help_files/member_sm.gif" 
+                        border=0></TD>
+                      <TD class=Frm_MsgAuthor><A 
+                        href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=850321">daluu</A></TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">18:57 7 
+                        Nov '07 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=F2309534_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 34px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2>Wish I knew of such a service. And 
+                                if there is, I'm guessing they probably charge 
+                                for it.<BR><BR>One free service I know that lets 
+                                you send SMS w/o knowing the carrier is 
+                                www.gizmosms.com of the Gizmo project. Perhaps 
+                                you can check with them to see how they 
+                                implement their SMS routing. Don't know if 
+                                they'd offer any help though. <BR><BR>
+                                <DIV class=ForumSig>"A good scientist is a 
+                                person with original ideas. A good engineer is a 
+                                person who makes a design that works with as few 
+                                original ideas as possible." - Freeman 
+                                Dyson</DIV><BR></TD></TR>
+                                <TR style="VERTICAL-ALIGN: middle">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL 
+                                href="http://www.codeproject.com/script/Membership/LogOn.aspx?rp=%2fKB%2ftips%2feasysmtpandsms.aspx">Sign 
+                                In</A>·<A class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/tips/easysmtpandsms.aspx?fid=355120&amp;tid=2308970">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=355120&amp;msg=2309534">PermaLink</A></TD>
+                                <TD class=Frm_MsgFt 
+                                style="TEXT-ALIGN: right"><SPAN id=MVF2309534 
+                                style="WHITE-SPACE: nowrap">3.00/5 (1 vote) 
+                                </SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR class=Quick>
+                <TD class=Frm_MsgRtDivide><IMG height=1 alt="" 
+                  src="CodeProject Some easy ways to send emails (via SMTP) and SMS text messages_ Free source code and programming help_files/t.gif" 
+                  width=1 border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd Rt HdUnSel " id=F2278142_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=16><A 
+                        name=xx2278142xx></A><IMG height=16 alt=General 
+                        src="CodeProject Some easy ways to send emails (via SMTP) and SMS text messages_ Free source code and programming help_files/msg_general.gif" 
+                        width=16 align=top></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/tips/easysmtpandsms.aspx?fid=355120&amp;select=2278142#xx2278142xx" 
+                        name=2278142>CSMTPConnection::Connect fails</A></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        title=member height=16 alt=member 
+                        src="CodeProject Some easy ways to send emails (via SMTP) and SMS text messages_ Free source code and programming help_files/member_sm.gif" 
+                        border=0></TD>
+                      <TD class=Frm_MsgAuthor><A 
+                        href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=1885114">Raju 
+                        Sai</A></TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">3:38 18 
+                        Oct '07 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=F2278142_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 16px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2>Hi, I have downloaded the source 
+                                and tried from my organization, it failed. So I 
+                                made a debug version and found it fails during 
+                                call "CSMTPConnection::Connect". Using 
+                                GetLastError I got error No.10038.I have created 
+                                my debug version in VS2005 compiler and found 
+                                this. Can I know why it is? What's the mistake I 
+                                am doing?. Thanks in advance. <BR><BR>
+                                <DIV class=ForumSig>B.Raju</DIV><BR></TD></TR>
+                                <TR style="VERTICAL-ALIGN: middle">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL 
+                                href="http://www.codeproject.com/script/Membership/LogOn.aspx?rp=%2fKB%2ftips%2feasysmtpandsms.aspx">Sign 
+                                In</A>·<A class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/tips/easysmtpandsms.aspx?fid=355120&amp;tid=2278142">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=355120&amp;msg=2278142">PermaLink</A></TD>
+                                <TD class=Frm_MsgFt 
+                                style="TEXT-ALIGN: right"><SPAN id=MVF2278142 
+                                style="WHITE-SPACE: nowrap"></SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR class=Quick>
+                <TD class=Frm_MsgDivide><IMG height=1 alt="" 
+                  src="CodeProject Some easy ways to send emails (via SMTP) and SMS text messages_ Free source code and programming help_files/t.gif" 
+                  width=1 border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd HdUnSel " id=F2278769_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=34><A 
+                        name=xx2278769xx></A><IMG height=16 alt=General 
+                        src="CodeProject Some easy ways to send emails (via SMTP) and SMS text messages_ Free source code and programming help_files/msg_general.gif" 
+                        width=16 align=top></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/tips/easysmtpandsms.aspx?fid=355120&amp;select=2278769#xx2278769xx" 
+                        name=2278769>Re: CSMTPConnection::Connect fails</A></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        title=member height=16 alt=member 
+                        src="CodeProject Some easy ways to send emails (via SMTP) and SMS text messages_ Free source code and programming help_files/member_sm.gif" 
+                        border=0></TD>
+                      <TD class=Frm_MsgAuthor><A 
+                        href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=850321">daluu</A></TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">8:26 18 
+                        Oct '07 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=F2278769_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 34px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2>You should try the original 
+                                compiled executable that comes with the source. 
+                                Do you have problems with that as well?<BR><BR>I 
+                                compiled with VS2003, not sure if that makes a 
+                                difference.<BR><BR>My code depends on the SMTP 
+                                framework code from the following article. You 
+                                will probably have better luck contacting the 
+                                author of that article.<BR><BR>Send mail without 
+                                specifying an SMTP 
+                                server<BR>http://www.codeproject.com/tips/CSMTPConnection2.asp 
+                                <BR><BR>
+                                <DIV class=ForumSig>"A good scientist is a 
+                                person with original ideas. A good engineer is a 
+                                person who makes a design that works with as few 
+                                original ideas as possible." - Freeman 
+                                Dyson</DIV><BR></TD></TR>
+                                <TR style="VERTICAL-ALIGN: middle">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL 
+                                href="http://www.codeproject.com/script/Membership/LogOn.aspx?rp=%2fKB%2ftips%2feasysmtpandsms.aspx">Sign 
+                                In</A>·<A class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/tips/easysmtpandsms.aspx?fid=355120&amp;tid=2278142">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=355120&amp;msg=2278769">PermaLink</A></TD>
+                                <TD class=Frm_MsgFt 
+                                style="TEXT-ALIGN: right"><SPAN id=MVF2278769 
+                                style="WHITE-SPACE: nowrap"></SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR class=Quick>
+                <TD class=Frm_MsgRtDivide><IMG height=1 alt="" 
+                  src="CodeProject Some easy ways to send emails (via SMTP) and SMS text messages_ Free source code and programming help_files/t.gif" 
+                  width=1 border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd Rt HdUnSel " id=F2274682_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=16><A 
+                        name=xx2274682xx></A><IMG height=16 alt=General 
+                        src="CodeProject Some easy ways to send emails (via SMTP) and SMS text messages_ Free source code and programming help_files/msg_general.gif" 
+                        width=16 align=top></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/tips/easysmtpandsms.aspx?fid=355120&amp;select=2274682#xx2274682xx" 
+                        name=2274682>Sending SMS using command line.</A></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        title=member height=16 alt=member 
+                        src="CodeProject Some easy ways to send emails (via SMTP) and SMS text messages_ Free source code and programming help_files/member_sm.gif" 
+                        border=0></TD>
+                      <TD class=Frm_MsgAuthor><A 
+                        href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=1229387">touchring</A></TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">9:08 16 
+                        Oct '07 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=F2274682_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 16px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2>You can also send SMS using 
+                                command line. Here's a freeware you can use - 
+                                http://www.visualgsm.com/products_vgsmlite.htm. 
+                                It also support unicode messaging. 
+                                <BR><BR><BR>---------------------<BR><A 
+                                href="http://www.visualtron.com/">SMS 
+                                Software</A>@Expert<BR>---------------------<BR></TD></TR>
+                                <TR style="VERTICAL-ALIGN: middle">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL 
+                                href="http://www.codeproject.com/script/Membership/LogOn.aspx?rp=%2fKB%2ftips%2feasysmtpandsms.aspx">Sign 
+                                In</A>·<A class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/tips/easysmtpandsms.aspx?fid=355120&amp;tid=2274682">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=355120&amp;msg=2274682">PermaLink</A></TD>
+                                <TD class=Frm_MsgFt 
+                                style="TEXT-ALIGN: right"><SPAN id=MVF2274682 
+                                style="WHITE-SPACE: nowrap"></SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR class=Quick>
+                <TD class=Frm_MsgDivide><IMG height=1 alt="" 
+                  src="CodeProject Some easy ways to send emails (via SMTP) and SMS text messages_ Free source code and programming help_files/t.gif" 
+                  width=1 border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd HdUnSel " id=F2274991_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=34><A 
+                        name=xx2274991xx></A><IMG height=16 alt=General 
+                        src="CodeProject Some easy ways to send emails (via SMTP) and SMS text messages_ Free source code and programming help_files/msg_general.gif" 
+                        width=16 align=top></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/tips/easysmtpandsms.aspx?fid=355120&amp;select=2274991#xx2274991xx" 
+                        name=2274991>Re: Sending SMS using command line.</A></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        title=member height=16 alt=member 
+                        src="CodeProject Some easy ways to send emails (via SMTP) and SMS text messages_ Free source code and programming help_files/member_sm.gif" 
+                        border=0></TD>
+                      <TD class=Frm_MsgAuthor><A 
+                        href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=850321">daluu</A></TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">13:23 
+                        16 Oct '07 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=F2274991_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 34px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2>Thanks for sharing the info. Great 
+                                tool.<BR><BR>However, it doesn't sound practical 
+                                for real world usage. Who in their right mind 
+                                would hook up their mobile phone, etc. forever 
+                                to a PC or web server so that SMS can be sent? 
+                                Unless the software queues SMS messages when the 
+                                mobile phone is not attached, but then there 
+                                would be a delay in receipt of messages as you 
+                                have to hook up the phone again to empty the 
+                                queue.<BR><BR>Don't know about other countries, 
+                                but in USA, text messaging isn't free. Not 
+                                pricey but for those who text a lot, it ain't 
+                                cheap either. <BR><BR>
+                                <DIV class=ForumSig>"A good scientist is a 
+                                person with original ideas. A good engineer is a 
+                                person who makes a design that works with as few 
+                                original ideas as possible." - Freeman 
+                                Dyson</DIV><BR></TD></TR>
+                                <TR style="VERTICAL-ALIGN: middle">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL 
+                                href="http://www.codeproject.com/script/Membership/LogOn.aspx?rp=%2fKB%2ftips%2feasysmtpandsms.aspx">Sign 
+                                In</A>·<A class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/tips/easysmtpandsms.aspx?fid=355120&amp;tid=2274682">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=355120&amp;msg=2274991">PermaLink</A></TD>
+                                <TD class=Frm_MsgFt 
+                                style="TEXT-ALIGN: right"><SPAN id=MVF2274991 
+                                style="WHITE-SPACE: nowrap"></SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR class=Quick>
+                <TD class=Frm_MsgDivide><IMG height=1 alt="" 
+                  src="CodeProject Some easy ways to send emails (via SMTP) and SMS text messages_ Free source code and programming help_files/t.gif" 
+                  width=1 border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd HdUnSel " id=F2275320_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=52><A 
+                        name=xx2275320xx></A><IMG height=16 alt=General 
+                        src="CodeProject Some easy ways to send emails (via SMTP) and SMS text messages_ Free source code and programming help_files/msg_general.gif" 
+                        width=16 align=top></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/tips/easysmtpandsms.aspx?fid=355120&amp;select=2275320#xx2275320xx" 
+                        name=2275320>Re: Sending SMS using command line.</A></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        title=member height=16 alt=member 
+                        src="CodeProject Some easy ways to send emails (via SMTP) and SMS text messages_ Free source code and programming help_files/member_sm.gif" 
+                        border=0></TD>
+                      <TD class=Frm_MsgAuthor><A 
+                        href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=1229387">touchring</A></TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">21:21 
+                        16 Oct '07 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=F2275320_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 52px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2>A few scenarios whereby this is 
+                                useful:<BR><BR>1. If you need to receive 
+                                reply/acknowledgement.<BR>2. If you need to send 
+                                overseas SMS.<BR>3. If you need reliability - 
+                                your phone is as reliable as it can be.<BR>4. If 
+                                you don't have internet access on that PC - it 
+                                happens for ultra-security LAN. 
+                                <BR><BR><BR>---------------------<BR><A 
+                                href="http://www.visualtron.com/">SMS 
+                                Software</A>@Expert<BR>---------------------<BR></TD></TR>
+                                <TR style="VERTICAL-ALIGN: middle">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL 
+                                href="http://www.codeproject.com/script/Membership/LogOn.aspx?rp=%2fKB%2ftips%2feasysmtpandsms.aspx">Sign 
+                                In</A>·<A class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/tips/easysmtpandsms.aspx?fid=355120&amp;tid=2274682">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=355120&amp;msg=2275320">PermaLink</A></TD>
+                                <TD class=Frm_MsgFt 
+                                style="TEXT-ALIGN: right"><SPAN id=MVF2275320 
+                                style="WHITE-SPACE: nowrap"></SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR class=Quick>
+                <TD class=Frm_MsgRtDivide><IMG height=1 alt="" 
+                  src="CodeProject Some easy ways to send emails (via SMTP) and SMS text messages_ Free source code and programming help_files/t.gif" 
+                  width=1 border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd LoVote Rt HdUnSel " id=F2206158_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=16><A 
+                        name=xx2206158xx></A><IMG height=16 alt=General 
+                        src="CodeProject Some easy ways to send emails (via SMTP) and SMS text messages_ Free source code and programming help_files/msg_general.gif" 
+                        width=16 align=top></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/tips/easysmtpandsms.aspx?fid=355120&amp;select=2206158#xx2206158xx" 
+                        name=2206158>sms carrier addresses</A></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        title=member height=16 alt=member 
+                        src="CodeProject Some easy ways to send emails (via SMTP) and SMS text messages_ Free source code and programming help_files/member_sm.gif" 
+                        border=0></TD>
+                      <TD class=Frm_MsgAuthor><A 
+                        href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=300041">VEMS</A></TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">6:14 30 
+                        Aug '07 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=F2206158_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 16px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2>T-Mobile: phonenumber@tmomail.net 
+                                <BR>Virgin Mobile: phonenumber@vmobl.com 
+                                <BR>Cingular: phonenumber@cingularme.com 
+                                <BR>Sprint: phonenumber@messaging.sprintpcs.com 
+                                <BR>Verizon: phonenumber@vtext.com <BR>Nextel: 
+                                phonenumber@messaging.nextel.com <BR><BR>where 
+                                phonenumber = your 10 digit phone number 
+                                <BR><BR><BR><BR></TD></TR>
+                                <TR style="VERTICAL-ALIGN: middle">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL 
+                                href="http://www.codeproject.com/script/Membership/LogOn.aspx?rp=%2fKB%2ftips%2feasysmtpandsms.aspx">Sign 
+                                In</A>·<A class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/tips/easysmtpandsms.aspx?fid=355120&amp;tid=2206158">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=355120&amp;msg=2206158">PermaLink</A></TD>
+                                <TD class=Frm_MsgFt 
+                                style="TEXT-ALIGN: right"><SPAN id=MVF2206158 
+                                style="WHITE-SPACE: nowrap">2.00/5 (1 vote) 
+                                </SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR class=Quick>
+                <TD class=Frm_MsgRtDivide><IMG height=1 alt="" 
+                  src="CodeProject Some easy ways to send emails (via SMTP) and SMS text messages_ Free source code and programming help_files/t.gif" 
+                  width=1 border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd Rt HdUnSel " id=F1913709_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=16><A 
+                        name=xx1913709xx></A><IMG height=16 alt=General 
+                        src="CodeProject Some easy ways to send emails (via SMTP) and SMS text messages_ Free source code and programming help_files/msg_general.gif" 
+                        width=16 align=top></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/tips/easysmtpandsms.aspx?fid=355120&amp;select=1913709#xx1913709xx" 
+                        name=1913709>Running mxmail.exe from VC++ didn't wokr. 
+                        Why? [modified]</A></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        title=member height=16 alt=member 
+                        src="CodeProject Some easy ways to send emails (via SMTP) and SMS text messages_ Free source code and programming help_files/member_sm.gif" 
+                        border=0></TD>
+                      <TD class=Frm_MsgAuthor><A 
+                        href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=658032">ehaerim</A></TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">23:12 
+                        26 Feb '07 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=F1913709_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 16px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2>I tried to send a message using 
+                                mxmail.exe in two ways: from DOS command line 
+                                and from VC++6 program.<BR><BR>1) DOS mode =&gt; 
+                                worked fine.<BR>C:\&gt; mxmail "Haerim" 
+                                "myemail@mycompany.com" 
+                                "otheremail@othercompany.com" "Please check 
+                                this" -t "CheckStuff"<BR><BR>2) From VC++ 6.0 
+                                =&gt; failed.<BR>int nErr = _spawnl(_P_NOWAIT, 
+                                "C:\\mxmail.exe", "Haerim", 
+                                "myemail@mycompany.com", 
+                                "otheremail@othercompany.com",<BR>"Please check 
+                                this.", "-t", "CheckStuff", NULL);<BR><BR>As 
+                                soon as the above line is executed, I could see 
+                                a DOS winodw shortly. But mail was not 
+                                sent.<BR><BR>Can someone post a working VC++ 
+                                code using mxmail.exe 
+                                please?<BR><BR>haerim<BR><BR><BR>I figured it 
+                                out myself ... That is, the argument list should 
+                                contain the executable name even though it was 
+                                alread specified as the second argument of 
+                                _spawnl function.<BR><BR>int nErr = 
+                                _spawnl(_P_NOWAIT, "C:\\mxmail.exe", 
+                                "C:\\mxmail.exe", "Haerim", 
+                                "myemail@mycompany.com", 
+                                "otheremail@othercompany.com", "Please check 
+                                this.", "-t", "CheckStuff", NULL);<BR><BR><BR>-- 
+                                modified at 4:55 Tuesday 27th February, 2007 
+                                <BR></TD></TR>
+                                <TR style="VERTICAL-ALIGN: middle">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL 
+                                href="http://www.codeproject.com/script/Membership/LogOn.aspx?rp=%2fKB%2ftips%2feasysmtpandsms.aspx">Sign 
+                                In</A>·<A class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/tips/easysmtpandsms.aspx?fid=355120&amp;tid=1913709">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=355120&amp;msg=1913709">PermaLink</A></TD>
+                                <TD class=Frm_MsgFt 
+                                style="TEXT-ALIGN: right"><SPAN id=MVF1913709 
+                                style="WHITE-SPACE: nowrap"></SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR class=Quick>
+                <TD class=Frm_MsgRtDivide><IMG height=1 alt="" 
+                  src="CodeProject Some easy ways to send emails (via SMTP) and SMS text messages_ Free source code and programming help_files/t.gif" 
+                  width=1 border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd Rt HdUnSel " id=F1913156_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=16><A 
+                        name=xx1913156xx></A><IMG height=16 alt=Question 
+                        src="CodeProject Some easy ways to send emails (via SMTP) and SMS text messages_ Free source code and programming help_files/msg_question.gif" 
+                        width=16 align=top></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/tips/easysmtpandsms.aspx?fid=355120&amp;select=1913156#xx1913156xx" 
+                        name=1913156>mail message headers</A></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        title=member height=16 alt=member 
+                        src="CodeProject Some easy ways to send emails (via SMTP) and SMS text messages_ Free source code and programming help_files/member_sm.gif" 
+                        border=0></TD>
+                      <TD class=Frm_MsgAuthor><A 
+                        href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=131809">Camilo 
+                        Vergara M.</A></TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">11:50 
+                        26 Feb '07 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=F1913156_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 16px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2>Hello,<BR><BR>Great code man, I 
+                                would like to know how can I change the headers 
+                                of the message to send HTML 
+                                messages?<BR><BR>Thanks!<BR><BR>KMILO 
+                                <BR></TD></TR>
+                                <TR style="VERTICAL-ALIGN: middle">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL 
+                                href="http://www.codeproject.com/script/Membership/LogOn.aspx?rp=%2fKB%2ftips%2feasysmtpandsms.aspx">Sign 
+                                In</A>·<A class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/tips/easysmtpandsms.aspx?fid=355120&amp;tid=1913156">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=355120&amp;msg=1913156">PermaLink</A></TD>
+                                <TD class=Frm_MsgFt 
+                                style="TEXT-ALIGN: right"><SPAN id=MVF1913156 
+                                style="WHITE-SPACE: nowrap"></SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR class=Quick>
+                <TD class=Frm_MsgDivide><IMG height=1 alt="" 
+                  src="CodeProject Some easy ways to send emails (via SMTP) and SMS text messages_ Free source code and programming help_files/t.gif" 
+                  width=1 border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd HdUnSel " id=F1913240_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=34><A 
+                        name=xx1913240xx></A><IMG height=16 alt=Answer 
+                        src="CodeProject Some easy ways to send emails (via SMTP) and SMS text messages_ Free source code and programming help_files/msg_answer.gif" 
+                        width=16 align=top></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/tips/easysmtpandsms.aspx?fid=355120&amp;select=1913240#xx1913240xx" 
+                        name=1913240>Re: mail message headers</A></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        title=member height=16 alt=member 
+                        src="CodeProject Some easy ways to send emails (via SMTP) and SMS text messages_ Free source code and programming help_files/member_sm.gif" 
+                        border=0></TD>
+                      <TD class=Frm_MsgAuthor><A 
+                        href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=850321">daluu</A></TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">13:12 
+                        26 Feb '07 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=F1913240_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 34px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2>Thanks.<BR><BR>If you are 
+                                referring to mxmail, you should probably contact 
+                                the author of the following Code Project 
+                                article:<BR><BR>Code Project article: Send mail 
+                                without specifying an SMTP 
+                                server<BR>http://www.codeproject.com/tips/CSMTPConnection2.asp<BR><BR>mxmail 
+                                basically uses code from that article.<BR><BR>If 
+                                you are referring to sending HTML messages in 
+                                general, it will depend on your particular 
+                                email/SMTP tool that you are using. So check the 
+                                documentation for that tool.<BR><BR><BR>
+                                <DIV class=ForumSig>"A good scientist is a 
+                                person with original ideas. A good engineer is a 
+                                person who makes a design that works with as few 
+                                original ideas as possible." - Freeman 
+                                Dyson</DIV><BR></TD></TR>
+                                <TR style="VERTICAL-ALIGN: middle">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL 
+                                href="http://www.codeproject.com/script/Membership/LogOn.aspx?rp=%2fKB%2ftips%2feasysmtpandsms.aspx">Sign 
+                                In</A>·<A class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/tips/easysmtpandsms.aspx?fid=355120&amp;tid=1913156">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=355120&amp;msg=1913240">PermaLink</A></TD>
+                                <TD class=Frm_MsgFt 
+                                style="TEXT-ALIGN: right"><SPAN id=MVF1913240 
+                                style="WHITE-SPACE: nowrap"></SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR class=Quick>
+                <TD class=Frm_MsgRtDivide><IMG height=1 alt="" 
+                  src="CodeProject Some easy ways to send emails (via SMTP) and SMS text messages_ Free source code and programming help_files/t.gif" 
+                  width=1 border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd LoVote Rt HdUnSel " id=F1909056_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=16><A 
+                        name=xx1909056xx></A><IMG height=16 alt=Question 
+                        src="CodeProject Some easy ways to send emails (via SMTP) and SMS text messages_ Free source code and programming help_files/msg_question.gif" 
+                        width=16 align=top></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/tips/easysmtpandsms.aspx?fid=355120&amp;select=1909056#xx1909056xx" 
+                        name=1909056>great work but i hve a problem</A></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        title=member height=16 alt=member 
+                        src="CodeProject Some easy ways to send emails (via SMTP) and SMS text messages_ Free source code and programming help_files/member_sm.gif" 
+                        border=0></TD>
+                      <TD class=Frm_MsgAuthor><A 
+                        href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=3838836">jayu_s_a</A></TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">5:01 23 
+                        Feb '07 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=F1909056_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 16px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2>I m doin a project named"Operating 
+                                PC Through SMS" for which I require a SMS 
+                                Gateway that will send my SMS to my PC in the 
+                                e-mail form &amp; send the reply from my PC to 
+                                my phone through SMS. Can u help me find a SMS 
+                                Gateway. I hve been tryin for a month now. But 
+                                no reply. Plz help &amp; suggest sometin. 
+                                <BR></TD></TR>
+                                <TR style="VERTICAL-ALIGN: middle">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL 
+                                href="http://www.codeproject.com/script/Membership/LogOn.aspx?rp=%2fKB%2ftips%2feasysmtpandsms.aspx">Sign 
+                                In</A>·<A class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/tips/easysmtpandsms.aspx?fid=355120&amp;tid=1909056">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=355120&amp;msg=1909056">PermaLink</A></TD>
+                                <TD class=Frm_MsgFt 
+                                style="TEXT-ALIGN: right"><SPAN id=MVF1909056 
+                                style="WHITE-SPACE: nowrap">2.00/5 (1 vote) 
+                                </SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR class=Quick>
+                <TD class=Frm_MsgDivide><IMG height=1 alt="" 
+                  src="CodeProject Some easy ways to send emails (via SMTP) and SMS text messages_ Free source code and programming help_files/t.gif" 
+                  width=1 border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd LoVote HdUnSel " id=F1909562_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=34><A 
+                        name=xx1909562xx></A><IMG height=16 alt=Answer 
+                        src="CodeProject Some easy ways to send emails (via SMTP) and SMS text messages_ Free source code and programming help_files/msg_answer.gif" 
+                        width=16 align=top></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/tips/easysmtpandsms.aspx?fid=355120&amp;select=1909562#xx1909562xx" 
+                        name=1909562>Re: great work but i hve a problem</A></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        title=member height=16 alt=member 
+                        src="CodeProject Some easy ways to send emails (via SMTP) and SMS text messages_ Free source code and programming help_files/member_sm.gif" 
+                        border=0></TD>
+                      <TD class=Frm_MsgAuthor><A 
+                        href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=850321">daluu</A></TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">8:54 23 
+                        Feb '07 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=F1909562_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 34px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2>Depending on what you want to do 
+                                exactly, you might have to search around some 
+                                more for the required software. SMS between 
+                                PC-phone is not my specialty. I think there are 
+                                some articles on CodeProject that cover SMS 
+                                between PC-phone somewhat.<BR><BR>If I'm not 
+                                mistaken, there's no way you can send SMS to a 
+                                PC unless you have PC set as an SMS gateway or 
+                                emulating as an SMS device (either of those 
+                                would require you to find the right and free? 
+                                software) OR you need another phone that will be 
+                                connected to the PC via bluetooth/USB and have 
+                                PC control that phone to send/receive SMS to the 
+                                other phone. But for the other half, you can 
+                                send an SMS from PC to phone using either 
+                                methods mentioned in my article.<BR><BR>If you 
+                                do not strictly need to do an "all SMS" project, 
+                                you can have phone send SMS to a standard email 
+                                address (name@yahoo.com, name@yourIP, etc.) (SMS 
+                                to email). Then on the PC, it will periodically 
+                                scan email mailbox for new messsages. When new 
+                                message received, the PC will reply to the email 
+                                via standard email (to SMS) using any of the 
+                                methods mentioned in my article. It would 
+                                functionally do what you intend to do, just not 
+                                being an all SMS solution. As for how to build 
+                                such a system to monitor &amp; reply to email on 
+                                a PC, you'll have to research that 
+                                yourself.<BR><BR>Hope that helps. <IMG 
+                                title=Smile 
+                                src="CodeProject Some easy ways to send emails (via SMTP) and SMS text messages_ Free source code and programming help_files/smiley_smile.gif" 
+                                align=top> <BR><BR>
+                                <DIV class=ForumSig>"A good scientist is a 
+                                person with original ideas. A good engineer is a 
+                                person who makes a design that works with as few 
+                                original ideas as possible." - Freeman 
+                                Dyson</DIV><BR></TD></TR>
+                                <TR style="VERTICAL-ALIGN: middle">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL 
+                                href="http://www.codeproject.com/script/Membership/LogOn.aspx?rp=%2fKB%2ftips%2feasysmtpandsms.aspx">Sign 
+                                In</A>·<A class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/tips/easysmtpandsms.aspx?fid=355120&amp;tid=1909056">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=355120&amp;msg=1909562">PermaLink</A></TD>
+                                <TD class=Frm_MsgFt 
+                                style="TEXT-ALIGN: right"><SPAN id=MVF1909562 
+                                style="WHITE-SPACE: nowrap">2.00/5 (1 vote) 
+                                </SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR class=Quick>
+                <TD class=Frm_MsgRtDivide><IMG height=1 alt="" 
+                  src="CodeProject Some easy ways to send emails (via SMTP) and SMS text messages_ Free source code and programming help_files/t.gif" 
+                  width=1 border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd Rt HdUnSel " id=F1905470_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=16><A 
+                        name=xx1905470xx></A><IMG height=16 alt=General 
+                        src="CodeProject Some easy ways to send emails (via SMTP) and SMS text messages_ Free source code and programming help_files/msg_general.gif" 
+                        width=16 align=top></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/tips/easysmtpandsms.aspx?fid=355120&amp;select=1905470#xx1905470xx" 
+                        name=1905470>do you have codes for VC6</A></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        title=member height=16 alt=member 
+                        src="CodeProject Some easy ways to send emails (via SMTP) and SMS text messages_ Free source code and programming help_files/member_sm.gif" 
+                        border=0></TD>
+                      <TD class=Frm_MsgAuthor><A 
+                        href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=377163">TongGao 
+                        Tang</A></TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">7:05 21 
+                        Feb '07 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=F1905470_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 16px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2>Your Job is definitely great. 
+                                <BR>I have VC++6. if you have source for VC6 
+                                that is good to me.<BR>If you have not, your 
+                                current version is still great.<BR><BR>TongGao 
+                                Tang <BR><BR>
+                                <DIV class=ForumSig>TongGao 
+                                Tang</DIV><BR></TD></TR>
+                                <TR style="VERTICAL-ALIGN: middle">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL 
+                                href="http://www.codeproject.com/script/Membership/LogOn.aspx?rp=%2fKB%2ftips%2feasysmtpandsms.aspx">Sign 
+                                In</A>·<A class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/tips/easysmtpandsms.aspx?fid=355120&amp;tid=1905470">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=355120&amp;msg=1905470">PermaLink</A></TD>
+                                <TD class=Frm_MsgFt 
+                                style="TEXT-ALIGN: right"><SPAN id=MVF1905470 
+                                style="WHITE-SPACE: nowrap"></SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR class=Quick>
+                <TD class=Frm_MsgDivide><IMG height=1 alt="" 
+                  src="CodeProject Some easy ways to send emails (via SMTP) and SMS text messages_ Free source code and programming help_files/t.gif" 
+                  width=1 border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd HdUnSel " id=F1905637_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=34><A 
+                        name=xx1905637xx></A><IMG height=16 alt=General 
+                        src="CodeProject Some easy ways to send emails (via SMTP) and SMS text messages_ Free source code and programming help_files/msg_general.gif" 
+                        width=16 align=top></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/tips/easysmtpandsms.aspx?fid=355120&amp;select=1905637#xx1905637xx" 
+                        name=1905637>Re: do you have codes for VC6</A></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        title=member height=16 alt=member 
+                        src="CodeProject Some easy ways to send emails (via SMTP) and SMS text messages_ Free source code and programming help_files/member_sm.gif" 
+                        border=0></TD>
+                      <TD class=Frm_MsgAuthor><A 
+                        href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=850321">daluu</A></TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">8:43 21 
+                        Feb '07 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=F1905637_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 34px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2>Unfortunately, the code for mxmail 
+                                is based on other code that requires VC++ 7. 
+                                <BR><BR>Additionally, it seems you may need a 
+                                standard version (or better) of VC++ 7 to 
+                                compile the code. My friend attempted to compile 
+                                the code with VC++ 2005 Express Edition and it 
+                                gave errors, not sure if VC++ 2005 (or version 
+                                8?) is too new for compiling or whether it was 
+                                the "Express" feature that limited compiling. 
+                                <BR><BR>
+                                <DIV class=ForumSig>"A good scientist is a 
+                                person with original ideas. A good engineer is a 
+                                person who makes a design that works with as few 
+                                original ideas as possible." - Freeman 
+                                Dyson</DIV><BR></TD></TR>
+                                <TR style="VERTICAL-ALIGN: middle">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL 
+                                href="http://www.codeproject.com/script/Membership/LogOn.aspx?rp=%2fKB%2ftips%2feasysmtpandsms.aspx">Sign 
+                                In</A>·<A class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/tips/easysmtpandsms.aspx?fid=355120&amp;tid=1905470">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=355120&amp;msg=1905637">PermaLink</A></TD>
+                                <TD class=Frm_MsgFt 
+                                style="TEXT-ALIGN: right"><SPAN id=MVF1905637 
+                                style="WHITE-SPACE: nowrap"></SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR class=Quick>
+                <TD class=Frm_MsgRtDivide><IMG height=1 alt="" 
+                  src="CodeProject Some easy ways to send emails (via SMTP) and SMS text messages_ Free source code and programming help_files/t.gif" 
+                  width=1 border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd Rt HdUnSel " id=F1842848_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=16><A 
+                        name=xx1842848xx></A><IMG height=16 alt=General 
+                        src="CodeProject Some easy ways to send emails (via SMTP) and SMS text messages_ Free source code and programming help_files/msg_general.gif" 
+                        width=16 align=top></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/tips/easysmtpandsms.aspx?fid=355120&amp;select=1842848#xx1842848xx" 
+                        name=1842848>What happens when you don't know the 
+                        carrier domain</A></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        title=member height=16 alt=member 
+                        src="CodeProject Some easy ways to send emails (via SMTP) and SMS text messages_ Free source code and programming help_files/member_sm.gif" 
+                        border=0></TD>
+                      <TD class=Frm_MsgAuthor><A 
+                        href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=1294409">xaml.net</A></TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">3:11 13 
+                        Jan '07 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=F1842848_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 16px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2>This would work for some networks, 
+                                but not all phone companies support the 
+                                number@somedomain.com format for sending SMS, 
+                                you could use a professional SMS webservice such 
+                                as <A 
+                                href="http://www.freebiesms.co.uk/developers.aspx">http://www.freebiesms.co.uk/developers.aspx</A>[<A 
+                                title="New Window" 
+                                href="http://www.freebiesms.co.uk/developers.aspx" 
+                                target=_blank>^</A>]. It only works for the UK, 
+                                but the website says it will expand. 
+                                <BR></TD></TR>
+                                <TR style="VERTICAL-ALIGN: middle">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL 
+                                href="http://www.codeproject.com/script/Membership/LogOn.aspx?rp=%2fKB%2ftips%2feasysmtpandsms.aspx">Sign 
+                                In</A>·<A class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/tips/easysmtpandsms.aspx?fid=355120&amp;tid=1842848">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=355120&amp;msg=1842848">PermaLink</A></TD>
+                                <TD class=Frm_MsgFt 
+                                style="TEXT-ALIGN: right"><SPAN id=MVF1842848 
+                                style="WHITE-SPACE: nowrap"></SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR class=Quick>
+                <TD class=Frm_MsgDivide><IMG height=1 alt="" 
+                  src="CodeProject Some easy ways to send emails (via SMTP) and SMS text messages_ Free source code and programming help_files/t.gif" 
+                  width=1 border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd LoVote HdUnSel " id=F1843234_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=34><A 
+                        name=xx1843234xx></A><IMG height=16 alt=General 
+                        src="CodeProject Some easy ways to send emails (via SMTP) and SMS text messages_ Free source code and programming help_files/msg_general.gif" 
+                        width=16 align=top></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/tips/easysmtpandsms.aspx?fid=355120&amp;select=1843234#xx1843234xx" 
+                        name=1843234>Re: What happens when you don't know the 
+                        carrier domain</A></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        title=member height=16 alt=member 
+                        src="CodeProject Some easy ways to send emails (via SMTP) and SMS text messages_ Free source code and programming help_files/member_sm.gif" 
+                        border=0></TD>
+                      <TD class=Frm_MsgAuthor><A 
+                        href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=850321">daluu</A></TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">15:36 
+                        13 Jan '07 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=F1843234_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 34px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2>Thanks for sharing the info. You 
+                                are right, too bad not all carriers support 
+                                number@domain SMS gateway feature. <BR><BR>
+                                <DIV class=ForumSig>"A good scientist is a 
+                                person with original ideas. A good engineer is a 
+                                person who makes a design that works with as few 
+                                original ideas as possible." - Freeman 
+                                Dyson</DIV><BR></TD></TR>
+                                <TR style="VERTICAL-ALIGN: middle">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL 
+                                href="http://www.codeproject.com/script/Membership/LogOn.aspx?rp=%2fKB%2ftips%2feasysmtpandsms.aspx">Sign 
+                                In</A>·<A class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/tips/easysmtpandsms.aspx?fid=355120&amp;tid=1842848">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=355120&amp;msg=1843234">PermaLink</A></TD>
+                                <TD class=Frm_MsgFt 
+                                style="TEXT-ALIGN: right"><SPAN id=MVF1843234 
+                                style="WHITE-SPACE: nowrap">1.00/5 (1 vote) 
+                                </SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR class=Quick>
+                <TD class=Frm_MsgRtDivide><IMG height=1 alt="" 
+                  src="CodeProject Some easy ways to send emails (via SMTP) and SMS text messages_ Free source code and programming help_files/t.gif" 
+                  width=1 border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd LoVote Rt HdUnSel " id=F1801537_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=16><A 
+                        name=xx1801537xx></A><IMG height=16 alt=General 
+                        src="CodeProject Some easy ways to send emails (via SMTP) and SMS text messages_ Free source code and programming help_files/msg_general.gif" 
+                        width=16 align=top></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/tips/easysmtpandsms.aspx?fid=355120&amp;select=1801537#xx1801537xx" 
+                        name=1801537>Great work !</A></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        title=member height=16 alt=member 
+                        src="CodeProject Some easy ways to send emails (via SMTP) and SMS text messages_ Free source code and programming help_files/member_sm.gif" 
+                        border=0></TD>
+                      <TD class=Frm_MsgAuthor><A 
+                        href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=1297035">eugene_liu</A></TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">11:11 
+                        12 Dec '06 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=F1801537_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 16px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2>Hi, <BR><BR>It is great job. Any 
+                                interesting to make a real application ? Contact 
+                                me at eliu@netstarsolution.com Thanks. 
+                                <BR><BR>Eugene <BR></TD></TR>
+                                <TR style="VERTICAL-ALIGN: middle">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL 
+                                href="http://www.codeproject.com/script/Membership/LogOn.aspx?rp=%2fKB%2ftips%2feasysmtpandsms.aspx">Sign 
+                                In</A>·<A class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/tips/easysmtpandsms.aspx?fid=355120&amp;tid=1801537">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=355120&amp;msg=1801537">PermaLink</A></TD>
+                                <TD class=Frm_MsgFt 
+                                style="TEXT-ALIGN: right"><SPAN id=MVF1801537 
+                                style="WHITE-SPACE: nowrap">2.00/5 (1 vote) 
+                                </SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR class=Quick>
+                <TD class=Frm_MsgRtDivide><IMG height=1 alt="" 
+                  src="CodeProject Some easy ways to send emails (via SMTP) and SMS text messages_ Free source code and programming help_files/t.gif" 
+                  width=1 border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd Rt HdUnSel " id=F1779692_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=16><A 
+                        name=xx1779692xx></A><IMG height=16 alt=General 
+                        src="CodeProject Some easy ways to send emails (via SMTP) and SMS text messages_ Free source code and programming help_files/msg_general.gif" 
+                        width=16 align=top></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/tips/easysmtpandsms.aspx?fid=355120&amp;select=1779692#xx1779692xx" 
+                        name=1779692>Got It</A></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        title=member height=16 alt=member 
+                        src="CodeProject Some easy ways to send emails (via SMTP) and SMS text messages_ Free source code and programming help_files/member_sm.gif" 
+                        border=0></TD>
+                      <TD class=Frm_MsgAuthor><A 
+                        href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=2036019">andre12345</A></TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">9:36 28 
+                        Nov '06 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=F1779692_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 16px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2>Thank you. <BR></TD></TR>
+                                <TR style="VERTICAL-ALIGN: middle">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL 
+                                href="http://www.codeproject.com/script/Membership/LogOn.aspx?rp=%2fKB%2ftips%2feasysmtpandsms.aspx">Sign 
+                                In</A>·<A class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/tips/easysmtpandsms.aspx?fid=355120&amp;tid=1779692">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=355120&amp;msg=1779692">PermaLink</A></TD>
+                                <TD class=Frm_MsgFt 
+                                style="TEXT-ALIGN: right"><SPAN id=MVF1779692 
+                                style="WHITE-SPACE: nowrap"></SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR>
+                <TD><IMG height=5 alt="" 
+                  src="CodeProject Some easy ways to send emails (via SMTP) and SMS text messages_ Free source code and programming help_files/t.gif" 
+                  width=1 border=0></TD></TR></TBODY></TABLE></TD></TR>
+        <TR>
+          <TD>
+            <TABLE cellSpacing=0 cellPadding=2 width="100%">
+              <TBODY>
+              <TR class=Frm_Footer>
+                <TD>Last Visit: Monday, July 21, 2008 5:52 PM &nbsp; &nbsp; 
+                  Last Update:Monday, July 21, 2008 5:52 PM</TD>
+                <TD style="WHITE-SPACE: nowrap; TEXT-ALIGN: right"><B>1</B> <A 
+                  class=Frm_HL 
+                  href="http://www.codeproject.com/KB/tips/easysmtpandsms.aspx?fid=355120&amp;fr=26#xx0xx" 
+                  name=Frm_HoverNL>Next 
+      »</A></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></DIV>
+      <P class=SmallText><IMG height=16 alt=General 
+      src="CodeProject Some easy ways to send emails (via SMTP) and SMS text messages_ Free source code and programming help_files/msg_general.gif" 
+      width=16 align=top> General &nbsp;&nbsp; <IMG height=16 alt=News 
+      src="CodeProject Some easy ways to send emails (via SMTP) and SMS text messages_ Free source code and programming help_files/msg_news.gif" 
+      width=16 align=top> News &nbsp;&nbsp; <IMG height=16 alt=Question 
+      src="CodeProject Some easy ways to send emails (via SMTP) and SMS text messages_ Free source code and programming help_files/msg_question.gif" 
+      width=16 align=top> Question &nbsp;&nbsp; <IMG height=16 alt=Answer 
+      src="CodeProject Some easy ways to send emails (via SMTP) and SMS text messages_ Free source code and programming help_files/msg_answer.gif" 
+      width=16 align=top> Answer &nbsp;&nbsp; <IMG height=16 alt=Joke 
+      src="CodeProject Some easy ways to send emails (via SMTP) and SMS text messages_ Free source code and programming help_files/msg_joke.gif" 
+      width=16 align=top> Joke &nbsp;&nbsp; <IMG height=16 alt=Rant 
+      src="CodeProject Some easy ways to send emails (via SMTP) and SMS text messages_ Free source code and programming help_files/msg_rant.gif" 
+      width=16 align=top> Rant &nbsp;&nbsp; <IMG height=16 alt=Admin 
+      src="CodeProject Some easy ways to send emails (via SMTP) and SMS text messages_ Free source code and programming help_files/msg_admin.gif" 
+      width=16 align=top> Admin &nbsp;&nbsp; </P><!-- Forum End --></DIV>
+      <TABLE width="100%">
+        <TBODY>
+        <TR vAlign=top>
+          <TD class=TinyText align=left><A id=ctl00_PermaLink 
+            href="http://www.codeproject.com/script/Articles/Article.aspx?aid=16250">PermaLink</A> 
+            | <A id=ctl00_PrivacyLink 
+            href="http://www.codeproject.com/info/privacy.aspx">Privacy </A>| <A 
+            id=ctl00_TermsOfUseLink 
+            href="http://www.codeproject.com/info/TermsOfUse.aspx">Terms of 
+            Use</A> <BR>Last Updated: 30 Dec 2007<BR>Editor: <A 
+            id=ctl00_ArticleEditor></A><BR></TD>
+          <TD class=TinyText vAlign=top align=right>Copyright 2006 by 
+            daluu<BR>Everything else Copyright © <A 
+            href="mailto:webmaster@codeproject.com">CodeProject</A>, 1999-2008 
+            <BR>Web13 | <A id=ctl00_AdvertiseLink 
+            href="http://www.codeproject.com/info/MediaKit.aspx">Advertise on 
+            the Code Project </A></TD></TR></TBODY></TABLE>
+      <CENTER></CENTER></TD></TR>
+  <TR>
+    <TD align=middle colSpan=2></TD></TR></TBODY></TABLE><BR>
+<SCRIPT language=Javascript type=text/javascript>//<![CDATA[
+if (document.all) try {window.attachEvent("oncopy",copyCode);}catch(e){};
+//]]></SCRIPT>
+
+<SCRIPT language=Javascript 
+src="CodeProject Some easy ways to send emails (via SMTP) and SMS text messages_ Free source code and programming help_files/TogglePre.js" 
+type=text/javascript></SCRIPT>
+
+<SCRIPT language=Javascript 
+src="CodeProject Some easy ways to send emails (via SMTP) and SMS text messages_ Free source code and programming help_files/menu132_com.js" 
+type=text/javascript></SCRIPT>
+
+<SCRIPT language=Javascript 
+src="CodeProject Some easy ways to send emails (via SMTP) and SMS text messages_ Free source code and programming help_files/TopNavBar.js" 
+type=text/javascript></SCRIPT>
+
+<SCRIPT language=Javascript type=text/javascript>//<![CDATA[
+new HVMenu(new menu_NavbarConfig());
+//]]></SCRIPT>
+</BODY></HTML>

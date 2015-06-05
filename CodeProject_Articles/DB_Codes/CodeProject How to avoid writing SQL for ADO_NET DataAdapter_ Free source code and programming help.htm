@@ -1,0 +1,2521 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!-- saved from url=(0064)http://www.codeproject.com/KB/database/CustomCommandBuilder.aspx -->
+<HTML><HEAD><TITLE>CodeProject: How to avoid writing SQL for ADO.NET DataAdapter. Free source code and programming help</TITLE>
+<META http-equiv=Content-Type content="text/html; charset=utf-8">
+<META 
+content="Automatic creation of SQL for CRUD operations when Strongly Typed DataSets are used.; Author: Dejan Grujic; Section: Database; Chapter: Database" 
+name=Description>
+<META 
+content=".NET 1.0, .NET 1.1, Win2K, WinXP, Win2003, VS.NET2003, C#, DBA, Dev, Intermediate,Database,Database,Free source code, tutorials" 
+name=Keywords>
+<META content="The Code Project" name=Author>
+<META content=General name=Rating>
+<META content="index, follow" name=Robots>
+<META content="1 days" name=Revisit-After><LINK 
+title="CodeProject Latest articles - All topics" 
+href="http://www.codeproject.com/webservices/articlerss.aspx?cat=1" 
+type=application/rss+xml rel=alternate><LINK 
+title="CodeProject Latest articles - MFC / C++" 
+href="http://www.codeproject.com/webservices/articlerss.aspx?cat=2" 
+type=application/rss+xml rel=alternate><LINK 
+title="CodeProject Latest articles - C#" 
+href="http://www.codeproject.com/webservices/articlerss.aspx?cat=3" 
+type=application/rss+xml rel=alternate><LINK 
+title="CodeProject Latest articles - ASP.NET" 
+href="http://www.codeproject.com/webservices/articlerss.aspx?cat=4" 
+type=application/rss+xml rel=alternate><LINK 
+title="CodeProject Latest articles - .NET" 
+href="http://www.codeproject.com/webservices/articlerss.aspx?cat=5" 
+type=application/rss+xml rel=alternate><LINK 
+title="CodeProject Latest articles - VB.NET" 
+href="http://www.codeproject.com/webservices/articlerss.aspx?cat=6" 
+type=application/rss+xml rel=alternate><LINK title="CodeProject Lounge Postings" 
+href="http://www.codeproject.com/webservices/LoungeRSS.aspx" 
+type=application/rss+xml rel=alternate><LINK title=CodeProject 
+href="http://www.codeproject.com/info/OpenSearch.xml" 
+type=application/opensearchdescription+xml rel=search><LINK 
+href="CodeProject How to avoid writing SQL for ADO_NET DataAdapter_ Free source code and programming help_files/CodeProject.css" 
+type=text/css rel=stylesheet><LINK 
+href="CodeProject How to avoid writing SQL for ADO_NET DataAdapter_ Free source code and programming help_files/ForumClassic.css" 
+type=text/css rel=stylesheet>
+<SCRIPT type=text/javascript>
+  var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+  document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</SCRIPT>
+
+<SCRIPT type=text/javascript>
+   var pageTracker = _gat._getTracker("UA-1735123-1");
+   pageTracker._setDomainName("www.codeproject.com");
+   pageTracker._setSessionTimeout("1200"); // 20 mins
+   pageTracker._initData();
+   pageTracker._trackPageview();
+</SCRIPT>
+
+<SCRIPT language=Javascript 
+src="CodeProject How to avoid writing SQL for ADO_NET DataAdapter_ Free source code and programming help_files/oncopy.js" 
+type=text/javascript></SCRIPT>
+
+<SCRIPT language=Javascript 
+src="CodeProject How to avoid writing SQL for ADO_NET DataAdapter_ Free source code and programming help_files/jxs.js" 
+type=text/javascript></SCRIPT>
+
+<SCRIPT language=Javascript 
+src="CodeProject How to avoid writing SQL for ADO_NET DataAdapter_ Free source code and programming help_files/bookmark.js" 
+type=text/javascript></SCRIPT>
+
+<SCRIPT language=Javascript 
+src="CodeProject How to avoid writing SQL for ADO_NET DataAdapter_ Free source code and programming help_files/rateitem.js" 
+type=text/javascript></SCRIPT>
+
+<SCRIPT language=Javascript type=text/javascript>//<![CDATA[
+function ToggleMenu(itemName)
+{
+	var elm = document.getElementById(itemName);
+	var i,others = document.getElementById('SectionMenu');
+	for(i=0; i < others.childNodes.length; i++)
+	{
+		var other = others.childNodes[i];
+		if ((other.className == 'MenuSectionBlock') && (other != elm))
+			other.style.display='none';
+	}
+	if (elm.style.display == 'block') elm.style.display='none';
+	else elm.style.display='block';
+	return false;
+}
+
+//]]></SCRIPT>
+
+<SCRIPT language=Javascript 
+src="CodeProject How to avoid writing SQL for ADO_NET DataAdapter_ Free source code and programming help_files/addto.js" 
+type=text/javascript></SCRIPT>
+
+<SCRIPT language=Javascript type=text/javascript>//<![CDATA[
+function MsgVoteForm(MemberID,MsgID,GB,gp,bp,mt) {
+ if(!GB)document.write("Rate this message: ");
+ document.write(unescape("%3Ca href=\"#xx" + MsgID.toString() + "xx\" onclick=\"RateMsg(" + MemberID.toString() + ", " + MsgID.toString() + ","));document.write((GB?"5":"1")+unescape(");\"%3E"));
+ if(GB) document.write(unescape("%3Cimg height=\"24\" width=\"24\" src=\"/script/Forums/Images/good.png\" alt=\"good\" border=\"0\" align=\"absmiddle\" /%3E "+gp+" "+mt+"%3C/a%3E "));
+ else document.write(unescape("%3Cimg height=\"14\" width=\"14\" src=\"/script/Forums/Images/thumbs_down.gif\" alt=\"vote 1\" border=\"0\" align=\"middle\" /%3E%3C/a%3E "));
+ if(GB)document.write(" &nbsp;"); else for(var i=1; i<=5;i++)
+  document.write(unescape("%3Ca class=\"Frm_MHL\" href=\"#xx" + MsgID.toString() + "xx\" title=\"vote this message a " + i.toString() + "\" onclick=\"RateMsg(" + MemberID.toString() + ", " + MsgID.toString() + ", " + i.toString() + ")\"%3E%3Cb%3E" + i.toString() + "%3C/b%3E%3C/a%3E "));
+ document.write(unescape("%3Ca href=\"#xx" + MsgID.toString() + "xx\" onclick=\"RateMsg(" + MemberID.toString() + ", " + MsgID.toString() + ","));document.write((GB?"1":"5")+unescape(");\"%3E"));
+ if(GB)document.write(unescape("%3Cimg height=\"24\" width=\"24\" src=\"/script/Forums/Images/bad.png\" alt=\"bad\" border=\"0\" align=\"absmiddle\" /%3E "+bp+" "+mt+"%3C/a%3E"));
+ else document.write(unescape("%3Cimg height=\"14\" width=\"14\" src=\"/script/Forums/Images/thumbs_up.gif\" border=\"0\" alt=\"vote 5\" align=\"middle\" /%3E%3C/a%3E "));
+}
+
+function ReportMsg(userid, msgid, score) {
+ if (confirm("Are you sure you want to report this message?") == true)
+  return RateMsg(userid, msgid, score);
+ else return false;
+}
+function RateMsg(memberid, msgid, score) {
+ var req = new ActiveXObject("MSXML2.XMLHTTP");
+ req.onreadystatechange = function() {
+  if (req.readyState == 4) {
+   if ( req.status == 200 ) {
+    var respText = req.responseText;
+    var re = new RegExp(unescape("\%3Cdiv\%3E([^\%3C]*)\%3C/div\%3E"), "g");
+    var match = re.exec(respText);
+    voteStatus.innerHTML = unescape("%3Cb%3E") + (match)?match[1]:"An error occured" + unescape("%3C/b%3E");
+   }
+   else
+   {
+    voteStatus.innerHTML = unescape("%3Cb style='color:red'%3EFailed!") + req.statusText + unescape("%3C/b%3E");
+   }
+  }
+ }
+ var voteStatus = document.getElementById("MVF" + msgid);
+ if (!voteStatus) return;
+ voteStatus.innerHTML = unescape("%3Cb style='color:green'%3EVoting...%3C/b%3E");
+ var strAction = "/script/Forums/Vote.aspx?js=1&fmid="+memberid.toString()+"&select="+msgid.toString()+"&score="+score.toString();
+ req.open("GET", strAction, true);
+ req.send(null);
+  return false;
+}
+//]]></SCRIPT>
+
+<SCRIPT language=Javascript type=text/javascript>//<![CDATA[
+var Selected = "-1";
+
+function SwitchMessage(e, msgId)
+{
+  if (!msgId) {
+    if(!e)e=window.event;
+    var target=e.target?e.target:e.srcElement;
+    while(target&&target.id!='DynMessLink')target=target.parentNode;
+    if(!target||target.id!='DynMessLink')return;
+    msgId=target.name;
+  }
+  if(Selected&&Selected!=""){
+    var body=eval("document.getElementById('F" + Selected + "_h1')");
+    if(body) body.style.display = 'none';
+    var head=eval("document.getElementById('F" + Selected + "_h0')");
+    if(head) head.className = head.className.replace("Sel", "UnSel");
+  }
+  if(Selected==msgId.toString())
+    Selected="";
+  else {
+    Selected=msgId.toString();
+    var body=eval("document.getElementById('F" + Selected + "_h1')");
+    if(body){
+      if(body.style.display=='none') body.style.display='';
+      else body.style.display = 'none';
+    }
+    var head=eval("document.getElementById('F" + Selected + "_h0')");
+    if (head) 
+      head.className = head.className.replace("UnSel", "Sel");
+    if(body&&head&&body.style.display!='none'){
+      document.body.scrollTop = getRealPos(head, "Top") - document.body.clientHeight/10;
+      EnsureMessageVisible(Selected, true);
+    }
+  }
+  if (e){if(e.preventDefault)e.preventDefault;else e.returnValue=false;}
+  return false;
+}
+
+//]]></SCRIPT>
+
+<SCRIPT language=Javascript 
+src="CodeProject How to avoid writing SQL for ADO_NET DataAdapter_ Free source code and programming help_files/ShortCuts.js" 
+type=text/javascript></SCRIPT>
+<LINK 
+href="CodeProject How to avoid writing SQL for ADO_NET DataAdapter_ Free source code and programming help_files/ForumClassicIE6.css" 
+type=text/css rel=stylesheet><LINK href="/favicon.ico" type=image/ico 
+rel=icon><LINK href="/favicon.ico" type=image/ico rel="shortcut icon">
+<META content="MSHTML 6.00.2900.2180" name=GENERATOR></HEAD>
+<BODY>
+<TABLE id=ctl00_AT cellSpacing=0 cellPadding=0 border=0>
+  <TBODY>
+  <TR vAlign=top>
+    <TD colSpan=2>
+      <TABLE cellSpacing=0 cellPadding=0 border=0>
+        <TBODY>
+        <TR>
+          <TD class=HeaderLogo><A href="http://www.codeproject.com/"><IMG 
+            id=ctl00_Logo 
+            style="BORDER-TOP-WIDTH: 0px; BORDER-LEFT-WIDTH: 0px; BORDER-BOTTOM-WIDTH: 0px; WIDTH: 225px; HEIGHT: 90px; BORDER-RIGHT-WIDTH: 0px" 
+            alt="The Code Project" 
+            src="CodeProject How to avoid writing SQL for ADO_NET DataAdapter_ Free source code and programming help_files/logo225x90.gif"></A></TD>
+          <TD class=HeaderBanner align=right width="100%">
+            <SCRIPT type=text/javascript>document.write(unescape("%3ca%20href%3d%22http%3a%2f%2fwww.codeproject.com%2fRedir.aspx%3fadid%3d6478%26way%3dban%22%20target%3d%22_blank%22%20rel%3d%22nofollow%22%3e%3cimg%20src%3d%22http%3a%2f%2fwww.codeproject.com%2fscript%2fAnn%2fServeImg.aspx%3fFile%3d%252fscript%252fadmentor%252fimages%252fDPB%2b728x90.jpg%26C%3dFalse%26id%3d6478%22%20alt%3d%22%22%20border%3d%220%22%20width%3d%22728%22%20height%3d%2290%22%3e%3c%2fa%3e"));</SCRIPT>
+          </TD></TR>
+        <TR>
+          <TD colSpan=2>
+            <TABLE class=MemberNavBar cellSpacing=0 cellPadding=5 
+              width="100%"><TBODY>
+              <TR>
+                <TD class=SmallText style="FONT-WEIGHT: bold">5,215,143 
+                  members and growing! (19,434 online)</TD>
+                <TD align=right>
+                  <DIV class=MemberNavBarText 
+                  id=ctl00_MemberMenu_LoggedOnOptions><A 
+                  id=ctl00_MemberMenu_MyProfile 
+                  href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=2959938">abdelrady2030</A> 
+                  | <A id=ctl00_MemberMenu_MySettings 
+                  href="http://www.codeproject.com/script/Membership/Modify.aspx">My 
+                  Settings</A> | <A id=ctl00_MemberMenu_MyCodeProject 
+                  href="http://www.codeproject.com/script/Membership/MyCodeProject.aspx"><B>My 
+                  CodeProject</B></A> | <A id=ctl00_MemberMenu_MyBookmarks 
+                  href="http://www.codeproject.com/script/Bookmarks/List.aspx?obtid=2"><IMG 
+                  height=16 
+                  src="CodeProject How to avoid writing SQL for ADO_NET DataAdapter_ Free source code and programming help_files/fave.gif" 
+                  width=16 align=absMiddle border=0> My Bookmarks</A> | <A 
+                  id=ctl00_MemberMenu_MyArticles 
+                  href="http://www.codeproject.com/script/Articles/MemberArticles.aspx?amid=2959938">My 
+                  Articles</A> | <A id=ctl00_MemberMenu_Signout 
+                  href="http://www.codeproject.com/script/Membership/LogOff.aspx?rp=%2fKB%2fdatabase%2fCustomCommandBuilder.aspx">Sign 
+                  out</A> </DIV></TD></TR></TBODY></TABLE></TD></TR>
+        <TR>
+          <TD colSpan=2>
+            <TABLE class=SiteNavBar id=tblSiteToolbar cellSpacing=0 
+            cellPadding=0>
+              <TBODY>
+              <TR>
+                <TD noWrap><A href="http://www.codeproject.com/">Home</A></TD>
+                <TD>&nbsp; </TD>
+                <TD noWrap align=right>Current Site: </TD>
+                <TD class=SelCat noWrap><A 
+                  href="http://www.codeproject.com/">Main Site</A></TD>
+                <TD noWrap><A href="http://java.codeproject.com/">Java</A></TD>
+                <TD noWrap><A href="http://lamp.codeproject.com/">Linux Apache 
+                  MySQL PHP</A></TD>
+                <TD width="100%">&nbsp;</TD>
+                <TD id=ctl00_TopNavBar_RightMenus><!--380-->
+                  <DIV id=MenuPos 
+                  style="WIDTH: 305px; POSITION: relative; TOP: 1px; HEIGHT: 22px">
+                  <TABLE 
+                  style="BORDER-TOP-WIDTH: 0px; BORDER-LEFT-WIDTH: 0px; BORDER-BOTTOM-WIDTH: 0px; HEIGHT: 20px; BORDER-RIGHT-WIDTH: 0px" 
+                  cellSpacing=0 cellPadding=0 width=305>
+                    <TBODY>
+                    <TR vAlign=center>
+                      <TD 
+                      style="BORDER-TOP-WIDTH: 0px; BORDER-LEFT-WIDTH: 0px; BORDER-BOTTOM-WIDTH: 0px; BORDER-RIGHT-WIDTH: 0px" 
+                      noWrap><A 
+                        href="http://www.codeproject.com/info/FAQ.aspx">Help!</A></TD>
+                      <TD 
+                      style="BORDER-TOP-WIDTH: 0px; BORDER-LEFT-WIDTH: 0px; BORDER-BOTTOM-WIDTH: 0px; BORDER-RIGHT-WIDTH: 0px" 
+                      noWrap><A 
+                        href="http://www.codeproject.com/script/Articles/Latest.aspx">Articles</A></TD>
+                      <TD 
+                      style="BORDER-TOP-WIDTH: 0px; BORDER-LEFT-WIDTH: 0px; BORDER-BOTTOM-WIDTH: 0px; BORDER-RIGHT-WIDTH: 0px" 
+                      noWrap><A 
+                        href="http://www.codeproject.com/script/Forums/List.aspx">Message 
+                        Boards</A></TD>
+                      <TD 
+                      style="BORDER-TOP-WIDTH: 0px; BORDER-LEFT-WIDTH: 0px; BORDER-BOTTOM-WIDTH: 0px; BORDER-RIGHT-WIDTH: 0px" 
+                      noWrap><A 
+                        href="http://www.codeproject.com/Lounge.aspx">Lounge</A></TD></TR></TBODY></TABLE></DIV></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+  <TR>
+    <TD vAlign=top colSpan=2><A name=_top></A>
+      <TABLE class=ArticleHeader id=ctl00_ArticleTopHeader_HeaderTable 
+      cellSpacing=0 cellPadding=3 width="100%" border=0>
+        <TBODY>
+        <TR vAlign=top>
+          <TD class=SmallText><A id=ctl00_ArticleTopHeader_ChapterLink 
+            href="http://www.codeproject.com/script/Content/Chapter.aspx?chptId=4">Database</A> 
+            » <A id=ctl00_ArticleTopHeader_SectionLink 
+            href="http://www.codeproject.com/KB/database/">Database</A> » <A 
+            id=ctl00_ArticleTopHeader_SubsectionLink 
+            href="http://www.codeproject.com/KB/database/index.aspx?#Database - ADO.NET">ADO.NET</A> 
+            <SPAN class=ArticleIntermediate 
+            id=ctl00_ArticleTopHeader_SkillLevel>&nbsp;&nbsp;&nbsp; 
+            Intermediate</SPAN> <SPAN 
+            id=ctl00_ArticleTopHeader_LicenceTerms></SPAN><BR><BR>
+            <H1><SPAN class=ArticleTopTitle 
+            id=ctl00_ArticleTopHeader_ArticleTitle>How to avoid writing SQL for 
+            ADO.NET DataAdapter</SPAN></H1><B>By <A 
+            href="http://www.codeproject.com/script/Articles/MemberArticles.aspx?amid=986527">Dejan 
+            Grujic</A></B><BR><BR><SPAN class=ArticleTopDescr 
+            id=ctl00_ArticleTopHeader_ArticleDescr>Automatic creation of SQL for 
+            CRUD operations when Strongly Typed DataSets are used.</SPAN> </TD>
+          <TD class=SmallText style="WIDTH: 210px"><SPAN 
+            id=ctl00_ArticleTopHeader_ArticleAttributes>C#.NET 1.0, .NET 1.1, 
+            Win2K, WinXP, Win2003, Windows, .NETVS, VS.NET2003, DBA, 
+            Dev</SPAN><BR><BR><SPAN style="PADDING-RIGHT: 2ex">Posted</SPAN>: 
+            <B>4 May 2004</B><BR><SPAN 
+            style="PADDING-RIGHT: 0.5ex">Updated</SPAN>: <B>17 Jan 2005</B> 
+            <BR><SPAN style="PADDING-RIGHT: 3.2ex">Views</SPAN>: 
+            <B>79,547</B><BR></TD></TR>
+        <TR>
+          <TD colSpan=2>
+            <TABLE width="100%">
+              <TBODY>
+              <TR>
+                <TD></TD>
+                <TD class=SmallText style="WHITE-SPACE: nowrap" 
+              align=right></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+  <TR vAlign=top>
+    <TD class=LHNavBar id=ctl00_LeftNavCell>
+      <DIV style="PADDING-TOP: 5px; TEXT-ALIGN: center">
+      <SCRIPT type=text/javascript>document.write(unescape("%3ca%20href%3d%22http%3a%2f%2fwww.codeproject.com%2fRedir.aspx%3fadid%3d6247%26way%3dban%22%20target%3d%22_blank%22%20rel%3d%22nofollow%22%3e%3cimg%20src%3d%22http%3a%2f%2fwww.codeproject.com%2fscript%2fAnn%2fServeImg.aspx%3fFile%3d%252fscript%252fadmentor%252fimages%252fcp_daily_150x80.gif%26C%3dFalse%26id%3d6247%22%20alt%3d%22%22%20border%3d%220%22%20width%3d%22150%22%20height%3d%2280%22%3e%3c%2fa%3e"));</SCRIPT>
+      </DIV>
+      <DIV class=FeatureBlockHeader>Announcements</DIV>
+      <DIV class="FeatureBlockContent RHFeatureBar">
+      <DIV style="PADDING-TOP: 0px"><IMG 
+      style="FLOAT: left; MARGIN-LEFT: 8px; MARGIN-RIGHT: 9px" height=20 
+      alt=Comp 
+      src="CodeProject How to avoid writing SQL for ADO_NET DataAdapter_ Free source code and programming help_files/prize_winner.gif" 
+      width=10> <A href="http://www.codeproject.com/Feature/CodeGenComp/">Code 
+      Generation<BR>comp. $1,000 prize!</A></DIV>
+      <DIV style="MARGIN-TOP: 4px; MARGIN-BOTTOM: 3px"><IMG 
+      style="FLOAT: left; MARGIN-LEFT: 6px; MARGIN-RIGHT: 6px" height=16 
+      alt=Comp 
+      src="CodeProject How to avoid writing SQL for ADO_NET DataAdapter_ Free source code and programming help_files/coffee.gif" 
+      width=16> <A href="http://www.codeproject.com/Zones/IBM/">Win CodeProject 
+      Coffee!</A></DIV>
+      <DIV style="PADDING-TOP: 0px"><IMG 
+      style="FLOAT: left; MARGIN-LEFT: 8px; MARGIN-RIGHT: 9px" height=20 
+      alt=Comp 
+      src="CodeProject How to avoid writing SQL for ADO_NET DataAdapter_ Free source code and programming help_files/prize_winner.gif" 
+      width=10> <A id=ctl00_Announcements_CompLink 
+      href="http://www.codeproject.com/Feature/ArticleCompetition/">Monthly 
+      Competition</A><BR clear=all>
+      <DIV style="PADDING-BOTTOM: 5px; PADDING-TOP: 3px"><IMG 
+      style="PADDING-RIGHT: 10px; FLOAT: left; MARGIN-LEFT: 7px; MARGIN-RIGHT: 8px" 
+      height=16 alt=Staff 
+      src="CodeProject How to avoid writing SQL for ADO_NET DataAdapter_ Free source code and programming help_files/staff_sm.gif" 
+      width=12> <A href="http://www.codeproject.com/info/jobs/">We're 
+      Hiring</A></DIV></DIV></DIV>
+      <DIV class=MenuCat>Services</DIV>
+      <DIV class=MenuChapter><A 
+      href="http://www.codeproject.com/script/Jobs/List.aspx">Job 
+Board</A></DIV>
+      <DIV class=MenuChapter><A 
+      href="http://www.codeproject.com/Services/coffee.aspx">Code Project 
+      Coffee</A></DIV>
+      <DIV class=MenuChapter><A 
+      href="http://www.codeproject.com/Services/TradePub.aspx">Free 
+      Magazines</A></DIV><BR>
+      <DIV id=SectionMenu>
+      <DIV class=MenuCat>Chapters</DIV>
+      <DIV class=MenuChapter><A onclick="return ToggleMenu('Chapter1');" 
+      href="http://www.codeproject.com/script/Content/Chapter.aspx?chptId=1">Desktop 
+      Development</A></DIV>
+      <DIV class=MenuSectionBlock id=Chapter1 style="DISPLAY: none">
+      <DIV class=MI id=Section1><A 
+      href="http://www.codeproject.com/KB/buttons/">Button Controls</A></DIV>
+      <DIV class=MI id=Section15><A 
+      href="http://www.codeproject.com/KB/clipboard/">Clipboard</A></DIV>
+      <DIV class=MI id=Section2><A 
+      href="http://www.codeproject.com/KB/combobox/">Combo &amp; List 
+      Boxes</A></DIV>
+      <DIV class=MI id=Section67><A 
+      href="http://www.codeproject.com/KB/dialog/">Dialogs and Windows</A></DIV>
+      <DIV class=MI id=Section107><A 
+      href="http://www.codeproject.com/KB/gadgets/">Desktop Gadgets</A></DIV>
+      <DIV class=MI id=Section16><A 
+      href="http://www.codeproject.com/KB/docview/">Document / View</A></DIV>
+      <DIV class=MI id=Section4><A 
+      href="http://www.codeproject.com/KB/edit/">Edit Controls</A></DIV>
+      <DIV class=MI id=Section17><A 
+      href="http://www.codeproject.com/KB/files/">Files and Folders</A></DIV>
+      <DIV class=MI id=Section3><A 
+      href="http://www.codeproject.com/KB/grid/">Grid &amp; Data 
+      Controls</A></DIV>
+      <DIV class=MI id=Section5><A 
+      href="http://www.codeproject.com/KB/list/">List Controls</A></DIV>
+      <DIV class=MI id=Section6><A 
+      href="http://www.codeproject.com/KB/menus/">Menus</A></DIV>
+      <DIV class=MI id=Section14><A 
+      href="http://www.codeproject.com/KB/miscctrl/">Miscellaneous</A></DIV>
+      <DIV class=MI id=Section18><A 
+      href="http://www.codeproject.com/KB/printing/">Printing</A></DIV>
+      <DIV class=MI id=Section95><A 
+      href="http://www.codeproject.com/KB/progress/">Progress Controls</A></DIV>
+      <DIV class=MI id=Section11><A 
+      href="http://www.codeproject.com/KB/selection/">Selection 
+      Controls</A></DIV>
+      <DIV class=MI id=Section19><A 
+      href="http://www.codeproject.com/KB/shell/">Shell and IE 
+      programming</A></DIV>
+      <DIV class=MI id=Section68><A 
+      href="http://www.codeproject.com/KB/smart/">Smart Client</A></DIV>
+      <DIV class=MI id=Section8><A 
+      href="http://www.codeproject.com/KB/splitter/">Splitter Windows</A></DIV>
+      <DIV class=MI id=Section9><A 
+      href="http://www.codeproject.com/KB/static/">Static &amp; Panel 
+      Controls</A></DIV>
+      <DIV class=MI id=Section10><A 
+      href="http://www.codeproject.com/KB/statusbar/">Status Bar</A></DIV>
+      <DIV class=MI id=Section7><A 
+      href="http://www.codeproject.com/KB/tabs/">Tabs &amp; Property 
+      Pages</A></DIV>
+      <DIV class=MI id=Section12><A 
+      href="http://www.codeproject.com/KB/toolbars/">Toolbars &amp; Docking 
+      windows</A></DIV>
+      <DIV class=MI id=Section13><A 
+      href="http://www.codeproject.com/KB/tree/">Tree Controls</A></DIV></DIV>
+      <DIV class=MenuChapter><A onclick="return ToggleMenu('Chapter2');" 
+      href="http://www.codeproject.com/script/Content/Chapter.aspx?chptId=2">Web 
+      Development</A></DIV>
+      <DIV class=MenuSectionBlock id=Chapter2 style="DISPLAY: none">
+      <DIV class=MI id=Section70><A 
+      href="http://www.codeproject.com/KB/ajax/">Ajax and Atlas</A></DIV>
+      <DIV class=MI id=Section27><A 
+      href="http://www.codeproject.com/KB/applications/">Applications &amp; 
+      Tools</A></DIV>
+      <DIV class=MI id=Section85><A 
+      href="http://www.codeproject.com/KB/asp/">ASP</A></DIV>
+      <DIV class=MI id=Section89><A 
+      href="http://www.codeproject.com/KB/aspnet/">ASP.NET</A></DIV>
+      <DIV class=MI id=Section28><A 
+      href="http://www.codeproject.com/KB/webforms/">ASP.NET Controls</A></DIV>
+      <DIV class=MI id=Section38><A 
+      href="http://www.codeproject.com/KB/ATL-Server/">ATL Server</A></DIV>
+      <DIV class=MI id=Section29><A 
+      href="http://www.codeproject.com/KB/web-cache/">Caching</A></DIV>
+      <DIV class=MI id=Section91><A 
+      href="http://www.codeproject.com/KB/web-image/">Charts, Graphs and 
+      Images</A></DIV>
+      <DIV class=MI id=Section25><A 
+      href="http://www.codeproject.com/KB/scripting/">Client side 
+      scripting</A></DIV>
+      <DIV class=MI id=Section30><A 
+      href="http://www.codeproject.com/KB/custom-controls/">Custom 
+      Controls</A></DIV>
+      <DIV class=MI id=Section23><A 
+      href="http://www.codeproject.com/KB/HTML/">HTML / CSS</A></DIV>
+      <DIV class=MI id=Section22><A 
+      href="http://www.codeproject.com/KB/IP/">Internet / Network</A></DIV>
+      <DIV class=MI id=Section24><A 
+      href="http://www.codeproject.com/KB/ISAPI/">ISAPI</A></DIV>
+      <DIV class=MI id=Section33><A 
+      href="http://www.codeproject.com/KB/server-management/">Site &amp; Server 
+      Management</A></DIV>
+      <DIV class=MI id=Section34><A 
+      href="http://www.codeproject.com/KB/session/">Session State</A></DIV>
+      <DIV class=MI id=Section113><A 
+      href="http://www.codeproject.com/KB/silverlight/">Silverlight</A></DIV>
+      <DIV class=MI id=Section36><A 
+      href="http://www.codeproject.com/KB/trace/">Trace and Logs</A></DIV>
+      <DIV class=MI id=Section31><A 
+      href="http://www.codeproject.com/KB/user-controls/">User 
+Controls</A></DIV>
+      <DIV class=MI id=Section37><A 
+      href="http://www.codeproject.com/KB/validation/">Validation</A></DIV>
+      <DIV class=MI id=Section35><A 
+      href="http://www.codeproject.com/KB/viewstate/">View State</A></DIV>
+      <DIV class=MI id=Section26><A 
+      href="http://www.codeproject.com/KB/WAP/">WAP / WML</A></DIV>
+      <DIV class=MI id=Section32><A 
+      href="http://www.codeproject.com/KB/web-security/">Web Security</A></DIV>
+      <DIV class=MI id=Section20><A 
+      href="http://www.codeproject.com/KB/webservices/">Web 
+      Services</A></DIV></DIV>
+      <DIV class=MenuChapter><A onclick="return ToggleMenu('Chapter9');" 
+      href="http://www.codeproject.com/script/Content/Chapter.aspx?chptId=9">Enterprise 
+      Systems</A></DIV>
+      <DIV class=MenuSectionBlock id=Chapter9 style="DISPLAY: none">
+      <DIV class=MI id=Section98><A 
+      href="http://www.codeproject.com/KB/MCMS/">Content Management 
+      Server</A></DIV>
+      <DIV class=MI id=Section99><A 
+      href="http://www.codeproject.com/KB/biztalk/">Microsoft BizTalk 
+      Server</A></DIV>
+      <DIV class=MI id=Section102><A 
+      href="http://www.codeproject.com/KB/exchange/">Microsoft 
+Exchange</A></DIV>
+      <DIV class=MI id=Section90><A 
+      href="http://www.codeproject.com/KB/office/">Office Development</A></DIV>
+      <DIV class=MI id=Section101><A 
+      href="http://www.codeproject.com/KB/sharepoint/">SharePoint 
+      Server</A></DIV></DIV>
+      <DIV class=MenuChapter><A onclick="return ToggleMenu('Chapter3');" 
+      href="http://www.codeproject.com/script/Content/Chapter.aspx?chptId=3">Multimedia</A></DIV>
+      <DIV class=MenuSectionBlock id=Chapter3 style="DISPLAY: none">
+      <DIV class=MI id=Section42><A 
+      href="http://www.codeproject.com/KB/audio-video/">Audio and 
+Video</A></DIV>
+      <DIV class=MI id=Section44><A 
+      href="http://www.codeproject.com/KB/directx/">DirectX</A></DIV>
+      <DIV class=MI id=Section46><A 
+      href="http://www.codeproject.com/KB/GDI/">GDI</A></DIV>
+      <DIV class=MI id=Section47><A 
+      href="http://www.codeproject.com/KB/GDI-plus/">GDI+</A></DIV>
+      <DIV class=MI id=Section43><A 
+      href="http://www.codeproject.com/KB/graphics/">General Graphics</A></DIV>
+      <DIV class=MI id=Section45><A 
+      href="http://www.codeproject.com/KB/openGL/">OpenGL</A></DIV></DIV>
+      <DIV class=MenuChapter><A onclick="return ToggleMenu('Chapter4');" 
+      href="http://www.codeproject.com/script/Content/Chapter.aspx?chptId=4">Database</A></DIV>
+      <DIV class=MenuSectionBlock id=Chapter4>
+      <DIV class=MIS id=Section66><A 
+      href="http://www.codeproject.com/KB/database/">Database</A></DIV>
+      <DIV class=MI id=Section100><A 
+      href="http://www.codeproject.com/KB/reporting-services/">SQL Reporting 
+      Services</A></DIV></DIV>
+      <DIV class=MenuChapter><A onclick="return ToggleMenu('Chapter8');" 
+      href="http://www.codeproject.com/script/Content/Chapter.aspx?chptId=8">Platforms, 
+      Frameworks &amp; Libraries</A></DIV>
+      <DIV class=MenuSectionBlock id=Chapter8 style="DISPLAY: none">
+      <DIV class=MI id=Section83><A 
+      href="http://www.codeproject.com/KB/atl/">ATL</A></DIV>
+      <DIV class=MI id=Section117><A 
+      href="http://www.codeproject.com/KB/MFC/">MFC</A></DIV>
+      <DIV class=MI id=Section88><A 
+      href="http://www.codeproject.com/KB/stl/">STL</A></DIV>
+      <DIV class=MI id=Section84><A 
+      href="http://www.codeproject.com/KB/wtl/">WTL</A></DIV>
+      <DIV class=MI id=Section49><A 
+      href="http://www.codeproject.com/KB/COM/">COM / COM+</A></DIV>
+      <DIV class=MI id=Section76><A 
+      href="http://www.codeproject.com/KB/dotnet/">.NET Framework</A></DIV>
+      <DIV class=MI id=Section92><A 
+      href="http://www.codeproject.com/KB/winsdk/">Win32/64 SDK &amp; 
+      OS</A></DIV>
+      <DIV class=MI id=Section108><A 
+      href="http://www.codeproject.com/KB/vista/">Vista API</A></DIV>
+      <DIV class=MI id=Section110><A 
+      href="http://www.codeproject.com/KB/vista-security/">Vista 
+      Security</A></DIV>
+      <DIV class=MI id=Section82><A 
+      href="http://www.codeproject.com/KB/cross-platform/">Cross 
+      Platform</A></DIV>
+      <DIV class=MI id=Section69><A 
+      href="http://www.codeproject.com/KB/game/">Game Development</A></DIV>
+      <DIV class=MI id=Section73><A 
+      href="http://www.codeproject.com/KB/mobile/">Mobile Development</A></DIV>
+      <DIV class=MI id=Section106><A 
+      href="http://www.codeproject.com/KB/WC/">Windows CardSpace</A></DIV>
+      <DIV class=MI id=Section103><A 
+      href="http://www.codeproject.com/KB/WCF/">Windows Communication 
+      Foundation</A></DIV>
+      <DIV class=MI id=Section104><A 
+      href="http://www.codeproject.com/KB/WPF/">Windows Presentation 
+      Foundation</A></DIV>
+      <DIV class=MI id=Section105><A 
+      href="http://www.codeproject.com/KB/WF/">Windows Workflow 
+      Foundation</A></DIV>
+      <DIV class=MI id=Section119><A 
+      href="http://www.codeproject.com/KB/library/">Libraries</A></DIV>
+      <DIV class=MI id=Section122><A 
+      href="http://www.codeproject.com/KB/powershell/">Windows 
+      Powershell</A></DIV>
+      <DIV class=MI id=Section123><A 
+      href="http://www.codeproject.com/KB/linq/">LINQ</A></DIV></DIV>
+      <DIV class=MenuChapter><A onclick="return ToggleMenu('Chapter5');" 
+      href="http://www.codeproject.com/script/Content/Chapter.aspx?chptId=5">Languages</A></DIV>
+      <DIV class=MenuSectionBlock id=Chapter5 style="DISPLAY: none">
+      <DIV class=MI id=Section71><A href="http://www.codeproject.com/KB/cpp/">C 
+      / C++ Language</A></DIV>
+      <DIV class=MI id=Section72><A 
+      href="http://www.codeproject.com/KB/mcpp/">C++ / CLI</A></DIV>
+      <DIV class=MI id=Section93><A 
+      href="http://www.codeproject.com/KB/cs/">C#</A></DIV>
+      <DIV class=MI id=Section78><A 
+      href="http://www.codeproject.com/KB/msil/">MSIL</A></DIV>
+      <DIV class=MI id=Section86><A 
+      href="http://www.codeproject.com/KB/vbscript/">VBScript</A></DIV>
+      <DIV class=MI id=Section87><A 
+      href="http://www.codeproject.com/KB/vb/">VB.NET</A></DIV>
+      <DIV class=MI id=Section115><A 
+      href="http://www.codeproject.com/KB/vb-interop/">VB6 Interop</A></DIV>
+      <DIV class=MI id=Section77><A 
+      href="http://www.codeproject.com/KB/net-languages/">Other .NET 
+      Languages</A></DIV>
+      <DIV class=MI id=Section21><A 
+      href="http://www.codeproject.com/KB/XML/">XML</A></DIV>
+      <DIV class=MI id=Section96><A 
+      href="http://www.codeproject.com/KB/java/">Java</A></DIV></DIV>
+      <DIV class=MenuChapter><A onclick="return ToggleMenu('Chapter6');" 
+      href="http://www.codeproject.com/script/Content/Chapter.aspx?chptId=6">General 
+      Programming</A></DIV>
+      <DIV class=MenuSectionBlock id=Chapter6 style="DISPLAY: none">
+      <DIV class=MI id=Section57><A 
+      href="http://www.codeproject.com/KB/recipes/">Algorithms &amp; 
+      Recipes</A></DIV>
+      <DIV class=MI id=Section64><A 
+      href="http://www.codeproject.com/KB/bugs/">Bugs &amp; 
+Workarounds</A></DIV>
+      <DIV class=MI id=Section79><A 
+      href="http://www.codeproject.com/KB/collections/">Collections</A></DIV>
+      <DIV class=MI id=Section56><A 
+      href="http://www.codeproject.com/KB/security/">Cryptography &amp; 
+      Security</A></DIV>
+      <DIV class=MI id=Section50><A 
+      href="http://www.codeproject.com/KB/datetime/">Date and Time</A></DIV>
+      <DIV class=MI id=Section52><A 
+      href="http://www.codeproject.com/KB/DLL/">DLLs &amp; Assemblies</A></DIV>
+      <DIV class=MI id=Section80><A 
+      href="http://www.codeproject.com/KB/exception/">Exception 
+      Handling</A></DIV>
+      <DIV class=MI id=Section81><A 
+      href="http://www.codeproject.com/KB/locale/">Localisation</A></DIV>
+      <DIV class=MI id=Section53><A 
+      href="http://www.codeproject.com/KB/macros/">Macros and Add-ins</A></DIV>
+      <DIV class=MI id=Section54><A 
+      href="http://www.codeproject.com/KB/tips/">Programming Tips</A></DIV>
+      <DIV class=MI id=Section55><A 
+      href="http://www.codeproject.com/KB/string/">String handling</A></DIV>
+      <DIV class=MI id=Section58><A 
+      href="http://www.codeproject.com/KB/threads/">Threads, Processes &amp; 
+      IPC</A></DIV>
+      <DIV class=MI id=Section59><A 
+      href="http://www.codeproject.com/KB/winhelp/">WinHelp / 
+      HTMLHelp</A></DIV></DIV>
+      <DIV class=MenuChapter><A onclick="return ToggleMenu('Chapter10');" 
+      href="http://www.codeproject.com/script/Content/Chapter.aspx?chptId=10">Graphics 
+      / Design</A></DIV>
+      <DIV class=MenuSectionBlock id=Chapter10 style="DISPLAY: none">
+      <DIV class=MI id=Section40><A 
+      href="http://www.codeproject.com/KB/expression/">Expression</A></DIV>
+      <DIV class=MI id=Section114><A 
+      href="http://www.codeproject.com/KB/usability/">Usability</A></DIV></DIV>
+      <DIV class=MenuChapter><A onclick="return ToggleMenu('Chapter11');" 
+      href="http://www.codeproject.com/script/Content/Chapter.aspx?chptId=11">Development 
+      Lifecycle</A></DIV>
+      <DIV class=MenuSectionBlock id=Chapter11 style="DISPLAY: none">
+      <DIV class=MI id=Section51><A 
+      href="http://www.codeproject.com/KB/debug/">Debug Tips</A></DIV>
+      <DIV class=MI id=Section39><A 
+      href="http://www.codeproject.com/KB/architecture/">Design and 
+      Architecture</A></DIV>
+      <DIV class=MI id=Section112><A 
+      href="http://www.codeproject.com/KB/install/">Installation</A></DIV>
+      <DIV class=MI id=Section41><A 
+      href="http://www.codeproject.com/KB/work/">Work Issues</A></DIV>
+      <DIV class=MI id=Section126><A 
+      href="http://www.codeproject.com/KB/codegen/">Code 
+      Generation</A></DIV></DIV>
+      <DIV class=MenuChapter><A onclick="return ToggleMenu('Chapter7');" 
+      href="http://www.codeproject.com/script/Content/Chapter.aspx?chptId=7">General 
+      Reading</A></DIV>
+      <DIV class=MenuSectionBlock id=Chapter7 style="DISPLAY: none">
+      <DIV class=MI id=Section60><A 
+      href="http://www.codeproject.com/KB/books/">Book Chapters</A></DIV>
+      <DIV class=MI id=Section61><A 
+      href="http://www.codeproject.com/KB/book-reviews/">Book Reviews</A></DIV>
+      <DIV class=MI id=Section109><A 
+      href="http://www.codeproject.com/KB/hardware-review/">Hardware 
+      Reviews</A></DIV>
+      <DIV class=MI id=Section63><A 
+      href="http://www.codeproject.com/KB/interviews/">Interviews</A></DIV>
+      <DIV class=MI id=Section62><A 
+      href="http://www.codeproject.com/KB/scrapbook/">Scrapbook</A></DIV>
+      <DIV class=MI id=Section48><A 
+      href="http://www.codeproject.com/KB/system/">Hardware &amp; 
+      System</A></DIV></DIV>
+      <DIV class=MenuChapter><A onclick="return ToggleMenu('Chapter12');" 
+      href="http://www.codeproject.com/script/Content/Chapter.aspx?chptId=12">Third 
+      Party Products</A></DIV>
+      <DIV class=MenuSectionBlock id=Chapter12 style="DISPLAY: none">
+      <DIV class=MI id=Section65><A 
+      href="http://www.codeproject.com/KB/showcase/">Product Showcase</A></DIV>
+      <DIV class=MI id=Section124><A 
+      href="http://www.codeproject.com/KB/solution-center/">Solution 
+      Center</A></DIV></DIV></DIV><BR>
+      <DIV class=MenuCat>Feature Zones</DIV>
+      <DIV class=MenuChapter><A href="http://www.codeproject.com/Zones/IBM">IBM 
+      DeveloperWorks</A></DIV>
+      <DIV class=MenuChapter><A 
+      href="http://www.codeproject.com/Zones/WhitePapers">WhitePapers</A></DIV>
+      <DIV class=MenuChapter><A 
+      href="http://www.codeproject.com/Zones/CodeGeneration">Code 
+      Generation</A></DIV>
+      <DIV class=MenuChapter><A 
+      href="http://www.codeproject.com/Zones/QuestSQL">Quest SQL 
+      Zone</A></DIV><BR>
+      <SCRIPT type=text/javascript>document.write(unescape("%3ca%20href%3d%22http%3a%2f%2fwww.codeproject.com%2fRedir.aspx%3fadid%3d6484%26way%3dban%22%20target%3d%22_blank%22%20rel%3d%22nofollow%22%3e%3cimg%20src%3d%22http%3a%2f%2fwww.codeproject.com%2fscript%2fAnn%2fServeImg.aspx%3fFile%3d%252fscript%252fadmentor%252fimages%252fDPB%2b160x600.jpg%26C%3dFalse%26id%3d6484%22%20alt%3d%22%22%20border%3d%220%22%20width%3d%22160%22%20height%3d%22600%22%3e%3c%2fa%3e"));</SCRIPT>
+      <IMG height=1 alt="" 
+      src="CodeProject How to avoid writing SQL for ADO_NET DataAdapter_ Free source code and programming help_files/t.gif" 
+      width=160> </TD>
+    <TD class=ArticlePane vAlign=top>
+      <TABLE class=SearchHeaderBar cellSpacing=0 width="100%">
+        <TBODY>
+        <TR>
+          <TD style="WIDTH: 60%; WHITE-SPACE: nowrap" vAlign=center 
+            align=right><FORM style="MARGIN: 0px" name=Search 
+            action=/info/search.aspx method=get><B>Search &nbsp;</B> <INPUT 
+            class=SmallText style="WIDTH: 200px" name=artkw> <SELECT 
+            class=SmallText style="FONT-WEIGHT: bold" name=sbo> <OPTION 
+              value=kw selected>Articles</OPTION> <OPTION 
+              value=fm>Messages</OPTION></SELECT> <INPUT class=SmallText style="FONT-WEIGHT: bold" type=submit value=" Go! "> 
+            &nbsp; </FORM></TD>
+          <TD class=TinyText style="WHITE-SPACE: nowrap"><A 
+            href="http://www.codeproject.com/info/search.aspx">Advanced 
+            Search</A><BR><A 
+            href="http://www.codeproject.com/script/Content/SiteMap.aspx">Sitemap</A> 
+            | <A id=ctl00_SearchBarCtrl_AddToIESearchLnk 
+            title="Add The Code Project to your IE search Providers" 
+            onclick="window.external.AddSearchProvider('http://www.codeproject.com/info/OpenSearch.xml');return false;" 
+            href="http://www.codeproject.com/">Add to IE Search</A> 
+        </TD></TR></TBODY></TABLE><SPAN id=ctl00_ResultMessage></SPAN>
+      <DIV id=ctl00_ArtDiv>
+      <TABLE cellSpacing=0 cellPadding=0 width="100%" border=0>
+        <TBODY>
+        <TR vAlign=top>
+          <TD vAlign=top>
+            <TABLE>
+              <TBODY></TBODY></TABLE>
+            <DIV class=SmallText><IMG style="VERTICAL-ALIGN: middle" height=16 
+            alt=print 
+            src="CodeProject How to avoid writing SQL for ADO_NET DataAdapter_ Free source code and programming help_files/print.gif" 
+            width=16> <A id=ctl00_ArticleHeaderLinks_PrintLnk 
+            href="http://www.codeproject.com/KB/database/CustomCommandBuilder.aspx?display=Print">Print</A> 
+            &nbsp; <IMG style="VERTICAL-ALIGN: middle" height=16 
+            alt="Broken Article?" 
+            src="CodeProject How to avoid writing SQL for ADO_NET DataAdapter_ Free source code and programming help_files/report.gif" 
+            width=16> <A id=ctl00_ArticleHeaderLinks_BrokenLnk 
+            href="http://www.codeproject.com/script/Articles/Report.aspx?aid=6956">Report 
+            Article</A> &nbsp; <IMG style="VERTICAL-ALIGN: middle" alt=Watch 
+            src="CodeProject How to avoid writing SQL for ADO_NET DataAdapter_ Free source code and programming help_files/watchon.png"> 
+            <A class="" id=bmw_6956,2 onclick="return watchMe(6956, 2);" 
+            href="http://www.codeproject.com/script/Bookmarks/Add.aspx?&amp;obid=6956&amp;obtid=2&amp;bma=AddWatch" 
+            name=ajaxBookmarkWatchLink>Watch</A> <SPAN class=TinyText 
+            style="VISIBILITY: hidden"></SPAN><SPAN 
+            id=ctl00_ArticleHeaderLinks_ArticleBmkWatch_Message></SPAN>&nbsp; 
+            <IMG style="VERTICAL-ALIGN: middle" height=16 alt=Bookmark 
+            src="CodeProject How to avoid writing SQL for ADO_NET DataAdapter_ Free source code and programming help_files/link.png" 
+            width=16> <A class="" id=bm_6956,2 
+            onclick="return bookmarkMe(6956, 2);" 
+            href="http://www.codeproject.com/script/Bookmarks/Add.aspx?&amp;obid=6956&amp;obtid=2&amp;bma=AddBookmark" 
+            name=ajaxBookmarkLink>Bookmark</A> <SPAN class=TinyText 
+            style="VISIBILITY: hidden"></SPAN><SPAN 
+            id=ctl00_ArticleHeaderLinks_ArticleBmk_Message></SPAN>&nbsp; <IMG 
+            style="VERTICAL-ALIGN: middle" height=16 alt=Discuss 
+            src="CodeProject How to avoid writing SQL for ADO_NET DataAdapter_ Free source code and programming help_files/discuss.gif" 
+            width=15> <A 
+            href="http://www.codeproject.com/KB/database/CustomCommandBuilder.aspx#_comments">Discuss</A> 
+            &nbsp; <IMG style="VERTICAL-ALIGN: middle" height=16 
+            alt="Recommend Article" 
+            src="CodeProject How to avoid writing SQL for ADO_NET DataAdapter_ Free source code and programming help_files/mail.gif" 
+            width=16>&nbsp;<A id=ctl00_ArticleHeaderLinks_Recommend 
+            href="http://www.codeproject.com/script/common/TellFriend.aspx?obtid=2&amp;obid=6956">Send&nbsp;to&nbsp;a&nbsp;friend</A> 
+            </DIV></TD>
+          <TD style="WIDTH: 100px; WHITE-SPACE: nowrap; TEXT-ALIGN: right">
+            <TABLE id=CurRat>
+              <TBODY>
+              <TR>
+                <TD>
+                  <TABLE>
+                    <TBODY>
+                    <TR>
+                      <TD class=SmallText style="WHITE-SPACE: nowrap" 
+                      align=right><SPAN id=ctl00_ArticleRating_VoteLabel>20 
+                        votes for this Article.</SPAN></TD>
+                      <TD>
+                        <TABLE cellSpacing=0 cellPadding=0 border=1>
+                          <TBODY>
+                          <TR>
+                            <TD width=20 bgColor=white height=7><IMG height=7 
+                              src="CodeProject How to avoid writing SQL for ADO_NET DataAdapter_ Free source code and programming help_files/red.gif" 
+                              width=20 align=center border=0></TD>
+                            <TD width=20 bgColor=white height=7><IMG height=7 
+                              src="CodeProject How to avoid writing SQL for ADO_NET DataAdapter_ Free source code and programming help_files/red.gif" 
+                              width=20 align=center border=0></TD>
+                            <TD width=20 bgColor=white height=7><IMG height=7 
+                              src="CodeProject How to avoid writing SQL for ADO_NET DataAdapter_ Free source code and programming help_files/red.gif" 
+                              width=20 align=center border=0></TD>
+                            <TD width=20 bgColor=white height=7><IMG height=7 
+                              src="CodeProject How to avoid writing SQL for ADO_NET DataAdapter_ Free source code and programming help_files/red.gif" 
+                              width=20 align=center border=0></TD>
+                            <TD noWrap width=20 bgColor=white height=7><IMG 
+                              height=7 
+                              src="CodeProject How to avoid writing SQL for ADO_NET DataAdapter_ Free source code and programming help_files/red.gif" 
+                              width=1 align=center 
+                      border=0></TD></TR></TBODY></TABLE></TD></TR>
+                    <TR id=ctl00_ArticleRating_PopularityRow>
+                      <TD class=SmallText align=right colSpan=2><A 
+                        id=ctl00_ArticleRating_PopularityLnk 
+                        title="Calculated as rating x Log10(# votes)" 
+                        href="http://www.codeproject.com/script/Articles/TopArticles.aspx?ta_so=1">Popularity: 
+                        5.26</A> <SPAN 
+                        id=ctl00_ArticleRating_PopularityLbl></SPAN><SPAN 
+                        id=ratingVal>Rating: <B>4.04</B> out of 
+                    5</SPAN></TD></TR></TBODY></TABLE></TD>
+                <TD>
+                  <DIV>
+                  <TABLE class=HistTable 
+                  title="Voting Distribution. Recent data only">
+                    <TBODY>
+                    <TR>
+                      <TD><IMG title="0 votes, 0.0%" height=1 
+                        alt="0 votes, 0.0%" src="" width=10 border=0><BR>1</TD>
+                      <TD><IMG title="1 vote, 5.0%" height=2 
+                        alt="1 vote, 5.0%" 
+                        src="CodeProject How to avoid writing SQL for ADO_NET DataAdapter_ Free source code and programming help_files/pollcol.gif" 
+                        width=10 border=0><BR>2</TD>
+                      <TD><IMG title="3 votes, 15.0%" height=6 
+                        alt="3 votes, 15.0%" 
+                        src="CodeProject How to avoid writing SQL for ADO_NET DataAdapter_ Free source code and programming help_files/pollcol.gif" 
+                        width=10 border=0><BR>3</TD>
+                      <TD><IMG title="6 votes, 30.0%" height=12 
+                        alt="6 votes, 30.0%" 
+                        src="CodeProject How to avoid writing SQL for ADO_NET DataAdapter_ Free source code and programming help_files/pollcol.gif" 
+                        width=10 border=0><BR>4</TD>
+                      <TD><IMG title="10 votes, 50.0%" height=20 
+                        alt="10 votes, 50.0%" 
+                        src="CodeProject How to avoid writing SQL for ADO_NET DataAdapter_ Free source code and programming help_files/pollcol.gif" 
+                        width=10 
+              border=0><BR>5</TD></TD></TR></TBODY></TABLE></DIV></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE>
+      <UL class=Callout id=ctl00_confirmError style="MARGIN-RIGHT: 20px">
+        <LI class=SmallText 
+        style="LIST-STYLE-IMAGE: url(/images/warning.gif)">You are signed up for 
+        one or more <A id=ctl00_SubscribeLink2 
+        href="http://www.codeproject.com/script/Membership/Subscribe.aspx?rp=%2fKB%2fdatabase%2fCustomCommandBuilder.aspx">newsletters</A> 
+        but your email address is either unconfirmed, or has not been 
+        reconfirmed in a long time. Please click <A id=ctl00_RequestConfirmLink2 
+        href="http://www.codeproject.com/script/Membership/SendConfirmRequest.aspx?rp=%2fKB%2fdatabase%2fCustomCommandBuilder.aspx">here</A> 
+        to have an email sent that will allow us to confirm your email address 
+        and start sending you newsletters again.</LI></UL><SPAN id=intelliTXT>
+      <DIV id=contentdiv><!-- Main Page Contents Start --><!-- Article Starts -->
+      <UL class=download>
+        <LI><A 
+        href="http://www.codeproject.com/KB/database/CustomCommandBuilder/CustomCommandBuilder_src.zip">Download 
+        source files - 25.1 Kb</A> 
+        <LI><A 
+        href="http://www.codeproject.com/KB/database/CustomCommandBuilder/CustomCommandBuilder_demo.zip">Download 
+        demo project - 19.3 Kb</A> </LI></UL>
+      <H2>Contents</H2>
+      <UL>
+        <LI><A 
+        href="http://www.codeproject.com/KB/database/CustomCommandBuilder.aspx#Introduction">Introduction</A> 
+
+        <LI><A 
+        href="http://www.codeproject.com/KB/database/CustomCommandBuilder.aspx#SqlCommandBuilder">What's 
+        already included in ADO.NET</A> 
+        <LI><A 
+        href="http://www.codeproject.com/KB/database/CustomCommandBuilder.aspx#TypedDS">A 
+        word or two about Strongly Typed DataSets</A> 
+        <LI><A 
+        href="http://www.codeproject.com/KB/database/CustomCommandBuilder.aspx#CustomCommandBuilder">CustomCommandBuilder</A> 
+
+        <LI><A 
+        href="http://www.codeproject.com/KB/database/CustomCommandBuilder.aspx#Performance">Performance 
+        considerations</A> 
+        <LI><A 
+        href="http://www.codeproject.com/KB/database/CustomCommandBuilder.aspx#Conclusion">Conclusion</A> 
+        </LI></UL>
+      <H2><A name=Introduction></A>Introduction</H2>
+      <P>One of the most repetitive, boring and thus error prone tasks when 
+      accessing databases from C# (or other languages) is writing SQL commands. 
+      And when there is explicit SQL, no matter whether it's in stored 
+      procedures or inside your code, it has to be maintained. For instance, if 
+      a column is added to a database, that column must be added to all four 
+      commands (<CODE lang=sql><SPAN class=code-keyword>INSERT</SPAN></CODE>, 
+      <CODE lang=sql><SPAN class=code-keyword>SELECT</SPAN></CODE>, <CODE 
+      lang=sql><SPAN class=code-keyword>UPDATE</SPAN></CODE>, <CODE 
+      lang=sql><SPAN class=code-keyword>DELETE</SPAN></CODE> - a.k.a. CRUD), and 
+      there are often more than one <CODE lang=sql><SPAN 
+      class=code-keyword>SELECT</SPAN></CODE>s with different filters. There are 
+      certainly times when you must write some SQL, but it would be better if 
+      machine could create as much as possible.</P>
+      <P>This article is about writing some code that can do that job. It was 
+      made for SQL Server and ADO.NET SqlClient provider.</P>
+      <P><B>Update 15/1/2005:</B> I've changed it to support OLEDB too. Wherever 
+      in text <CODE>SqlCommandBuilder</CODE> is referenced, it also applies to 
+      <CODE>OleDbCommandBuilder</CODE>. You shouldn't have too much problems to 
+      customize it to other databases and data providers.</P>
+      <H2><A name=SqlCommandBuilder></A>What's already included in ADO.NET</H2>
+      <P>ADO.NET comes with one solution for this problem, 
+      <CODE>SqlCommandBuilder</CODE> class. You still have to provide <CODE 
+      lang=sql><SPAN class=code-keyword>SELECT</SPAN></CODE> command, but <CODE 
+      lang=sql><SPAN class=code-keyword>INSERT</SPAN></CODE>, <CODE 
+      lang=sql><SPAN class=code-keyword>UPDATE</SPAN></CODE> and <CODE 
+      lang=sql><SPAN class=code-keyword>DELETE</SPAN></CODE> are generated for 
+      you. Behind the scenes, <CODE>CommandBuilder</CODE> goes to database to 
+      fetch the required metadata. <CODE>CommandBuilder</CODE> has lots of 
+      issues, discussed in William Vaughn's article "<A 
+      href="http://msdn.microsoft.com/library/en-us/dnadonet/html/commandbuilder.asp" 
+      target=_blank>Weaning Developers from the CommandBuilder</A>". In my 
+      opinion, the greatest problem is, if for some reason, the code it 
+      generates doesn't fit your needs, there's no way to customize or fix it - 
+      you have to abandon it completely. For example, if you want to find out 
+      the value of autoincrement column in SQL Server after <CODE lang=sql><SPAN 
+      class=code-keyword>INSERT</SPAN></CODE>, you're out of luck. Another 
+      serious problem is that it requires roundtrip to database to fetch 
+      metadata, so even Microsoft doesn't recommend using it in production 
+      code.</P>
+      <P>Another possible solution is to use Data Adapter Configuration Wizard 
+      (DACW), as suggested in Vaughn's article. It works similar to 
+      <CODE>SqlCommandBuilder</CODE>, but in design time. So you can see 
+      generated code and tweak it to your needs. Problem is, you have to make 
+      same tweaks whenever you generate SQL (e.g., to add retrieval of 
+      autogenerated column to <CODE lang=sql><SPAN 
+      class=code-keyword>INSERT</SPAN></CODE> commands). Once you have tweaked 
+      it, you are in manual maintenance mode - the computer can't add new 
+      columns to these commands for you.</P>
+      <H2><A name=TypedDS></A>A word or two about Strongly Typed DataSets</H2>
+      <P>When working with plain, untyped <CODE>DataSet</CODE>s, there are lots 
+      of casts and finding columns by name. Both of these activities can't be 
+      checked at compile time. If you like, when compiler finds as many bugs in 
+      your code as possible, then you must be using Strongly Typed DataSet 
+      (typed DS). It's one of my favorite features of .NET. If something changes 
+      in the DB, you just update the typed DS, compile, and let the compiler 
+      find where your code doesn't work with the new version of DB. Also, when 
+      you use typed DS, you have Intellisense (which is hard to live without). 
+      Although it affects performance, benefits usually compensate that 
+      difference. If your application can afford to use typed datasets, you'll 
+      see here how they can reduce the amount of SQL that should be written 
+      manually.</P>
+      <P>Typed DS is created from the database in a similar way to how 
+      <CODE>CommandBuilder</CODE> works - database is queried for metadata. Main 
+      difference is it's happening on design time instead of run time. This 
+      essentially means, on run time, there already exists enough metadata 
+      inside typed DS to construct commands - you can find out names of tables, 
+      list of columns, their types, which columns are primary keys, etc. If 
+      <CODE>SqlCommandBuilder</CODE> knew about them, it wouldn't have to make 
+      roundtrip to the database. Also, <CODE>SqlCommandBuilder</CODE> has no way 
+      of knowing which columns you really need: if some typed DS represents only 
+      a subset of some database table, only columns represented in that DS 
+      should be included in commands.</P>
+      <H2><A name=CustomCommandBuilder></A>CustomCommandBuilder</H2>
+      <P>Code presented here will work similar to 
+      <CODE>SqlCommandBuilder</CODE>, but under our control. Therefore, we can 
+      make custom changes. For <CODE lang=sql><SPAN 
+      class=code-keyword>SELECT</SPAN></CODE> command, we can add filtering or 
+      ordering, and still have auto generation of column list. For <CODE 
+      lang=sql><SPAN class=code-keyword>INSERT</SPAN></CODE>, we can add support 
+      for auto increment fields. For <CODE lang=sql><SPAN 
+      class=code-keyword>UPDATE</SPAN></CODE> command, 
+      <CODE>SqlCommandBuilder</CODE> is using "optimistic locking" support, 
+      i.e., only rows that are not changed since we fetched them are written to 
+      the DB. We can choose other kinds of concurrency controls, e.g., using 
+      timestamps or no concurrency control at all.</P>
+      <P>All relevant classes are in <CODE>Cogin.Data</CODE> and 
+      <CODE>Cogin.Data.DataAccess</CODE> namespaces. Class 
+      <CODE>CustomCommandBuilder</CODE> is one that generates SQL. It's used by 
+      <CODE>SqlDataAccess</CODE> class, which contains low level ADO.NET code. 
+      These two classes are not application specific and can be reused in 
+      different projects. There are two similar classes for OleDb: 
+      <CODE>OleDbCustomCommandBuilder</CODE> and <CODE>OleDbDataAccess</CODE>. 
+      DataAccess classes are not used directly, but through 
+      <CODE>IDataAccess</CODE> interface, so that application specific classes 
+      don't have to be changed when we switch from SqlClient to OleDb data 
+      provider. They just have to use <CODE>DataAccessFactory</CODE> to get the 
+      appropriate version, which checks config file to see which data provider 
+      will be used.</P>
+      <P>Example of data access classes are <CODE>CustomersDataAccess</CODE> and 
+      <CODE>OrdersViewDataAccess</CODE>. These classes are handling all CRUD 
+      operations for the sample application, and yet there is no SQL in any of 
+      them! That was our goal. Methods you have to write are as simple as:</P><PRE lang=cs>    <SPAN class=code-keyword>public</SPAN> <SPAN class=code-keyword>void</SPAN> FillOrdersForCustomer( <SPAN class=code-keyword>string</SPAN> customerId )
+    {
+        dataAccess.SelectWithFilter( dataSet.Orders, <SPAN class=code-string>"</SPAN><SPAN class=code-string>CustomerID=@customerId"</SPAN>, 
+            <SPAN class=code-keyword>new</SPAN> GenericSqlParameter( <SPAN class=code-string>"</SPAN><SPAN class=code-string>@customerId"</SPAN>, customerId ) );
+    }
+
+    <SPAN class=code-keyword>public</SPAN> <SPAN class=code-keyword>void</SPAN> updateCustomers()
+    {
+        dataAccess.fullUpdate( dataSet.Customers );
+    }</PRE>
+      <P>Sample Win Forms application is included. It uses Northwind database 
+      which you should already have on SQL Server. It displays customers and 
+      their orders (filtered and loaded only when needed) and allows updates, 
+      inserts and deletes. Unfortunately, Northwind doesn't have cascade 
+      updates/deletes, so you can successfully play only with rows you created. 
+      Since that wasn't the point of this article, I didn't bother to write code 
+      to cascade changes to all affected tables, e.g., to Order Details.</P>
+      <P><CODE>CustomCommandBuilder</CODE> can be used even if you want to use 
+      stored procedures instead of plain SQL. It can create calls to stored 
+      procedures, and generic procedures as well. Creating these autogenerated 
+      stored procs in the DB can be done manually or automatically on 
+      application start.</P>
+      <H2><A name=Performance></A>Performance considerations</H2>
+      <P>When working with DB, usually the bottleneck is database itself. 
+      However, I was still interested to find out the performance hit 
+      <CODE>CustomCommandBuilder</CODE> introduces. In order to minimize DB 
+      overhead, the test database was on the same machine as the test program 
+      (no network latency). Fastest way is to use stored procedures, so 
+      alternatives are compared to that approach. All test cases use typed DS. I 
+      didn't try to measure typed DS versus DataReader or some other approach. I 
+      tried to answer the following questions with this test:</P>
+      <UL>
+        <LI>Is it slow if SQL commands are generated every time? It's what 
+        <CODE>CustomCommandBuilder</CODE> is doing, and if command generation is 
+        too slow, some caching mechanism should be used. 
+        <LI>Is it slow to recreate data access and typed DS classes for each 
+        request? 
+        <LI>Does it matter if filters are made using <CODE>SqlParameter</CODE>s 
+        compared to plain text? </LI></UL>
+      <P>Last question was important because you can make filters by 
+      concatenating strings, e.g.:</P><PRE lang=cs>    SelectWithFilter( dataSet.Orders, <SPAN class=code-string>"</SPAN><SPAN class=code-string>CustomerId='"</SPAN> + customerId + <SPAN class=code-string>"</SPAN><SPAN class=code-string>'"</SPAN> );</PRE>
+      <P>This is slow not because of string concatenation, but because SQL 
+      Server receives always different commands and must compile them (parse and 
+      determine execution order) every time. Better way to make parameterized 
+      filters is:</P><PRE lang=cs>    SelectWithFilter( dataSet.Orders, <SPAN class=code-string>"</SPAN><SPAN class=code-string>CustomerId=@customerId"</SPAN>,
+        <SPAN class=code-keyword>new</SPAN> GenericSqlParameter ( <SPAN class=code-string>"</SPAN><SPAN class=code-string>@customerId"</SPAN>, customerId ) );</PRE>
+      <P>SQL Server can cache this kind of commands, because parameters are 
+      transferred separately from command string. As you'll see from benchmark 
+      results, this is almost as fast as using stored procedures, but much more 
+      flexible. Using <CODE>SqlParameter</CODE> is not only faster, but safer 
+      too because you don't have to worry if parameter contains some illegal 
+      character, like ' sign. <CODE>GenericSqlParameter</CODE> here is just 
+      Facade that allows us to use it for both SqlClient and OleDb.</P>
+      <P>I created a small benchmark that also uses Northwind database, to fetch 
+      1000 times random row from Orders table. Stored procedure 
+      <CODE>CustOrdersOrders</CODE> (which already exists in Northwind) is 
+      compared to selecting using generated SQL command, generated again for 
+      each request. Variants with and without reusing data access and typed DS 
+      classes are measured. Test configuration: Athlon XP 1800+, 512MB RAM, 
+      7200rpm HDD, Win XP SP1, SQL Server 2000. Database is running on the same 
+      machine. All tests are performed thrice. Results:</P>
+      <P><IMG height=406 
+      src="CodeProject How to avoid writing SQL for ADO_NET DataAdapter_ Free source code and programming help_files/CustomCommandBuilder.gif" 
+      width=520></P>
+      <P>This example is very simplified and limited, but it gives some hints. 
+      You should perform tests on your setup with typical real life load, to get 
+      relevant data for your case.</P>
+      <P>As you can see, differences are rather small, and worst case is only 
+      25% slower than best case. I consider 25% to be a small difference because 
+      in real world, database is on a separate server, queries are much more 
+      disk-intensive (during this benchmark, disk activity was practically 
+      nonexistent because very soon entire Orders table was cached in system 
+      memory), so differences should be much smaller. You should notice that 
+      "plain text filters" have largest deviation. That's because they are very 
+      dependent on "randomness" of required CustomerID, i.e., whenever same 
+      filter condition is repeated, previously compiled SQL command is used. 
+      This also means that this kind of filtering is trashing SQL Server's 
+      compiled commands cache.</P>
+      <P>If this performance difference is significant in your case, or you can 
+      not afford additional memory overhead of typed DS, you can go 
+      <CODE>DataReader</CODE>/Stored proc way, but that requires much more work 
+      and is much harder to maintain. Best advice is to measure before 
+      optimizing anything.</P>
+      <P>If performance is an issue, I would rather focus on a way typed data 
+      sets are usually used - as a set of several data tables which directly map 
+      to database tables, i.e., without using <CODE lang=sql><SPAN 
+      class=code-keyword>JOIN</SPAN></CODE>s in queries. Each 
+      <CODE>DataTable</CODE> object is filled/updated with separate SQL 
+      commands, and each one means roundtrip to the server. This can be improved 
+      by packaging several commands together - multiple resultsets will be 
+      received with single roundtrip.</P>
+      <H2><A name=Conclusion></A>Conclusion</H2>
+      <P><CODE>CustomCommandBuilder</CODE> frees you of writing generic SQL 
+      code, and yet allows you to choose how it will be generated. Performance 
+      hit is usually minimal in real life. Only requirement is that you're using 
+      typed data sets, which I would recommend anyway if you can trade some 
+      performance hit for increased productivity. If you're using SQL Server, 
+      everything is already provided, but contrary to ADO.NET's 
+      <CODE>SqlCommandBuilder</CODE>, you can change it for other servers.</P><!-- Article Ends --><!-- Main Page Contents End --></DIV></SPAN>
+      <FORM id=aspnetForm 
+      style="PADDING-RIGHT: 0px; PADDING-LEFT: 0px; PADDING-BOTTOM: 0px; MARGIN: 0px; PADDING-TOP: 0px" 
+      name=aspnetForm action=CustomCommandBuilder.aspx method=post>
+      <DIV><INPUT id=__VIEWSTATE type=hidden 
+      value=/wEPDwULLTEwMDUyNjYzMjhkZGNDIVb/WkPcV47L7+gvYjHKkqax 
+      name=__VIEWSTATE> </DIV>
+      <H2>License</H2>
+      <DIV id=ctl00_LicenseTerms>
+      <P>This article has no explicit license attached to it but may contain 
+      usage terms in the article text or the download files themselves. If in 
+      doubt please contact the author via the discussion board below.</P>
+      <P>A list of licenses authors might use can be found <A 
+      href="http://www.codeproject.com/info/Licenses.aspx">here</A></P></DIV>
+      <H2>About the Author</H2>
+      <TABLE cellSpacing=5 cellPadding=0 width="100%" border=0>
+        <TBODY>
+        <TR vAlign=top>
+          <TD id=ctl00_AboutAuthorRptr_ctl00_AboutAuthor_memberPhotoTable 
+          style="WIDTH: 155px" vAlign=top><B><A 
+            id=ctl00_AboutAuthorRptr_ctl00_AboutAuthor_memberProfileLink 
+            href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=986527">Dejan 
+            Grujic</A></B><BR><BR>
+            <CENTER><IMG id=ctl00_AboutAuthorRptr_ctl00_AboutAuthor_memberPhoto 
+            style="BORDER-TOP-WIDTH: 0px; BORDER-LEFT-WIDTH: 0px; BORDER-BOTTOM-WIDTH: 0px; BORDER-RIGHT-WIDTH: 0px" 
+            src="CodeProject How to avoid writing SQL for ADO_NET DataAdapter_ Free source code and programming help_files/{34D4DCBC-03D4-4678-B425-8A75E785A0ED}.jpg"></CENTER><BR><SPAN 
+            class=SmallText 
+            id=ctl00_AboutAuthorRptr_ctl00_AboutAuthor_memberType></SPAN></TD>
+          <TD>Developing software since 1985. Hobby turned into profession 
+            even before graduating on Computer Science. Main interest was 
+            Internet development in Java, but since 2002. focus shifted toward 
+            .Net. With experience as lead developer on several larger 
+            applications for financial industry, Dejan is currently mostly 
+            dealing with agile development of distributed applications. He is 
+            also developing tools for MSMQ community.<BR><BR>See more on <A 
+            href="http://www.cogin.com/">http://www.cogin.com/</A><BR><BR>
+            <TABLE>
+              <TBODY>
+              <TR id=ctl00_AboutAuthorRptr_ctl00_AboutAuthor_jobTitleRow>
+                <TD class=SmallText noWrap>Occupation: </TD>
+                <TD width="100%"><SPAN class=SmallText 
+                  id=ctl00_AboutAuthorRptr_ctl00_AboutAuthor_memberJobTitle>Web 
+                  Developer</SPAN></TD></TR>
+              <TR id=ctl00_AboutAuthorRptr_ctl00_AboutAuthor_locationRow>
+                <TD class=SmallText>Location: </TD>
+                <TD width="100%"><SPAN class=SmallText 
+                  id=ctl00_AboutAuthorRptr_ctl00_AboutAuthor_memberLocation><IMG 
+                  height=11 alt=Yugoslavia 
+                  src="CodeProject How to avoid writing SQL for ADO_NET DataAdapter_ Free source code and programming help_files/YU.gif" 
+                  width=16> 
+      Yugoslavia</SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE><BR>
+      <TABLE id=ctl00_PopularArticlesRow cellSpacing=0 cellPadding=0 
+      width="100%" border=0>
+        <TBODY>
+        <TR vAlign=top>
+          <TD style="WIDTH: 100%">
+            <H2>Other popular Database articles:</H2>
+            <UL>
+              <LI><A 
+              href="http://www.codeproject.com/KB/database/caaadoclass1.aspx">A 
+              set of ADO classes - version 2.20</A>
+              <DIV class=SmallText>Simple database access using an ADO 
+              class.</DIV>
+              <LI><A 
+              href="http://www.codeproject.com/KB/database/filehelpers.aspx">FileHelpers 
+              v2.0 - Delimited (CSV) or Fixed Data Import/Export Framework</A>
+              <DIV class=SmallText>An easy to use .NET library to read/write 
+              strong typed data from files with fixed length or delimited 
+              records (CSV). Also has support to import/export data from 
+              different data storages (Excel, Acces, SqlServer, MySql)</DIV>
+              <LI><A 
+              href="http://www.codeproject.com/KB/database/sqldodont.aspx">SQL 
+              Server DO's and DONT's</A>
+              <DIV class=SmallText>SQL Server database best practices</DIV>
+              <LI><A 
+              href="http://www.codeproject.com/KB/database/connectionstrings.aspx">ADO 
+              Connection Strings</A>
+              <DIV class=SmallText>A list of ODBC DSN Connection Strings.</DIV>
+              <LI><A 
+              href="http://www.codeproject.com/KB/database/DynamicMethod_ILGenerator.aspx">Dynamic... 
+              but fast: The tale of three monkeys, a wolf and the DynamicMethod 
+              and ILGenerator classes</A>
+              <DIV class=SmallText>How to use the DynamicMethod and ILGenerator 
+              classes to create dynamic code at runtime that out performs 
+              reflection</DIV></LI></UL>
+            <H2></H2></TD>
+          <TD>
+            <SCRIPT type=text/javascript>document.write(unescape("%3ca%20href%3d%22http%3a%2f%2fwww.codeproject.com%2fRedir.aspx%3fadid%3d6417%26way%3dban%22%20target%3d%22_blank%22%20rel%3d%22nofollow%22%3e%3cimg%20src%3d%22http%3a%2f%2fwww.codeproject.com%2fscript%2fAnn%2fServeImg.aspx%3fFile%3d%252fscript%252fadmentor%252fimages%252fVisual_Numerics_IMSEL_Eval_300x250.jpg%26C%3dFalse%26id%3d6417%22%20alt%3d%22%22%20border%3d%220%22%20width%3d%22300%22%20height%3d%22250%22%3e%3c%2fa%3e"));</SCRIPT>
+          </TD></TR></TBODY></TABLE>
+      <DIV id=ctl00_AddTo_AddTo style="MARGIN: 10px">
+      <SCRIPT language=JavaScript type=text/javascript>
+var addtoMethod=1;
+var AddURL = document.location.href;
+var AddTitle = escape(document.title);
+DrawLinks(100, 0, "SmallText Bold", "AddTo") 
+</SCRIPT>
+      </DIV>
+      <TABLE class=RatingBar id=ctl00_RateArticleRow cellSpacing=0 cellPadding=0 
+      width="100%" border=0>
+        <TBODY>
+        <TR>
+          <TD><A 
+            href="http://www.codeproject.com/KB/database/CustomCommandBuilder.aspx#_top">Article 
+            Top</A></TD>
+          <TD align=right>
+            <TABLE cellSpacing=0 cellPadding=0 width="100%">
+              <TBODY>
+              <TR>
+                <TD id=ctl00_RateArticle_VoteResultDiv noWrap align=right 
+                width="100%"><SPAN id=voteRes></SPAN><IMG id=loaderImg 
+                  style="DISPLAY: none" height=16 alt=loading... 
+                  src="CodeProject How to avoid writing SQL for ADO_NET DataAdapter_ Free source code and programming help_files/ajax-loader.gif" 
+                  width=16> </TD>
+                <TD class=SmallText id=voteTbl style="WHITE-SPACE: nowrap" 
+                align=right>
+                  <TABLE>
+                    <TBODY>
+                    <TR>
+                      <TD id=ctl00_RateArticle_RateText 
+                      style="PADDING-RIGHT: 5px; WHITE-SPACE: nowrap"><I><B>Rate 
+                        this Article for us!</B></I></TD>
+                      <TD id=ctl00_RateArticle_StartForm 
+                        align=right><I>&nbsp;&nbsp;Poor</I></TD>
+                      <TD id=ctl00_RateArticle_VoteFormDiv 
+                      style="WHITE-SPACE: nowrap" align=left>
+                        <TABLE id=ctl00_RateArticle_VoteRBL border=0>
+                          <TBODY>
+                          <TR>
+                            <TD><INPUT id=ctl00_RateArticle_VoteRBL_0 
+                              type=radio value=1 
+                            name=ctl00$RateArticle$VoteRBL></TD>
+                            <TD><INPUT id=ctl00_RateArticle_VoteRBL_1 
+                              type=radio value=2 
+                            name=ctl00$RateArticle$VoteRBL></TD>
+                            <TD><INPUT id=ctl00_RateArticle_VoteRBL_2 
+                              type=radio value=3 
+                            name=ctl00$RateArticle$VoteRBL></TD>
+                            <TD><INPUT id=ctl00_RateArticle_VoteRBL_3 
+                              type=radio value=4 
+                            name=ctl00$RateArticle$VoteRBL></TD>
+                            <TD><INPUT id=ctl00_RateArticle_VoteRBL_4 
+                              type=radio value=5 
+                            name=ctl00$RateArticle$VoteRBL></TD></TR></TBODY></TABLE></TD>
+                      <TD id=ctl00_RateArticle_EndForm noWrap 
+                        align=left><I>Excellent</I> <INPUT class=FormButton id=ctl00_RateArticle_SubmitRateBtn onclick="return rateItem(6956,2);" type=submit value=Vote name=ctl00$RateArticle$SubmitRateBtn> 
+                      </TD>
+                      <TD><SPAN 
+                    id=ctl00_RateArticle_ErrorMessage></SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE>
+      <DIV><INPUT id=__EVENTVALIDATION type=hidden 
+      value=/wEWCALsz4X/CwLAlMXDBwLBlMXDBwLClMXDBwLDlMXDBwLElMXDBwLP+++tCwK5upDkC72R0f3sWDF3YCtFW6wawmyjuH6f 
+      name=__EVENTVALIDATION> </DIV></FORM>
+      <DIV 
+      style="PADDING-RIGHT: 10px; PADDING-LEFT: 10px; PADDING-BOTTOM: 10px; OVERFLOW: hidden; PADDING-TOP: 10px; WHITE-SPACE: nowrap; TEXT-ALIGN: center"><IFRAME 
+      src="CodeProject How to avoid writing SQL for ADO_NET DataAdapter_ Free source code and programming help_files/ServeHTML.htm" 
+      frameBorder=0 width=468 scrolling=no height=60></IFRAME><IFRAME 
+      src="CodeProject How to avoid writing SQL for ADO_NET DataAdapter_ Free source code and programming help_files/ServeLinks.htm" 
+      frameBorder=0 width=300 scrolling=no height=60></IFRAME></DIV><A 
+      name=_comments></A><!-- Forum Start -->
+      <DIV id=_MessageBoard onclick="return SwitchMessage(event, null)">
+      <TABLE class=Frm_MainTable id=ForumTable cellSpacing=0 cellPadding=0>
+        <TBODY>
+        <TR>
+          <TD>
+            <FORM 
+            style="PADDING-RIGHT: 0px; PADDING-LEFT: 0px; PADDING-BOTTOM: 0px; MARGIN: 0px; PADDING-TOP: 0px" 
+            action=/script/Forums/SetOptions.aspx?floc=%2fKB%2fdatabase%2fCustomCommandBuilder.aspx&amp;fid=42844 
+            method=get><INPUT type=hidden value=42844 name=fid><INPUT 
+            type=hidden 
+            value=?floc=%2fKB%2fdatabase%2fCustomCommandBuilder.aspx&amp;fid=42844 
+            name=currentQS><INPUT type=hidden 
+            value=/KB/database/CustomCommandBuilder.aspx name=floc>
+            <TABLE cellSpacing=0 cellPadding=3 width="100%" border=0>
+              <TBODY>
+              <TR class=Frm_HeaderRow1>
+                <TD style="WHITE-SPACE: nowrap"><IMG height=16 alt=FAQ 
+                  src="CodeProject How to avoid writing SQL for ADO_NET DataAdapter_ Free source code and programming help_files/forum_faq.gif" 
+                  width=16 align=middle border=0>&nbsp;<A 
+                  href="http://www.codeproject.com/script/Forums/FAQ.aspx"><B>FAQ</B></A>&nbsp;</TD>
+                <TD style="WHITE-SPACE: nowrap; TEXT-ALIGN: right">Noise 
+                  Tolerance<SELECT class=Frm_DropDown size=1 name=noise> 
+                    <OPTION value=1>Very High</OPTION><OPTION 
+                    value=2>High</OPTION><OPTION value=3 
+                    selected>Medium</OPTION><OPTION value=4>Low</OPTION><OPTION 
+                    value=5>Very Low</OPTION></SELECT></TD>
+                <TD style="WHITE-SPACE: nowrap; TEXT-ALIGN: right" 
+                  colSpan=2><IMG height=15 alt=Search 
+                  src="CodeProject How to avoid writing SQL for ADO_NET DataAdapter_ Free source code and programming help_files/forum_search.gif" 
+                  width=16 align=top border=0>&nbsp;<A 
+                  href="http://www.codeproject.com/script/Forums/Search.aspx?fid=42844">Search 
+                  Messages</A>&nbsp;</TD>
+                <TD style="TEXT-ALIGN: right"><INPUT class=Frm_Button type=submit value="Set Options" name=submit></TD></TR>
+              <TR class=Frm_HeaderRow2>
+                <TD style="WIDTH: 100%">&nbsp;</TD>
+                <TD 
+                  style="WHITE-SPACE: nowrap; TEXT-ALIGN: right">Layout<SELECT 
+                  class=Frm_DropDown size=1 name=view> <OPTION value=Quick 
+                    selected>Normal</OPTION><OPTION value=Topic>Expand Root 
+                    Messages</OPTION><OPTION value=Expanded>Expand All 
+                    Messages</OPTION><OPTION value=Thread>Thread 
+                    View</OPTION><OPTION value=Normal>No Javascript 
+                    (slow)</OPTION><OPTION value=Preview>No Javascript 
+                    Preview</OPTION></SELECT>&nbsp;&nbsp;</TD>
+                <TD style="WHITE-SPACE: nowrap">Per page<SELECT 
+                  class=Frm_DropDown size=1 name=mpp> <OPTION 
+                    value=10>10</OPTION><OPTION value=25 
+                    selected>25</OPTION><OPTION 
+                  value=50>50</OPTION></SELECT>&nbsp;&nbsp;</TD>
+                <TD colSpan=2>&nbsp;</TD></TR></TBODY></TABLE></FORM></TD></TR>
+        <TR>
+          <TD><A name=xx0xx></A>
+            <TABLE cellSpacing=0 cellPadding=2 width="100%" border=0>
+              <TBODY>
+              <TR class=Frm_NavigationBar>
+                <TD><IMG height=16 alt=new 
+                  src="CodeProject How to avoid writing SQL for ADO_NET DataAdapter_ Free source code and programming help_files/forum_newmsg.gif" 
+                  width=16 align=top border=0><A class=Frm_HL 
+                  title="Create a new message thread" 
+                  href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=42844&amp;floc=/KB/database/CustomCommandBuilder.aspx" 
+                  target=_top name=Frm_HoverNL><B>New Message</B></A></TD>
+                <TD>Msgs 1 to 14 of 14 (Total in Forum: 14) (<A 
+                  href="http://www.codeproject.com/KB/database/CustomCommandBuilder.aspx?fid=42844">Refresh</A>)</TD>
+                <TD style="WHITE-SPACE: nowrap; TEXT-ALIGN: right"><SPAN 
+                  class=Frm_HL>First</SPAN><SPAN class=Frm_HL>Prev</SPAN><SPAN 
+                  class=Frm_HL>Next</SPAN></TD></TR></TBODY></TABLE></TD></TR>
+        <TR>
+          <TD>
+            <TABLE class=Frm_MsgTable cellSpacing=0 cellPadding=0 width="100%" 
+            border=0><!-- Column Headers -->
+              <TBODY>
+              <TR class=Frm_ColumnHeaders>
+                <TD style="WIDTH: 100%">
+                  <TABLE cellSpacing=0 cellPadding=2 width="100%" border=0>
+                    <TBODY>
+                    <TR>
+                      <TD>Subject&nbsp;</TD>
+                      <TD class=Frm_MsgAuthor>&nbsp;Author&nbsp;</TD>
+                      <TD 
+              class=Frm_MsgDate>Date&nbsp;</TD></TR></TBODY></TABLE></TD></TR>
+              <TR>
+                <TD><IMG height=5 alt="" 
+                  src="C:\Documents and Settings\valley\Desktop\New Folder\CodeProject How to avoid writing SQL for ADO_NET DataAdapter_ Free source code and programming help_files\t(1).gif" 
+                  width=1 border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd Rt HdUnSel " id=F1977389_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=16><A 
+                        name=xx1977389xx></A><IMG height=16 alt=Question 
+                        src="CodeProject How to avoid writing SQL for ADO_NET DataAdapter_ Free source code and programming help_files/msg_question.gif" 
+                        width=16 align=top></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/database/CustomCommandBuilder.aspx?fid=42844&amp;select=1977389#xx1977389xx" 
+                        name=1977389>UpdateCommand gives ORA-01036: illegal 
+                        variable name/number error</A></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        title=member height=16 alt=member 
+                        src="CodeProject How to avoid writing SQL for ADO_NET DataAdapter_ Free source code and programming help_files/member_sm.gif" 
+                        border=0></TD>
+                      <TD class=Frm_MsgAuthor><A 
+                        href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=2536644">flexlims</A></TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">0:34 6 
+                        Apr '07 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=F1977389_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 16px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2>I've really liked using this class 
+                                for one of my projects. I was wondering if it 
+                                would be alright if I use it in my Open Source 
+                                project, giving the right credit, 
+                                etc.?<BR><BR>Also, maybe you can help me 
+                                determine why I get this error, only for Oracle 
+                                (not SQL Server) in the UpdateCommand method. My 
+                                Primary Key field is an Int which Oracle changes 
+                                to a Number field.<BR><BR>The UpdateCommand 
+                                returned the following CommandText:<BR>UPDATE 
+                                t_Experiment SET NAME = :NAME, CREATED_DATE = 
+                                :CREATED_DATE, OWNER = :OWNER, DESCRIPTION = 
+                                :DESCRIPTION WHERE NAME= :'oldNAME' AND 
+                                EXPERIMENT_ID= :'oldEXPERIMENT_ID'"<BR><BR>The 
+                                column called EXPERIMENT_ID is the primary key. 
+                                Using a 10g Oracle DB and Microsoft's 
+                                System.Data OLEDB connection 
+                                factory.<BR><BR>//Here's the code using the 
+                                factory class<BR>_providerName = 
+                                "System.Data.OracleClient";<BR>_factory = 
+                                DbProviderFactories.GetFactory(_providerName);<BR><BR>internal 
+                                DbCommand UpdateCommand<BR>{<BR>get<BR>{<BR>bool 
+                                bAddedStringInWhereClause = false;<BR>DbCommand 
+                                command = 
+                                _factory.CreateCommand();<BR>command.CommandText 
+                                = "";<BR>StringBuilder setString = new 
+                                StringBuilder();<BR>StringBuilder whereString = 
+                                new StringBuilder();<BR>DataColumn[] 
+                                primaryKeyColumns = 
+                                dataTable.PrimaryKey;<BR><BR>foreach (DataColumn 
+                                column in dataTable.Columns)<BR>{<BR>if 
+                                (System.Array.IndexOf(primaryKeyColumns, column) 
+                                != -1)<BR>{<BR>// A primary key<BR>// Set this 
+                                column in the WHERE Clause<BR>if 
+                                (whereString.Length &gt; 
+                                0)<BR>{<BR>whereString.Append(" AND 
+                                ");<BR>}<BR><BR>whereString.Append(column.ColumnName)<BR>.Append("= 
+                                " + GetParameterNamePrefix() + 
+                                "'old").Append(column.ColumnName + 
+                                "'");<BR><BR>}<BR>else<BR>{<BR>//Now add this 
+                                column in the SET Clause<BR>if (setString.Length 
+                                &gt; 0)<BR>{<BR>setString.Append(", 
+                                ");<BR>}<BR>setString.Append(column.ColumnName)<BR>.Append(" 
+                                = " + 
+                                GetParameterNamePrefix()).Append(column.ColumnName);<BR>}<BR><BR><BR>command.Parameters.Add(CreateParam(column));<BR>command.Parameters.Add(CreateOldParam(column));<BR><BR>}<BR>if 
+                                (whereString.Length == 0)<BR>{<BR>Exception e = 
+                                new Exception("No primary key found in table '" 
+                                + dataTable.TableName + "'");<BR>throw 
+                                e;<BR>}<BR>string commandText = "UPDATE " + 
+                                TableName + " SET "<BR>+ setString.ToString() + 
+                                " WHERE " + 
+                                whereString.ToString();<BR>//commandText += "; 
+                                END;";<BR>command.CommandText = 
+                                commandText;<BR>command.Connection = 
+                                connection;<BR>command.CommandType = 
+                                CommandType.Text;<BR>return 
+                                command;<BR>}<BR>}<BR><BR><BR>
+                                <DIV 
+                                class=ForumSig>Thanks,<BR>flexlims</DIV><BR></TD></TR>
+                                <TR style="VERTICAL-ALIGN: middle">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL title=Reply 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=42844&amp;select=1977389&amp;floc=/KB/database/CustomCommandBuilder.aspx&amp;fa=r">Reply</A>·<A 
+                                class=Frm_MHL title=Email 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=42844&amp;select=1977389&amp;floc=/KB/database/CustomCommandBuilder.aspx&amp;fa=e">Email</A>·<A 
+                                class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/database/CustomCommandBuilder.aspx?fid=42844&amp;tid=1977389">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=42844&amp;msg=1977389">PermaLink</A>·<A 
+                                class=Frm_MHL title="Bookmark this post" 
+                                href="http://www.codeproject.com/script/Bookmarks/Add.aspx?&amp;obid=1977389&amp;obtid=3&amp;bma=AddBookmark">Bookmark</A></TD>
+                                <TD class=Frm_MsgFt 
+                                style="TEXT-ALIGN: right"><SPAN id=MVF1977389 
+                                style="WHITE-SPACE: nowrap">
+                                <SCRIPT type=text/javascript>
+												MsgVoteForm(2536644,1977389,false,"","","");
+											</SCRIPT>
+                                </SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR class=Quick>
+                <TD class=Frm_MsgDivide><IMG height=1 alt="" 
+                  src="C:\Documents and Settings\valley\Desktop\New Folder\CodeProject How to avoid writing SQL for ADO_NET DataAdapter_ Free source code and programming help_files\t(1).gif" 
+                  width=1 border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd HdUnSel " id=F1977525_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=34><A 
+                        name=xx1977525xx></A><IMG height=16 alt=Answer 
+                        src="CodeProject How to avoid writing SQL for ADO_NET DataAdapter_ Free source code and programming help_files/msg_answer.gif" 
+                        width=16 align=top></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/database/CustomCommandBuilder.aspx?fid=42844&amp;select=1977525#xx1977525xx" 
+                        name=1977525>Re: UpdateCommand gives ORA-01036: illegal 
+                        variable name/number error</A></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        title=member height=16 alt=member 
+                        src="CodeProject How to avoid writing SQL for ADO_NET DataAdapter_ Free source code and programming help_files/member_sm.gif" 
+                        border=0></TD>
+                      <TD class=Frm_MsgAuthor><A 
+                        href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=986527">Dejan 
+                        Grujic</A></TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">3:27 6 
+                        Apr '07 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=F1977525_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 34px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2>You're welcome to use this code in 
+                                any project, open source or not. You don't even 
+                                have to give credits. As for Oracle problem, I 
+                                really don't have a clue, since I never touched 
+                                Oracle in my life. Sql Server has wonderful tool 
+                                Sql profiler, which you can use to monitor exact 
+                                SQL commands with parameters as they are sent to 
+                                server, among other things. I'm sure Oracle has 
+                                something like that. <BR>Problem is probably 
+                                related to parameter naming between command 
+                                factory, ole db adapter and oracle.<BR><BR>Dejan 
+                                <BR></TD></TR>
+                                <TR style="VERTICAL-ALIGN: middle">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL title=Reply 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=42844&amp;select=1977525&amp;floc=/KB/database/CustomCommandBuilder.aspx&amp;fa=r">Reply</A>·<A 
+                                class=Frm_MHL title=Email 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=42844&amp;select=1977525&amp;floc=/KB/database/CustomCommandBuilder.aspx&amp;fa=e">Email</A>·<A 
+                                class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/database/CustomCommandBuilder.aspx?fid=42844&amp;tid=1977389">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=42844&amp;msg=1977525">PermaLink</A>·<A 
+                                class=Frm_MHL title="Bookmark this post" 
+                                href="http://www.codeproject.com/script/Bookmarks/Add.aspx?&amp;obid=1977525&amp;obtid=3&amp;bma=AddBookmark">Bookmark</A></TD>
+                                <TD class=Frm_MsgFt 
+                                style="TEXT-ALIGN: right"><SPAN id=MVF1977525 
+                                style="WHITE-SPACE: nowrap">
+                                <SCRIPT type=text/javascript>
+												MsgVoteForm(986527,1977525,false,"","","");
+											</SCRIPT>
+                                </SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR class=Quick>
+                <TD class=Frm_MsgDivide><IMG height=1 alt="" 
+                  src="C:\Documents and Settings\valley\Desktop\New Folder\CodeProject How to avoid writing SQL for ADO_NET DataAdapter_ Free source code and programming help_files\t(1).gif" 
+                  width=1 border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd HdUnSel " id=F2108587_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=52><A 
+                        name=xx2108587xx></A><IMG height=16 alt=General 
+                        src="CodeProject How to avoid writing SQL for ADO_NET DataAdapter_ Free source code and programming help_files/msg_general.gif" 
+                        width=16 align=top></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/database/CustomCommandBuilder.aspx?fid=42844&amp;select=2108587#xx2108587xx" 
+                        name=2108587>Re: UpdateCommand gives ORA-01036: illegal 
+                        variable name/number error</A></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        title=member height=16 alt=member 
+                        src="CodeProject How to avoid writing SQL for ADO_NET DataAdapter_ Free source code and programming help_files/member_sm.gif" 
+                        border=0></TD>
+                      <TD class=Frm_MsgAuthor><A 
+                        href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=2837141">mishenkovks</A></TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">3:40 2 
+                        Jul '07 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=F2108587_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 52px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2>Dejan<BR>Try to use some client 
+                                software to work with Oracle DB. I advise you to 
+                                use TOAD version 7.6.<BR><BR>About this 
+                                errors.<BR>It related with Oracle Clients your 
+                                and your version of 
+                                System.Data.OracleClient.<BR><BR>Check following 
+                                when you get this error.<BR><BR>1. parameter 
+                                name which you are setting and which you are 
+                                passing in the insert, update and delete 
+                                commands.<BR>2. Values : If you try to pass 
+                                string to a number datatype.<BR>3. Null Values. 
+                                Null values has to be handled seperately for 
+                                Delete and update<BR>Example : (ColumnName = 
+                                :pColumn_Name OR :pColumn_Name IS NULL AND 
+                                ColumnName IS NULL);<BR>4. Datatypes of hose 
+                                columns in Oracle table with the Datatable 
+                                columns<BR>5. Check spaces in the parameter 
+                                name. <BR></TD></TR>
+                                <TR style="VERTICAL-ALIGN: middle">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL title=Reply 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=42844&amp;select=2108587&amp;floc=/KB/database/CustomCommandBuilder.aspx&amp;fa=r">Reply</A>·<A 
+                                class=Frm_MHL title=Email 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=42844&amp;select=2108587&amp;floc=/KB/database/CustomCommandBuilder.aspx&amp;fa=e">Email</A>·<A 
+                                class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/database/CustomCommandBuilder.aspx?fid=42844&amp;tid=1977389">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=42844&amp;msg=2108587">PermaLink</A>·<A 
+                                class=Frm_MHL title="Bookmark this post" 
+                                href="http://www.codeproject.com/script/Bookmarks/Add.aspx?&amp;obid=2108587&amp;obtid=3&amp;bma=AddBookmark">Bookmark</A></TD>
+                                <TD class=Frm_MsgFt 
+                                style="TEXT-ALIGN: right"><SPAN id=MVF2108587 
+                                style="WHITE-SPACE: nowrap">
+                                <SCRIPT type=text/javascript>
+												MsgVoteForm(2837141,2108587,false,"","","");
+											</SCRIPT>
+                                </SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR class=Quick>
+                <TD class=Frm_MsgRtDivide><IMG height=1 alt="" 
+                  src="C:\Documents and Settings\valley\Desktop\New Folder\CodeProject How to avoid writing SQL for ADO_NET DataAdapter_ Free source code and programming help_files\t(1).gif" 
+                  width=1 border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd Rt HdUnSel " id=F1742646_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=16><A 
+                        name=xx1742646xx></A><IMG height=16 alt=General 
+                        src="CodeProject How to avoid writing SQL for ADO_NET DataAdapter_ Free source code and programming help_files/msg_general.gif" 
+                        width=16 align=top></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/database/CustomCommandBuilder.aspx?fid=42844&amp;select=1742646#xx1742646xx" 
+                        name=1742646>Thank you!!</A></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        title=member height=16 alt=member 
+                        src="CodeProject How to avoid writing SQL for ADO_NET DataAdapter_ Free source code and programming help_files/member_sm.gif" 
+                        border=0></TD>
+                      <TD class=Frm_MsgAuthor><A 
+                        href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=3354925">Skcheng</A></TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">16:35 5 
+                        Nov '06 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=F1742646_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 16px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2>Hi there,<BR><BR>I just wanted to 
+                                say thanks for providing this a nice neat 
+                                package. This has just saved me countless hours 
+                                of frustration, mental heart attacks, and stress 
+                                in trying to develop a program for my work. 
+                                Thank you thank you thank you!!<BR><BR><IMG 
+                                title="Big Grin" 
+                                src="CodeProject How to avoid writing SQL for ADO_NET DataAdapter_ Free source code and programming help_files/smiley_biggrin.gif" 
+                                align=top><IMG title="Big Grin" 
+                                src="CodeProject How to avoid writing SQL for ADO_NET DataAdapter_ Free source code and programming help_files/smiley_biggrin.gif" 
+                                align=top><IMG title="Big Grin" 
+                                src="CodeProject How to avoid writing SQL for ADO_NET DataAdapter_ Free source code and programming help_files/smiley_biggrin.gif" 
+                                align=top> <BR><BR>-stressed out, over-worked, 
+                                under-rested Glorified Secretary<BR></TD></TR>
+                                <TR style="VERTICAL-ALIGN: middle">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL title=Reply 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=42844&amp;select=1742646&amp;floc=/KB/database/CustomCommandBuilder.aspx&amp;fa=r">Reply</A>·<A 
+                                class=Frm_MHL title=Email 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=42844&amp;select=1742646&amp;floc=/KB/database/CustomCommandBuilder.aspx&amp;fa=e">Email</A>·<A 
+                                class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/database/CustomCommandBuilder.aspx?fid=42844&amp;tid=1742646">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=42844&amp;msg=1742646">PermaLink</A>·<A 
+                                class=Frm_MHL title="Bookmark this post" 
+                                href="http://www.codeproject.com/script/Bookmarks/Add.aspx?&amp;obid=1742646&amp;obtid=3&amp;bma=AddBookmark">Bookmark</A></TD>
+                                <TD class=Frm_MsgFt 
+                                style="TEXT-ALIGN: right"><SPAN id=MVF1742646 
+                                style="WHITE-SPACE: nowrap">
+                                <SCRIPT type=text/javascript>
+												MsgVoteForm(3354925,1742646,false,"","","");
+											</SCRIPT>
+                                </SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR class=Quick>
+                <TD class=Frm_MsgRtDivide><IMG height=1 alt="" 
+                  src="C:\Documents and Settings\valley\Desktop\New Folder\CodeProject How to avoid writing SQL for ADO_NET DataAdapter_ Free source code and programming help_files\t(1).gif" 
+                  width=1 border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd LoVote Rt HdUnSel " id=F1320003_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=16><A 
+                        name=xx1320003xx></A><IMG height=16 alt=General 
+                        src="CodeProject How to avoid writing SQL for ADO_NET DataAdapter_ Free source code and programming help_files/msg_general.gif" 
+                        width=16 align=top></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/database/CustomCommandBuilder.aspx?fid=42844&amp;select=1320003#xx1320003xx" 
+                        name=1320003>RE: OleDbCommand InsertCommand</A></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        title=member height=16 alt=member 
+                        src="CodeProject How to avoid writing SQL for ADO_NET DataAdapter_ Free source code and programming help_files/member_sm.gif" 
+                        border=0></TD>
+                      <TD class=Frm_MsgAuthor><A 
+                        href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=1099656">kennster</A></TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">11:40 
+                        29 Dec '05 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=F1320003_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 16px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2>Hello:<BR><BR>I really liked your 
+                                article, and although this question is not 
+                                really a show stopper as I would NEVER use 
+                                Access for a production system, I do not have 
+                                access to any RDBMS of any form while I am at my 
+                                'daytime job,' but do have VS.NET &amp; SOA 
+                                oriented development environment available for 
+                                when we have downtimes. <BR><BR>I tried to run 
+                                your sample against MS Access, and it can't seem 
+                                to handle AutoIncrement columns in MS Access. I 
+                                was thinking about trying to hook this into the 
+                                IssueVision sample for example, which I have 
+                                ported to work with Access, and of course would 
+                                not be able to do anything until I work through 
+                                the problem.<BR><BR>Either way, a very elegant 
+                                solution ! Thanks for the great article! 
+                                <BR></TD></TR>
+                                <TR style="VERTICAL-ALIGN: middle">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL title=Reply 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=42844&amp;select=1320003&amp;floc=/KB/database/CustomCommandBuilder.aspx&amp;fa=r">Reply</A>·<A 
+                                class=Frm_MHL title=Email 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=42844&amp;select=1320003&amp;floc=/KB/database/CustomCommandBuilder.aspx&amp;fa=e">Email</A>·<A 
+                                class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/database/CustomCommandBuilder.aspx?fid=42844&amp;tid=1320003">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=42844&amp;msg=1320003">PermaLink</A>·<A 
+                                class=Frm_MHL title="Bookmark this post" 
+                                href="http://www.codeproject.com/script/Bookmarks/Add.aspx?&amp;obid=1320003&amp;obtid=3&amp;bma=AddBookmark">Bookmark</A></TD>
+                                <TD class=Frm_MsgFt 
+                                style="TEXT-ALIGN: right"><SPAN id=MVF1320003 
+                                style="WHITE-SPACE: nowrap">1.00/5 (1 vote)
+                                <SCRIPT type=text/javascript>
+												MsgVoteForm(1099656,1320003,false,"","","");
+											</SCRIPT>
+                                 
+                        </SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR class=Quick>
+                <TD class=Frm_MsgRtDivide><IMG height=1 alt="" 
+                  src="C:\Documents and Settings\valley\Desktop\New Folder\CodeProject How to avoid writing SQL for ADO_NET DataAdapter_ Free source code and programming help_files\t(1).gif" 
+                  width=1 border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd Rt HdUnSel " id=F1231960_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=16><A 
+                        name=xx1231960xx></A><IMG height=16 alt=General 
+                        src="CodeProject How to avoid writing SQL for ADO_NET DataAdapter_ Free source code and programming help_files/msg_general.gif" 
+                        width=16 align=top></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/database/CustomCommandBuilder.aspx?fid=42844&amp;select=1231960#xx1231960xx" 
+                        name=1231960>Very Slick... I like! New features?</A></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        height=15 alt=suss 
+                        src="CodeProject How to avoid writing SQL for ADO_NET DataAdapter_ Free source code and programming help_files/usersuss.gif" 
+                        width=14></TD>
+                      <TD class=Frm_MsgAuthor>Sean Aitken</TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">18:26 
+                        20 Sep '05 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=F1231960_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 16px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2>Well, I've managed to adapt this 
+                                to a problem I was recently having with the 
+                                CommandBUilders in the .NET 1.1 env. I really 
+                                enjoy the simplicity of letting the IDE manage 
+                                the schema creation and how this utility works 
+                                with a dataset, rather than a specified 
+                                'adapter'.<BR><BR>I would like to see some of 
+                                this:<BR>- Stronger typed paramters. The 
+                                varchar(4000) seems to work okay for the 
+                                parameters, but it does seem mighty congested on 
+                                the wire when the update statement looks 
+                                like:<BR>"... @p18 nvarchar(4000),@p19 
+                                nvarchar(4000),@p20 nvarchar(4000),@p21 
+                                nvarchar(4000),@p22 nvarchar(4000)..."<BR>- You 
+                                may have noticed, but I also changed the 
+                                parameter names to be smaller (in the vain of 
+                                MS)..<BR>- Also, it broke when columns contained 
+                                NULL;s. The "WHERE colA = 'foobar" works.. but, 
+                                "WHERE colA = NULL" just fails in the tradition 
+                                of SQL.<BR><BR>Tracing MS, I noticed that they 
+                                handle the null values at runtime by having the 
+                                where clause contain:<BR>"...AND ((@p11 = 1 AND 
+                                Title1 IS NULL) OR (Title1 = @p12))...". @p11 
+                                would be '1' if the new value was NULL. I think 
+                                this is for efficiency and speed.. but, my hack 
+                                was something 
+                                like:<BR><BR><CODE><BR>whereString.Append( "(" + 
+                                column.ColumnName + " = " + pNameOld + <BR>" OR 
+                                (" + column.ColumnName + " IS NULL AND " + 
+                                pNameNew + " IS 
+                                NULL))");<BR></CODE><BR><BR>Also, I removed the 
+                                nested Append(...).Append(...).... I'm pretty 
+                                sure the optimizer will take care of 
+                                this.<BR><BR>Maybe on my horizon is to modify 
+                                this a bit to only update changed columns. 
+                                (Haven't spent too much time finding a good way 
+                                to do this.. comparing all values can be nasty.. 
+                                but there should be a way <IMG title=Smile 
+                                src="CodeProject How to avoid writing SQL for ADO_NET DataAdapter_ Free source code and programming help_files/smiley_smile.gif" 
+                                align=top>)<BR><BR>Again, I like the concept. 
+                                I've embraced it. I will run with 
+                                it.<BR><BR>Best regards,<BR>-Sean <BR></TD></TR>
+                                <TR style="VERTICAL-ALIGN: middle">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL title=Reply 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=42844&amp;select=1231960&amp;floc=/KB/database/CustomCommandBuilder.aspx&amp;fa=r">Reply</A>·<A 
+                                class=Frm_MHL title=Email 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=42844&amp;select=1231960&amp;floc=/KB/database/CustomCommandBuilder.aspx&amp;fa=e">Email</A>·<A 
+                                class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/database/CustomCommandBuilder.aspx?fid=42844&amp;tid=1231960">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=42844&amp;msg=1231960">PermaLink</A>·<A 
+                                class=Frm_MHL title="Bookmark this post" 
+                                href="http://www.codeproject.com/script/Bookmarks/Add.aspx?&amp;obid=1231960&amp;obtid=3&amp;bma=AddBookmark">Bookmark</A></TD>
+                                <TD class=Frm_MsgFt style="TEXT-ALIGN: right"><A 
+                                class=Frm_MHL 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=42844&amp;select=1231960&amp;floc=/KB/database/CustomCommandBuilder.aspx&amp;fa=m">Edit</A>·<A 
+                                class=Frm_MHL 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=42844&amp;select=1231960&amp;floc=/KB/database/CustomCommandBuilder.aspx&amp;fa=d">Delete</A><BR><SPAN 
+                                id=MVF1231960 style="WHITE-SPACE: nowrap">
+                                <SCRIPT type=text/javascript>
+												MsgVoteForm(0,1231960,false,"","","");
+											</SCRIPT>
+                                </SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR class=Quick>
+                <TD class=Frm_MsgDivide><IMG height=1 alt="" 
+                  src="C:\Documents and Settings\valley\Desktop\New Folder\CodeProject How to avoid writing SQL for ADO_NET DataAdapter_ Free source code and programming help_files\t(1).gif" 
+                  width=1 border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd HdUnSel " id=F1234946_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=34><A 
+                        name=xx1234946xx></A><IMG height=16 alt=General 
+                        src="CodeProject How to avoid writing SQL for ADO_NET DataAdapter_ Free source code and programming help_files/msg_general.gif" 
+                        width=16 align=top></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/database/CustomCommandBuilder.aspx?fid=42844&amp;select=1234946#xx1234946xx" 
+                        name=1234946>Re: Very Slick... I like! New 
+                      features?</A></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        title=member height=16 alt=member 
+                        src="CodeProject How to avoid writing SQL for ADO_NET DataAdapter_ Free source code and programming help_files/member_sm.gif" 
+                        border=0></TD>
+                      <TD class=Frm_MsgAuthor><A 
+                        href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=986527">Dejan 
+                        Grujic</A></TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">7:03 23 
+                        Sep '05 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=F1234946_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 34px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2>I'm glad you find this article 
+                                useful.<BR><BR>I encountered similar problems 
+                                like you did. <BR><BR>- Stronger typed params. 
+                                Before I saw it in SQL profiler I lived in 
+                                illusion that DataAdapter will automatically 
+                                transform .Net type to appropriate SQL type, 
+                                like it does in opposite direction. 
+                                Unfortunately that's not the case. I've added 
+                                code to solve my immediate problem - to 
+                                explicitly set parameter type for int, decimal 
+                                and few more types. However it's not general 
+                                enough.<BR><BR>- NULL values - looks same like 
+                                code I've added after I noticed that issue. 
+                                <BR><BR>- Updating only changed columns - some 
+                                parts of DataAdapter functionality would have to 
+                                be reimplemented - part that goes through 
+                                DataRows and checks which one should be inserted 
+                                and which one updated. Then separate update SQL 
+                                would have to be constructed for each row. It 
+                                would definitely be useful in some cases, but it 
+                                opens some questions - what to do with 
+                                optimistic concurency? Check non-changed values 
+                                or not?<BR><BR>All in all it seems you already 
+                                have changes similar to my own.<BR><BR>I'm not 
+                                uploading new version because I don't have it 
+                                clean in one place - some changes are in one 
+                                project, others somewhere else etc.<BR>If 
+                                someone else needs it I'll find some time to put 
+                                it together.<BR><BR></TD></TR>
+                                <TR style="VERTICAL-ALIGN: middle">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL title=Reply 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=42844&amp;select=1234946&amp;floc=/KB/database/CustomCommandBuilder.aspx&amp;fa=r">Reply</A>·<A 
+                                class=Frm_MHL title=Email 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=42844&amp;select=1234946&amp;floc=/KB/database/CustomCommandBuilder.aspx&amp;fa=e">Email</A>·<A 
+                                class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/database/CustomCommandBuilder.aspx?fid=42844&amp;tid=1231960">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=42844&amp;msg=1234946">PermaLink</A>·<A 
+                                class=Frm_MHL title="Bookmark this post" 
+                                href="http://www.codeproject.com/script/Bookmarks/Add.aspx?&amp;obid=1234946&amp;obtid=3&amp;bma=AddBookmark">Bookmark</A></TD>
+                                <TD class=Frm_MsgFt 
+                                style="TEXT-ALIGN: right"><SPAN id=MVF1234946 
+                                style="WHITE-SPACE: nowrap">
+                                <SCRIPT type=text/javascript>
+												MsgVoteForm(986527,1234946,false,"","","");
+											</SCRIPT>
+                                </SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR class=Quick>
+                <TD class=Frm_MsgRtDivide><IMG height=1 alt="" 
+                  src="C:\Documents and Settings\valley\Desktop\New Folder\CodeProject How to avoid writing SQL for ADO_NET DataAdapter_ Free source code and programming help_files\t(1).gif" 
+                  width=1 border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd Rt HdUnSel " id=F981367_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=16><A 
+                        name=xx981367xx></A><IMG height=16 alt=General 
+                        src="CodeProject How to avoid writing SQL for ADO_NET DataAdapter_ Free source code and programming help_files/msg_general.gif" 
+                        width=16 align=top></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/database/CustomCommandBuilder.aspx?fid=42844&amp;select=981367#xx981367xx" 
+                        name=981367>OleDbCommand</A></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        title=member height=16 alt=member 
+                        src="CodeProject How to avoid writing SQL for ADO_NET DataAdapter_ Free source code and programming help_files/member_sm.gif" 
+                        border=0></TD>
+                      <TD class=Frm_MsgAuthor><A 
+                        href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=32840">Adalbertus</A></TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">9:56 25 
+                        Nov '04 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=F981367_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 16px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2>Your CustomCommandBuilder in 
+                                fine.<BR>I transleted code to use with 
+                                OleDbCommand insted SqlCommand.<BR>But I retrive 
+                                error: Must declare the variable 
+                                '@Nnnnn'.<BR><BR>I tried with 
+                                OleDbCommandBuilder. It works O.K.<BR>I don't 
+                                want to use OldDbCommandBuilder. You class is 
+                                beter for me.<BR><BR>Did you or anyone have 
+                                error like me and find solution?<BR><BR>And 
+                                second problem.<BR>Do you know how to extract 
+                                timestamp column from table in 
+                                OleDB?<BR><BR>Thans<BR><BR></TD></TR>
+                                <TR style="VERTICAL-ALIGN: middle">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL title=Reply 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=42844&amp;select=981367&amp;floc=/KB/database/CustomCommandBuilder.aspx&amp;fa=r">Reply</A>·<A 
+                                class=Frm_MHL title=Email 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=42844&amp;select=981367&amp;floc=/KB/database/CustomCommandBuilder.aspx&amp;fa=e">Email</A>·<A 
+                                class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/database/CustomCommandBuilder.aspx?fid=42844&amp;tid=981367">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=42844&amp;msg=981367">PermaLink</A>·<A 
+                                class=Frm_MHL title="Bookmark this post" 
+                                href="http://www.codeproject.com/script/Bookmarks/Add.aspx?&amp;obid=981367&amp;obtid=3&amp;bma=AddBookmark">Bookmark</A></TD>
+                                <TD class=Frm_MsgFt 
+                                style="TEXT-ALIGN: right"><SPAN id=MVF981367 
+                                style="WHITE-SPACE: nowrap">
+                                <SCRIPT type=text/javascript>
+												MsgVoteForm(32840,981367,false,"","","");
+											</SCRIPT>
+                                </SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR class=Quick>
+                <TD class=Frm_MsgDivide><IMG height=1 alt="" 
+                  src="C:\Documents and Settings\valley\Desktop\New Folder\CodeProject How to avoid writing SQL for ADO_NET DataAdapter_ Free source code and programming help_files\t(1).gif" 
+                  width=1 border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd HdUnSel " id=F981473_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=34><A 
+                        name=xx981473xx></A><IMG height=16 alt=General 
+                        src="CodeProject How to avoid writing SQL for ADO_NET DataAdapter_ Free source code and programming help_files/msg_general.gif" 
+                        width=16 align=top></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/database/CustomCommandBuilder.aspx?fid=42844&amp;select=981473#xx981473xx" 
+                        name=981473>Re: OleDbCommand</A></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        title=member height=16 alt=member 
+                        src="CodeProject How to avoid writing SQL for ADO_NET DataAdapter_ Free source code and programming help_files/member_sm.gif" 
+                        border=0></TD>
+                      <TD class=Frm_MsgAuthor><A 
+                        href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=986527">Dejan 
+                        Grujic</A></TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">13:21 
+                        25 Nov '04 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=F981473_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 34px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2>OleDb data provider is handling 
+                                parameters a bit differently that SqlClient data 
+                                provider – it doesn't use named parameters, but 
+                                you have to add params in same order they are in 
+                                command. So for SqlClient we'll have something 
+                                like:<BR><BR><CODE>UPDATE x SET 
+                                column1=@column1</CODE><BR><BR>While for OleDb 
+                                it's: <BR><BR><CODE>UPDATE x SET 
+                                column1=?</CODE><BR><BR>Here is changed method: 
+                                <BR><BR><PRE lang=cs><BR>		public OleDbCommand UpdateCommand<BR>		{<BR>			get<BR>			{<BR>				OleDbCommand command = GetTextCommand( "" );<BR>				StringBuilder setString = new StringBuilder();<BR>				StringBuilder whereString = new StringBuilder();<BR>				DataColumn[] primaryKeyColumns = dataTable.PrimaryKey;<BR><BR>				foreach( DataColumn column in dataTable.Columns )<BR>				{<BR>					if( System.Array.IndexOf( primaryKeyColumns, column) != -1 )<BR>					{<BR>						// A primary key<BR>						if( whereString.Length &gt; 0 )<BR>						{<BR>							whereString.Append( " AND " );<BR>						}<BR>						whereString.Append( column.ColumnName )<BR>							.Append( "= ?" );<BR>					} <BR>					else <BR>					{<BR>						if( setString.Length &gt; 0 )<BR>						{<BR>							setString.Append( ", " );<BR>						}<BR>						setString.Append( column.ColumnName )<BR>							.Append( " = ?" );<BR>						command.Parameters.Add( CreateParam( column ) );<BR>					}<BR>				}<BR><BR>				foreach( DataColumn column in dataTable.Columns )<BR>				{<BR>					if( System.Array.IndexOf( primaryKeyColumns, column) != -1 )<BR>					{<BR>						command.Parameters.Add( CreateParam( column ) );<BR>					} <BR>				}<BR><BR>				string commandText = "UPDATE " + TableName + " SET "<BR>					+ setString.ToString() + " WHERE " + whereString.ToString();<BR>				command.CommandText = commandText;<BR>				return command;<BR>			}<BR>		}</PRE><BR><BR>If 
+                                there are enough interested people I can upload 
+                                OleDb version of command builder and data access 
+                                classes.<BR><BR>I didn’t understood question 
+                                about "extract timestamp". Can you please try to 
+                                explain what's problem in more 
+                                details?<BR><BR></TD></TR>
+                                <TR style="VERTICAL-ALIGN: middle">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL title=Reply 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=42844&amp;select=981473&amp;floc=/KB/database/CustomCommandBuilder.aspx&amp;fa=r">Reply</A>·<A 
+                                class=Frm_MHL title=Email 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=42844&amp;select=981473&amp;floc=/KB/database/CustomCommandBuilder.aspx&amp;fa=e">Email</A>·<A 
+                                class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/database/CustomCommandBuilder.aspx?fid=42844&amp;tid=981367">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=42844&amp;msg=981473">PermaLink</A>·<A 
+                                class=Frm_MHL title="Bookmark this post" 
+                                href="http://www.codeproject.com/script/Bookmarks/Add.aspx?&amp;obid=981473&amp;obtid=3&amp;bma=AddBookmark">Bookmark</A></TD>
+                                <TD class=Frm_MsgFt 
+                                style="TEXT-ALIGN: right"><SPAN id=MVF981473 
+                                style="WHITE-SPACE: nowrap">
+                                <SCRIPT type=text/javascript>
+												MsgVoteForm(986527,981473,false,"","","");
+											</SCRIPT>
+                                </SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR class=Quick>
+                <TD class=Frm_MsgDivide><IMG height=1 alt="" 
+                  src="C:\Documents and Settings\valley\Desktop\New Folder\CodeProject How to avoid writing SQL for ADO_NET DataAdapter_ Free source code and programming help_files\t(1).gif" 
+                  width=1 border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd HdUnSel " id=F982847_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=52><A 
+                        name=xx982847xx></A><IMG height=16 alt=General 
+                        src="CodeProject How to avoid writing SQL for ADO_NET DataAdapter_ Free source code and programming help_files/msg_general.gif" 
+                        width=16 align=top></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/database/CustomCommandBuilder.aspx?fid=42844&amp;select=982847#xx982847xx" 
+                        name=982847>Re: OleDbCommand</A></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        title=member height=16 alt=member 
+                        src="CodeProject How to avoid writing SQL for ADO_NET DataAdapter_ Free source code and programming help_files/member_sm.gif" 
+                        border=0></TD>
+                      <TD class=Frm_MsgAuthor><A 
+                        href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=32840">Adalbertus</A></TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">15:06 
+                        28 Nov '04 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=F982847_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 52px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2>I changed Insert, Update and 
+                                Delete command as you explaned and my program 
+                                works well. Thank you.<BR><BR>I didn't write 
+                                precisely what I mean "extract timestamp".<BR>I 
+                                have table type and want to know which column in 
+                                one is timestamp type. Why? Becouse timestamp 
+                                column type cannot occur in Insert and Update 
+                                command text.<BR>Second, I want use timestamp 
+                                type column in where section in update command 
+                                to perform optimistic concurrency.<BR><BR>I 
+                                didn't find any properties in DataColumn class 
+                                to check 
+                                this.<BR><BR><BR><BR><BR><BR>Adalbertus<BR></TD></TR>
+                                <TR style="VERTICAL-ALIGN: middle">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL title=Reply 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=42844&amp;select=982847&amp;floc=/KB/database/CustomCommandBuilder.aspx&amp;fa=r">Reply</A>·<A 
+                                class=Frm_MHL title=Email 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=42844&amp;select=982847&amp;floc=/KB/database/CustomCommandBuilder.aspx&amp;fa=e">Email</A>·<A 
+                                class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/database/CustomCommandBuilder.aspx?fid=42844&amp;tid=981367">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=42844&amp;msg=982847">PermaLink</A>·<A 
+                                class=Frm_MHL title="Bookmark this post" 
+                                href="http://www.codeproject.com/script/Bookmarks/Add.aspx?&amp;obid=982847&amp;obtid=3&amp;bma=AddBookmark">Bookmark</A></TD>
+                                <TD class=Frm_MsgFt 
+                                style="TEXT-ALIGN: right"><SPAN id=MVF982847 
+                                style="WHITE-SPACE: nowrap">
+                                <SCRIPT type=text/javascript>
+												MsgVoteForm(32840,982847,false,"","","");
+											</SCRIPT>
+                                </SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR class=Quick>
+                <TD class=Frm_MsgRtDivide><IMG height=1 alt="" 
+                  src="C:\Documents and Settings\valley\Desktop\New Folder\CodeProject How to avoid writing SQL for ADO_NET DataAdapter_ Free source code and programming help_files\t(1).gif" 
+                  width=1 border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd Rt HdUnSel " id=F865726_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=16><A 
+                        name=xx865726xx></A><IMG height=16 alt=General 
+                        src="CodeProject How to avoid writing SQL for ADO_NET DataAdapter_ Free source code and programming help_files/msg_general.gif" 
+                        width=16 align=top></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/database/CustomCommandBuilder.aspx?fid=42844&amp;select=865726#xx865726xx" 
+                        name=865726>This is great</A></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        title=member height=16 alt=member 
+                        src="CodeProject How to avoid writing SQL for ADO_NET DataAdapter_ Free source code and programming help_files/member_sm.gif" 
+                        border=0></TD>
+                      <TD class=Frm_MsgAuthor><A 
+                        href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=1211500">philippedev</A></TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">14:25 1 
+                        Jul '04 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=F865726_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 16px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2>This is great, thanks! I find this 
+                                a lot cleaner than using the other solutions 
+                                that automatically generate an entire data 
+                                access layer for you. <BR><BR><A 
+                                href="http://www.alternex.net/philippe">blog</A><BR></TD></TR>
+                                <TR style="VERTICAL-ALIGN: middle">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL title=Reply 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=42844&amp;select=865726&amp;floc=/KB/database/CustomCommandBuilder.aspx&amp;fa=r">Reply</A>·<A 
+                                class=Frm_MHL title=Email 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=42844&amp;select=865726&amp;floc=/KB/database/CustomCommandBuilder.aspx&amp;fa=e">Email</A>·<A 
+                                class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/database/CustomCommandBuilder.aspx?fid=42844&amp;tid=865726">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=42844&amp;msg=865726">PermaLink</A>·<A 
+                                class=Frm_MHL title="Bookmark this post" 
+                                href="http://www.codeproject.com/script/Bookmarks/Add.aspx?&amp;obid=865726&amp;obtid=3&amp;bma=AddBookmark">Bookmark</A></TD>
+                                <TD class=Frm_MsgFt 
+                                style="TEXT-ALIGN: right"><SPAN id=MVF865726 
+                                style="WHITE-SPACE: nowrap">
+                                <SCRIPT type=text/javascript>
+												MsgVoteForm(1211500,865726,false,"","","");
+											</SCRIPT>
+                                </SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR class=Quick>
+                <TD class=Frm_MsgRtDivide><IMG height=1 alt="" 
+                  src="C:\Documents and Settings\valley\Desktop\New Folder\CodeProject How to avoid writing SQL for ADO_NET DataAdapter_ Free source code and programming help_files\t(1).gif" 
+                  width=1 border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd Rt HdUnSel " id=F813446_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=16><A 
+                        name=xx813446xx></A><IMG height=16 alt=General 
+                        src="CodeProject How to avoid writing SQL for ADO_NET DataAdapter_ Free source code and programming help_files/msg_general.gif" 
+                        width=16 align=top></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/database/CustomCommandBuilder.aspx?fid=42844&amp;select=813446#xx813446xx" 
+                        name=813446>A minor correction</A></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        title=member height=16 alt=member 
+                        src="CodeProject How to avoid writing SQL for ADO_NET DataAdapter_ Free source code and programming help_files/member_sm.gif" 
+                        border=0></TD>
+                      <TD class=Frm_MsgAuthor><A 
+                        href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=551973">Jeff 
+                        Varszegi</A></TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">7:04 6 
+                        May '04 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=F813446_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 16px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2>First, nice article.<BR><BR>You 
+                                said<BR><I>if column is added to database, that 
+                                column must be added to all 4 commands (INSERT, 
+                                SELECT, UPDATE, DELETE - aka CRUD)</I><BR><BR>If 
+                                the column has a default value, it doesn't have 
+                                to be added to any INSERT statements (or, also, 
+                                if the application code is protected from the 
+                                raw tables with stored procedures, functions and 
+                                views). <BR><BR>It also doesn't have to be added 
+                                to any SELECT statements, although if code has 
+                                been written using SELECT * that tries to use 
+                                all returned values, a bad practice indeed 
+                                except in certain reporting situations, 
+                                application code can be affected.<BR><BR>It 
+                                doesn't have to be added to UPDATE 
+                                statements.<BR><BR>It doesn't have to be added 
+                                to DELETE statements.<BR><BR><BR>-Jeff<BR><BR><A 
+                                href="http://www.codeproject.com/script/profile/whos_who.asp?id=551973#Blog" 
+                                target=jvBlogWin><FONT size=-2>here, bloggy 
+                                bloggy</FONT></A><BR></TD></TR>
+                                <TR style="VERTICAL-ALIGN: middle">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL title=Reply 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=42844&amp;select=813446&amp;floc=/KB/database/CustomCommandBuilder.aspx&amp;fa=r">Reply</A>·<A 
+                                class=Frm_MHL title=Email 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=42844&amp;select=813446&amp;floc=/KB/database/CustomCommandBuilder.aspx&amp;fa=e">Email</A>·<A 
+                                class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/database/CustomCommandBuilder.aspx?fid=42844&amp;tid=813446">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=42844&amp;msg=813446">PermaLink</A>·<A 
+                                class=Frm_MHL title="Bookmark this post" 
+                                href="http://www.codeproject.com/script/Bookmarks/Add.aspx?&amp;obid=813446&amp;obtid=3&amp;bma=AddBookmark">Bookmark</A></TD>
+                                <TD class=Frm_MsgFt 
+                                style="TEXT-ALIGN: right"><SPAN id=MVF813446 
+                                style="WHITE-SPACE: nowrap">
+                                <SCRIPT type=text/javascript>
+												MsgVoteForm(551973,813446,false,"","","");
+											</SCRIPT>
+                                </SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR class=Quick>
+                <TD class=Frm_MsgDivide><IMG height=1 alt="" 
+                  src="C:\Documents and Settings\valley\Desktop\New Folder\CodeProject How to avoid writing SQL for ADO_NET DataAdapter_ Free source code and programming help_files\t(1).gif" 
+                  width=1 border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd HdUnSel " id=F813587_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=34><A 
+                        name=xx813587xx></A><IMG height=16 alt=General 
+                        src="CodeProject How to avoid writing SQL for ADO_NET DataAdapter_ Free source code and programming help_files/msg_general.gif" 
+                        width=16 align=top></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/database/CustomCommandBuilder.aspx?fid=42844&amp;select=813587#xx813587xx" 
+                        name=813587>Re: A minor correction</A></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        title=member height=16 alt=member 
+                        src="CodeProject How to avoid writing SQL for ADO_NET DataAdapter_ Free source code and programming help_files/member_sm.gif" 
+                        border=0></TD>
+                      <TD class=Frm_MsgAuthor><A 
+                        href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=986527">Dejan 
+                        Grujic</A></TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">8:32 6 
+                        May '04 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=F813587_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 34px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2>When I said they MUST be added, I 
+                                meant situation when you want to add these new 
+                                columns to app code as well. If you have 
+                                explicit SQL in your data access layer you must 
+                                update it in that case. <BR>Your remarks are for 
+                                case when db is changed but app code is not. 
+                                <BR><BR>I admit I exagerated a bit. For instance 
+                                you're maybe not using all 4 operations on that 
+                                table. Also it's very small probability that 
+                                DELETE will be affected.<BR><BR>I wanted to make 
+                                point that if you have something 
+                                like:<BR><BR>"SELECT a, b, c FROM 
+                                table1"<BR><BR>(also applies for INSERT, UPDATE 
+                                or some sp call with parameter list) you will 
+                                have to check and update manually (without help 
+                                of compiler) all these statements when you add 
+                                new column 'd'. <BR></TD></TR>
+                                <TR style="VERTICAL-ALIGN: middle">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL title=Reply 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=42844&amp;select=813587&amp;floc=/KB/database/CustomCommandBuilder.aspx&amp;fa=r">Reply</A>·<A 
+                                class=Frm_MHL title=Email 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=42844&amp;select=813587&amp;floc=/KB/database/CustomCommandBuilder.aspx&amp;fa=e">Email</A>·<A 
+                                class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/database/CustomCommandBuilder.aspx?fid=42844&amp;tid=813446">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=42844&amp;msg=813587">PermaLink</A>·<A 
+                                class=Frm_MHL title="Bookmark this post" 
+                                href="http://www.codeproject.com/script/Bookmarks/Add.aspx?&amp;obid=813587&amp;obtid=3&amp;bma=AddBookmark">Bookmark</A></TD>
+                                <TD class=Frm_MsgFt 
+                                style="TEXT-ALIGN: right"><SPAN id=MVF813587 
+                                style="WHITE-SPACE: nowrap">
+                                <SCRIPT type=text/javascript>
+												MsgVoteForm(986527,813587,false,"","","");
+											</SCRIPT>
+                                </SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR class=Quick>
+                <TD class=Frm_MsgDivide><IMG height=1 alt="" 
+                  src="C:\Documents and Settings\valley\Desktop\New Folder\CodeProject How to avoid writing SQL for ADO_NET DataAdapter_ Free source code and programming help_files\t(1).gif" 
+                  width=1 border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd HdUnSel " id=F813593_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=52><A 
+                        name=xx813593xx></A><IMG height=16 alt=General 
+                        src="CodeProject How to avoid writing SQL for ADO_NET DataAdapter_ Free source code and programming help_files/msg_general.gif" 
+                        width=16 align=top></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/database/CustomCommandBuilder.aspx?fid=42844&amp;select=813593#xx813593xx" 
+                        name=813593>Re: A minor correction</A></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        title=member height=16 alt=member 
+                        src="CodeProject How to avoid writing SQL for ADO_NET DataAdapter_ Free source code and programming help_files/member_sm.gif" 
+                        border=0></TD>
+                      <TD class=Frm_MsgAuthor><A 
+                        href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=551973">Jeff 
+                        Varszegi</A></TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">8:39 6 
+                        May '04 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=F813593_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 52px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2>I understand. Mine was a nitpicky 
+                                comment anyway. I enjoyed the 
+                                article.<BR><BR>These articles might interest 
+                                you:<BR><BR><A 
+                                href="http://www.codeproject.com/cs/database/dalgen.asp" 
+                                target=articleWin1><U>http://www.codeproject.com/cs/database/dalgen.asp</U></A><BR><A 
+                                href="http://www.codeproject.com/useritems/xmlsqlpp.asp" 
+                                target=articleWin2><U>http://www.codeproject.com/useritems/xmlsqlpp.asp</U></A><BR><BR><BR><BR>-Jeff<BR><BR><A 
+                                href="http://www.codeproject.com/script/profile/whos_who.asp?id=551973#Blog" 
+                                target=jvBlogWin><FONT size=-2>here, bloggy 
+                                bloggy</FONT></A><BR></TD></TR>
+                                <TR style="VERTICAL-ALIGN: middle">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL title=Reply 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=42844&amp;select=813593&amp;floc=/KB/database/CustomCommandBuilder.aspx&amp;fa=r">Reply</A>·<A 
+                                class=Frm_MHL title=Email 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=42844&amp;select=813593&amp;floc=/KB/database/CustomCommandBuilder.aspx&amp;fa=e">Email</A>·<A 
+                                class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/database/CustomCommandBuilder.aspx?fid=42844&amp;tid=813446">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=42844&amp;msg=813593">PermaLink</A>·<A 
+                                class=Frm_MHL title="Bookmark this post" 
+                                href="http://www.codeproject.com/script/Bookmarks/Add.aspx?&amp;obid=813593&amp;obtid=3&amp;bma=AddBookmark">Bookmark</A></TD>
+                                <TD class=Frm_MsgFt 
+                                style="TEXT-ALIGN: right"><SPAN id=MVF813593 
+                                style="WHITE-SPACE: nowrap">
+                                <SCRIPT type=text/javascript>
+												MsgVoteForm(551973,813593,false,"","","");
+											</SCRIPT>
+                                </SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR>
+                <TD><IMG height=5 alt="" 
+                  src="C:\Documents and Settings\valley\Desktop\New Folder\CodeProject How to avoid writing SQL for ADO_NET DataAdapter_ Free source code and programming help_files\t(1).gif" 
+                  width=1 border=0></TD></TR></TBODY></TABLE></TD></TR>
+        <TR>
+          <TD>
+            <TABLE cellSpacing=0 cellPadding=2 width="100%">
+              <TBODY>
+              <TR class=Frm_Footer>
+                <TD>Last Visit: Monday, June 9, 2008 5:35 AM &nbsp; &nbsp; 
+                  Last Update:Thursday, June 12, 2008 8:26 AM</TD>
+                <TD 
+              style="WHITE-SPACE: nowrap; TEXT-ALIGN: right"></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></DIV>
+      <P class=SmallText><IMG height=16 alt=General 
+      src="CodeProject How to avoid writing SQL for ADO_NET DataAdapter_ Free source code and programming help_files/msg_general.gif" 
+      width=16 align=top> General &nbsp;&nbsp; <IMG height=16 alt=News 
+      src="CodeProject How to avoid writing SQL for ADO_NET DataAdapter_ Free source code and programming help_files/msg_news.gif" 
+      width=16 align=top> News &nbsp;&nbsp; <IMG height=16 alt=Question 
+      src="CodeProject How to avoid writing SQL for ADO_NET DataAdapter_ Free source code and programming help_files/msg_question.gif" 
+      width=16 align=top> Question &nbsp;&nbsp; <IMG height=16 alt=Answer 
+      src="CodeProject How to avoid writing SQL for ADO_NET DataAdapter_ Free source code and programming help_files/msg_answer.gif" 
+      width=16 align=top> Answer &nbsp;&nbsp; <IMG height=16 alt=Joke 
+      src="CodeProject How to avoid writing SQL for ADO_NET DataAdapter_ Free source code and programming help_files/msg_joke.gif" 
+      width=16 align=top> Joke &nbsp;&nbsp; <IMG height=16 alt=Rant 
+      src="CodeProject How to avoid writing SQL for ADO_NET DataAdapter_ Free source code and programming help_files/msg_rant.gif" 
+      width=16 align=top> Rant &nbsp;&nbsp; <IMG height=16 alt=Admin 
+      src="CodeProject How to avoid writing SQL for ADO_NET DataAdapter_ Free source code and programming help_files/msg_admin.gif" 
+      width=16 align=top> Admin &nbsp;&nbsp; </P><!-- Forum End --></DIV>
+      <TABLE width="100%">
+        <TBODY>
+        <TR vAlign=top>
+          <TD class=TinyText align=left><A id=ctl00_PermaLink 
+            href="http://www.codeproject.com/script/Articles/Article.aspx?aid=6956">PermaLink</A> 
+            | <A id=ctl00_PrivacyLink 
+            href="http://www.codeproject.com/info/privacy.aspx">Privacy </A>| <A 
+            id=ctl00_TermsOfUseLink 
+            href="http://www.codeproject.com/info/TermsOfUse.aspx">Terms of 
+            Use</A> <BR>Last Updated: 17 Jan 2005<BR>Editor: <A 
+            id=ctl00_ArticleEditor 
+            href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=28970">Smitha 
+            Vijayan</A><BR></TD>
+          <TD class=TinyText vAlign=top align=right>Copyright 2004 by Dejan 
+            Grujic<BR>Everything else Copyright © <A 
+            href="mailto:webmaster@codeproject.com">CodeProject</A>, 1999-2008 
+            <BR>Web15 | <A id=ctl00_AdvertiseLink 
+            href="http://www.codeproject.com/info/MediaKit.aspx">Advertise on 
+            the Code Project </A></TD></TR></TBODY></TABLE>
+      <CENTER></CENTER></TD></TR>
+  <TR>
+    <TD align=middle colSpan=2></TD></TR></TBODY></TABLE><BR>
+<SCRIPT language=Javascript type=text/javascript>//<![CDATA[
+if (document.all) try {window.attachEvent("oncopy",copyCode);}catch(e){};
+//]]></SCRIPT>
+
+<SCRIPT language=Javascript 
+src="CodeProject How to avoid writing SQL for ADO_NET DataAdapter_ Free source code and programming help_files/TogglePre.js" 
+type=text/javascript></SCRIPT>
+
+<SCRIPT language=Javascript 
+src="CodeProject How to avoid writing SQL for ADO_NET DataAdapter_ Free source code and programming help_files/menu132_com.js" 
+type=text/javascript></SCRIPT>
+
+<SCRIPT language=Javascript 
+src="CodeProject How to avoid writing SQL for ADO_NET DataAdapter_ Free source code and programming help_files/TopNavBar.js" 
+type=text/javascript></SCRIPT>
+
+<SCRIPT language=Javascript type=text/javascript>//<![CDATA[
+new HVMenu(new menu_NavbarConfig());
+//]]></SCRIPT>
+</BODY></HTML>

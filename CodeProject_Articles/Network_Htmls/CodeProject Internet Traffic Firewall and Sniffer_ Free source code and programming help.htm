@@ -1,0 +1,1780 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!-- saved from url=(0054)http://www.codeproject.com/KB/IP/firewall_sniffer.aspx -->
+<HTML><HEAD><TITLE>CodeProject: Internet Traffic Firewall and Sniffer. Free source code and programming help</TITLE>
+<META http-equiv=Content-Type content="text/html; charset=utf-8">
+<META 
+content="The article demonstrates internet packets interception with firewall capabilities based on  IpFilterDriver driver and sending TCP/UDP/ICMP packets using raw sockets with IP spoofing support.; Author: Chesnokov Yuriy; Section: Internet / Network; Chapter: Web Development" 
+name=Description>
+<META 
+content="VC8.0, WinXP, VS.NET2003, VS2005, MFC, Dev, Advanced,Internet / Network,Web Development,Free source code, tutorials" 
+name=Keywords>
+<META content="The Code Project" name=Author>
+<META content=General name=Rating>
+<META content="index, follow" name=Robots>
+<META content="1 days" name=Revisit-After><LINK 
+title="CodeProject Latest articles - All topics" 
+href="http://www.codeproject.com/webservices/articlerss.aspx?cat=1" 
+type=application/rss+xml rel=alternate><LINK 
+title="CodeProject Latest articles - MFC / C++" 
+href="http://www.codeproject.com/webservices/articlerss.aspx?cat=2" 
+type=application/rss+xml rel=alternate><LINK 
+title="CodeProject Latest articles - C#" 
+href="http://www.codeproject.com/webservices/articlerss.aspx?cat=3" 
+type=application/rss+xml rel=alternate><LINK 
+title="CodeProject Latest articles - ASP.NET" 
+href="http://www.codeproject.com/webservices/articlerss.aspx?cat=4" 
+type=application/rss+xml rel=alternate><LINK 
+title="CodeProject Latest articles - .NET" 
+href="http://www.codeproject.com/webservices/articlerss.aspx?cat=5" 
+type=application/rss+xml rel=alternate><LINK 
+title="CodeProject Latest articles - VB.NET" 
+href="http://www.codeproject.com/webservices/articlerss.aspx?cat=6" 
+type=application/rss+xml rel=alternate><LINK title="CodeProject Lounge Postings" 
+href="http://www.codeproject.com/webservices/LoungeRSS.aspx" 
+type=application/rss+xml rel=alternate><LINK title=CodeProject 
+href="http://www.codeproject.com/info/OpenSearch.xml" 
+type=application/opensearchdescription+xml rel=search><LINK 
+href="CodeProject Internet Traffic Firewall and Sniffer_ Free source code and programming help_files/CodeProject.css" 
+type=text/css rel=stylesheet><LINK 
+href="CodeProject Internet Traffic Firewall and Sniffer_ Free source code and programming help_files/ForumClassic.css" 
+type=text/css rel=stylesheet>
+<SCRIPT type=text/javascript>
+  var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+  document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</SCRIPT>
+
+<SCRIPT type=text/javascript>
+   var pageTracker = _gat._getTracker("UA-1735123-1");
+   pageTracker._setDomainName("www.codeproject.com");
+   pageTracker._setSessionTimeout("1200"); // 20 mins
+   pageTracker._initData();
+   pageTracker._trackPageview();
+</SCRIPT>
+
+<SCRIPT language=Javascript 
+src="CodeProject Internet Traffic Firewall and Sniffer_ Free source code and programming help_files/oncopy.js" 
+type=text/javascript></SCRIPT>
+
+<SCRIPT language=Javascript 
+src="CodeProject Internet Traffic Firewall and Sniffer_ Free source code and programming help_files/jxs.js" 
+type=text/javascript></SCRIPT>
+
+<SCRIPT language=Javascript 
+src="CodeProject Internet Traffic Firewall and Sniffer_ Free source code and programming help_files/bookmark.js" 
+type=text/javascript></SCRIPT>
+
+<SCRIPT language=Javascript 
+src="CodeProject Internet Traffic Firewall and Sniffer_ Free source code and programming help_files/rateitem.js" 
+type=text/javascript></SCRIPT>
+
+<SCRIPT language=Javascript type=text/javascript>//<![CDATA[
+function ToggleMenu(itemName)
+{
+	var elm = document.getElementById(itemName);
+	var i,others = document.getElementById('SectionMenu');
+	for(i=0; i < others.childNodes.length; i++)
+	{
+		var other = others.childNodes[i];
+		if ((other.className == 'MenuSectionBlock') && (other != elm))
+			other.style.display='none';
+	}
+	if (elm.style.display == 'block') elm.style.display='none';
+	else elm.style.display='block';
+	return false;
+}
+
+//]]></SCRIPT>
+
+<SCRIPT language=Javascript 
+src="CodeProject Internet Traffic Firewall and Sniffer_ Free source code and programming help_files/addto.js" 
+type=text/javascript></SCRIPT>
+
+<SCRIPT language=Javascript type=text/javascript>//<![CDATA[
+function MarkAns(MemberID,MsgID,QID) {
+ document.write(unescape("%3Cdiv class=\"CallOut\"%3E"));
+ document.write("Was this a good answer to your question? ");
+ document.write(unescape("%3Ca href=\"#xx" + MsgID.toString() + "xx\" "));
+ document.write("onclick=\"RateMsg("+MemberID.toString()+", "+MsgID.toString()+",6,"+QID.toString()+");\"");
+ document.write(unescape("%3E"));
+ document.write(unescape("%3Cimg height=\"20\" width=\"20\" src=\"/script/Forums/Images/good.png\" alt=\"correct\" border=\"0\" align=\"absmiddle\" /%3E Yes%3C/a%3E"));
+ document.write(unescape("%3Ca href=\"#xx" + MsgID.toString() + "xx\" "));
+ document.write("onclick=\"RateMsg("+MemberID.toString()+","+MsgID.toString()+",7,"+QID.toString()+");\"");
+ document.write(unescape("%3E"));
+ document.write(unescape("%3Cimg height=\"20\" width=\"20\" src=\"/script/Forums/Images/bad.png\" alt=\"correct\" style=\"margin-left:10px\" border=\"0\" align=\"absmiddle\" /%3E No%3C/a%3E"));
+ document.write(unescape("%3C/div%3E"));
+}
+function MsgVFrm(MemberID,MsgID,GB,gp,bp,mt){
+ if(!GB)document.write("Rate this message: ");
+ document.write(unescape("%3Ca href=\"#xx" + MsgID.toString() + "xx\" onclick=\"RateMsg(" + MemberID.toString() + ", " + MsgID.toString() + ","));document.write((GB?"5":"1")+unescape(",0);\"%3E"));
+ if(GB) document.write(unescape("%3Cimg height=\"20\" width=\"20\" src=\"/script/Forums/Images/good.png\" alt=\"good\" border=\"0\" align=\"absmiddle\" /%3E "+gp+" "+mt+"%3C/a%3E "));
+ else document.write(unescape("%3Cimg height=\"14\" width=\"14\" src=\"/script/Forums/Images/thumbs_down.gif\" alt=\"vote 1\" border=\"0\" align=\"middle\" /%3E%3C/a%3E "));
+ if(GB)document.write(" &nbsp;"); else for(var i=1; i<=5;i++)
+  document.write(unescape("%3Ca class=\"Frm_MHL\" href=\"#xx" + MsgID.toString() + "xx\" title=\"vote this message a " + i.toString() + "\" onclick=\"RateMsg(" + MemberID.toString() + ", " + MsgID.toString() + ", " + i.toString() + ",0)\"%3E%3Cb%3E" + i.toString() + "%3C/b%3E%3C/a%3E "));
+ document.write(unescape("%3Ca href=\"#xx" + MsgID.toString() + "xx\" onclick=\"RateMsg(" + MemberID.toString() + ", " + MsgID.toString() + ","));document.write((GB?"1":"5")+unescape(",0);\"%3E"));
+ if(GB)document.write(unescape("%3Cimg height=\"20\" width=\"20\" src=\"/script/Forums/Images/bad.png\" alt=\"bad\" border=\"0\" align=\"absmiddle\" /%3E "+bp+" "+mt+"%3C/a%3E"));
+ else document.write(unescape("%3Cimg height=\"14\" width=\"14\" src=\"/script/Forums/Images/thumbs_up.gif\" border=\"0\" alt=\"vote 5\" align=\"middle\" /%3E%3C/a%3E "));
+ if(GB)document.write(" &nbsp;&nbsp; "); else document.write(unescape("%3Cbr /%3E")); document.writeln(unescape("[%3Ca href='#xx") + MsgID.toString() +"xx' title='Report as Abuse' onclick='return ReportMsg(" + MemberID.toString());
+ document.writeln(", " + MsgID.toString() + unescape(",-2)'%3EReport Message%3C/a%3E]"));
+}
+
+function ReportMsg(userid, msgid, score) {
+ if (confirm("Are you sure you want to report this message?"))
+  return RateMsg(userid, msgid, score, 0);
+ else return false;
+}
+function RateMsg(memberid, msgid, score, questionId) {
+ var req = new ActiveXObject("MSXML2.XMLHTTP");
+ req.onreadystatechange = function() {
+  if (req.readyState == 4){
+   if (req.status == 200){
+    var respText = req.responseText;
+    var re = new RegExp(unescape("\%3Cdiv\%3E([^\%3C]*)\%3C/div\%3E"), "g");
+    var match = re.exec(respText);
+    voteStatus.innerHTML = unescape("%3Cb%3E") + (match&&match[1])?match[1]:"An error occured" + unescape("%3C/b%3E");
+   } else
+    voteStatus.innerHTML = unescape("%3Cb style='color:red'%3EFailed!") + req.statusText + unescape("%3C/b%3E");
+  }
+ }
+ var voteStatus = document.getElementById("MVF" + msgid);
+ if (!voteStatus) return;
+ voteStatus.innerHTML = unescape("%3Cb style='color:green'%3EVoting...%3C/b%3E");
+ var strAction = "/script/Forums/Vote.aspx?js=1&fmid="+memberid.toString()+"&select="+msgid.toString()+"&score="+score.toString()+"&qid="+questionId.toString();
+ req.open("GET", strAction, true);
+ req.send(null);
+  return false;
+}
+//]]></SCRIPT>
+
+<SCRIPT language=Javascript type=text/javascript>//<![CDATA[
+var Selected = "-1";
+
+function SwitchMessage(e, msgId)
+{
+  if (!msgId) {
+    if(!e)e=window.event;
+    var target=e.target?e.target:e.srcElement;
+    while(target&&target.id!='DynMessLink')target=target.parentNode;
+    if(!target||target.id!='DynMessLink')return;
+    msgId=target.name;
+  }
+  if(Selected&&Selected!=""){
+    var body=eval("document.getElementById('F" + Selected + "_h1')");
+    if(body) body.style.display = 'none';
+    var head=eval("document.getElementById('F" + Selected + "_h0')");
+    if(head) head.className = head.className.replace("Sel", "UnSel");
+  }
+  if(Selected==msgId.toString())
+    Selected="";
+  else {
+    Selected=msgId.toString();
+    var body=eval("document.getElementById('F" + Selected + "_h1')");
+    if(body){
+      if(body.style.display=='none') body.style.display='';
+      else body.style.display = 'none';
+    }
+    var head=eval("document.getElementById('F" + Selected + "_h0')");
+    if (head) 
+      head.className = head.className.replace("UnSel", "Sel");
+    if(body&&head&&body.style.display!='none'){
+      document.body.scrollTop = getRealPos(head, "Top") - document.body.clientHeight/10;
+      EnsureMessageVisible(Selected, true);
+    }
+  }
+  if (e){if(e.preventDefault)e.preventDefault;else e.returnValue=false;}
+  return false;
+}
+
+//]]></SCRIPT>
+
+<SCRIPT language=Javascript 
+src="CodeProject Internet Traffic Firewall and Sniffer_ Free source code and programming help_files/ShortCuts.js" 
+type=text/javascript></SCRIPT>
+<LINK 
+href="CodeProject Internet Traffic Firewall and Sniffer_ Free source code and programming help_files/ForumClassicIE6.css" 
+type=text/css rel=stylesheet><LINK href="/favicon.ico" type=image/ico 
+rel=icon><LINK href="/favicon.ico" type=image/ico rel="shortcut icon">
+<META content="MSHTML 6.00.2900.2180" name=GENERATOR></HEAD>
+<BODY>
+<TABLE id=ctl00_AT cellSpacing=0 cellPadding=0 border=0>
+  <TBODY>
+  <TR vAlign=top>
+    <TD colSpan=2>
+      <TABLE cellSpacing=0 cellPadding=0 border=0>
+        <TBODY>
+        <TR>
+          <TD class=HeaderLogo><A href="http://www.codeproject.com/"><IMG 
+            id=ctl00_Logo 
+            style="BORDER-TOP-WIDTH: 0px; BORDER-LEFT-WIDTH: 0px; BORDER-BOTTOM-WIDTH: 0px; WIDTH: 225px; HEIGHT: 90px; BORDER-RIGHT-WIDTH: 0px" 
+            alt="The Code Project" 
+            src="CodeProject Internet Traffic Firewall and Sniffer_ Free source code and programming help_files/logo225x90.gif"></A></TD>
+          <TD class=HeaderBanner align=right width="100%"><IFRAME 
+            src="CodeProject Internet Traffic Firewall and Sniffer_ Free source code and programming help_files/ServeHTML.htm" 
+            frameBorder=0 width=728 scrolling=no height=90></IFRAME></TD></TR>
+        <TR>
+          <TD colSpan=2>
+            <TABLE class=MemberNavBar cellSpacing=0 cellPadding=5 
+              width="100%"><TBODY>
+              <TR>
+                <TD class=SmallText style="FONT-WEIGHT: bold">5,386,863 
+                  members and growing! (14,622 online)</TD>
+                <TD align=right>
+                  <DIV class=MemberNavBarText 
+                  id=ctl00_MemberMenu_LoggedOnOptions><A 
+                  id=ctl00_MemberMenu_MyProfile 
+                  href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=2959938">Abdelrady_FCIS</A> 
+                  | <A id=ctl00_MemberMenu_MySettings 
+                  href="http://www.codeproject.com/script/Membership/Modify.aspx">My 
+                  Settings</A> | <A id=ctl00_MemberMenu_MyCodeProject 
+                  href="http://www.codeproject.com/script/Membership/MyCodeProject.aspx"><B>My 
+                  CodeProject</B></A> | <A id=ctl00_MemberMenu_MyBookmarks 
+                  href="http://www.codeproject.com/script/Bookmarks/List.aspx?obtid=2"><IMG 
+                  height=16 
+                  src="CodeProject Internet Traffic Firewall and Sniffer_ Free source code and programming help_files/fave.gif" 
+                  width=16 align=absMiddle border=0> My Bookmarks</A> | <A 
+                  id=ctl00_MemberMenu_MyArticles 
+                  href="http://www.codeproject.com/script/Articles/MemberArticles.aspx?amid=2959938">My 
+                  Articles</A> | <A id=ctl00_MemberMenu_Signout 
+                  href="http://www.codeproject.com/script/Membership/LogOff.aspx?rp=%2fKB%2fIP%2ffirewall_sniffer.aspx">Sign 
+                  out</A> </DIV></TD></TR></TBODY></TABLE></TD></TR>
+        <TR>
+          <TD colSpan=2>
+            <TABLE class=SiteNavBar id=tblSiteToolbar cellSpacing=0 
+            cellPadding=0>
+              <TBODY>
+              <TR>
+                <TD noWrap><A href="http://www.codeproject.com/">Home</A></TD>
+                <TD>&nbsp; </TD>
+                <TD style="FONT-WEIGHT: normal" noWrap align=right>Current 
+                  Site:</TD>
+                <TD class=SelCat noWrap><A 
+                  href="http://www.codeproject.com/">C++ / .NET</A></TD>
+                <TD noWrap><A href="http://java.codeproject.com/">Java</A></TD>
+                <TD noWrap><A href="http://sql.codeproject.com/">SQL</A></TD>
+                <TD noWrap><A href="http://lamp.codeproject.com/">Linux / 
+                  Unix</A></TD>
+                <TD width="100%">&nbsp;</TD>
+                <TD id=ctl00_TopNavBar_RightMenus>
+                  <DIV id=MenuPos 
+                  style="WIDTH: 380px; POSITION: relative; TOP: 1px; HEIGHT: 22px">
+                  <TABLE 
+                  style="BORDER-TOP-WIDTH: 0px; BORDER-LEFT-WIDTH: 0px; BORDER-BOTTOM-WIDTH: 0px; HEIGHT: 20px; BORDER-RIGHT-WIDTH: 0px" 
+                  cellSpacing=0 cellPadding=0 width=380>
+                    <TBODY>
+                    <TR vAlign=center>
+                      <TD 
+                      style="BORDER-TOP-WIDTH: 0px; BORDER-LEFT-WIDTH: 0px; BORDER-BOTTOM-WIDTH: 0px; BORDER-RIGHT-WIDTH: 0px" 
+                      noWrap><A 
+                        href="http://www.codeproject.com/info/FAQ.aspx">Help!</A></TD>
+                      <TD 
+                      style="BORDER-TOP-WIDTH: 0px; BORDER-LEFT-WIDTH: 0px; BORDER-BOTTOM-WIDTH: 0px; BORDER-RIGHT-WIDTH: 0px" 
+                      noWrap><A 
+                        href="http://www.codeproject.com/script/Articles/Latest.aspx">Articles</A></TD>
+                      <TD 
+                      style="BORDER-TOP-WIDTH: 0px; BORDER-LEFT-WIDTH: 0px; BORDER-BOTTOM-WIDTH: 0px; BORDER-RIGHT-WIDTH: 0px" 
+                      noWrap><A 
+                        href="http://www.codeproject.com/script/Forums/List.aspx">Message 
+                        Boards</A></TD>
+                      <TD 
+                      style="BORDER-TOP-WIDTH: 0px; BORDER-LEFT-WIDTH: 0px; BORDER-BOTTOM-WIDTH: 0px; BORDER-RIGHT-WIDTH: 0px" 
+                      noWrap><A 
+                        href="http://www.codeproject.com/script/Jobs/List.aspx">Job 
+                        Board</A></TD>
+                      <TD 
+                      style="BORDER-TOP-WIDTH: 0px; BORDER-LEFT-WIDTH: 0px; BORDER-BOTTOM-WIDTH: 0px; BORDER-RIGHT-WIDTH: 0px" 
+                      noWrap><A 
+                        href="http://www.codeproject.com/Lounge.aspx">Lounge</A></TD></TR></TBODY></TABLE></DIV></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+  <TR>
+    <TD vAlign=top colSpan=2><A name=_top></A>
+      <TABLE class=ArticleHeader id=ctl00_ArticleTopHeader_HeaderTable 
+      cellSpacing=0 cellPadding=3 width="100%" border=0>
+        <TBODY>
+        <TR vAlign=top>
+          <TD class=SmallText><A id=ctl00_ArticleTopHeader_ChapterLink 
+            href="http://www.codeproject.com/script/Content/Chapter.aspx?chptId=2">Web 
+            Development</A> » <A id=ctl00_ArticleTopHeader_SectionLink 
+            href="http://www.codeproject.com/KB/IP/">Internet / Network</A> » <A 
+            id=ctl00_ArticleTopHeader_SubsectionLink 
+            href="http://www.codeproject.com/KB/IP/index.aspx?#Internet / Network - Proxy / Firewall">Proxy 
+            / Firewall</A> <SPAN class=ArticleAdvanced 
+            id=ctl00_ArticleTopHeader_SkillLevel>&nbsp;&nbsp;&nbsp; 
+            Advanced</SPAN> <SPAN class=SmallText 
+            id=ctl00_ArticleTopHeader_LicenceTerms 
+            style="MARGIN-LEFT: 40px">License: <A 
+            href="http://www.opensource.org/licenses/gpl-license.php">The GNU 
+            General Public License (GPL)</A></SPAN> <BR><BR>
+            <H1><SPAN class=ArticleTopTitle 
+            id=ctl00_ArticleTopHeader_ArticleTitle>Internet Traffic Firewall and 
+            Sniffer</SPAN></H1><B>By <A 
+            href="http://www.codeproject.com/script/Articles/MemberArticles.aspx?amid=4613314">Chesnokov 
+            Yuriy</A></B><BR><BR><SPAN class=ArticleTopDescr 
+            id=ctl00_ArticleTopHeader_ArticleDescr>The article demonstrates 
+            internet packets interception with firewall capabilities based on 
+            IpFilterDriver driver and sending TCP/UDP/ICMP packets using raw 
+            sockets with IP spoofing support.</SPAN> </TD>
+          <TD class=SmallText style="WIDTH: 210px"><SPAN 
+            id=ctl00_ArticleTopHeader_ArticleAttributes>VC8.0, C++Windows, 
+            WinXP, MFC, VS.NET2003, VS2005, Visual Studio, 
+            Dev</SPAN><BR><BR><SPAN style="WIDTH: 14ex">Posted</SPAN>: <B>24 Oct 
+            2007</B><BR><SPAN style="WIDTH: 14ex">Updated</SPAN>: <B>23 Oct 
+            2007</B> <BR><SPAN style="WIDTH: 14ex">Views</SPAN>: 
+            <B>15,745</B><BR><SPAN style="WIDTH: 14ex">Bookmarked</SPAN>: <B>63 
+            times</B><BR></TD></TR>
+        <TR>
+          <TD colSpan=2>
+            <TABLE width="100%">
+              <TBODY>
+              <TR>
+                <TD></TD>
+                <TD class=SmallText style="WHITE-SPACE: nowrap" 
+              align=right></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+  <TR vAlign=top>
+    <TD class=LHNavBar id=ctl00_LeftNavCell>
+      <DIV class=FeatureBlockHeader>Announcements</DIV>
+      <DIV class="FeatureBlockContent RHFeatureBar" 
+      style="PADDING-RIGHT: 0px; PADDING-LEFT: 0px; PADDING-BOTTOM: 0px; MARGIN: 0px; PADDING-TOP: 0px">
+      <TABLE cellPadding=2>
+        <TBODY>
+        <TR vAlign=center>
+          <TD><IMG height=10 alt=Comp 
+            src="CodeProject Internet Traffic Firewall and Sniffer_ Free source code and programming help_files/startrek.gif" 
+            width=24></TD>
+          <TD><A 
+            href="http://www.codeproject.com/script/Awards/Competition.aspx?cid=274">Summer 
+            Code Competition!</A></TD></TR>
+        <TR vAlign=center>
+          <TD><IMG height=24 alt=Comp 
+            src="CodeProject Internet Traffic Firewall and Sniffer_ Free source code and programming help_files/info_24.png" 
+            width=24></TD>
+          <TD><A 
+            href="http://www.codeproject.com/script/Awards/Competition.aspx?cid=270">New 
+            thawte <BR>Scavenger Hunt!</A></TD></TR>
+        <TR vAlign=center>
+          <TD><IMG height=24 alt=Comp 
+            src="CodeProject Internet Traffic Firewall and Sniffer_ Free source code and programming help_files/info_24.png" 
+            width=24 align=middle></TD>
+          <TD><A id=ctl00_Announcements_CompLink 
+            href="http://www.codeproject.com/Feature/ArticleCompetition/">Monthly 
+            Competition</A></TD></TR></TBODY></TABLE></DIV>
+      <DIV class=FeatureBlockHeader style="MARGIN-TOP: 7px">Want a new 
+Job?</DIV>
+      <DIV class="FeatureBlockContent RHFeatureBar">
+      <UL class=InfoList>
+        <LI><A 
+        href="http://www.codeproject.com/script/Jobs/View.aspx?jid=27">Senior 
+        ASP.NET Architect</A> at Atalasoft in United States
+        <LI><A 
+        href="http://www.codeproject.com/script/Jobs/View.aspx?jid=77">ASP.NET 
+        C# VB.NET SQL Developer</A> at High Power Consulting, Inc. in United 
+        States
+        <LI><A 
+        href="http://www.codeproject.com/script/Jobs/View.aspx?jid=112">Software 
+        Engineer (C# Windows .NET)</A> at Memeo Inc. in United States
+        <LI><A href="http://www.codeproject.com/script/Jobs/List.aspx">View 
+        Latest Jobs...</A></LI></UL></DIV>
+      <DIV id=SectionMenu>
+      <DIV class=MenuCat>Chapters</DIV>
+      <DIV class=MenuChapter><A onclick="return ToggleMenu('Chapter1');" 
+      href="http://www.codeproject.com/script/Content/Chapter.aspx?chptId=1">Desktop 
+      Development</A></DIV>
+      <DIV class=MenuSectionBlock id=Chapter1 style="DISPLAY: none">
+      <DIV class=MI id=Section1><A 
+      href="http://www.codeproject.com/KB/buttons/">Button Controls</A></DIV>
+      <DIV class=MI id=Section15><A 
+      href="http://www.codeproject.com/KB/clipboard/">Clipboard</A></DIV>
+      <DIV class=MI id=Section2><A 
+      href="http://www.codeproject.com/KB/combobox/">Combo &amp; List 
+      Boxes</A></DIV>
+      <DIV class=MI id=Section67><A 
+      href="http://www.codeproject.com/KB/dialog/">Dialogs and Windows</A></DIV>
+      <DIV class=MI id=Section107><A 
+      href="http://www.codeproject.com/KB/gadgets/">Desktop Gadgets</A></DIV>
+      <DIV class=MI id=Section16><A 
+      href="http://www.codeproject.com/KB/docview/">Document / View</A></DIV>
+      <DIV class=MI id=Section4><A 
+      href="http://www.codeproject.com/KB/edit/">Edit Controls</A></DIV>
+      <DIV class=MI id=Section17><A 
+      href="http://www.codeproject.com/KB/files/">Files and Folders</A></DIV>
+      <DIV class=MI id=Section3><A 
+      href="http://www.codeproject.com/KB/grid/">Grid &amp; Data 
+      Controls</A></DIV>
+      <DIV class=MI id=Section5><A 
+      href="http://www.codeproject.com/KB/list/">List Controls</A></DIV>
+      <DIV class=MI id=Section6><A 
+      href="http://www.codeproject.com/KB/menus/">Menus</A></DIV>
+      <DIV class=MI id=Section14><A 
+      href="http://www.codeproject.com/KB/miscctrl/">Miscellaneous</A></DIV>
+      <DIV class=MI id=Section18><A 
+      href="http://www.codeproject.com/KB/printing/">Printing</A></DIV>
+      <DIV class=MI id=Section95><A 
+      href="http://www.codeproject.com/KB/progress/">Progress Controls</A></DIV>
+      <DIV class=MI id=Section11><A 
+      href="http://www.codeproject.com/KB/selection/">Selection 
+      Controls</A></DIV>
+      <DIV class=MI id=Section19><A 
+      href="http://www.codeproject.com/KB/shell/">Shell and IE 
+      programming</A></DIV>
+      <DIV class=MI id=Section68><A 
+      href="http://www.codeproject.com/KB/smart/">Smart Client</A></DIV>
+      <DIV class=MI id=Section8><A 
+      href="http://www.codeproject.com/KB/splitter/">Splitter Windows</A></DIV>
+      <DIV class=MI id=Section9><A 
+      href="http://www.codeproject.com/KB/static/">Static &amp; Panel 
+      Controls</A></DIV>
+      <DIV class=MI id=Section10><A 
+      href="http://www.codeproject.com/KB/statusbar/">Status Bar</A></DIV>
+      <DIV class=MI id=Section7><A 
+      href="http://www.codeproject.com/KB/tabs/">Tabs &amp; Property 
+      Pages</A></DIV>
+      <DIV class=MI id=Section12><A 
+      href="http://www.codeproject.com/KB/toolbars/">Toolbars &amp; Docking 
+      windows</A></DIV>
+      <DIV class=MI id=Section13><A 
+      href="http://www.codeproject.com/KB/tree/">Tree Controls</A></DIV></DIV>
+      <DIV class=MenuChapter><A onclick="return ToggleMenu('Chapter2');" 
+      href="http://www.codeproject.com/script/Content/Chapter.aspx?chptId=2">Web 
+      Development</A></DIV>
+      <DIV class=MenuSectionBlock id=Chapter2>
+      <DIV class=MI id=Section70><A 
+      href="http://www.codeproject.com/KB/ajax/">Ajax and Atlas</A></DIV>
+      <DIV class=MI id=Section27><A 
+      href="http://www.codeproject.com/KB/applications/">Applications &amp; 
+      Tools</A></DIV>
+      <DIV class=MI id=Section85><A 
+      href="http://www.codeproject.com/KB/asp/">ASP</A></DIV>
+      <DIV class=MI id=Section89><A 
+      href="http://www.codeproject.com/KB/aspnet/">ASP.NET</A></DIV>
+      <DIV class=MI id=Section28><A 
+      href="http://www.codeproject.com/KB/webforms/">ASP.NET Controls</A></DIV>
+      <DIV class=MI id=Section38><A 
+      href="http://www.codeproject.com/KB/ATL-Server/">ATL Server</A></DIV>
+      <DIV class=MI id=Section29><A 
+      href="http://www.codeproject.com/KB/web-cache/">Caching</A></DIV>
+      <DIV class=MI id=Section91><A 
+      href="http://www.codeproject.com/KB/web-image/">Charts, Graphs and 
+      Images</A></DIV>
+      <DIV class=MI id=Section25><A 
+      href="http://www.codeproject.com/KB/scripting/">Client side 
+      scripting</A></DIV>
+      <DIV class=MI id=Section30><A 
+      href="http://www.codeproject.com/KB/custom-controls/">Custom 
+      Controls</A></DIV>
+      <DIV class=MI id=Section23><A 
+      href="http://www.codeproject.com/KB/HTML/">HTML / CSS</A></DIV>
+      <DIV class=MIS id=Section22><A 
+      href="http://www.codeproject.com/KB/IP/">Internet / Network</A></DIV>
+      <DIV class=MI id=Section24><A 
+      href="http://www.codeproject.com/KB/ISAPI/">ISAPI</A></DIV>
+      <DIV class=MI id=Section33><A 
+      href="http://www.codeproject.com/KB/server-management/">Site &amp; Server 
+      Management</A></DIV>
+      <DIV class=MI id=Section34><A 
+      href="http://www.codeproject.com/KB/session/">Session State</A></DIV>
+      <DIV class=MI id=Section113><A 
+      href="http://www.codeproject.com/KB/silverlight/">Silverlight</A></DIV>
+      <DIV class=MI id=Section36><A 
+      href="http://www.codeproject.com/KB/trace/">Trace and Logs</A></DIV>
+      <DIV class=MI id=Section31><A 
+      href="http://www.codeproject.com/KB/user-controls/">User 
+Controls</A></DIV>
+      <DIV class=MI id=Section37><A 
+      href="http://www.codeproject.com/KB/validation/">Validation</A></DIV>
+      <DIV class=MI id=Section35><A 
+      href="http://www.codeproject.com/KB/viewstate/">View State</A></DIV>
+      <DIV class=MI id=Section26><A 
+      href="http://www.codeproject.com/KB/WAP/">WAP / WML</A></DIV>
+      <DIV class=MI id=Section32><A 
+      href="http://www.codeproject.com/KB/web-security/">Web Security</A></DIV>
+      <DIV class=MI id=Section20><A 
+      href="http://www.codeproject.com/KB/webservices/">Web 
+      Services</A></DIV></DIV>
+      <DIV class=MenuChapter><A onclick="return ToggleMenu('Chapter9');" 
+      href="http://www.codeproject.com/script/Content/Chapter.aspx?chptId=9">Enterprise 
+      Systems</A></DIV>
+      <DIV class=MenuSectionBlock id=Chapter9 style="DISPLAY: none">
+      <DIV class=MI id=Section98><A 
+      href="http://www.codeproject.com/KB/MCMS/">Content Management 
+      Server</A></DIV>
+      <DIV class=MI id=Section99><A 
+      href="http://www.codeproject.com/KB/biztalk/">Microsoft BizTalk 
+      Server</A></DIV>
+      <DIV class=MI id=Section102><A 
+      href="http://www.codeproject.com/KB/exchange/">Microsoft 
+Exchange</A></DIV>
+      <DIV class=MI id=Section90><A 
+      href="http://www.codeproject.com/KB/office/">Office Development</A></DIV>
+      <DIV class=MI id=Section101><A 
+      href="http://www.codeproject.com/KB/sharepoint/">SharePoint 
+      Server</A></DIV></DIV>
+      <DIV class=MenuChapter><A onclick="return ToggleMenu('Chapter3');" 
+      href="http://www.codeproject.com/script/Content/Chapter.aspx?chptId=3">Multimedia</A></DIV>
+      <DIV class=MenuSectionBlock id=Chapter3 style="DISPLAY: none">
+      <DIV class=MI id=Section42><A 
+      href="http://www.codeproject.com/KB/audio-video/">Audio and 
+Video</A></DIV>
+      <DIV class=MI id=Section44><A 
+      href="http://www.codeproject.com/KB/directx/">DirectX</A></DIV>
+      <DIV class=MI id=Section46><A 
+      href="http://www.codeproject.com/KB/GDI/">GDI</A></DIV>
+      <DIV class=MI id=Section47><A 
+      href="http://www.codeproject.com/KB/GDI-plus/">GDI+</A></DIV>
+      <DIV class=MI id=Section43><A 
+      href="http://www.codeproject.com/KB/graphics/">General Graphics</A></DIV>
+      <DIV class=MI id=Section45><A 
+      href="http://www.codeproject.com/KB/openGL/">OpenGL</A></DIV></DIV>
+      <DIV class=MenuChapter><A onclick="return ToggleMenu('Chapter4');" 
+      href="http://www.codeproject.com/script/Content/Chapter.aspx?chptId=4">Database</A></DIV>
+      <DIV class=MenuSectionBlock id=Chapter4 style="DISPLAY: none">
+      <DIV class=MI id=Section66><A 
+      href="http://www.codeproject.com/KB/database/">Database</A></DIV>
+      <DIV class=MI id=Section100><A 
+      href="http://www.codeproject.com/KB/reporting-services/">SQL Reporting 
+      Services</A></DIV></DIV>
+      <DIV class=MenuChapter><A onclick="return ToggleMenu('Chapter8');" 
+      href="http://www.codeproject.com/script/Content/Chapter.aspx?chptId=8">Platforms, 
+      Frameworks &amp; Libraries</A></DIV>
+      <DIV class=MenuSectionBlock id=Chapter8 style="DISPLAY: none">
+      <DIV class=MI id=Section83><A 
+      href="http://www.codeproject.com/KB/atl/">ATL</A></DIV>
+      <DIV class=MI id=Section117><A 
+      href="http://www.codeproject.com/KB/MFC/">MFC</A></DIV>
+      <DIV class=MI id=Section88><A 
+      href="http://www.codeproject.com/KB/stl/">STL</A></DIV>
+      <DIV class=MI id=Section84><A 
+      href="http://www.codeproject.com/KB/wtl/">WTL</A></DIV>
+      <DIV class=MI id=Section49><A 
+      href="http://www.codeproject.com/KB/COM/">COM / COM+</A></DIV>
+      <DIV class=MI id=Section76><A 
+      href="http://www.codeproject.com/KB/dotnet/">.NET Framework</A></DIV>
+      <DIV class=MI id=Section92><A 
+      href="http://www.codeproject.com/KB/winsdk/">Win32/64 SDK &amp; 
+      OS</A></DIV>
+      <DIV class=MI id=Section108><A 
+      href="http://www.codeproject.com/KB/vista/">Vista API</A></DIV>
+      <DIV class=MI id=Section110><A 
+      href="http://www.codeproject.com/KB/vista-security/">Vista 
+      Security</A></DIV>
+      <DIV class=MI id=Section82><A 
+      href="http://www.codeproject.com/KB/cross-platform/">Cross 
+      Platform</A></DIV>
+      <DIV class=MI id=Section69><A 
+      href="http://www.codeproject.com/KB/game/">Game Development</A></DIV>
+      <DIV class=MI id=Section73><A 
+      href="http://www.codeproject.com/KB/mobile/">Mobile Development</A></DIV>
+      <DIV class=MI id=Section106><A 
+      href="http://www.codeproject.com/KB/WC/">Windows CardSpace</A></DIV>
+      <DIV class=MI id=Section103><A 
+      href="http://www.codeproject.com/KB/WCF/">Windows Communication 
+      Foundation</A></DIV>
+      <DIV class=MI id=Section104><A 
+      href="http://www.codeproject.com/KB/WPF/">Windows Presentation 
+      Foundation</A></DIV>
+      <DIV class=MI id=Section105><A 
+      href="http://www.codeproject.com/KB/WF/">Windows Workflow 
+      Foundation</A></DIV>
+      <DIV class=MI id=Section119><A 
+      href="http://www.codeproject.com/KB/library/">Libraries</A></DIV>
+      <DIV class=MI id=Section122><A 
+      href="http://www.codeproject.com/KB/powershell/">Windows 
+      Powershell</A></DIV>
+      <DIV class=MI id=Section123><A 
+      href="http://www.codeproject.com/KB/linq/">LINQ</A></DIV></DIV>
+      <DIV class=MenuChapter><A onclick="return ToggleMenu('Chapter5');" 
+      href="http://www.codeproject.com/script/Content/Chapter.aspx?chptId=5">Languages</A></DIV>
+      <DIV class=MenuSectionBlock id=Chapter5 style="DISPLAY: none">
+      <DIV class=MI id=Section71><A href="http://www.codeproject.com/KB/cpp/">C 
+      / C++ Language</A></DIV>
+      <DIV class=MI id=Section72><A 
+      href="http://www.codeproject.com/KB/mcpp/">C++ / CLI</A></DIV>
+      <DIV class=MI id=Section93><A 
+      href="http://www.codeproject.com/KB/cs/">C#</A></DIV>
+      <DIV class=MI id=Section78><A 
+      href="http://www.codeproject.com/KB/msil/">MSIL</A></DIV>
+      <DIV class=MI id=Section86><A 
+      href="http://www.codeproject.com/KB/vbscript/">VBScript</A></DIV>
+      <DIV class=MI id=Section87><A 
+      href="http://www.codeproject.com/KB/vb/">VB.NET</A></DIV>
+      <DIV class=MI id=Section115><A 
+      href="http://www.codeproject.com/KB/vb-interop/">VB6 Interop</A></DIV>
+      <DIV class=MI id=Section77><A 
+      href="http://www.codeproject.com/KB/net-languages/">Other .NET 
+      Languages</A></DIV>
+      <DIV class=MI id=Section21><A 
+      href="http://www.codeproject.com/KB/XML/">XML</A></DIV>
+      <DIV class=MI id=Section96><A 
+      href="http://www.codeproject.com/KB/java/">Java</A></DIV></DIV>
+      <DIV class=MenuChapter><A onclick="return ToggleMenu('Chapter6');" 
+      href="http://www.codeproject.com/script/Content/Chapter.aspx?chptId=6">General 
+      Programming</A></DIV>
+      <DIV class=MenuSectionBlock id=Chapter6 style="DISPLAY: none">
+      <DIV class=MI id=Section57><A 
+      href="http://www.codeproject.com/KB/recipes/">Algorithms &amp; 
+      Recipes</A></DIV>
+      <DIV class=MI id=Section64><A 
+      href="http://www.codeproject.com/KB/bugs/">Bugs &amp; 
+Workarounds</A></DIV>
+      <DIV class=MI id=Section79><A 
+      href="http://www.codeproject.com/KB/collections/">Collections</A></DIV>
+      <DIV class=MI id=Section56><A 
+      href="http://www.codeproject.com/KB/security/">Cryptography &amp; 
+      Security</A></DIV>
+      <DIV class=MI id=Section50><A 
+      href="http://www.codeproject.com/KB/datetime/">Date and Time</A></DIV>
+      <DIV class=MI id=Section52><A 
+      href="http://www.codeproject.com/KB/DLL/">DLLs &amp; Assemblies</A></DIV>
+      <DIV class=MI id=Section80><A 
+      href="http://www.codeproject.com/KB/exception/">Exception 
+      Handling</A></DIV>
+      <DIV class=MI id=Section81><A 
+      href="http://www.codeproject.com/KB/locale/">Localisation</A></DIV>
+      <DIV class=MI id=Section53><A 
+      href="http://www.codeproject.com/KB/macros/">Macros and Add-ins</A></DIV>
+      <DIV class=MI id=Section54><A 
+      href="http://www.codeproject.com/KB/tips/">Programming Tips</A></DIV>
+      <DIV class=MI id=Section55><A 
+      href="http://www.codeproject.com/KB/string/">String handling</A></DIV>
+      <DIV class=MI id=Section58><A 
+      href="http://www.codeproject.com/KB/threads/">Threads, Processes &amp; 
+      IPC</A></DIV>
+      <DIV class=MI id=Section59><A 
+      href="http://www.codeproject.com/KB/winhelp/">WinHelp / 
+      HTMLHelp</A></DIV></DIV>
+      <DIV class=MenuChapter><A onclick="return ToggleMenu('Chapter10');" 
+      href="http://www.codeproject.com/script/Content/Chapter.aspx?chptId=10">Graphics 
+      / Design</A></DIV>
+      <DIV class=MenuSectionBlock id=Chapter10 style="DISPLAY: none">
+      <DIV class=MI id=Section40><A 
+      href="http://www.codeproject.com/KB/expression/">Expression</A></DIV>
+      <DIV class=MI id=Section114><A 
+      href="http://www.codeproject.com/KB/usability/">Usability</A></DIV></DIV>
+      <DIV class=MenuChapter><A onclick="return ToggleMenu('Chapter11');" 
+      href="http://www.codeproject.com/script/Content/Chapter.aspx?chptId=11">Development 
+      Lifecycle</A></DIV>
+      <DIV class=MenuSectionBlock id=Chapter11 style="DISPLAY: none">
+      <DIV class=MI id=Section51><A 
+      href="http://www.codeproject.com/KB/debug/">Debug Tips</A></DIV>
+      <DIV class=MI id=Section39><A 
+      href="http://www.codeproject.com/KB/architecture/">Design and 
+      Architecture</A></DIV>
+      <DIV class=MI id=Section112><A 
+      href="http://www.codeproject.com/KB/install/">Installation</A></DIV>
+      <DIV class=MI id=Section41><A 
+      href="http://www.codeproject.com/KB/work/">Work Issues</A></DIV>
+      <DIV class=MI id=Section126><A 
+      href="http://www.codeproject.com/KB/codegen/">Code 
+      Generation</A></DIV></DIV>
+      <DIV class=MenuChapter><A onclick="return ToggleMenu('Chapter7');" 
+      href="http://www.codeproject.com/script/Content/Chapter.aspx?chptId=7">General 
+      Reading</A></DIV>
+      <DIV class=MenuSectionBlock id=Chapter7 style="DISPLAY: none">
+      <DIV class=MI id=Section60><A 
+      href="http://www.codeproject.com/KB/books/">Book Chapters</A></DIV>
+      <DIV class=MI id=Section61><A 
+      href="http://www.codeproject.com/KB/book-reviews/">Book Reviews</A></DIV>
+      <DIV class=MI id=Section109><A 
+      href="http://www.codeproject.com/KB/hardware-review/">Hardware 
+      Reviews</A></DIV>
+      <DIV class=MI id=Section63><A 
+      href="http://www.codeproject.com/KB/interviews/">Interviews</A></DIV>
+      <DIV class=MI id=Section62><A 
+      href="http://www.codeproject.com/KB/scrapbook/">Scrapbook</A></DIV>
+      <DIV class=MI id=Section48><A 
+      href="http://www.codeproject.com/KB/system/">Hardware &amp; 
+      System</A></DIV></DIV>
+      <DIV class=MenuChapter><A onclick="return ToggleMenu('Chapter12');" 
+      href="http://www.codeproject.com/script/Content/Chapter.aspx?chptId=12">Third 
+      Party Products</A></DIV>
+      <DIV class=MenuSectionBlock id=Chapter12 style="DISPLAY: none">
+      <DIV class=MI id=Section65><A 
+      href="http://www.codeproject.com/KB/showcase/">Product Showcase</A></DIV>
+      <DIV class=MI id=Section124><A 
+      href="http://www.codeproject.com/KB/solution-center/">Solution 
+      Center</A></DIV></DIV></DIV><BR>
+      <DIV class=MenuCat>Services</DIV>
+      <DIV class=MenuChapter><A 
+      href="http://www.codeproject.com/script/Jobs/List.aspx">Job 
+Board</A></DIV>
+      <DIV class=MenuChapter><A 
+      href="http://www.codeproject.com/Services/coffee.aspx">Code Project 
+      Coffee</A></DIV>
+      <DIV class=MenuChapter><A 
+      href="http://www.codeproject.com/Services/TradePub.aspx">Free 
+      Magazines</A></DIV><BR>
+      <DIV class=MenuCat>Feature Zones</DIV>
+      <DIV class=MenuChapter><A 
+      href="http://www.codeproject.com/kb/Showcase/">Product Showcase</A></DIV>
+      <DIV class=MenuChapter><A href="http://www.codeproject.com/Zones/IBM">IBM 
+      DeveloperWorks</A></DIV>
+      <DIV class=MenuChapter><A 
+      href="http://www.codeproject.com/Zones/WhitePapers">WhitePapers / 
+      Webcasts</A></DIV>
+      <DIV class=MenuChapter><A 
+      href="http://www.codeproject.com/Zones/QuestSQL">Quest SQL Zone</A></DIV>
+      <DIV class=MenuChapter><A 
+      href="http://www.codeproject.com/Zones/Acresso">InstallShield 
+      2009</A></DIV><BR>
+      <DIV style="MARGIN-BOTTOM: 10px; TEXT-ALIGN: center">
+      <SCRIPT type=text/javascript>document.write(unescape("%3ca%20href%3d%22http%3a%2f%2fwww.codeproject.com%2fRedir.aspx%3fadid%3d5302%26way%3dban%22%20target%3d%22_blank%22%20rel%3d%22nofollow%22%3e%3cimg%20src%3d%22http%3a%2f%2fwww.codeproject.com%2fscript%2fAdm%2fServeImg.aspx%3fFile%3d%252fscript%252fadmentor%252fimages%252fIBMdeveloperWorks_150x80.gif%26C%3dFalse%26adid%3d5302%22%20alt%3d%22%22%20border%3d%220%22%20width%3d%22150%22%20height%3d%2280%22%3e%3c%2fa%3e"));</SCRIPT>
+      </DIV><IFRAME 
+      src="C:\Documents and Settings\Administrator\Desktop\asqw\CodeProject Internet Traffic Firewall and Sniffer_ Free source code and programming help_files\ServeHTML(1).htm" 
+      frameBorder=0 width=160 scrolling=no height=600></IFRAME></TD>
+    <TD class=ArticlePane vAlign=top>
+      <TABLE class=SearchHeaderBar cellSpacing=0 width="100%">
+        <TBODY>
+        <TR>
+          <TD style="WIDTH: 60%; WHITE-SPACE: nowrap" vAlign=center 
+            align=right><FORM style="MARGIN: 0px" name=Search 
+            action=/info/search.aspx method=get><B>Search &nbsp;</B> <INPUT 
+            class=SmallText style="WIDTH: 200px" name=artkw> <SELECT 
+            class=SmallText style="FONT-WEIGHT: bold" name=sbo> <OPTION 
+              value=kw selected>Articles</OPTION> <OPTION 
+              value=fm>Messages</OPTION> <OPTION value=s>Jobs</OPTION></SELECT> <INPUT class=SmallText style="FONT-WEIGHT: bold" type=submit value=" Go! "> 
+            &nbsp; </FORM></TD>
+          <TD class=TinyText style="WHITE-SPACE: nowrap"><A 
+            href="http://www.codeproject.com/info/search.aspx">Advanced 
+            Search</A><BR><A 
+            href="http://www.codeproject.com/script/Content/SiteMap.aspx">Sitemap</A> 
+            | <A id=ctl00_SearchBarCtrl_AddToIESearchLnk 
+            title="Add The Code Project to your IE search Providers" 
+            onclick="window.external.AddSearchProvider('http://www.codeproject.com/info/OpenSearch.xml');return false;" 
+            href="http://www.codeproject.com/">Add to IE Search</A> 
+        </TD></TR></TBODY></TABLE><SPAN id=ctl00_ResultMessage></SPAN>
+      <DIV id=ctl00_ArtDiv>
+      <TABLE cellSpacing=0 cellPadding=0 width="100%" border=0>
+        <TBODY>
+        <TR vAlign=top>
+          <TD vAlign=top>
+            <TABLE>
+              <TBODY></TBODY></TABLE>
+            <DIV class=SmallText><IMG style="VERTICAL-ALIGN: middle" height=16 
+            alt=print 
+            src="CodeProject Internet Traffic Firewall and Sniffer_ Free source code and programming help_files/print.gif" 
+            width=16> <A id=ctl00_ArticleHeaderLinks_PrintLnk 
+            href="http://www.codeproject.com/KB/IP/firewall_sniffer.aspx?display=Print">Print</A> 
+            &nbsp; <IMG style="VERTICAL-ALIGN: middle" height=16 
+            alt="Broken Article?" 
+            src="CodeProject Internet Traffic Firewall and Sniffer_ Free source code and programming help_files/report.gif" 
+            width=16> <A id=ctl00_ArticleHeaderLinks_BrokenLnk 
+            href="http://www.codeproject.com/script/Articles/Report.aspx?aid=21001">Report 
+            Article</A> &nbsp; <IMG style="VERTICAL-ALIGN: middle" alt=Watch 
+            src="CodeProject Internet Traffic Firewall and Sniffer_ Free source code and programming help_files/watchon.png"> 
+            <A class="" id=bmw_21001,2 onclick="return watchMe(21001, 2);" 
+            href="http://www.codeproject.com/script/Bookmarks/Add.aspx?&amp;obid=21001&amp;obtid=2&amp;bma=AddWatch" 
+            name=ajaxBookmarkWatchLink>Watch</A> <SPAN class=TinyText 
+            style="VISIBILITY: hidden"></SPAN><SPAN 
+            id=ctl00_ArticleHeaderLinks_ArticleBmkWatch_Message></SPAN>&nbsp; 
+            <IMG style="VERTICAL-ALIGN: middle" height=16 alt=Bookmark 
+            src="CodeProject Internet Traffic Firewall and Sniffer_ Free source code and programming help_files/link.png" 
+            width=16> <A class="" id=bm_21001,2 
+            onclick="return bookmarkMe(21001, 2);" 
+            href="http://www.codeproject.com/script/Bookmarks/Add.aspx?&amp;obid=21001&amp;obtid=2&amp;bma=AddBookmark" 
+            name=ajaxBookmarkLink>Bookmark</A> <SPAN class=TinyText 
+            style="VISIBILITY: hidden"></SPAN><SPAN 
+            id=ctl00_ArticleHeaderLinks_ArticleBmk_Message></SPAN>&nbsp; <IMG 
+            style="VERTICAL-ALIGN: middle" height=16 alt=Discuss 
+            src="CodeProject Internet Traffic Firewall and Sniffer_ Free source code and programming help_files/discuss.gif" 
+            width=15> <A 
+            href="http://www.codeproject.com/KB/IP/firewall_sniffer.aspx#_comments">Discuss</A> 
+            &nbsp; <IMG style="VERTICAL-ALIGN: middle" height=16 
+            alt="Recommend Article" 
+            src="CodeProject Internet Traffic Firewall and Sniffer_ Free source code and programming help_files/mail.gif" 
+            width=16>&nbsp;<A id=ctl00_ArticleHeaderLinks_Recommend 
+            href="http://www.codeproject.com/script/common/TellFriend.aspx?obtid=2&amp;obid=21001">Send&nbsp;to&nbsp;a&nbsp;friend</A> 
+            </DIV></TD>
+          <TD style="WIDTH: 100px; WHITE-SPACE: nowrap; TEXT-ALIGN: right">
+            <TABLE id=CurRat>
+              <TBODY>
+              <TR>
+                <TD>
+                  <TABLE>
+                    <TBODY>
+                    <TR>
+                      <TD class=SmallText id=ctl00_ArticleRating_VL 
+                      style="WHITE-SPACE: nowrap" align=right><SPAN 
+                        id=ctl00_ArticleRating_VoteLabel>14 votes for this 
+                        Article.</SPAN></TD>
+                      <TD>
+                        <TABLE cellSpacing=0 cellPadding=0 border=1>
+                          <TBODY>
+                          <TR>
+                            <TD width=20 bgColor=white height=7><IMG height=7 
+                              src="CodeProject Internet Traffic Firewall and Sniffer_ Free source code and programming help_files/red.gif" 
+                              width=20 align=center border=0></TD>
+                            <TD width=20 bgColor=white height=7><IMG height=7 
+                              src="CodeProject Internet Traffic Firewall and Sniffer_ Free source code and programming help_files/red.gif" 
+                              width=20 align=center border=0></TD>
+                            <TD width=20 bgColor=white height=7><IMG height=7 
+                              src="CodeProject Internet Traffic Firewall and Sniffer_ Free source code and programming help_files/red.gif" 
+                              width=20 align=center border=0></TD>
+                            <TD width=20 bgColor=white height=7><IMG height=7 
+                              src="CodeProject Internet Traffic Firewall and Sniffer_ Free source code and programming help_files/red.gif" 
+                              width=20 align=center border=0></TD>
+                            <TD noWrap width=20 bgColor=white height=7><IMG 
+                              height=7 
+                              src="CodeProject Internet Traffic Firewall and Sniffer_ Free source code and programming help_files/red.gif" 
+                              width=12 align=center 
+                      border=0></TD></TR></TBODY></TABLE></TD></TR>
+                    <TR id=ctl00_ArticleRating_PopularityRow>
+                      <TD class=SmallText align=right colSpan=2><A 
+                        id=ctl00_ArticleRating_PopularityLnk 
+                        title="Calculated as rating x Log10(# votes)" 
+                        href="http://www.codeproject.com/script/Articles/TopArticles.aspx?ta_so=1">Popularity: 
+                        5.28</A> <SPAN 
+                        id=ctl00_ArticleRating_PopularityLbl></SPAN><SPAN 
+                        id=ratingVal>Rating: <B>4.60</B> out of 
+                    5</SPAN></TD></TR></TBODY></TABLE></TD>
+                <TD>
+                  <DIV>
+                  <TABLE class=HistTable 
+                  title="Voting Distribution. Recent data only">
+                    <TBODY>
+                    <TR>
+                      <TD><IMG title="1 vote, 7.1%" height=1 
+                        alt="1 vote, 7.1%" 
+                        src="CodeProject Internet Traffic Firewall and Sniffer_ Free source code and programming help_files/pollcol.gif" 
+                        width=10 border=0><BR>1</TD>
+                      <TD><IMG title="0 votes, 0.0%" height=1 
+                        alt="0 votes, 0.0%" src="" width=10 border=0><BR>2</TD>
+                      <TD><IMG title="0 votes, 0.0%" height=1 
+                        alt="0 votes, 0.0%" src="" width=10 border=0><BR>3</TD>
+                      <TD><IMG title="2 votes, 14.3%" height=3 
+                        alt="2 votes, 14.3%" 
+                        src="CodeProject Internet Traffic Firewall and Sniffer_ Free source code and programming help_files/pollcol.gif" 
+                        width=10 border=0><BR>4</TD>
+                      <TD><IMG title="11 votes, 78.6%" height=20 
+                        alt="11 votes, 78.6%" 
+                        src="CodeProject Internet Traffic Firewall and Sniffer_ Free source code and programming help_files/pollcol.gif" 
+                        width=10 
+              border=0><BR>5</TD></TD></TR></TBODY></TABLE></DIV></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE><SPAN 
+      id=intelliTXT>
+      <DIV id=contentdiv><!-- Main Page Contents Start --><!-- Article Starts -->
+      <UL class=download>
+        <LI><A 
+        href="http://www.codeproject.com/KB/IP/firewall_sniffer/sniffer_demo.zip">Download 
+        demo project - 305.5 KB</A> 
+        <LI><A 
+        href="http://www.codeproject.com/KB/IP/firewall_sniffer/sniffer_src.zip">Download 
+        source files - 70.4 KB</A> </LI></UL>
+      <H2>Introduction</H2>
+      <P>Some time ago, I developed a Sniffer/Firewall GUI application which 
+      allows monitoring internet traffic, sending raw TCP/UDP/ICMP packets with 
+      any source IP you'd like using raw sockets. It is based on 
+      <CODE>IpFilterDriver</CODE>. I used <A 
+      href="http://www.codeproject.com/internet/drvfltip.asp">Developing 
+      Firewalls for Windows 2000/XP </A>article when studying how to intercept 
+      internet traffic and wrote a simple driver with Windows 2000 DDK for that 
+      purpose. I developed and used it successfully under WinXP. However, I 
+      recently migrated to Vista and it is not able to intercept internet 
+      traffic under that OS but is executing all functions without error. The 
+      Vista firewall does not use <CODE>IpFilterDriver </CODE>as it is disabled 
+      and I do not use any additional ones. However I tried to turn off Vista's 
+      firewall but the interception still did not occur.</P>
+      <H2>Background</H2>
+      <P>You need to have an understanding of TCP/IP for sending raw packets and 
+      interpreting intercepted traffic contents. If you'd like to extend the 
+      developed driver and figure out why it does not capture packets under 
+      Vista, you should have experience with DDK.</P>
+      <H2>Using the Code</H2>
+      <P>The MFC application is developed with SDI Document/View architecture. 
+      Go to FireWall menu and click IPhookON. This will start the 
+      <EM>userdrv.sys</EM> driver and <CODE>IpFilterDriver</CODE>. The first one 
+      is developed by me to intercept packets using <EM>ipfltdrv.sys</EM> 
+      windows driver. If no errors are encountered you'll notice <CODE>IpFilter: 
+      ON </CODE>displayed at the status bar right corner. To stop interception 
+      click IPhookOFF. The same procedure applies if you want to enable raw 
+      sockets, click Packs-&gt;StartRAW. After <CODE>rawsock: ON</CODE> 
+      notification in the status bar you'll be able to send raw sockets. Just go 
+      to Packs-&gt;IP4 menu and choose TCP, UDP or ICMP one. The two wide edit 
+      boxes in the middle of the dialog are source and destination IPs in text 
+      format like 127.0.0.1. The same for the ports, first is the source and 
+      second edit box is the destination one. The bottom large edit box is for 
+      the text message you want to send (currently supports only text data, just 
+      meddle with the code to add binary).</P>
+      <P>Through the Settings... menu you can control FireWall parameters sent 
+      to <EM>userdrv.sys</EM>.</P><IMG height=237 alt="firewall settings" 
+      src="CodeProject Internet Traffic Firewall and Sniffer_ Free source code and programming help_files/pic1.png" 
+      width=214 border=0> 
+      <P>Drop TCP SYN and drop TCP RST enable it to drop incoming TCP SYN 
+      packets and outgoing TCP RST packets. The latter is useful if you initiate 
+      connection with raw sockets and prevent windows from sending reset packets 
+      to the remote host. Drop ICMP * tells the driver to drop incoming ICMP 
+      packets of the corresponding type. UDP range is the allowed interval of 
+      incoming UDP packets ports. You can also log packets to 
+      <EM>windows\pmyfire.log</EM> file by checking the bottom box.</P>
+      <P>You may also use promiscuous mode to track the packets using 
+      FireWall-&gt;PromiscON but without controlling the traffic.</P>
+      <P>The additional helper classes I developed in the project are:</P>
+      <UL>
+        <LI><CODE>CPacket</CODE> 
+        <LI><CODE>CDriver</CODE> </LI></UL>
+      <P>With <CODE>CPacket</CODE> class you can send TCP, UDP and ICMP raw 
+      packets.</P><PRE lang=C++><SPAN class=code-keyword>int</SPAN> sendudp(SOCKET s, ip4_header *, 
+    udp_header *, <SPAN class=code-keyword>char</SPAN> *data = <SPAN class=code-digit>0</SPAN>, <SPAN class=code-keyword>int</SPAN> size = <SPAN class=code-digit>0</SPAN>);
+
+<SPAN class=code-keyword>int</SPAN> sendtcp(SOCKET s, ip4_header *, 
+    tcp_header *, <SPAN class=code-keyword>char</SPAN> *data = <SPAN class=code-digit>0</SPAN>, <SPAN class=code-keyword>int</SPAN> size = <SPAN class=code-digit>0</SPAN>);
+
+<SPAN class=code-keyword>int</SPAN> sendicmp(SOCKET s, ip4_header *, icmp_header *);</PRE>
+      <P>With <CODE>CDriver</CODE> class you can start, stop, send IOCTL codes 
+      to system drivers and remove them from the registry.</P><PRE lang=C++><SPAN class=code-keyword>bool</SPAN> drvStart(LPCTSTR, LPCTSTR servpath = <SPAN class=code-digit>0</SPAN>, 
+    LPCTSTR linkname = <SPAN class=code-digit>0</SPAN>, LPCTSTR info = <SPAN class=code-digit>0</SPAN>);
+
+DWORD drvIOCTL(DWORD code, LPVOID <SPAN class=code-keyword>in</SPAN> = <SPAN class=code-digit>0</SPAN>, DWORD inlen = <SPAN class=code-digit>0</SPAN>, 
+    LPVOID out = <SPAN class=code-digit>0</SPAN>, DWORD outlen = <SPAN class=code-digit>0</SPAN>);
+
+<SPAN class=code-keyword>bool</SPAN> drvStop(LPCTSTR servname = <SPAN class=code-digit>0</SPAN>, DWORD timeout = <SPAN class=code-digit>30000</SPAN>);
+
+<SPAN class=code-keyword>bool</SPAN> drvDelete(LPCTSTR servname = <SPAN class=code-digit>0</SPAN>);</PRE>
+      <P>Just have a look at the <CODE>CSnifferDoc</CODE> class on how to use 
+      them properly.</P>
+      <H2>Points of Interest</H2>
+      <P>The nice feature you may find in the context menu clicking on a 
+      particular packet. You may actually create a fake connection by using 
+      <CODE>CSnifferDoc::Onsynack</CODE>, <CODE>CSnifferDoc::Onack</CODE>, 
+      <CODE>CSnifferDoc::OnPshack</CODE>, <CODE>CSnifferDoc::OnFinack</CODE>. Do 
+      not forget to drop outgoing TCP reset packets. The intruder thinks you 
+      have got a lot of open ports (depends on which SYN you reply ACK) to his 
+      delight and rubs his hands! You may confuse him quite a lot by sending 
+      fake data also. Works fine in text messages after he got himself 
+      'connected' to port 80.</P><!-- Article Ends --><!-- Main Page Contents End --></DIV></SPAN>
+      <FORM id=aspnetForm 
+      style="PADDING-RIGHT: 0px; PADDING-LEFT: 0px; PADDING-BOTTOM: 0px; MARGIN: 0px; PADDING-TOP: 0px" 
+      name=aspnetForm action=firewall_sniffer.aspx method=post>
+      <DIV><INPUT id=__VIEWSTATE type=hidden 
+      value=/wEPDwULLTEwMDUyNjYzMjhkZEFPaBxpPJugILSZRxMvE5twkgod 
+      name=__VIEWSTATE> </DIV>
+      <H2>License</H2>
+      <DIV id=ctl00_LicenseTerms>
+      <P>This article, along with any associated source code and files, is 
+      licensed under <A 
+      href="http://www.opensource.org/licenses/gpl-license.php">The GNU General 
+      Public License (GPL)</A></P></DIV>
+      <H2>About the Author</H2>
+      <TABLE cellSpacing=5 cellPadding=0 width="100%" border=0>
+        <TBODY>
+        <TR vAlign=top>
+          <TD id=ctl00_AboutAuthorRptr_ctl00_AboutAuthor_memberPhotoTable 
+          style="WIDTH: 155px" vAlign=top><B><A 
+            id=ctl00_AboutAuthorRptr_ctl00_AboutAuthor_memberProfileLink 
+            href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=4613314">Chesnokov 
+            Yuriy</A></B><BR><BR>
+            <CENTER><IMG id=ctl00_AboutAuthorRptr_ctl00_AboutAuthor_memberPhoto 
+            style="BORDER-TOP-WIDTH: 0px; BORDER-LEFT-WIDTH: 0px; BORDER-BOTTOM-WIDTH: 0px; BORDER-RIGHT-WIDTH: 0px" 
+            src="CodeProject Internet Traffic Firewall and Sniffer_ Free source code and programming help_files/{ACBF1064-BEFB-420F-B339-C93C613CA11B}.jpg"></CENTER><BR><SPAN 
+            class=SmallText 
+            id=ctl00_AboutAuthorRptr_ctl00_AboutAuthor_memberType>Mvp</SPAN> </TD>
+          <TD>Former Cambridge University post-doc 
+            (http://www-ucc.ch.cam.ac.uk/research/yc274-research.html) currently 
+            lives in Krasnodar, Russia and doing some contract research for 
+            third parties. Research intrests in digital signal processing in 
+            medicine, image and video processing, pattern recognition, AI 
+            methods, computer vision. You may approach me for the code/research 
+            development in the above areas (chesnokov_yuriy at mail dot ru, 
+            chesnokov.yuriy at gmail dot com). 
+            <BR><BR>Publications:<BR><BR>Complexity and spectral analysis of the 
+            heart rate variability dynamics for distant prediction of paroxysmal 
+            atrial fibrillation with artificial intelligence methods. Artificial 
+            Intelligence in Medicine. 2008. V43/2. PP. 151-165 
+            (http://dx.doi.org/10.1016/j.artmed.2008.03.009)<BR><BR>Face 
+            Detection C++ Library with Skin and Motion Analysis. Biometrics AIA 
+            2007 TTS. 22 November 2007, Moscow, Russia. 
+            (http://www.dancom.ru/rus/AIA/2007TTS/ProgramAIA2007TTS.html)<BR><BR>Screening 
+            Patients with Paroxysmal Atrial Fibrillation (PAF) from Non-PAF 
+            Heart Rhythm Using HRV Data Analysis. Computers in Cardiology 2007. 
+            V. 34. PP. 459–463 
+            (http://www.cinc.org/Proceedings/2007/pdf/0459.pdf)<BR><BR>Distant 
+            Prediction of Paroxysmal Atrial Fibrillation Using HRV Data 
+            Analysis. Computers in Cardiology 2007. V. 34. PP. 455-459 
+            (http://www.cinc.org/Proceedings/2007/pdf/0455.pdf)<BR><BR>Individually 
+            Adaptable Automatic QT Detector. Computers in Cardiology 2006. V. 
+            33. PP. 337-341 
+            http://www.cinc.org/Proceedings/2006/pdf/0337.pdf)<BR><BR><BR>Past/recent 
+            outsourcing code/research:<BR><BR>www.ayonix.com - face recognition 
+            C/MATLAB<BR>www.system7.co.uk - CBIR C#/ASP.NET 
+            (cbir.system7.com)<BR>private enterprise in UK - pedestrian 
+            detection C++/CLI<BR>www.trulyintelligent.com - SpeechSieve 
+            consulting in AI<BR>www.devline.ru - video codecs C++<BR>
+            <TABLE>
+              <TBODY>
+              <TR id=ctl00_AboutAuthorRptr_ctl00_AboutAuthor_jobTitleRow>
+                <TD class=SmallText noWrap>Occupation: </TD>
+                <TD width="100%"><SPAN class=SmallText 
+                  id=ctl00_AboutAuthorRptr_ctl00_AboutAuthor_memberJobTitle>Software 
+                  Developer</SPAN></TD></TR>
+              <TR id=ctl00_AboutAuthorRptr_ctl00_AboutAuthor_locationRow>
+                <TD class=SmallText>Location: </TD>
+                <TD width="100%"><SPAN class=SmallText 
+                  id=ctl00_AboutAuthorRptr_ctl00_AboutAuthor_memberLocation><IMG 
+                  height=11 alt="Russian Federation" 
+                  src="CodeProject Internet Traffic Firewall and Sniffer_ Free source code and programming help_files/RU.gif" 
+                  width=16> Russian 
+        Federation</SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE><BR>
+      <TABLE id=ctl00_PopularArticlesRow cellSpacing=0 cellPadding=0 
+      width="100%" border=0>
+        <TBODY>
+        <TR vAlign=top>
+          <TD style="WIDTH: 100%">
+            <H2>Other popular Internet / Network articles:</H2>
+            <UL>
+              <LI><A 
+              href="http://www.codeproject.com/KB/IP/AsyncSocketServerandClien.aspx">An 
+              Asynchronous Socket Server and Client</A>
+              <DIV class=SmallText>An asynchronous socket server and client with 
+              encryption and compression.</DIV>
+              <LI><A 
+              href="http://www.codeproject.com/KB/IP/MyDownloader.aspx">MyDownloader: 
+              A Multi-thread C# Segmented Download Manager</A>
+              <DIV class=SmallText>Sample application that manages multiple 
+              segmented downloads and supports HTTP, FTP and YouTube video 
+              downloads</DIV>
+              <LI><A href="http://www.codeproject.com/KB/IP/ndk.aspx">Network 
+              Development Kit 2.0</A>
+              <DIV class=SmallText>Network Development Kit is a set of simple 
+              classes for a client-server architecture.</DIV>
+              <LI><A 
+              href="http://www.codeproject.com/KB/IP/drvfltip.aspx">Developing 
+              Firewalls for Windows 2000/XP</A>
+              <DIV class=SmallText>An article about developing Firewalls for 
+              Windows 2000/XP</DIV>
+              <LI><A 
+              href="http://www.codeproject.com/KB/IP/iocp_server_client.aspx">A 
+              simple IOCP Server/Client Class</A>
+              <DIV class=SmallText>This source code uses the advanced IOCP 
+              technology which can efficiently serve multiple clients. It also 
+              presents some solutions to practical problems that arise with the 
+              IOCP programming API, and provides a simple echo client/server 
+              with file transfer.</DIV></LI></UL>
+            <H2></H2></TD>
+          <TD>
+            <SCRIPT type=text/javascript>document.write(unescape("%3ca%20href%3d%22http%3a%2f%2fwww.codeproject.com%2fRedir.aspx%3fadid%3d7159%26way%3dban%22%20target%3d%22_blank%22%20rel%3d%22nofollow%22%3e%3cimg%20src%3d%22http%3a%2f%2fwww.codeproject.com%2fscript%2fAdm%2fServeImg.aspx%3fFile%3d%252fscript%252fadmentor%252fimages%252ftelerik_300x250_wpf.jpg%26C%3dFalse%26adid%3d7159%22%20alt%3d%22%22%20border%3d%220%22%20width%3d%22300%22%20height%3d%22250%22%3e%3c%2fa%3e"));</SCRIPT>
+          </TD></TR></TBODY></TABLE>
+      <DIV id=ctl00_AddTo_AddTo style="MARGIN: 10px">
+      <SCRIPT language=JavaScript type=text/javascript>
+var socialLinks = new social();
+socialLinks.addtoMethod=1;
+socialLinks.DrawLinks("socialLinks", document.location.href, escape(document.title), 100, 0, "SmallText Bold", "AddTo");
+</SCRIPT>
+      </DIV>
+      <TABLE class=RatingBar id=ctl00_RateArticleRow cellSpacing=0 cellPadding=0 
+      width="100%" border=0>
+        <TBODY>
+        <TR>
+          <TD><A 
+            href="http://www.codeproject.com/KB/IP/firewall_sniffer.aspx#_top">Article 
+            Top</A></TD>
+          <TD align=right>
+            <TABLE cellSpacing=0 cellPadding=0 width="100%">
+              <TBODY>
+              <TR>
+                <TD id=ctl00_RateArticle_VoteResultDiv noWrap align=right 
+                width="100%"><SPAN id=voteRes></SPAN><IMG id=loaderImg 
+                  style="DISPLAY: none" height=16 alt=loading... 
+                  src="CodeProject Internet Traffic Firewall and Sniffer_ Free source code and programming help_files/ajax-loader.gif" 
+                  width=16> </TD>
+                <TD class=SmallText id=voteTbl style="WHITE-SPACE: nowrap" 
+                align=right>
+                  <TABLE>
+                    <TBODY>
+                    <TR>
+                      <TD id=ctl00_RateArticle_RateText 
+                      style="PADDING-RIGHT: 5px; WHITE-SPACE: nowrap"><I><B>Rate 
+                        this Article for us!</B></I></TD>
+                      <TD id=ctl00_RateArticle_StartForm 
+                        align=right><I>&nbsp;&nbsp;Poor</I></TD>
+                      <TD id=ctl00_RateArticle_VoteFormDiv 
+                      style="WHITE-SPACE: nowrap" align=left>
+                        <TABLE id=ctl00_RateArticle_VoteRBL border=0>
+                          <TBODY>
+                          <TR>
+                            <TD><INPUT id=ctl00_RateArticle_VoteRBL_0 
+                              type=radio value=1 
+                            name=ctl00$RateArticle$VoteRBL></TD>
+                            <TD><INPUT id=ctl00_RateArticle_VoteRBL_1 
+                              type=radio value=2 
+                            name=ctl00$RateArticle$VoteRBL></TD>
+                            <TD><INPUT id=ctl00_RateArticle_VoteRBL_2 
+                              type=radio value=3 
+                            name=ctl00$RateArticle$VoteRBL></TD>
+                            <TD><INPUT id=ctl00_RateArticle_VoteRBL_3 
+                              type=radio value=4 
+                            name=ctl00$RateArticle$VoteRBL></TD>
+                            <TD><INPUT id=ctl00_RateArticle_VoteRBL_4 
+                              type=radio value=5 
+                            name=ctl00$RateArticle$VoteRBL></TD></TR></TBODY></TABLE></TD>
+                      <TD id=ctl00_RateArticle_EndForm noWrap 
+                        align=left><I>Excellent</I> <INPUT class=FormButton id=ctl00_RateArticle_SubmitRateBtn onclick="return rateItem(21001,2);" type=submit value=Vote name=ctl00$RateArticle$SubmitRateBtn> 
+                      </TD>
+                      <TD><SPAN 
+                    id=ctl00_RateArticle_ErrorMessage></SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE>
+      <DIV><INPUT id=__EVENTVALIDATION type=hidden 
+      value=/wEWCAKEiNWHCgLAlMXDBwLBlMXDBwLClMXDBwLDlMXDBwLElMXDBwLP+++tCwK5upDkC+rpSi19H0M5DXp3+vkxF4j3DGtj 
+      name=__EVENTVALIDATION> </DIV></FORM>
+      <DIV 
+      style="PADDING-RIGHT: 10px; PADDING-LEFT: 10px; PADDING-BOTTOM: 10px; OVERFLOW: hidden; PADDING-TOP: 10px; WHITE-SPACE: nowrap; TEXT-ALIGN: center">
+      <SCRIPT type=text/javascript>document.write(unescape("%3ca%20href%3d%22http%3a%2f%2fwww.codeproject.com%2fRedir.aspx%3fadid%3d6183%26way%3dban%22%20target%3d%22_blank%22%20rel%3d%22nofollow%22%3e%3cimg%20src%3d%22http%3a%2f%2fwww.codeproject.com%2fscript%2fAdm%2fServeImg.aspx%3fFile%3d%252fscript%252fadmentor%252fimages%252fCWS_net_468x60.gif%26C%3dFalse%26adid%3d6183%22%20alt%3d%22%22%20border%3d%220%22%20width%3d%22468%22%20height%3d%2260%22%3e%3c%2fa%3e"));</SCRIPT>
+      <IFRAME 
+      src="CodeProject Internet Traffic Firewall and Sniffer_ Free source code and programming help_files/ServeLinks.htm" 
+      frameBorder=0 width=300 scrolling=no height=60></IFRAME></DIV><A 
+      name=_comments></A><!-- Forum Start -->
+      <DIV id=_MessageBoard onclick="return SwitchMessage(event, null)">
+      <TABLE class=Frm_MainTable id=ForumTable cellSpacing=0 cellPadding=0>
+        <TBODY>
+        <TR>
+          <TD>
+            <FORM 
+            style="PADDING-RIGHT: 0px; PADDING-LEFT: 0px; PADDING-BOTTOM: 0px; MARGIN: 0px; PADDING-TOP: 0px" 
+            action=/script/Forums/SetOptions.aspx?floc=%2fKB%2fIP%2ffirewall_sniffer.aspx&amp;fid=474769 
+            method=get><INPUT type=hidden value=474769 name=fid><INPUT 
+            type=hidden 
+            value=?floc=%2fKB%2fIP%2ffirewall_sniffer.aspx&amp;fid=474769 
+            name=currentQS><INPUT type=hidden value=/KB/IP/firewall_sniffer.aspx 
+            name=floc>
+            <TABLE cellSpacing=0 cellPadding=3 width="100%" border=0>
+              <TBODY>
+              <TR class=Frm_HeaderRow1>
+                <TD style="WHITE-SPACE: nowrap"><IMG height=16 alt=FAQ 
+                  src="CodeProject Internet Traffic Firewall and Sniffer_ Free source code and programming help_files/forum_faq.gif" 
+                  width=16 align=middle border=0>&nbsp;<A 
+                  href="http://www.codeproject.com/script/Forums/FAQ.aspx"><B>FAQ</B></A>&nbsp;</TD>
+                <TD style="WHITE-SPACE: nowrap; TEXT-ALIGN: right">Noise 
+                  Tolerance<SELECT class=Frm_DropDown size=1 name=noise> 
+                    <OPTION value=1>Very High</OPTION><OPTION 
+                    value=2>High</OPTION><OPTION value=3 
+                    selected>Medium</OPTION><OPTION value=4>Low</OPTION><OPTION 
+                    value=5>Very Low</OPTION></SELECT></TD>
+                <TD style="WHITE-SPACE: nowrap; TEXT-ALIGN: right" 
+                  colSpan=2><IMG height=15 alt=Search 
+                  src="CodeProject Internet Traffic Firewall and Sniffer_ Free source code and programming help_files/forum_search.gif" 
+                  width=16 align=top border=0>&nbsp;<A 
+                  href="http://www.codeproject.com/script/Forums/Search.aspx?fid=474769">Search 
+                  Messages</A>&nbsp;</TD>
+                <TD style="TEXT-ALIGN: right"><INPUT class=Frm_Button type=submit value="Set Options" name=SetOpt></TD></TR>
+              <TR class=Frm_HeaderRow2>
+                <TD style="WIDTH: 100%">&nbsp;</TD>
+                <TD 
+                  style="WHITE-SPACE: nowrap; TEXT-ALIGN: right">Layout<SELECT 
+                  class=Frm_DropDown size=1 name=view> <OPTION value=Quick 
+                    selected>Normal</OPTION><OPTION value=Topic>Expand Root 
+                    Messages</OPTION><OPTION value=Expanded>Expand All 
+                    Messages</OPTION><OPTION value=Thread>Thread 
+                    View</OPTION><OPTION value=Normal>No Javascript 
+                    (slow)</OPTION><OPTION value=Preview>No Javascript 
+                    Preview</OPTION></SELECT>&nbsp;&nbsp;</TD>
+                <TD style="WHITE-SPACE: nowrap">Per page<SELECT 
+                  class=Frm_DropDown size=1 name=mpp> <OPTION 
+                    value=10>10</OPTION><OPTION value=25 
+                    selected>25</OPTION><OPTION 
+                  value=50>50</OPTION></SELECT>&nbsp;&nbsp;</TD>
+                <TD colSpan=2>&nbsp;</TD></TR></TBODY></TABLE></FORM></TD></TR>
+        <TR>
+          <TD><A name=xx0xx></A>
+            <TABLE cellSpacing=0 cellPadding=2 width="100%" border=0>
+              <TBODY>
+              <TR class=Frm_NavigationBar>
+                <TD><IMG height=16 alt=new 
+                  src="CodeProject Internet Traffic Firewall and Sniffer_ Free source code and programming help_files/forum_newmsg.gif" 
+                  width=16 align=top border=0><A class=Frm_HL 
+                  title="Create a new message thread" 
+                  href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=474769&amp;floc=/KB/IP/firewall_sniffer.aspx" 
+                  target=_top name=Frm_HoverNL><B>New Message</B></A></TD>
+                <TD>Msgs 1 to 6 of 6 (Total in Forum: 6) (<A 
+                  href="http://www.codeproject.com/KB/IP/firewall_sniffer.aspx?fid=474769">Refresh</A>)</TD>
+                <TD style="WHITE-SPACE: nowrap; TEXT-ALIGN: right"><SPAN 
+                  class=Frm_HL>First</SPAN><SPAN class=Frm_HL>Prev</SPAN><SPAN 
+                  class=Frm_HL>Next</SPAN></TD></TR></TBODY></TABLE></TD></TR>
+        <TR>
+          <TD>
+            <TABLE class=Frm_MsgTable cellSpacing=0 cellPadding=0 width="100%" 
+            border=0><!-- Column Headers -->
+              <TBODY>
+              <TR class=Frm_ColumnHeaders>
+                <TD style="WIDTH: 100%">
+                  <TABLE cellSpacing=0 cellPadding=2 width="100%" border=0>
+                    <TBODY>
+                    <TR>
+                      <TD>Subject&nbsp;</TD>
+                      <TD class=Frm_MsgAuthor>&nbsp;Author&nbsp;</TD>
+                      <TD 
+              class=Frm_MsgDate>Date&nbsp;</TD></TR></TBODY></TABLE></TD></TR>
+              <TR>
+                <TD><IMG height=5 alt="" 
+                  src="CodeProject Internet Traffic Firewall and Sniffer_ Free source code and programming help_files/t.gif" 
+                  width=1 border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd Rt HdUnSel " id=F2616972_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=16><A 
+                        name=xx2616972xx></A><IMG height=16 alt=General 
+                        src="CodeProject Internet Traffic Firewall and Sniffer_ Free source code and programming help_files/msg_general.gif" 
+                        width=16 align=top></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/IP/firewall_sniffer.aspx?fid=474769&amp;select=2616972#xx2616972xx" 
+                        name=2616972>DRIVER_IRQL_NOT_LESS_OR_EQUAL</A></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        title=member height=16 alt=member 
+                        src="CodeProject Internet Traffic Firewall and Sniffer_ Free source code and programming help_files/member_sm.gif" 
+                        border=0></TD>
+                      <TD class=Frm_MsgAuthor><A 
+                        href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=4537093">Kerem 
+                        Guemruekcue</A></TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">10:22 
+                        29 Jun '08 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=F2616972_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 16px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2>Hi,<BR><BR>i got this from your 
+                                driver. Maybe you are interested in the 
+                                message.<BR>My System is XP Pro, with SP3 
+                                up2date. Here is a bugcheck "!analyse -v" for 
+                                you from kernel 
+                                code:<BR><BR>....................<BR>*******************************************************************************<BR>* 
+                                *<BR>* Bugcheck Analysis *<BR>* 
+                                *<BR>*******************************************************************************<BR><BR>Use 
+                                !analyze -v to get detailed debugging 
+                                information.<BR><BR>BugCheck D1, {e5cbf000, 2, 
+                                1, f27e5727}<BR><BR>*** ERROR: Module load 
+                                completed but symbols could not be loaded for 
+                                userdrv.sys<BR>*** ERROR: Module load completed 
+                                but symbols could not be loaded for 
+                                nwfs.sys<BR>PEB is paged out (Peb.Ldr = 
+                                7ffd900c). Type ".hh dbgerr001" for 
+                                details<BR>PEB is paged out (Peb.Ldr = 
+                                7ffd900c). Type ".hh dbgerr001" for 
+                                details<BR>Probably caused by : userdrv.sys ( 
+                                userdrv+1727 )<BR><BR>Followup: 
+                                MachineOwner<BR>---------<BR><BR>kd&amp;gt; 
+                                !analyze 
+                                -v<BR>*******************************************************************************<BR>* 
+                                *<BR>* Bugcheck Analysis *<BR>* 
+                                *<BR>*******************************************************************************<BR><BR>DRIVER_IRQL_NOT_LESS_OR_EQUAL 
+                                (d1)<BR>An attempt was made to access a pageable 
+                                (or completely invalid) address at 
+                                an<BR>interrupt request level (IRQL) that is too 
+                                high. This is usually<BR>caused by drivers using 
+                                improper addresses.<BR>If kernel debugger is 
+                                available get stack 
+                                backtrace.<BR>Arguments:<BR>Arg1: e5cbf000, 
+                                memory referenced<BR>Arg2: 00000002, 
+                                IRQL<BR>Arg3: 00000001, value 0 = read 
+                                operation, 1 = write operation<BR>Arg4: 
+                                f27e5727, address which referenced 
+                                memory<BR><BR>Debugging 
+                                Details:<BR>------------------<BR><BR>PEB is 
+                                paged out (Peb.Ldr = 7ffd900c). Type ".hh 
+                                dbgerr001" for details<BR>PEB is paged out 
+                                (Peb.Ldr = 7ffd900c). Type ".hh dbgerr001" for 
+                                details<BR><BR>WRITE_ADDRESS: e5cbf000 Paged 
+                                pool<BR><BR>CURRENT_IRQL: 2<BR><BR>FAULTING_IP: 
+                                <BR>userdrv+1727<BR>f27e5727 f3a5 rep movs dword 
+                                ptr es:[edi],dword ptr 
+                                [esi]<BR><BR>DEFAULT_BUCKET_ID: 
+                                DRIVER_FAULT<BR><BR>BUGCHECK_STR: 
+                                0xD1<BR><BR>PROCESS_NAME: 
+                                spamihilator.ex<BR><BR>TRAP_FRAME: f27bb670 -- 
+                                (.trap 0xfffffffff27bb670)<BR>ErrCode = 
+                                00000002<BR>eax=00000014 ebx=00000014 
+                                ecx=00000002 edx=00000014 esi=8551332c 
+                                edi=e5cbf000<BR>eip=f27e5727 esp=f27bb6e4 
+                                ebp=00000000 iopl=0 nv up ei pl nz na pe 
+                                nc<BR>cs=0008 ss=0010 ds=0023 es=0023 fs=0030 
+                                gs=0000 
+                                efl=00010206<BR>userdrv+0x1727:<BR>f27e5727 f3a5 
+                                rep movs dword ptr es:[edi],dword ptr 
+                                [esi]<BR>Resetting default 
+                                scope<BR><BR>LAST_CONTROL_TRANSFER: from 
+                                f27e5727 to 804e187f<BR><BR>STACK_TEXT: 
+                                <BR>f27bb670 f27e5727 badb0d00 00000014 f27e54d6 
+                                nt!KiTrap0E+0x233<BR>WARNING: Stack unwind 
+                                information not available. Following frames may 
+                                be wrong.<BR>00000000 00000000 00000000 00000000 
+                                00000000 
+                                userdrv+0x1727<BR><BR><BR>STACK_COMMAND: 
+                                kb<BR><BR>FOLLOWUP_IP: 
+                                <BR>userdrv+1727<BR>f27e5727 f3a5 rep movs dword 
+                                ptr es:[edi],dword ptr 
+                                [esi]<BR><BR>SYMBOL_STACK_INDEX: 
+                                1<BR><BR>SYMBOL_NAME: 
+                                userdrv+1727<BR><BR>FOLLOWUP_NAME: 
+                                MachineOwner<BR><BR>MODULE_NAME: 
+                                userdrv<BR><BR>IMAGE_NAME: 
+                                userdrv.sys<BR><BR>DEBUG_FLR_IMAGE_TIMESTAMP: 
+                                41f74075<BR><BR>FAILURE_BUCKET_ID: 
+                                0xD1_W_userdrv+1727<BR><BR>BUCKET_ID: 
+                                0xD1_W_userdrv+1727<BR><BR>Followup: 
+                                MachineOwner<BR>---------<BR><BR>kd&amp;gt; 
+                                .trap 0xfffffffff27bb670<BR>ErrCode = 
+                                00000002<BR>eax=00000014 ebx=00000014 
+                                ecx=00000002 edx=00000014 esi=8551332c 
+                                edi=e5cbf000<BR>eip=f27e5727 esp=f27bb6e4 
+                                ebp=00000000 iopl=0 nv up ei pl nz na pe 
+                                nc<BR>cs=0008 ss=0010 ds=0023 es=0023 fs=0030 
+                                gs=0000 
+                                efl=00010206<BR>userdrv+0x1727:<BR>f27e5727 f3a5 
+                                rep movs dword ptr es:[edi],dword ptr 
+                                [esi]<BR>kd&amp;gt; lmvm userdrv<BR>start end 
+                                module name<BR>f27e4000 f27ec000 userdrv (no 
+                                symbols) <BR>Loaded symbol image file: 
+                                userdrv.sys<BR>Image path: \??\C:\Dokumente und 
+                                Einstellungen\Administrator\Desktop\userdrv.sys<BR>Image 
+                                name: userdrv.sys<BR>Timestamp: Wed Jan 26 
+                                08:02:13 2005 (41F74075)<BR>CheckSum: 
+                                00002BF9<BR>ImageSize: 00008000<BR>Translations: 
+                                0000.04b0 0000.04e0 0409.04b0 
+                                0409.04e0<BR><BR><BR><BR>Regards<BR><BR><BR>Kerem 
+                                <BR><BR>
+                                <DIV class=ForumSig>----------------------- 
+                                <BR>Beste Grüsse / Best regards / Votre bien 
+                                devoue<BR>Kerem Gümrükcü<BR>Latest Open-Source 
+                                Projects: codeplex, 
+                                sourceforge<BR>----------------------- <BR>"This 
+                                reply is provided as is, without warranty 
+                                express or implied."</DIV><BR></TD></TR>
+                                <TR style="VERTICAL-ALIGN: middle">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL title=Reply 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=474769&amp;select=2616972&amp;floc=/KB/IP/firewall_sniffer.aspx&amp;fa=r">Reply</A>·<A 
+                                class=Frm_MHL title=Email 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=474769&amp;select=2616972&amp;floc=/KB/IP/firewall_sniffer.aspx&amp;fa=e">Email</A>·<A 
+                                class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/IP/firewall_sniffer.aspx?fid=474769&amp;tid=2616972">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=474769&amp;msg=2616972">PermaLink</A>·<A 
+                                class=Frm_MHL title="Bookmark this post" 
+                                href="http://www.codeproject.com/script/Bookmarks/Add.aspx?&amp;obid=2616972&amp;obtid=3&amp;bma=AddBookmark">Bookmark</A></TD>
+                                <TD class=Frm_MsgFt 
+                                style="TEXT-ALIGN: right"><SPAN id=MVF2616972 
+                                style="WHITE-SPACE: nowrap">
+                                <SCRIPT type=text/javascript>
+												MsgVFrm(4537093,2616972,false,"","","");
+											</SCRIPT>
+                                </SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR class=Quick>
+                <TD class=Frm_MsgRtDivide><IMG height=1 alt="" 
+                  src="CodeProject Internet Traffic Firewall and Sniffer_ Free source code and programming help_files/t.gif" 
+                  width=1 border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd LoVote Rt HdUnSel " id=F2352567_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=16><A 
+                        name=xx2352567xx></A><IMG height=16 alt=Answer 
+                        src="CodeProject Internet Traffic Firewall and Sniffer_ Free source code and programming help_files/msg_answer.gif" 
+                        width=16 align=top></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/IP/firewall_sniffer.aspx?fid=474769&amp;select=2352567#xx2352567xx" 
+                        name=2352567>data compression program to gui</A></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        title=member height=16 alt=member 
+                        src="CodeProject Internet Traffic Firewall and Sniffer_ Free source code and programming help_files/member_sm.gif" 
+                        border=0></TD>
+                      <TD class=Frm_MsgAuthor><A 
+                        href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=4776156">geetikasuri</A></TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">9:32 10 
+                        Dec '07 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=F2352567_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 16px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2>i want to make my 'c' data 
+                                compression program to gui with c# 
+<BR></TD></TR>
+                                <TR style="VERTICAL-ALIGN: middle">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL title=Reply 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=474769&amp;select=2352567&amp;floc=/KB/IP/firewall_sniffer.aspx&amp;fa=r">Reply</A>·<A 
+                                class=Frm_MHL title=Email 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=474769&amp;select=2352567&amp;floc=/KB/IP/firewall_sniffer.aspx&amp;fa=e">Email</A>·<A 
+                                class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/IP/firewall_sniffer.aspx?fid=474769&amp;tid=2352567">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=474769&amp;msg=2352567">PermaLink</A>·<A 
+                                class=Frm_MHL title="Bookmark this post" 
+                                href="http://www.codeproject.com/script/Bookmarks/Add.aspx?&amp;obid=2352567&amp;obtid=3&amp;bma=AddBookmark">Bookmark</A></TD>
+                                <TD class=Frm_MsgFt 
+                                style="TEXT-ALIGN: right"><SPAN id=MVF2352567 
+                                style="WHITE-SPACE: nowrap">1.20/5 (5 votes)
+                                <SCRIPT type=text/javascript>
+												MsgVFrm(4776156,2352567,false,"","","");
+											</SCRIPT>
+                                 
+                        </SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR class=Quick>
+                <TD class=Frm_MsgRtDivide><IMG height=1 alt="" 
+                  src="CodeProject Internet Traffic Firewall and Sniffer_ Free source code and programming help_files/t.gif" 
+                  width=1 border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd Rt HdUnSel " id=F2286110_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=16><A 
+                        name=xx2286110xx></A><IMG height=16 alt=General 
+                        src="CodeProject Internet Traffic Firewall and Sniffer_ Free source code and programming help_files/msg_general.gif" 
+                        width=16 align=top></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/IP/firewall_sniffer.aspx?fid=474769&amp;select=2286110#xx2286110xx" 
+                        name=2286110>I'm sorry...</A></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        title=member height=16 alt=member 
+                        src="CodeProject Internet Traffic Firewall and Sniffer_ Free source code and programming help_files/member_sm.gif" 
+                        border=0></TD>
+                      <TD class=Frm_MsgAuthor><A 
+                        href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=290469">SlimFast2000</A></TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">2:06 24 
+                        Oct '07 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=F2286110_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 16px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2>...but the binary archive seems 
+                                still broken. <IMG title=Frown 
+                                src="CodeProject Internet Traffic Firewall and Sniffer_ Free source code and programming help_files/smiley_frown.gif" 
+                                align=top><BR>Although this really seems 
+                                interesting to me! <IMG title=Smile 
+                                src="CodeProject Internet Traffic Firewall and Sniffer_ Free source code and programming help_files/smiley_smile.gif" 
+                                align=top> <BR></TD></TR>
+                                <TR style="VERTICAL-ALIGN: middle">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL title=Reply 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=474769&amp;select=2286110&amp;floc=/KB/IP/firewall_sniffer.aspx&amp;fa=r">Reply</A>·<A 
+                                class=Frm_MHL title=Email 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=474769&amp;select=2286110&amp;floc=/KB/IP/firewall_sniffer.aspx&amp;fa=e">Email</A>·<A 
+                                class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/IP/firewall_sniffer.aspx?fid=474769&amp;tid=2286110">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=474769&amp;msg=2286110">PermaLink</A>·<A 
+                                class=Frm_MHL title="Bookmark this post" 
+                                href="http://www.codeproject.com/script/Bookmarks/Add.aspx?&amp;obid=2286110&amp;obtid=3&amp;bma=AddBookmark">Bookmark</A></TD>
+                                <TD class=Frm_MsgFt 
+                                style="TEXT-ALIGN: right"><SPAN id=MVF2286110 
+                                style="WHITE-SPACE: nowrap">
+                                <SCRIPT type=text/javascript>
+												MsgVFrm(290469,2286110,false,"","","");
+											</SCRIPT>
+                                </SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR class=Quick>
+                <TD class=Frm_MsgDivide><IMG height=1 alt="" 
+                  src="CodeProject Internet Traffic Firewall and Sniffer_ Free source code and programming help_files/t.gif" 
+                  width=1 border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd HdUnSel " id=F2286235_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=34><A 
+                        name=xx2286235xx></A><IMG height=16 alt=General 
+                        src="CodeProject Internet Traffic Firewall and Sniffer_ Free source code and programming help_files/msg_general.gif" 
+                        width=16 align=top></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/IP/firewall_sniffer.aspx?fid=474769&amp;select=2286235#xx2286235xx" 
+                        name=2286235>Re: I'm sorry... demo.zip should be 
+                        uploaded</A></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        title=member height=16 alt=member 
+                        src="CodeProject Internet Traffic Firewall and Sniffer_ Free source code and programming help_files/member_sm.gif" 
+                        border=0></TD>
+                      <TD class=Frm_MsgAuthor><A 
+                        href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=4613314">Chesnokov 
+                        Yuriy</A></TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">3:17 24 
+                        Oct '07 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=F2286235_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 34px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2>Now the demo.zip is uploaded 
+                                without codeproject errors. Shoud be not broken 
+                                now. <BR><BR>
+                                <DIV 
+class=ForumSig>chesnokov</DIV><BR></TD></TR>
+                                <TR style="VERTICAL-ALIGN: middle">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL title=Reply 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=474769&amp;select=2286235&amp;floc=/KB/IP/firewall_sniffer.aspx&amp;fa=r">Reply</A>·<A 
+                                class=Frm_MHL title=Email 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=474769&amp;select=2286235&amp;floc=/KB/IP/firewall_sniffer.aspx&amp;fa=e">Email</A>·<A 
+                                class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/IP/firewall_sniffer.aspx?fid=474769&amp;tid=2286110">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=474769&amp;msg=2286235">PermaLink</A>·<A 
+                                class=Frm_MHL title="Bookmark this post" 
+                                href="http://www.codeproject.com/script/Bookmarks/Add.aspx?&amp;obid=2286235&amp;obtid=3&amp;bma=AddBookmark">Bookmark</A></TD>
+                                <TD class=Frm_MsgFt 
+                                style="TEXT-ALIGN: right"><SPAN id=MVF2286235 
+                                style="WHITE-SPACE: nowrap">
+                                <SCRIPT type=text/javascript>
+												MsgVFrm(4613314,2286235,false,"","","");
+											</SCRIPT>
+                                </SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR class=Quick>
+                <TD class=Frm_MsgDivide><IMG height=1 alt="" 
+                  src="CodeProject Internet Traffic Firewall and Sniffer_ Free source code and programming help_files/t.gif" 
+                  width=1 border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd LoVote HdUnSel " id=F2286314_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=52><A 
+                        name=xx2286314xx></A><IMG height=16 alt=General 
+                        src="CodeProject Internet Traffic Firewall and Sniffer_ Free source code and programming help_files/msg_general.gif" 
+                        width=16 align=top></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/IP/firewall_sniffer.aspx?fid=474769&amp;select=2286314#xx2286314xx" 
+                        name=2286314>Re: I'm sorry... demo.zip should be 
+                        uploaded</A></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        title=member height=16 alt=member 
+                        src="CodeProject Internet Traffic Firewall and Sniffer_ Free source code and programming help_files/member_sm.gif" 
+                        border=0></TD>
+                      <TD class=Frm_MsgAuthor><A 
+                        href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=290469">SlimFast2000</A></TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">3:59 24 
+                        Oct '07 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=F2286314_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 52px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2>Thanks a lot - that was fast. And 
+                                sorry that I didn't read the other message. <IMG 
+                                title="D'Oh!" 
+                                src="CodeProject Internet Traffic Firewall and Sniffer_ Free source code and programming help_files/smiley_doh.gif" 
+                                align=top> <BR></TD></TR>
+                                <TR style="VERTICAL-ALIGN: middle">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL title=Reply 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=474769&amp;select=2286314&amp;floc=/KB/IP/firewall_sniffer.aspx&amp;fa=r">Reply</A>·<A 
+                                class=Frm_MHL title=Email 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=474769&amp;select=2286314&amp;floc=/KB/IP/firewall_sniffer.aspx&amp;fa=e">Email</A>·<A 
+                                class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/IP/firewall_sniffer.aspx?fid=474769&amp;tid=2286110">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=474769&amp;msg=2286314">PermaLink</A>·<A 
+                                class=Frm_MHL title="Bookmark this post" 
+                                href="http://www.codeproject.com/script/Bookmarks/Add.aspx?&amp;obid=2286314&amp;obtid=3&amp;bma=AddBookmark">Bookmark</A></TD>
+                                <TD class=Frm_MsgFt 
+                                style="TEXT-ALIGN: right"><SPAN id=MVF2286314 
+                                style="WHITE-SPACE: nowrap">1.00/5 (1 vote)
+                                <SCRIPT type=text/javascript>
+												MsgVFrm(290469,2286314,false,"","","");
+											</SCRIPT>
+                                 
+                        </SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR class=Quick>
+                <TD class=Frm_MsgRtDivide><IMG height=1 alt="" 
+                  src="CodeProject Internet Traffic Firewall and Sniffer_ Free source code and programming help_files/t.gif" 
+                  width=1 border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd LoVote Rt HdUnSel " id=F2285988_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=16><A 
+                        name=xx2285988xx></A><IMG height=16 alt=General 
+                        src="CodeProject Internet Traffic Firewall and Sniffer_ Free source code and programming help_files/msg_general.gif" 
+                        width=16 align=top></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/IP/firewall_sniffer.aspx?fid=474769&amp;select=2285988#xx2285988xx" 
+                        name=2285988>sniffer_demo.zip</A></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        title=member height=16 alt=member 
+                        src="CodeProject Internet Traffic Firewall and Sniffer_ Free source code and programming help_files/member_sm.gif" 
+                        border=0></TD>
+                      <TD class=Frm_MsgAuthor><A 
+                        href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=4613314">Chesnokov 
+                        Yuriy</A></TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">1:01 24 
+                        Oct '07 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=F2285988_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 16px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2>The demo might not be properly 
+                                uploaded as I'm having problems with data upload 
+                                to codeproject today. I will check it and upload 
+                                it later on. <BR><BR>
+                                <DIV 
+class=ForumSig>chesnokov</DIV><BR></TD></TR>
+                                <TR style="VERTICAL-ALIGN: middle">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL title=Reply 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=474769&amp;select=2285988&amp;floc=/KB/IP/firewall_sniffer.aspx&amp;fa=r">Reply</A>·<A 
+                                class=Frm_MHL title=Email 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=474769&amp;select=2285988&amp;floc=/KB/IP/firewall_sniffer.aspx&amp;fa=e">Email</A>·<A 
+                                class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/IP/firewall_sniffer.aspx?fid=474769&amp;tid=2285988">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=474769&amp;msg=2285988">PermaLink</A>·<A 
+                                class=Frm_MHL title="Bookmark this post" 
+                                href="http://www.codeproject.com/script/Bookmarks/Add.aspx?&amp;obid=2285988&amp;obtid=3&amp;bma=AddBookmark">Bookmark</A></TD>
+                                <TD class=Frm_MsgFt 
+                                style="TEXT-ALIGN: right"><SPAN id=MVF2285988 
+                                style="WHITE-SPACE: nowrap">2.00/5 (1 vote)
+                                <SCRIPT type=text/javascript>
+												MsgVFrm(4613314,2285988,false,"","","");
+											</SCRIPT>
+                                 
+                        </SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR>
+                <TD><IMG height=5 alt="" 
+                  src="CodeProject Internet Traffic Firewall and Sniffer_ Free source code and programming help_files/t.gif" 
+                  width=1 border=0></TD></TR></TBODY></TABLE></TD></TR>
+        <TR>
+          <TD>
+            <TABLE cellSpacing=0 cellPadding=2 width="100%">
+              <TBODY>
+              <TR class=Frm_Footer>
+                <TD>Last Visit: Tuesday, July 29, 2008 12:24 AM &nbsp; &nbsp; 
+                  Last Update:Thursday, August 14, 2008 10:50 AM</TD>
+                <TD 
+              style="WHITE-SPACE: nowrap; TEXT-ALIGN: right"></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></DIV>
+      <P class=SmallText><IMG height=16 alt=General 
+      src="CodeProject Internet Traffic Firewall and Sniffer_ Free source code and programming help_files/msg_general.gif" 
+      width=16 align=top> General &nbsp;&nbsp; <IMG height=16 alt=News 
+      src="CodeProject Internet Traffic Firewall and Sniffer_ Free source code and programming help_files/msg_news.gif" 
+      width=16 align=top> News &nbsp;&nbsp; <IMG height=16 alt=Question 
+      src="CodeProject Internet Traffic Firewall and Sniffer_ Free source code and programming help_files/msg_question.gif" 
+      width=16 align=top> Question &nbsp;&nbsp; <IMG height=16 alt=Answer 
+      src="CodeProject Internet Traffic Firewall and Sniffer_ Free source code and programming help_files/msg_answer.gif" 
+      width=16 align=top> Answer &nbsp;&nbsp; <IMG height=16 alt=Joke 
+      src="CodeProject Internet Traffic Firewall and Sniffer_ Free source code and programming help_files/msg_joke.gif" 
+      width=16 align=top> Joke &nbsp;&nbsp; <IMG height=16 alt=Rant 
+      src="CodeProject Internet Traffic Firewall and Sniffer_ Free source code and programming help_files/msg_rant.gif" 
+      width=16 align=top> Rant &nbsp;&nbsp; <IMG height=16 alt=Admin 
+      src="CodeProject Internet Traffic Firewall and Sniffer_ Free source code and programming help_files/msg_admin.gif" 
+      width=16 align=top> Admin &nbsp;&nbsp; </P><!-- Forum End --></DIV>
+      <TABLE width="100%">
+        <TBODY>
+        <TR vAlign=top>
+          <TD class=TinyText align=left><A id=ctl00_PermaLink 
+            href="http://www.codeproject.com/script/Articles/Article.aspx?aid=21001">PermaLink</A> 
+            | <A id=ctl00_PrivacyLink 
+            href="http://www.codeproject.com/info/privacy.aspx">Privacy </A>| <A 
+            id=ctl00_TermsOfUseLink 
+            href="http://www.codeproject.com/info/TermsOfUse.aspx">Terms of 
+            Use</A> <BR>Last Updated: 23 Oct 2007<BR>Editor: <A 
+            id=ctl00_ArticleEditor 
+            href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=3873871">Sean 
+            Ewington</A><BR></TD>
+          <TD class=TinyText vAlign=top align=right>Copyright 2007 by 
+            Chesnokov Yuriy<BR>Everything else Copyright © <A 
+            href="mailto:webmaster@codeproject.com">CodeProject</A>, 1999-2008 
+            <BR>Web19 | <A id=ctl00_AdvertiseLink 
+            href="http://www.codeproject.com/info/MediaKit.aspx">Advertise on 
+            the Code Project </A></TD></TR></TBODY></TABLE>
+      <CENTER></CENTER></TD></TR>
+  <TR>
+    <TD align=middle colSpan=2></TD></TR></TBODY></TABLE><BR>
+<SCRIPT language=Javascript type=text/javascript>//<![CDATA[
+if (document.all) try {window.attachEvent("oncopy",copyCode);}catch(e){};
+//]]></SCRIPT>
+
+<SCRIPT language=Javascript 
+src="CodeProject Internet Traffic Firewall and Sniffer_ Free source code and programming help_files/TogglePre.js" 
+type=text/javascript></SCRIPT>
+
+<SCRIPT language=Javascript 
+src="CodeProject Internet Traffic Firewall and Sniffer_ Free source code and programming help_files/menu132_com.js" 
+type=text/javascript></SCRIPT>
+
+<SCRIPT language=Javascript 
+src="CodeProject Internet Traffic Firewall and Sniffer_ Free source code and programming help_files/TopNavBar.js" 
+type=text/javascript></SCRIPT>
+
+<SCRIPT language=Javascript type=text/javascript>//<![CDATA[
+new HVMenu(new menu_NavbarConfig());
+//]]></SCRIPT>
+</BODY></HTML>

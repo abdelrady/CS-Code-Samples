@@ -1,0 +1,2976 @@
+From: "Saved by Windows Internet Explorer 7"
+Subject: HTTP/1.1: Header Field Definitions
+Date: Tue, 24 Jun 2008 12:14:00 +0300
+MIME-Version: 1.0
+Content-Type: text/html;
+	charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
+Content-Location: http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html
+X-MimeOLE: Produced By Microsoft MimeOLE V6.0.6000.16545
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" =
+"http://www.w3c.org/TR/1999/REC-html401-19991224/loose.dtd">
+<HTML xmlns=3D"http://www.w3.org/1999/xhtml"><HEAD><TITLE>HTTP/1.1: =
+Header Field Definitions</TITLE>
+<META http-equiv=3DContent-Type content=3D"text/html; =
+charset=3Diso-8859-1">
+<META content=3D"MSHTML 6.00.6000.16643" name=3DGENERATOR></HEAD>
+<BODY>
+<ADDRESS>part of <A =
+href=3D"http://www.w3.org/Protocols/rfc2616/rfc2616.html"=20
+rev=3DSection>Hypertext Transfer Protocol -- HTTP/1.1</A><BR>RFC 2616 =
+Fielding, et=20
+al.</ADDRESS>
+<H2><A id=3Dsec14>14</A> Header Field Definitions</H2>
+<P>This section defines the syntax and semantics of all standard =
+HTTP/1.1 header=20
+fields. For entity-header fields, both sender and recipient refer to =
+either the=20
+client or the server, depending on who sends and who receives the =
+entity. </P>
+<H3><A id=3Dsec14.1>14.1</A> Accept</H3>
+<P>The Accept request-header field can be used to specify certain media =
+types=20
+which are acceptable for the response. Accept headers can be used to =
+indicate=20
+that the request is specifically limited to a small set of desired =
+types, as in=20
+the case of a request for an in-line image. </P><PRE>       Accept       =
+  =3D "Accept" ":"
+                        #( media-range [ accept-params ] )
+</PRE><PRE>       media-range    =3D ( "*/*"
+                        | ( type "/" "*" )
+                        | ( type "/" subtype )
+                        ) *( ";" parameter )
+       accept-params  =3D ";" "q" "=3D" qvalue *( accept-extension )
+       accept-extension =3D ";" token [ "=3D" ( token | quoted-string ) =
+]
+</PRE>
+<P>The asterisk "*" character is used to group media types into ranges, =
+with=20
+"*/*" indicating all media types and "type/*" indicating all subtypes of =
+that=20
+type. The media-range MAY include media type parameters that are =
+applicable to=20
+that range. </P>
+<P>Each media-range MAY be followed by one or more accept-params, =
+beginning with=20
+the "q" parameter for indicating a relative quality factor. The first =
+"q"=20
+parameter (if any) separates the media-range parameter(s) from the=20
+accept-params. Quality factors allow the user or user agent to indicate =
+the=20
+relative degree of preference for that media-range, using the qvalue =
+scale from=20
+0 to 1 (section <A=20
+href=3D"http://www.w3.org/Protocols/rfc2616/rfc2616-sec3.html#sec3.9"=20
+rel=3Dxref>3.9</A>). The default value is q=3D1. </P><PRE>      Note: =
+Use of the "q" parameter name to separate media type
+      parameters from Accept extension parameters is due to historical
+      practice. Although this prevents any media type parameter named
+      "q" from being used with a media range, such an event is believed
+      to be unlikely given the lack of any "q" parameters in the IANA
+      media type registry and the rare usage of any media type
+      parameters in Accept. Future media types are discouraged from
+      registering any parameter named "q".
+</PRE>
+<P>The example </P><PRE>       Accept: audio/*; q=3D0.2, audio/basic
+</PRE>
+<P>SHOULD be interpreted as "I prefer audio/basic, but send me any audio =
+type if=20
+it is the best available after an 80% mark-down in quality." </P>
+<P>If no Accept header field is present, then it is assumed that the =
+client=20
+accepts all media types. If an Accept header field is present, and if =
+the server=20
+cannot send a response which is acceptable according to the combined =
+Accept=20
+field value, then the server SHOULD send a 406 (not acceptable) =
+response. </P>
+<P>A more elaborate example is </P><PRE>       Accept: text/plain; =
+q=3D0.5, text/html,
+               text/x-dvi; q=3D0.8, text/x-c
+</PRE>
+<P>Verbally, this would be interpreted as "text/html and text/x-c are =
+the=20
+preferred media types, but if they do not exist, then send the =
+text/x-dvi=20
+entity, and if that does not exist, send the text/plain entity." </P>
+<P>Media ranges can be overridden by more specific media ranges or =
+specific=20
+media types. If more than one media range applies to a given type, the =
+most=20
+specific reference has precedence. For example, </P><PRE>       Accept: =
+text/*, text/html, text/html;level=3D1, */*
+</PRE>
+<P>have the following precedence: </P><PRE>       1) text/html;level=3D1
+       2) text/html
+       3) text/*
+       4) */*
+</PRE>
+<P>The media type quality factor associated with a given type is =
+determined by=20
+finding the media range with the highest precedence which matches that =
+type. For=20
+example, </P><PRE>       Accept: text/*;q=3D0.3, text/html;q=3D0.7, =
+text/html;level=3D1,
+               text/html;level=3D2;q=3D0.4, */*;q=3D0.5
+</PRE>
+<P>would cause the following values to be associated: </P><PRE>       =
+text/html;level=3D1         =3D 1
+       text/html                 =3D <A =
+href=3D"http://www.w3.org/Protocols/rfc2616/rfc2616-sec0.html#sec0.7" =
+rel=3Dxref>0.7</A>
+       text/plain                =3D <A =
+href=3D"http://www.w3.org/Protocols/rfc2616/rfc2616-sec0.html#sec0.3" =
+rel=3Dxref>0.3</A>
+</PRE><PRE>       image/jpeg                =3D 0.5
+       text/html;level=3D2         =3D <A =
+href=3D"http://www.w3.org/Protocols/rfc2616/rfc2616-sec0.html#sec0.4" =
+rel=3Dxref>0.4</A>
+       text/html;level=3D3         =3D <A =
+href=3D"http://www.w3.org/Protocols/rfc2616/rfc2616-sec0.html#sec0.7" =
+rel=3Dxref>0.7</A>
+</PRE><PRE>      Note: A user agent might be provided with a default set =
+of quality
+      values for certain media ranges. However, unless the user agent is
+      a closed system which cannot interact with other rendering agents,
+      this default set ought to be configurable by the user.
+</PRE>
+<H3><A id=3Dsec14.2>14.2</A> Accept-Charset</H3>
+<P>The Accept-Charset request-header field can be used to indicate what=20
+character sets are acceptable for the response. This field allows =
+clients=20
+capable of understanding more comprehensive or special- purpose =
+character sets=20
+to signal that capability to a server which is capable of representing =
+documents=20
+in those character sets. </P><PRE>      Accept-Charset =3D =
+"Accept-Charset" ":"
+              1#( ( charset | "*" )[ ";" "q" "=3D" qvalue ] )
+</PRE>
+<P>Character set values are described in section <A=20
+href=3D"http://www.w3.org/Protocols/rfc2616/rfc2616-sec3.html#sec3.4"=20
+rel=3Dxref>3.4</A>. Each charset MAY be given an associated quality =
+value which=20
+represents the user's preference for that charset. The default value is =
+q=3D1. An=20
+example is </P><PRE>      Accept-Charset: iso-8859-5, =
+unicode-1-1;q=3D0.8
+</PRE>
+<P>The special value "*", if present in the Accept-Charset field, =
+matches every=20
+character set (including ISO-8859-1) which is not mentioned elsewhere in =
+the=20
+Accept-Charset field. If no "*" is present in an Accept-Charset field, =
+then all=20
+character sets not explicitly mentioned get a quality value of 0, except =
+for=20
+ISO-8859-1, which gets a quality value of 1 if not explicitly mentioned. =
+</P>
+<P>If no Accept-Charset header is present, the default is that any =
+character set=20
+is acceptable. If an Accept-Charset header is present, and if the server =
+cannot=20
+send a response which is acceptable according to the Accept-Charset =
+header, then=20
+the server SHOULD send an error response with the 406 (not acceptable) =
+status=20
+code, though the sending of an unacceptable response is also allowed. =
+</P>
+<H3><A id=3Dsec14.3>14.3</A> Accept-Encoding</H3>
+<P>The Accept-Encoding request-header field is similar to Accept, but =
+restricts=20
+the content-codings (section 3.5) that are acceptable in the response. =
+</P><PRE>       Accept-Encoding  =3D "Accept-Encoding" ":"
+</PRE><PRE>                          1#( codings [ ";" "q" "=3D" qvalue =
+] )
+       codings          =3D ( content-coding | "*" )
+</PRE>
+<P>Examples of its use are: </P><PRE>       Accept-Encoding: compress, =
+gzip
+       Accept-Encoding:
+       Accept-Encoding: *
+       Accept-Encoding: compress;q=3D0.5, gzip;q=3D1.0
+       Accept-Encoding: gzip;q=3D1.0, identity; q=3D0.5, *;q=3D0
+</PRE>
+<P>A server tests whether a content-coding is acceptable, according to =
+an=20
+Accept-Encoding field, using these rules: </P><PRE>      1. If the =
+content-coding is one of the content-codings listed in
+         the Accept-Encoding field, then it is acceptable, unless it is
+         accompanied by a qvalue of 0. (As defined in section <A =
+href=3D"http://www.w3.org/Protocols/rfc2616/rfc2616-sec3.html#sec3.9" =
+rel=3Dxref>3.9</A>, a
+         qvalue of 0 means "not acceptable.")
+</PRE><PRE>      2. The special "*" symbol in an Accept-Encoding field =
+matches any
+         available content-coding not explicitly listed in the header
+         field.
+</PRE><PRE>      3. If multiple content-codings are acceptable, then the =
+acceptable
+         content-coding with the highest non-zero qvalue is preferred.
+</PRE><PRE>      4. The "identity" content-coding is always acceptable, =
+unless
+         specifically refused because the Accept-Encoding field includes
+         "identity;q=3D0", or because the field includes "*;q=3D0" and =
+does
+         not explicitly include the "identity" content-coding. If the
+         Accept-Encoding field-value is empty, then only the "identity"
+         encoding is acceptable.
+</PRE>
+<P>If an Accept-Encoding field is present in a request, and if the =
+server cannot=20
+send a response which is acceptable according to the Accept-Encoding =
+header,=20
+then the server SHOULD send an error response with the 406 (Not =
+Acceptable)=20
+status code. </P>
+<P>If no Accept-Encoding field is present in a request, the server MAY =
+assume=20
+that the client will accept any content coding. In this case, if =
+"identity" is=20
+one of the available content-codings, then the server SHOULD use the =
+"identity"=20
+content-coding, unless it has additional information that a different=20
+content-coding is meaningful to the client. </P><PRE>      Note: If the =
+request does not include an Accept-Encoding field,
+      and if the "identity" content-coding is unavailable, then
+      content-codings commonly understood by HTTP/1.0 clients (i.e.,
+</PRE><PRE>      "gzip" and "compress") are preferred; some older =
+clients
+      improperly display messages sent with other content-codings.  The
+      server might also make this decision based on information about
+      the particular user-agent or client.
+</PRE><PRE>      Note: Most HTTP/1.0 applications do not recognize or =
+obey qvalues
+      associated with content-codings. This means that qvalues will not
+      work and are not permitted with x-gzip or x-compress.
+</PRE>
+<H3><A id=3Dsec14.4>14.4</A> Accept-Language</H3>
+<P>The Accept-Language request-header field is similar to Accept, but =
+restricts=20
+the set of natural languages that are preferred as a response to the =
+request.=20
+Language tags are defined in section <A=20
+href=3D"http://www.w3.org/Protocols/rfc2616/rfc2616-sec3.html#sec3.10"=20
+rel=3Dxref>3.10</A>. </P><PRE>       Accept-Language =3D =
+"Accept-Language" ":"
+                         1#( language-range [ ";" "q" "=3D" qvalue ] )
+       language-range  =3D ( ( 1*8ALPHA *( "-" 1*8ALPHA ) ) | "*" )
+</PRE>
+<P>Each language-range MAY be given an associated quality value which =
+represents=20
+an estimate of the user's preference for the languages specified by that =
+range.=20
+The quality value defaults to "q=3D1". For example, </P><PRE>       =
+Accept-Language: da, en-gb;q=3D0.8, en;q=3D0.7
+</PRE>
+<P>would mean: "I prefer Danish, but will accept British English and =
+other types=20
+of English." A language-range matches a language-tag if it exactly =
+equals the=20
+tag, or if it exactly equals a prefix of the tag such that the first tag =
+
+character following the prefix is "-". The special range "*", if present =
+in the=20
+Accept-Language field, matches every tag not matched by any other range =
+present=20
+in the Accept-Language field. </P><PRE>      Note: This use of a prefix =
+matching rule does not imply that
+      language tags are assigned to languages in such a way that it is
+      always true that if a user understands a language with a certain
+      tag, then this user will also understand all languages with tags
+      for which this tag is a prefix. The prefix rule simply allows the
+      use of prefix tags if this is the case.
+</PRE>
+<P>The language quality factor assigned to a language-tag by the =
+Accept-Language=20
+field is the quality value of the longest language- range in the field =
+that=20
+matches the language-tag. If no language- range in the field matches the =
+tag,=20
+the language quality factor assigned is 0. If no Accept-Language header =
+is=20
+present in the request, the server </P>
+<P>SHOULD assume that all languages are equally acceptable. If an=20
+Accept-Language header is present, then all languages which are assigned =
+a=20
+quality factor greater than 0 are acceptable. </P>
+<P>It might be contrary to the privacy expectations of the user to send =
+an=20
+Accept-Language header with the complete linguistic preferences of the =
+user in=20
+every request. For a discussion of this issue, see section <A=20
+href=3D"http://www.w3.org/Protocols/rfc2616/rfc2616-sec15.html#sec15.1.4"=
+=20
+rel=3Dxref>15.1.4</A>. </P>
+<P>As intelligibility is highly dependent on the individual user, it is=20
+recommended that client applications make the choice of linguistic =
+preference=20
+available to the user. If the choice is not made available, then the=20
+Accept-Language header field MUST NOT be given in the request. </P><PRE> =
+     Note: When making the choice of linguistic preference available to
+      the user, we remind implementors of  the fact that users are not
+      familiar with the details of language matching as described above,
+      and should provide appropriate guidance. As an example, users
+      might assume that on selecting "en-gb", they will be served any
+      kind of English document if British English is not available. A
+      user agent might suggest in such a case to add "en" to get the
+      best matching behavior.
+</PRE>
+<H3><A id=3Dsec14.5>14.5</A> Accept-Ranges</H3><PRE>      The =
+Accept-Ranges response-header field allows the server to
+      indicate its acceptance of range requests for a resource:
+</PRE><PRE>          Accept-Ranges     =3D "Accept-Ranges" ":" =
+acceptable-ranges
+          acceptable-ranges =3D 1#range-unit | "none"
+</PRE><PRE>      Origin servers that accept byte-range requests MAY send
+</PRE><PRE>          Accept-Ranges: bytes
+</PRE><PRE>      but are not required to do so. Clients MAY generate =
+byte-range
+      requests without having received this header for the resource
+      involved. Range units are defined in section <A =
+href=3D"http://www.w3.org/Protocols/rfc2616/rfc2616-sec3.html#sec3.12" =
+rel=3Dxref>3.12</A>.
+</PRE><PRE>      Servers that do not accept any kind of range request =
+for a
+      resource MAY send
+</PRE><PRE>          Accept-Ranges: none
+</PRE><PRE>      to advise the client not to attempt a range request.
+</PRE>
+<H3><A id=3Dsec14.6>14.6</A> Age</H3><PRE>      The Age response-header =
+field conveys the sender's estimate of the
+      amount of time since the response (or its revalidation) was
+      generated at the origin server. A cached response is "fresh" if
+      its age does not exceed its freshness lifetime. Age values are
+      calculated as specified in section <A =
+href=3D"http://www.w3.org/Protocols/rfc2616/rfc2616-sec13.html#sec13.2.3"=
+ rel=3Dxref>13.2.3</A>.
+</PRE><PRE>           Age =3D "Age" ":" age-value
+           age-value =3D delta-seconds
+</PRE><PRE>      Age values are non-negative decimal integers, =
+representing time in
+      seconds.
+</PRE><PRE>      If a cache receives a value larger than the largest =
+positive
+      integer it can represent, or if any of its age calculations
+      overflows, it MUST transmit an Age header with a value of
+      2147483648 (2^31). An HTTP/1.1 server that includes a cache MUST
+      include an Age header field in every response generated from its
+      own cache. Caches SHOULD use an arithmetic type of at least 31
+      bits of range.
+</PRE>
+<H3><A id=3Dsec14.7>14.7</A> Allow</H3><PRE>      The Allow =
+entity-header field lists the set of methods supported
+      by the resource identified by the Request-URI. The purpose of this
+      field is strictly to inform the recipient of valid methods
+      associated with the resource. An Allow header field MUST be
+      present in a 405 (Method Not Allowed) response.
+</PRE><PRE>          Allow   =3D "Allow" ":" #Method
+</PRE><PRE>      Example of use:
+</PRE><PRE>          Allow: GET, HEAD, PUT
+</PRE><PRE>      This field cannot prevent a client from trying other =
+methods.
+      However, the indications given by the Allow header field value
+      SHOULD be followed. The actual set of allowed methods is defined
+      by the origin server at the time of each request.
+</PRE><PRE>      The Allow header field MAY be provided with a PUT =
+request to
+      recommend the methods to be supported by the new or modified
+      resource. The server is not required to support these methods and
+      SHOULD include an Allow header in the response giving the actual
+      supported methods.
+</PRE><PRE>      A proxy MUST NOT modify the Allow header field even if =
+it does not
+      understand all the methods specified, since the user agent might
+      have other means of communicating with the origin server.
+</PRE>
+<H3><A id=3Dsec14.8>14.8</A> Authorization</H3><PRE>      A user agent =
+that wishes to authenticate itself with a server--
+      usually, but not necessarily, after receiving a 401 response--does
+      so by including an Authorization request-header field with the
+      request.  The Authorization field value consists of credentials
+      containing the authentication information of the user agent for
+      the realm of the resource being requested.
+</PRE><PRE>          Authorization  =3D "Authorization" ":" credentials
+</PRE><PRE>      HTTP access authentication is described in "HTTP =
+Authentication:
+      Basic and Digest Access Authentication" <A =
+href=3D"http://www.w3.org/Protocols/rfc2616/rfc2616-sec17.html#bib43" =
+rel=3Dbibref>[43]</A>. If a request is
+      authenticated and a realm specified, the same credentials SHOULD
+      be valid for all other requests within this realm (assuming that
+      the authentication scheme itself does not require otherwise, such
+      as credentials that vary according to a challenge value or using
+      synchronized clocks).
+</PRE><PRE>      When a shared cache (see section 13.7) receives a =
+request
+      containing an Authorization field, it MUST NOT return the
+      corresponding response as a reply to any other request, unless one
+      of the following specific exceptions holds:
+</PRE><PRE>      1. If the response includes the "s-maxage" =
+cache-control
+         directive, the cache MAY use that response in replying to a
+         subsequent request. But (if the specified maximum age has
+         passed) a proxy cache MUST first revalidate it with the origin
+         server, using the request-headers from the new request to allow
+         the origin server to authenticate the new request. (This is the
+         defined behavior for s-maxage.) If the response includes "s-
+         maxage=3D0", the proxy MUST always revalidate it before =
+re-using
+         it.
+</PRE><PRE>      2. If the response includes the "must-revalidate" =
+cache-control
+         directive, the cache MAY use that response in replying to a
+         subsequent request. But if the response is stale, all caches
+         MUST first revalidate it with the origin server, using the
+         request-headers from the new request to allow the origin server
+         to authenticate the new request.
+</PRE><PRE>      3. If the response includes the "public" cache-control =
+directive,
+         it MAY be returned in reply to any subsequent request.
+</PRE>
+<H3><A id=3Dsec14.9>14.9</A> Cache-Control</H3>
+<P>The Cache-Control general-header field is used to specify directives =
+that=20
+MUST be obeyed by all caching mechanisms along the request/response =
+chain. The=20
+directives specify behavior intended to prevent caches from adversely=20
+interfering with the request or response. These directives typically =
+override=20
+the default caching algorithms. Cache directives are unidirectional in =
+that the=20
+presence of a directive in a request does not imply that the same =
+directive is=20
+to be given in the response. </P><PRE>      Note that HTTP/1.0 caches =
+might not implement Cache-Control and
+      might only implement Pragma: no-cache (see section <A =
+href=3D"http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.32" =
+rel=3Dxref>14.32</A>).
+</PRE>
+<P>Cache directives MUST be passed through by a proxy or gateway =
+application,=20
+regardless of their significance to that application, since the =
+directives might=20
+be applicable to all recipients along the request/response chain. It is =
+not=20
+possible to specify a cache- directive for a specific cache. </P><PRE>   =
+ Cache-Control   =3D "Cache-Control" ":" 1#cache-directive
+</PRE><PRE>    cache-directive =3D cache-request-directive
+         | cache-response-directive
+</PRE><PRE>    cache-request-directive =3D
+           "no-cache"                          ; Section <A =
+href=3D"http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.9.1"=
+ rel=3Dxref>14.9.1</A>
+         | "no-store"                          ; Section <A =
+href=3D"http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.9.2"=
+ rel=3Dxref>14.9.2</A>
+         | "max-age" "=3D" delta-seconds         ; Section <A =
+href=3D"http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.9.3"=
+ rel=3Dxref>14.9.3</A>, <A =
+href=3D"http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.9.4"=
+ rel=3Dxref>14.9.4</A>
+         | "max-stale" [ "=3D" delta-seconds ]   ; Section <A =
+href=3D"http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.9.3"=
+ rel=3Dxref>14.9.3</A>
+         | "min-fresh" "=3D" delta-seconds       ; Section <A =
+href=3D"http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.9.3"=
+ rel=3Dxref>14.9.3</A>
+         | "no-transform"                      ; Section <A =
+href=3D"http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.9.5"=
+ rel=3Dxref>14.9.5</A>
+         | "only-if-cached"                    ; Section <A =
+href=3D"http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.9.4"=
+ rel=3Dxref>14.9.4</A>
+         | cache-extension                     ; Section <A =
+href=3D"http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.9.6"=
+ rel=3Dxref>14.9.6</A>
+</PRE><PRE>     cache-response-directive =3D
+           "public"                               ; Section <A =
+href=3D"http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.9.1"=
+ rel=3Dxref>14.9.1</A>
+         | "private" [ "=3D" &lt;"&gt; 1#field-name &lt;"&gt; ] ; =
+Section <A =
+href=3D"http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.9.1"=
+ rel=3Dxref>14.9.1</A>
+         | "no-cache" [ "=3D" &lt;"&gt; 1#field-name &lt;"&gt; ]; =
+Section <A =
+href=3D"http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.9.1"=
+ rel=3Dxref>14.9.1</A>
+         | "no-store"                             ; Section <A =
+href=3D"http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.9.2"=
+ rel=3Dxref>14.9.2</A>
+         | "no-transform"                         ; Section <A =
+href=3D"http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.9.5"=
+ rel=3Dxref>14.9.5</A>
+         | "must-revalidate"                      ; Section <A =
+href=3D"http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.9.4"=
+ rel=3Dxref>14.9.4</A>
+         | "proxy-revalidate"                     ; Section <A =
+href=3D"http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.9.4"=
+ rel=3Dxref>14.9.4</A>
+         | "max-age" "=3D" delta-seconds            ; Section <A =
+href=3D"http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.9.3"=
+ rel=3Dxref>14.9.3</A>
+         | "s-maxage" "=3D" delta-seconds           ; Section <A =
+href=3D"http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.9.3"=
+ rel=3Dxref>14.9.3</A>
+         | cache-extension                        ; Section <A =
+href=3D"http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.9.6"=
+ rel=3Dxref>14.9.6</A>
+</PRE><PRE>    cache-extension =3D token [ "=3D" ( token | quoted-string =
+) ]
+</PRE>
+<P>When a directive appears without any 1#field-name parameter, the =
+directive=20
+applies to the entire request or response. When such a directive appears =
+with a=20
+1#field-name parameter, it applies only to the named field or fields, =
+and not to=20
+the rest of the request or response. This mechanism supports =
+extensibility;=20
+implementations of future versions of the HTTP protocol might apply =
+these=20
+directives to header fields not defined in HTTP/1.1. </P>
+<P>The cache-control directives can be broken down into these general=20
+categories: </P><PRE>      - Restrictions on what are cacheable; these =
+may only be imposed by
+        the origin server.
+</PRE><PRE>      - Restrictions on what may be stored by a cache; these =
+may be
+        imposed by either the origin server or the user agent.
+</PRE><PRE>      - Modifications of the basic expiration mechanism; =
+these may be
+        imposed by either the origin server or the user agent.
+</PRE><PRE>      - Controls over cache revalidation and reload; these =
+may only be
+        imposed by a user agent.
+</PRE><PRE>      - Control over transformation of entities.
+</PRE><PRE>      - Extensions to the caching system.
+</PRE>
+<H3><A id=3Dsec14.9.1>14.9.1</A> What is Cacheable</H3>
+<P>By default, a response is cacheable if the requirements of the =
+request=20
+method, request header fields, and the response status indicate that it =
+is=20
+cacheable. Section <A=20
+href=3D"http://www.w3.org/Protocols/rfc2616/rfc2616-sec13.html#sec13.4"=20
+rel=3Dxref>13.4</A> summarizes these defaults for cacheability. The =
+following=20
+Cache-Control response directives allow an origin server to override the =
+default=20
+cacheability of a response: </P>
+<DL>
+  <DT>public=20
+  <DD>Indicates that the response MAY be cached by any cache, even if it =
+would=20
+  normally be non-cacheable or cacheable only within a non- shared =
+cache. (See=20
+  also Authorization, section <A=20
+  =
+href=3D"http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.8"=20
+  rel=3Dxref>14.8</A>, for additional details.)=20
+  <DT>private=20
+  <DD>Indicates that all or part of the response message is intended for =
+a=20
+  single user and MUST NOT be cached by a shared cache. This allows an =
+origin=20
+  server to state that the specified parts of the=20
+  <DT>
+  <DD>response are intended for only one user and are not a valid =
+response for=20
+  requests by other users. A private (non-shared) cache MAY cache the =
+response.=20
+  <DD>
+  <P><STRONG>Note:</STRONG> This usage of the word private only controls =
+where=20
+  the response may be cached, and cannot ensure the privacy of the =
+message=20
+  content. </P>
+  <DT>no-cache=20
+  <DD>If the no-cache directive does not specify a field-name, then a =
+cache MUST=20
+  NOT use the response to satisfy a subsequent request without =
+successful=20
+  revalidation with the origin server. This allows an origin server to =
+prevent=20
+  caching even by caches that have been configured to return stale =
+responses to=20
+  client requests.=20
+  <DT>
+  <DD>If the no-cache directive does specify one or more field-names, =
+then a=20
+  cache MAY use the response to satisfy a subsequent request, subject to =
+any=20
+  other restrictions on caching. However, the specified field-name(s) =
+MUST NOT=20
+  be sent in the response to a subsequent request without successful=20
+  revalidation with the origin server. This allows an origin server to =
+prevent=20
+  the re-use of certain header fields in a response, while still =
+allowing=20
+  caching of the rest of the response.=20
+  <DD>
+  <P><STRONG>Note:</STRONG> Most HTTP/1.0 caches will not recognize or =
+obey this=20
+  directive. </P></DD></DL>
+<H3><A id=3Dsec14.9.2>14.9.2</A> What May be Stored by Caches</H3>
+<DL>
+  <DT>no-store=20
+  <DD>The purpose of the no-store directive is to prevent the =
+inadvertent=20
+  release or retention of sensitive information (for example, on backup =
+tapes).=20
+  The no-store directive applies to the entire message, and MAY be sent =
+either=20
+  in a response or in a request. If sent in a request, a cache MUST NOT =
+store=20
+  any part of either this request or any response to it. If sent in a =
+response,=20
+  a cache MUST NOT store any part of either this response or the request =
+that=20
+  elicited it. This directive applies to both non- shared and shared =
+caches.=20
+  "MUST NOT store" in this context means that the cache MUST NOT =
+intentionally=20
+  store the information in non-volatile storage, and MUST make a =
+best-effort=20
+  attempt to remove the information from volatile storage as promptly as =
+
+  possible after forwarding it.=20
+  <DT>
+  <DD>Even when this directive is associated with a response, users =
+might=20
+  explicitly store such a response outside of the caching system (e.g., =
+with a=20
+  "Save As" dialog). History buffers MAY store such responses as part of =
+their=20
+  normal operation.=20
+  <DT>
+  <DD>The purpose of this directive is to meet the stated requirements =
+of=20
+  certain users and service authors who are concerned about accidental =
+releases=20
+  of information via unanticipated accesses to cache data structures. =
+While the=20
+  use of this directive might improve privacy in some cases, we caution =
+that it=20
+  is NOT in any way a reliable or sufficient mechanism for ensuring =
+privacy. In=20
+  particular, malicious or compromised caches might not recognize or =
+obey this=20
+  directive, and communications networks might be vulnerable to =
+eavesdropping.=20
+  </DD></DL>
+<H3><A id=3Dsec14.9.3>14.9.3</A> Modifications of the Basic Expiration=20
+Mechanism</H3>
+<P>The expiration time of an entity MAY be specified by the origin =
+server using=20
+the Expires header (see section 14.21). Alternatively, it MAY be =
+specified using=20
+the max-age directive in a response. When the max-age cache-control =
+directive is=20
+present in a cached response, the response is stale if its current age =
+is=20
+greater than the age value given (in seconds) at the time of a new =
+request for=20
+that resource. The max-age directive on a response implies that the =
+response is=20
+cacheable (i.e., "public") unless some other, more restrictive cache =
+directive=20
+is also present. </P>
+<P>If a response includes both an Expires header and a max-age =
+directive, the=20
+max-age directive overrides the Expires header, even if the Expires =
+header is=20
+more restrictive. This rule allows an origin server to provide, for a =
+given=20
+response, a longer expiration time to an HTTP/1.1 (or later) cache than =
+to an=20
+HTTP/1.0 cache. This might be useful if certain HTTP/1.0 caches =
+improperly=20
+calculate ages or expiration times, perhaps due to desynchronized =
+clocks. </P>
+<P>Many HTTP/1.0 cache implementations will treat an Expires value that =
+is less=20
+than or equal to the response Date value as being equivalent to the=20
+Cache-Control response directive "no-cache". If an HTTP/1.1 cache =
+receives such=20
+a response, and the response does not include a Cache-Control header =
+field, it=20
+SHOULD consider the response to be non-cacheable in order to retain=20
+compatibility with HTTP/1.0 servers. </P>
+<P><STRONG>Note:</STRONG> An origin server might wish to use a =
+relatively new=20
+HTTP cache control feature, such as the "private" directive, on a =
+network=20
+including older caches that do not understand that feature. The origin =
+server=20
+will need to combine the new feature with an Expires field whose value =
+is less=20
+than or equal to the Date value. This will prevent older caches from =
+improperly=20
+caching the response. </P>
+<DL>
+  <DT>s-maxage=20
+  <DD>If a response includes an s-maxage directive, then for a shared =
+cache (but=20
+  not for a private cache), the maximum age specified by this directive=20
+  overrides the maximum age specified by either the max-age directive or =
+the=20
+  Expires header. The s-maxage directive also implies the semantics of =
+the=20
+  proxy-revalidate directive (see section <A=20
+  =
+href=3D"http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.9.4"=
+=20
+  rel=3Dxref>14.9.4</A>), i.e., that the shared cache must not use the =
+entry after=20
+  it becomes stale to respond to a subsequent request without first =
+revalidating=20
+  it with the origin server. The s- maxage directive is always ignored =
+by a=20
+  private cache. </DD></DL>
+<P>Note that most older caches, not compliant with this specification, =
+do not=20
+implement any cache-control directives. An origin server wishing to use =
+a=20
+cache-control directive that restricts, but does not prevent, caching by =
+an=20
+HTTP/1.1-compliant cache MAY exploit the requirement that the max-age =
+directive=20
+overrides the Expires header, and the fact that pre-HTTP/1.1-compliant =
+caches do=20
+not observe the max-age directive. </P>
+<P>Other directives allow a user agent to modify the basic expiration =
+mechanism.=20
+These directives MAY be specified on a request: </P>
+<DL>
+  <DT>max-age=20
+  <DD>Indicates that the client is willing to accept a response whose =
+age is no=20
+  greater than the specified time in seconds. Unless max- stale =
+directive is=20
+  also included, the client is not willing to accept a stale response.=20
+  <DT>min-fresh=20
+  <DD>Indicates that the client is willing to accept a response whose =
+freshness=20
+  lifetime is no less than its current age plus the specified time in =
+seconds.=20
+  That is, the client wants a response that will still be fresh for at =
+least the=20
+  specified number of seconds.=20
+  <DT>max-stale=20
+  <DD>Indicates that the client is willing to accept a response that has =
+
+  exceeded its expiration time. If max-stale is assigned a value, then =
+the=20
+  client is willing to accept a response that has exceeded its =
+expiration time=20
+  by no more than the specified number of seconds. If no value is =
+assigned to=20
+  max-stale, then the client is willing to accept a stale response of =
+any age.=20
+  </DD></DL>
+<P>If a cache returns a stale response, either because of a max-stale =
+directive=20
+on a request, or because the cache is configured to override the =
+expiration time=20
+of a response, the cache MUST attach a Warning header to the stale =
+response,=20
+using Warning 110 (Response is stale). </P>
+<P>A cache MAY be configured to return stale responses without =
+validation, but=20
+only if this does not conflict with any "MUST"-level requirements =
+concerning=20
+cache validation (e.g., a "must-revalidate" cache-control directive). =
+</P>
+<P>If both the new request and the cached entry include "max-age" =
+directives,=20
+then the lesser of the two values is used for determining the freshness =
+of the=20
+cached entry for that request. </P>
+<H3><A id=3Dsec14.9.4>14.9.4</A> Cache Revalidation and Reload =
+Controls</H3>
+<P>Sometimes a user agent might want or need to insist that a cache =
+revalidate=20
+its cache entry with the origin server (and not just with the next cache =
+along=20
+the path to the origin server), or to reload its cache entry from the =
+origin=20
+server. End-to-end revalidation might be necessary if either the cache =
+or the=20
+origin server has overestimated the expiration time of the cached =
+response.=20
+End-to-end reload may be necessary if the cache entry has become =
+corrupted for=20
+some reason. </P>
+<P>End-to-end revalidation may be requested either when the client does =
+not have=20
+its own local cached copy, in which case we call it "unspecified =
+end-to-end=20
+revalidation", or when the client does have a local cached copy, in =
+which case=20
+we call it "specific end-to-end revalidation." </P>
+<P>The client can specify these three kinds of action using Cache- =
+Control=20
+request directives: </P>
+<DL>
+  <DT>End-to-end reload=20
+  <DD>The request includes a "no-cache" cache-control directive or, for=20
+  compatibility with HTTP/1.0 clients, "Pragma: no-cache". Field names =
+MUST NOT=20
+  be included with the no-cache directive in a request. The server MUST =
+NOT use=20
+  a cached copy when responding to such a request.=20
+  <DT>Specific end-to-end revalidation=20
+  <DD>The request includes a "max-age=3D0" cache-control directive, =
+which forces=20
+  each cache along the path to the origin server to revalidate its own =
+entry, if=20
+  any, with the next cache or server. The initial request includes a=20
+  cache-validating conditional with the client's current validator.=20
+  <DT>Unspecified end-to-end revalidation=20
+  <DD>The request includes "max-age=3D0" cache-control directive, which =
+forces=20
+  each cache along the path to the origin server to revalidate its own =
+entry, if=20
+  any, with the next cache or server. The initial request does not =
+include a=20
+  cache-validating=20
+  <DT>
+  <DD>conditional; the first cache along the path (if any) that holds a =
+cache=20
+  entry for this resource includes a cache-validating conditional with =
+its=20
+  current validator.=20
+  <DT>max-age=20
+  <DD>When an intermediate cache is forced, by means of a max-age=3D0 =
+directive,=20
+  to revalidate its own cache entry, and the client has supplied its own =
+
+  validator in the request, the supplied validator might differ from the =
+
+  validator currently stored with the cache entry. In this case, the =
+cache MAY=20
+  use either validator in making its own request without affecting =
+semantic=20
+  transparency.=20
+  <DT>
+  <DD>However, the choice of validator might affect performance. The =
+best=20
+  approach is for the intermediate cache to use its own validator when =
+making=20
+  its request. If the server replies with 304 (Not Modified), then the =
+cache can=20
+  return its now validated copy to the client with a 200 (OK) response. =
+If the=20
+  server replies with a new entity and cache validator, however, the=20
+  intermediate cache can compare the returned validator with the one =
+provided in=20
+  the client's request, using the strong comparison function. If the =
+client's=20
+  validator is equal to the origin server's, then the intermediate cache =
+simply=20
+  returns 304 (Not Modified). Otherwise, it returns the new entity with =
+a 200=20
+  (OK) response.=20
+  <DT>
+  <DD>If a request includes the no-cache directive, it SHOULD NOT =
+include=20
+  min-fresh, max-stale, or max-age.=20
+  <DT>only-if-cached=20
+  <DD>In some cases, such as times of extremely poor network =
+connectivity, a=20
+  client may want a cache to return only those responses that it =
+currently has=20
+  stored, and not to reload or revalidate with the origin server. To do =
+this,=20
+  the client may include the only-if-cached directive in a request. If =
+it=20
+  receives this directive, a cache SHOULD either respond using a cached =
+entry=20
+  that is consistent with the other constraints of the request, or =
+respond with=20
+  a 504 (Gateway Timeout) status. However, if a group of caches is being =
+
+  operated as a unified system with good internal connectivity, such a =
+request=20
+  MAY be forwarded within that group of caches.=20
+  <DT>must-revalidate=20
+  <DD>Because a cache MAY be configured to ignore a server's specified=20
+  expiration time, and because a client request MAY include a max- stale =
+
+  directive (which has a similar effect), the protocol also includes a =
+mechanism=20
+  for the origin server to require revalidation of a cache entry on any=20
+  subsequent use. When the must-revalidate directive is present in a =
+response=20
+  received by a cache, that cache MUST NOT use the entry after it =
+becomes stale=20
+  to respond to a=20
+  <DT>
+  <DD>subsequent request without first revalidating it with the origin =
+server.=20
+  (I.e., the cache MUST do an end-to-end revalidation every time, if, =
+based=20
+  solely on the origin server's Expires or max-age value, the cached =
+response is=20
+  stale.)=20
+  <DT>
+  <DD>The must-revalidate directive is necessary to support reliable =
+operation=20
+  for certain protocol features. In all circumstances an HTTP/1.1 cache =
+MUST=20
+  obey the must-revalidate directive; in particular, if the cache cannot =
+reach=20
+  the origin server for any reason, it MUST generate a 504 (Gateway =
+Timeout)=20
+  response.=20
+  <DT>
+  <DD>Servers SHOULD send the must-revalidate directive if and only if =
+failure=20
+  to revalidate a request on the entity could result in incorrect =
+operation,=20
+  such as a silently unexecuted financial transaction. Recipients MUST =
+NOT take=20
+  any automated action that violates this directive, and MUST NOT =
+automatically=20
+  provide an unvalidated copy of the entity if revalidation fails.=20
+  <DT>
+  <DD>Although this is not recommended, user agents operating under =
+severe=20
+  connectivity constraints MAY violate this directive but, if so, MUST=20
+  explicitly warn the user that an unvalidated response has been =
+provided. The=20
+  warning MUST be provided on each unvalidated access, and SHOULD =
+require=20
+  explicit user confirmation.=20
+  <DT>proxy-revalidate=20
+  <DD>The proxy-revalidate directive has the same meaning as the must-=20
+  revalidate directive, except that it does not apply to non-shared user =
+agent=20
+  caches. It can be used on a response to an authenticated request to =
+permit the=20
+  user's cache to store and later return the response without needing to =
+
+  revalidate it (since it has already been authenticated once by that =
+user),=20
+  while still requiring proxies that service many users to revalidate =
+each time=20
+  (in order to make sure that each user has been authenticated). Note =
+that such=20
+  authenticated responses also need the public cache control directive =
+in order=20
+  to allow them to be cached at all. </DD></DL>
+<H3><A id=3Dsec14.9.5>14.9.5</A> No-Transform Directive</H3>
+<DL>
+  <DT>no-transform=20
+  <DD>Implementors of intermediate caches (proxies) have found it useful =
+to=20
+  convert the media type of certain entity bodies. A non- transparent =
+proxy=20
+  might, for example, convert between image formats in order to save =
+cache space=20
+  or to reduce the amount of traffic on a slow link.=20
+  <DT>
+  <DD>Serious operational problems occur, however, when these =
+transformations=20
+  are applied to entity bodies intended for certain kinds of =
+applications. For=20
+  example, applications for medical=20
+  <DT>
+  <DD>imaging, scientific data analysis and those using end-to-end=20
+  authentication, all depend on receiving an entity body that is bit for =
+bit=20
+  identical to the original entity-body.=20
+  <DT>
+  <DD>Therefore, if a message includes the no-transform directive, an=20
+  intermediate cache or proxy MUST NOT change those headers that are =
+listed in=20
+  section <A=20
+  =
+href=3D"http://www.w3.org/Protocols/rfc2616/rfc2616-sec13.html#sec13.5.2"=
+=20
+  rel=3Dxref>13.5.2</A> as being subject to the no-transform directive. =
+This=20
+  implies that the cache or proxy MUST NOT change any aspect of the =
+entity-body=20
+  that is specified by these headers, including the value of the =
+entity-body=20
+  itself. </DD></DL>
+<H3><A id=3Dsec14.9.6>14.9.6</A> Cache Control Extensions</H3>
+<P>The Cache-Control header field can be extended through the use of one =
+or more=20
+cache-extension tokens, each with an optional assigned value. =
+Informational=20
+extensions (those which do not require a change in cache behavior) MAY =
+be added=20
+without changing the semantics of other directives. Behavioral =
+extensions are=20
+designed to work by acting as modifiers to the existing base of cache=20
+directives. Both the new directive and the standard directive are =
+supplied, such=20
+that applications which do not understand the new directive will default =
+to the=20
+behavior specified by the standard directive, and those that understand =
+the new=20
+directive will recognize it as modifying the requirements associated =
+with the=20
+standard directive. In this way, extensions to the cache-control =
+directives can=20
+be made without requiring changes to the base protocol. </P>
+<P>This extension mechanism depends on an HTTP cache obeying all of the=20
+cache-control directives defined for its native HTTP-version, obeying =
+certain=20
+extensions, and ignoring all directives that it does not understand. =
+</P>
+<P>For example, consider a hypothetical new response directive called =
+community=20
+which acts as a modifier to the private directive. We define this new =
+directive=20
+to mean that, in addition to any non-shared cache, any cache which is =
+shared=20
+only by members of the community named within its value may cache the =
+response.=20
+An origin server wishing to allow the UCI community to use an otherwise =
+private=20
+response in their shared cache(s) could do so by including </P><PRE>     =
+  Cache-Control: private, community=3D"UCI"
+</PRE>
+<P>A cache seeing this header field will act correctly even if the cache =
+does=20
+not understand the community cache-extension, since it will also see and =
+
+understand the private directive and thus default to the safe behavior. =
+</P>
+<P>Unrecognized cache-directives MUST be ignored; it is assumed that any =
+
+cache-directive likely to be unrecognized by an HTTP/1.1 cache will be =
+combined=20
+with standard directives (or the response's default cacheability) such =
+that the=20
+cache behavior will remain minimally correct even if the cache does not=20
+understand the extension(s). </P>
+<H3><A id=3Dsec14.10>14.10</A> Connection</H3>
+<P>The Connection general-header field allows the sender to specify =
+options that=20
+are desired for that particular connection and MUST NOT be communicated =
+by=20
+proxies over further connections. </P>
+<P>The Connection header has the following grammar: </P><PRE>       =
+Connection =3D "Connection" ":" 1#(connection-token)
+       connection-token  =3D token
+</PRE>
+<P>HTTP/1.1 proxies MUST parse the Connection header field before a =
+message is=20
+forwarded and, for each connection-token in this field, remove any =
+header=20
+field(s) from the message with the same name as the connection-token. =
+Connection=20
+options are signaled by the presence of a connection-token in the =
+Connection=20
+header field, not by any corresponding additional header field(s), since =
+the=20
+additional header field may not be sent if there are no parameters =
+associated=20
+with that connection option. </P>
+<P>Message headers listed in the Connection header MUST NOT include =
+end-to-end=20
+headers, such as Cache-Control. </P>
+<P>HTTP/1.1 defines the "close" connection option for the sender to =
+signal that=20
+the connection will be closed after completion of the response. For =
+example,=20
+</P><PRE>       Connection: close
+</PRE>
+<P>in either the request or the response header fields indicates that =
+the=20
+connection SHOULD NOT be considered `persistent' (section 8.1) after the =
+current=20
+request/response is complete. </P>
+<P>HTTP/1.1 applications that do not support persistent connections MUST =
+include=20
+the "close" connection option in every message. </P>
+<P>A system receiving an HTTP/1.0 (or lower-version) message that =
+includes a=20
+Connection header MUST, for each connection-token in this field, remove =
+and=20
+ignore any header field(s) from the message with the same name as the=20
+connection-token. This protects against mistaken forwarding of such =
+header=20
+fields by pre-HTTP/1.1 proxies. See section <A=20
+href=3D"http://www.w3.org/Protocols/rfc2616/rfc2616-sec19.html#sec19.6.2"=
+=20
+rel=3Dxref>19.6.2</A>. </P>
+<H3><A id=3Dsec14.11>14.11</A> Content-Encoding</H3>
+<P>The Content-Encoding entity-header field is used as a modifier to the =
+
+media-type. When present, its value indicates what additional content =
+codings=20
+have been applied to the entity-body, and thus what decoding mechanisms =
+must be=20
+applied in order to obtain the media-type referenced by the Content-Type =
+header=20
+field. Content-Encoding is primarily used to allow a document to be =
+compressed=20
+without losing the identity of its underlying media type. </P><PRE>      =
+ Content-Encoding  =3D "Content-Encoding" ":" 1#content-coding
+</PRE>
+<P>Content codings are defined in section <A=20
+href=3D"http://www.w3.org/Protocols/rfc2616/rfc2616-sec3.html#sec3.5"=20
+rel=3Dxref>3.5</A>. An example of its use is </P><PRE>       =
+Content-Encoding: gzip
+</PRE>
+<P>The content-coding is a characteristic of the entity identified by =
+the=20
+Request-URI. Typically, the entity-body is stored with this encoding and =
+is only=20
+decoded before rendering or analogous usage. However, a non-transparent =
+proxy=20
+MAY modify the content-coding if the new coding is known to be =
+acceptable to the=20
+recipient, unless the "no-transform" cache-control directive is present =
+in the=20
+message. </P>
+<P>If the content-coding of an entity is not "identity", then the =
+response MUST=20
+include a Content-Encoding entity-header (section <A=20
+href=3D"http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.11" =
+
+rel=3Dxref>14.11</A>) that lists the non-identity content-coding(s) =
+used. </P>
+<P>If the content-coding of an entity in a request message is not =
+acceptable to=20
+the origin server, the server SHOULD respond with a status code of 415=20
+(Unsupported Media Type). </P>
+<P>If multiple encodings have been applied to an entity, the content =
+codings=20
+MUST be listed in the order in which they were applied. Additional =
+information=20
+about the encoding parameters MAY be provided by other entity-header =
+fields not=20
+defined by this specification. </P>
+<H3><A id=3Dsec14.12>14.12</A> Content-Language</H3>
+<P>The Content-Language entity-header field describes the natural =
+language(s) of=20
+the intended audience for the enclosed entity. Note that this might not =
+be=20
+equivalent to all the languages used within the entity-body. </P><PRE>   =
+    Content-Language  =3D "Content-Language" ":" 1#language-tag
+</PRE>
+<P>Language tags are defined in section <A=20
+href=3D"http://www.w3.org/Protocols/rfc2616/rfc2616-sec3.html#sec3.10"=20
+rel=3Dxref>3.10</A>. The primary purpose of Content-Language is to allow =
+a user to=20
+identify and differentiate entities according to the user's own =
+preferred=20
+language. Thus, if the body content is intended only for a =
+Danish-literate=20
+audience, the appropriate field is </P><PRE>       Content-Language: da
+</PRE>
+<P>If no Content-Language is specified, the default is that the content =
+is=20
+intended for all language audiences. This might mean that the sender =
+does not=20
+consider it to be specific to any natural language, or that the sender =
+does not=20
+know for which language it is intended. </P>
+<P>Multiple languages MAY be listed for content that is intended for =
+multiple=20
+audiences. For example, a rendition of the "Treaty of Waitangi," =
+presented=20
+simultaneously in the original Maori and English versions, would call =
+for </P><PRE>       Content-Language: mi, en
+</PRE>
+<P>However, just because multiple languages are present within an entity =
+does=20
+not mean that it is intended for multiple linguistic audiences. An =
+example would=20
+be a beginner's language primer, such as "A First Lesson in Latin," =
+which is=20
+clearly intended to be used by an English-literate audience. In this =
+case, the=20
+Content-Language would properly only include "en". </P>
+<P>Content-Language MAY be applied to any media type -- it is not =
+limited to=20
+textual documents. </P>
+<H3><A id=3Dsec14.13>14.13</A> Content-Length</H3>
+<P>The Content-Length entity-header field indicates the size of the =
+entity-body,=20
+in decimal number of OCTETs, sent to the recipient or, in the case of =
+the HEAD=20
+method, the size of the entity-body that would have been sent had the =
+request=20
+been a GET. </P><PRE>       Content-Length    =3D "Content-Length" ":" =
+1*DIGIT
+</PRE>
+<P>An example is </P><PRE>       Content-Length: 3495
+</PRE>
+<P>Applications SHOULD use this field to indicate the transfer-length of =
+the=20
+message-body, unless this is prohibited by the rules in section <A=20
+href=3D"http://www.w3.org/Protocols/rfc2616/rfc2616-sec4.html#sec4.4"=20
+rel=3Dxref>4.4</A>. </P>
+<P>Any Content-Length greater than or equal to zero is a valid value. =
+Section=20
+4.4 describes how to determine the length of a message-body if a =
+Content-Length=20
+is not given. </P>
+<P>Note that the meaning of this field is significantly different from =
+the=20
+corresponding definition in MIME, where it is an optional field used =
+within the=20
+"message/external-body" content-type. In HTTP, it SHOULD be sent =
+whenever the=20
+message's length can be determined prior to being transferred, unless =
+this is=20
+prohibited by the rules in section <A=20
+href=3D"http://www.w3.org/Protocols/rfc2616/rfc2616-sec4.html#sec4.4"=20
+rel=3Dxref>4.4</A>. </P>
+<H3><A id=3Dsec14.14>14.14</A> Content-Location</H3>
+<P>The Content-Location entity-header field MAY be used to supply the =
+resource=20
+location for the entity enclosed in the message when that entity is =
+accessible=20
+from a location separate from the requested resource's URI. A server =
+SHOULD=20
+provide a Content-Location for the variant corresponding to the response =
+entity;=20
+especially in the case where a resource has multiple entities associated =
+with=20
+it, and those entities actually have separate locations by which they =
+might be=20
+individually accessed, the server SHOULD provide a Content-Location for =
+the=20
+particular variant which is returned. </P><PRE>       Content-Location =
+=3D "Content-Location" ":"
+                         ( absoluteURI | relativeURI )
+</PRE>
+<P>The value of Content-Location also defines the base URI for the =
+entity. </P>
+<P>The Content-Location value is not a replacement for the original =
+requested=20
+URI; it is only a statement of the location of the resource =
+corresponding to=20
+this particular entity at the time of the request. Future requests MAY =
+specify=20
+the Content-Location URI as the request- URI if the desire is to =
+identify the=20
+source of that particular entity. </P>
+<P>A cache cannot assume that an entity with a Content-Location =
+different from=20
+the URI used to retrieve it can be used to respond to later requests on =
+that=20
+Content-Location URI. However, the Content- Location can be used to=20
+differentiate between multiple entities retrieved from a single =
+requested=20
+resource, as described in section <A=20
+href=3D"http://www.w3.org/Protocols/rfc2616/rfc2616-sec13.html#sec13.6"=20
+rel=3Dxref>13.6</A>. </P>
+<P>If the Content-Location is a relative URI, the relative URI is =
+interpreted=20
+relative to the Request-URI. </P>
+<P>The meaning of the Content-Location header in PUT or POST requests is =
+
+undefined; servers are free to ignore it in those cases. </P>
+<H3><A id=3Dsec14.15>14.15</A> Content-MD5</H3>
+<P>The Content-MD5 entity-header field, as defined in RFC 1864 <A=20
+href=3D"http://www.w3.org/Protocols/rfc2616/rfc2616-sec17.html#bib23"=20
+rel=3Dbibref>[23]</A>, is an MD5 digest of the entity-body for the =
+purpose of=20
+providing an end-to-end message integrity check (MIC) of the =
+entity-body. (Note:=20
+a MIC is good for detecting accidental modification of the entity-body =
+in=20
+transit, but is not proof against malicious attacks.) </P><PRE>        =
+Content-MD5   =3D "Content-MD5" ":" md5-digest
+        md5-digest   =3D &lt;base64 of 128 bit MD5 digest as per RFC =
+1864&gt;
+</PRE>
+<P>The Content-MD5 header field MAY be generated by an origin server or =
+client=20
+to function as an integrity check of the entity-body. Only origin =
+servers or=20
+clients MAY generate the Content-MD5 header field; proxies and gateways =
+MUST NOT=20
+generate it, as this would defeat its value as an end-to-end integrity =
+check.=20
+Any recipient of the entity- body, including gateways and proxies, MAY =
+check=20
+that the digest value in this header field matches that of the =
+entity-body as=20
+received. </P>
+<P>The MD5 digest is computed based on the content of the entity-body, =
+including=20
+any content-coding that has been applied, but not including any=20
+transfer-encoding applied to the message-body. If the message is =
+received with a=20
+transfer-encoding, that encoding MUST be removed prior to checking the=20
+Content-MD5 value against the received entity. </P>
+<P>This has the result that the digest is computed on the octets of the=20
+entity-body exactly as, and in the order that, they would be sent if no=20
+transfer-encoding were being applied. </P>
+<P>HTTP extends RFC 1864 to permit the digest to be computed for MIME =
+composite=20
+media-types (e.g., multipart/* and message/rfc822), but this does not =
+change how=20
+the digest is computed as defined in the preceding paragraph. </P>
+<P>There are several consequences of this. The entity-body for composite =
+types=20
+MAY contain many body-parts, each with its own MIME and HTTP headers =
+(including=20
+Content-MD5, Content-Transfer-Encoding, and Content-Encoding headers). =
+If a=20
+body-part has a Content-Transfer- Encoding or Content-Encoding header, =
+it is=20
+assumed that the content of the body-part has had the encoding applied, =
+and the=20
+body-part is included in the Content-MD5 digest as is -- i.e., after the =
+
+application. The Transfer-Encoding header field is not allowed within=20
+body-parts. </P>
+<P>Conversion of all line breaks to CRLF MUST NOT be done before =
+computing or=20
+checking the digest: the line break convention used in the text actually =
+
+transmitted MUST be left unaltered when computing the digest. </P><PRE>  =
+    Note: while the definition of Content-MD5 is exactly the same for
+      HTTP as in RFC 1864 for MIME entity-bodies, there are several ways
+      in which the application of Content-MD5 to HTTP entity-bodies
+      differs from its application to MIME entity-bodies. One is that
+      HTTP, unlike MIME, does not use Content-Transfer-Encoding, and
+      does use Transfer-Encoding and Content-Encoding. Another is that
+      HTTP more frequently uses binary content types than MIME, so it is
+      worth noting that, in such cases, the byte order used to compute
+      the digest is the transmission byte order defined for the type.
+      Lastly, HTTP allows transmission of text types with any of several
+      line break conventions and not just the canonical form using CRLF.
+</PRE>
+<H3><A id=3Dsec14.16>14.16</A> Content-Range</H3>
+<P>The Content-Range entity-header is sent with a partial entity-body to =
+specify=20
+where in the full entity-body the partial body should be applied. Range =
+units=20
+are defined in section <A=20
+href=3D"http://www.w3.org/Protocols/rfc2616/rfc2616-sec3.html#sec3.12"=20
+rel=3Dxref>3.12</A>. </P><PRE>       Content-Range =3D "Content-Range" =
+":" content-range-spec
+</PRE><PRE>       content-range-spec      =3D byte-content-range-spec
+       byte-content-range-spec =3D bytes-unit SP
+                                 byte-range-resp-spec "/"
+                                 ( instance-length | "*" )
+</PRE><PRE>       byte-range-resp-spec =3D (first-byte-pos "-" =
+last-byte-pos)
+                                      | "*"
+       instance-length           =3D 1*DIGIT
+</PRE>
+<P>The header SHOULD indicate the total length of the full entity-body, =
+unless=20
+this length is unknown or difficult to determine. The asterisk "*" =
+character=20
+means that the instance-length is unknown at the time when the response =
+was=20
+generated. </P>
+<P>Unlike byte-ranges-specifier values (see section <A=20
+href=3D"http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.35.1=
+"=20
+rel=3Dxref>14.35.1</A>), a byte- range-resp-spec MUST only specify one =
+range, and=20
+MUST contain absolute byte positions for both the first and last byte of =
+the=20
+range. </P>
+<P>A byte-content-range-spec with a byte-range-resp-spec whose last- =
+byte-pos=20
+value is less than its first-byte-pos value, or whose instance-length =
+value is=20
+less than or equal to its last-byte-pos value, is invalid. The recipient =
+of an=20
+invalid byte-content-range- spec MUST ignore it and any content =
+transferred=20
+along with it. </P>
+<P>A server sending a response with status code 416 (Requested range not =
+
+satisfiable) SHOULD include a Content-Range field with a byte-range- =
+resp-spec=20
+of "*". The instance-length specifies the current length of </P>
+<P>the selected resource. A response with status code 206 (Partial =
+Content) MUST=20
+NOT include a Content-Range field with a byte-range- resp-spec of "*". =
+</P>
+<P>Examples of byte-content-range-spec values, assuming that the entity =
+contains=20
+a total of 1234 bytes: </P><PRE>      . The first 500 bytes:
+       bytes 0-499/1234
+</PRE><PRE>      . The second 500 bytes:
+       bytes 500-999/1234
+</PRE><PRE>      . All except for the first 500 bytes:
+       bytes 500-1233/1234
+</PRE><PRE>      . The last 500 bytes:
+       bytes 734-1233/1234
+</PRE>
+<P>When an HTTP message includes the content of a single range (for =
+example, a=20
+response to a request for a single range, or to a request for a set of =
+ranges=20
+that overlap without any holes), this content is transmitted with a=20
+Content-Range header, and a Content-Length header showing the number of =
+bytes=20
+actually transferred. For example, </P><PRE>       HTTP/1.1 206 Partial =
+content
+       Date: Wed, 15 Nov 1995 06:25:24 GMT
+       Last-Modified: Wed, 15 Nov 1995 04:58:08 GMT
+       Content-Range: bytes 21010-47021/47022
+       Content-Length: 26012
+       Content-Type: image/gif
+</PRE>
+<P>When an HTTP message includes the content of multiple ranges (for =
+example, a=20
+response to a request for multiple non-overlapping ranges), these are=20
+transmitted as a multipart message. The multipart media type used for =
+this=20
+purpose is "multipart/byteranges" as defined in appendix <A=20
+href=3D"http://www.w3.org/Protocols/rfc2616/rfc2616-sec19.html#sec19.2"=20
+rel=3Dxref>19.2</A>. See appendix <A=20
+href=3D"http://www.w3.org/Protocols/rfc2616/rfc2616-sec19.html#sec19.6.3"=
+=20
+rel=3Dxref>19.6.3</A> for a compatibility issue. </P>
+<P>A response to a request for a single range MUST NOT be sent using the =
+
+multipart/byteranges media type. A response to a request for multiple =
+ranges,=20
+whose result is a single range, MAY be sent as a multipart/byteranges =
+media type=20
+with one part. A client that cannot decode a multipart/byteranges =
+message MUST=20
+NOT ask for multiple byte-ranges in a single request. </P>
+<P>When a client requests multiple byte-ranges in one request, the =
+server SHOULD=20
+return them in the order that they appeared in the request. </P>
+<P>If the server ignores a byte-range-spec because it is syntactically =
+invalid,=20
+the server SHOULD treat the request as if the invalid Range header field =
+did not=20
+exist. (Normally, this means return a 200 response containing the full =
+entity).=20
+</P>
+<P>If the server receives a request (other than one including an If- =
+Range=20
+request-header field) with an unsatisfiable Range request- header field =
+(that=20
+is, all of whose byte-range-spec values have a first-byte-pos value =
+greater than=20
+the current length of the selected resource), it SHOULD return a =
+response code=20
+of 416 (Requested range not satisfiable) (section <A=20
+href=3D"http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.17=
+"=20
+rel=3Dxref>10.4.17</A>). </P><PRE>      Note: clients cannot depend on =
+servers to send a 416 (Requested
+      range not satisfiable) response instead of a 200 (OK) response for
+      an unsatisfiable Range request-header, since not all servers
+      implement this request-header.
+</PRE>
+<H3><A id=3Dsec14.17>14.17</A> Content-Type</H3>
+<P>The Content-Type entity-header field indicates the media type of the=20
+entity-body sent to the recipient or, in the case of the HEAD method, =
+the media=20
+type that would have been sent had the request been a GET. </P><PRE>     =
+  Content-Type   =3D "Content-Type" ":" media-type
+</PRE>
+<P>Media types are defined in section <A=20
+href=3D"http://www.w3.org/Protocols/rfc2616/rfc2616-sec3.html#sec3.7"=20
+rel=3Dxref>3.7</A>. An example of the field is </P><PRE>       =
+Content-Type: text/html; charset=3DISO-8859-4
+</PRE>
+<P>Further discussion of methods for identifying the media type of an =
+entity is=20
+provided in section 7.2.1. </P>
+<H3><A id=3Dsec14.18>14.18</A> Date</H3>
+<P>The Date general-header field represents the date and time at which =
+the=20
+message was originated, having the same semantics as orig-date in RFC =
+822. The=20
+field value is an HTTP-date, as described in section <A=20
+href=3D"http://www.w3.org/Protocols/rfc2616/rfc2616-sec3.html#sec3.3.1"=20
+rel=3Dxref>3.3.1</A>; it MUST be sent in RFC 1123 <A=20
+href=3D"http://www.w3.org/Protocols/rfc2616/rfc2616-sec17.html#bib8"=20
+rel=3Dbibref>[8]</A>-date format. </P><PRE>       Date  =3D "Date" ":" =
+HTTP-date
+</PRE>
+<P>An example is </P><PRE>       Date: Tue, 15 Nov 1994 08:12:31 GMT
+</PRE>
+<P>Origin servers MUST include a Date header field in all responses, =
+except in=20
+these cases: </P><PRE>      1. If the response status code is 100 =
+(Continue) or 101 (Switching
+         Protocols), the response MAY include a Date header field, at
+         the server's option.
+</PRE><PRE>      2. If the response status code conveys a server error, =
+e.g. 500
+         (Internal Server Error) or 503 (Service Unavailable), and it is
+         inconvenient or impossible to generate a valid Date.
+</PRE><PRE>      3. If the server does not have a clock that can provide =
+a
+         reasonable approximation of the current time, its responses
+         MUST NOT include a Date header field. In this case, the rules
+         in section <A =
+href=3D"http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.18.1=
+" rel=3Dxref>14.18.1</A> MUST be followed.
+</PRE>
+<P>A received message that does not have a Date header field MUST be =
+assigned=20
+one by the recipient if the message will be cached by that recipient or=20
+gatewayed via a protocol which requires a Date. An HTTP implementation =
+without a=20
+clock MUST NOT cache responses without revalidating them on every use. =
+An HTTP=20
+cache, especially a shared cache, SHOULD use a mechanism, such as NTP <A =
+
+href=3D"http://www.w3.org/Protocols/rfc2616/rfc2616-sec17.html#bib28"=20
+rel=3Dbibref>[28]</A>, to synchronize its clock with a reliable external =
+standard.=20
+</P>
+<P>Clients SHOULD only send a Date header field in messages that include =
+an=20
+entity-body, as in the case of the PUT and POST requests, and even then =
+it is=20
+optional. A client without a clock MUST NOT send a Date header field in =
+a=20
+request. </P>
+<P>The HTTP-date sent in a Date header SHOULD NOT represent a date and =
+time=20
+subsequent to the generation of the message. It SHOULD represent the =
+best=20
+available approximation of the date and time of message generation, =
+unless the=20
+implementation has no means of generating a reasonably accurate date and =
+time.=20
+In theory, the date ought to represent the moment just before the entity =
+is=20
+generated. In practice, the date can be generated at any time during the =
+message=20
+origination without affecting its semantic value. </P>
+<H3><A id=3Dsec14.18.1>14.18.1</A> Clockless Origin Server =
+Operation</H3>
+<P>Some origin server implementations might not have a clock available. =
+An=20
+origin server without a clock MUST NOT assign Expires or Last- Modified =
+values=20
+to a response, unless these values were associated with the resource by =
+a system=20
+or user with a reliable clock. It MAY assign an Expires value that is =
+known, at=20
+or before server configuration time, to be in the past (this allows=20
+"pre-expiration" of responses without storing separate Expires values =
+for each=20
+resource). </P>
+<H3><A id=3Dsec14.19>14.19</A> ETag</H3>
+<P>The ETag response-header field provides the current value of the =
+entity tag=20
+for the requested variant. The headers used with entity tags are =
+described in=20
+sections <A=20
+href=3D"http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.24" =
+
+rel=3Dxref>14.24</A>, <A=20
+href=3D"http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.26" =
+
+rel=3Dxref>14.26</A> and <A=20
+href=3D"http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.44" =
+
+rel=3Dxref>14.44</A>. The entity tag MAY be used for comparison with =
+other=20
+entities from the same resource (see section <A=20
+href=3D"http://www.w3.org/Protocols/rfc2616/rfc2616-sec13.html#sec13.3.3"=
+=20
+rel=3Dxref>13.3.3</A>). </P><PRE>      ETag =3D "ETag" ":" entity-tag
+</PRE>
+<P>Examples: </P><PRE>      ETag: "xyzzy"
+      ETag: W/"xyzzy"
+      ETag: ""
+</PRE>
+<H3><A id=3Dsec14.20>14.20</A> Expect</H3>
+<P>The Expect request-header field is used to indicate that particular =
+server=20
+behaviors are required by the client. </P><PRE>      Expect       =3D  =
+"Expect" ":" 1#expectation
+</PRE><PRE>      expectation  =3D  "100-continue" | =
+expectation-extension
+      expectation-extension =3D  token [ "=3D" ( token | quoted-string )
+                               *expect-params ]
+      expect-params =3D  ";" token [ "=3D" ( token | quoted-string ) ]
+</PRE>
+<P>A server that does not understand or is unable to comply with any of =
+the=20
+expectation values in the Expect field of a request MUST respond with=20
+appropriate error status. The server MUST respond with a 417 =
+(Expectation=20
+Failed) status if any of the expectations cannot be met or, if there are =
+other=20
+problems with the request, some other 4xx status. </P>
+<P>This header field is defined with extensible syntax to allow for =
+future=20
+extensions. If a server receives a request containing an Expect field =
+that=20
+includes an expectation-extension that it does not support, it MUST =
+respond with=20
+a 417 (Expectation Failed) status. </P>
+<P>Comparison of expectation values is case-insensitive for unquoted =
+tokens=20
+(including the 100-continue token), and is case-sensitive for =
+quoted-string=20
+expectation-extensions. </P>
+<P>The Expect mechanism is hop-by-hop: that is, an HTTP/1.1 proxy MUST =
+return a=20
+417 (Expectation Failed) status if it receives a request with an =
+expectation=20
+that it cannot meet. However, the Expect request-header itself is =
+end-to-end; it=20
+MUST be forwarded if the request is forwarded. </P>
+<P>Many older HTTP/1.0 and HTTP/1.1 applications do not understand the =
+Expect=20
+header. </P>
+<P>See section <A=20
+href=3D"http://www.w3.org/Protocols/rfc2616/rfc2616-sec8.html#sec8.2.3"=20
+rel=3Dxref>8.2.3</A> for the use of the 100 (continue) status. </P>
+<H3><A id=3Dsec14.21>14.21</A> Expires</H3>
+<P>The Expires entity-header field gives the date/time after which the =
+response=20
+is considered stale. A stale cache entry may not normally be returned by =
+a cache=20
+(either a proxy cache or a user agent cache) unless it is first =
+validated with=20
+the origin server (or with an intermediate cache that has a fresh copy =
+of the=20
+entity). See section <A=20
+href=3D"http://www.w3.org/Protocols/rfc2616/rfc2616-sec13.html#sec13.2"=20
+rel=3Dxref>13.2</A> for further discussion of the expiration model. </P>
+<P>The presence of an Expires field does not imply that the original =
+resource=20
+will change or cease to exist at, before, or after that time. </P>
+<P>The format is an absolute date and time as defined by HTTP-date in =
+section=20
+3.3.1; it MUST be in RFC 1123 date format: </P><PRE>      Expires =3D =
+"Expires" ":" HTTP-date
+</PRE>
+<P>An example of its use is </P><PRE>      Expires: Thu, 01 Dec 1994 =
+16:00:00 GMT
+</PRE><PRE>      Note: if a response includes a Cache-Control field with =
+the max-
+      age directive (see section <A =
+href=3D"http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.9.3"=
+ rel=3Dxref>14.9.3</A>), that directive overrides the
+      Expires field.
+</PRE>
+<P>HTTP/1.1 clients and caches MUST treat other invalid date formats, =
+especially=20
+including the value "0", as in the past (i.e., "already expired"). </P>
+<P>To mark a response as "already expired," an origin server sends an =
+Expires=20
+date that is equal to the Date header value. (See the rules for =
+expiration=20
+calculations in section <A=20
+href=3D"http://www.w3.org/Protocols/rfc2616/rfc2616-sec13.html#sec13.2.4"=
+=20
+rel=3Dxref>13.2.4</A>.) </P>
+<P>To mark a response as "never expires," an origin server sends an =
+Expires date=20
+approximately one year from the time the response is sent. HTTP/1.1 =
+servers=20
+SHOULD NOT send Expires dates more than one year in the future. </P>
+<P>The presence of an Expires header field with a date value of some =
+time in the=20
+future on a response that otherwise would by default be non-cacheable =
+indicates=20
+that the response is cacheable, unless indicated otherwise by a =
+Cache-Control=20
+header field (section <A=20
+href=3D"http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.9"=20
+rel=3Dxref>14.9</A>). </P>
+<H3><A id=3Dsec14.22>14.22</A> From</H3>
+<P>The From request-header field, if given, SHOULD contain an Internet =
+e-mail=20
+address for the human user who controls the requesting user agent. The =
+address=20
+SHOULD be machine-usable, as defined by "mailbox" in RFC 822 <A=20
+href=3D"http://www.w3.org/Protocols/rfc2616/rfc2616-sec17.html#bib9"=20
+rel=3Dbibref>[9]</A> as updated by RFC 1123 <A=20
+href=3D"http://www.w3.org/Protocols/rfc2616/rfc2616-sec17.html#bib8"=20
+rel=3Dbibref>[8]</A>: </P><PRE>       From   =3D "From" ":" mailbox
+</PRE>
+<P>An example is: </P><PRE>       From: webmaster@w3.org
+</PRE>
+<P>This header field MAY be used for logging purposes and as a means for =
+
+identifying the source of invalid or unwanted requests. It SHOULD NOT be =
+used as=20
+an insecure form of access protection. The interpretation of this field =
+is that=20
+the request is being performed on behalf of the person given, who =
+accepts=20
+responsibility for the method performed. In particular, robot agents =
+SHOULD=20
+include this header so that the person responsible for running the robot =
+can be=20
+contacted if problems occur on the receiving end. </P>
+<P>The Internet e-mail address in this field MAY be separate from the =
+Internet=20
+host which issued the request. For example, when a request is passed =
+through a=20
+proxy the original issuer's address SHOULD be used. </P>
+<P>The client SHOULD NOT send the From header field without the user's =
+approval,=20
+as it might conflict with the user's privacy interests or their site's =
+security=20
+policy. It is strongly recommended that the user be able to disable, =
+enable, and=20
+modify the value of this field at any time prior to a request. </P>
+<H3><A id=3Dsec14.23>14.23</A> Host</H3>
+<P>The Host request-header field specifies the Internet host and port =
+number of=20
+the resource being requested, as obtained from the original URI given by =
+the=20
+user or referring resource (generally an HTTP URL, </P>
+<P>as described in section <A=20
+href=3D"http://www.w3.org/Protocols/rfc2616/rfc2616-sec3.html#sec3.2.2"=20
+rel=3Dxref>3.2.2</A>). The Host field value MUST represent the naming =
+authority of=20
+the origin server or gateway given by the original URL. This allows the =
+origin=20
+server or gateway to differentiate between internally-ambiguous URLs, =
+such as=20
+the root "/" URL of a server for multiple host names on a single IP =
+address.=20
+</P><PRE>       Host =3D "Host" ":" host [ ":" port ] ; Section 3.2.2
+</PRE>
+<P>A "host" without any trailing port information implies the default =
+port for=20
+the service requested (e.g., "80" for an HTTP URL). For example, a =
+request on=20
+the origin server for &lt;http://www.w3.org/pub/WWW/&gt; would properly =
+include:=20
+</P><PRE>       GET /pub/WWW/ HTTP/1.1
+       Host: www.w3.org
+</PRE>
+<P>A client MUST include a Host header field in all HTTP/1.1 request =
+messages .=20
+If the requested URI does not include an Internet host name for the =
+service=20
+being requested, then the Host header field MUST be given with an empty =
+value.=20
+An HTTP/1.1 proxy MUST ensure that any request message it forwards does =
+contain=20
+an appropriate Host header field that identifies the service being =
+requested by=20
+the proxy. All Internet-based HTTP/1.1 servers MUST respond with a 400 =
+(Bad=20
+Request) status code to any HTTP/1.1 request message which lacks a Host =
+header=20
+field. </P>
+<P>See sections <A=20
+href=3D"http://www.w3.org/Protocols/rfc2616/rfc2616-sec5.html#sec5.2"=20
+rel=3Dxref>5.2</A> and <A=20
+href=3D"http://www.w3.org/Protocols/rfc2616/rfc2616-sec19.html#sec19.6.1.=
+1"=20
+rel=3Dxref>19.6.1.1</A> for other requirements relating to Host. </P>
+<H3><A id=3Dsec14.24>14.24</A> If-Match</H3>
+<P>The If-Match request-header field is used with a method to make it=20
+conditional. A client that has one or more entities previously obtained =
+from the=20
+resource can verify that one of those entities is current by including a =
+list of=20
+their associated entity tags in the If-Match header field. Entity tags =
+are=20
+defined in section <A=20
+href=3D"http://www.w3.org/Protocols/rfc2616/rfc2616-sec3.html#sec3.11"=20
+rel=3Dxref>3.11</A>. The purpose of this feature is to allow efficient =
+updates of=20
+cached information with a minimum amount of transaction overhead. It is =
+also=20
+used, on updating requests, to prevent inadvertent modification of the =
+wrong=20
+version of a resource. As a special case, the value "*" matches any =
+current=20
+entity of the resource. </P><PRE>       If-Match =3D "If-Match" ":" ( =
+"*" | 1#entity-tag )
+</PRE>
+<P>If any of the entity tags match the entity tag of the entity that =
+would have=20
+been returned in the response to a similar GET request (without the =
+If-Match=20
+header) on that resource, or if "*" is given </P>
+<P>and any current entity exists for that resource, then the server MAY =
+perform=20
+the requested method as if the If-Match header field did not exist. </P>
+<P>A server MUST use the strong comparison function (see section <A=20
+href=3D"http://www.w3.org/Protocols/rfc2616/rfc2616-sec13.html#sec13.3.3"=
+=20
+rel=3Dxref>13.3.3</A>) to compare the entity tags in If-Match. </P>
+<P>If none of the entity tags match, or if "*" is given and no current =
+entity=20
+exists, the server MUST NOT perform the requested method, and MUST =
+return a 412=20
+(Precondition Failed) response. This behavior is most useful when the =
+client=20
+wants to prevent an updating method, such as PUT, from modifying a =
+resource that=20
+has changed since the client last retrieved it. </P>
+<P>If the request would, without the If-Match header field, result in =
+anything=20
+other than a 2xx or 412 status, then the If-Match header MUST be =
+ignored. </P>
+<P>The meaning of "If-Match: *" is that the method SHOULD be performed =
+if the=20
+representation selected by the origin server (or by a cache, possibly =
+using the=20
+Vary mechanism, see section <A=20
+href=3D"http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.44" =
+
+rel=3Dxref>14.44</A>) exists, and MUST NOT be performed if the =
+representation does=20
+not exist. </P>
+<P>A request intended to update a resource (e.g., a PUT) MAY include an =
+If-Match=20
+header field to signal that the request method MUST NOT be applied if =
+the entity=20
+corresponding to the If-Match value (a single entity tag) is no longer a =
+
+representation of that resource. This allows the user to indicate that =
+they do=20
+not wish the request to be successful if the resource has been changed =
+without=20
+their knowledge. Examples: </P><PRE>       If-Match: "xyzzy"
+       If-Match: "xyzzy", "r2d2xxxx", "c3piozzzz"
+       If-Match: *
+</PRE>
+<P>The result of a request having both an If-Match header field and =
+either an=20
+If-None-Match or an If-Modified-Since header fields is undefined by this =
+
+specification. </P>
+<H3><A id=3Dsec14.25>14.25</A> If-Modified-Since</H3>
+<P>The If-Modified-Since request-header field is used with a method to =
+make it=20
+conditional: if the requested variant has not been modified since the =
+time=20
+specified in this field, an entity will not be returned from the server; =
+
+instead, a 304 (not modified) response will be returned without any=20
+message-body. </P><PRE>       If-Modified-Since =3D "If-Modified-Since" =
+":" HTTP-date
+</PRE>
+<P>An example of the field is: </P><PRE>       If-Modified-Since: Sat, =
+29 Oct 1994 19:43:31 GMT
+</PRE>
+<P>A GET method with an If-Modified-Since header and no Range header =
+requests=20
+that the identified entity be transferred only if it has been modified =
+since the=20
+date given by the If-Modified-Since header. The algorithm for =
+determining this=20
+includes the following cases: </P><PRE>      a) If the request would =
+normally result in anything other than a
+         200 (OK) status, or if the passed If-Modified-Since date is
+         invalid, the response is exactly the same as for a normal GET.
+         A date which is later than the server's current time is
+         invalid.
+</PRE><PRE>      b) If the variant has been modified since the =
+If-Modified-Since
+         date, the response is exactly the same as for a normal GET.
+</PRE><PRE>      c) If the variant has not been modified since a valid =
+If-
+         Modified-Since date, the server SHOULD return a 304 (Not
+         Modified) response.
+</PRE>
+<P>The purpose of this feature is to allow efficient updates of cached=20
+information with a minimum amount of transaction overhead. </P><PRE>     =
+ Note: The Range request-header field modifies the meaning of If-
+      Modified-Since; see section <A =
+href=3D"http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.35" =
+rel=3Dxref>14.35</A> for full details.
+</PRE><PRE>      Note: If-Modified-Since times are interpreted by the =
+server, whose
+      clock might not be synchronized with the client.
+</PRE><PRE>      Note: When handling an If-Modified-Since header field, =
+some
+      servers will use an exact date comparison function, rather than a
+      less-than function, for deciding whether to send a 304 (Not
+      Modified) response. To get best results when sending an If-
+      Modified-Since header field for cache validation, clients are
+      advised to use the exact date string received in a previous Last-
+      Modified header field whenever possible.
+</PRE><PRE>      Note: If a client uses an arbitrary date in the =
+If-Modified-Since
+      header instead of a date taken from the Last-Modified header for
+      the same request, the client should be aware of the fact that this
+      date is interpreted in the server's understanding of time. The
+      client should consider unsynchronized clocks and rounding problems
+      due to the different encodings of time between the client and
+      server. This includes the possibility of race conditions if the
+      document has changed between the time it was first requested and
+      the If-Modified-Since date of a subsequent request, and the
+</PRE><PRE>      possibility of clock-skew-related problems if the =
+If-Modified-
+      Since date is derived from the client's clock without correction
+      to the server's clock. Corrections for different time bases
+      between client and server are at best approximate due to network
+      latency.
+</PRE>
+<P>The result of a request having both an If-Modified-Since header field =
+and=20
+either an If-Match or an If-Unmodified-Since header fields is undefined =
+by this=20
+specification. </P>
+<H3><A id=3Dsec14.26>14.26</A> If-None-Match</H3>
+<P>The If-None-Match request-header field is used with a method to make =
+it=20
+conditional. A client that has one or more entities previously obtained =
+from the=20
+resource can verify that none of those entities is current by including =
+a list=20
+of their associated entity tags in the If-None-Match header field. The =
+purpose=20
+of this feature is to allow efficient updates of cached information with =
+a=20
+minimum amount of transaction overhead. It is also used to prevent a =
+method=20
+(e.g. PUT) from inadvertently modifying an existing resource when the =
+client=20
+believes that the resource does not exist. </P>
+<P>As a special case, the value "*" matches any current entity of the =
+resource.=20
+</P><PRE>       If-None-Match =3D "If-None-Match" ":" ( "*" | =
+1#entity-tag )
+</PRE>
+<P>If any of the entity tags match the entity tag of the entity that =
+would have=20
+been returned in the response to a similar GET request (without the=20
+If-None-Match header) on that resource, or if "*" is given and any =
+current=20
+entity exists for that resource, then the server MUST NOT perform the =
+requested=20
+method, unless required to do so because the resource's modification =
+date fails=20
+to match that supplied in an If-Modified-Since header field in the =
+request.=20
+Instead, if the request method was GET or HEAD, the server SHOULD =
+respond with a=20
+304 (Not Modified) response, including the cache- related header fields=20
+(particularly ETag) of one of the entities that matched. For all other =
+request=20
+methods, the server MUST respond with a status of 412 (Precondition =
+Failed).=20
+</P>
+<P>See section <A=20
+href=3D"http://www.w3.org/Protocols/rfc2616/rfc2616-sec13.html#sec13.3.3"=
+=20
+rel=3Dxref>13.3.3</A> for rules on how to determine if two entities tags =
+match.=20
+The weak comparison function can only be used with GET or HEAD requests. =
+</P>
+<P>If none of the entity tags match, then the server MAY perform the =
+requested=20
+method as if the If-None-Match header field did not exist, but MUST also =
+ignore=20
+any If-Modified-Since header field(s) in the request. That is, if no =
+entity tags=20
+match, then the server MUST NOT return a 304 (Not Modified) response. =
+</P>
+<P>If the request would, without the If-None-Match header field, result =
+in=20
+anything other than a 2xx or 304 status, then the If-None-Match header =
+MUST be=20
+ignored. (See section <A=20
+href=3D"http://www.w3.org/Protocols/rfc2616/rfc2616-sec13.html#sec13.3.4"=
+=20
+rel=3Dxref>13.3.4</A> for a discussion of server behavior when both=20
+If-Modified-Since and If-None-Match appear in the same request.) </P>
+<P>The meaning of "If-None-Match: *" is that the method MUST NOT be =
+performed if=20
+the representation selected by the origin server (or by a cache, =
+possibly using=20
+the Vary mechanism, see section <A=20
+href=3D"http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.44" =
+
+rel=3Dxref>14.44</A>) exists, and SHOULD be performed if the =
+representation does=20
+not exist. This feature is intended to be useful in preventing races =
+between PUT=20
+operations. </P>
+<P>Examples: </P><PRE>       If-None-Match: "xyzzy"
+       If-None-Match: W/"xyzzy"
+       If-None-Match: "xyzzy", "r2d2xxxx", "c3piozzzz"
+       If-None-Match: W/"xyzzy", W/"r2d2xxxx", W/"c3piozzzz"
+       If-None-Match: *
+</PRE>
+<P>The result of a request having both an If-None-Match header field and =
+either=20
+an If-Match or an If-Unmodified-Since header fields is undefined by this =
+
+specification. </P>
+<H3><A id=3Dsec14.27>14.27</A> If-Range</H3>
+<P>If a client has a partial copy of an entity in its cache, and wishes =
+to have=20
+an up-to-date copy of the entire entity in its cache, it could use the =
+Range=20
+request-header with a conditional GET (using either or both of=20
+If-Unmodified-Since and If-Match.) However, if the condition fails =
+because the=20
+entity has been modified, the client would then have to make a second =
+request to=20
+obtain the entire current entity-body. </P>
+<P>The If-Range header allows a client to "short-circuit" the second =
+request.=20
+Informally, its meaning is `if the entity is unchanged, send me the =
+part(s) that=20
+I am missing; otherwise, send me the entire new entity'. </P><PRE>       =
+ If-Range =3D "If-Range" ":" ( entity-tag | HTTP-date )
+</PRE>
+<P>If the client has no entity tag for an entity, but does have a Last- =
+Modified=20
+date, it MAY use that date in an If-Range header. (The server can =
+distinguish=20
+between a valid HTTP-date and any form of entity-tag by examining no =
+more than=20
+two characters.) The If-Range header SHOULD only be used together with a =
+Range=20
+header, and MUST be ignored if the request does not include a Range =
+header, or=20
+if the server does not support the sub-range operation. </P>
+<P>If the entity tag given in the If-Range header matches the current =
+entity tag=20
+for the entity, then the server SHOULD provide the specified sub-range =
+of the=20
+entity using a 206 (Partial content) response. If the entity tag does =
+not match,=20
+then the server SHOULD return the entire entity using a 200 (OK) =
+response. </P>
+<H3><A id=3Dsec14.28>14.28</A> If-Unmodified-Since</H3>
+<P>The If-Unmodified-Since request-header field is used with a method to =
+make it=20
+conditional. If the requested resource has not been modified since the =
+time=20
+specified in this field, the server SHOULD perform the requested =
+operation as if=20
+the If-Unmodified-Since header were not present. </P>
+<P>If the requested variant has been modified since the specified time, =
+the=20
+server MUST NOT perform the requested operation, and MUST return a 412=20
+(Precondition Failed). </P><PRE>      If-Unmodified-Since =3D =
+"If-Unmodified-Since" ":" HTTP-date
+</PRE>
+<P>An example of the field is: </P><PRE>       If-Unmodified-Since: Sat, =
+29 Oct 1994 19:43:31 GMT
+</PRE>
+<P>If the request normally (i.e., without the If-Unmodified-Since =
+header) would=20
+result in anything other than a 2xx or 412 status, the =
+If-Unmodified-Since=20
+header SHOULD be ignored. </P>
+<P>If the specified date is invalid, the header is ignored. </P>
+<P>The result of a request having both an If-Unmodified-Since header =
+field and=20
+either an If-None-Match or an If-Modified-Since header fields is =
+undefined by=20
+this specification. </P>
+<H3><A id=3Dsec14.29>14.29</A> Last-Modified</H3>
+<P>The Last-Modified entity-header field indicates the date and time at =
+which=20
+the origin server believes the variant was last modified. </P><PRE>      =
+ Last-Modified  =3D "Last-Modified" ":" HTTP-date
+</PRE>
+<P>An example of its use is </P><PRE>       Last-Modified: Tue, 15 Nov =
+1994 12:45:26 GMT
+</PRE>
+<P>The exact meaning of this header field depends on the implementation =
+of the=20
+origin server and the nature of the original resource. For files, it may =
+be just=20
+the file system last-modified time. For entities with dynamically =
+included=20
+parts, it may be the most recent of the set of last-modify times for its =
+
+component parts. For database gateways, it may be the last-update time =
+stamp of=20
+the record. For virtual objects, it may be the last time the internal =
+state=20
+changed. </P>
+<P>An origin server MUST NOT send a Last-Modified date which is later =
+than the=20
+server's time of message origination. In such cases, where the =
+resource's last=20
+modification would indicate some time in the future, the server MUST =
+replace=20
+that date with the message origination date. </P>
+<P>An origin server SHOULD obtain the Last-Modified value of the entity =
+as close=20
+as possible to the time that it generates the Date value of its =
+response. This=20
+allows a recipient to make an accurate assessment of the entity's =
+modification=20
+time, especially if the entity changes near the time that the response =
+is=20
+generated. </P>
+<P>HTTP/1.1 servers SHOULD send Last-Modified whenever feasible. </P>
+<H3><A id=3Dsec14.30>14.30</A> Location</H3>
+<P>The Location response-header field is used to redirect the recipient =
+to a=20
+location other than the Request-URI for completion of the request or=20
+identification of a new resource. For 201 (Created) responses, the =
+Location is=20
+that of the new resource which was created by the request. For 3xx =
+responses,=20
+the location SHOULD indicate the server's preferred URI for automatic=20
+redirection to the resource. The field value consists of a single =
+absolute URI.=20
+</P><PRE>       Location       =3D "Location" ":" absoluteURI
+</PRE>
+<P>An example is: </P><PRE>       Location: =
+http://www.w3.org/pub/WWW/People.html
+</PRE><PRE>      Note: The Content-Location header field (section 14.14) =
+differs
+      from Location in that the Content-Location identifies the original
+      location of the entity enclosed in the request. It is therefore
+      possible for a response to contain header fields for both Location
+      and Content-Location. Also see section <A =
+href=3D"http://www.w3.org/Protocols/rfc2616/rfc2616-sec13.html#sec13.10" =
+rel=3Dxref>13.10</A> for cache
+      requirements of some methods.
+</PRE>
+<H3><A id=3Dsec14.31>14.31</A> Max-Forwards</H3>
+<P>The Max-Forwards request-header field provides a mechanism with the =
+TRACE=20
+(section 9.8) and OPTIONS (section 9.2) methods to limit the number of =
+proxies=20
+or gateways that can forward the request to the next inbound server. =
+This can be=20
+useful when the client is attempting to trace a request chain which =
+appears to=20
+be failing or looping in mid-chain. </P><PRE>       Max-Forwards   =3D =
+"Max-Forwards" ":" 1*DIGIT
+</PRE>
+<P>The Max-Forwards value is a decimal integer indicating the remaining =
+number=20
+of times this request message may be forwarded. </P>
+<P>Each proxy or gateway recipient of a TRACE or OPTIONS request =
+containing a=20
+Max-Forwards header field MUST check and update its value prior to =
+forwarding=20
+the request. If the received value is zero (0), the recipient MUST NOT =
+forward=20
+the request; instead, it MUST respond as the final recipient. If the =
+received=20
+Max-Forwards value is greater than zero, then the forwarded message MUST =
+contain=20
+an updated Max-Forwards field with a value decremented by one (1). </P>
+<P>The Max-Forwards header field MAY be ignored for all other methods =
+defined by=20
+this specification and for any extension methods for which it is not =
+explicitly=20
+referred to as part of that method definition. </P>
+<H3><A id=3Dsec14.32>14.32</A> Pragma</H3>
+<P>The Pragma general-header field is used to include implementation- =
+specific=20
+directives that might apply to any recipient along the request/response =
+chain.=20
+All pragma directives specify optional behavior from the viewpoint of =
+the=20
+protocol; however, some systems MAY require that behavior be consistent =
+with the=20
+directives. </P><PRE>       Pragma            =3D "Pragma" ":" =
+1#pragma-directive
+       pragma-directive  =3D "no-cache" | extension-pragma
+       extension-pragma  =3D token [ "=3D" ( token | quoted-string ) ]
+</PRE>
+<P>When the no-cache directive is present in a request message, an =
+application=20
+SHOULD forward the request toward the origin server even if it has a =
+cached copy=20
+of what is being requested. This pragma directive has the same semantics =
+as the=20
+no-cache cache-directive (see section <A=20
+href=3D"http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.9"=20
+rel=3Dxref>14.9</A>) and is defined here for backward compatibility with =
+HTTP/1.0.=20
+Clients SHOULD include both header fields when a no-cache request is =
+sent to a=20
+server not known to be HTTP/1.1 compliant. </P>
+<P>Pragma directives MUST be passed through by a proxy or gateway =
+application,=20
+regardless of their significance to that application, since the =
+directives might=20
+be applicable to all recipients along the request/response chain. It is =
+not=20
+possible to specify a pragma for a specific recipient; however, any =
+pragma=20
+directive not relevant to a recipient SHOULD be ignored by that =
+recipient. </P>
+<P>HTTP/1.1 caches SHOULD treat "Pragma: no-cache" as if the client had =
+sent=20
+"Cache-Control: no-cache". No new Pragma directives will be defined in =
+HTTP.=20
+</P><PRE>      Note: because the meaning of "Pragma: no-cache as a =
+response
+      header field is not actually specified, it does not provide a
+      reliable replacement for "Cache-Control: no-cache" in a response
+</PRE>
+<H3><A id=3Dsec14.33>14.33</A> Proxy-Authenticate</H3>
+<P>The Proxy-Authenticate response-header field MUST be included as part =
+of a=20
+407 (Proxy Authentication Required) response. The field value consists =
+of a=20
+challenge that indicates the authentication scheme and parameters =
+applicable to=20
+the proxy for this Request-URI. </P><PRE>       Proxy-Authenticate  =3D =
+"Proxy-Authenticate" ":" 1#challenge
+</PRE>
+<P>The HTTP access authentication process is described in "HTTP =
+Authentication:=20
+Basic and Digest Access Authentication" [43]. Unlike WWW-Authenticate, =
+the=20
+Proxy-Authenticate header field applies only to the current connection =
+and=20
+SHOULD NOT be passed on to downstream clients. However, an intermediate =
+proxy=20
+might need to obtain its own credentials by requesting them from the =
+downstream=20
+client, which in some circumstances will appear as if the proxy is =
+forwarding=20
+the Proxy-Authenticate header field. </P>
+<H3><A id=3Dsec14.34>14.34</A> Proxy-Authorization</H3>
+<P>The Proxy-Authorization request-header field allows the client to =
+identify=20
+itself (or its user) to a proxy which requires authentication. The=20
+Proxy-Authorization field value consists of credentials containing the=20
+authentication information of the user agent for the proxy and/or realm =
+of the=20
+resource being requested. </P><PRE>       Proxy-Authorization     =3D =
+"Proxy-Authorization" ":" credentials
+</PRE>
+<P>The HTTP access authentication process is described in "HTTP =
+Authentication:=20
+Basic and Digest Access Authentication" [43] . Unlike Authorization, the =
+
+Proxy-Authorization header field applies only to the next outbound proxy =
+that=20
+demanded authentication using the Proxy- Authenticate field. When =
+multiple=20
+proxies are used in a chain, the </P>
+<P>Proxy-Authorization header field is consumed by the first outbound =
+proxy that=20
+was expecting to receive credentials. A proxy MAY relay the credentials =
+from the=20
+client request to the next proxy if that is the mechanism by which the =
+proxies=20
+cooperatively authenticate a given request. </P>
+<H3><A id=3Dsec14.35>14.35</A> Range</H3>
+<H3><A id=3Dsec14.35.1>14.35.1</A> Byte Ranges</H3>
+<P>Since all HTTP entities are represented in HTTP messages as sequences =
+of=20
+bytes, the concept of a byte range is meaningful for any HTTP entity. =
+(However,=20
+not all clients and servers need to support byte- range operations.) =
+</P>
+<P>Byte range specifications in HTTP apply to the sequence of bytes in =
+the=20
+entity-body (not necessarily the same as the message-body). </P>
+<P>A byte range operation MAY specify a single range of bytes, or a set =
+of=20
+ranges within a single entity. </P><PRE>       ranges-specifier =3D =
+byte-ranges-specifier
+       byte-ranges-specifier =3D bytes-unit "=3D" byte-range-set
+       byte-range-set  =3D 1#( byte-range-spec | suffix-byte-range-spec =
+)
+       byte-range-spec =3D first-byte-pos "-" [last-byte-pos]
+       first-byte-pos  =3D 1*DIGIT
+       last-byte-pos   =3D 1*DIGIT
+</PRE>
+<P>The first-byte-pos value in a byte-range-spec gives the byte-offset =
+of the=20
+first byte in a range. The last-byte-pos value gives the byte-offset of =
+the last=20
+byte in the range; that is, the byte positions specified are inclusive. =
+Byte=20
+offsets start at zero. </P>
+<P>If the last-byte-pos value is present, it MUST be greater than or =
+equal to=20
+the first-byte-pos in that byte-range-spec, or the byte- range-spec is=20
+syntactically invalid. The recipient of a byte-range- set that includes =
+one or=20
+more syntactically invalid byte-range-spec values MUST ignore the header =
+field=20
+that includes that byte-range- set. </P>
+<P>If the last-byte-pos value is absent, or if the value is greater than =
+or=20
+equal to the current length of the entity-body, last-byte-pos is taken =
+to be=20
+equal to one less than the current length of the entity- body in bytes. =
+</P>
+<P>By its choice of last-byte-pos, a client can limit the number of =
+bytes=20
+retrieved without knowing the size of the entity. </P><PRE>       =
+suffix-byte-range-spec =3D "-" suffix-length
+       suffix-length =3D 1*DIGIT
+</PRE>
+<P>A suffix-byte-range-spec is used to specify the suffix of the =
+entity-body, of=20
+a length given by the suffix-length value. (That is, this form specifies =
+the=20
+last N bytes of an entity-body.) If the entity is shorter than the =
+specified=20
+suffix-length, the entire entity-body is used. </P>
+<P>If a syntactically valid byte-range-set includes at least one byte-=20
+range-spec whose first-byte-pos is less than the current length of the=20
+entity-body, or at least one suffix-byte-range-spec with a non- zero=20
+suffix-length, then the byte-range-set is satisfiable. Otherwise, the=20
+byte-range-set is unsatisfiable. If the byte-range-set is unsatisfiable, =
+the=20
+server SHOULD return a response with a status of 416 (Requested range =
+not=20
+satisfiable). Otherwise, the server SHOULD return a response with a =
+status of=20
+206 (Partial Content) containing the satisfiable ranges of the =
+entity-body. </P>
+<P>Examples of byte-ranges-specifier values (assuming an entity-body of =
+length=20
+10000): </P><PRE>      - The first 500 bytes (byte offsets 0-499, =
+inclusive):  bytes=3D0-
+        499
+</PRE><PRE>      - The second 500 bytes (byte offsets 500-999, =
+inclusive):
+        bytes=3D500-999
+</PRE><PRE>      - The final 500 bytes (byte offsets 9500-9999, =
+inclusive):
+        bytes=3D-500
+</PRE><PRE>      - Or bytes=3D9500-
+</PRE><PRE>      - The first and last bytes only (bytes 0 and 9999):  =
+bytes=3D0-0,-1
+</PRE><PRE>      - Several legal but not canonical specifications of the =
+second 500
+        bytes (byte offsets 500-999, inclusive):
+         bytes=3D500-600,601-999
+         bytes=3D500-700,601-999
+</PRE>
+<H3><A id=3Dsec14.35.2>14.35.2</A> Range Retrieval Requests</H3>
+<P>HTTP retrieval requests using conditional or unconditional GET =
+methods MAY=20
+request one or more sub-ranges of the entity, instead of the entire =
+entity,=20
+using the Range request header, which applies to the entity returned as =
+the=20
+result of the request: </P><PRE>      Range =3D "Range" ":" =
+ranges-specifier
+</PRE>
+<P>A server MAY ignore the Range header. However, HTTP/1.1 origin =
+servers and=20
+intermediate caches ought to support byte ranges when possible, since =
+Range=20
+supports efficient recovery from partially failed transfers, and =
+supports=20
+efficient partial retrieval of large entities. </P>
+<P>If the server supports the Range header and the specified range or =
+ranges are=20
+appropriate for the entity: </P><PRE>      - The presence of a Range =
+header in an unconditional GET modifies
+        what is returned if the GET is otherwise successful. In other
+        words, the response carries a status code of 206 (Partial
+        Content) instead of 200 (OK).
+</PRE><PRE>      - The presence of a Range header in a conditional GET =
+(a request
+        using one or both of If-Modified-Since and If-None-Match, or
+        one or both of If-Unmodified-Since and If-Match) modifies what
+        is returned if the GET is otherwise successful and the
+        condition is true. It does not affect the 304 (Not Modified)
+        response returned if the conditional is false.
+</PRE>
+<P>In some cases, it might be more appropriate to use the If-Range =
+header (see=20
+section 14.27) in addition to the Range header. </P>
+<P>If a proxy that supports ranges receives a Range request, forwards =
+the=20
+request to an inbound server, and receives an entire entity in reply, it =
+SHOULD=20
+only return the requested range to its client. It SHOULD store the =
+entire=20
+received response in its cache if that is consistent with its cache =
+allocation=20
+policies. </P>
+<H3><A id=3Dsec14.36>14.36</A> Referer</H3>
+<P>The Referer[sic] request-header field allows the client to specify, =
+for the=20
+server's benefit, the address (URI) of the resource from which the =
+Request-URI=20
+was obtained (the "referrer", although the header field is misspelled.) =
+The=20
+Referer request-header allows a server to generate lists of back-links =
+to=20
+resources for interest, logging, optimized caching, etc. It also allows =
+obsolete=20
+or mistyped links to be traced for maintenance. The Referer field MUST =
+NOT be=20
+sent if the Request-URI was obtained from a source that does not have =
+its own=20
+URI, such as input from the user keyboard. </P><PRE>       Referer       =
+ =3D "Referer" ":" ( absoluteURI | relativeURI )
+</PRE>
+<P>Example: </P><PRE>       Referer: =
+http://www.w3.org/hypertext/DataSources/Overview.html
+</PRE>
+<P>If the field value is a relative URI, it SHOULD be interpreted =
+relative to=20
+the Request-URI. The URI MUST NOT include a fragment. See section <A=20
+href=3D"http://www.w3.org/Protocols/rfc2616/rfc2616-sec15.html#sec15.1.3"=
+=20
+rel=3Dxref>15.1.3</A> for security considerations. </P>
+<H3><A id=3Dsec14.37>14.37</A> Retry-After</H3>
+<P>The Retry-After response-header field can be used with a 503 (Service =
+
+Unavailable) response to indicate how long the service is expected to be =
+
+unavailable to the requesting client. This field MAY also be used with =
+any 3xx=20
+(Redirection) response to indicate the minimum time the user-agent is =
+asked wait=20
+before issuing the redirected request. The value of this field can be =
+either an=20
+HTTP-date or an integer number of seconds (in decimal) after the time of =
+the=20
+response. </P><PRE>       Retry-After  =3D "Retry-After" ":" ( HTTP-date =
+| delta-seconds )
+</PRE>
+<P>Two examples of its use are </P><PRE>       Retry-After: Fri, 31 Dec =
+1999 23:59:59 GMT
+       Retry-After: 120
+</PRE>
+<P>In the latter example, the delay is 2 minutes. </P>
+<H3><A id=3Dsec14.38>14.38</A> Server</H3>
+<P>The Server response-header field contains information about the =
+software used=20
+by the origin server to handle the request. The field can contain =
+multiple=20
+product tokens (section <A=20
+href=3D"http://www.w3.org/Protocols/rfc2616/rfc2616-sec3.html#sec3.8"=20
+rel=3Dxref>3.8</A>) and comments identifying the server and any =
+significant=20
+subproducts. The product tokens are listed in order of their =
+significance for=20
+identifying the application. </P><PRE>       Server         =3D "Server" =
+":" 1*( product | comment )
+</PRE>
+<P>Example: </P><PRE>       Server: CERN/3.0 libwww/2.17
+</PRE>
+<P>If the response is being forwarded through a proxy, the proxy =
+application=20
+MUST NOT modify the Server response-header. Instead, it SHOULD include a =
+Via=20
+field (as described in section <A=20
+href=3D"http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.45" =
+
+rel=3Dxref>14.45</A>). </P><PRE>      Note: Revealing the specific =
+software version of the server might
+      allow the server machine to become more vulnerable to attacks
+      against software that is known to contain security holes. Server
+      implementors are encouraged to make this field a configurable
+      option.
+</PRE>
+<H3><A id=3Dsec14.39>14.39</A> TE</H3>
+<P>The TE request-header field indicates what extension transfer-codings =
+it is=20
+willing to accept in the response and whether or not it is willing to =
+accept=20
+trailer fields in a chunked transfer-coding. Its value may consist of =
+the=20
+keyword "trailers" and/or a comma-separated list of extension =
+transfer-coding=20
+names with optional accept parameters (as described in section <A=20
+href=3D"http://www.w3.org/Protocols/rfc2616/rfc2616-sec3.html#sec3.6"=20
+rel=3Dxref>3.6</A>). </P><PRE>       TE        =3D "TE" ":" #( t-codings =
+)
+       t-codings =3D "trailers" | ( transfer-extension [ accept-params ] =
+)
+</PRE>
+<P>The presence of the keyword "trailers" indicates that the client is =
+willing=20
+to accept trailer fields in a chunked transfer-coding, as defined in =
+section <A=20
+href=3D"http://www.w3.org/Protocols/rfc2616/rfc2616-sec3.html#sec3.6.1"=20
+rel=3Dxref>3.6.1</A>. This keyword is reserved for use with =
+transfer-coding values=20
+even though it does not itself represent a transfer-coding. </P>
+<P>Examples of its use are: </P><PRE>       TE: deflate
+       TE:
+       TE: trailers, deflate;q=3D0.5
+</PRE>
+<P>The TE header field only applies to the immediate connection. =
+Therefore, the=20
+keyword MUST be supplied within a Connection header field (section <A=20
+href=3D"http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.10" =
+
+rel=3Dxref>14.10</A>) whenever TE is present in an HTTP/1.1 message. =
+</P>
+<P>A server tests whether a transfer-coding is acceptable, according to =
+a TE=20
+field, using these rules: </P><PRE>      1. The "chunked" =
+transfer-coding is always acceptable. If the
+         keyword "trailers" is listed, the client indicates that it is
+         willing to accept trailer fields in the chunked response on
+         behalf of itself and any downstream clients. The implication is
+         that, if given, the client is stating that either all
+         downstream clients are willing to accept trailer fields in the
+         forwarded response, or that it will attempt to buffer the
+         response on behalf of downstream recipients.
+</PRE><PRE>         Note: HTTP/1.1 does not define any means to limit =
+the size of a
+         chunked response such that a client can be assured of buffering
+         the entire response.
+</PRE><PRE>      2. If the transfer-coding being tested is one of the =
+transfer-
+         codings listed in the TE field, then it is acceptable unless it
+         is accompanied by a qvalue of 0. (As defined in section <A =
+href=3D"http://www.w3.org/Protocols/rfc2616/rfc2616-sec3.html#sec3.9" =
+rel=3Dxref>3.9</A>, a
+         qvalue of 0 means "not acceptable.")
+</PRE><PRE>      3. If multiple transfer-codings are acceptable, then =
+the
+         acceptable transfer-coding with the highest non-zero qvalue is
+         preferred.  The "chunked" transfer-coding always has a qvalue
+         of 1.
+</PRE>
+<P>If the TE field-value is empty or if no TE field is present, the only =
+
+transfer-coding is "chunked". A message with no transfer-coding is =
+always=20
+acceptable. </P>
+<H3><A id=3Dsec14.40>14.40</A> Trailer</H3>
+<P>The Trailer general field value indicates that the given set of =
+header fields=20
+is present in the trailer of a message encoded with chunked =
+transfer-coding.=20
+</P><PRE>       Trailer  =3D "Trailer" ":" 1#field-name
+</PRE>
+<P>An HTTP/1.1 message SHOULD include a Trailer header field in a =
+message using=20
+chunked transfer-coding with a non-empty trailer. Doing so allows the =
+recipient=20
+to know which header fields to expect in the trailer. </P>
+<P>If no Trailer header field is present, the trailer SHOULD NOT include =
+any=20
+header fields. See section 3.6.1 for restrictions on the use of trailer =
+fields=20
+in a "chunked" transfer-coding. </P>
+<P>Message header fields listed in the Trailer header field MUST NOT =
+include the=20
+following header fields: </P><PRE>      . Transfer-Encoding
+</PRE><PRE>      . Content-Length
+</PRE><PRE>      . Trailer
+</PRE>
+<H3><A id=3Dsec14.41>14.41</A> Transfer-Encoding</H3>
+<P>The Transfer-Encoding general-header field indicates what (if any) =
+type of=20
+transformation has been applied to the message body in order to safely =
+transfer=20
+it between the sender and the recipient. This differs from the =
+content-coding in=20
+that the transfer-coding is a property of the message, not of the =
+entity. </P><PRE>     Transfer-Encoding       =3D "Transfer-Encoding" =
+":" 1#transfer-coding
+</PRE>
+<P>Transfer-codings are defined in section <A=20
+href=3D"http://www.w3.org/Protocols/rfc2616/rfc2616-sec3.html#sec3.6"=20
+rel=3Dxref>3.6</A>. An example is: </P><PRE>     Transfer-Encoding: =
+chunked
+</PRE>
+<P>If multiple encodings have been applied to an entity, the transfer- =
+codings=20
+MUST be listed in the order in which they were applied. Additional =
+information=20
+about the encoding parameters MAY be provided by other entity-header =
+fields not=20
+defined by this specification. </P>
+<P>Many older HTTP/1.0 applications do not understand the Transfer- =
+Encoding=20
+header. </P>
+<H3><A id=3Dsec14.42>14.42</A> Upgrade</H3>
+<P>The Upgrade general-header allows the client to specify what =
+additional=20
+communication protocols it supports and would like to use if the server =
+finds it=20
+appropriate to switch protocols. The server MUST use the Upgrade header =
+field=20
+within a 101 (Switching Protocols) response to indicate which =
+protocol(s) are=20
+being switched. </P><PRE>       Upgrade        =3D "Upgrade" ":" =
+1#product
+</PRE>
+<P>For example, </P><PRE>       Upgrade: HTTP/2.0, SHTTP/1.3, IRC/6.9, =
+RTA/x11
+</PRE>
+<P>The Upgrade header field is intended to provide a simple mechanism =
+for=20
+transition from HTTP/1.1 to some other, incompatible protocol. It does =
+so by=20
+allowing the client to advertise its desire to use another protocol, =
+such as a=20
+later version of HTTP with a higher major version number, even though =
+the=20
+current request has been made using HTTP/1.1. This eases the difficult=20
+transition between incompatible protocols by allowing the client to =
+initiate a=20
+request in the more commonly supported protocol while indicating to the =
+server=20
+that it would like to use a "better" protocol if available (where =
+"better" is=20
+determined by the server, possibly according to the nature of the method =
+and/or=20
+resource being requested). </P>
+<P>The Upgrade header field only applies to switching application-layer=20
+protocols upon the existing transport-layer connection. Upgrade cannot =
+be used=20
+to insist on a protocol change; its acceptance and use by the server is=20
+optional. The capabilities and nature of the application-layer =
+communication=20
+after the protocol change is entirely dependent upon the new protocol =
+chosen,=20
+although the first action after changing the protocol MUST be a response =
+to the=20
+initial HTTP request containing the Upgrade header field. </P>
+<P>The Upgrade header field only applies to the immediate connection. =
+Therefore,=20
+the upgrade keyword MUST be supplied within a Connection header field =
+(section=20
+<A =
+href=3D"http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.10" =
+
+rel=3Dxref>14.10</A>) whenever Upgrade is present in an HTTP/1.1 =
+message. </P>
+<P>The Upgrade header field cannot be used to indicate a switch to a =
+protocol on=20
+a different connection. For that purpose, it is more appropriate to use =
+a 301,=20
+302, 303, or 305 redirection response. </P>
+<P>This specification only defines the protocol name "HTTP" for use by =
+the=20
+family of Hypertext Transfer Protocols, as defined by the HTTP version =
+rules of=20
+section <A =
+href=3D"http://www.w3.org/Protocols/rfc2616/rfc2616-sec3.html#sec3.1"=20
+rel=3Dxref>3.1</A> and future updates to this specification. Any token =
+can be used=20
+as a protocol name; however, it will only be useful if both the client =
+and=20
+server associate the name with the same protocol. </P>
+<H3><A id=3Dsec14.43>14.43</A> User-Agent</H3>
+<P>The User-Agent request-header field contains information about the =
+user agent=20
+originating the request. This is for statistical purposes, the tracing =
+of=20
+protocol violations, and automated recognition of user agents for the =
+sake of=20
+tailoring responses to avoid particular user agent limitations. User =
+agents=20
+SHOULD include this field with requests. The field can contain multiple =
+product=20
+tokens (section <A=20
+href=3D"http://www.w3.org/Protocols/rfc2616/rfc2616-sec3.html#sec3.8"=20
+rel=3Dxref>3.8</A>) and comments identifying the agent and any =
+subproducts which=20
+form a significant part of the user agent. By convention, the product =
+tokens are=20
+listed in order of their significance for identifying the application. =
+</P><PRE>       User-Agent     =3D "User-Agent" ":" 1*( product | =
+comment )
+</PRE>
+<P>Example: </P><PRE>       User-Agent: CERN-LineMode/2.15 libwww/2.17b3
+</PRE>
+<H3><A id=3Dsec14.44>14.44</A> Vary</H3>
+<P>The Vary field value indicates the set of request-header fields that =
+fully=20
+determines, while the response is fresh, whether a cache is permitted to =
+use the=20
+response to reply to a subsequent request without revalidation. For =
+uncacheable=20
+or stale responses, the Vary field value advises the user agent about =
+the=20
+criteria that were used to select the representation. A Vary field value =
+of "*"=20
+implies that a cache cannot determine from the request headers of a =
+subsequent=20
+request whether this response is the appropriate representation. See =
+section <A=20
+href=3D"http://www.w3.org/Protocols/rfc2616/rfc2616-sec13.html#sec13.6"=20
+rel=3Dxref>13.6</A> for use of the Vary header field by caches. =
+</P><PRE>       Vary  =3D "Vary" ":" ( "*" | 1#field-name )
+</PRE>
+<P>An HTTP/1.1 server SHOULD include a Vary header field with any =
+cacheable=20
+response that is subject to server-driven negotiation. Doing so allows a =
+cache=20
+to properly interpret future requests on that resource and informs the =
+user=20
+agent about the presence of negotiation </P>
+<P>on that resource. A server MAY include a Vary header field with a=20
+non-cacheable response that is subject to server-driven negotiation, =
+since this=20
+might provide the user agent with useful information about the =
+dimensions over=20
+which the response varies at the time of the response. </P>
+<P>A Vary field value consisting of a list of field-names signals that =
+the=20
+representation selected for the response is based on a selection =
+algorithm which=20
+considers ONLY the listed request-header field values in selecting the =
+most=20
+appropriate representation. A cache MAY assume that the same selection =
+will be=20
+made for future requests with the same values for the listed field =
+names, for=20
+the duration of time for which the response is fresh. </P>
+<P>The field-names given are not limited to the set of standard =
+request-header=20
+fields defined by this specification. Field names are case-insensitive. =
+</P>
+<P>A Vary field value of "*" signals that unspecified parameters not =
+limited to=20
+the request-headers (e.g., the network address of the client), play a =
+role in=20
+the selection of the response representation. The "*" value MUST NOT be=20
+generated by a proxy server; it may only be generated by an origin =
+server. </P>
+<H3><A id=3Dsec14.45>14.45</A> Via</H3>
+<P>The Via general-header field MUST be used by gateways and proxies to =
+indicate=20
+the intermediate protocols and recipients between the user agent and the =
+server=20
+on requests, and between the origin server and the client on responses. =
+It is=20
+analogous to the "Received" field of RFC 822 <A=20
+href=3D"http://www.w3.org/Protocols/rfc2616/rfc2616-sec17.html#bib9"=20
+rel=3Dbibref>[9]</A> and is intended to be used for tracking message =
+forwards,=20
+avoiding request loops, and identifying the protocol capabilities of all =
+senders=20
+along the request/response chain. </P><PRE>      Via =3D  "Via" ":" 1#( =
+received-protocol received-by [ comment ] )
+      received-protocol =3D [ protocol-name "/" ] protocol-version
+      protocol-name     =3D token
+      protocol-version  =3D token
+      received-by       =3D ( host [ ":" port ] ) | pseudonym
+      pseudonym         =3D token
+</PRE>
+<P>The received-protocol indicates the protocol version of the message =
+received=20
+by the server or client along each segment of the request/response =
+chain. The=20
+received-protocol version is appended to the Via field value when the =
+message is=20
+forwarded so that information about the protocol capabilities of =
+upstream=20
+applications remains visible to all recipients. </P>
+<P>The protocol-name is optional if and only if it would be "HTTP". The=20
+received-by field is normally the host and optional port number of a =
+recipient=20
+server or client that subsequently forwarded the message. However, if =
+the real=20
+host is considered to be sensitive information, it MAY be replaced by a=20
+pseudonym. If the port is not given, it MAY be assumed to be the default =
+port of=20
+the received-protocol. </P>
+<P>Multiple Via field values represents each proxy or gateway that has =
+forwarded=20
+the message. Each recipient MUST append its information such that the =
+end result=20
+is ordered according to the sequence of forwarding applications. </P>
+<P>Comments MAY be used in the Via header field to identify the software =
+of the=20
+recipient proxy or gateway, analogous to the User-Agent and Server =
+header=20
+fields. However, all comments in the Via field are optional and MAY be =
+removed=20
+by any recipient prior to forwarding the message. </P>
+<P>For example, a request message could be sent from an HTTP/1.0 user =
+agent to=20
+an internal proxy code-named "fred", which uses HTTP/1.1 to forward the =
+request=20
+to a public proxy at nowhere.com, which completes the request by =
+forwarding it=20
+to the origin server at www.ics.uci.edu. The request received by =
+www.ics.uci.edu=20
+would then have the following Via header field: </P><PRE>       Via: 1.0 =
+fred, 1.1 nowhere.com (Apache/1.1)
+</PRE>
+<P>Proxies and gateways used as a portal through a network firewall =
+SHOULD NOT,=20
+by default, forward the names and ports of hosts within the firewall =
+region.=20
+This information SHOULD only be propagated if explicitly enabled. If not =
+
+enabled, the received-by host of any host behind the firewall SHOULD be =
+replaced=20
+by an appropriate pseudonym for that host. </P>
+<P>For organizations that have strong privacy requirements for hiding =
+internal=20
+structures, a proxy MAY combine an ordered subsequence of Via header =
+field=20
+entries with identical received-protocol values into a single such =
+entry. For=20
+example, </P><PRE>       Via: 1.0 ricky, 1.1 ethel, 1.1 fred, 1.0 lucy
+</PRE><PRE>        could be collapsed to
+</PRE><PRE>       Via: 1.0 ricky, 1.1 mertz, 1.0 lucy
+</PRE>
+<P>Applications SHOULD NOT combine multiple entries unless they are all =
+under=20
+the same organizational control and the hosts have already been replaced =
+by=20
+pseudonyms. Applications MUST NOT combine entries which have different=20
+received-protocol values. </P>
+<H3><A id=3Dsec14.46>14.46</A> Warning</H3>
+<P>The Warning general-header field is used to carry additional =
+information=20
+about the status or transformation of a message which might not be =
+reflected in=20
+the message. This information is typically used to warn about a possible =
+lack of=20
+semantic transparency from caching operations or transformations applied =
+to the=20
+entity body of the message. </P>
+<P>Warning headers are sent with responses using: </P><PRE>       =
+Warning    =3D "Warning" ":" 1#warning-value
+</PRE><PRE>       warning-value =3D warn-code SP warn-agent SP warn-text
+                                             [SP warn-date]
+</PRE><PRE>       warn-code  =3D 3DIGIT
+       warn-agent =3D ( host [ ":" port ] ) | pseudonym
+                       ; the name or pseudonym of the server adding
+                       ; the Warning header, for use in debugging
+       warn-text  =3D quoted-string
+       warn-date  =3D &lt;"&gt; HTTP-date &lt;"&gt;
+</PRE>
+<P>A response MAY carry more than one Warning header. </P>
+<P>The warn-text SHOULD be in a natural language and character set that =
+is most=20
+likely to be intelligible to the human user receiving the response. This =
+
+decision MAY be based on any available knowledge, such as the location =
+of the=20
+cache or user, the Accept-Language field in a request, the =
+Content-Language=20
+field in a response, etc. The default language is English and the =
+default=20
+character set is ISO-8859-1. </P>
+<P>If a character set other than ISO-8859-1 is used, it MUST be encoded =
+in the=20
+warn-text using the method described in RFC 2047 [14]. </P>
+<P>Warning headers can in general be applied to any message, however =
+some=20
+specific warn-codes are specific to caches and can only be applied to =
+response=20
+messages. New Warning headers SHOULD be added after any existing Warning =
+
+headers. A cache MUST NOT delete any Warning header that it received =
+with a=20
+message. However, if a cache successfully validates a cache entry, it =
+SHOULD=20
+remove any Warning headers previously attached to that entry except as =
+specified=20
+for </P>
+<P>specific Warning codes. It MUST then add any Warning headers received =
+in the=20
+validating response. In other words, Warning headers are those that =
+would be=20
+attached to the most recent relevant response. </P>
+<P>When multiple Warning headers are attached to a response, the user =
+agent=20
+ought to inform the user of as many of them as possible, in the order =
+that they=20
+appear in the response. If it is not possible to inform the user of all =
+of the=20
+warnings, the user agent SHOULD follow these heuristics: </P><PRE>      =
+- Warnings that appear early in the response take priority over
+        those appearing later in the response.
+</PRE><PRE>      - Warnings in the user's preferred character set take =
+priority
+        over warnings in other character sets but with identical warn-
+        codes and warn-agents.
+</PRE>
+<P>Systems that generate multiple Warning headers SHOULD order them with =
+this=20
+user agent behavior in mind. </P>
+<P>Requirements for the behavior of caches with respect to Warnings are =
+stated=20
+in section 13.1.2. </P>
+<P>This is a list of the currently-defined warn-codes, each with a =
+recommended=20
+warn-text in English, and a description of its meaning. </P>
+<P>110 Response is stale MUST be included whenever the returned response =
+is=20
+stale. </P>
+<P>111 Revalidation failed MUST be included if a cache returns a stale =
+response=20
+because an attempt to revalidate the response failed, due to an =
+inability to=20
+reach the server. </P>
+<P>112 Disconnected operation SHOULD be included if the cache is =
+intentionally=20
+disconnected from the rest of the network for a period of time. </P>
+<P>113 Heuristic expiration MUST be included if the cache heuristically =
+chose a=20
+freshness lifetime greater than 24 hours and the response's age is =
+greater than=20
+24 hours. </P>
+<P>199 Miscellaneous warning The warning text MAY include arbitrary =
+information=20
+to be presented to a human user, or logged. A system receiving this =
+warning MUST=20
+NOT take any automated action, besides presenting the warning to the =
+user. </P>
+<P>214 Transformation applied MUST be added by an intermediate cache or =
+proxy if=20
+it applies any transformation changing the content-coding (as specified =
+in the=20
+Content-Encoding header) or media-type (as specified in the Content-Type =
+header)=20
+of the response, or the entity-body of the response, unless this Warning =
+code=20
+already appears in the response. </P>
+<P>299 Miscellaneous persistent warning The warning text MAY include =
+arbitrary=20
+information to be presented to a human user, or logged. A system =
+receiving this=20
+warning MUST NOT take any automated action. </P>
+<P>If an implementation sends a message with one or more Warning headers =
+whose=20
+version is HTTP/1.0 or lower, then the sender MUST include in each =
+warning-value=20
+a warn-date that matches the date in the response. </P>
+<P>If an implementation receives a message with a warning-value that =
+includes a=20
+warn-date, and that warn-date is different from the Date value in the =
+response,=20
+then that warning-value MUST be deleted from the message before storing, =
+
+forwarding, or using it. (This prevents bad consequences of naive =
+caching of=20
+Warning header fields.) If all of the warning-values are deleted for =
+this=20
+reason, the Warning header MUST be deleted as well. </P>
+<H3><A id=3Dsec14.47>14.47</A> WWW-Authenticate</H3>
+<P>The WWW-Authenticate response-header field MUST be included in 401=20
+(Unauthorized) response messages. The field value consists of at least =
+one=20
+challenge that indicates the authentication scheme(s) and parameters =
+applicable=20
+to the Request-URI. </P><PRE>       WWW-Authenticate  =3D =
+"WWW-Authenticate" ":" 1#challenge
+</PRE>
+<P>The HTTP access authentication process is described in "HTTP =
+Authentication:=20
+Basic and Digest Access Authentication" [43]. User agents are advised to =
+take=20
+special care in parsing the WWW- Authenticate field value as it might =
+contain=20
+more than one challenge, or if more than one WWW-Authenticate header =
+field is=20
+provided, the contents of a challenge itself can contain a =
+comma-separated list=20
+of authentication parameters. </P></BODY></HTML>

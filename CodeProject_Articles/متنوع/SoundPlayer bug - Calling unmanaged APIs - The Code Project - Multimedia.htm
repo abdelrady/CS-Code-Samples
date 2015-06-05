@@ -1,0 +1,1510 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!-- saved from url=(0054)http://www.codeproject.com/cs/media/soundplayerbug.asp -->
+<HTML><HEAD><TITLE>SoundPlayer bug - Calling unmanaged APIs - The Code Project - Multimedia</TITLE>
+<META http-equiv=Reply-to content=mailto:webmaster@codeproject.com>
+<META http-equiv=Content-Type content="text/html; charset=ISO-8859-1">
+<META content=en-US name=MS.LOCALE>
+<META 
+content="Calling unmanaged code from managed code is very simple, but there are some things to look out for, that even Microsoft ignores." 
+name=Description>
+<META content=kbArticle name=Search.TopicType>
+<META content=shteff name=Author>
+<META content="24 Apr 2006 14:00:00 GMT" name=Search.PublishDate>
+<META content="24 Apr 2006 14:00:00 GMT" name=Search.RevisedDate>
+<META 
+content="Free source code, , Visual C++, MFC, Windows, unmanaged, pinvoke, garbage collector, soundplayer" 
+name=keywords>
+<META 
+content="Article content copyright shteff, 2006, everthing else Copyright © CodeProject, 1999-2007, All Rights Reserved." 
+name=Copyright><LINK title="CodeProject Lounge Postings" 
+href="http://www.codeproject.com/webservices/LoungeRSS.aspx" 
+type=application/rss+xml rel=alternate><LINK 
+title="CodeProject Latest articles - All topics" 
+href="http://www.codeproject.com/webservices/articlerss.aspx?cat=1" 
+type=application/rss+xml rel=alternate><LINK 
+title="CodeProject Latest articles - MFC / C++" 
+href="http://www.codeproject.com/webservices/articlerss.aspx?cat=2" 
+type=application/rss+xml rel=alternate><LINK 
+title="CodeProject Latest articles - C#" 
+href="http://www.codeproject.com/webservices/articlerss.aspx?cat=3" 
+type=application/rss+xml rel=alternate><LINK 
+title="CodeProject Latest articles - ASP.NET" 
+href="http://www.codeproject.com/webservices/articlerss.aspx?cat=4" 
+type=application/rss+xml rel=alternate><LINK 
+title="CodeProject Latest articles - .NET" 
+href="http://www.codeproject.com/webservices/articlerss.aspx?cat=5" 
+type=application/rss+xml rel=alternate><LINK 
+title="CodeProject Latest articles - VB.NET" 
+href="http://www.codeproject.com/webservices/articlerss.aspx?cat=6" 
+type=application/rss+xml rel=alternate><LINK title="The Code Project" 
+href="http://www.codeproject.com/info/OpenSearch.xml" 
+type=application/opensearchdescription+xml rel=search><LINK href="/favicon.ico" 
+type=image/ico rel=icon><LINK href="/favicon.ico" rel="SHORTCUT ICON"><LINK 
+href="SoundPlayer bug - Calling unmanaged APIs - The Code Project - Multimedia_files/global.css" 
+type=text/css rel=stylesheet>
+<SCRIPT language=javascript 
+src="SoundPlayer bug - Calling unmanaged APIs - The Code Project - Multimedia_files/oncopy.js"></SCRIPT>
+
+<SCRIPT language=javascript>
+if (top != self) top.location.href = location.href;
+if (typeof(DemoUrl) != "undefined")
+	document.write('<me' + 'ta http' + '-equiv="re' + 'fresh" con' + 'tent="1;url=' + DemoUrl + '">');
+</SCRIPT>
+
+<META content="MSHTML 6.00.2900.2180" name=GENERATOR></HEAD>
+<BODY style="MARGIN: 0px" oncopy="return copyCode();" text=black vLink=navy 
+aLink=red link=blue bgColor=white>
+<SCRIPT 
+src="SoundPlayer bug - Calling unmanaged APIs - The Code Project - Multimedia_files/urchin.js" 
+type=text/javascript>
+</SCRIPT>
+
+<SCRIPT type=text/javascript>
+_uacct = "UA-1735123-1";
+urchinTracker();
+</SCRIPT>
+
+<TABLE cellSpacing=0 cellPadding=0 width="100%" border=0>
+  <TBODY>
+  <TR>
+    <TD class=HeaderLogo><A href="http://www.codeproject.com/"><IMG height=90 
+      alt=Home 
+      src="SoundPlayer bug - Calling unmanaged APIs - The Code Project - Multimedia_files/codeproject225x90.gif" 
+      border=0></A></TD>
+    <TD class=HeaderBanner><SPAN id=AdBanner4>
+      <SCRIPT language=javascript>document.write("<a href=\"/script/admentor/admentorredir.asp?id=4035&way=ban\" target=_blank><img src=\"/script/ann/ServeImg.aspx?File=%2Fscript%2Fadmentor%2Fimages%2Finnerworkings%5F728x90%2Egif&C=False&id=4035&cb=1612576\" alt=\"\" border=0 width=728 height=90></a>");</SCRIPT>
+      </SPAN></TD></TR>
+  <TR>
+    <TD colSpan=2>
+      <TABLE class=MemberNavBar cellSpacing=0 cellPadding=5 width="100%" 
+      border=0>
+        <TBODY>
+        <TR vAlign=center>
+          <TD class=smallText style="FONT-WEIGHT: bold">4,547,383 members and 
+            growing! &nbsp; 10,212 now online. </TD>
+          <TD class=userNavText align=right><A 
+            href="http://www.codeproject.com/script/profile/whos_who.asp?id=2959938">abdelrady2030 
+            </A>| <A 
+            href="http://www.codeproject.com/script/profile/modify.asp?ct=/cs/media/soundplayerbug.asp"><B>My 
+            Settings</B></A> | <A 
+            href="http://www.codeproject.com/script/profile/bookmark_list.asp">My 
+            Bookmarks</A> | <A 
+            href="http://www.codeproject.com/script/articles/list_articles.asp?userid=2959938">My 
+            Articles</A> | <A 
+            href="http://www.codeproject.com/script/profile/logoff.asp?ct=/cs/media/soundplayerbug.asp">Sign 
+            out</A> </TD></TR></TBODY></TABLE></TD></TR>
+  <TR>
+    <TD colSpan=2>
+      <TABLE class=SiteNavBar id=tblSiteToolbar cellSpacing=0 cellPadding=0>
+        <TBODY>
+        <TR>
+          <TD><A href="http://www.codeproject.com/">Home</A></TD>
+          <TD noWrap><A 
+            href="http://www.codeproject.com/index.asp?cat=2">MFC/C++</A></TD>
+          <TD><A href="http://www.codeproject.com/index.asp?cat=3">C#</A></TD>
+          <TD noWrap><A 
+            href="http://www.codeproject.com/index.asp?cat=4">ASP.NET</A></TD>
+          <TD noWrap><A 
+            href="http://www.codeproject.com/index.asp?cat=6">VB.NET</A></TD>
+          <TD noWrap><A 
+            href="http://www.codeproject.com/index.asp?cat=8">Architect</A></TD>
+          <TD noWrap><A 
+            href="http://www.codeproject.com/index.asp?cat=9">SQL</A></TD>
+          <TD class=SelCat noWrap><A 
+            href="http://www.codeproject.com/index.asp?cat=1">All Topics</A></TD>
+          <TD width="100%">&nbsp;</TD>
+          <TD>
+            <DIV id=MenuPos 
+            style="WIDTH: 300px; POSITION: relative; TOP: 1px; HEIGHT: 22px">
+            <TABLE id=MPH 
+            style="BORDER-TOP-WIDTH: 0px; BORDER-LEFT-WIDTH: 0px; BORDER-BOTTOM-WIDTH: 0px; HEIGHT: 20px; BORDER-RIGHT-WIDTH: 0px" 
+            cellSpacing=0 cellPadding=0 width=300>
+              <TBODY>
+              <TR vAlign=center>
+                <TD 
+                style="BORDER-TOP-WIDTH: 0px; BORDER-LEFT-WIDTH: 0px; BORDER-BOTTOM-WIDTH: 0px; BORDER-RIGHT-WIDTH: 0px" 
+                noWrap><A 
+                  href="http://www.codeproject.com/info/faq.asp">Help!</A></TD>
+                <TD 
+                style="BORDER-TOP-WIDTH: 0px; BORDER-LEFT-WIDTH: 0px; BORDER-BOTTOM-WIDTH: 0px; BORDER-RIGHT-WIDTH: 0px" 
+                noWrap><A 
+                  href="http://www.codeproject.com/info/latest.asp">Articles</A></TD>
+                <TD 
+                style="BORDER-TOP-WIDTH: 0px; BORDER-LEFT-WIDTH: 0px; BORDER-BOTTOM-WIDTH: 0px; BORDER-RIGHT-WIDTH: 0px" 
+                noWrap><A 
+                  href="http://www.codeproject.com/script/comments/forums.asp">Message 
+                  Boards</A></TD>
+                <TD 
+                style="BORDER-TOP-WIDTH: 0px; BORDER-LEFT-WIDTH: 0px; BORDER-BOTTOM-WIDTH: 0px; BORDER-RIGHT-WIDTH: 0px" 
+                noWrap><A 
+                  href="http://www.codeproject.com/lounge.asp">Lounge</A></TD></TR></TBODY></TABLE></DIV></TD></TR></TBODY></TABLE>
+      <SCRIPT type=text/javascript>function Go(){return}</SCRIPT>
+
+      <SCRIPT 
+      src="SoundPlayer bug - Calling unmanaged APIs - The Code Project - Multimedia_files/cpmenu_var.js" 
+      type=text/javascript></SCRIPT>
+
+      <SCRIPT 
+      src="SoundPlayer bug - Calling unmanaged APIs - The Code Project - Multimedia_files/menu10_com.js" 
+      type=text/javascript></SCRIPT>
+
+      <SCRIPT type=text/javascript>
+var MPH = document.getElementById("MPH");
+if (MPH) MPH.style.display='none';
+</SCRIPT>
+    </TD></TR>
+  <TR>
+    <TD colSpan=2>
+      <TABLE class=ArticleHeader cellSpacing=0 cellPadding=3 width="100%">
+        <TBODY>
+        <TR vAlign=top>
+          <TD class=smallText style="PADDING-RIGHT: 10px"><A 
+            href="http://www.codeproject.com/?cat=1">All Topics</A>, <A 
+            href="http://www.codeproject.com/?cat=3">C#</A>, <A 
+            href="http://www.codeproject.com/?cat=5">.NET</A> &gt;&gt; <A 
+            href="http://www.codeproject.com/cs/media/">Multimedia</A> &gt;&gt; 
+            <A 
+            href="http://www.codeproject.com/cs/media/#Audio">Audio</A><BR><BR>
+            <DIV style="FONT-WEIGHT: bold; FONT-SIZE: 16pt">SoundPlayer bug - 
+            Calling unmanaged APIs</DIV><B>By <A 
+            href="http://www.codeproject.com/script/Articles/list_articles.asp?userid=307568">shteff</A></B>. 
+            <BR><BR>
+            <DIV style="FONT-SIZE: 12px">Calling unmanaged code from managed 
+            code is very simple, but there are some things to look out for, that 
+            even Microsoft ignores.</DIV></TD>
+          <TD class=smallText style="WIDTH: 200px">C#<BR>Windows, 
+            .NET<BR>Win32, VS<BR>Dev<BR><SPAN 
+            style="PADDING-RIGHT: 2ex">Posted</SPAN>: <B>25 Apr 
+            2006</B><BR><SPAN style="PADDING-RIGHT: 3ex">Views</SPAN>: 
+            <B>13,024</B> </TD></TR></TD></TR></TD></TR></TBODY></TABLE>
+      <TABLE cellSpacing=0 cellPadding=0 border=0>
+        <TBODY>
+        <TR vAlign=top>
+          <TD class=LHNavBar rowSpan=2><!-- Yes, there are IE hacks that will allow us to create a min-width DIV 
+	     (eg http://www.webreference.com/programming/min-width/) but I couldn't
+	     be arsed. Wait for it in v2.0 -->
+            <DIV class=FeatureBlockHeader>Announcements</DIV>
+            <DIV class="FeatureBlockContent RHFeatureBar">
+            <DIV style="PADDING-TOP: 3px"><IMG style="MARGIN-LEFT: 0px" 
+            height=16 alt=Jobs 
+            src="SoundPlayer bug - Calling unmanaged APIs - The Code Project - Multimedia_files/staff_sm.gif" 
+            width=12 align=absMiddle> <A 
+            href="http://www.codeproject.com/info/jobs/">http://www.codeproject.com/info/jobs/</A></DIV>
+            <DIV style="PADDING-TOP: 3px"><IMG style="MARGIN-LEFT: 0px" 
+            height=20 alt=Comp 
+            src="SoundPlayer bug - Calling unmanaged APIs - The Code Project - Multimedia_files/prize_winner_sm.gif" 
+            width=10 align=absMiddle> <A 
+            href="http://www.codeproject.com/script/competitions/monthly/">Monthly 
+            Competition</A></DIV></DIV>
+            <CENTER>
+            <SCRIPT language=javascript>document.write("<IFRAME src=\"/script/ann/ServeHTML.aspx?C=False&id=4108&cb=1612585\" border=0 frameborder=0 scrolling=no width=160 height=600></IFRAME>");</SCRIPT>
+            </CENTER><BR><BR><IMG height=1 
+            src="SoundPlayer bug - Calling unmanaged APIs - The Code Project - Multimedia_files/t.gif" 
+            width=160> </TD>
+          <TD width="100%">
+            <TABLE class=SearchHeaderBar cellSpacing=0 width="100%">
+              <TBODY>
+              <TR>
+                <TD vAlign=center noWrap align=right width="60%">
+                  <FORM style="MARGIN: 0px" name=Search action=/info/search.asp 
+                  method=post><B>Search &nbsp;</B><INPUT class=smallText 
+                  style="WIDTH: 200px" name=target> <SELECT 
+                  style="FONT-WEIGHT: bold; FONT-SIZE: 8pt" name=st> <OPTION 
+                    value=kw selected>Articles</OPTION> <OPTION 
+                    value=au>Authors</OPTION></SELECT> <INPUT style="FONT-WEIGHT: bold; FONT-SIZE: 8pt" type=submit value=" Go! "> 
+                  &nbsp; </FORM></TD>
+                <TD class=tinyText noWrap><A 
+                  href="http://www.codeproject.com/info/search.asp">Advanced 
+                  Search</A><BR><A 
+                  href="http://www.codeproject.com/script/articles/sections.asp">Sitemap</A> 
+                </TD></TR></TBODY></TABLE>
+            <TABLE width="100%">
+              <TBODY>
+              <TR vAlign=top>
+                <TD class=SmallText noWrap>
+                  <TABLE>
+                    <TBODY>
+                    <TR>
+                      <TD class=smallText noWrap><IMG 
+                        src="SoundPlayer bug - Calling unmanaged APIs - The Code Project - Multimedia_files/print.gif" 
+                        align=absMiddle> <A 
+                        href="http://www.codeproject.com/cs/media/soundplayerbug.asp?print=true" 
+                        target=_print>Print</A></TD>
+                      <TD class=smallText noWrap><IMG 
+                        src="SoundPlayer bug - Calling unmanaged APIs - The Code Project - Multimedia_files/sitebuild_icon.gif" 
+                        align=absMiddle><A 
+                        href="http://www.codeproject.com/script/submit/ReportProblem.asp?GUID=soundplayerbug%2Fcs%2Fmedia4%2F25%2F2006">Broken 
+                        Article?</A></TD>
+                      <TD class=smallText noWrap><IMG 
+                        src="SoundPlayer bug - Calling unmanaged APIs - The Code Project - Multimedia_files/link.gif" 
+                        align=absMiddle><A 
+                        href="http://www.codeproject.com/script/profile/add_bookmark.asp?t=0&amp;ct=%2Fcs%2Fmedia%2Fsoundplayerbug%2Easp&amp;guid=soundplayerbug%2Fcs%2Fmedia4%2F25%2F2006">Bookmark</A></TD>
+                      <TD class=smallText noWrap><IMG 
+                        src="SoundPlayer bug - Calling unmanaged APIs - The Code Project - Multimedia_files/mail_small.gif" 
+                        align=absMiddle> <A 
+                        href="http://www.codeproject.com/cs/media/soundplayerbug.asp#__comments">Discuss</A></TD>
+                      <TD class=smallText noWrap><IMG 
+                        src="SoundPlayer bug - Calling unmanaged APIs - The Code Project - Multimedia_files/mail.gif" 
+                        align=absMiddle> <A 
+                        href="http://www.codeproject.com/script/recommend/form.asp?guid=soundplayerbug%2Fcs%2Fmedia4%2F25%2F2006">Send 
+                        to a friend</A></TD></TR></TBODY></TABLE></TD>
+                <TD noWrap align=right><A name=__top></A>
+                  <TABLE>
+                    <TBODY>
+                    <TR>
+                      <TD class=smallText align=right>15 votes for this 
+                        article.</TD>
+                      <TD>
+                        <TABLE cellSpacing=0 cellPadding=0 border=2>
+                          <TBODY>
+                          <TR>
+                            <TD><IMG height=5 
+                              src="SoundPlayer bug - Calling unmanaged APIs - The Code Project - Multimedia_files/red.gif" 
+                              width=20 border=0></TD>
+                            <TD><IMG height=5 
+                              src="SoundPlayer bug - Calling unmanaged APIs - The Code Project - Multimedia_files/red.gif" 
+                              width=20 border=0></TD>
+                            <TD><IMG height=5 
+                              src="SoundPlayer bug - Calling unmanaged APIs - The Code Project - Multimedia_files/red.gif" 
+                              width=20 border=0></TD>
+                            <TD><IMG height=5 
+                              src="SoundPlayer bug - Calling unmanaged APIs - The Code Project - Multimedia_files/red.gif" 
+                              width=20 border=0></TD>
+                            <TD><IMG height=5 
+                              src="SoundPlayer bug - Calling unmanaged APIs - The Code Project - Multimedia_files/red.gif" 
+                              width=6 border=0><IMG height=5 
+                              src="SoundPlayer bug - Calling unmanaged APIs - The Code Project - Multimedia_files/white.gif" 
+                              width=14 border=0></TD></TR></TBODY></TABLE></TD></TR>
+                    <TR>
+                      <TD class=smallText align=right colSpan=2><A 
+                        title="Calculated as rating x Log10(# votes)" 
+                        href="http://www.codeproject.com/script/articles/top_articles.asp?st=2">Popularity: 
+                        5.08</A>. Rating: <B>4.32</B> out of 
+                  5.</TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+        <TR>
+          <TD class=ArticlePane><SPAN id=intelliTXT>
+            <DIV id=contentdiv><!-- Article Starts -->
+            <UL class=download>
+              <LI><A 
+              href="http://www.codeproject.com/cs/media/soundplayerbug/soundplayerbug_src.zip">Download 
+              source - 1.07 MB</A> 
+              <LI><A 
+              href="http://www.codeproject.com/cs/media/soundplayerbug/soundplayerbug_demo.zip">Download 
+              application - 1.06 MB</A> </LI></UL>
+            <H2>Introduction</H2>
+            <P>Recently, I was making a full-fledged blackjack card game, and 
+            wanted to play some sounds throughout the game. .NET 2.0 has made 
+            this extremely easy with the new <CODE>SoundPlayer</CODE> class. To 
+            my surprise though, it does not handle the case of playing an 
+            asynchronous sound from a stream correctly. Microsoft has identified 
+            this as "By Design" rather than a bug, as shown here at <A 
+            href="http://lab.msdn.microsoft.com/productfeedback/viewfeedback.aspx?feedbackid=9fb822a8-65c4-40c4-8abf-9765de2385ea" 
+            target=_blank>MSDN Feedback</A>. The problem stems from the 
+            difficulties in calling unmanaged code asynchronously. This article 
+            will explain the problem in the <CODE>SoundPlayer</CODE> class, the 
+            reasons Microsoft may have classed this as "By Design" rather than a 
+            bug, and a way to play sounds asynchronously from a stream 
+            guaranteed.</P>
+            <H2>The SoundPlayer problem</H2>
+            <P>The problem with the <CODE>SoundPlayer</CODE> class resides deep 
+            within the class itself and the call it makes to the unmanaged 
+            <CODE>PlaySound</CODE>. The <CODE>PlaySound</CODE> function takes a 
+            pointer to a byte array when playing the sound from memory. When a 
+            call to an unmanaged API is made, the garbage collector 
+            automatically pins the objects passed in, and unpins them when the 
+            call returns. However, when <CODE>PlaySound</CODE> is called with 
+            the <CODE>SND_ASYNC</CODE> flag, "The sound is played 
+            asynchronously, and <CODE>PlaySound</CODE> returns immediately after 
+            beginning the sound." Now the question arises, if the managed byte 
+            array has been passed into the unmanaged function 
+            <CODE>PlaySound</CODE> and <CODE>PlaySound</CODE> returns 
+            immediately, can the <CODE lang=cs><SPAN 
+            class=cs-keyword>byte</SPAN>[]</CODE> be moved or collected by the 
+            garbage collector while the sound is playing? The answer is yes, as 
+            outlined <A 
+            href="http://msdn.microsoft.com/msdnmag/issues/04/10/NET/" 
+            target=_blank>here in Object Lifetime and Pinning</A>, and this is 
+            the problem I have had when playing asynchronous embedded resource 
+            sounds using the <CODE>SoundPlayer</CODE>.</P>
+            <H2>Reproducing the problem</H2>
+            <P>Due to fact that the problem only appears when the the Garbage 
+            Collector runs at the instant just after the call to 
+            <CODE>SoundPlayer.Play()</CODE> and the <CODE lang=cs><SPAN 
+            class=cs-keyword>byte</SPAN>[]</CODE> passed into 
+            <CODE>PlaySound</CODE> by the <CODE>SoundPlayer</CODE> class must be 
+            moved or collected as well, the problem can be very difficult to 
+            reproduce. However, I have produced a demo application, downloadable 
+            above, that reliably (at least on my computer) reproduces the 
+            problem. To reproduce the problem, run the demo application, and 
+            press the "Using SoundPlayer" play button. You should hear a sound 
+            that has been corrupted; if not, press the Play Sound button a 
+            couple of more times after allowing the sound to completely play, or 
+            switch between pressing the the two Play buttons. Now, if you click 
+            the Switch Image button, and press the Play button again, the sound 
+            plays correctly (or at least it does on my computer). Why? Well, 
+            because the first image is much, much larger, and thus causes the 
+            Garbage Collector to be far more aggressive when collecting memory. 
+            There are ways to help the situation, like making the 
+            <CODE>SoundPlayer</CODE> a class variable instead of creating a new 
+            one each time Play is pressed. In this example application, this 
+            seems to fix the problem. However, in the <A 
+            href="http://www.s3ware.com/" target=_blank>BlackJack</A> game I 
+            wrote, the problem still existed, just a lot less frequently.</P>
+            <H2>The code to reproduce the problem</H2>
+            <H3>Playing the sound</H3><PRE lang=cs>SoundPlayer soundPlayer = <SPAN class=cs-keyword>new</SPAN> SoundPlayer();
+soundPlayer.Stop();
+soundPlayer.Stream = Properties.Resources.Windows_XP_Startup;
+soundPlayer.Play();</PRE>
+            <H3>Causing the garbage collector to run</H3><PRE lang=cs><SPAN class=cs-keyword>private</SPAN> <SPAN class=cs-keyword>void</SPAN> ProcessingThread()
+{
+  <SPAN class=cs-comment>// Do some work just so memory</SPAN>
+  <SPAN class=cs-comment>// is being created and destroyed</SPAN>
+  <SPAN class=cs-keyword>while</SPAN> (processThread)
+  {
+    Thread.Sleep(<SPAN class=cs-literal>10</SPAN>);
+    panel1.Invalidate();
+  }
+}
+
+<SPAN class=cs-keyword>private</SPAN> <SPAN class=cs-keyword>void</SPAN> panel1_Paint(<SPAN class=cs-keyword>object</SPAN> sender, PaintEventArgs e)
+{
+  TimeSpan ts = DateTime.Now.Subtract(dateTime);
+  <SPAN class=cs-keyword>int</SPAN> rotateAngle = (<SPAN class=cs-keyword>int</SPAN>)(ts.TotalMilliseconds / <SPAN class=cs-literal>100</SPAN>);
+  Math.DivRem(rotateAngle, <SPAN class=cs-literal>360</SPAN>, <SPAN class=cs-keyword>out</SPAN> rotateAngle);
+
+  Image image = <SPAN class=cs-keyword>null</SPAN>;
+  <SPAN class=cs-keyword>if</SPAN> (largeImage)
+  {
+    image = Properties.Resources.Bliss;
+  }
+  <SPAN class=cs-keyword>else</SPAN>
+  {
+    image = Properties.Resources.logo;
+  }
+
+  Matrix transformMatrix = <SPAN class=cs-keyword>new</SPAN> Matrix();
+  transformMatrix.RotateAt(rotateAngle, 
+    <SPAN class=cs-keyword>new</SPAN> PointF(<SPAN class=cs-keyword>this</SPAN>.Width / <SPAN class=cs-literal>2</SPAN>, <SPAN class=cs-keyword>this</SPAN>.Height / <SPAN class=cs-literal>2</SPAN>));
+  e.Graphics.MultiplyTransform(transformMatrix);
+  e.Graphics.DrawImage(image, ClientRectangle);
+  transformMatrix.Dispose();
+
+
+  GC.Collect();
+}</PRE>
+            <H2>How to 100% reliably play embedded resource sounds 
+            asynchronously</H2>
+            <P>The answer to this lies in the article here in <A 
+            href="http://msdn.microsoft.com/msdnmag/issues/04/10/NET/" 
+            target=_blank>Object Lifetime and Pinning</A>. The <CODE 
+            lang=cs><SPAN class=cs-keyword>byte</SPAN>[]</CODE> must be pinned 
+            while the sound is playing, or depending on if the 
+            <CODE>PlaySound</CODE> function caches the sound, while it is 
+            cached. To illustrate this in action, press the "Using a Pinned 
+            byte[]" Play button. This sound should never play a corrupt 
+            sound.</P><PRE lang=cs><SPAN class=cs-keyword>using</SPAN> System;
+<SPAN class=cs-keyword>using</SPAN> System.Collections.Generic;
+<SPAN class=cs-keyword>using</SPAN> System.Text;
+<SPAN class=cs-keyword>using</SPAN> System.Runtime.InteropServices;
+
+<SPAN class=cs-keyword>namespace</SPAN> SoundPlayerBug
+{
+  <SPAN class=cs-keyword>public</SPAN> <SPAN class=cs-keyword>static</SPAN> <SPAN class=cs-keyword>class</SPAN> SoundPlayerAsync
+  {
+    [DllImport(<SPAN class=cpp-string>"winmm.dll"</SPAN>, SetLastError = <SPAN class=cs-keyword>true</SPAN>)]
+    <SPAN class=cs-keyword>public</SPAN> <SPAN class=cs-keyword>static</SPAN> <SPAN class=cs-keyword>extern</SPAN> <SPAN class=cs-keyword>bool</SPAN> PlaySound(<SPAN class=cs-keyword>byte</SPAN>[] ptrToSound,
+       System.UIntPtr hmod, <SPAN class=cs-keyword>uint</SPAN> fdwSound);
+
+    [DllImport(<SPAN class=cpp-string>"winmm.dll"</SPAN>, SetLastError = <SPAN class=cs-keyword>true</SPAN>)]
+    <SPAN class=cs-keyword>public</SPAN> <SPAN class=cs-keyword>static</SPAN> <SPAN class=cs-keyword>extern</SPAN> <SPAN class=cs-keyword>bool</SPAN> PlaySound(IntPtr ptrToSound,
+       System.UIntPtr hmod, <SPAN class=cs-keyword>uint</SPAN> fdwSound);
+
+    <SPAN class=cs-keyword>static</SPAN> <SPAN class=cs-keyword>private</SPAN> GCHandle? gcHandle = <SPAN class=cs-keyword>null</SPAN>;
+    <SPAN class=cs-keyword>private</SPAN> <SPAN class=cs-keyword>static</SPAN> <SPAN class=cs-keyword>byte</SPAN>[] bytesToPlay = <SPAN class=cs-keyword>null</SPAN>;
+    <SPAN class=cs-keyword>private</SPAN> <SPAN class=cs-keyword>static</SPAN> <SPAN class=cs-keyword>byte</SPAN>[] BytesToPlay
+    {
+      <SPAN class=cs-keyword>get</SPAN> { <SPAN class=cs-keyword>return</SPAN> bytesToPlay; }
+      <SPAN class=cs-keyword>set</SPAN> 
+      {
+        FreeHandle();
+        bytesToPlay = value;
+      }
+    }
+
+    <SPAN class=cs-keyword>public</SPAN> <SPAN class=cs-keyword>static</SPAN> <SPAN class=cs-keyword>void</SPAN> PlaySound(System.IO.Stream stream)
+    {
+      PlaySound(stream, SoundFlags.SND_MEMORY | 
+                        SoundFlags.SND_ASYNC);
+    }
+
+    <SPAN class=cs-keyword>public</SPAN> <SPAN class=cs-keyword>static</SPAN> <SPAN class=cs-keyword>void</SPAN> PlaySound(System.IO.Stream stream, 
+                                 SoundFlags flags)
+    {
+      LoadStream(stream);
+      flags |= SoundFlags.SND_ASYNC;
+      flags |= SoundFlags.SND_MEMORY;
+
+      <SPAN class=cs-keyword>if</SPAN> (BytesToPlay != <SPAN class=cs-keyword>null</SPAN>)
+      {
+        gcHandle = GCHandle.Alloc(BytesToPlay, 
+                                 GCHandleType.Pinned);
+        PlaySound(gcHandle.Value.AddrOfPinnedObject(), 
+                             (UIntPtr)<SPAN class=cs-literal>0</SPAN>, (<SPAN class=cs-keyword>uint</SPAN>)flags);
+      }
+      <SPAN class=cs-keyword>else</SPAN>
+      {
+        PlaySound((<SPAN class=cs-keyword>byte</SPAN>[])<SPAN class=cs-keyword>null</SPAN>, (UIntPtr)<SPAN class=cs-literal>0</SPAN>, (<SPAN class=cs-keyword>uint</SPAN>)flags);
+      }
+    }
+
+    <SPAN class=cs-keyword>private</SPAN> <SPAN class=cs-keyword>static</SPAN> <SPAN class=cs-keyword>void</SPAN> LoadStream(System.IO.Stream stream)
+    {
+      <SPAN class=cs-keyword>if</SPAN> (stream != <SPAN class=cs-keyword>null</SPAN>)
+      {
+        <SPAN class=cs-keyword>byte</SPAN>[] bytesToPlay = <SPAN class=cs-keyword>new</SPAN> <SPAN class=cs-keyword>byte</SPAN>[stream.Length];
+        stream.Read(bytesToPlay, <SPAN class=cs-literal>0</SPAN>, (<SPAN class=cs-keyword>int</SPAN>)stream.Length);
+        BytesToPlay = bytesToPlay;
+      }
+      <SPAN class=cs-keyword>else</SPAN>
+      {
+        BytesToPlay = <SPAN class=cs-keyword>null</SPAN>;
+      }
+    }
+
+    <SPAN class=cs-keyword>private</SPAN> <SPAN class=cs-keyword>static</SPAN> <SPAN class=cs-keyword>void</SPAN> FreeHandle()
+    {
+      <SPAN class=cs-keyword>if</SPAN> (gcHandle != <SPAN class=cs-keyword>null</SPAN>)
+      {
+        PlaySound((<SPAN class=cs-keyword>byte</SPAN>[])<SPAN class=cs-keyword>null</SPAN>, (UIntPtr)<SPAN class=cs-literal>0</SPAN>, (<SPAN class=cs-keyword>uint</SPAN>)<SPAN class=cs-literal>0</SPAN>);
+        gcHandle.Value.Free();
+        gcHandle = <SPAN class=cs-keyword>null</SPAN>;
+      }
+    }
+  }
+
+  [Flags]
+  <SPAN class=cs-keyword>public</SPAN> <SPAN class=cs-keyword>enum</SPAN> SoundFlags : <SPAN class=cs-keyword>int</SPAN>
+  {
+    SND_SYNC = <SPAN class=cs-literal>0x0000</SPAN>,            <SPAN class=cs-comment>// play synchronously (default)</SPAN>
+    SND_ASYNC = <SPAN class=cs-literal>0x0001</SPAN>,        <SPAN class=cs-comment>// play asynchronously</SPAN>
+    SND_NODEFAULT = <SPAN class=cs-literal>0x0002</SPAN>,        <SPAN class=cs-comment>// silence (!default) if sound not found</SPAN>
+    SND_MEMORY = <SPAN class=cs-literal>0x0004</SPAN>,        <SPAN class=cs-comment>// pszSound points to a memory file</SPAN>
+    SND_LOOP = <SPAN class=cs-literal>0x0008</SPAN>,            <SPAN class=cs-comment>// loop the sound until next sndPlaySound</SPAN>
+    SND_NOSTOP = <SPAN class=cs-literal>0x0010</SPAN>,        <SPAN class=cs-comment>// don't stop any currently playing sound</SPAN>
+    SND_NOWAIT = <SPAN class=cs-literal>0x00002000</SPAN>,        <SPAN class=cs-comment>// don't wait if the driver is busy</SPAN>
+    SND_ALIAS = <SPAN class=cs-literal>0x00010000</SPAN>,        <SPAN class=cs-comment>// name is a registry alias</SPAN>
+    SND_ALIAS_ID = <SPAN class=cs-literal>0x00110000</SPAN>,        <SPAN class=cs-comment>// alias is a predefined id</SPAN>
+    SND_FILENAME = <SPAN class=cs-literal>0x00020000</SPAN>,        <SPAN class=cs-comment>// name is file name</SPAN>
+  }
+}</PRE>
+            <P>The important part of the above code is:</P><PRE lang=cs>gcHandle = GCHandle.Alloc(BytesToPlay, GCHandleType.Pinned);
+PlaySound(gcHandle.Value.AddrOfPinnedObject(), (UIntPtr)<SPAN class=cs-literal>0</SPAN>, (<SPAN class=cs-keyword>uint</SPAN>)flags);</PRE>
+            <P>The byte array that is about to be played is pinned so the 
+            garbage collector can not move or collect it.</P>
+            <P>Unpinning the byte array is also very important, otherwise you 
+            will have a memory leak.</P><PRE lang=cs><SPAN class=cs-keyword>if</SPAN> (gcHandle != <SPAN class=cs-keyword>null</SPAN>)
+{
+    PlaySound((<SPAN class=cs-keyword>byte</SPAN>[])<SPAN class=cs-keyword>null</SPAN>, (UIntPtr)<SPAN class=cs-literal>0</SPAN>, (<SPAN class=cs-keyword>uint</SPAN>)<SPAN class=cs-literal>0</SPAN>);
+    gcHandle.Value.Free();
+    gcHandle = <SPAN class=cs-keyword>null</SPAN>;
+}</PRE>
+            <H2>Why would Microsoft resolve this as "By Design"</H2>
+            <P>I believe Microsoft has resolved <A 
+            href="http://lab.msdn.microsoft.com/productfeedback/viewfeedback.aspx?feedbackid=9fb822a8-65c4-40c4-8abf-9765de2385ea" 
+            target=_blank>my bug report</A> as "By Design" as there are Garbage 
+            Collector performance implications when objects are manually pinned. 
+            This is of increased concern with the <CODE>SoundPlayer</CODE> class 
+            as, when to unpin the object is impossible to determine because 
+            there is no way of confirming when the sound has finished playing. I 
+            would be intrigued to know how C++ programmers deal with calling the 
+            <CODE>PlaySound</CODE> function. It would seem to me they would have 
+            a similar problem in identifying when to delete the 
+            <CODE>byte*</CODE> passed to <CODE>PlaySound</CODE>. The solution to 
+            the problem I have presented does not deal with unpinning the <CODE 
+            lang=cs><SPAN class=cs-keyword>byte</SPAN>[]</CODE> unless another 
+            sound is played. This could potentially leave a <CODE lang=cs><SPAN 
+            class=cs-keyword>byte</SPAN>[]</CODE> pinned for a lengthy period of 
+            time unnecessarily.</P>
+            <H2>Ways to avoid the problem</H2>
+            <UL>
+              <LI>Don't play asynchronous sounds from memory using the 
+              <CODE>SoundPlayer</CODE> class. 
+              <LI>Instead of using embedded sounds, install any sounds to be 
+              played as a file. Sounds played from files don't have the same 
+              problem. 
+              <LI>Avoid memory intensive operations while a memory sound is 
+              playing asynchronously. </LI></UL>
+            <H2>Thank you</H2>
+            <P>CodeProject has helped me in many ways over the years, so I hope 
+            this article saves some people the headache I had in trying to 
+            locate and resolve the above problem. This is also my first attempt 
+            at an article, so any feedback would be greatly appreciated.</P><!-- Article Ends --></DIV></SPAN>
+            <SCRIPT 
+            src="SoundPlayer bug - Calling unmanaged APIs - The Code Project - Multimedia_files/togglePre.js" 
+            type=text/javascript></SCRIPT>
+
+            <H2>About shteff</H2>
+            <DIV style="OVERFLOW: hidden">
+            <TABLE border=0>
+              <TBODY>
+              <TR vAlign=top>
+                <TD class=smallText noWrap><BR></TD>
+                <TD class=smallText>I am currently a Software Engineer working 
+                  for an international company on a defence project. I graduated 
+                  from university around 5 years ago with a Bacehlor of 
+                  Engineering (Aerospace Avionics) First Class Honours. 
+                  Currently in my spare time I am experimenting with the joys of 
+                  shareware. I also enjoy most sports including, basketball, 
+                  netball and rockclimbing.<BR><A 
+                  href="http://www.s3ware.com/">http://www.s3ware.com/</A>
+                  <P class=smallText>Click <A 
+                  href="http://www.codeproject.com/script/profile/whos_who.asp?vt=arts&amp;id=307568">here</A> 
+                  to view shteff's online 
+            profile.</P></TD></TR></TBODY></TABLE></DIV><BR>
+            <TABLE cellPadding=4 width="100%" border=0>
+              <TBODY>
+              <TR vAlign=top>
+                <TD width="100%">
+                  <H2>Other popular Multimedia articles:</H2>
+                  <UL>
+                    <LI><A 
+                    href="http://www.codeproject.com/cs/media/Motion_Detection.asp">Motion 
+                    Detection Algorithms</A>
+                    <DIV class=smallText>Some approaches to detect motion in a 
+                    video stream.</DIV>
+                    <LI><A 
+                    href="http://www.codeproject.com/cs/media/Image_Processing_Lab.asp">Image 
+                    Processing Lab in C#</A>
+                    <DIV class=smallText>A tool and library for image 
+                    processing.</DIV>
+                    <LI><A 
+                    href="http://www.codeproject.com/cs/media/cameraviewer.asp">Camera 
+                    Vision - video surveillance on C#</A>
+                    <DIV class=smallText>A C# video surveillance application, 
+                    which allows monitoring several IP cameras 
+                    simultaneously.</DIV>
+                    <LI><A 
+                    href="http://www.codeproject.com/cs/media/directxcapture.asp">DirectX.Capture 
+                    Class Library</A>
+                    <DIV class=smallText>A .NET class library for capturing 
+                    video and audio to AVI files.</DIV></LI></UL></TD>
+                <TD width=360>
+                  <SCRIPT language=javascript>document.write("<IFRAME src=\"/script/ann/ServeHTML.aspx?C=False&id=3782&cb=1612591\" border=0 frameborder=0 scrolling=no width=300 height=250></IFRAME>");</SCRIPT>
+                </TD></TR></TBODY></TABLE>
+            <FORM action=/script/rating/code/app/insert_vote.asp 
+            method=post><INPUT type=hidden 
+            value=soundplayerbug/cs/media4/25/2006 name=vote_name> <INPUT 
+            type=hidden value=/cs/media/soundplayerbug.asp name=goal> 
+            <TABLE cellSpacing=0 cellPadding=1 width="100%" bgColor=#ff9900 
+            border=0>
+              <TBODY>
+              <TR>
+                <TD width="100%">
+                  <TABLE cellSpacing=0 cellPadding=4 width="100%" 
+                  bgColor=#fbedbb border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=smalltext vAlign=center>[<A 
+                        href="http://www.codeproject.com/cs/media/soundplayerbug.asp#__top">Top</A>]</TD>
+                      <TD vAlign=center noWrap align=right><I><B>Rate this 
+                        Article for us!</B></I>&nbsp;&nbsp;&nbsp;&nbsp; 
+                        <I>Poor</I><INPUT type=radio value=1 name=rate><INPUT 
+                        type=radio value=2 name=rate><INPUT type=radio value=3 
+                        name=rate><INPUT type=radio value=4 name=rate><INPUT 
+                        type=radio value=5 
+name=rate><I>Excellent</I>&nbsp;&nbsp;<INPUT class=FormButton type=submit value=Vote> 
+                      </TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></FORM>
+            <CENTER>
+            <DIV style="MARGIN: 10px"><SPAN id=AdBanner5>
+            <SCRIPT language=javascript>document.write("<IFRAME src=\"/script/ann/ServeHTML.aspx?C=False&id=4114&cb=1612580\" border=0 frameborder=0 scrolling=no width=468 height=60></IFRAME>");</SCRIPT>
+            </SPAN></DIV></CENTER><A name=__comments></A>
+            <SCRIPT language=JavaScript>
+
+function MsgVoteForm(MemberID, MsgID)
+{
+	document.write("<span id=\"MVF" + MsgID + "\">");
+	document.write("Rate this message: ");
+	for (var i=1; i<=5;i++)
+	{
+		document.write("<a href='#xx" + MsgID.toString() + "xx' title='give this message a vote of " + i.toString());
+		document.write("' onclick='return RateMsg(" + MemberID.toString() + ", " + MsgID.toString() + ", ");
+		document.write(i.toString() + ")'><b>" + i.toString() + "</b></a> ");
+	}
+	document.write(" (out of 5)");
+	document.writeln("</span>");
+	
+	
+}
+
+function RetypeForm(MemberID, MsgID)
+{
+	var types = [
+				 {pic:'news_general.gif',  id: 1},
+	             {pic:'news_info.gif',     id: 2},
+	             {pic:'news_question.gif', id: 4},
+	             {pic:'news_answer.gif',   id: 8},
+	             {pic:'news_game.gif',     id: 16},
+	             {pic:'news_spam.gif',     id: 32}
+	            ];
+	
+	document.write("<span id=\"RTF" + MsgID + "\">");
+	for (var i=0;i<types.length;i++)
+	{
+		document.write("<a href='/script/comments/retype?msg=" + MsgID.toString());
+		document.write("&mid=" + MemberID.toString() + "&type=" + types[i].id + "'>");
+		document.write("<img border=0 src='/script/images/" + types[i].pic + "'></a><br />");
+	}
+	document.writeln("</span>");
+}
+
+function ReportMsg(userid, msgid, score)
+{
+	if (confirm("Are you sure you want to report this message?") == true)
+		return RateMsg(userid, msgid, score);
+	else return false;
+}
+
+
+function RateMsg(userid, msgid, score)
+{
+
+   var req = new ActiveXObject("Msxml2.XMLHTTP"); 
+
+   req.onreadystatechange = function()
+   {
+      if ( req.readyState == 4 )
+      {
+         if ( req.status == 200 )
+         {
+         	var respText = req.responseText;
+         	var re = new RegExp("\<div\>([^\<]*)\</div\>", "g");
+         	var match = re.exec(respText);
+         	status.innerHTML = "<b>" + (match)?match[1]:"An error occured" + "</b>";
+         }
+         else
+         {
+            status.innerHTML = "<b style='color:red'>Failed!" + req.statusText + "</b>";
+         }
+      }
+   }
+   
+   var status = document.getElementById("MVF" + msgid);
+   if (!status) return;  // should never happen...   
+   status.innerHTML = "<b style='color:green'>Voting...</b>";
+   
+   var strAction = "/script/comments/vote.asp?js=1&user="+userid+"&msg="+msgid+"&score="+score;
+   req.open("GET", strAction, true);
+   req.send(null);
+   return false;
+}
+
+</SCRIPT>
+
+            <SCRIPT language=JavaScript>
+var Selected = "";
+
+var AdTime = new Date();
+
+
+// Ensures the expanded message appears reasonably close to where 
+// it should appear: on screen, and if possible, under the mouse cursor.
+function SwitchMessage(e)
+{
+   if ( !e ) e = window.event;
+   var target = e.target ? e.target : e.srcElement;
+
+   // is it a post?
+   while ( target && target.id != 'DynMessLink' )
+      target = target.parentNode;
+   if ( !target || target.id != 'DynMessLink' )
+      return;
+
+   if (Selected)
+   {
+      var body = document.getElementById(Selected + "_h1");
+      if (body)
+         body.style.display = 'none';
+      var head = document.getElementById(Selected + "_h0");
+      if (head)
+         head.bgColor = '#FEF9E7';
+   }
+
+   if (Selected == target.name) // just collapse
+      Selected="";
+   else
+   {
+      Selected = target.name;
+      var body = document.getElementById(Selected + "_h1");
+      if (body)
+      {
+         if (body.style.display=='none')
+            body.style.display='';
+         else
+            body.style.display = 'none';
+      }
+      var head = document.getElementById(Selected + "_h0");
+      if (head)
+         head.bgColor = '#99CCFF';
+
+      if ( body && head && body.style.display != 'none' )
+      {
+         // the bit that keeps the post on-screen and under the cursor
+         //var dif = (getRealPos(head, "Top") + head.offsetHeight/2) - (document.body.scrollTop+e.clientY);
+         //document.body.scrollTop += dif;
+         document.body.scrollTop = getRealPos(head, "Top") - document.body.clientHeight/10;
+         EnsureMessageVisible(target.name, true);
+      }
+   }
+
+   if ( e.preventDefault )
+      e.preventDefault();
+   else
+      e.returnValue = false;
+   return false;
+}
+
+// does its best to make a message visible on-screen (vs. scrolled off somewhere).
+function EnsureMessageVisible(msgID, bShowTop) {
+   var msgHeader = document.getElementById(msgID + "_h0");
+   var msgBody = document.getElementById(msgID + "_h1");
+
+   // determine scroll position of top and bottom
+   var scrollContainer = document.body;
+   var top = getRealPos(msgHeader, 'Top');
+   var bottom = getRealPos(msgBody, 'Top') + msgBody.offsetHeight;
+
+   // if not already visible, scroll to make it so
+   if ( scrollContainer.scrollTop > top && !bShowTop)
+      scrollContainer.scrollTop = top - document.body.clientHeight/10;
+   if ( scrollContainer.scrollTop+scrollContainer.clientHeight < bottom )
+      scrollContainer.scrollTop = bottom-scrollContainer.clientHeight;
+   if ( scrollContainer.scrollTop > top && bShowTop)
+      scrollContainer.scrollTop = top - document.body.clientHeight/10;
+}
+
+// utility
+function getRealPos(i,which)
+{
+   iPos = 0
+   while (i!=null)
+   {
+      iPos += i["offset" + which];
+      i = i.offsetParent;
+   }
+   return iPos
+}
+
+
+</SCRIPT>
+
+            <DIV id=_MessageBoard onclick=SwitchMessage(event)>
+            <TABLE cellSpacing=0 cellPadding=0 width="100%" bgColor=#ff9900 
+            border=0>
+              <TBODY>
+              <TR>
+                <TD width="100%">
+                  <TABLE id=ForumTable cellSpacing=1 cellPadding=0 width="100%" 
+                  bgColor=#ff9900 border=0>
+                    <FORM 
+                    action=/script/comments/app/do_filtermessages.asp?main=/cs/media/soundplayerbug.asp&amp;df=100&amp;forumid=297100 
+                    method=post>
+                    <TBODY>
+                    <TR>
+                      <TD>
+                        <TABLE cellSpacing=0 cellPadding=3 width="100%" 
+                        bgColor=white border=0>
+                          <TBODY>
+                          <TR bgColor=#fbedbb>
+                            <TD class=smalltext noWrap><A 
+                              href="http://www.codeproject.com/script/comments/faq.asp"><IMG 
+                              height=16 
+                              src="SoundPlayer bug - Calling unmanaged APIs - The Code Project - Multimedia_files/forum_faq.gif" 
+                              width=16 align=absMiddle border=0> 
+                            <B>FAQ</B></A>&nbsp;</TD>
+                            <TD class=smalltext vAlign=top noWrap 
+                              align=right>Message score threshold <SELECT 
+                              class=smalltext size=1 name=noise><OPTION 
+                                value=1>1.0</OPTION> <OPTION 
+                                value=2>2.0</OPTION> <OPTION value=3 
+                                selected>3.0</OPTION> <OPTION 
+                                value=4>4.0</OPTION> <OPTION 
+                              value=5>5.0</OPTION></SELECT>&nbsp;&nbsp;</TD>
+                            <TD class=smalltext vAlign=center noWrap align=right 
+                            colSpan=2><A 
+                              href="http://www.codeproject.com/script/comments/search_comments.asp?forumid=297100"><IMG 
+                              height=15 
+                              src="SoundPlayer bug - Calling unmanaged APIs - The Code Project - Multimedia_files/forum_search.gif" 
+                              width=16 border=0> Search comments</A> &nbsp;</TD>
+                            <TD vAlign=top align=right><INPUT class=FormButton type=submit value="Set Options" name=submit></TD></TR>
+                          <TR bgColor=#ff9900>
+                            <TD width="100%">&nbsp;</TD>
+                            <TD class=smalltext vAlign=top noWrap 
+                              align=right>View <SELECT class=smalltext size=1 
+                              name=expand><OPTION value=0>Normal 
+                                (slow)</OPTION> <OPTION value=2>Preview 
+                                (slow)</OPTION> <OPTION value=5 selected>Message 
+                                View</OPTION> <OPTION value=6>Topic 
+                                View</OPTION> <OPTION value=1>Thread 
+                                View</OPTION> <OPTION 
+                              value=3>Expanded</OPTION></SELECT>&nbsp;&nbsp;</TD>
+                            <TD class=smalltext vAlign=top noWrap>Per page 
+                              <SELECT class=smalltext size=1 
+                                name=perpage><OPTION value=10>10</OPTION> 
+                                <OPTION value=25 selected>25</OPTION> <OPTION 
+                                value=50>50</OPTION></SELECT></TD>
+                            <TD 
+                    colSpan=2>&nbsp;</TD></TR></TBODY></TABLE></TD></TR></FORM>
+                    <TR bgColor=#fbedbb>
+                      <TD><A name=xx0xx></A>
+                        <TABLE cellPadding=2 width="100%" bgColor=#fbedbb 
+                        border=0>
+                          <TBODY>
+                          <TR>
+                            <TD class=messagetitle><IMG height=16 
+                              src="SoundPlayer bug - Calling unmanaged APIs - The Code Project - Multimedia_files/forum_newmsg.gif" 
+                              width=16 align=top border=0><A class=HoverLink 
+                              title="Add a new message to the discussions" 
+                              href="http://www.codeproject.com/script/comments/user_new.asp?main=/cs/media/soundplayerbug.asp&amp;df=100&amp;forumid=297100" 
+                              target=_top name=HoverNL><B>New Message</B></A></TD>
+                            <TD class=messagetitle>Msgs 1 to 7 of 7 (Total: 7) 
+                              (<A 
+                              href="http://www.codeproject.com/cs/media/soundplayerbug.asp?df=100&amp;forumid=297100">Refresh</A>)</TD>
+                            <TD noWrap align=right><FONT 
+                              class=messagetitle><SPAN 
+                              class=HoverLink>First</SPAN> <SPAN 
+                              class=HoverLink>Prev</SPAN> <SPAN 
+                              class=HoverLink>Next</SPAN> <SPAN 
+                              class=HoverLink>&nbsp;&nbsp;&nbsp;&nbsp;</SPAN> 
+                              </FONT></TD></TR></TBODY></TABLE></TD></TR>
+                    <TR bgColor=white>
+                      <TD>
+                        <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD width="100%">
+                              <TABLE cellSpacing=0 cellPadding=2 bgColor=#fbedbb 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD class=messagetitle 
+                                width="100%">Subject&nbsp;</TD>
+                                <TD class=messagetitle noWrap 
+                                width=140>Author&nbsp;</TD>
+                                <TD style="WIDTH: 9em" noWrap align=right 
+                                width=120><FONT 
+                                class=messagetitle>Date&nbsp;</FONT></TD></TR></TBODY></TABLE></TD></TR>
+                          <TR>
+                            <TD><IMG height=5 
+                              src="SoundPlayer bug - Calling unmanaged APIs - The Code Project - Multimedia_files/t.gif" 
+                              width=1 border=0></TD></TR>
+                          <TR id=1978405_h0 bgColor=#fef9e7>
+                            <TD width="100%">
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD bgColor=white><A name=xx1978405xx></A><IMG 
+                                src="SoundPlayer bug - Calling unmanaged APIs - The Code Project - Multimedia_files/news_general.gif" 
+                                align=absMiddle>&nbsp;</TD>
+                                <TD class=messagetitle style="COLOR: #aa0000" 
+                                width="100%"><A class=messagetitle 
+                                id=DynMessLink style="COLOR: #aa0000" 
+                                href="http://www.codeproject.com/cs/media/soundplayerbug.asp?df=100&amp;forumid=297100&amp;select=1978405#xx1978405xx" 
+                                name=1978405><B>shortcut</B></A></TD>
+                                <TD vAlign=bottom noWrap><A 
+                                href="http://www.codeproject.com/script/profile/whos_who.asp?id=4003737"><IMG 
+                                title="Click for User Profile" height=15 
+                                src="SoundPlayer bug - Calling unmanaged APIs - The Code Project - Multimedia_files/userinfo.gif" 
+                                width=14 border=0></A>&nbsp;</TD>
+                                <TD noWrap width=140><FONT class=messagetitle 
+                                style="COLOR: #aa0000"><B>Stonkie</B>&nbsp;</FONT></TD>
+                                <TD style="WIDTH: 9em" noWrap align=right 
+                                width=120><FONT class=messagetitle 
+                                style="COLOR: #aa0000"><B>16:52 6 Apr 
+                                '07</B>&nbsp;</FONT></TD></TR></TBODY></TABLE></TD></TR>
+                          <TR id=1978405_h1 style="DISPLAY: none">
+                            <TD width="100%">
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD><IMG 
+                                src="SoundPlayer bug - Calling unmanaged APIs - The Code Project - Multimedia_files/news_blank.gif" 
+                                align=absMiddle>&nbsp;</TD>
+                                <TD width="100%" bgColor=#d5eaff>
+                                <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+                                border=0>
+                                <TBODY>
+                                <TR>
+                                <TD>
+                                <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                                border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2><FONT 
+                                class=messagecontent>PlaySync seems to solve the 
+                                problem too, so simply replacing all occurences 
+                                of :<BR><BR>mySound.play()<BR><BR>by 
+                                :<BR><BR>Dim soundThread As New 
+                                System.Threading.Thread(AddressOf 
+                                mySound.PlaySync)<BR>soundThread.Start()<BR><BR>seems 
+                                to do the trick... <BR>&nbsp;</FONT></TD></TR>
+                                <TR vAlign=top>
+                                <TD class=messagetitle>[<A 
+                                title="Reply to this current thread" 
+                                href="http://www.codeproject.com/script/comments/user_reply.asp?main=/cs/media/soundplayerbug.asp&amp;df=100&amp;forumid=297100&amp;select=1978405">Reply</A> 
+                                | <A 
+                                title="Email a reply to the author of this message" 
+                                href="http://www.codeproject.com/script/comments/user_mail.asp?main=/cs/media/soundplayerbug.asp&amp;df=100&amp;forumid=297100&amp;select=1978405">Email</A> 
+                                | <A 
+                                title="View only messages within this thread" 
+                                href="http://www.codeproject.com/cs/media/soundplayerbug.asp?df=100&amp;tid=1978405&amp;forumid=297100&amp;select=1978405#xx1978405xx">View 
+                                Thread</A> | <A 
+                                title="Get the URL for this message" 
+                                href="http://www.codeproject.com/cs/media/soundplayerbug.asp?msg=1978405#xx1978405xx">PermaLink</A> 
+                                | <A title="Go to Thread Start" 
+                                href="http://www.codeproject.com/cs/media/soundplayerbug.asp?msg=1978405#xx1978405xx">Go 
+                                to Thread Start</A>]</TD>
+                                <TD class=messagetitle align=right>Score: 5.0 (1 
+                                vote).
+                                <SCRIPT language=Javascript>MsgVoteForm(4003737,1978405);</SCRIPT>
+                                 
+                                </TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+                          <TR>
+                            <TD><IMG height=6 
+                              src="SoundPlayer bug - Calling unmanaged APIs - The Code Project - Multimedia_files/t.gif" 
+                              width=1 border=0></TD></TR>
+                          <TR id=2214495_h0 bgColor=#fef9e7>
+                            <TD width="100%">
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD bgColor=white><A name=xx2214495xx></A><IMG 
+                                height=1 
+                                src="SoundPlayer bug - Calling unmanaged APIs - The Code Project - Multimedia_files/ind.gif" 
+                                width=18><IMG 
+                                src="SoundPlayer bug - Calling unmanaged APIs - The Code Project - Multimedia_files/news_general.gif" 
+                                align=absMiddle>&nbsp;</TD>
+                                <TD class=messagetitle width="100%"><A 
+                                class=messagetitle id=DynMessLink 
+                                href="http://www.codeproject.com/cs/media/soundplayerbug.asp?df=100&amp;forumid=297100&amp;select=2214495#xx2214495xx" 
+                                name=2214495>Re: shortcut</A></TD>
+                                <TD vAlign=bottom noWrap><A 
+                                href="http://www.codeproject.com/script/profile/whos_who.asp?id=2736085"><IMG 
+                                title="Click for User Profile" height=15 
+                                src="SoundPlayer bug - Calling unmanaged APIs - The Code Project - Multimedia_files/userinfo.gif" 
+                                width=14 border=0></A>&nbsp;</TD>
+                                <TD noWrap width=140><FONT 
+                                class=messagetitle>beketata&nbsp;</FONT></TD>
+                                <TD style="WIDTH: 9em" noWrap align=right 
+                                width=120><FONT class=messagetitle>16:19 5 Sep 
+                                '07&nbsp;</FONT></TD></TR></TBODY></TABLE></TD></TR>
+                          <TR id=2214495_h1 style="DISPLAY: none">
+                            <TD width="100%">
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD><IMG height=1 
+                                src="SoundPlayer bug - Calling unmanaged APIs - The Code Project - Multimedia_files/ind.gif" 
+                                width=18><IMG 
+                                src="SoundPlayer bug - Calling unmanaged APIs - The Code Project - Multimedia_files/news_blank.gif" 
+                                align=absMiddle>&nbsp;</TD>
+                                <TD width="100%" bgColor=#d5eaff>
+                                <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+                                border=0>
+                                <TBODY>
+                                <TR>
+                                <TD>
+                                <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                                border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2><FONT class=messagecontent>It's 
+                                not acceptable for the PlayLoop() 
+                                <BR>&nbsp;</FONT></TD></TR>
+                                <TR vAlign=top>
+                                <TD class=messagetitle>[<A 
+                                title="Reply to this current thread" 
+                                href="http://www.codeproject.com/script/comments/user_reply.asp?main=/cs/media/soundplayerbug.asp&amp;df=100&amp;forumid=297100&amp;select=2214495">Reply</A> 
+                                | <A 
+                                title="Email a reply to the author of this message" 
+                                href="http://www.codeproject.com/script/comments/user_mail.asp?main=/cs/media/soundplayerbug.asp&amp;df=100&amp;forumid=297100&amp;select=2214495">Email</A> 
+                                | <A 
+                                title="View only messages within this thread" 
+                                href="http://www.codeproject.com/cs/media/soundplayerbug.asp?df=100&amp;tid=1978405&amp;forumid=297100&amp;select=2214495#xx2214495xx">View 
+                                Thread</A> | <A 
+                                title="Get the URL for this message" 
+                                href="http://www.codeproject.com/cs/media/soundplayerbug.asp?msg=2214495#xx2214495xx">PermaLink</A> 
+                                | <A title="Go to Thread Start" 
+                                href="http://www.codeproject.com/cs/media/soundplayerbug.asp?msg=1978405#xx1978405xx">Go 
+                                to Thread Start</A>]</TD>
+                                <TD class=messagetitle align=right>
+                                <SCRIPT language=Javascript>MsgVoteForm(2736085,2214495);</SCRIPT>
+                                </TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+                          <TR>
+                            <TD><IMG height=5 
+                              src="SoundPlayer bug - Calling unmanaged APIs - The Code Project - Multimedia_files/t.gif" 
+                              width=1 border=0></TD></TR>
+                          <TR height=1>
+                            <TD bgColor=#ff9900><IMG height=1 
+                              src="SoundPlayer bug - Calling unmanaged APIs - The Code Project - Multimedia_files/t.gif" 
+                              width=1></TD></TR>
+                          <TR id=1647097_h0 bgColor=#fef9e7>
+                            <TD width="100%">
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD bgColor=white><A name=xx1647097xx></A><IMG 
+                                src="SoundPlayer bug - Calling unmanaged APIs - The Code Project - Multimedia_files/news_general.gif" 
+                                align=absMiddle>&nbsp;</TD>
+                                <TD class=messagetitle width="100%"><A 
+                                class=messagetitle id=DynMessLink 
+                                href="http://www.codeproject.com/cs/media/soundplayerbug.asp?df=100&amp;forumid=297100&amp;select=1647097#xx1647097xx" 
+                                name=1647097><B>Works flawlessly</B></A></TD>
+                                <TD vAlign=bottom noWrap><A 
+                                href="http://www.codeproject.com/script/profile/whos_who.asp?id=31645"><IMG 
+                                title="Click for User Profile" height=15 
+                                src="SoundPlayer bug - Calling unmanaged APIs - The Code Project - Multimedia_files/userinfo.gif" 
+                                width=14 border=0></A>&nbsp;</TD>
+                                <TD noWrap width=140><FONT 
+                                class=messagetitle><B>burstingfist</B>&nbsp;</FONT></TD>
+                                <TD style="WIDTH: 9em" noWrap align=right 
+                                width=120><FONT class=messagetitle><B>12:11 29 
+                                Aug 
+                            '06</B>&nbsp;</FONT></TD></TR></TBODY></TABLE></TD></TR>
+                          <TR id=1647097_h1 style="DISPLAY: none">
+                            <TD width="100%">
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD><IMG 
+                                src="SoundPlayer bug - Calling unmanaged APIs - The Code Project - Multimedia_files/news_blank.gif" 
+                                align=absMiddle>&nbsp;</TD>
+                                <TD width="100%" bgColor=#d5eaff>
+                                <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+                                border=0>
+                                <TBODY>
+                                <TR>
+                                <TD>
+                                <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                                border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2><FONT class=messagecontent>Solved 
+                                my problems perfectly. Thanks for sharing! 
+                                <BR>&nbsp;</FONT></TD></TR>
+                                <TR vAlign=top>
+                                <TD class=messagetitle>[<A 
+                                title="Reply to this current thread" 
+                                href="http://www.codeproject.com/script/comments/user_reply.asp?main=/cs/media/soundplayerbug.asp&amp;df=100&amp;forumid=297100&amp;select=1647097">Reply</A> 
+                                | <A 
+                                title="Email a reply to the author of this message" 
+                                href="http://www.codeproject.com/script/comments/user_mail.asp?main=/cs/media/soundplayerbug.asp&amp;df=100&amp;forumid=297100&amp;select=1647097">Email</A> 
+                                | <A 
+                                title="View only messages within this thread" 
+                                href="http://www.codeproject.com/cs/media/soundplayerbug.asp?df=100&amp;tid=1647097&amp;forumid=297100&amp;select=1647097#xx1647097xx">View 
+                                Thread</A> | <A 
+                                title="Get the URL for this message" 
+                                href="http://www.codeproject.com/cs/media/soundplayerbug.asp?msg=1647097#xx1647097xx">PermaLink</A> 
+                                | <A title="Go to Thread Start" 
+                                href="http://www.codeproject.com/cs/media/soundplayerbug.asp?msg=1647097#xx1647097xx">Go 
+                                to Thread Start</A>]</TD>
+                                <TD class=messagetitle align=right>
+                                <SCRIPT language=Javascript>MsgVoteForm(31645,1647097);</SCRIPT>
+                                </TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+                          <TR>
+                            <TD><IMG height=5 
+                              src="SoundPlayer bug - Calling unmanaged APIs - The Code Project - Multimedia_files/t.gif" 
+                              width=1 border=0></TD></TR>
+                          <TR height=1>
+                            <TD bgColor=#ff9900><IMG height=1 
+                              src="SoundPlayer bug - Calling unmanaged APIs - The Code Project - Multimedia_files/t.gif" 
+                              width=1></TD></TR>
+                          <TR id=1633098_h0 bgColor=#fef9e7>
+                            <TD width="100%">
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD bgColor=white><A name=xx1633098xx></A><IMG 
+                                src="SoundPlayer bug - Calling unmanaged APIs - The Code Project - Multimedia_files/news_general.gif" 
+                                align=absMiddle>&nbsp;</TD>
+                                <TD class=messagetitle width="100%"><A 
+                                class=messagetitle id=DynMessLink 
+                                href="http://www.codeproject.com/cs/media/soundplayerbug.asp?df=100&amp;forumid=297100&amp;select=1633098#xx1633098xx" 
+                                name=1633098><B>Great article!</B></A></TD>
+                                <TD vAlign=bottom noWrap><A 
+                                href="http://www.codeproject.com/script/profile/whos_who.asp?id=3131795"><IMG 
+                                title="Click for User Profile" height=15 
+                                src="SoundPlayer bug - Calling unmanaged APIs - The Code Project - Multimedia_files/userinfo.gif" 
+                                width=14 border=0></A>&nbsp;</TD>
+                                <TD noWrap width=140><FONT 
+                                class=messagetitle><B>qborg</B>&nbsp;</FONT></TD>
+                                <TD style="WIDTH: 9em" noWrap align=right 
+                                width=120><FONT class=messagetitle><B>10:53 19 
+                                Aug 
+                            '06</B>&nbsp;</FONT></TD></TR></TBODY></TABLE></TD></TR>
+                          <TR id=1633098_h1 style="DISPLAY: none">
+                            <TD width="100%">
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD><IMG 
+                                src="SoundPlayer bug - Calling unmanaged APIs - The Code Project - Multimedia_files/news_blank.gif" 
+                                align=absMiddle>&nbsp;</TD>
+                                <TD width="100%" bgColor=#d5eaff>
+                                <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+                                border=0>
+                                <TBODY>
+                                <TR>
+                                <TD>
+                                <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                                border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2><FONT class=messagecontent>Great 
+                                article! <BR><BR>
+                                <DIV class=ForumSig>You see, this profession is 
+                                filled to the brim with unrealistic 
+                                motherfuckers. Motherfuckers who thought their 
+                                ass would age like wine. If you mean it turns to 
+                                vinegar, it does. If you mean it gets better 
+                                with age, it don't. (Pulp 
+                                Fiction)</DIV><BR>&nbsp;</FONT></TD></TR>
+                                <TR vAlign=top>
+                                <TD class=messagetitle>[<A 
+                                title="Reply to this current thread" 
+                                href="http://www.codeproject.com/script/comments/user_reply.asp?main=/cs/media/soundplayerbug.asp&amp;df=100&amp;forumid=297100&amp;select=1633098">Reply</A> 
+                                | <A 
+                                title="Email a reply to the author of this message" 
+                                href="http://www.codeproject.com/script/comments/user_mail.asp?main=/cs/media/soundplayerbug.asp&amp;df=100&amp;forumid=297100&amp;select=1633098">Email</A> 
+                                | <A 
+                                title="View only messages within this thread" 
+                                href="http://www.codeproject.com/cs/media/soundplayerbug.asp?df=100&amp;tid=1633098&amp;forumid=297100&amp;select=1633098#xx1633098xx">View 
+                                Thread</A> | <A 
+                                title="Get the URL for this message" 
+                                href="http://www.codeproject.com/cs/media/soundplayerbug.asp?msg=1633098#xx1633098xx">PermaLink</A> 
+                                | <A title="Go to Thread Start" 
+                                href="http://www.codeproject.com/cs/media/soundplayerbug.asp?msg=1633098#xx1633098xx">Go 
+                                to Thread Start</A>]</TD>
+                                <TD class=messagetitle align=right>
+                                <SCRIPT language=Javascript>MsgVoteForm(3131795,1633098);</SCRIPT>
+                                </TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+                          <TR>
+                            <TD><IMG height=5 
+                              src="SoundPlayer bug - Calling unmanaged APIs - The Code Project - Multimedia_files/t.gif" 
+                              width=1 border=0></TD></TR>
+                          <TR height=1>
+                            <TD bgColor=#ff9900><IMG height=1 
+                              src="SoundPlayer bug - Calling unmanaged APIs - The Code Project - Multimedia_files/t.gif" 
+                              width=1></TD></TR>
+                          <TR id=1505467_h0 bgColor=#fef9e7>
+                            <TD width="100%">
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD bgColor=white><A name=xx1505467xx></A><IMG 
+                                src="SoundPlayer bug - Calling unmanaged APIs - The Code Project - Multimedia_files/news_game.gif" 
+                                align=absMiddle>&nbsp;</TD>
+                                <TD class=messagetitle width="100%"><A 
+                                class=messagetitle id=DynMessLink 
+                                href="http://www.codeproject.com/cs/media/soundplayerbug.asp?df=100&amp;forumid=297100&amp;select=1505467#xx1505467xx" 
+                                name=1505467><B>Great job</B></A></TD>
+                                <TD vAlign=bottom noWrap><A 
+                                href="http://www.codeproject.com/script/profile/whos_who.asp?id=859880"><IMG 
+                                title="Click for User Profile" height=15 
+                                src="SoundPlayer bug - Calling unmanaged APIs - The Code Project - Multimedia_files/userinfo.gif" 
+                                width=14 border=0></A>&nbsp;</TD>
+                                <TD noWrap width=140><FONT 
+                                class=messagetitle><B>infinite4281</B>&nbsp;</FONT></TD>
+                                <TD style="WIDTH: 9em" noWrap align=right 
+                                width=120><FONT class=messagetitle><B>14:57 26 
+                                May 
+                            '06</B>&nbsp;</FONT></TD></TR></TBODY></TABLE></TD></TR>
+                          <TR id=1505467_h1 style="DISPLAY: none">
+                            <TD width="100%">
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD><IMG 
+                                src="SoundPlayer bug - Calling unmanaged APIs - The Code Project - Multimedia_files/news_blank.gif" 
+                                align=absMiddle>&nbsp;</TD>
+                                <TD width="100%" bgColor=#d5eaff>
+                                <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+                                border=0>
+                                <TBODY>
+                                <TR>
+                                <TD>
+                                <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                                border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2><FONT class=messagecontent>I 
+                                thougth that it was something I was'nt doing 
+                                properly. I tried everything and the problem 
+                                still persisted. Thank you very much for your 
+                                efforts. <BR><BR>RP<BR>Software Engineer, 
+                                Crystal Universe Enterprise 
+                                Inc.<BR>&nbsp;</FONT></TD></TR>
+                                <TR vAlign=top>
+                                <TD class=messagetitle>[<A 
+                                title="Reply to this current thread" 
+                                href="http://www.codeproject.com/script/comments/user_reply.asp?main=/cs/media/soundplayerbug.asp&amp;df=100&amp;forumid=297100&amp;select=1505467">Reply</A> 
+                                | <A 
+                                title="Email a reply to the author of this message" 
+                                href="http://www.codeproject.com/script/comments/user_mail.asp?main=/cs/media/soundplayerbug.asp&amp;df=100&amp;forumid=297100&amp;select=1505467">Email</A> 
+                                | <A 
+                                title="View only messages within this thread" 
+                                href="http://www.codeproject.com/cs/media/soundplayerbug.asp?df=100&amp;tid=1505467&amp;forumid=297100&amp;select=1505467#xx1505467xx">View 
+                                Thread</A> | <A 
+                                title="Get the URL for this message" 
+                                href="http://www.codeproject.com/cs/media/soundplayerbug.asp?msg=1505467#xx1505467xx">PermaLink</A> 
+                                | <A title="Go to Thread Start" 
+                                href="http://www.codeproject.com/cs/media/soundplayerbug.asp?msg=1505467#xx1505467xx">Go 
+                                to Thread Start</A>]</TD>
+                                <TD class=messagetitle align=right>
+                                <SCRIPT language=Javascript>MsgVoteForm(859880,1505467);</SCRIPT>
+                                </TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+                          <TR>
+                            <TD><IMG height=5 
+                              src="SoundPlayer bug - Calling unmanaged APIs - The Code Project - Multimedia_files/t.gif" 
+                              width=1 border=0></TD></TR>
+                          <TR height=1>
+                            <TD bgColor=#ff9900><IMG height=1 
+                              src="SoundPlayer bug - Calling unmanaged APIs - The Code Project - Multimedia_files/t.gif" 
+                              width=1></TD></TR>
+                          <TR id=1462701_h0 bgColor=#fef9e7>
+                            <TD width="100%">
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD bgColor=white><A name=xx1462701xx></A><IMG 
+                                src="SoundPlayer bug - Calling unmanaged APIs - The Code Project - Multimedia_files/news_general.gif" 
+                                align=absMiddle>&nbsp;</TD>
+                                <TD class=messagetitle width="100%"><A 
+                                class=messagetitle id=DynMessLink 
+                                href="http://www.codeproject.com/cs/media/soundplayerbug.asp?df=100&amp;forumid=297100&amp;select=1462701#xx1462701xx" 
+                                name=1462701><B>thanks</B></A></TD>
+                                <TD vAlign=bottom noWrap><A 
+                                href="http://www.codeproject.com/script/profile/whos_who.asp?id=199839"><IMG 
+                                title="Click for User Profile" height=15 
+                                src="SoundPlayer bug - Calling unmanaged APIs - The Code Project - Multimedia_files/userinfo.gif" 
+                                width=14 border=0></A>&nbsp;</TD>
+                                <TD noWrap width=140><FONT 
+                                class=messagetitle><B>GoAn</B>&nbsp;</FONT></TD>
+                                <TD style="WIDTH: 9em" noWrap align=right 
+                                width=120><FONT class=messagetitle><B>18:44 25 
+                                Apr 
+                            '06</B>&nbsp;</FONT></TD></TR></TBODY></TABLE></TD></TR>
+                          <TR id=1462701_h1 style="DISPLAY: none">
+                            <TD width="100%">
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD><IMG 
+                                src="SoundPlayer bug - Calling unmanaged APIs - The Code Project - Multimedia_files/news_blank.gif" 
+                                align=absMiddle>&nbsp;</TD>
+                                <TD width="100%" bgColor=#d5eaff>
+                                <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+                                border=0>
+                                <TBODY>
+                                <TR>
+                                <TD>
+                                <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                                border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2><FONT class=messagecontent>i also 
+                                encountered this problem and i assumed the .net 
+                                version of the sound player was a poc so i ended 
+                                up using directx for playing the sounds <IMG 
+                                src="SoundPlayer bug - Calling unmanaged APIs - The Code Project - Multimedia_files/smiley_redface.gif" 
+                                align=absMiddle> <BR>&nbsp;</FONT></TD></TR>
+                                <TR vAlign=top>
+                                <TD class=messagetitle>[<A 
+                                title="Reply to this current thread" 
+                                href="http://www.codeproject.com/script/comments/user_reply.asp?main=/cs/media/soundplayerbug.asp&amp;df=100&amp;forumid=297100&amp;select=1462701">Reply</A> 
+                                | <A 
+                                title="Email a reply to the author of this message" 
+                                href="http://www.codeproject.com/script/comments/user_mail.asp?main=/cs/media/soundplayerbug.asp&amp;df=100&amp;forumid=297100&amp;select=1462701">Email</A> 
+                                | <A 
+                                title="View only messages within this thread" 
+                                href="http://www.codeproject.com/cs/media/soundplayerbug.asp?df=100&amp;tid=1462701&amp;forumid=297100&amp;select=1462701#xx1462701xx">View 
+                                Thread</A> | <A 
+                                title="Get the URL for this message" 
+                                href="http://www.codeproject.com/cs/media/soundplayerbug.asp?msg=1462701#xx1462701xx">PermaLink</A> 
+                                | <A title="Go to Thread Start" 
+                                href="http://www.codeproject.com/cs/media/soundplayerbug.asp?msg=1462701#xx1462701xx">Go 
+                                to Thread Start</A>]</TD>
+                                <TD class=messagetitle align=right>
+                                <SCRIPT language=Javascript>MsgVoteForm(199839,1462701);</SCRIPT>
+                                </TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+                          <TR>
+                            <TD><IMG height=5 
+                              src="SoundPlayer bug - Calling unmanaged APIs - The Code Project - Multimedia_files/t.gif" 
+                              width=1 border=0></TD></TR>
+                          <TR height=1>
+                            <TD bgColor=#ff9900><IMG height=1 
+                              src="SoundPlayer bug - Calling unmanaged APIs - The Code Project - Multimedia_files/t.gif" 
+                              width=1></TD></TR>
+                          <TR id=1462673_h0 bgColor=#fef9e7>
+                            <TD width="100%">
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD bgColor=white><A name=xx1462673xx></A><IMG 
+                                src="SoundPlayer bug - Calling unmanaged APIs - The Code Project - Multimedia_files/news_general.gif" 
+                                align=absMiddle>&nbsp;</TD>
+                                <TD class=messagetitle width="100%"><A 
+                                class=messagetitle id=DynMessLink 
+                                href="http://www.codeproject.com/cs/media/soundplayerbug.asp?df=100&amp;forumid=297100&amp;select=1462673#xx1462673xx" 
+                                name=1462673><B>Same with the waveIn and waveOut 
+                                API's</B></A></TD>
+                                <TD vAlign=bottom noWrap><A 
+                                href="http://www.codeproject.com/script/profile/whos_who.asp?id=1184524"><IMG 
+                                title="Click for User Profile" height=15 
+                                src="SoundPlayer bug - Calling unmanaged APIs - The Code Project - Multimedia_files/userinfo.gif" 
+                                width=14 border=0></A>&nbsp;</TD>
+                                <TD noWrap width=140><FONT 
+                                class=messagetitle><B>Mike 
+                                Sargent</B>&nbsp;</FONT></TD>
+                                <TD style="WIDTH: 9em" noWrap align=right 
+                                width=120><FONT class=messagetitle><B>17:52 25 
+                                Apr 
+                            '06</B>&nbsp;</FONT></TD></TR></TBODY></TABLE></TD></TR>
+                          <TR id=1462673_h1 style="DISPLAY: none">
+                            <TD width="100%">
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD><IMG 
+                                src="SoundPlayer bug - Calling unmanaged APIs - The Code Project - Multimedia_files/news_blank.gif" 
+                                align=absMiddle>&nbsp;</TD>
+                                <TD width="100%" bgColor=#d5eaff>
+                                <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+                                border=0>
+                                <TBODY>
+                                <TR>
+                                <TD>
+                                <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                                border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2><FONT class=messagecontent>I ran 
+                                into the same problem last week with the waveIn 
+                                API. I would be merrily recording along and then 
+                                Boom! I'd get some strange exception. Sometimes 
+                                the debugger would report corrupted memory and 
+                                sometimes the application would die without 
+                                breaking into the debugger. I found that way to 
+                                reproduce this 100% was to add a GC.Collect(); 
+                                after the waveInAddBuffer().<BR><BR>With an 
+                                output function, like PlaySound or 
+                                waveOutAddBuffer, the output bugger can get 
+                                messed up by the garbage collector, but it will 
+                                probably continue playing. With an input 
+                                function, the unmanaged code filling the buffer 
+                                will suddenly be writing into some other object 
+                                once the buffer is moved. That can cause all 
+                                sorts of corruption.<BR><BR>As you found, 
+                                CGHandle is the solution to this problem. As so 
+                                as I used that to pin the memory, it has worked 
+                                flawlessly ever since.<BR><BR>Mike 
+                                <BR>&nbsp;</FONT></TD></TR>
+                                <TR vAlign=top>
+                                <TD class=messagetitle>[<A 
+                                title="Reply to this current thread" 
+                                href="http://www.codeproject.com/script/comments/user_reply.asp?main=/cs/media/soundplayerbug.asp&amp;df=100&amp;forumid=297100&amp;select=1462673">Reply</A> 
+                                | <A 
+                                title="Email a reply to the author of this message" 
+                                href="http://www.codeproject.com/script/comments/user_mail.asp?main=/cs/media/soundplayerbug.asp&amp;df=100&amp;forumid=297100&amp;select=1462673">Email</A> 
+                                | <A 
+                                title="View only messages within this thread" 
+                                href="http://www.codeproject.com/cs/media/soundplayerbug.asp?df=100&amp;tid=1462673&amp;forumid=297100&amp;select=1462673#xx1462673xx">View 
+                                Thread</A> | <A 
+                                title="Get the URL for this message" 
+                                href="http://www.codeproject.com/cs/media/soundplayerbug.asp?msg=1462673#xx1462673xx">PermaLink</A> 
+                                | <A title="Go to Thread Start" 
+                                href="http://www.codeproject.com/cs/media/soundplayerbug.asp?msg=1462673#xx1462673xx">Go 
+                                to Thread Start</A>]</TD>
+                                <TD class=messagetitle align=right>Score: 4.0 (1 
+                                vote).
+                                <SCRIPT language=Javascript>MsgVoteForm(1184524,1462673);</SCRIPT>
+                                 
+                                </TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+                          <TR>
+                            <TD><IMG height=5 
+                              src="SoundPlayer bug - Calling unmanaged APIs - The Code Project - Multimedia_files/t.gif" 
+                              width=1 border=0></TD></TR></TBODY></TABLE></TD></TR>
+                    <TR bgColor=#fbedbb>
+                      <TD>
+                        <TABLE cellPadding=2 width="100%">
+                          <TBODY>
+                          <TR>
+                            <TD class=messagetitle>Last Visit: 4:07 Saturday 
+                              29th September, 2007</TD>
+                            <TD noWrap align=right><FONT 
+                              class=messagetitle><SPAN 
+                              class=HoverLink>First</SPAN> <SPAN 
+                              class=HoverLink>Prev</SPAN> <SPAN 
+                              class=HoverLink>Next</SPAN> <SPAN 
+                              class=HoverLink>&nbsp;&nbsp;&nbsp;&nbsp;</SPAN> 
+                              </FONT></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></DIV>
+            <P class=smallText><IMG 
+            src="SoundPlayer bug - Calling unmanaged APIs - The Code Project - Multimedia_files/news_general.gif" 
+            align=absMiddle> General comment &nbsp;&nbsp; <IMG 
+            src="SoundPlayer bug - Calling unmanaged APIs - The Code Project - Multimedia_files/news_info.gif" 
+            align=absMiddle> News / Info &nbsp;&nbsp; <IMG 
+            src="SoundPlayer bug - Calling unmanaged APIs - The Code Project - Multimedia_files/news_question.gif" 
+            align=absMiddle> Question &nbsp;&nbsp; <IMG 
+            src="SoundPlayer bug - Calling unmanaged APIs - The Code Project - Multimedia_files/news_answer.gif" 
+            align=absMiddle> Answer &nbsp;&nbsp; <IMG 
+            src="SoundPlayer bug - Calling unmanaged APIs - The Code Project - Multimedia_files/news_game.gif" 
+            align=absMiddle> Joke / Game &nbsp;&nbsp; <IMG 
+            src="SoundPlayer bug - Calling unmanaged APIs - The Code Project - Multimedia_files/news_sticky.gif" 
+            align=absMiddle> Admin message</P><BR>
+            <TABLE cellSpacing=5 width="100%">
+              <TBODY>
+              <TR vAlign=top>
+                <TD class=smallText>Updated: 25 Apr 2006 </TD>
+                <TD class=SmallText align=right>Article content copyright 
+                  shteff, 2006<BR>everything else Copyright © <A 
+                  href="mailto:webmaster@codeproject.com">CodeProject</A>, 
+                  1999-2007</A>. <BR>Web11 | <A 
+                  href="http://www.codeproject.com/info/MediaKit">Advertise on 
+                  The Code Project</A> | <A 
+                  href="http://www.codeproject.com/info/privacy.asp">Privacy</A> 
+                </TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE>
+      <SCRIPT 
+      src="SoundPlayer bug - Calling unmanaged APIs - The Code Project - Multimedia_files/front.asp" 
+      type=text/javascript></SCRIPT>
+      <BR>
+      <CENTER>
+      <TABLE cellSpacing=0 cellPadding=0 width="95%" border=0>
+        <TBODY>
+        <TR>
+          <TD bgColor=#ff9900 height=1><IMG height=1 
+            src="SoundPlayer bug - Calling unmanaged APIs - The Code Project - Multimedia_files/space.gif"></TD></TR>
+        <TR>
+          <TD align=middle><FONT size=1><A 
+            href="http://www.theultimatetoolbox.com/">The Ultimate Toolbox</A> • 
+            <A href="http://aspalliance.com/">ASP Alliance</A> • <A 
+            href="http://www.developerfusion.co.uk/">Developer Fusion</A> • <A 
+            href="http://www.developersdex.com/">Developersdex</A> • <A 
+            href="http://www.devguru.com/">DevGuru</A> • <A 
+            href="http://www.programmersheaven.com/">Programmers Heaven</A> • <A 
+            href="http://www.planet-source-code.com/">Planet Source Code</A> • 
+            <A href="http://www.tek-tips.com/">Tek-Tips Forums</A> • 
+        </FONT></TD></TR></TBODY></TABLE></CENTER></TR></TBODY></TABLE></BODY></HTML>

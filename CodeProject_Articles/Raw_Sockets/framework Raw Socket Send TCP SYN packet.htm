@@ -1,0 +1,488 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!-- saved from url=(0078)http://www.eggheadcafe.com/forumarchives/NETFramework/Nov2005/post25262660.asp -->
+<HTML><HEAD><TITLE>framework Raw Socket Send TCP SYN packet</TITLE>
+<STYLE type=text/css>.hdn_adtitle {
+	FONT-WEIGHT: bold; FONT-SIZE: 10pt; COLOR: #008000; FONT-FAMILY: Verdana; TEXT-DECORATION: underline
+}
+.hdn_adsubtitle {
+	FONT-SIZE: 8pt; COLOR: #999999; FONT-STYLE: italic; FONT-FAMILY: Verdana
+}
+.hdn_adline {
+	FONT-SIZE: 8pt; FONT-FAMILY: Verdana
+}
+.hdn_lnks {
+	FONT-WEIGHT: bold; FONT-SIZE: 8pt; COLOR: #008000; FONT-FAMILY: Verdana
+}
+</STYLE>
+<LINK title="Eggheadcafe.com Main Feed" 
+href="http://www.pheedo.com/f/eggheadcafecom_articles" type=application/rss+xml 
+rel=alternate>
+<SCRIPT src="framework Raw Socket Send TCP SYN packet_files/common.js" 
+type=text/javascript></SCRIPT>
+<!-- PUT THIS TAG IN THE head SECTION -->
+<SCRIPT src="framework Raw Socket Send TCP SYN packet_files/google_service.js" 
+type=text/javascript>
+</SCRIPT>
+
+<SCRIPT type=text/javascript>
+  GS_googleAddAdSenseService("ca-pub-8682474657542641");
+  GS_googleEnableAllServices();
+</SCRIPT>
+
+<SCRIPT type=text/javascript>
+ GA_googleAddSlot("ca-pub-8682474657542641", "DeveloperArticles");
+ GA_googleAddSlot("ca-pub-8682474657542641", "DeveloperArticles2");
+</SCRIPT>
+
+<SCRIPT type=text/javascript>
+  GA_googleFetchAds();
+</SCRIPT>
+<!-- END OF TAG FOR head SECTION -->
+<SCRIPT language=JavaScript> 
+
+       var  baseURL = 'http://www.eggheadcafe.com'; 
+
+       try
+       {
+           if (self.parent.frames.length != 0)
+	          self.parent.location=document.location;
+	   }
+   	   catch (Exception) {}
+
+       function PrintThisPage()
+	   {
+	      var sOption="toolbar=yes,location=no,directories=yes,menubar=yes,";
+              sOption+="scrollbars=yes,width=750,height=650,left=100,top=25";
+                      					                 
+              var winprint=window.open("/print.asp","Print",sOption);
+                            
+              winprint.focus();
+ 
+	   }
+              
+     </SCRIPT>
+
+<META content=7 name=revisit-after>
+<META http-equiv=Content-Type content="text/html; charset=utf-8">
+<META content="MSHTML 6.00.2900.2180" name=GENERATOR>
+<STYLE type=text/css>BR.short {
+	LINE-HEIGHT: 4px
+}
+.bright {
+	FONT-WEIGHT: bold; COLOR: #ff7800
+}
+.bright9 {
+	FONT-WEIGHT: bold; FONT-SIZE: 8pt; COLOR: #ffffff; FONT-FAMILY: Arial
+}
+BODY {
+	FONT-SIZE: 11px; FONT-FAMILY: arial, helvetica; font-color: #444444
+}
+TD {
+	FONT-SIZE: 11px; FONT-FAMILY: arial, helvetica; font-color: #444444
+}
+B {
+	COLOR: #333333
+}
+.sidelink {
+	FONT-SIZE: 10px; COLOR: #666666; FONT-FAMILY: verdana, arial, helvetica; LETTER-SPACING: -1px
+}
+.carea {
+	COLOR: #777777; LINE-HEIGHT: 20px
+}
+A:visited {
+	TEXT-DECORATION: none
+}
+A:link {
+	TEXT-DECORATION: none
+}
+A:hover {
+	TEXT-DECORATION: underline
+}
+.bottom {
+	COLOR: #ededed
+}
+A.bottom {
+	FONT-WEIGHT: bold
+}
+</STYLE>
+<LINK href="framework Raw Socket Send TCP SYN packet_files/eggheadcafe.css" 
+rel=Stylesheet><LINK 
+href="framework Raw Socket Send TCP SYN packet_files/stylesheet.css" 
+rel=Stylesheet></HEAD>
+<BODY style="MARGIN: 0px">
+<FORM id=form1 runat="server">
+<DIV id=header>
+<DIV id=logo>
+<H1><A href="http://www.eggheadcafe.com/default.aspx">ASP.NET, SQL Server, WPF, 
+C#, VB.NET</A></H1></DIV>
+<DIV id=search><INPUT id=searchRelatedText 
+onkeydown="return searchRelatedClassicMaster(event);" 
+style="BORDER-RIGHT: 1px solid; PADDING-RIGHT: 0px; BACKGROUND-POSITION: right 50%; BORDER-TOP: #4b7c9f 1px solid; PADDING-LEFT: 0px; FONT-WEIGHT: bold; PADDING-BOTTOM: 0px; VERTICAL-ALIGN: top; BORDER-LEFT: #4b7c9f 1px solid; WIDTH: 250px; COLOR: #4b7c9f; PADDING-TOP: 0px; BORDER-BOTTOM: #4b7c9f 1px solid; BACKGROUND-REPEAT: no-repeat; HEIGHT: 20px; BACKGROUND-COLOR: white" 
+type=textbox> <INPUT class=button onclick=javascript:doSearchClassicMaster(); type=button value=Search> 
+</DIV>
+<DIV id=menu>
+<UL>
+  <LI><A href="http://www.eggheadcafe.com/articlelist.aspx">Articles</A> </LI>
+  <LI><A href="http://www.eggheadcafe.com/aboutus.aspx">About Us</A> 
+</LI></UL></DIV></DIV><!-- end #header -->
+<DIV id=submenu>
+<UL>
+  <LI><A title="Subscribe to my feed" 
+  href="http://www.pheedo.com/f/eggheadcafe_messageboard"><IMG 
+  alt="rss articles" src="/graphics/rssmessageboardicon.png" align=middle 
+  border=0></A> </LI>
+  <LI><A title="Subscribe to my feed" 
+  href="http://www.pheedo.com/f/eggheadcafecom_articles"><IMG alt="rss articles" 
+  src="/graphics/rssarticlesicon.png" align=middle border=0></A> </LI>
+  <LI><A href="http://www.eggheadcafe.com/feedbackhome.aspx"><IMG 
+  alt="slap microsoft" src="/graphics/SlapIcon.png" align=middle border=0></A> 
+  </LI>
+  <LI><A href="http://www.eggheadcafe.com/forummerit.aspx"><IMG 
+  alt="rss articles" src="/graphics/DollarIcon.png" align=middle border=0></A> 
+  </LI>
+  <LI><A href="http://www.eggheadcafe.com/forumtree.aspx"><IMG 
+  alt="rss articles" src="/graphics/MessageBoardIcon.png" border=0></A> 
+</LI></UL></DIV>
+<DIV style="VERTICAL-ALIGN: top; TEXT-ALIGN: right"><A 
+href="http://www.eggheadcafe.com/msdn.aspx" target=_self><IMG 
+src="/graphics/promoicon.png" border=0></A></DIV>
+<TABLE cellSpacing=0 cellPadding=0 width="100%" border=0>
+  <TBODY>
+  <TR>
+    <TD vAlign=top align=middle width=850>
+      <TABLE cellSpacing=4 cellPadding=0 border=0>
+        <TBODY>
+        <TR>
+          <TD align=middle>
+            <DIV id=Card_Search 
+            style="BORDER-RIGHT: #ffffff 0px outset; BORDER-TOP: #ffffff 0px outset; VISIBILITY: hidden; SCROLLBAR-HIGHLIGHT-COLOR: #cccccc; OVERFLOW: auto; BORDER-LEFT: #ffffff 0px outset; SCROLLBAR-ARROW-COLOR: #ffffff; SCROLLBAR-TRACK-COLOR: #ffffff; BORDER-BOTTOM: #ffffff 0px outset; SCROLLBAR-DARKSHADOW-COLOR: #ffffff; SCROLLBAR-BASE-COLOR: #efefef; POSITION: relative; HEIGHT: 5px; BACKGROUND-COLOR: #ffffff"></DIV>
+            <DIV id=contentstart align=center width="100%" name="contentstart">
+            <TABLE cellSpacing=2 cellPadding=2 width=675 align=center 
+              border=0><TBODY>
+              <TR>
+                <TD align=left><BR></TD></TR>
+              <TR>
+                <TD class=homepagetext align=left><B>Previous Thread</B>: 
+                  &nbsp;&nbsp;<A class=forumroll 
+                  href="http://www.eggheadcafe.com/forumarchives/NETFramework/Nov2005/post25262656.asp" 
+                  target=_self>vbc.exe and assembly info</A></TD></TR>
+              <TR>
+                <TD class=homepagetext9 align=left><BR></TD></TR>
+              <TR>
+                <TD class=homepagetext9 noWrap align=left><B><U>11/19/2005 
+                  7:25:51 PM&nbsp;&nbsp;&nbsp;&nbsp;Raw Socket Send TCP SYN 
+                  packet</U></B></TD></TR>
+              <TR>
+                <TD class=homepagetext align=left><PRE class=homepagetext>Hi to all,  
+  
+I'm trying just for fun to writing an application that completly handle a  
+  
+TCP connection.  
+  
+The first problem is connect with an endPoint server.  
+  
+In this case a set my remoteSocket:  
+  
+Dim sck As New Sockets.Socket(Sockets.AddressFamily.InterNetwork,  
+  
+Sockets.SocketType.Raw, Sockets.ProtocolType.Raw)  
+  
+When I try to send a packet, it occurs an Exception. The packet is formatted  
+  
+with the TCP Header (so I can handle the SYN)  
+  
+What's wrong?  
+  
+If I try with:  
+  
+Dim sck As New Sockets.Socket(Sockets.AddressFamily.InterNetwork,  
+  
+Sockets.SocketType.Raw, Sockets.ProtocolType.IP)  
+  
+But it send a packet with the PROTOCOL  IP Option  equal to Zero, and don't  
+  
+work!  
+  
+I tried to bind the socket and send a packet but won't work... I haven't any  
+  
+idea...  
+  
+if someone can help me...thanks  
+  
+Marco  
+  
+p.s. I know that if can I send the SYN packet the SYN/ACK will discarded by  
+  
+the stack... but I want to work with this things. :-)  
+  
+p.s.s. sorry for my english
+</PRE></TD></TR>
+              <TR>
+                <TD align=left><BR></TD></TR>
+              <TR>
+                <TD class=homepagetext align=middle>
+                  <TABLE cellSpacing=0 cellPadding=0 width="100%" align=center 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD vAlign=top align=left>
+                        <DIV id=AdPage name="AdPage">
+                        <TABLE cellSpacing=0 cellPadding=0 align=left border=0 
+                        valign="top">
+                          <TBODY>
+                          <TR>
+                            <TD vAlign=top align=left width=350></TD></TR>
+                          <TR>
+                            <TD><BR></TD></TR>
+                          <TR>
+                            <TD vAlign=top align=left width=350>
+                              <SCRIPT type=text/javascript>
+ lqm_channel=1;  
+ lqm_publisher=135;  
+ lqm_zone=1;  
+ lqm_format="7";  
+</SCRIPT>
+
+                              <SCRIPT 
+                              src="framework Raw Socket Send TCP SYN packet_files/s.js" 
+                              type=text/javascript></SCRIPT>
+                            </TD></TR></TBODY></TABLE></DIV></TD></TR>
+                    <TR>
+                      <TD><BR></TD></TR></TBODY></TABLE></TD></TR>
+              <TR>
+                <TD class=homepagetext9 noWrap align=left><B><U>11/20/2005 
+                  11:15:42 AM&nbsp;&nbsp;&nbsp;&nbsp;Re: Raw Socket Send TCP SYN 
+                  packet</U></B></TD></TR>
+              <TR>
+                <TD class=homepagetext align=left><PRE class=homepagetext>Marco Spiga wrote:  
+  
+What OS are you using? Microsoft disabled user level raw socket access  
+  
+in XP SP2, so if you want to do raw sockets you have to move to Linux.  
+  
+I think it was a daft move from Microsoft and solved nothing, because if  
+  
+someone wants to do something nasty with raw sockets they would not be  
+  
+detered by Microsoft removing the ability to do this on XP.  
+  
+Richard  
+  
+--  
+  
+<A class=keywordroll href="http://www.grimes.demon.co.uk/workshops/fusionWS.htm" target=_blank>http://www.grimes.demon.co.uk/workshops/fusionWS.htm</A>  
+  
+<A class=keywordroll href="http://www.grimes.demon.co.uk/workshops/securityWS.htm" target=_blank>http://www.grimes.demon.co.uk/workshops/securityWS.htm</A>
+</PRE></TD></TR>
+              <TR>
+                <TD align=left><BR></TD></TR>
+              <TR>
+                <TD class=homepagetext9 noWrap align=left><B><U>11/20/2005 
+                  3:05:26 PM&nbsp;&nbsp;&nbsp;&nbsp;Re: Raw Socket Send TCP SYN 
+                  packet</U></B></TD></TR>
+              <TR>
+                <TD class=homepagetext align=left><PRE class=homepagetext>"Richard Grimes" &lt;richardg@mvps.org&gt; ha scritto nel messaggio  
+  
+news:OJdX8Tc7FHA.956@TK2MSFTNGP10.phx.gbl...  
+  
+Thanks for the answer, my OS is WindowsXP SP1!, I think it's stupid too. :-)  
+  
+IMHO is a problem of handle in the TCP/IP stack of Windows, If I suppose  
+  
+that I can send the SYN packet, the answer SYN/ACK or RST will be discarded  
+  
+by the TCP/IP stack of the OS, because the sequence number isn't correct,  
+  
+for that Microsoft don't permit this feature.  
+  
+bye.  
+  
+Marco
+</PRE></TD></TR>
+              <TR>
+                <TD align=left><BR></TD></TR></TBODY></TABLE><!-- End of your database generated content-----
+ 
+ <script type="text/javascript" src="/adhandler.ashx?zoneid=1&adchannel=0679176943"></script>
+
+ //--></DIV></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE>
+<SCRIPT>
+var iFr;
+function log() { 
+var theAd=""+ escape(window.status.substring(6)) ;
+var format=queryString('format',iFr.src);
+var channel=queryString('channel',iFr.src);
+//alert(iFr.src);
+var bug = new Image();
+
+var thetitle='/forumarchives/NETFramework/Nov2005/post25262660.asp' + '?' + '';
+//bug.src = '/pix.aspx?ref=' + document.referrer + '&url=' +theAd +'&title=' + thetitle+ '&format=' + format +'&channel='+channel ; 
+
+// new code block
+if (window.status.indexOf('go to') == 0) 
+	{ 		
+		urchinTracker('/adsense/ads/' + escape(window.status.substring(6)) +'_'+ thetitle ); 
+	} 
+	else if (window.status.indexOf('View ads about') == 0) 
+	{ 		
+		urchinTracker('/adsense/links/' + escape(window.status.substring(15))+'_'+ thetitle ); 
+	} 
+// end new code block
+}  
+ 
+	var elements; 
+	elements = document.getElementsByTagName("iframe"); 
+	for (var i = 0; i < elements.length; i++) 
+		{ 
+		if(elements[i].src.indexOf('googlesyndication.com') > -1) 
+			{ 
+				elements[i].attachEvent("onfocus",log) 
+				iFr=elements[i];
+				 
+			} 
+		} 
+
+function queryString(item, source)
+{
+var itemLoc=source.indexOf(item);
+var newSrc=source.substring(itemLoc);
+var endLoc=newSrc.indexOf("&");
+ var lstSrc=newSrc.substring(0,endLoc);
+ var itm=lstSrc.substring(item.length+1);
+ return itm;
+} 
+</SCRIPT>
+
+<DIV id=footer>
+<TABLE cellSpacing=0 cellPadding=2 width="100%" border=0>
+  <TBODY>
+  <TR>
+    <TD colSpan=8>&nbsp;</TD></TR>
+  <TR>
+    <TD align=left><A class=sidelink title="Peter Bromberg's UnBlog" 
+      href="http://petesbloggerama.blogspot.com/" target=_self>Pete's 
+Blog</A></TD>
+    <TD align=left><A class=sidelink title="Peter's Online Resume" 
+      href="http://www.eggheadcafe.com/articles/pbrombergresume.asp" 
+      target=_self>Pete's Resume</A></TD>
+    <TD align=left><A class=sidelink title="Robbe's Blog" 
+      href="http://robbemorris.blogspot.com/" target=_self>Robbe's Blog</A></TD>
+    <TD align=left><A class=sidelink title="Robbe's Resume" 
+      href="http://www.eggheadcafe.com/robbemorris.htm" target=_self>Robbe's 
+      Resume</A></TD>
+    <TD align=left><A class=sidelink title="ASP.NET Resources" 
+      href="http://www.eggheadcafe.com/asp-net-how-to.aspx" target=_self>ASP.NET 
+      Resources</A></TD>
+    <TD align=left><A class=sidelink title="Archived .NET Comments" 
+      href="http://www.eggheadcafe.com/aspnet_answers">Archive #2</A></TD>
+    <TD align=left><A class=sidelink title="Archived .NET Comments" 
+      href="http://www.eggheadcafe.com/forumarchives">Archive #3</A></TD>
+    <TD align=left></TD></TR>
+  <TR>
+    <TD align=left><A class=sidelink 
+      href="http://www.eggheadcafe.com/conversationgroupsummary.aspx">All 
+      Categories</A></TD>
+    <TD align=left><A class=sidelink 
+      href="http://www.eggheadcafe.com/conversationlist.aspx?groupid=454" 
+      target=_self>.NET</A></TD>
+    <TD align=left><A class=sidelink 
+      href="http://www.eggheadcafe.com/conversationlist.aspx?groupid=103" 
+      target=_self>BizTalk</A></TD>
+    <TD align=left><A class=sidelink 
+      href="http://www.eggheadcafe.com/conversationlist.aspx?groupid=602" 
+      target=_self>Exchange</A></TD>
+    <TD align=left><A class=sidelink 
+      href="http://www.eggheadcafe.com/conversationlist.aspx?groupid=929" 
+      target=_self>IIS</A></TD>
+    <TD align=left><A class=sidelink 
+      href="http://www.eggheadcafe.com/conversationlist.aspx?groupid=2298" 
+      target=_self>IE</A></TD>
+    <TD align=left><A class=sidelink 
+      href="http://www.eggheadcafe.com/conversationlist.aspx?groupid=963" 
+      target=_self>ISA Server</A></TD>
+    <TD align=left><A class=sidelink 
+      href="http://www.eggheadcafe.com/conversationlist.aspx?groupid=1" 
+      target=_self>Misc</A></TD></TR>
+  <TR>
+    <TD align=left><A class=sidelink 
+      href="http://www.eggheadcafe.com/conversationlist.aspx?groupid=1375" 
+      target=_self>Networking</A></TD>
+    <TD align=left><A class=sidelink 
+      href="http://www.eggheadcafe.com/conversationlist.aspx?groupid=2475" 
+      target=_self>SharePoint</A></TD>
+    <TD align=left><A class=sidelink 
+      href="http://www.eggheadcafe.com/conversationlist.aspx?groupid=1731" 
+      target=_self>SQL Server</A></TD>
+    <TD align=left><A class=sidelink 
+      href="http://www.eggheadcafe.com/conversationlist.aspx?groupid=1705" 
+      target=_self>Sys Mgmt Server</A></TD>
+    <TD align=left><A class=sidelink 
+      href="http://www.eggheadcafe.com/conversationlist.aspx?groupid=1996" 
+      target=_self>Win32</A></TD>
+    <TD align=left><A class=sidelink 
+      href="http://www.eggheadcafe.com/conversationlist.aspx?groupid=1570" 
+      target=_self>Mobile Dev</A></TD>
+    <TD align=left><A class=sidelink 
+      href="http://www.eggheadcafe.com/conversationlist.aspx?groupid=1291" 
+      target=_self>MSN</A></TD>
+    <TD align=left><A class=sidelink 
+      href="http://www.eggheadcafe.com/conversationlist.aspx?groupid=2053" 
+      target=_self>WinFX</A></TD></TR>
+  <TR>
+    <TD align=left><A class=sidelink 
+      href="http://www.eggheadcafe.com/conversationlist.aspx?groupid=1380" 
+      target=_self>Windows 2003</A></TD>
+    <TD align=left><A class=sidelink 
+      href="http://www.eggheadcafe.com/conversationlist.aspx?groupid=1389" 
+      target=_self>Windows Media</A></TD>
+    <TD align=left><A class=sidelink 
+      href="http://www.eggheadcafe.com/conversationlist.aspx?groupid=2168" 
+      target=_self>Windows NT</A></TD>
+    <TD align=left><A class=sidelink 
+      href="http://www.eggheadcafe.com/conversationlist.aspx?groupid=2412" 
+      target=_self>Windows Vista</A></TD>
+    <TD align=left><A class=sidelink 
+      href="http://www.eggheadcafe.com/conversationlist.aspx?groupid=1404" 
+      target=_self>Windows XP</A></TD>
+    <TD align=left><A class=sidelink title=XmlPitStop.com 
+      href="http://www.xmlpitstop.com/" target=_blank>XmlPitStop</A></TD>
+    <TD align=left><A class=sidelink title=".NET Answers" 
+      href="http://www.eggheadcafe.com/forumrecentthreads.aspx" 
+      target=_self>Recent</A></TD>
+    <TD align=left><A class=sidelink title=DotNetSlackers.com 
+      href="http://www.dotnetslackers.com/" 
+  target=_blank>DotNetSlackers</A></TD></TR></TBODY></TABLE>
+<DIV id=CardHidden_Search 
+style="VISIBILITY: hidden; OVERFLOW: auto; POSITION: relative; HEIGHT: 5px; BACKGROUND-COLOR: #ffffff">
+<TABLE cellSpacing=0 cellPadding=5 width=850 border=0>
+  <TBODY>
+  <TR>
+    <TD vAlign=bottom align=left>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<B>Search 
+      Results</B></TD>
+    <TD vAlign=bottom align=right><A 
+      href="javascript:ToggleSearch('Search',false,'');"><IMG alt="Close Search" 
+      src="/graphics/Close16.png" 
+      border=0></A>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD></TR>
+  <TR>
+    <TD style="BACKGROUND: #ffffff" align=middle colSpan=2><IFRAME 
+      id=iframeSearch style="OVERFLOW: auto; WIDTH: 800px; HEIGHT: 450px" 
+      src="framework Raw Socket Send TCP SYN packet_files/blank.htm" 
+      frameBorder=0></IFRAME></TD></TR></TBODY></TABLE></DIV>
+<TABLE cellSpacing=0 cellPadding=2 width="100%" border=0>
+  <TBODY>
+  <TR>
+    <TD class=linkColoredText align=right><A 
+      href="http://www.eggheadcafe.com/default.aspx">Home</A>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<A 
+      href="http://www.eggheadcafe.com/aboutus.aspx">Advertise</A>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<A 
+      href="http://www.eggheadcafe.com/contactus.aspx">Contact 
+      Us</A>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<A 
+      href="http://www.eggheadcafe.com/privacy.aspx">Privacy 
+      Policy</A>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;Copyright (c) 2000 - 
+      2008.&nbsp;&nbsp;All rights reserved.</TD></TR></TBODY></TABLE></DIV></FORM>
+<SCRIPT src="framework Raw Socket Send TCP SYN packet_files/urc.js" 
+type=text/javascript></SCRIPT>
+
+<SCRIPT type=text/javascript> 
+       _uacct = "UA-142061-1";
+       urchinTracker();
+    </SCRIPT>
+</BODY></HTML>

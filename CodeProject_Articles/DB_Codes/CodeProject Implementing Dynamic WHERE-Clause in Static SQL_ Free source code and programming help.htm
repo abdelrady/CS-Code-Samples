@@ -1,0 +1,1812 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!-- saved from url=(0064)http://www.codeproject.com/KB/database/Dynamic_WHERE_Clause.aspx -->
+<HTML><HEAD><TITLE>CodeProject: Implementing Dynamic WHERE-Clause in Static SQL. Free source code and programming help</TITLE>
+<META http-equiv=Content-Type content="text/html; charset=utf-8">
+<META 
+content='This article shows different methods of implementing Dynamic WHERE-Clause in static SQL.; Author:   <font color="brown" size="1">John Prabhu</font>; Section: Database; Chapter: Database' 
+name=Description>
+<META 
+content="SQL 2000, SQL 2005, C++, SQL, Windows, .NET, Visual Studio, DBA, Dev, Intermediate,Database,Database,Free source code, tutorials" 
+name=Keywords>
+<META content="The Code Project" name=Author>
+<META content=General name=Rating>
+<META content="index, follow" name=Robots>
+<META content="1 days" name=Revisit-After><LINK 
+title="CodeProject Latest articles - All topics" 
+href="http://www.codeproject.com/webservices/articlerss.aspx?cat=1" 
+type=application/rss+xml rel=alternate><LINK 
+title="CodeProject Latest articles - MFC / C++" 
+href="http://www.codeproject.com/webservices/articlerss.aspx?cat=2" 
+type=application/rss+xml rel=alternate><LINK 
+title="CodeProject Latest articles - C#" 
+href="http://www.codeproject.com/webservices/articlerss.aspx?cat=3" 
+type=application/rss+xml rel=alternate><LINK 
+title="CodeProject Latest articles - ASP.NET" 
+href="http://www.codeproject.com/webservices/articlerss.aspx?cat=4" 
+type=application/rss+xml rel=alternate><LINK 
+title="CodeProject Latest articles - .NET" 
+href="http://www.codeproject.com/webservices/articlerss.aspx?cat=5" 
+type=application/rss+xml rel=alternate><LINK 
+title="CodeProject Latest articles - VB.NET" 
+href="http://www.codeproject.com/webservices/articlerss.aspx?cat=6" 
+type=application/rss+xml rel=alternate><LINK title="CodeProject Lounge Postings" 
+href="http://www.codeproject.com/webservices/LoungeRSS.aspx" 
+type=application/rss+xml rel=alternate><LINK title=CodeProject 
+href="http://www.codeproject.com/info/OpenSearch.xml" 
+type=application/opensearchdescription+xml rel=search><LINK 
+href="CodeProject Implementing Dynamic WHERE-Clause in Static SQL_ Free source code and programming help_files/CodeProject.css" 
+type=text/css rel=stylesheet><LINK 
+href="CodeProject Implementing Dynamic WHERE-Clause in Static SQL_ Free source code and programming help_files/ForumClassic.css" 
+type=text/css rel=stylesheet>
+<SCRIPT type=text/javascript>
+  var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+  document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</SCRIPT>
+
+<SCRIPT type=text/javascript>
+   var pageTracker = _gat._getTracker("UA-1735123-1");
+   pageTracker._setDomainName("www.codeproject.com");
+   pageTracker._setSessionTimeout("1200"); // 20 mins
+   pageTracker._initData();
+   pageTracker._trackPageview();
+</SCRIPT>
+
+<SCRIPT language=Javascript 
+src="CodeProject Implementing Dynamic WHERE-Clause in Static SQL_ Free source code and programming help_files/oncopy.js" 
+type=text/javascript></SCRIPT>
+
+<SCRIPT language=Javascript 
+src="CodeProject Implementing Dynamic WHERE-Clause in Static SQL_ Free source code and programming help_files/jxs.js" 
+type=text/javascript></SCRIPT>
+
+<SCRIPT language=Javascript 
+src="CodeProject Implementing Dynamic WHERE-Clause in Static SQL_ Free source code and programming help_files/bookmark.js" 
+type=text/javascript></SCRIPT>
+
+<SCRIPT language=Javascript 
+src="CodeProject Implementing Dynamic WHERE-Clause in Static SQL_ Free source code and programming help_files/rateitem.js" 
+type=text/javascript></SCRIPT>
+
+<SCRIPT language=Javascript type=text/javascript>//<![CDATA[
+function ToggleMenu(itemName)
+{
+	var elm = document.getElementById(itemName);
+	var i,others = document.getElementById('SectionMenu');
+	for(i=0; i < others.childNodes.length; i++)
+	{
+		var other = others.childNodes[i];
+		if ((other.className == 'MenuSectionBlock') && (other != elm))
+			other.style.display='none';
+	}
+	if (elm.style.display == 'block') elm.style.display='none';
+	else elm.style.display='block';
+	return false;
+}
+
+//]]></SCRIPT>
+
+<SCRIPT language=Javascript 
+src="CodeProject Implementing Dynamic WHERE-Clause in Static SQL_ Free source code and programming help_files/addto.js" 
+type=text/javascript></SCRIPT>
+
+<SCRIPT language=Javascript type=text/javascript>//<![CDATA[
+function MsgVoteForm(MemberID,MsgID,GB,gp,bp,mt) {
+ if(!GB)document.write("Rate this message: ");
+ document.write(unescape("%3Ca href=\"#xx" + MsgID.toString() + "xx\" onclick=\"RateMsg(" + MemberID.toString() + ", " + MsgID.toString() + ","));document.write((GB?"5":"1")+unescape(");\"%3E"));
+ if(GB) document.write(unescape("%3Cimg height=\"24\" width=\"24\" src=\"/script/Forums/Images/good.png\" alt=\"good\" border=\"0\" align=\"absmiddle\" /%3E "+gp+" "+mt+"%3C/a%3E "));
+ else document.write(unescape("%3Cimg height=\"14\" width=\"14\" src=\"/script/Forums/Images/thumbs_down.gif\" alt=\"vote 1\" border=\"0\" align=\"middle\" /%3E%3C/a%3E "));
+ if(GB)document.write(" &nbsp;"); else for(var i=1; i<=5;i++)
+  document.write(unescape("%3Ca class=\"Frm_MHL\" href=\"#xx" + MsgID.toString() + "xx\" title=\"vote this message a " + i.toString() + "\" onclick=\"RateMsg(" + MemberID.toString() + ", " + MsgID.toString() + ", " + i.toString() + ")\"%3E%3Cb%3E" + i.toString() + "%3C/b%3E%3C/a%3E "));
+ document.write(unescape("%3Ca href=\"#xx" + MsgID.toString() + "xx\" onclick=\"RateMsg(" + MemberID.toString() + ", " + MsgID.toString() + ","));document.write((GB?"1":"5")+unescape(");\"%3E"));
+ if(GB)document.write(unescape("%3Cimg height=\"24\" width=\"24\" src=\"/script/Forums/Images/bad.png\" alt=\"bad\" border=\"0\" align=\"absmiddle\" /%3E "+bp+" "+mt+"%3C/a%3E"));
+ else document.write(unescape("%3Cimg height=\"14\" width=\"14\" src=\"/script/Forums/Images/thumbs_up.gif\" border=\"0\" alt=\"vote 5\" align=\"middle\" /%3E%3C/a%3E "));
+}
+
+function ReportMsg(userid, msgid, score) {
+ if (confirm("Are you sure you want to report this message?") == true)
+  return RateMsg(userid, msgid, score);
+ else return false;
+}
+function RateMsg(memberid, msgid, score) {
+ var req = new ActiveXObject("MSXML2.XMLHTTP");
+ req.onreadystatechange = function() {
+  if (req.readyState == 4) {
+   if ( req.status == 200 ) {
+    var respText = req.responseText;
+    var re = new RegExp(unescape("\%3Cdiv\%3E([^\%3C]*)\%3C/div\%3E"), "g");
+    var match = re.exec(respText);
+    voteStatus.innerHTML = unescape("%3Cb%3E") + (match)?match[1]:"An error occured" + unescape("%3C/b%3E");
+   }
+   else
+   {
+    voteStatus.innerHTML = unescape("%3Cb style='color:red'%3EFailed!") + req.statusText + unescape("%3C/b%3E");
+   }
+  }
+ }
+ var voteStatus = document.getElementById("MVF" + msgid);
+ if (!voteStatus) return;
+ voteStatus.innerHTML = unescape("%3Cb style='color:green'%3EVoting...%3C/b%3E");
+ var strAction = "/script/Forums/Vote.aspx?js=1&fmid="+memberid.toString()+"&select="+msgid.toString()+"&score="+score.toString();
+ req.open("GET", strAction, true);
+ req.send(null);
+  return false;
+}
+//]]></SCRIPT>
+
+<SCRIPT language=Javascript type=text/javascript>//<![CDATA[
+var Selected = "-1";
+
+function SwitchMessage(e, msgId)
+{
+  if (!msgId) {
+    if(!e)e=window.event;
+    var target=e.target?e.target:e.srcElement;
+    while(target&&target.id!='DynMessLink')target=target.parentNode;
+    if(!target||target.id!='DynMessLink')return;
+    msgId=target.name;
+  }
+  if(Selected&&Selected!=""){
+    var body=eval("document.getElementById('F" + Selected + "_h1')");
+    if(body) body.style.display = 'none';
+    var head=eval("document.getElementById('F" + Selected + "_h0')");
+    if(head) head.className = head.className.replace("Sel", "UnSel");
+  }
+  if(Selected==msgId.toString())
+    Selected="";
+  else {
+    Selected=msgId.toString();
+    var body=eval("document.getElementById('F" + Selected + "_h1')");
+    if(body){
+      if(body.style.display=='none') body.style.display='';
+      else body.style.display = 'none';
+    }
+    var head=eval("document.getElementById('F" + Selected + "_h0')");
+    if (head) 
+      head.className = head.className.replace("UnSel", "Sel");
+    if(body&&head&&body.style.display!='none'){
+      document.body.scrollTop = getRealPos(head, "Top") - document.body.clientHeight/10;
+      EnsureMessageVisible(Selected, true);
+    }
+  }
+  if (e){if(e.preventDefault)e.preventDefault;else e.returnValue=false;}
+  return false;
+}
+
+//]]></SCRIPT>
+
+<SCRIPT language=Javascript 
+src="CodeProject Implementing Dynamic WHERE-Clause in Static SQL_ Free source code and programming help_files/ShortCuts.js" 
+type=text/javascript></SCRIPT>
+<LINK 
+href="CodeProject Implementing Dynamic WHERE-Clause in Static SQL_ Free source code and programming help_files/ForumClassicIE6.css" 
+type=text/css rel=stylesheet><LINK href="/favicon.ico" type=image/ico 
+rel=icon><LINK href="/favicon.ico" type=image/ico rel="shortcut icon">
+<META content="MSHTML 6.00.2900.2180" name=GENERATOR></HEAD>
+<BODY>
+<TABLE id=ctl00_AT cellSpacing=0 cellPadding=0 border=0>
+  <TBODY>
+  <TR vAlign=top>
+    <TD colSpan=2>
+      <TABLE cellSpacing=0 cellPadding=0 border=0>
+        <TBODY>
+        <TR>
+          <TD class=HeaderLogo><A href="http://www.codeproject.com/"><IMG 
+            id=ctl00_Logo 
+            style="BORDER-TOP-WIDTH: 0px; BORDER-LEFT-WIDTH: 0px; BORDER-BOTTOM-WIDTH: 0px; WIDTH: 225px; HEIGHT: 90px; BORDER-RIGHT-WIDTH: 0px" 
+            alt="The Code Project" 
+            src="CodeProject Implementing Dynamic WHERE-Clause in Static SQL_ Free source code and programming help_files/logo225x90.gif"></A></TD>
+          <TD class=HeaderBanner align=right width="100%"><IFRAME 
+            src="CodeProject Implementing Dynamic WHERE-Clause in Static SQL_ Free source code and programming help_files/ServeHTML.htm" 
+            frameBorder=0 width=728 scrolling=no height=90></IFRAME></TD></TR>
+        <TR>
+          <TD colSpan=2>
+            <TABLE class=MemberNavBar cellSpacing=0 cellPadding=5 
+              width="100%"><TBODY>
+              <TR>
+                <TD class=SmallText style="FONT-WEIGHT: bold">5,215,143 
+                  members and growing! (21,327 online)</TD>
+                <TD align=right>
+                  <DIV class=MemberNavBarText 
+                  id=ctl00_MemberMenu_LoggedOnOptions><A 
+                  id=ctl00_MemberMenu_MyProfile 
+                  href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=2959938">abdelrady2030</A> 
+                  | <A id=ctl00_MemberMenu_MySettings 
+                  href="http://www.codeproject.com/script/Membership/Modify.aspx">My 
+                  Settings</A> | <A id=ctl00_MemberMenu_MyCodeProject 
+                  href="http://www.codeproject.com/script/Membership/MyCodeProject.aspx"><B>My 
+                  CodeProject</B></A> | <A id=ctl00_MemberMenu_MyBookmarks 
+                  href="http://www.codeproject.com/script/Bookmarks/List.aspx?obtid=2"><IMG 
+                  height=16 
+                  src="CodeProject Implementing Dynamic WHERE-Clause in Static SQL_ Free source code and programming help_files/fave.gif" 
+                  width=16 align=absMiddle border=0> My Bookmarks</A> | <A 
+                  id=ctl00_MemberMenu_MyArticles 
+                  href="http://www.codeproject.com/script/Articles/MemberArticles.aspx?amid=2959938">My 
+                  Articles</A> | <A id=ctl00_MemberMenu_Signout 
+                  href="http://www.codeproject.com/script/Membership/LogOff.aspx?rp=%2fKB%2fdatabase%2fDynamic_WHERE_Clause.aspx">Sign 
+                  out</A> </DIV></TD></TR></TBODY></TABLE></TD></TR>
+        <TR>
+          <TD colSpan=2>
+            <TABLE class=SiteNavBar id=tblSiteToolbar cellSpacing=0 
+            cellPadding=0>
+              <TBODY>
+              <TR>
+                <TD noWrap><A href="http://www.codeproject.com/">Home</A></TD>
+                <TD>&nbsp; </TD>
+                <TD noWrap align=right>Current Site: </TD>
+                <TD class=SelCat noWrap><A 
+                  href="http://www.codeproject.com/">Main Site</A></TD>
+                <TD noWrap><A href="http://java.codeproject.com/">Java</A></TD>
+                <TD noWrap><A href="http://lamp.codeproject.com/">Linux Apache 
+                  MySQL PHP</A></TD>
+                <TD width="100%">&nbsp;</TD>
+                <TD id=ctl00_TopNavBar_RightMenus><!--380-->
+                  <DIV id=MenuPos 
+                  style="WIDTH: 305px; POSITION: relative; TOP: 1px; HEIGHT: 22px">
+                  <TABLE 
+                  style="BORDER-TOP-WIDTH: 0px; BORDER-LEFT-WIDTH: 0px; BORDER-BOTTOM-WIDTH: 0px; HEIGHT: 20px; BORDER-RIGHT-WIDTH: 0px" 
+                  cellSpacing=0 cellPadding=0 width=305>
+                    <TBODY>
+                    <TR vAlign=center>
+                      <TD 
+                      style="BORDER-TOP-WIDTH: 0px; BORDER-LEFT-WIDTH: 0px; BORDER-BOTTOM-WIDTH: 0px; BORDER-RIGHT-WIDTH: 0px" 
+                      noWrap><A 
+                        href="http://www.codeproject.com/info/FAQ.aspx">Help!</A></TD>
+                      <TD 
+                      style="BORDER-TOP-WIDTH: 0px; BORDER-LEFT-WIDTH: 0px; BORDER-BOTTOM-WIDTH: 0px; BORDER-RIGHT-WIDTH: 0px" 
+                      noWrap><A 
+                        href="http://www.codeproject.com/script/Articles/Latest.aspx">Articles</A></TD>
+                      <TD 
+                      style="BORDER-TOP-WIDTH: 0px; BORDER-LEFT-WIDTH: 0px; BORDER-BOTTOM-WIDTH: 0px; BORDER-RIGHT-WIDTH: 0px" 
+                      noWrap><A 
+                        href="http://www.codeproject.com/script/Forums/List.aspx">Message 
+                        Boards</A></TD>
+                      <TD 
+                      style="BORDER-TOP-WIDTH: 0px; BORDER-LEFT-WIDTH: 0px; BORDER-BOTTOM-WIDTH: 0px; BORDER-RIGHT-WIDTH: 0px" 
+                      noWrap><A 
+                        href="http://www.codeproject.com/Lounge.aspx">Lounge</A></TD></TR></TBODY></TABLE></DIV></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+  <TR>
+    <TD vAlign=top colSpan=2><A name=_top></A>
+      <TABLE class=ArticleUneditedHeader id=ctl00_ArticleTopHeader_HeaderTable 
+      cellSpacing=0 cellPadding=3 width="100%" border=0>
+        <TBODY>
+        <TR vAlign=top>
+          <TD class=SmallText><A id=ctl00_ArticleTopHeader_ChapterLink 
+            href="http://www.codeproject.com/script/Content/Chapter.aspx?chptId=4">Database</A> 
+            » <A id=ctl00_ArticleTopHeader_SectionLink 
+            href="http://www.codeproject.com/KB/database/">Database</A> » <A 
+            id=ctl00_ArticleTopHeader_SubsectionLink 
+            href="http://www.codeproject.com/KB/database/index.aspx?#Database - General">General</A> 
+            <SPAN class=ArticleIntermediate 
+            id=ctl00_ArticleTopHeader_SkillLevel>&nbsp;&nbsp;&nbsp; 
+            Intermediate</SPAN> <SPAN class=SmallText 
+            id=ctl00_ArticleTopHeader_LicenceTerms 
+            style="MARGIN-LEFT: 40px">License: <A 
+            href="http://www.codeproject.com/info/cpol10.aspx">The Code Project 
+            Open License (CPOL)</A></SPAN> <BR><BR>
+            <H1><SPAN class=ArticleTopTitle 
+            id=ctl00_ArticleTopHeader_ArticleTitle>Implementing Dynamic 
+            WHERE-Clause in Static SQL</SPAN></H1><B>By <A 
+            href="http://www.codeproject.com/script/Articles/MemberArticles.aspx?amid=2445395"><FONT 
+            color=brown size=1>John Prabhu</FONT></A></B><BR><BR><SPAN 
+            class=ArticleTopDescr id=ctl00_ArticleTopHeader_ArticleDescr>This 
+            article shows different methods of implementing Dynamic WHERE-Clause 
+            in static SQL.</SPAN> </TD>
+          <TD class=SmallText style="WIDTH: 210px"><SPAN 
+            id=ctl00_ArticleTopHeader_ArticleAttributes>C++, SQL, Windows, .NET, 
+            Visual Studio, SQL 2000, SQL 2005, SQL, DBA, Dev</SPAN><BR><BR><SPAN 
+            style="PADDING-RIGHT: 2ex">Posted</SPAN>: <B>8 Nov 2007</B><BR><SPAN 
+            style="PADDING-RIGHT: 0.5ex">Updated</SPAN>: <B>8 Nov 2007</B> 
+            <BR><SPAN style="PADDING-RIGHT: 3.2ex">Views</SPAN>: 
+          <B>6,985</B><BR></TD></TR>
+        <TR>
+          <TD colSpan=2>
+            <TABLE width="100%">
+              <TBODY>
+              <TR>
+                <TD>
+                  <DIV id=ctl00_ArticleTopHeader_UneditedDiv><B>Note: <A 
+                  id=ctl00_ArticleTopHeader_UneditedLnk 
+                  href="http://www.codeproject.com/script/Articles/Unedited.aspx">This 
+                  is an unedited reader contribution</A></B> </DIV></TD>
+                <TD class=SmallText style="WHITE-SPACE: nowrap" 
+              align=right></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+  <TR vAlign=top>
+    <TD class=LHNavBar id=ctl00_LeftNavCell>
+      <DIV style="PADDING-TOP: 5px; TEXT-ALIGN: center">
+      <SCRIPT type=text/javascript>document.write(unescape("%3ca%20href%3d%22http%3a%2f%2fwww.codeproject.com%2fRedir.aspx%3fadid%3d3487%26way%3dban%22%20target%3d%22_blank%22%20rel%3d%22nofollow%22%3e%3cimg%20src%3d%22http%3a%2f%2fwww.codeproject.com%2fscript%2fAnn%2fServeImg.aspx%3fFile%3d%252fscript%252fadmentor%252fimages%252fcp_daily_150x80.gif%26C%3dFalse%26id%3d3487%22%20alt%3d%22%22%20border%3d%220%22%20width%3d%22150%22%20height%3d%2280%22%3e%3c%2fa%3e"));</SCRIPT>
+      </DIV>
+      <DIV class=FeatureBlockHeader>Announcements</DIV>
+      <DIV class="FeatureBlockContent RHFeatureBar">
+      <DIV style="PADDING-TOP: 0px"><IMG 
+      style="FLOAT: left; MARGIN-LEFT: 8px; MARGIN-RIGHT: 9px" height=20 
+      alt=Comp 
+      src="CodeProject Implementing Dynamic WHERE-Clause in Static SQL_ Free source code and programming help_files/prize_winner.gif" 
+      width=10> <A href="http://www.codeproject.com/Feature/CodeGenComp/">Code 
+      Generation<BR>comp. $1,000 prize!</A></DIV>
+      <DIV style="MARGIN-TOP: 4px; MARGIN-BOTTOM: 3px"><IMG 
+      style="FLOAT: left; MARGIN-LEFT: 6px; MARGIN-RIGHT: 6px" height=16 
+      alt=Comp 
+      src="CodeProject Implementing Dynamic WHERE-Clause in Static SQL_ Free source code and programming help_files/coffee.gif" 
+      width=16> <A href="http://www.codeproject.com/Zones/IBM/">Win CodeProject 
+      Coffee!</A></DIV>
+      <DIV style="PADDING-TOP: 0px"><IMG 
+      style="FLOAT: left; MARGIN-LEFT: 8px; MARGIN-RIGHT: 9px" height=20 
+      alt=Comp 
+      src="CodeProject Implementing Dynamic WHERE-Clause in Static SQL_ Free source code and programming help_files/prize_winner.gif" 
+      width=10> <A id=ctl00_Announcements_CompLink 
+      href="http://www.codeproject.com/Feature/ArticleCompetition/">Monthly 
+      Competition</A><BR clear=all>
+      <DIV style="PADDING-BOTTOM: 5px; PADDING-TOP: 3px"><IMG 
+      style="PADDING-RIGHT: 10px; FLOAT: left; MARGIN-LEFT: 7px; MARGIN-RIGHT: 8px" 
+      height=16 alt=Staff 
+      src="CodeProject Implementing Dynamic WHERE-Clause in Static SQL_ Free source code and programming help_files/staff_sm.gif" 
+      width=12> <A href="http://www.codeproject.com/info/jobs/">We're 
+      Hiring</A></DIV></DIV></DIV>
+      <DIV class=MenuCat>Services</DIV>
+      <DIV class=MenuChapter><A 
+      href="http://www.codeproject.com/script/Jobs/List.aspx">Job 
+Board</A></DIV>
+      <DIV class=MenuChapter><A 
+      href="http://www.codeproject.com/Services/coffee.aspx">Code Project 
+      Coffee</A></DIV>
+      <DIV class=MenuChapter><A 
+      href="http://www.codeproject.com/Services/TradePub.aspx">Free 
+      Magazines</A></DIV><BR>
+      <DIV id=SectionMenu>
+      <DIV class=MenuCat>Chapters</DIV>
+      <DIV class=MenuChapter><A onclick="return ToggleMenu('Chapter1');" 
+      href="http://www.codeproject.com/script/Content/Chapter.aspx?chptId=1">Desktop 
+      Development</A></DIV>
+      <DIV class=MenuSectionBlock id=Chapter1 style="DISPLAY: none">
+      <DIV class=MI id=Section1><A 
+      href="http://www.codeproject.com/KB/buttons/">Button Controls</A></DIV>
+      <DIV class=MI id=Section15><A 
+      href="http://www.codeproject.com/KB/clipboard/">Clipboard</A></DIV>
+      <DIV class=MI id=Section2><A 
+      href="http://www.codeproject.com/KB/combobox/">Combo &amp; List 
+      Boxes</A></DIV>
+      <DIV class=MI id=Section67><A 
+      href="http://www.codeproject.com/KB/dialog/">Dialogs and Windows</A></DIV>
+      <DIV class=MI id=Section107><A 
+      href="http://www.codeproject.com/KB/gadgets/">Desktop Gadgets</A></DIV>
+      <DIV class=MI id=Section16><A 
+      href="http://www.codeproject.com/KB/docview/">Document / View</A></DIV>
+      <DIV class=MI id=Section4><A 
+      href="http://www.codeproject.com/KB/edit/">Edit Controls</A></DIV>
+      <DIV class=MI id=Section17><A 
+      href="http://www.codeproject.com/KB/files/">Files and Folders</A></DIV>
+      <DIV class=MI id=Section3><A 
+      href="http://www.codeproject.com/KB/grid/">Grid &amp; Data 
+      Controls</A></DIV>
+      <DIV class=MI id=Section5><A 
+      href="http://www.codeproject.com/KB/list/">List Controls</A></DIV>
+      <DIV class=MI id=Section6><A 
+      href="http://www.codeproject.com/KB/menus/">Menus</A></DIV>
+      <DIV class=MI id=Section14><A 
+      href="http://www.codeproject.com/KB/miscctrl/">Miscellaneous</A></DIV>
+      <DIV class=MI id=Section18><A 
+      href="http://www.codeproject.com/KB/printing/">Printing</A></DIV>
+      <DIV class=MI id=Section95><A 
+      href="http://www.codeproject.com/KB/progress/">Progress Controls</A></DIV>
+      <DIV class=MI id=Section11><A 
+      href="http://www.codeproject.com/KB/selection/">Selection 
+      Controls</A></DIV>
+      <DIV class=MI id=Section19><A 
+      href="http://www.codeproject.com/KB/shell/">Shell and IE 
+      programming</A></DIV>
+      <DIV class=MI id=Section68><A 
+      href="http://www.codeproject.com/KB/smart/">Smart Client</A></DIV>
+      <DIV class=MI id=Section8><A 
+      href="http://www.codeproject.com/KB/splitter/">Splitter Windows</A></DIV>
+      <DIV class=MI id=Section9><A 
+      href="http://www.codeproject.com/KB/static/">Static &amp; Panel 
+      Controls</A></DIV>
+      <DIV class=MI id=Section10><A 
+      href="http://www.codeproject.com/KB/statusbar/">Status Bar</A></DIV>
+      <DIV class=MI id=Section7><A 
+      href="http://www.codeproject.com/KB/tabs/">Tabs &amp; Property 
+      Pages</A></DIV>
+      <DIV class=MI id=Section12><A 
+      href="http://www.codeproject.com/KB/toolbars/">Toolbars &amp; Docking 
+      windows</A></DIV>
+      <DIV class=MI id=Section13><A 
+      href="http://www.codeproject.com/KB/tree/">Tree Controls</A></DIV></DIV>
+      <DIV class=MenuChapter><A onclick="return ToggleMenu('Chapter2');" 
+      href="http://www.codeproject.com/script/Content/Chapter.aspx?chptId=2">Web 
+      Development</A></DIV>
+      <DIV class=MenuSectionBlock id=Chapter2 style="DISPLAY: none">
+      <DIV class=MI id=Section70><A 
+      href="http://www.codeproject.com/KB/ajax/">Ajax and Atlas</A></DIV>
+      <DIV class=MI id=Section27><A 
+      href="http://www.codeproject.com/KB/applications/">Applications &amp; 
+      Tools</A></DIV>
+      <DIV class=MI id=Section85><A 
+      href="http://www.codeproject.com/KB/asp/">ASP</A></DIV>
+      <DIV class=MI id=Section89><A 
+      href="http://www.codeproject.com/KB/aspnet/">ASP.NET</A></DIV>
+      <DIV class=MI id=Section28><A 
+      href="http://www.codeproject.com/KB/webforms/">ASP.NET Controls</A></DIV>
+      <DIV class=MI id=Section38><A 
+      href="http://www.codeproject.com/KB/ATL-Server/">ATL Server</A></DIV>
+      <DIV class=MI id=Section29><A 
+      href="http://www.codeproject.com/KB/web-cache/">Caching</A></DIV>
+      <DIV class=MI id=Section91><A 
+      href="http://www.codeproject.com/KB/web-image/">Charts, Graphs and 
+      Images</A></DIV>
+      <DIV class=MI id=Section25><A 
+      href="http://www.codeproject.com/KB/scripting/">Client side 
+      scripting</A></DIV>
+      <DIV class=MI id=Section30><A 
+      href="http://www.codeproject.com/KB/custom-controls/">Custom 
+      Controls</A></DIV>
+      <DIV class=MI id=Section23><A 
+      href="http://www.codeproject.com/KB/HTML/">HTML / CSS</A></DIV>
+      <DIV class=MI id=Section22><A 
+      href="http://www.codeproject.com/KB/IP/">Internet / Network</A></DIV>
+      <DIV class=MI id=Section24><A 
+      href="http://www.codeproject.com/KB/ISAPI/">ISAPI</A></DIV>
+      <DIV class=MI id=Section33><A 
+      href="http://www.codeproject.com/KB/server-management/">Site &amp; Server 
+      Management</A></DIV>
+      <DIV class=MI id=Section34><A 
+      href="http://www.codeproject.com/KB/session/">Session State</A></DIV>
+      <DIV class=MI id=Section113><A 
+      href="http://www.codeproject.com/KB/silverlight/">Silverlight</A></DIV>
+      <DIV class=MI id=Section36><A 
+      href="http://www.codeproject.com/KB/trace/">Trace and Logs</A></DIV>
+      <DIV class=MI id=Section31><A 
+      href="http://www.codeproject.com/KB/user-controls/">User 
+Controls</A></DIV>
+      <DIV class=MI id=Section37><A 
+      href="http://www.codeproject.com/KB/validation/">Validation</A></DIV>
+      <DIV class=MI id=Section35><A 
+      href="http://www.codeproject.com/KB/viewstate/">View State</A></DIV>
+      <DIV class=MI id=Section26><A 
+      href="http://www.codeproject.com/KB/WAP/">WAP / WML</A></DIV>
+      <DIV class=MI id=Section32><A 
+      href="http://www.codeproject.com/KB/web-security/">Web Security</A></DIV>
+      <DIV class=MI id=Section20><A 
+      href="http://www.codeproject.com/KB/webservices/">Web 
+      Services</A></DIV></DIV>
+      <DIV class=MenuChapter><A onclick="return ToggleMenu('Chapter9');" 
+      href="http://www.codeproject.com/script/Content/Chapter.aspx?chptId=9">Enterprise 
+      Systems</A></DIV>
+      <DIV class=MenuSectionBlock id=Chapter9 style="DISPLAY: none">
+      <DIV class=MI id=Section98><A 
+      href="http://www.codeproject.com/KB/MCMS/">Content Management 
+      Server</A></DIV>
+      <DIV class=MI id=Section99><A 
+      href="http://www.codeproject.com/KB/biztalk/">Microsoft BizTalk 
+      Server</A></DIV>
+      <DIV class=MI id=Section102><A 
+      href="http://www.codeproject.com/KB/exchange/">Microsoft 
+Exchange</A></DIV>
+      <DIV class=MI id=Section90><A 
+      href="http://www.codeproject.com/KB/office/">Office Development</A></DIV>
+      <DIV class=MI id=Section101><A 
+      href="http://www.codeproject.com/KB/sharepoint/">SharePoint 
+      Server</A></DIV></DIV>
+      <DIV class=MenuChapter><A onclick="return ToggleMenu('Chapter3');" 
+      href="http://www.codeproject.com/script/Content/Chapter.aspx?chptId=3">Multimedia</A></DIV>
+      <DIV class=MenuSectionBlock id=Chapter3 style="DISPLAY: none">
+      <DIV class=MI id=Section42><A 
+      href="http://www.codeproject.com/KB/audio-video/">Audio and 
+Video</A></DIV>
+      <DIV class=MI id=Section44><A 
+      href="http://www.codeproject.com/KB/directx/">DirectX</A></DIV>
+      <DIV class=MI id=Section46><A 
+      href="http://www.codeproject.com/KB/GDI/">GDI</A></DIV>
+      <DIV class=MI id=Section47><A 
+      href="http://www.codeproject.com/KB/GDI-plus/">GDI+</A></DIV>
+      <DIV class=MI id=Section43><A 
+      href="http://www.codeproject.com/KB/graphics/">General Graphics</A></DIV>
+      <DIV class=MI id=Section45><A 
+      href="http://www.codeproject.com/KB/openGL/">OpenGL</A></DIV></DIV>
+      <DIV class=MenuChapter><A onclick="return ToggleMenu('Chapter4');" 
+      href="http://www.codeproject.com/script/Content/Chapter.aspx?chptId=4">Database</A></DIV>
+      <DIV class=MenuSectionBlock id=Chapter4>
+      <DIV class=MIS id=Section66><A 
+      href="http://www.codeproject.com/KB/database/">Database</A></DIV>
+      <DIV class=MI id=Section100><A 
+      href="http://www.codeproject.com/KB/reporting-services/">SQL Reporting 
+      Services</A></DIV></DIV>
+      <DIV class=MenuChapter><A onclick="return ToggleMenu('Chapter8');" 
+      href="http://www.codeproject.com/script/Content/Chapter.aspx?chptId=8">Platforms, 
+      Frameworks &amp; Libraries</A></DIV>
+      <DIV class=MenuSectionBlock id=Chapter8 style="DISPLAY: none">
+      <DIV class=MI id=Section83><A 
+      href="http://www.codeproject.com/KB/atl/">ATL</A></DIV>
+      <DIV class=MI id=Section117><A 
+      href="http://www.codeproject.com/KB/MFC/">MFC</A></DIV>
+      <DIV class=MI id=Section88><A 
+      href="http://www.codeproject.com/KB/stl/">STL</A></DIV>
+      <DIV class=MI id=Section84><A 
+      href="http://www.codeproject.com/KB/wtl/">WTL</A></DIV>
+      <DIV class=MI id=Section49><A 
+      href="http://www.codeproject.com/KB/COM/">COM / COM+</A></DIV>
+      <DIV class=MI id=Section76><A 
+      href="http://www.codeproject.com/KB/dotnet/">.NET Framework</A></DIV>
+      <DIV class=MI id=Section92><A 
+      href="http://www.codeproject.com/KB/winsdk/">Win32/64 SDK &amp; 
+      OS</A></DIV>
+      <DIV class=MI id=Section108><A 
+      href="http://www.codeproject.com/KB/vista/">Vista API</A></DIV>
+      <DIV class=MI id=Section110><A 
+      href="http://www.codeproject.com/KB/vista-security/">Vista 
+      Security</A></DIV>
+      <DIV class=MI id=Section82><A 
+      href="http://www.codeproject.com/KB/cross-platform/">Cross 
+      Platform</A></DIV>
+      <DIV class=MI id=Section69><A 
+      href="http://www.codeproject.com/KB/game/">Game Development</A></DIV>
+      <DIV class=MI id=Section73><A 
+      href="http://www.codeproject.com/KB/mobile/">Mobile Development</A></DIV>
+      <DIV class=MI id=Section106><A 
+      href="http://www.codeproject.com/KB/WC/">Windows CardSpace</A></DIV>
+      <DIV class=MI id=Section103><A 
+      href="http://www.codeproject.com/KB/WCF/">Windows Communication 
+      Foundation</A></DIV>
+      <DIV class=MI id=Section104><A 
+      href="http://www.codeproject.com/KB/WPF/">Windows Presentation 
+      Foundation</A></DIV>
+      <DIV class=MI id=Section105><A 
+      href="http://www.codeproject.com/KB/WF/">Windows Workflow 
+      Foundation</A></DIV>
+      <DIV class=MI id=Section119><A 
+      href="http://www.codeproject.com/KB/library/">Libraries</A></DIV>
+      <DIV class=MI id=Section122><A 
+      href="http://www.codeproject.com/KB/powershell/">Windows 
+      Powershell</A></DIV>
+      <DIV class=MI id=Section123><A 
+      href="http://www.codeproject.com/KB/linq/">LINQ</A></DIV></DIV>
+      <DIV class=MenuChapter><A onclick="return ToggleMenu('Chapter5');" 
+      href="http://www.codeproject.com/script/Content/Chapter.aspx?chptId=5">Languages</A></DIV>
+      <DIV class=MenuSectionBlock id=Chapter5 style="DISPLAY: none">
+      <DIV class=MI id=Section71><A href="http://www.codeproject.com/KB/cpp/">C 
+      / C++ Language</A></DIV>
+      <DIV class=MI id=Section72><A 
+      href="http://www.codeproject.com/KB/mcpp/">C++ / CLI</A></DIV>
+      <DIV class=MI id=Section93><A 
+      href="http://www.codeproject.com/KB/cs/">C#</A></DIV>
+      <DIV class=MI id=Section78><A 
+      href="http://www.codeproject.com/KB/msil/">MSIL</A></DIV>
+      <DIV class=MI id=Section86><A 
+      href="http://www.codeproject.com/KB/vbscript/">VBScript</A></DIV>
+      <DIV class=MI id=Section87><A 
+      href="http://www.codeproject.com/KB/vb/">VB.NET</A></DIV>
+      <DIV class=MI id=Section115><A 
+      href="http://www.codeproject.com/KB/vb-interop/">VB6 Interop</A></DIV>
+      <DIV class=MI id=Section77><A 
+      href="http://www.codeproject.com/KB/net-languages/">Other .NET 
+      Languages</A></DIV>
+      <DIV class=MI id=Section21><A 
+      href="http://www.codeproject.com/KB/XML/">XML</A></DIV>
+      <DIV class=MI id=Section96><A 
+      href="http://www.codeproject.com/KB/java/">Java</A></DIV></DIV>
+      <DIV class=MenuChapter><A onclick="return ToggleMenu('Chapter6');" 
+      href="http://www.codeproject.com/script/Content/Chapter.aspx?chptId=6">General 
+      Programming</A></DIV>
+      <DIV class=MenuSectionBlock id=Chapter6 style="DISPLAY: none">
+      <DIV class=MI id=Section57><A 
+      href="http://www.codeproject.com/KB/recipes/">Algorithms &amp; 
+      Recipes</A></DIV>
+      <DIV class=MI id=Section64><A 
+      href="http://www.codeproject.com/KB/bugs/">Bugs &amp; 
+Workarounds</A></DIV>
+      <DIV class=MI id=Section79><A 
+      href="http://www.codeproject.com/KB/collections/">Collections</A></DIV>
+      <DIV class=MI id=Section56><A 
+      href="http://www.codeproject.com/KB/security/">Cryptography &amp; 
+      Security</A></DIV>
+      <DIV class=MI id=Section50><A 
+      href="http://www.codeproject.com/KB/datetime/">Date and Time</A></DIV>
+      <DIV class=MI id=Section52><A 
+      href="http://www.codeproject.com/KB/DLL/">DLLs &amp; Assemblies</A></DIV>
+      <DIV class=MI id=Section80><A 
+      href="http://www.codeproject.com/KB/exception/">Exception 
+      Handling</A></DIV>
+      <DIV class=MI id=Section81><A 
+      href="http://www.codeproject.com/KB/locale/">Localisation</A></DIV>
+      <DIV class=MI id=Section53><A 
+      href="http://www.codeproject.com/KB/macros/">Macros and Add-ins</A></DIV>
+      <DIV class=MI id=Section54><A 
+      href="http://www.codeproject.com/KB/tips/">Programming Tips</A></DIV>
+      <DIV class=MI id=Section55><A 
+      href="http://www.codeproject.com/KB/string/">String handling</A></DIV>
+      <DIV class=MI id=Section58><A 
+      href="http://www.codeproject.com/KB/threads/">Threads, Processes &amp; 
+      IPC</A></DIV>
+      <DIV class=MI id=Section59><A 
+      href="http://www.codeproject.com/KB/winhelp/">WinHelp / 
+      HTMLHelp</A></DIV></DIV>
+      <DIV class=MenuChapter><A onclick="return ToggleMenu('Chapter10');" 
+      href="http://www.codeproject.com/script/Content/Chapter.aspx?chptId=10">Graphics 
+      / Design</A></DIV>
+      <DIV class=MenuSectionBlock id=Chapter10 style="DISPLAY: none">
+      <DIV class=MI id=Section40><A 
+      href="http://www.codeproject.com/KB/expression/">Expression</A></DIV>
+      <DIV class=MI id=Section114><A 
+      href="http://www.codeproject.com/KB/usability/">Usability</A></DIV></DIV>
+      <DIV class=MenuChapter><A onclick="return ToggleMenu('Chapter11');" 
+      href="http://www.codeproject.com/script/Content/Chapter.aspx?chptId=11">Development 
+      Lifecycle</A></DIV>
+      <DIV class=MenuSectionBlock id=Chapter11 style="DISPLAY: none">
+      <DIV class=MI id=Section51><A 
+      href="http://www.codeproject.com/KB/debug/">Debug Tips</A></DIV>
+      <DIV class=MI id=Section39><A 
+      href="http://www.codeproject.com/KB/architecture/">Design and 
+      Architecture</A></DIV>
+      <DIV class=MI id=Section112><A 
+      href="http://www.codeproject.com/KB/install/">Installation</A></DIV>
+      <DIV class=MI id=Section41><A 
+      href="http://www.codeproject.com/KB/work/">Work Issues</A></DIV>
+      <DIV class=MI id=Section126><A 
+      href="http://www.codeproject.com/KB/codegen/">Code 
+      Generation</A></DIV></DIV>
+      <DIV class=MenuChapter><A onclick="return ToggleMenu('Chapter7');" 
+      href="http://www.codeproject.com/script/Content/Chapter.aspx?chptId=7">General 
+      Reading</A></DIV>
+      <DIV class=MenuSectionBlock id=Chapter7 style="DISPLAY: none">
+      <DIV class=MI id=Section60><A 
+      href="http://www.codeproject.com/KB/books/">Book Chapters</A></DIV>
+      <DIV class=MI id=Section61><A 
+      href="http://www.codeproject.com/KB/book-reviews/">Book Reviews</A></DIV>
+      <DIV class=MI id=Section109><A 
+      href="http://www.codeproject.com/KB/hardware-review/">Hardware 
+      Reviews</A></DIV>
+      <DIV class=MI id=Section63><A 
+      href="http://www.codeproject.com/KB/interviews/">Interviews</A></DIV>
+      <DIV class=MI id=Section62><A 
+      href="http://www.codeproject.com/KB/scrapbook/">Scrapbook</A></DIV>
+      <DIV class=MI id=Section48><A 
+      href="http://www.codeproject.com/KB/system/">Hardware &amp; 
+      System</A></DIV></DIV>
+      <DIV class=MenuChapter><A onclick="return ToggleMenu('Chapter12');" 
+      href="http://www.codeproject.com/script/Content/Chapter.aspx?chptId=12">Third 
+      Party Products</A></DIV>
+      <DIV class=MenuSectionBlock id=Chapter12 style="DISPLAY: none">
+      <DIV class=MI id=Section65><A 
+      href="http://www.codeproject.com/KB/showcase/">Product Showcase</A></DIV>
+      <DIV class=MI id=Section124><A 
+      href="http://www.codeproject.com/KB/solution-center/">Solution 
+      Center</A></DIV></DIV></DIV><BR>
+      <DIV class=MenuCat>Feature Zones</DIV>
+      <DIV class=MenuChapter><A href="http://www.codeproject.com/Zones/IBM">IBM 
+      DeveloperWorks</A></DIV>
+      <DIV class=MenuChapter><A 
+      href="http://www.codeproject.com/Zones/WhitePapers">WhitePapers</A></DIV>
+      <DIV class=MenuChapter><A 
+      href="http://www.codeproject.com/Zones/CodeGeneration">Code 
+      Generation</A></DIV>
+      <DIV class=MenuChapter><A 
+      href="http://www.codeproject.com/Zones/QuestSQL">Quest SQL 
+      Zone</A></DIV><BR>
+      <SCRIPT type=text/javascript>document.write(unescape("%3ca%20href%3d%22http%3a%2f%2fwww.codeproject.com%2fRedir.aspx%3fadid%3d5009%26way%3dban%22%20target%3d%22_blank%22%20rel%3d%22nofollow%22%3e%3cimg%20src%3d%22http%3a%2f%2fwww.codeproject.com%2fscript%2fAnn%2fServeImg.aspx%3fFile%3d%252fscript%252fadmentor%252fimages%252fxoreax_160x600.gif%26C%3dFalse%26id%3d5009%22%20alt%3d%22Xoreax%20cuts%20VS%20build%20times%20by%20up%20to%2090%25%22%20border%3d%220%22%20width%3d%22160%22%20height%3d%22600%22%3e%3c%2fa%3e"));</SCRIPT>
+      <IMG height=1 alt="" 
+      src="CodeProject Implementing Dynamic WHERE-Clause in Static SQL_ Free source code and programming help_files/t.gif" 
+      width=160> </TD>
+    <TD class=ArticlePane vAlign=top>
+      <TABLE class=SearchHeaderBar cellSpacing=0 width="100%">
+        <TBODY>
+        <TR>
+          <TD style="WIDTH: 60%; WHITE-SPACE: nowrap" vAlign=center 
+            align=right><FORM style="MARGIN: 0px" name=Search 
+            action=/info/search.aspx method=get><B>Search &nbsp;</B> <INPUT 
+            class=SmallText style="WIDTH: 200px" name=artkw> <SELECT 
+            class=SmallText style="FONT-WEIGHT: bold" name=sbo> <OPTION 
+              value=kw selected>Articles</OPTION> <OPTION 
+              value=fm>Messages</OPTION></SELECT> <INPUT class=SmallText style="FONT-WEIGHT: bold" type=submit value=" Go! "> 
+            &nbsp; </FORM></TD>
+          <TD class=TinyText style="WHITE-SPACE: nowrap"><A 
+            href="http://www.codeproject.com/info/search.aspx">Advanced 
+            Search</A><BR><A 
+            href="http://www.codeproject.com/script/Content/SiteMap.aspx">Sitemap</A> 
+            | <A id=ctl00_SearchBarCtrl_AddToIESearchLnk 
+            title="Add The Code Project to your IE search Providers" 
+            onclick="window.external.AddSearchProvider('http://www.codeproject.com/info/OpenSearch.xml');return false;" 
+            href="http://www.codeproject.com/">Add to IE Search</A> 
+        </TD></TR></TBODY></TABLE><SPAN id=ctl00_ResultMessage></SPAN>
+      <DIV id=ctl00_ArtDiv>
+      <TABLE cellSpacing=0 cellPadding=0 width="100%" border=0>
+        <TBODY>
+        <TR vAlign=top>
+          <TD vAlign=top>
+            <TABLE>
+              <TBODY></TBODY></TABLE>
+            <DIV class=SmallText><IMG style="VERTICAL-ALIGN: middle" height=16 
+            alt=print 
+            src="CodeProject Implementing Dynamic WHERE-Clause in Static SQL_ Free source code and programming help_files/print.gif" 
+            width=16> <A id=ctl00_ArticleHeaderLinks_PrintLnk 
+            href="http://www.codeproject.com/KB/database/Dynamic_WHERE_Clause.aspx?display=Print">Print</A> 
+            &nbsp; <IMG style="VERTICAL-ALIGN: middle" height=16 
+            alt="Broken Article?" 
+            src="CodeProject Implementing Dynamic WHERE-Clause in Static SQL_ Free source code and programming help_files/report.gif" 
+            width=16> <A id=ctl00_ArticleHeaderLinks_BrokenLnk 
+            href="http://www.codeproject.com/script/Articles/Report.aspx?aid=21234">Report 
+            Article</A> &nbsp; <IMG style="VERTICAL-ALIGN: middle" alt=Watch 
+            src="CodeProject Implementing Dynamic WHERE-Clause in Static SQL_ Free source code and programming help_files/watchon.png"> 
+            <A class="" id=bmw_21234,2 onclick="return watchMe(21234, 2);" 
+            href="http://www.codeproject.com/script/Bookmarks/Add.aspx?&amp;obid=21234&amp;obtid=2&amp;bma=AddWatch" 
+            name=ajaxBookmarkWatchLink>Watch</A> <SPAN class=TinyText 
+            style="VISIBILITY: hidden"></SPAN><SPAN 
+            id=ctl00_ArticleHeaderLinks_ArticleBmkWatch_Message></SPAN>&nbsp; 
+            <IMG style="VERTICAL-ALIGN: middle" height=16 alt=Bookmark 
+            src="CodeProject Implementing Dynamic WHERE-Clause in Static SQL_ Free source code and programming help_files/link.png" 
+            width=16> <A class="" id=bm_21234,2 
+            onclick="return bookmarkMe(21234, 2);" 
+            href="http://www.codeproject.com/script/Bookmarks/Add.aspx?&amp;obid=21234&amp;obtid=2&amp;bma=AddBookmark" 
+            name=ajaxBookmarkLink>Bookmark</A> <SPAN class=TinyText 
+            style="VISIBILITY: hidden"></SPAN><SPAN 
+            id=ctl00_ArticleHeaderLinks_ArticleBmk_Message></SPAN>&nbsp; <IMG 
+            style="VERTICAL-ALIGN: middle" height=16 alt=Discuss 
+            src="CodeProject Implementing Dynamic WHERE-Clause in Static SQL_ Free source code and programming help_files/discuss.gif" 
+            width=15> <A 
+            href="http://www.codeproject.com/KB/database/Dynamic_WHERE_Clause.aspx#_comments">Discuss</A> 
+            &nbsp; <IMG style="VERTICAL-ALIGN: middle" height=16 
+            alt="Recommend Article" 
+            src="CodeProject Implementing Dynamic WHERE-Clause in Static SQL_ Free source code and programming help_files/mail.gif" 
+            width=16>&nbsp;<A id=ctl00_ArticleHeaderLinks_Recommend 
+            href="http://www.codeproject.com/script/common/TellFriend.aspx?obtid=2&amp;obid=21234">Send&nbsp;to&nbsp;a&nbsp;friend</A> 
+            </DIV></TD>
+          <TD style="WIDTH: 100px; WHITE-SPACE: nowrap; TEXT-ALIGN: right">
+            <TABLE id=CurRat>
+              <TBODY>
+              <TR>
+                <TD>
+                  <TABLE>
+                    <TBODY>
+                    <TR>
+                      <TD class=SmallText style="WHITE-SPACE: nowrap" 
+                      align=right><SPAN id=ctl00_ArticleRating_VoteLabel>9 
+                        votes for this Article.</SPAN></TD>
+                      <TD>
+                        <TABLE cellSpacing=0 cellPadding=0 border=1>
+                          <TBODY>
+                          <TR>
+                            <TD width=20 bgColor=white height=7><IMG height=7 
+                              src="CodeProject Implementing Dynamic WHERE-Clause in Static SQL_ Free source code and programming help_files/red.gif" 
+                              width=20 align=center border=0></TD>
+                            <TD width=20 bgColor=white height=7><IMG height=7 
+                              src="CodeProject Implementing Dynamic WHERE-Clause in Static SQL_ Free source code and programming help_files/red.gif" 
+                              width=20 align=center border=0></TD>
+                            <TD width=20 bgColor=white height=7><IMG height=7 
+                              src="CodeProject Implementing Dynamic WHERE-Clause in Static SQL_ Free source code and programming help_files/red.gif" 
+                              width=20 align=center border=0></TD>
+                            <TD width=20 bgColor=white height=7><IMG height=7 
+                              src="CodeProject Implementing Dynamic WHERE-Clause in Static SQL_ Free source code and programming help_files/red.gif" 
+                              width=20 align=center border=0></TD>
+                            <TD noWrap width=20 bgColor=white height=7><IMG 
+                              height=7 
+                              src="CodeProject Implementing Dynamic WHERE-Clause in Static SQL_ Free source code and programming help_files/red.gif" 
+                              width=5 align=center 
+                      border=0></TD></TR></TBODY></TABLE></TD></TR>
+                    <TR id=ctl00_ArticleRating_PopularityRow>
+                      <TD class=SmallText align=right colSpan=2><A 
+                        id=ctl00_ArticleRating_PopularityLnk 
+                        title="Calculated as rating x Log10(# votes)" 
+                        href="http://www.codeproject.com/script/Articles/TopArticles.aspx?ta_so=1">Popularity: 
+                        4.06</A> <SPAN 
+                        id=ctl00_ArticleRating_PopularityLbl></SPAN><SPAN 
+                        id=ratingVal>Rating: <B>4.25</B> out of 
+                    5</SPAN></TD></TR></TBODY></TABLE></TD>
+                <TD>
+                  <DIV>
+                  <TABLE class=HistTable 
+                  title="Voting Distribution. Recent data only">
+                    <TBODY>
+                    <TR>
+                      <TD><IMG title="0 votes, 0.0%" height=1 
+                        alt="0 votes, 0.0%" src="" width=10 border=0><BR>1</TD>
+                      <TD><IMG title="0 votes, 0.0%" height=1 
+                        alt="0 votes, 0.0%" src="" width=10 border=0><BR>2</TD>
+                      <TD><IMG title="2 votes, 22.2%" height=8 
+                        alt="2 votes, 22.2%" 
+                        src="CodeProject Implementing Dynamic WHERE-Clause in Static SQL_ Free source code and programming help_files/pollcol.gif" 
+                        width=10 border=0><BR>3</TD>
+                      <TD><IMG title="2 votes, 22.2%" height=8 
+                        alt="2 votes, 22.2%" 
+                        src="CodeProject Implementing Dynamic WHERE-Clause in Static SQL_ Free source code and programming help_files/pollcol.gif" 
+                        width=10 border=0><BR>4</TD>
+                      <TD><IMG title="5 votes, 55.6%" height=20 
+                        alt="5 votes, 55.6%" 
+                        src="CodeProject Implementing Dynamic WHERE-Clause in Static SQL_ Free source code and programming help_files/pollcol.gif" 
+                        width=10 
+              border=0><BR>5</TD></TD></TR></TBODY></TABLE></DIV></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE>
+      <DIV class=SmallText id=ctl00_UneditedRow 
+      style="PADDING-RIGHT: 5px; BORDER-TOP: #ff9900 1px dashed; PADDING-LEFT: 5px; PADDING-BOTTOM: 5px; MARGIN: 5px; PADDING-TOP: 5px; BORDER-BOTTOM: #ff9900 1px dashed"><B>Note:</B> 
+      This is an unedited contribution. If this article is inappropriate, needs 
+      attention or copies someone else's work without reference then please <A 
+      id=ctl00_ReportProblem 
+      href="http://www.codeproject.com/script/Articles/Report.aspx?aid=21234">Report 
+      This Article</A> </DIV>
+      <UL class=Callout id=ctl00_confirmError style="MARGIN-RIGHT: 20px">
+        <LI class=SmallText 
+        style="LIST-STYLE-IMAGE: url(/images/warning.gif)">You are signed up for 
+        one or more <A id=ctl00_SubscribeLink2 
+        href="http://www.codeproject.com/script/Membership/Subscribe.aspx?rp=%2fKB%2fdatabase%2fDynamic_WHERE_Clause.aspx">newsletters</A> 
+        but your email address is either unconfirmed, or has not been 
+        reconfirmed in a long time. Please click <A id=ctl00_RequestConfirmLink2 
+        href="http://www.codeproject.com/script/Membership/SendConfirmRequest.aspx?rp=%2fKB%2fdatabase%2fDynamic_WHERE_Clause.aspx">here</A> 
+        to have an email sent that will allow us to confirm your email address 
+        and start sending you newsletters again.</LI></UL><SPAN id=intelliTXT>
+      <DIV id=contentdiv><!-- Main Page Contents Start --><!-- Article Starts -->
+      <UL class=download>
+        <LI><A 
+        href="http://www.codeproject.com/KB/database/Dynamic_WHERE_Clause/Dynamic-WHERE-Clause.zip">Download 
+        Demo SQL and Stored Proc Dynamic-WHERE-Clause.zip - 1.5 KB</A> </LI></UL>
+      <H2>Contents</H2>
+      <UL>
+        <LI><A 
+        href="http://www.codeproject.com/KB/database/Dynamic_WHERE_Clause.aspx#Content1">Introduction</A> 
+
+        <LI><A 
+        href="http://www.codeproject.com/KB/database/Dynamic_WHERE_Clause.aspx#Content2">Implementing 
+        Dynamic WHERE-Clause</A> 
+        <UL>
+          <LI><A 
+          href="http://www.codeproject.com/KB/database/Dynamic_WHERE_Clause.aspx#Content3">Using 
+          COALESCE</A> 
+          <LI><A 
+          href="http://www.codeproject.com/KB/database/Dynamic_WHERE_Clause.aspx#Content4">Using 
+          ISNULL</A> 
+          <LI><A 
+          href="http://www.codeproject.com/KB/database/Dynamic_WHERE_Clause.aspx#Content5">Using 
+          CASE</A> 
+          <LI><A 
+          href="http://www.codeproject.com/KB/database/Dynamic_WHERE_Clause.aspx#Content6">Alternative</A></LI></UL>
+        <LI><A 
+        href="http://www.codeproject.com/KB/database/Dynamic_WHERE_Clause.aspx#Content7">Conclusion</A> 
+
+        <LI><A 
+        href="http://www.codeproject.com/KB/database/Dynamic_WHERE_Clause.aspx#Content8">References</A></LI></UL>
+      <HR>
+      <BR><A name=Content1></A>
+      <H2>Introduction</H2>
+      <P align=justify>My previous article was about <A title="New Window" 
+      href="http://www.codeproject.com/KB/database/Building_Dynamic_SQL.asp" 
+      target=_blank>Building Dynamic SQL In a Stored Procedure</A>. I explained 
+      how to write and execute Dynamic SQL using sp_executesql command. well, 
+      when we take a look at the query execution plan of these two 
+      methods(static and dynamic); there is a huge difference in the speed and 
+      performance where as the static sql is checked for syntax error, parsed, 
+      compiled and the execution plan is stored in the SQL Server's cache for 
+      subsequent execution. As I mentioned in my previous article as a special 
+      note that Dynamic SQL Queries in a Variable are not Compiled, parsed, 
+      checked for errors until they are executed. It is impossible for the SQL 
+      Server to reuse the execution plans produced by the dynamic SQL statement. 
+      when performance is the top priority then one should avoid using Dynamic 
+      SQL statement. Speed, performance and reusability are the known issues 
+      with Dynamic SQL. Here I would like to show few ways of Implementing 
+      Dynamic WHERE-Clause in Static SQL. I take pleasure in writting this 
+      article which would force you to think of a better alternative rather 
+      jumping-in to write Dynamic SQL. And to those who read this I suggest you 
+      to have a look at my previous one for better understanding. It's always an 
+      advantage to know the details of both the methods which will help you to 
+      choose a more efficient way. </P><A name=Content2></A>
+      <H2>Implementing Dynamic WHERE-Clause</H2><A name=Content3></A>
+      <H2>Using COALESCE</H2>
+      <P align=justify>The COALESCE Function in sql Server serves a better 
+      purpose in handling column's with NULL values. It helps us to take a more 
+      efficient approach in building dynamic WHERE-Clause. Before we get into an 
+      example, Let me explain How this "COALESCE Function" works. </P>
+      <P>Basic Syntax : COALESCE()</P><PRE lang=sql><SPAN class=code-keyword>COALESCE</SPAN> ( expression1 , expression2, expression3....n) </PRE>
+      <P align=justify>COALESCE function accepts multiple expressions as 
+      argument and process the expression list from left to right. This function 
+      returns the first Non-Null expression in the expression list. If all 
+      arguments are NULL, it returns NULL. </P>
+      <P>Note : All expressions must be of the same type or must be implicitly 
+      convertible to the same type.</P>
+      <P>Let us take an example - Employee Table with common fields and wrap the 
+      statements in a stored procedure. Following Transact-Sql CREATE TABLE 
+      statement is to create a Employees Table within your database.</P><PRE lang=sql><SPAN class=code-comment>/*</SPAN><SPAN class=code-comment> Transact-Sql to create the table tblEmployees */</SPAN>
+<SPAN class=code-keyword>CREATE</SPAN> <SPAN class=code-keyword>TABLE</SPAN> tblEmployees
+(
+    EmployeeID       <SPAN class=code-keyword>SMALLINT</SPAN> <SPAN class=code-keyword>IDENTITY</SPAN>(<SPAN class=code-digit>1001</SPAN>,<SPAN class=code-digit>1</SPAN>) <SPAN class=code-keyword>NOT</SPAN> <SPAN class=code-keyword>NULL</SPAN>,
+    EmployeeName     <SPAN class=code-keyword>NVARCHAR</SPAN>(<SPAN class=code-digit>100</SPAN>) <SPAN class=code-keyword>NOT</SPAN> <SPAN class=code-keyword>NULL</SPAN>,
+    Department       <SPAN class=code-keyword>NVARCHAR</SPAN>(<SPAN class=code-digit>50</SPAN>) <SPAN class=code-keyword>NOT</SPAN> <SPAN class=code-keyword>NULL</SPAN>,
+    Designation      <SPAN class=code-keyword>NVARCHAR</SPAN>(<SPAN class=code-digit>50</SPAN>) <SPAN class=code-keyword>NOT</SPAN> <SPAN class=code-keyword>NULL</SPAN>,
+    JoiningDate      <SPAN class=code-keyword>DATETIME</SPAN> <SPAN class=code-keyword>NOT</SPAN> <SPAN class=code-keyword>NULL</SPAN>,
+    Salary           <SPAN class=code-keyword>DECIMAL</SPAN>(<SPAN class=code-digit>10</SPAN>,<SPAN class=code-digit>2</SPAN>) <SPAN class=code-keyword>NOT</SPAN> <SPAN class=code-keyword>NULL</SPAN>
+)</PRE>
+      <P>The following INSERT statements inserts some sample records into the 
+      tblEmployee table.</P><PRE lang=sql><SPAN class=code-comment>/*</SPAN><SPAN class=code-comment> Transact SQL to insert some sample records into tblEmployees table */</SPAN>
+<SPAN class=code-keyword>INSERT</SPAN> <SPAN class=code-keyword>INTO</SPAN> tblEmployees
+(EmployeeName, Department, Designation,  JoiningDate, Salary) <SPAN class=code-keyword>VALUES</SPAN>
+(<SPAN class=code-string>'</SPAN><SPAN class=code-string>John Smith'</SPAN>, <SPAN class=code-string>'</SPAN><SPAN class=code-string>IT Research'</SPAN>, <SPAN class=code-string>'</SPAN><SPAN class=code-string>Research Analyst'</SPAN>, <SPAN class=code-string>'</SPAN><SPAN class=code-string>02/08/2005'</SPAN>, <SPAN class=code-digit>23000</SPAN>.<SPAN class=code-digit>00</SPAN>)
+
+<SPAN class=code-keyword>INSERT</SPAN> <SPAN class=code-keyword>INTO</SPAN> 
+tblEmployees(EmployeeName, Department, Designation, JoiningDate, Salary) 
+<SPAN class=code-keyword>VALUES</SPAN>(<SPAN class=code-string>'</SPAN><SPAN class=code-string>John Micheal'</SPAN>, <SPAN class=code-string>'</SPAN><SPAN class=code-string>IT Operations'</SPAN>, <SPAN class=code-string>'</SPAN><SPAN class=code-string>Manager'</SPAN>, <SPAN class=code-string>'</SPAN><SPAN class=code-string>07/15/2007'</SPAN>, <SPAN class=code-digit>15000</SPAN>.<SPAN class=code-digit>00</SPAN>)
+
+<SPAN class=code-keyword>INSERT</SPAN> <SPAN class=code-keyword>INTO</SPAN> 
+tblEmployees(EmployeeName, Department, Designation, JoiningDate, Salary) 
+<SPAN class=code-keyword>VALUES</SPAN>(<SPAN class=code-string>'</SPAN><SPAN class=code-string>Will Smith'</SPAN>, <SPAN class=code-string>'</SPAN><SPAN class=code-string>IT Support'</SPAN>, <SPAN class=code-string>'</SPAN><SPAN class=code-string>Manager'</SPAN>, <SPAN class=code-string>'</SPAN><SPAN class=code-string>05/20/2006'</SPAN>, <SPAN class=code-digit>13000</SPAN>.<SPAN class=code-digit>00</SPAN>)
+</PRE>
+      <P>Below written stored procedure (Example 2.1) can be used to search for 
+      the following details in the Employee (tblEmployees) table.</P>
+      <UL>
+        <LI>Search for specific Employee Detail with the Name. 
+        <LI>List of Employees in a specific Department. 
+        <LI>List of Employees in a specific Designation. 
+        <LI>List of Employees joined the organization last year. 
+        <LI>List of Employees whose Salary &gt;= some specific Amount. 
+        <LI>Any of these condition listed above or all of these. </LI></UL>
+      <P align=justify>The SELECT query in the stored procedure dynamically 
+      implements the WHERE-Clause using COALESCE function to get the desired 
+      result.</P>
+      <P><I>Example 2.1 - Using COALESCE</I></P><PRE lang=sql><SPAN class=code-comment>/*</SPAN><SPAN class=code-comment> Create Stored Procedure 'sp_EmployeeSelect_Coalesce'. 
+Example 2.1 - Using Coalesce */</SPAN> 
+
+<SPAN class=code-keyword>Create</SPAN> <SPAN class=code-keyword>Procedure</SPAN> sp_EmployeeSelect_Coalesce
+    @EmployeeName <SPAN class=code-keyword>NVarchar</SPAN>(<SPAN class=code-digit>100</SPAN>),
+    @Department <SPAN class=code-keyword>NVarchar</SPAN>(<SPAN class=code-digit>50</SPAN>),
+    @Designation <SPAN class=code-keyword>NVarchar</SPAN>(<SPAN class=code-digit>50</SPAN>),
+    @StartDate <SPAN class=code-keyword>DateTime</SPAN>,
+    @EndDate <SPAN class=code-keyword>DateTime</SPAN>,
+    @Salary <SPAN class=code-keyword>Decimal</SPAN>(<SPAN class=code-digit>10</SPAN>,<SPAN class=code-digit>2</SPAN>)
+        
+<SPAN class=code-keyword>AS</SPAN>
+      <SPAN class=code-keyword>Set</SPAN> NoCount <SPAN class=code-keyword>ON</SPAN>
+ 
+    <SPAN class=code-keyword>Select</SPAN> * <SPAN class=code-keyword>From</SPAN> tblEmployees 
+    <SPAN class=code-keyword>where</SPAN> EmployeeName = <SPAN class=code-keyword>Coalesce</SPAN>(@EmployeeName, EmployeeName) <SPAN class=code-keyword>AND</SPAN>
+        Department = <SPAN class=code-keyword>Coalesce</SPAN>(@Department, Department ) <SPAN class=code-keyword>AND</SPAN>
+        Designation = <SPAN class=code-keyword>Coalesce</SPAN>(@Designation, Designation) <SPAN class=code-keyword>AND</SPAN>
+        JoiningDate &gt;= <SPAN class=code-keyword>Coalesce</SPAN>(@StartDate, JoiningDate) <SPAN class=code-keyword>AND</SPAN> 
+        JoiningDate &lt;= <SPAN class=code-keyword>Coalesce</SPAN>(@EndDate, JoiningDate) <SPAN class=code-keyword>AND</SPAN>
+        Salary &gt;= <SPAN class=code-keyword>Coalesce</SPAN>(@Salary, Salary)
+
+    <SPAN class=code-keyword>If</SPAN> <SPAN class=code-preprocessor>@@ERROR</SPAN> &lt;&gt; <SPAN class=code-digit>0</SPAN> <SPAN class=code-keyword>GoTo</SPAN> ErrorHandler
+    <SPAN class=code-keyword>Set</SPAN> NoCount <SPAN class=code-keyword>OFF</SPAN>
+    <SPAN class=code-keyword>Return</SPAN>(<SPAN class=code-digit>0</SPAN>)
+  
+ErrorHandler:
+    <SPAN class=code-keyword>Return</SPAN>(<SPAN class=code-preprocessor>@@ERROR</SPAN>)
+<SPAN class=code-keyword>GO</SPAN>
+</PRE>
+      <P>In the above stored procedure, for each condition in the WHERE-Clause 
+      the COALESCE function picks the first non-null value and uses it for the 
+      comparision operation. If the input parameter value is NULL then the 
+      coalesce function returns the actual value which equals itself. The causes 
+      the particular row to be returned for that operation. </P><A 
+      name=Content4></A>
+      <H2>Using ISNULL</H2>
+      <P align=justify>ISNULL is a T-Sql System function used to handle NULL 
+      values, it takes two argument, first One is to check for an expression and 
+      second argument is for the replacement value if the check expression value 
+      is NULL. we can say that ISNULL is equivalent to COALESCE function with 
+      two arguments.</P>
+      <P>Basic Syntax : ISNULL()</P>
+      <P>ISNULL ( check_expression , replacement_value )</P>
+      <P>Note : replacement_value must have the same type as check_expresssion. 
+      </P>
+      <P align=justify>Let's take above Example and write the stored procedure 
+      that builds the WHERE-Clause dynamically using ISNULL function.</P>
+      <P><I>Example 2.2 - Using ISNULL</I></P><PRE lang=sql><SPAN class=code-comment>/*</SPAN><SPAN class=code-comment> Create Stored Procedure 'sp_EmployeeSelect_ISNULL'. 
+Example 2.2 - Using IsNull */</SPAN> 
+
+<SPAN class=code-keyword>Create</SPAN> <SPAN class=code-keyword>Procedure</SPAN> sp_EmployeeSelect_ISNULL
+    @EmployeeName <SPAN class=code-keyword>NVarchar</SPAN>(<SPAN class=code-digit>100</SPAN>),
+    @Department <SPAN class=code-keyword>NVarchar</SPAN>(<SPAN class=code-digit>50</SPAN>),
+    @Designation <SPAN class=code-keyword>NVarchar</SPAN>(<SPAN class=code-digit>50</SPAN>),
+    @StartDate <SPAN class=code-keyword>DateTime</SPAN>,
+    @EndDate <SPAN class=code-keyword>DateTime</SPAN>,
+    @Salary <SPAN class=code-keyword>Decimal</SPAN>(<SPAN class=code-digit>10</SPAN>,<SPAN class=code-digit>2</SPAN>)
+<SPAN class=code-keyword>AS</SPAN>
+      <SPAN class=code-keyword>Set</SPAN> NoCount <SPAN class=code-keyword>ON</SPAN>
+  
+    <SPAN class=code-keyword>Select</SPAN> * <SPAN class=code-keyword>From</SPAN> tblEmployees 
+    <SPAN class=code-keyword>where</SPAN> EmployeeName = IsNull(@EmployeeName, EmployeeName) <SPAN class=code-keyword>AND</SPAN>
+        Department = IsNull(@Department, Department ) <SPAN class=code-keyword>AND</SPAN>
+        Designation = IsNull(@Designation, Designation) <SPAN class=code-keyword>AND</SPAN>
+        JoiningDate &gt;= IsNull(@StartDate, JoiningDate) <SPAN class=code-keyword>AND</SPAN> 
+        JoiningDate &lt;= IsNull(@EndDate, JoiningDate) <SPAN class=code-keyword>AND</SPAN>
+        Salary &gt;= IsNull(@Salary, Salary)
+
+    <SPAN class=code-keyword>If</SPAN> <SPAN class=code-preprocessor>@@ERROR</SPAN> &lt;&gt; <SPAN class=code-digit>0</SPAN> <SPAN class=code-keyword>GoTo</SPAN> ErrorHandler
+    <SPAN class=code-keyword>Set</SPAN> NoCount <SPAN class=code-keyword>OFF</SPAN>
+    <SPAN class=code-keyword>Return</SPAN>(<SPAN class=code-digit>0</SPAN>)
+  
+ErrorHandler:
+    <SPAN class=code-keyword>Return</SPAN>(<SPAN class=code-preprocessor>@@ERROR</SPAN>)
+<SPAN class=code-keyword>GO</SPAN>
+ </PRE>
+      <P align=justify>you can see in the Example 2.2 - WHERE-Clause is build 
+      dynamically using ISNULL function. It evaluates the expression and check's 
+      whether the parameter value is NULL or Not. When this check expression 
+      return's Non-Null Value then it uses the parameter value in the 
+      comparision operation. When the check expression return Null then it uses 
+      the current value which equal's itself and that causes causes all the rows 
+      to be returned for that operation.</P><A name=Content5></A>
+      <H2>Using CASE</H2>
+      <P align=justify>CASE function is equivalent to the COALESCE function in 
+      SQL Server. It evaluates a list of condition and return's one result 
+      expression from multiple possible result expressions. There are two types 
+      of CASE function.</P>
+      <UL>
+        <LI>Simple CASE 
+        <LI>Searched CASE </LI></UL>
+      <H4>Basic Syntax : Simple CASE</H4><PRE lang=sql><SPAN class=code-keyword>CASE</SPAN> input_expression
+   <SPAN class=code-keyword>WHEN</SPAN> (when_expression1 <SPAN class=code-keyword>IS</SPAN> <SPAN class=code-keyword>NOT</SPAN> <SPAN class=code-keyword>NULL</SPAN>) <SPAN class=code-keyword>THEN</SPAN> result_expression1
+   <SPAN class=code-keyword>WHEN</SPAN> (when_expression2 <SPAN class=code-keyword>IS</SPAN> <SPAN class=code-keyword>NOT</SPAN> <SPAN class=code-keyword>NULL</SPAN>) <SPAN class=code-keyword>THEN</SPAN> result_expression2
+   ...
+   <SPAN class=code-keyword>WHEN</SPAN> (when_expressionN <SPAN class=code-keyword>IS</SPAN> <SPAN class=code-keyword>NOT</SPAN> <SPAN class=code-keyword>NULL</SPAN>) <SPAN class=code-keyword>THEN</SPAN> result_expressionN
+   <SPAN class=code-keyword>ELSE</SPAN> else_result_expression
+<SPAN class=code-keyword>END</SPAN> </PRE>
+      <H4>Basic Syntax : Searched CASE</H4><PRE lang=sql><SPAN class=code-keyword>CASE</SPAN>
+   <SPAN class=code-keyword>WHEN</SPAN> (boolean_expression1 <SPAN class=code-keyword>IS</SPAN> <SPAN class=code-keyword>NOT</SPAN> <SPAN class=code-keyword>NULL</SPAN>) <SPAN class=code-keyword>THEN</SPAN> result_expression1
+   <SPAN class=code-keyword>WHEN</SPAN> (boolean_expression2 <SPAN class=code-keyword>IS</SPAN> <SPAN class=code-keyword>NOT</SPAN> <SPAN class=code-keyword>NULL</SPAN>) <SPAN class=code-keyword>THEN</SPAN> result_expression2
+   ...
+   <SPAN class=code-keyword>WHEN</SPAN> (boolean_expressionN <SPAN class=code-keyword>IS</SPAN> <SPAN class=code-keyword>NOT</SPAN> <SPAN class=code-keyword>NULL</SPAN>) <SPAN class=code-keyword>THEN</SPAN> result_expressionN
+   <SPAN class=code-keyword>ELSE</SPAN> else_result_expression
+<SPAN class=code-keyword>END</SPAN></PRE>
+      <P align=justify>The simple CASE function compares the input_expression 
+      with the when_expression to get the desired result_expression. The 
+      searched CASE function evaluates a set of Boolean expression to get the 
+      desired result_expression. Let's take the same example and write the 
+      stored procedure that builds the WHERE-Clause dynamically Using CASE 
+      function</P>
+      <P><I>Example 2.3 - Using CASE</I></P><PRE lang=sql><SPAN class=code-comment>/*</SPAN><SPAN class=code-comment> Create Stored Procedure 'sp_EmployeeSelect_Case'. 
+Example 2.3 - Using Case-When */</SPAN> 
+
+<SPAN class=code-keyword>Create</SPAN> <SPAN class=code-keyword>Procedure</SPAN> sp_EmployeeSelect_Case
+    @EmployeeName <SPAN class=code-keyword>NVarchar</SPAN>(<SPAN class=code-digit>100</SPAN>),
+    @Department <SPAN class=code-keyword>NVarchar</SPAN>(<SPAN class=code-digit>50</SPAN>),
+    @Designation <SPAN class=code-keyword>NVarchar</SPAN>(<SPAN class=code-digit>50</SPAN>),
+    @StartDate <SPAN class=code-keyword>DateTime</SPAN>,
+    @EndDate <SPAN class=code-keyword>DateTime</SPAN>,
+    @Salary <SPAN class=code-keyword>Decimal</SPAN>(<SPAN class=code-digit>10</SPAN>,<SPAN class=code-digit>2</SPAN>)
+<SPAN class=code-keyword>AS</SPAN>
+      <SPAN class=code-keyword>Set</SPAN> NoCount <SPAN class=code-keyword>ON</SPAN>
+  
+    <SPAN class=code-keyword>Select</SPAN> * <SPAN class=code-keyword>From</SPAN> tblEmployees <SPAN class=code-keyword>where</SPAN> EmployeeName = 
+    <SPAN class=code-keyword>Case</SPAN> <SPAN class=code-keyword>When</SPAN> @EmployeeName <SPAN class=code-keyword>Is</SPAN> <SPAN class=code-keyword>Not</SPAN> <SPAN class=code-keyword>Null</SPAN> <SPAN class=code-keyword>Then</SPAN> @EmployeeName 
+    <SPAN class=code-keyword>Else</SPAN> EmployeeName <SPAN class=code-keyword>End</SPAN> <SPAN class=code-keyword>AND</SPAN> Department = 
+    <SPAN class=code-keyword>Case</SPAN> <SPAN class=code-keyword>When</SPAN> @Department <SPAN class=code-keyword>Is</SPAN> <SPAN class=code-keyword>Not</SPAN> <SPAN class=code-keyword>Null</SPAN> <SPAN class=code-keyword>Then</SPAN> @Department 
+    <SPAN class=code-keyword>Else</SPAN> Department <SPAN class=code-keyword>End</SPAN> <SPAN class=code-keyword>AND</SPAN> Designation = 
+    <SPAN class=code-keyword>Case</SPAN> <SPAN class=code-keyword>When</SPAN> @Designation <SPAN class=code-keyword>Is</SPAN> <SPAN class=code-keyword>Not</SPAN> <SPAN class=code-keyword>Null</SPAN> <SPAN class=code-keyword>Then</SPAN> @Designation 
+    <SPAN class=code-keyword>Else</SPAN> Designation <SPAN class=code-keyword>End</SPAN> <SPAN class=code-keyword>AND</SPAN> JoiningDate &gt;= 
+    <SPAN class=code-keyword>Case</SPAN> <SPAN class=code-keyword>When</SPAN> @StartDate <SPAN class=code-keyword>Is</SPAN> <SPAN class=code-keyword>Not</SPAN> <SPAN class=code-keyword>Null</SPAN> <SPAN class=code-keyword>Then</SPAN> @StartDate 
+    <SPAN class=code-keyword>Else</SPAN> JoiningDate <SPAN class=code-keyword>End</SPAN> <SPAN class=code-keyword>AND</SPAN> JoiningDate &lt;= 
+    <SPAN class=code-keyword>Case</SPAN> <SPAN class=code-keyword>When</SPAN> @EndDate <SPAN class=code-keyword>Is</SPAN> <SPAN class=code-keyword>Not</SPAN> <SPAN class=code-keyword>Null</SPAN> <SPAN class=code-keyword>Then</SPAN> @EndDate 
+    <SPAN class=code-keyword>Else</SPAN> JoiningDate <SPAN class=code-keyword>End</SPAN> <SPAN class=code-keyword>AND</SPAN> Salary &gt;= 
+    <SPAN class=code-keyword>Case</SPAN> <SPAN class=code-keyword>When</SPAN> @Salary <SPAN class=code-keyword>Is</SPAN> <SPAN class=code-keyword>Not</SPAN> <SPAN class=code-keyword>Null</SPAN> <SPAN class=code-keyword>Then</SPAN> @Salary 
+    <SPAN class=code-keyword>Else</SPAN> Salary <SPAN class=code-keyword>End</SPAN> 
+
+    <SPAN class=code-keyword>If</SPAN> <SPAN class=code-preprocessor>@@ERROR</SPAN> &lt;&gt; <SPAN class=code-digit>0</SPAN> <SPAN class=code-keyword>GoTo</SPAN> ErrorHandler
+    <SPAN class=code-keyword>Set</SPAN> NoCount <SPAN class=code-keyword>OFF</SPAN>
+    <SPAN class=code-keyword>Return</SPAN>(<SPAN class=code-digit>0</SPAN>)
+  
+ErrorHandler:
+    <SPAN class=code-keyword>Return</SPAN>(<SPAN class=code-preprocessor>@@ERROR</SPAN>)
+<SPAN class=code-keyword>GO</SPAN>
+</PRE>
+      <P align=justify>you can see in the Example 2.3 that WHERE-Clause is build 
+      dynamically using CASE function. It evaluates the expression and check's 
+      whether the parameter values are NULL or Not. When this boolean expression 
+      return's true then it uses the parameter value in the comparision 
+      operation. When the boolean expression return false then it uses the 
+      current value which equal's itself and that causes causes all the rows to 
+      be returned for that operation.</P><A name=Content6></A>
+      <H2>Alternative</H2>
+      <P align=justify>Here is an alternative suggested by a codeproject member 
+      in the article disscusion of my first article. This alternative use's 
+      neither COALESCE nor CASE function to build Dynamic WHERE-Clause but a 
+      logic equivalent to it - worth using it. </P>
+      <H4>Example 2.4 - Alternate</H4><PRE lang=sql><SPAN class=code-comment>/*</SPAN><SPAN class=code-comment> Create Stored Procedure 'sp_EmployeeSelect_Alternate'. 
+Example 2.4 - Alternate */</SPAN> 
+
+<SPAN class=code-keyword>Create</SPAN> <SPAN class=code-keyword>Procedure</SPAN> sp_EmployeeSelect_Alternate
+    @EmployeeName <SPAN class=code-keyword>NVarchar</SPAN>(<SPAN class=code-digit>100</SPAN>),
+    @Department <SPAN class=code-keyword>NVarchar</SPAN>(<SPAN class=code-digit>50</SPAN>),
+    @Designation <SPAN class=code-keyword>NVarchar</SPAN>(<SPAN class=code-digit>50</SPAN>),
+    @StartDate <SPAN class=code-keyword>DateTime</SPAN>,
+    @EndDate <SPAN class=code-keyword>DateTime</SPAN>,
+    @Salary <SPAN class=code-keyword>Decimal</SPAN>(<SPAN class=code-digit>10</SPAN>,<SPAN class=code-digit>2</SPAN>)
+<SPAN class=code-keyword>AS</SPAN> 
+    <SPAN class=code-keyword>Set</SPAN> NoCount <SPAN class=code-keyword>ON</SPAN>
+  
+    <SPAN class=code-keyword>SELECT</SPAN> * <SPAN class=code-keyword>FROM</SPAN> tblEmployees
+    <SPAN class=code-keyword>WHERE</SPAN> (@EmployeeName <SPAN class=code-keyword>Is</SPAN> <SPAN class=code-keyword>Null</SPAN> <SPAN class=code-keyword>OR</SPAN> @EmployeeName = EmployeeName) <SPAN class=code-keyword>AND</SPAN>
+        (@Department <SPAN class=code-keyword>Is</SPAN> <SPAN class=code-keyword>Null</SPAN> <SPAN class=code-keyword>OR</SPAN> @Department = Department) <SPAN class=code-keyword>AND</SPAN>
+        (@Designation <SPAN class=code-keyword>Is</SPAN> <SPAN class=code-keyword>Null</SPAN> <SPAN class=code-keyword>OR</SPAN> @Designation = Designation) <SPAN class=code-keyword>AND</SPAN>
+        (@Salary <SPAN class=code-keyword>Is</SPAN> <SPAN class=code-keyword>Null</SPAN> <SPAN class=code-keyword>OR</SPAN> @Salary = Salary) <SPAN class=code-keyword>AND</SPAN>
+        (@StartDate <SPAN class=code-keyword>Is</SPAN> <SPAN class=code-keyword>Null</SPAN> <SPAN class=code-keyword>OR</SPAN> @EndDate <SPAN class=code-keyword>Is</SPAN> <SPAN class=code-keyword>Null</SPAN> <SPAN class=code-keyword>OR</SPAN> 
+        (@StartDate <SPAN class=code-keyword>Is</SPAN> <SPAN class=code-keyword>Not</SPAN> <SPAN class=code-keyword>Null</SPAN> <SPAN class=code-keyword>AND</SPAN> @EndDate <SPAN class=code-keyword>Is</SPAN> <SPAN class=code-keyword>Not</SPAN> <SPAN class=code-keyword>Null</SPAN> <SPAN class=code-keyword>AND</SPAN> 
+        JoiningDate <SPAN class=code-keyword>BETWEEN</SPAN> @StartDate <SPAN class=code-keyword>AND</SPAN> @EndDate))
+
+    <SPAN class=code-keyword>If</SPAN> <SPAN class=code-preprocessor>@@ERROR</SPAN> &lt;&gt; <SPAN class=code-digit>0</SPAN> <SPAN class=code-keyword>GoTo</SPAN> ErrorHandler
+    <SPAN class=code-keyword>Set</SPAN> NoCount <SPAN class=code-keyword>OFF</SPAN>
+    <SPAN class=code-keyword>Return</SPAN>(<SPAN class=code-digit>0</SPAN>)
+  
+ErrorHandler:
+    <SPAN class=code-keyword>Return</SPAN>(<SPAN class=code-preprocessor>@@ERROR</SPAN>)
+<SPAN class=code-keyword>GO</SPAN> </PRE><A name=Content7></A>
+      <H2>Conclusion</H2>
+      <P align=justify>Hope you learned How to Implement Dynamic WHERE-Clause in 
+      Static SQL. In all the examples I showed how to handle the input parameter 
+      when it is NULL. Even If it's a different Non-Null value's to be used for 
+      multiple comparision, still you can play around with simple CASE and 
+      searched CASE-function more efficiently. Hence I conclude that Static 
+      Sql's are more faster, Safer and in most cases we don't need to use 
+      dynamic Sql-Statement.</P><A name=Content8></A>
+      <H2>Reference</H2>MSDN (T-Sql)- <A title="New Window" 
+      href="http://msdn2.microsoft.com/en-us/library/ms190349.aspx" 
+      target=_blank>Coalesce</A>, <A title="New Window" 
+      href="http://msdn2.microsoft.com/en-us/library/ms184325.aspx" 
+      target=_blank>IsNull</A>, <A title="New Window" 
+      href="http://msdn2.microsoft.com/en-us/library/ms181765.aspx" 
+      target=_blank>CASE</A> 
+      <H4>
+      <H2></H2><!-- Article Ends --><!-- Main Page Contents End --></DIV></SPAN>
+      <FORM id=aspnetForm 
+      style="PADDING-RIGHT: 0px; PADDING-LEFT: 0px; PADDING-BOTTOM: 0px; MARGIN: 0px; PADDING-TOP: 0px" 
+      name=aspnetForm action=Dynamic_WHERE_Clause.aspx method=post>
+      <DIV><INPUT id=__VIEWSTATE type=hidden 
+      value=/wEPDwULLTEwMDUyNjYzMjhkZBzZJKuCVtkjOfv+mYAngE2vW7m2 
+      name=__VIEWSTATE> </DIV>
+      <H2>License</H2>
+      <DIV id=ctl00_LicenseTerms>
+      <P>This article, along with any associated source code and files, is 
+      licensed under <A href="http://www.codeproject.com/info/cpol10.aspx">The 
+      Code Project Open License (CPOL)</A></P></DIV>
+      <H2>About the Author</H2>
+      <TABLE cellSpacing=5 cellPadding=0 width="100%" border=0>
+        <TBODY>
+        <TR vAlign=top>
+          <TD id=ctl00_AboutAuthorRptr_ctl00_AboutAuthor_memberPhotoTable 
+          style="WIDTH: 155px" vAlign=top><B><A 
+            id=ctl00_AboutAuthorRptr_ctl00_AboutAuthor_memberProfileLink 
+            href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=2445395"><FONT 
+            color=brown size=1>John Prabhu</FONT></A></B><BR><BR>
+            <CENTER><IMG id=ctl00_AboutAuthorRptr_ctl00_AboutAuthor_memberPhoto 
+            style="BORDER-TOP-WIDTH: 0px; BORDER-LEFT-WIDTH: 0px; BORDER-BOTTOM-WIDTH: 0px; BORDER-RIGHT-WIDTH: 0px" 
+            src="CodeProject Implementing Dynamic WHERE-Clause in Static SQL_ Free source code and programming help_files/{09b731f7-f37a-4dba-aace-0cfccd5c2b36}.jpg"></CENTER><BR><SPAN 
+            class=SmallText 
+            id=ctl00_AboutAuthorRptr_ctl00_AboutAuthor_memberType></SPAN></TD>
+          <TD>John is currently working as a .NET Consultant at an 
+            International Bank, IT Operations Division in Dubai. Previously, 
+            John was working with Vxceed Technologies as a .NET 
+            Analyst/Developer. During his period at Vxceed, He worked at Dubai 
+            Intl. Airport, Civil Aviation IT Department as .NET Consultant on 
+            the roles of Vxceed.<BR><BR>He holds a Postgraduate Degree in 
+            Computer Science and MCP Certification in ASP.Net. His programming 
+            experience includes ASP.NET, VB.NET, ADO.NET, SQL Server, Oracle 9i, 
+            JavaScript, HTML, XML, Web Service, Windows Service, Crystal Reports 
+            and .net Charting.<BR><BR>
+            <TABLE>
+              <TBODY>
+              <TR id=ctl00_AboutAuthorRptr_ctl00_AboutAuthor_jobTitleRow>
+                <TD class=SmallText noWrap>Occupation: </TD>
+                <TD width="100%"><SPAN class=SmallText 
+                  id=ctl00_AboutAuthorRptr_ctl00_AboutAuthor_memberJobTitle>Web 
+                  Developer</SPAN></TD></TR>
+              <TR id=ctl00_AboutAuthorRptr_ctl00_AboutAuthor_locationRow>
+                <TD class=SmallText>Location: </TD>
+                <TD width="100%"><SPAN class=SmallText 
+                  id=ctl00_AboutAuthorRptr_ctl00_AboutAuthor_memberLocation><IMG 
+                  height=11 alt="United Arab Emirates" 
+                  src="CodeProject Implementing Dynamic WHERE-Clause in Static SQL_ Free source code and programming help_files/AE.gif" 
+                  width=16> United Arab 
+        Emirates</SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE><BR>
+      <TABLE id=ctl00_PopularArticlesRow cellSpacing=0 cellPadding=0 
+      width="100%" border=0>
+        <TBODY>
+        <TR vAlign=top>
+          <TD style="WIDTH: 100%">
+            <H2>Other popular Database articles:</H2>
+            <UL>
+              <LI><A 
+              href="http://www.codeproject.com/KB/database/caaadoclass1.aspx">A 
+              set of ADO classes - version 2.20</A>
+              <DIV class=SmallText>Simple database access using an ADO 
+              class.</DIV>
+              <LI><A 
+              href="http://www.codeproject.com/KB/database/filehelpers.aspx">FileHelpers 
+              v2.0 - Delimited (CSV) or Fixed Data Import/Export Framework</A>
+              <DIV class=SmallText>An easy to use .NET library to read/write 
+              strong typed data from files with fixed length or delimited 
+              records (CSV). Also has support to import/export data from 
+              different data storages (Excel, Acces, SqlServer, MySql)</DIV>
+              <LI><A 
+              href="http://www.codeproject.com/KB/database/sqldodont.aspx">SQL 
+              Server DO's and DONT's</A>
+              <DIV class=SmallText>SQL Server database best practices</DIV>
+              <LI><A 
+              href="http://www.codeproject.com/KB/database/connectionstrings.aspx">ADO 
+              Connection Strings</A>
+              <DIV class=SmallText>A list of ODBC DSN Connection Strings.</DIV>
+              <LI><A 
+              href="http://www.codeproject.com/KB/database/DynamicMethod_ILGenerator.aspx">Dynamic... 
+              but fast: The tale of three monkeys, a wolf and the DynamicMethod 
+              and ILGenerator classes</A>
+              <DIV class=SmallText>How to use the DynamicMethod and ILGenerator 
+              classes to create dynamic code at runtime that out performs 
+              reflection</DIV></LI></UL>
+            <H2></H2></TD>
+          <TD>
+            <SCRIPT type=text/javascript>document.write(unescape("%3ca%20href%3d%22http%3a%2f%2fwww.codeproject.com%2fRedir.aspx%3fadid%3d6197%26way%3dban%22%20target%3d%22_blank%22%20rel%3d%22nofollow%22%3e%3cimg%20src%3d%22http%3a%2f%2fwww.codeproject.com%2fscript%2fAnn%2fServeImg.aspx%3fFile%3d%252fscript%252fadmentor%252fimages%252fDevEx_spend-less-money-300x250.gif%26C%3dFalse%26id%3d6197%22%20alt%3d%22%22%20border%3d%220%22%20width%3d%22300%22%20height%3d%22250%22%3e%3c%2fa%3e"));</SCRIPT>
+          </TD></TR></TBODY></TABLE>
+      <DIV id=ctl00_AddTo_AddTo style="MARGIN: 10px">
+      <SCRIPT language=JavaScript type=text/javascript>
+var addtoMethod=1;
+var AddURL = document.location.href;
+var AddTitle = escape(document.title);
+DrawLinks(100, 0, "SmallText Bold", "AddTo") 
+</SCRIPT>
+      </DIV>
+      <TABLE class=ArticleUneditedHeader id=ctl00_RateArticleRow cellSpacing=0 
+      cellPadding=0 width="100%" border=0>
+        <TBODY>
+        <TR>
+          <TD><A 
+            href="http://www.codeproject.com/KB/database/Dynamic_WHERE_Clause.aspx#_top">Article 
+            Top</A></TD>
+          <TD align=right>
+            <TABLE cellSpacing=0 cellPadding=0 width="100%">
+              <TBODY>
+              <TR>
+                <TD id=ctl00_RateArticle_VoteResultDiv noWrap align=right 
+                width="100%"><SPAN id=voteRes></SPAN><IMG id=loaderImg 
+                  style="DISPLAY: none" height=16 alt=loading... 
+                  src="CodeProject Implementing Dynamic WHERE-Clause in Static SQL_ Free source code and programming help_files/ajax-loader.gif" 
+                  width=16> </TD>
+                <TD class=SmallText id=voteTbl style="WHITE-SPACE: nowrap" 
+                align=right>
+                  <TABLE>
+                    <TBODY>
+                    <TR>
+                      <TD id=ctl00_RateArticle_RateText 
+                      style="PADDING-RIGHT: 5px; WHITE-SPACE: nowrap"><I><B>Rate 
+                        this Article for us!</B></I></TD>
+                      <TD id=ctl00_RateArticle_StartForm 
+                        align=right><I>&nbsp;&nbsp;Poor</I></TD>
+                      <TD id=ctl00_RateArticle_VoteFormDiv 
+                      style="WHITE-SPACE: nowrap" align=left>
+                        <TABLE id=ctl00_RateArticle_VoteRBL border=0>
+                          <TBODY>
+                          <TR>
+                            <TD><INPUT id=ctl00_RateArticle_VoteRBL_0 
+                              type=radio value=1 
+                            name=ctl00$RateArticle$VoteRBL></TD>
+                            <TD><INPUT id=ctl00_RateArticle_VoteRBL_1 
+                              type=radio value=2 
+                            name=ctl00$RateArticle$VoteRBL></TD>
+                            <TD><INPUT id=ctl00_RateArticle_VoteRBL_2 
+                              type=radio value=3 
+                            name=ctl00$RateArticle$VoteRBL></TD>
+                            <TD><INPUT id=ctl00_RateArticle_VoteRBL_3 
+                              type=radio value=4 
+                            name=ctl00$RateArticle$VoteRBL></TD>
+                            <TD><INPUT id=ctl00_RateArticle_VoteRBL_4 
+                              type=radio value=5 
+                            name=ctl00$RateArticle$VoteRBL></TD></TR></TBODY></TABLE></TD>
+                      <TD id=ctl00_RateArticle_EndForm noWrap 
+                        align=left><I>Excellent</I> <INPUT class=FormButton id=ctl00_RateArticle_SubmitRateBtn onclick="return rateItem(21234,2);" type=submit value=Vote name=ctl00$RateArticle$SubmitRateBtn> 
+                      </TD>
+                      <TD><SPAN 
+                    id=ctl00_RateArticle_ErrorMessage></SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE>
+      <DIV><INPUT id=__EVENTVALIDATION type=hidden 
+      value=/wEWCAKkm5ymBQLAlMXDBwLBlMXDBwLClMXDBwLDlMXDBwLElMXDBwLP+++tCwK5upDkC47/2BVFGIVWBXoZ2j07m3RhVgZ+ 
+      name=__EVENTVALIDATION> </DIV></FORM>
+      <DIV 
+      style="PADDING-RIGHT: 10px; PADDING-LEFT: 10px; PADDING-BOTTOM: 10px; OVERFLOW: hidden; PADDING-TOP: 10px; WHITE-SPACE: nowrap; TEXT-ALIGN: center">
+      <SCRIPT type=text/javascript>document.write(unescape("%3ca%20href%3d%22http%3a%2f%2fwww.codeproject.com%2fRedir.aspx%3fadid%3d6281%26way%3dban%22%20target%3d%22_blank%22%20rel%3d%22nofollow%22%3e%3cimg%20src%3d%22http%3a%2f%2fwww.codeproject.com%2fscript%2fAnn%2fServeImg.aspx%3fFile%3d%252fscript%252fadmentor%252fimages%252fCodeProject20080421_468x60_ReportingApps.gif%26C%3dFalse%26id%3d6281%22%20alt%3d%22%22%20border%3d%220%22%20width%3d%22468%22%20height%3d%2260%22%3e%3c%2fa%3e"));</SCRIPT>
+      <IFRAME 
+      src="CodeProject Implementing Dynamic WHERE-Clause in Static SQL_ Free source code and programming help_files/ServeLinks.htm" 
+      frameBorder=0 width=300 scrolling=no height=60></IFRAME></DIV><A 
+      name=_comments></A><!-- Forum Start -->
+      <DIV id=_MessageBoard onclick="return SwitchMessage(event, null)">
+      <TABLE class=Frm_MainTable id=ForumTable cellSpacing=0 cellPadding=0>
+        <TBODY>
+        <TR>
+          <TD>
+            <FORM 
+            style="PADDING-RIGHT: 0px; PADDING-LEFT: 0px; PADDING-BOTTOM: 0px; MARGIN: 0px; PADDING-TOP: 0px" 
+            action=/script/Forums/SetOptions.aspx?floc=%2fKB%2fdatabase%2fDynamic_WHERE_Clause.aspx&amp;fid=480207 
+            method=get><INPUT type=hidden value=480207 name=fid><INPUT 
+            type=hidden 
+            value=?floc=%2fKB%2fdatabase%2fDynamic_WHERE_Clause.aspx&amp;fid=480207 
+            name=currentQS><INPUT type=hidden 
+            value=/KB/database/Dynamic_WHERE_Clause.aspx name=floc>
+            <TABLE cellSpacing=0 cellPadding=3 width="100%" border=0>
+              <TBODY>
+              <TR class=Frm_HeaderRow1>
+                <TD style="WHITE-SPACE: nowrap"><IMG height=16 alt=FAQ 
+                  src="CodeProject Implementing Dynamic WHERE-Clause in Static SQL_ Free source code and programming help_files/forum_faq.gif" 
+                  width=16 align=middle border=0>&nbsp;<A 
+                  href="http://www.codeproject.com/script/Forums/FAQ.aspx"><B>FAQ</B></A>&nbsp;</TD>
+                <TD style="WHITE-SPACE: nowrap; TEXT-ALIGN: right">Noise 
+                  Tolerance<SELECT class=Frm_DropDown size=1 name=noise> 
+                    <OPTION value=1>Very High</OPTION><OPTION 
+                    value=2>High</OPTION><OPTION value=3 
+                    selected>Medium</OPTION><OPTION value=4>Low</OPTION><OPTION 
+                    value=5>Very Low</OPTION></SELECT></TD>
+                <TD style="WHITE-SPACE: nowrap; TEXT-ALIGN: right" 
+                  colSpan=2><IMG height=15 alt=Search 
+                  src="CodeProject Implementing Dynamic WHERE-Clause in Static SQL_ Free source code and programming help_files/forum_search.gif" 
+                  width=16 align=top border=0>&nbsp;<A 
+                  href="http://www.codeproject.com/script/Forums/Search.aspx?fid=480207">Search 
+                  Messages</A>&nbsp;</TD>
+                <TD style="TEXT-ALIGN: right"><INPUT class=Frm_Button type=submit value="Set Options" name=submit></TD></TR>
+              <TR class=Frm_HeaderRow2>
+                <TD style="WIDTH: 100%">&nbsp;</TD>
+                <TD 
+                  style="WHITE-SPACE: nowrap; TEXT-ALIGN: right">Layout<SELECT 
+                  class=Frm_DropDown size=1 name=view> <OPTION value=Quick 
+                    selected>Normal</OPTION><OPTION value=Topic>Expand Root 
+                    Messages</OPTION><OPTION value=Expanded>Expand All 
+                    Messages</OPTION><OPTION value=Thread>Thread 
+                    View</OPTION><OPTION value=Normal>No Javascript 
+                    (slow)</OPTION><OPTION value=Preview>No Javascript 
+                    Preview</OPTION></SELECT>&nbsp;&nbsp;</TD>
+                <TD style="WHITE-SPACE: nowrap">Per page<SELECT 
+                  class=Frm_DropDown size=1 name=mpp> <OPTION 
+                    value=10>10</OPTION><OPTION value=25 
+                    selected>25</OPTION><OPTION 
+                  value=50>50</OPTION></SELECT>&nbsp;&nbsp;</TD>
+                <TD colSpan=2>&nbsp;</TD></TR></TBODY></TABLE></FORM></TD></TR>
+        <TR>
+          <TD><A name=xx0xx></A>
+            <TABLE cellSpacing=0 cellPadding=2 width="100%" border=0>
+              <TBODY>
+              <TR class=Frm_NavigationBar>
+                <TD><IMG height=16 alt=new 
+                  src="CodeProject Implementing Dynamic WHERE-Clause in Static SQL_ Free source code and programming help_files/forum_newmsg.gif" 
+                  width=16 align=top border=0><A class=Frm_HL 
+                  title="Create a new message thread" 
+                  href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=480207&amp;floc=/KB/database/Dynamic_WHERE_Clause.aspx" 
+                  target=_top name=Frm_HoverNL><B>New Message</B></A></TD>
+                <TD>Msgs 1 to 5 of 5 (Total in Forum: 5) (<A 
+                  href="http://www.codeproject.com/KB/database/Dynamic_WHERE_Clause.aspx?fid=480207">Refresh</A>)</TD>
+                <TD style="WHITE-SPACE: nowrap; TEXT-ALIGN: right"><SPAN 
+                  class=Frm_HL>First</SPAN><SPAN class=Frm_HL>Prev</SPAN><SPAN 
+                  class=Frm_HL>Next</SPAN></TD></TR></TBODY></TABLE></TD></TR>
+        <TR>
+          <TD>
+            <TABLE class=Frm_MsgTable cellSpacing=0 cellPadding=0 width="100%" 
+            border=0><!-- Column Headers -->
+              <TBODY>
+              <TR class=Frm_ColumnHeaders>
+                <TD style="WIDTH: 100%">
+                  <TABLE cellSpacing=0 cellPadding=2 width="100%" border=0>
+                    <TBODY>
+                    <TR>
+                      <TD>Subject&nbsp;</TD>
+                      <TD class=Frm_MsgAuthor>&nbsp;Author&nbsp;</TD>
+                      <TD 
+              class=Frm_MsgDate>Date&nbsp;</TD></TR></TBODY></TABLE></TD></TR>
+              <TR>
+                <TD><IMG height=5 alt="" 
+                  src="C:\Documents and Settings\valley\Desktop\New Folder\CodeProject Implementing Dynamic WHERE-Clause in Static SQL_ Free source code and programming help_files\t(1).gif" 
+                  width=1 border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd Rt HdUnSel " id=F2510620_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=16><A 
+                        name=xx2510620xx></A><IMG height=16 alt=General 
+                        src="CodeProject Implementing Dynamic WHERE-Clause in Static SQL_ Free source code and programming help_files/msg_general.gif" 
+                        width=16 align=top></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/database/Dynamic_WHERE_Clause.aspx?fid=480207&amp;select=2510620#xx2510620xx" 
+                        name=2510620>So which is the recommended style?</A></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        title=member height=16 alt=member 
+                        src="CodeProject Implementing Dynamic WHERE-Clause in Static SQL_ Free source code and programming help_files/member_sm.gif" 
+                        border=0></TD>
+                      <TD class=Frm_MsgAuthor><A 
+                        href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=4618353">tmpuserz</A></TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">13:42 
+                        16 Apr '08 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=F2510620_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 16px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2>That was a good summary of some 
+                                different styles. Although helpful it would be 
+                                nice to have some guidance on which style to use 
+                                and when. Which style do you recommend? 
+                                <BR></TD></TR>
+                                <TR style="VERTICAL-ALIGN: middle">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL title=Reply 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=480207&amp;select=2510620&amp;floc=/KB/database/Dynamic_WHERE_Clause.aspx&amp;fa=r">Reply</A>·<A 
+                                class=Frm_MHL title=Email 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=480207&amp;select=2510620&amp;floc=/KB/database/Dynamic_WHERE_Clause.aspx&amp;fa=e">Email</A>·<A 
+                                class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/database/Dynamic_WHERE_Clause.aspx?fid=480207&amp;tid=2510620">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=480207&amp;msg=2510620">PermaLink</A>·<A 
+                                class=Frm_MHL title="Bookmark this post" 
+                                href="http://www.codeproject.com/script/Bookmarks/Add.aspx?&amp;obid=2510620&amp;obtid=3&amp;bma=AddBookmark">Bookmark</A></TD>
+                                <TD class=Frm_MsgFt 
+                                style="TEXT-ALIGN: right"><SPAN id=MVF2510620 
+                                style="WHITE-SPACE: nowrap">
+                                <SCRIPT type=text/javascript>
+												MsgVoteForm(4618353,2510620,false,"","","");
+											</SCRIPT>
+                                </SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR class=Quick>
+                <TD class=Frm_MsgDivide><IMG height=1 alt="" 
+                  src="C:\Documents and Settings\valley\Desktop\New Folder\CodeProject Implementing Dynamic WHERE-Clause in Static SQL_ Free source code and programming help_files\t(1).gif" 
+                  width=1 border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd HdUnSel " id=F2510950_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=34><A 
+                        name=xx2510950xx></A><IMG height=16 alt=General 
+                        src="CodeProject Implementing Dynamic WHERE-Clause in Static SQL_ Free source code and programming help_files/msg_general.gif" 
+                        width=16 align=top></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/database/Dynamic_WHERE_Clause.aspx?fid=480207&amp;select=2510950#xx2510950xx" 
+                        name=2510950>Re: So which is the recommended 
+                      style?</A></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        title=member height=16 alt=member 
+                        src="CodeProject Implementing Dynamic WHERE-Clause in Static SQL_ Free source code and programming help_files/member_sm.gif" 
+                        border=0></TD>
+                      <TD class=Frm_MsgAuthor><A 
+                        href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=2445395"><FONT 
+                        color=brown size=1>John Prabhu</FONT< a></FONT></A></TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">22:22 
+                        16 Apr '08 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=F2510950_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 34px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2>I think <CODE>Example 2.4 - 
+                                Alternate</CODE> method is quite ok without 
+                                using any built-in functions but a 
+                                logic.<BR><BR>If the query has to perform 
+                                multiple comparisions for different non-null 
+                                value then you can use simple and searched CASE 
+                                statement(<CODE>Example 2.3 - Using CASE</CODE>) 
+                                to acheive.<BR><BR>Thanx and Regards. <BR><BR>
+                                <DIV class=ForumSig><FONT face="comic sans MS" 
+                                color=dimgray size=1>- Regards 
+                                -<BR>&nbsp;&nbsp;&nbsp;J O N</FONT><BR>
+                                <HR SIZE=1>
+                                <FONT face="comic sans MS" 
+                                color=dimgray>&nbsp;&nbsp;&nbsp;&nbsp; A good 
+                                thing is a bad thing if it keeps you from the 
+                                best thing. - Dr. Adrian Rogers<BR>
+                                <HR SIZE=1>
+                                </HR></FONT></DIV><BR></TD></TR>
+                                <TR style="VERTICAL-ALIGN: middle">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL title=Reply 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=480207&amp;select=2510950&amp;floc=/KB/database/Dynamic_WHERE_Clause.aspx&amp;fa=r">Reply</A>·<A 
+                                class=Frm_MHL title=Email 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=480207&amp;select=2510950&amp;floc=/KB/database/Dynamic_WHERE_Clause.aspx&amp;fa=e">Email</A>·<A 
+                                class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/database/Dynamic_WHERE_Clause.aspx?fid=480207&amp;tid=2510620">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=480207&amp;msg=2510950">PermaLink</A>·<A 
+                                class=Frm_MHL title="Bookmark this post" 
+                                href="http://www.codeproject.com/script/Bookmarks/Add.aspx?&amp;obid=2510950&amp;obtid=3&amp;bma=AddBookmark">Bookmark</A></TD>
+                                <TD class=Frm_MsgFt 
+                                style="TEXT-ALIGN: right"><SPAN id=MVF2510950 
+                                style="WHITE-SPACE: nowrap">
+                                <SCRIPT type=text/javascript>
+												MsgVoteForm(2445395,2510950,false,"","","");
+											</SCRIPT>
+                                </SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR class=Quick>
+                <TD class=Frm_MsgRtDivide><IMG height=1 alt="" 
+                  src="C:\Documents and Settings\valley\Desktop\New Folder\CodeProject Implementing Dynamic WHERE-Clause in Static SQL_ Free source code and programming help_files\t(1).gif" 
+                  width=1 border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd Rt HdUnSel " id=F2315502_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=16><A 
+                        name=xx2315502xx></A><IMG height=16 alt=General 
+                        src="CodeProject Implementing Dynamic WHERE-Clause in Static SQL_ Free source code and programming help_files/msg_general.gif" 
+                        width=16 align=top></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/database/Dynamic_WHERE_Clause.aspx?fid=480207&amp;select=2315502#xx2315502xx" 
+                        name=2315502>ad Example 1.1</A></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        title=member height=16 alt=member 
+                        src="CodeProject Implementing Dynamic WHERE-Clause in Static SQL_ Free source code and programming help_files/member_sm.gif" 
+                        border=0></TD>
+                      <TD class=Frm_MsgAuthor><A 
+                        href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=71645">Tonki</A></TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">14:54 
+                        12 Nov '07 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=F2315502_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 16px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2>since ' '+NULL yields 
+                                NULL:<BR><BR><CODE>select EmployeeID<BR>, 
+                                First_name <BR>+ coalesce(' 
+                                '+Middle_Name,'')<BR>+ coalesce(' 
+                                '+Last_Name,'')<BR>from tblEmployee where</CODE> 
+                                ...<BR><BR>should also work<BR><BR></TD></TR>
+                                <TR style="VERTICAL-ALIGN: middle">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL title=Reply 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=480207&amp;select=2315502&amp;floc=/KB/database/Dynamic_WHERE_Clause.aspx&amp;fa=r">Reply</A>·<A 
+                                class=Frm_MHL title=Email 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=480207&amp;select=2315502&amp;floc=/KB/database/Dynamic_WHERE_Clause.aspx&amp;fa=e">Email</A>·<A 
+                                class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/database/Dynamic_WHERE_Clause.aspx?fid=480207&amp;tid=2315502">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=480207&amp;msg=2315502">PermaLink</A>·<A 
+                                class=Frm_MHL title="Bookmark this post" 
+                                href="http://www.codeproject.com/script/Bookmarks/Add.aspx?&amp;obid=2315502&amp;obtid=3&amp;bma=AddBookmark">Bookmark</A></TD>
+                                <TD class=Frm_MsgFt 
+                                style="TEXT-ALIGN: right"><SPAN id=MVF2315502 
+                                style="WHITE-SPACE: nowrap">
+                                <SCRIPT type=text/javascript>
+												MsgVoteForm(71645,2315502,false,"","","");
+											</SCRIPT>
+                                </SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR class=Quick>
+                <TD class=Frm_MsgDivide><IMG height=1 alt="" 
+                  src="C:\Documents and Settings\valley\Desktop\New Folder\CodeProject Implementing Dynamic WHERE-Clause in Static SQL_ Free source code and programming help_files\t(1).gif" 
+                  width=1 border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd HdUnSel " id=F2315768_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=34><A 
+                        name=xx2315768xx></A><IMG height=16 alt=General 
+                        src="CodeProject Implementing Dynamic WHERE-Clause in Static SQL_ Free source code and programming help_files/msg_general.gif" 
+                        width=16 align=top></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/database/Dynamic_WHERE_Clause.aspx?fid=480207&amp;select=2315768#xx2315768xx" 
+                        name=2315768>Re: ad Example 1.1</A></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        title=member height=16 alt=member 
+                        src="CodeProject Implementing Dynamic WHERE-Clause in Static SQL_ Free source code and programming help_files/member_sm.gif" 
+                        border=0></TD>
+                      <TD class=Frm_MsgAuthor><A 
+                        href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=2445395"><FONT 
+                        face=verdana color=brown size=1>John 
+Prabhu</A></FONT></TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">22:37 
+                        12 Nov '07 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=F2315768_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 34px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2><BR><CODE>yes, you are 
+                                right...</CODE> <BR><BR>
+                                <DIV class=ForumSig><FONT face=verdana 
+                                color=brown size=2>&nbsp;Regards<BR><FONT 
+                                face=verdana color=brown size=1><B>&nbsp;- J O H 
+                                N -</B><BR><BR>
+                                <HR SIZE=1>
+                                </DIV><BR></FONT></FONT></TD></TR>
+                                <TR style="VERTICAL-ALIGN: middle">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL title=Reply 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=480207&amp;select=2315768&amp;floc=/KB/database/Dynamic_WHERE_Clause.aspx&amp;fa=r">Reply</A>·<A 
+                                class=Frm_MHL title=Email 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=480207&amp;select=2315768&amp;floc=/KB/database/Dynamic_WHERE_Clause.aspx&amp;fa=e">Email</A>·<A 
+                                class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/database/Dynamic_WHERE_Clause.aspx?fid=480207&amp;tid=2315502">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=480207&amp;msg=2315768">PermaLink</A>·<A 
+                                class=Frm_MHL title="Bookmark this post" 
+                                href="http://www.codeproject.com/script/Bookmarks/Add.aspx?&amp;obid=2315768&amp;obtid=3&amp;bma=AddBookmark">Bookmark</A></TD>
+                                <TD class=Frm_MsgFt 
+                                style="TEXT-ALIGN: right"><SPAN id=MVF2315768 
+                                style="WHITE-SPACE: nowrap">
+                                <SCRIPT type=text/javascript>
+												MsgVoteForm(2445395,2315768,false,"","","");
+											</SCRIPT>
+                                </SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR class=Quick>
+                <TD class=Frm_MsgRtDivide><IMG height=1 alt="" 
+                  src="C:\Documents and Settings\valley\Desktop\New Folder\CodeProject Implementing Dynamic WHERE-Clause in Static SQL_ Free source code and programming help_files\t(1).gif" 
+                  width=1 border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd Rt HdUnSel " id=F2312513_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=16><A 
+                        name=xx2312513xx></A><IMG height=16 alt=General 
+                        src="CodeProject Implementing Dynamic WHERE-Clause in Static SQL_ Free source code and programming help_files/msg_general.gif" 
+                        width=16 align=top></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/database/Dynamic_WHERE_Clause.aspx?fid=480207&amp;select=2312513#xx2312513xx" 
+                        name=2312513>Massive use of ISNULL and other 
+                      function</A></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        title=member height=16 alt=member 
+                        src="CodeProject Implementing Dynamic WHERE-Clause in Static SQL_ Free source code and programming help_files/member_sm.gif" 
+                        border=0></TD>
+                      <TD class=Frm_MsgAuthor><A 
+                        href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=673848">Jcmorin</A></TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">17:56 9 
+                        Nov '07 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=F2312513_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 16px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2>Be aware of those kind of 
+                                concatenation, case, ISNULL or other various 
+                                tricks in SQL to do what you want. The 
+                                performance will be affected 
+                                greatly!<BR><BR>Fill the database, do the 
+                                benchmark and come back to us... clean, plain 
+                                and simple string concatenation in C#/VB.net 
+                                using a non-stored procedure will do a better 
+                                job. <BR><BR>Something the complex query have be 
+                                done the old good way.<BR><BR>- Make sure you 
+                                still use the parameter to avoid SQL injection. 
+                                <BR></TD></TR>
+                                <TR style="VERTICAL-ALIGN: middle">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL title=Reply 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=480207&amp;select=2312513&amp;floc=/KB/database/Dynamic_WHERE_Clause.aspx&amp;fa=r">Reply</A>·<A 
+                                class=Frm_MHL title=Email 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=480207&amp;select=2312513&amp;floc=/KB/database/Dynamic_WHERE_Clause.aspx&amp;fa=e">Email</A>·<A 
+                                class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/database/Dynamic_WHERE_Clause.aspx?fid=480207&amp;tid=2312513">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=480207&amp;msg=2312513">PermaLink</A>·<A 
+                                class=Frm_MHL title="Bookmark this post" 
+                                href="http://www.codeproject.com/script/Bookmarks/Add.aspx?&amp;obid=2312513&amp;obtid=3&amp;bma=AddBookmark">Bookmark</A></TD>
+                                <TD class=Frm_MsgFt 
+                                style="TEXT-ALIGN: right"><SPAN id=MVF2312513 
+                                style="WHITE-SPACE: nowrap">
+                                <SCRIPT type=text/javascript>
+												MsgVoteForm(673848,2312513,false,"","","");
+											</SCRIPT>
+                                </SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR>
+                <TD><IMG height=5 alt="" 
+                  src="C:\Documents and Settings\valley\Desktop\New Folder\CodeProject Implementing Dynamic WHERE-Clause in Static SQL_ Free source code and programming help_files\t(1).gif" 
+                  width=1 border=0></TD></TR></TBODY></TABLE></TD></TR>
+        <TR>
+          <TD>
+            <TABLE cellSpacing=0 cellPadding=2 width="100%">
+              <TBODY>
+              <TR class=Frm_Footer>
+                <TD>Last Visit: Monday, June 9, 2008 5:35 AM &nbsp; &nbsp; 
+                  Last Update:Thursday, June 12, 2008 8:40 AM</TD>
+                <TD 
+              style="WHITE-SPACE: nowrap; TEXT-ALIGN: right"></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></DIV>
+      <P class=SmallText><IMG height=16 alt=General 
+      src="CodeProject Implementing Dynamic WHERE-Clause in Static SQL_ Free source code and programming help_files/msg_general.gif" 
+      width=16 align=top> General &nbsp;&nbsp; <IMG height=16 alt=News 
+      src="CodeProject Implementing Dynamic WHERE-Clause in Static SQL_ Free source code and programming help_files/msg_news.gif" 
+      width=16 align=top> News &nbsp;&nbsp; <IMG height=16 alt=Question 
+      src="CodeProject Implementing Dynamic WHERE-Clause in Static SQL_ Free source code and programming help_files/msg_question.gif" 
+      width=16 align=top> Question &nbsp;&nbsp; <IMG height=16 alt=Answer 
+      src="CodeProject Implementing Dynamic WHERE-Clause in Static SQL_ Free source code and programming help_files/msg_answer.gif" 
+      width=16 align=top> Answer &nbsp;&nbsp; <IMG height=16 alt=Joke 
+      src="CodeProject Implementing Dynamic WHERE-Clause in Static SQL_ Free source code and programming help_files/msg_joke.gif" 
+      width=16 align=top> Joke &nbsp;&nbsp; <IMG height=16 alt=Rant 
+      src="CodeProject Implementing Dynamic WHERE-Clause in Static SQL_ Free source code and programming help_files/msg_rant.gif" 
+      width=16 align=top> Rant &nbsp;&nbsp; <IMG height=16 alt=Admin 
+      src="CodeProject Implementing Dynamic WHERE-Clause in Static SQL_ Free source code and programming help_files/msg_admin.gif" 
+      width=16 align=top> Admin &nbsp;&nbsp; </P><!-- Forum End --></DIV>
+      <TABLE width="100%">
+        <TBODY>
+        <TR vAlign=top>
+          <TD class=TinyText align=left><A id=ctl00_PermaLink 
+            href="http://www.codeproject.com/script/Articles/Article.aspx?aid=21234">PermaLink</A> 
+            | <A id=ctl00_PrivacyLink 
+            href="http://www.codeproject.com/info/privacy.aspx">Privacy </A>| <A 
+            id=ctl00_TermsOfUseLink 
+            href="http://www.codeproject.com/info/TermsOfUse.aspx">Terms of 
+            Use</A> <BR>Last Updated: 8 Nov 2007<BR>Editor: <A 
+            id=ctl00_ArticleEditor 
+            href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=1">Chris 
+            Maunder</A><BR></TD>
+          <TD class=TinyText vAlign=top align=right>Copyright 2007 by <FONT 
+            color=brown size=1>John Prabhu</FONT><BR>Everything else Copyright © 
+            <A href="mailto:webmaster@codeproject.com">CodeProject</A>, 
+            1999-2008 <BR>Web16 | <A id=ctl00_AdvertiseLink 
+            href="http://www.codeproject.com/info/MediaKit.aspx">Advertise on 
+            the Code Project </A></TD></TR></TBODY></TABLE>
+      <CENTER></CENTER></H4></TD></TR>
+  <TR>
+    <TD align=middle colSpan=2></TD></TR></TBODY></TABLE><BR>
+<SCRIPT language=Javascript type=text/javascript>//<![CDATA[
+if (document.all) try {window.attachEvent("oncopy",copyCode);}catch(e){};
+//]]></SCRIPT>
+
+<SCRIPT language=Javascript 
+src="CodeProject Implementing Dynamic WHERE-Clause in Static SQL_ Free source code and programming help_files/TogglePre.js" 
+type=text/javascript></SCRIPT>
+
+<SCRIPT language=Javascript 
+src="CodeProject Implementing Dynamic WHERE-Clause in Static SQL_ Free source code and programming help_files/menu132_com.js" 
+type=text/javascript></SCRIPT>
+
+<SCRIPT language=Javascript 
+src="CodeProject Implementing Dynamic WHERE-Clause in Static SQL_ Free source code and programming help_files/TopNavBar.js" 
+type=text/javascript></SCRIPT>
+
+<SCRIPT language=Javascript type=text/javascript>//<![CDATA[
+new HVMenu(new menu_NavbarConfig());
+//]]></SCRIPT>
+</BODY></HTML>

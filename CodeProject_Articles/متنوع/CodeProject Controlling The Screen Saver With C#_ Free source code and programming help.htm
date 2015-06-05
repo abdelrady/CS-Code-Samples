@@ -1,0 +1,2809 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!-- saved from url=(0056)http://www.codeproject.com/KB/cs/ScreenSaverControl.aspx -->
+<HTML><HEAD><TITLE>CodeProject: Controlling The Screen Saver With C#. Free source code and programming help</TITLE>
+<META http-equiv=Content-Type content="text/html; charset=utf-8">
+<META 
+content="A C# class for monitoring, activating, deactivating, closing, and changing the timeout of the screen saver.; Author: kschulz; Section: C#; Chapter: Languages" 
+name=Description>
+<META 
+content="C#, Windows, .NET, Visual Studio, Dev, Intermediate,C#,Languages,Free source code, tutorials" 
+name=Keywords>
+<META content="The Code Project" name=Author>
+<META content=General name=Rating>
+<META content="index, follow" name=Robots>
+<META content="1 days" name=Revisit-After><LINK 
+title="CodeProject Lounge Postings" 
+href="http://www.codeproject.com/webservices/LoungeRSS.aspx" 
+type=application/rss+xml rel=alternate><LINK 
+title="CodeProject Latest articles - All topics" 
+href="http://www.codeproject.com/webservices/articlerss.aspx?cat=1" 
+type=application/rss+xml rel=alternate><LINK 
+title="CodeProject Latest articles - MFC / C++" 
+href="http://www.codeproject.com/webservices/articlerss.aspx?cat=2" 
+type=application/rss+xml rel=alternate><LINK 
+title="CodeProject Latest articles - C#" 
+href="http://www.codeproject.com/webservices/articlerss.aspx?cat=3" 
+type=application/rss+xml rel=alternate><LINK 
+title="CodeProject Latest articles - ASP.NET" 
+href="http://www.codeproject.com/webservices/articlerss.aspx?cat=4" 
+type=application/rss+xml rel=alternate><LINK 
+title="CodeProject Latest articles - .NET" 
+href="http://www.codeproject.com/webservices/articlerss.aspx?cat=5" 
+type=application/rss+xml rel=alternate><LINK 
+title="CodeProject Latest articles - VB.NET" 
+href="http://www.codeproject.com/webservices/articlerss.aspx?cat=6" 
+type=application/rss+xml rel=alternate><LINK title=CodeProject 
+href="http://www.codeproject.com/info/OpenSearch.xml" 
+type=application/opensearchdescription+xml rel=search><LINK 
+href="CodeProject Controlling The Screen Saver With C#_ Free source code and programming help_files/CodeProject.css" 
+type=text/css rel=stylesheet><LINK 
+href="CodeProject Controlling The Screen Saver With C#_ Free source code and programming help_files/ForumClassic.css" 
+type=text/css rel=stylesheet>
+<SCRIPT type=text/javascript>
+  var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+  document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</SCRIPT>
+
+<SCRIPT type=text/javascript>
+   var pageTracker = _gat._getTracker("UA-1735123-1");
+   pageTracker._setDomainName("codeproject.com");
+   pageTracker._setSessionTimeout("1200"); // 20 mins
+   pageTracker._initData();
+   pageTracker._trackPageview();
+</SCRIPT>
+
+<SCRIPT language=Javascript 
+src="CodeProject Controlling The Screen Saver With C#_ Free source code and programming help_files/oncopy.js" 
+type=text/javascript></SCRIPT>
+
+<SCRIPT language=Javascript 
+src="CodeProject Controlling The Screen Saver With C#_ Free source code and programming help_files/addto.js" 
+type=text/javascript></SCRIPT>
+
+<SCRIPT language=Javascript type=text/javascript>//<![CDATA[
+function ToggleMenu(itemName)
+{
+	var elm = document.getElementById(itemName);
+	var i,others = document.getElementById('SectionMenu');
+	for(i=0; i < others.childNodes.length; i++)
+	{
+		var other = others.childNodes[i];
+		if ((other.className == 'MenuSectionBlock') && (other != elm))
+			other.style.display='none';
+	}
+	if (elm.style.display == 'block') elm.style.display='none';
+	else elm.style.display='block';
+	return false;
+}
+
+//]]></SCRIPT>
+
+<SCRIPT language=Javascript type=text/javascript>//<![CDATA[
+var Selected = "-1";
+
+function SwitchMessage(e, msgId)
+{
+  if (!msgId) {
+    if(!e)e=window.event;
+    var target=e.target?e.target:e.srcElement;
+    while(target&&target.id!='DynMessLink')target=target.parentNode;
+    if(!target||target.id!='DynMessLink')return;
+    msgId=target.name;
+  }
+  if(Selected&&Selected!=""){
+    var body=eval("document.getElementById('F" + Selected + "_h1')");
+    if(body) body.style.display = 'none';
+    var head=eval("document.getElementById('F" + Selected + "_h0')");
+    if(head) head.className = head.className.replace("Sel", "UnSel");
+  }
+  if(Selected==msgId.toString())
+    Selected="";
+  else {
+    Selected=msgId.toString();
+    var body=eval("document.getElementById('F" + Selected + "_h1')");
+    if(body){
+      if(body.style.display=='none') body.style.display='';
+      else body.style.display = 'none';
+    }
+    var head=eval("document.getElementById('F" + Selected + "_h0')");
+    if (head) 
+      head.className = head.className.replace("UnSel", "Sel");
+    if(body&&head&&body.style.display!='none'){
+      document.body.scrollTop = getRealPos(head, "Top") - document.body.clientHeight/10;
+      EnsureMessageVisible(Selected, true);
+    }
+  }
+  if (e){if(e.preventDefault)e.preventDefault;else e.returnValue=false;}
+  return false;
+}
+
+//]]></SCRIPT>
+
+<SCRIPT language=Javascript 
+src="CodeProject Controlling The Screen Saver With C#_ Free source code and programming help_files/ShortCuts.js" 
+type=text/javascript></SCRIPT>
+<LINK 
+href="CodeProject Controlling The Screen Saver With C#_ Free source code and programming help_files/ForumClassicIE6.css" 
+type=text/css rel=stylesheet><LINK href="/favicon.ico" type=image/ico 
+rel=icon><LINK href="/favicon.ico" type=image/ico rel="shortcut icon">
+<SCRIPT type=text/javascript>
+	function SetAsAvailable() {
+	   var aid = document.getElementById("ArticleId");
+	   if(aid)
+		   window.location.href = "/script/Articles/UpdateArticleStatus.aspx?aid=" + articleId.value + "&rp=" + location.href;
+	}
+
+
+	</SCRIPT>
+
+<META content="MSHTML 6.00.2900.2180" name=GENERATOR></HEAD>
+<BODY>
+<TABLE id=ctl00_AT cellSpacing=0 cellPadding=0 border=0>
+  <TBODY>
+  <TR vAlign=top>
+    <TD colSpan=2>
+      <TABLE cellSpacing=0 cellPadding=0 border=0>
+        <TBODY>
+        <TR>
+          <TD class=HeaderLogo><A href="http://www.codeproject.com/"><IMG 
+            height=90 alt=Home 
+            src="CodeProject Controlling The Screen Saver With C#_ Free source code and programming help_files/codeproject225x90.gif" 
+            width=225 border=0></A></TD>
+          <TD class=HeaderBanner align=right width="100%">
+            <SCRIPT type=text/javascript>document.write(unescape("%3ca%20href%3d%22http%3a%2f%2fwww.codeproject.com%2fRedir.aspx%3fadid%3d5301%26way%3dban%22%20target%3d%22_blank%22%20rel%3d%22nofollow%22%3e%3cimg%20src%3d%22http%3a%2f%2fwww.codeproject.com%2fscript%2fAnn%2fServeImg.aspx%3fFile%3d%252fscript%252fadmentor%252fimages%252fIBMdeveloperWorks_728x90.gif%26C%3dFalse%26id%3d5301%22%20alt%3d%22%22%20border%3d%220%22%20width%3d%22728%22%20height%3d%2290%22%3e%3c%2fa%3e"));</SCRIPT>
+          </TD></TR>
+        <TR>
+          <TD colSpan=2>
+            <TABLE class=MemberNavBar cellSpacing=0 cellPadding=5 
+              width="100%"><TBODY>
+              <TR>
+                <TD class=SmallText style="FONT-WEIGHT: bold">4,929,683 
+                  members and growing! (17,759 online)</TD>
+                <TD align=right>
+                  <DIV class=MemberNavBarText 
+                  id=ctl00_MemberMenu_LoggedOffOptions 
+                  style="PADDING-RIGHT: 0px; PADDING-LEFT: 0px; PADDING-BOTTOM: 0px; MARGIN: 0px; PADDING-TOP: 0px"><A 
+                  name=SignUp></A>
+                  <FORM id=subForm 
+                  style="PADDING-RIGHT: 0px; PADDING-LEFT: 0px; PADDING-BOTTOM: 0px; MARGIN: 0px; PADDING-TOP: 0px" 
+                  name=subForm 
+                  action=/script/Membership/LogOn.aspx?rp=%2fKB%2fcs%2fScreenSaverControl.aspx 
+                  method=post>Email <INPUT class=SmallText id=Email 
+                  style="WIDTH: 100px" name=Email> Password <INPUT 
+                  class=SmallText id=Password style="WIDTH: 60px" type=password 
+                  name=Password> <INPUT class=FormButton type=submit value="Sign in">
+                  <SCRIPT type=text/javascript>
+function Join(){document.location.href='/script/Membership/Modify.aspx';return false;}
+document.write('<input type="button" class="FormButton" onclick="return Join();" value="Join"');
+document.write('<input type="hidden" name="fld_quicksign" value="true" />');
+</SCRIPT>
+                   <INPUT id=RememberMeCheck type=checkbox CHECKED name=cookie> 
+                  <LABEL for=RememberMeCheck>Remember me?</LABEL>&nbsp; <A 
+                  id=ctl00_MemberMenu_SendPassword 
+                  href="http://www.codeproject.com/script/Membership/SendPassword.aspx?rp=%2fKB%2fcs%2fScreenSaverControl.aspx"><IMG 
+                  height=16 alt=help 
+                  src="CodeProject Controlling The Screen Saver With C#_ Free source code and programming help_files/help.gif" 
+                  width=16 align=middle border=0>Lost your password?</A> 
+                  </FORM></DIV></TD></TR></TBODY></TABLE></TD></TR>
+        <TR>
+          <TD colSpan=2>
+            <TABLE class=SiteNavBar id=tblSiteToolbar cellSpacing=0 
+            cellPadding=0>
+              <TBODY>
+              <TR>
+                <TD><A href="http://www.codeproject.com/">Home</A></TD>
+                <TD class=SelCat noWrap><A 
+                  href="http://www.codeproject.com/?cat=1">All Topics</A></TD>
+                <TD noWrap><A 
+                  href="http://www.codeproject.com/?cat=2">MFC/C++</A></TD>
+                <TD noWrap><A 
+                href="http://www.codeproject.com/?cat=3">C#</A></TD>
+                <TD noWrap><A 
+                  href="http://www.codeproject.com/?cat=6">VB.NET</A></TD>
+                <TD noWrap><A 
+                  href="http://www.codeproject.com/?cat=4">ASP.NET</A></TD>
+                <TD noWrap><A 
+                href="http://www.codeproject.com/?cat=9">SQL</A></TD>
+                <TD noWrap><A 
+                  href="http://www.codeproject.com/?cat=8">Architect</A></TD>
+                <TD width="100%">&nbsp;</TD>
+                <TD id=ctl00_TopNavBar_RightMenus><!--380-->
+                  <DIV id=MenuPos 
+                  style="WIDTH: 305px; POSITION: relative; TOP: 1px; HEIGHT: 22px">
+                  <TABLE 
+                  style="BORDER-TOP-WIDTH: 0px; BORDER-LEFT-WIDTH: 0px; BORDER-BOTTOM-WIDTH: 0px; HEIGHT: 20px; BORDER-RIGHT-WIDTH: 0px" 
+                  cellSpacing=0 cellPadding=0 width=305>
+                    <TBODY>
+                    <TR vAlign=center>
+                      <TD 
+                      style="BORDER-TOP-WIDTH: 0px; BORDER-LEFT-WIDTH: 0px; BORDER-BOTTOM-WIDTH: 0px; BORDER-RIGHT-WIDTH: 0px" 
+                      noWrap><A 
+                        href="http://www.codeproject.com/info/FAQ.aspx">Help!</A></TD>
+                      <TD 
+                      style="BORDER-TOP-WIDTH: 0px; BORDER-LEFT-WIDTH: 0px; BORDER-BOTTOM-WIDTH: 0px; BORDER-RIGHT-WIDTH: 0px" 
+                      noWrap><A 
+                        href="http://www.codeproject.com/script/Articles/Latest.aspx">Articles</A></TD>
+                      <TD 
+                      style="BORDER-TOP-WIDTH: 0px; BORDER-LEFT-WIDTH: 0px; BORDER-BOTTOM-WIDTH: 0px; BORDER-RIGHT-WIDTH: 0px" 
+                      noWrap><A 
+                        href="http://www.codeproject.com/script/Forums/List.aspx">Message 
+                        Boards</A></TD>
+                      <TD 
+                      style="BORDER-TOP-WIDTH: 0px; BORDER-LEFT-WIDTH: 0px; BORDER-BOTTOM-WIDTH: 0px; BORDER-RIGHT-WIDTH: 0px" 
+                      noWrap><A 
+                        href="http://www.codeproject.com/Lounge.aspx">Lounge</A></TD></TR></TBODY></TABLE></DIV></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+  <TR>
+    <TD vAlign=top colSpan=2><A name=_top></A>
+      <TABLE class=ArticleHeader id=ctl00_ArticleTopHeader_HeaderTable 
+      cellSpacing=0 cellPadding=3 width="100%" border=0>
+        <TBODY>
+        <TR vAlign=top>
+          <TD class=SmallText><A id=ctl00_ArticleTopHeader_ChapterLink 
+            href="http://www.codeproject.com/script/Content/Chapter.aspx?chptId=5">Languages</A> 
+            » <A id=ctl00_ArticleTopHeader_SectionLink 
+            href="http://www.codeproject.com/KB/cs/">C#</A> » <A 
+            id=ctl00_ArticleTopHeader_SubsectionLink 
+            href="http://www.codeproject.com/KB/cs/index.aspx?#C - Applications">Applications</A> 
+            <SPAN class=ArticleIntermediate 
+            id=ctl00_ArticleTopHeader_SkillLevel>&nbsp;&nbsp;&nbsp; 
+            Intermediate</SPAN> <SPAN 
+            id=ctl00_ArticleTopHeader_LicenceTerms></SPAN><BR><BR>
+            <H1><SPAN class=ArticleTopTitle 
+            id=ctl00_ArticleTopHeader_ArticleTitle>Controlling The Screen Saver 
+            With C#</SPAN></H1><B>By <A 
+            href="http://www.codeproject.com/script/Articles/MemberArticles.aspx?amid=2604657">kschulz</A></B><BR><BR><SPAN 
+            class=ArticleTopDescr id=ctl00_ArticleTopHeader_ArticleDescr>A C# 
+            class for monitoring, activating, deactivating, closing, and 
+            changing the timeout of the screen saver.</SPAN> </TD>
+          <TD class=SmallText style="WIDTH: 210px"><SPAN 
+            id=ctl00_ArticleTopHeader_ArticleAttributes>C#, Windows, .NET, 
+            Visual Studio, Dev</SPAN><BR><BR><SPAN 
+            style="PADDING-RIGHT: 2ex">Posted</SPAN>: <B>8 Jan 2007</B><BR><SPAN 
+            style="PADDING-RIGHT: 0.5ex">Updated</SPAN>: <B>8 Jan 2007</B> 
+            <BR><SPAN style="PADDING-RIGHT: 3.2ex">Views</SPAN>: 
+            <B>23,972</B><BR></TD></TR>
+        <TR>
+          <TD colSpan=2>
+            <TABLE width="100%">
+              <TBODY>
+              <TR>
+                <TD></TD>
+                <TD class=SmallText style="WHITE-SPACE: nowrap" 
+              align=right></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+  <TR vAlign=top>
+    <TD class=LHNavBar id=ctl00_LeftNavCell>
+      <DIV style="PADDING-TOP: 5px; TEXT-ALIGN: center">
+      <SCRIPT type=text/javascript>document.write(unescape("%3ca%20href%3d%22http%3a%2f%2fwww.codeproject.com%2fRedir.aspx%3fadid%3d3487%26way%3dban%22%20target%3d%22_blank%22%20rel%3d%22nofollow%22%3e%3cimg%20src%3d%22http%3a%2f%2fwww.codeproject.com%2fscript%2fAnn%2fServeImg.aspx%3fFile%3d%252fscript%252fadmentor%252fimages%252fcp_daily_150x80.gif%26C%3dFalse%26id%3d3487%22%20alt%3d%22%22%20border%3d%220%22%20width%3d%22150%22%20height%3d%2280%22%3e%3c%2fa%3e"));</SCRIPT>
+      </DIV>
+      <DIV class=FeatureBlockHeader>Announcements</DIV>
+      <DIV class="FeatureBlockContent RHFeatureBar">
+      <DIV style="PADDING-TOP: 0px"><IMG 
+      style="PADDING-RIGHT: 14px; FLOAT: left; MARGIN-LEFT: 7px; MARGIN-RIGHT: 10px" 
+      height=20 alt=Comp 
+      src="CodeProject Controlling The Screen Saver With C#_ Free source code and programming help_files/prize_winner.gif" 
+      width=10> <A id=ctl00_Announcements_CompLink 
+      href="http://www.codeproject.com/Feature/ArticleCompetition/">Monthly 
+      Competition</A><BR clear=all>
+      <DIV style="PADDING-BOTTOM: 5px; PADDING-TOP: 3px"><IMG 
+      style="PADDING-RIGHT: 10px; FLOAT: left; MARGIN-LEFT: 7px; MARGIN-RIGHT: 8px" 
+      height=16 alt=Staff 
+      src="CodeProject Controlling The Screen Saver With C#_ Free source code and programming help_files/staff_sm.gif" 
+      width=12> <A href="http://www.codeproject.com/info/jobs/">We're 
+      Hiring!</A></DIV>
+      <DIV style="PADDING-BOTTOM: 5px; PADDING-TOP: 3px"><IMG 
+      style="PADDING-RIGHT: 0px; MARGIN-TOP: 3px; FLOAT: left; MARGIN-LEFT: 0px; MARGIN-RIGHT: 0px" 
+      height=20 alt=Silverlight 
+      src="CodeProject Controlling The Screen Saver With C#_ Free source code and programming help_files/silverlight_20.jpg" 
+      width=27> <A 
+      href="http://www.codeproject.com/script/News/View.aspx?nwid=6024">Add 
+      Silverlight to your articles</A></DIV></DIV></DIV>
+      <DIV class=MenuCat>Services</DIV>
+      <DIV class=MenuChapter><A 
+      href="http://www.codeproject.com/Services/coffee.aspx">Code Project 
+      Coffee</A></DIV>
+      <DIV class=MenuChapter><A 
+      href="http://www.codeproject.com/Services/TradePub.aspx">Free 
+      Magazines</A></DIV><BR>
+      <DIV id=SectionMenu>
+      <DIV class=MenuCat>Chapters</DIV>
+      <DIV class=MenuChapter><A onclick="return ToggleMenu('Chapter1');" 
+      href="http://www.codeproject.com/script/Content/Chapter.aspx?chptId=1">Desktop 
+      Development</A></DIV>
+      <DIV class=MenuSectionBlock id=Chapter1 style="DISPLAY: none">
+      <DIV class=MI id=Section1><A 
+      href="http://www.codeproject.com/KB/buttons/">Button Controls</A></DIV>
+      <DIV class=MI id=Section15><A 
+      href="http://www.codeproject.com/KB/clipboard/">Clipboard</A></DIV>
+      <DIV class=MI id=Section2><A 
+      href="http://www.codeproject.com/KB/combobox/">Combo &amp; List 
+      Boxes</A></DIV>
+      <DIV class=MI id=Section67><A 
+      href="http://www.codeproject.com/KB/dialog/">Dialogs and Windows</A></DIV>
+      <DIV class=MI id=Section107><A 
+      href="http://www.codeproject.com/KB/gadgets/">Desktop Gadgets</A></DIV>
+      <DIV class=MI id=Section16><A 
+      href="http://www.codeproject.com/KB/docview/">Document / View</A></DIV>
+      <DIV class=MI id=Section4><A 
+      href="http://www.codeproject.com/KB/edit/">Edit Controls</A></DIV>
+      <DIV class=MI id=Section17><A 
+      href="http://www.codeproject.com/KB/files/">Files and Folders</A></DIV>
+      <DIV class=MI id=Section3><A 
+      href="http://www.codeproject.com/KB/grid/">Grid &amp; Data 
+      Controls</A></DIV>
+      <DIV class=MI id=Section48><A 
+      href="http://www.codeproject.com/KB/system/">Hardware &amp; 
+      System</A></DIV>
+      <DIV class=MI id=Section5><A 
+      href="http://www.codeproject.com/KB/list/">List Controls</A></DIV>
+      <DIV class=MI id=Section6><A 
+      href="http://www.codeproject.com/KB/menus/">Menus</A></DIV>
+      <DIV class=MI id=Section14><A 
+      href="http://www.codeproject.com/KB/miscctrl/">Miscellaneous</A></DIV>
+      <DIV class=MI id=Section18><A 
+      href="http://www.codeproject.com/KB/printing/">Printing</A></DIV>
+      <DIV class=MI id=Section95><A 
+      href="http://www.codeproject.com/KB/progress/">Progress Controls</A></DIV>
+      <DIV class=MI id=Section11><A 
+      href="http://www.codeproject.com/KB/selection/">Selection 
+      Controls</A></DIV>
+      <DIV class=MI id=Section19><A 
+      href="http://www.codeproject.com/KB/shell/">Shell and IE 
+      programming</A></DIV>
+      <DIV class=MI id=Section68><A 
+      href="http://www.codeproject.com/KB/smart/">Smart Client</A></DIV>
+      <DIV class=MI id=Section8><A 
+      href="http://www.codeproject.com/KB/splitter/">Splitter Windows</A></DIV>
+      <DIV class=MI id=Section9><A 
+      href="http://www.codeproject.com/KB/static/">Static &amp; Panel 
+      Controls</A></DIV>
+      <DIV class=MI id=Section10><A 
+      href="http://www.codeproject.com/KB/statusbar/">Status Bar</A></DIV>
+      <DIV class=MI id=Section7><A 
+      href="http://www.codeproject.com/KB/tabs/">Tabs &amp; Property 
+      Pages</A></DIV>
+      <DIV class=MI id=Section12><A 
+      href="http://www.codeproject.com/KB/toolbars/">Toolbars &amp; Docking 
+      windows</A></DIV>
+      <DIV class=MI id=Section13><A 
+      href="http://www.codeproject.com/KB/tree/">Tree Controls</A></DIV></DIV>
+      <DIV class=MenuChapter><A onclick="return ToggleMenu('Chapter2');" 
+      href="http://www.codeproject.com/script/Content/Chapter.aspx?chptId=2">Web 
+      Development</A></DIV>
+      <DIV class=MenuSectionBlock id=Chapter2 style="DISPLAY: none">
+      <DIV class=MI id=Section70><A 
+      href="http://www.codeproject.com/KB/ajax/">Ajax and Atlas</A></DIV>
+      <DIV class=MI id=Section27><A 
+      href="http://www.codeproject.com/KB/applications/">Applications &amp; 
+      Tools</A></DIV>
+      <DIV class=MI id=Section85><A 
+      href="http://www.codeproject.com/KB/asp/">ASP</A></DIV>
+      <DIV class=MI id=Section89><A 
+      href="http://www.codeproject.com/KB/aspnet/">ASP.NET</A></DIV>
+      <DIV class=MI id=Section28><A 
+      href="http://www.codeproject.com/KB/webforms/">ASP.NET Controls</A></DIV>
+      <DIV class=MI id=Section38><A 
+      href="http://www.codeproject.com/KB/ATL-Server/">ATL Server</A></DIV>
+      <DIV class=MI id=Section29><A 
+      href="http://www.codeproject.com/KB/web-cache/">Caching</A></DIV>
+      <DIV class=MI id=Section91><A 
+      href="http://www.codeproject.com/KB/web-image/">Charts, Graphs and 
+      Images</A></DIV>
+      <DIV class=MI id=Section25><A 
+      href="http://www.codeproject.com/KB/scripting/">Client side 
+      scripting</A></DIV>
+      <DIV class=MI id=Section30><A 
+      href="http://www.codeproject.com/KB/custom-controls/">Custom 
+      Controls</A></DIV>
+      <DIV class=MI id=Section23><A 
+      href="http://www.codeproject.com/KB/HTML/">HTML / CSS</A></DIV>
+      <DIV class=MI id=Section22><A 
+      href="http://www.codeproject.com/KB/IP/">Internet / Network</A></DIV>
+      <DIV class=MI id=Section24><A 
+      href="http://www.codeproject.com/KB/ISAPI/">ISAPI</A></DIV>
+      <DIV class=MI id=Section33><A 
+      href="http://www.codeproject.com/KB/server-management/">Site &amp; Server 
+      Management</A></DIV>
+      <DIV class=MI id=Section34><A 
+      href="http://www.codeproject.com/KB/session/">Session State</A></DIV>
+      <DIV class=MI id=Section113><A 
+      href="http://www.codeproject.com/KB/silverlight/">Silverlight</A></DIV>
+      <DIV class=MI id=Section36><A 
+      href="http://www.codeproject.com/KB/trace/">Trace and Logs</A></DIV>
+      <DIV class=MI id=Section31><A 
+      href="http://www.codeproject.com/KB/user-controls/">User 
+Controls</A></DIV>
+      <DIV class=MI id=Section37><A 
+      href="http://www.codeproject.com/KB/validation/">Validation</A></DIV>
+      <DIV class=MI id=Section35><A 
+      href="http://www.codeproject.com/KB/viewstate/">View State</A></DIV>
+      <DIV class=MI id=Section26><A 
+      href="http://www.codeproject.com/KB/WAP/">WAP / WML</A></DIV>
+      <DIV class=MI id=Section32><A 
+      href="http://www.codeproject.com/KB/web-security/">Web Security</A></DIV>
+      <DIV class=MI id=Section20><A 
+      href="http://www.codeproject.com/KB/webservices/">Web 
+      Services</A></DIV></DIV>
+      <DIV class=MenuChapter><A onclick="return ToggleMenu('Chapter9');" 
+      href="http://www.codeproject.com/script/Content/Chapter.aspx?chptId=9">Enterprise 
+      Systems</A></DIV>
+      <DIV class=MenuSectionBlock id=Chapter9 style="DISPLAY: none">
+      <DIV class=MI id=Section98><A 
+      href="http://www.codeproject.com/KB/MCMS/">Content Management 
+      Server</A></DIV>
+      <DIV class=MI id=Section99><A 
+      href="http://www.codeproject.com/KB/biztalk/">Microsoft BizTalk 
+      Server</A></DIV>
+      <DIV class=MI id=Section102><A 
+      href="http://www.codeproject.com/KB/exchange/">Microsoft 
+Exchange</A></DIV>
+      <DIV class=MI id=Section90><A 
+      href="http://www.codeproject.com/KB/office/">Office Development</A></DIV>
+      <DIV class=MI id=Section101><A 
+      href="http://www.codeproject.com/KB/sharepoint/">SharePoint 
+      Server</A></DIV></DIV>
+      <DIV class=MenuChapter><A onclick="return ToggleMenu('Chapter3');" 
+      href="http://www.codeproject.com/script/Content/Chapter.aspx?chptId=3">Multimedia</A></DIV>
+      <DIV class=MenuSectionBlock id=Chapter3 style="DISPLAY: none">
+      <DIV class=MI id=Section42><A 
+      href="http://www.codeproject.com/KB/audio-video/">Audio and 
+Video</A></DIV>
+      <DIV class=MI id=Section44><A 
+      href="http://www.codeproject.com/KB/directx/">DirectX</A></DIV>
+      <DIV class=MI id=Section46><A 
+      href="http://www.codeproject.com/KB/GDI/">GDI</A></DIV>
+      <DIV class=MI id=Section47><A 
+      href="http://www.codeproject.com/KB/GDI-plus/">GDI+</A></DIV>
+      <DIV class=MI id=Section43><A 
+      href="http://www.codeproject.com/KB/graphics/">General Graphics</A></DIV>
+      <DIV class=MI id=Section45><A 
+      href="http://www.codeproject.com/KB/openGL/">OpenGL</A></DIV></DIV>
+      <DIV class=MenuChapter><A onclick="return ToggleMenu('Chapter4');" 
+      href="http://www.codeproject.com/script/Content/Chapter.aspx?chptId=4">Database</A></DIV>
+      <DIV class=MenuSectionBlock id=Chapter4 style="DISPLAY: none">
+      <DIV class=MI id=Section66><A 
+      href="http://www.codeproject.com/KB/database/">Database</A></DIV>
+      <DIV class=MI id=Section100><A 
+      href="http://www.codeproject.com/KB/reporting-services/">SQL Reporting 
+      Services</A></DIV></DIV>
+      <DIV class=MenuChapter><A onclick="return ToggleMenu('Chapter8');" 
+      href="http://www.codeproject.com/script/Content/Chapter.aspx?chptId=8">Platforms, 
+      Frameworks &amp; Libraries</A></DIV>
+      <DIV class=MenuSectionBlock id=Chapter8 style="DISPLAY: none">
+      <DIV class=MI id=Section83><A 
+      href="http://www.codeproject.com/KB/atl/">ATL</A></DIV>
+      <DIV class=MI id=Section117><A 
+      href="http://www.codeproject.com/KB/MFC/">MFC</A></DIV>
+      <DIV class=MI id=Section88><A 
+      href="http://www.codeproject.com/KB/stl/">STL</A></DIV>
+      <DIV class=MI id=Section84><A 
+      href="http://www.codeproject.com/KB/wtl/">WTL</A></DIV>
+      <DIV class=MI id=Section49><A 
+      href="http://www.codeproject.com/KB/COM/">COM / COM+</A></DIV>
+      <DIV class=MI id=Section76><A 
+      href="http://www.codeproject.com/KB/dotnet/">.NET Framework</A></DIV>
+      <DIV class=MI id=Section92><A 
+      href="http://www.codeproject.com/KB/winsdk/">Win32/64 SDK &amp; 
+      OS</A></DIV>
+      <DIV class=MI id=Section108><A 
+      href="http://www.codeproject.com/KB/vista/">Vista API</A></DIV>
+      <DIV class=MI id=Section110><A 
+      href="http://www.codeproject.com/KB/vista-security/">Vista 
+      Security</A></DIV>
+      <DIV class=MI id=Section82><A 
+      href="http://www.codeproject.com/KB/cross-platform/">Cross 
+      Platform</A></DIV>
+      <DIV class=MI id=Section69><A 
+      href="http://www.codeproject.com/KB/game/">Game Development</A></DIV>
+      <DIV class=MI id=Section73><A 
+      href="http://www.codeproject.com/KB/mobile/">Mobile Development</A></DIV>
+      <DIV class=MI id=Section106><A 
+      href="http://www.codeproject.com/KB/WC/">Windows CardSpace</A></DIV>
+      <DIV class=MI id=Section103><A 
+      href="http://www.codeproject.com/KB/WCF/">Windows Communication 
+      Foundation</A></DIV>
+      <DIV class=MI id=Section104><A 
+      href="http://www.codeproject.com/KB/WPF/">Windows Presentation 
+      Foundation</A></DIV>
+      <DIV class=MI id=Section105><A 
+      href="http://www.codeproject.com/KB/WF/">Windows Workflow 
+      Foundation</A></DIV>
+      <DIV class=MI id=Section119><A 
+      href="http://www.codeproject.com/KB/library/">Libraries</A></DIV>
+      <DIV class=MI id=Section122><A 
+      href="http://www.codeproject.com/KB/powershell/">Windows 
+      Powershell</A></DIV>
+      <DIV class=MI id=Section123><A 
+      href="http://www.codeproject.com/KB/linq/">LINQ</A></DIV></DIV>
+      <DIV class=MenuChapter><A onclick="return ToggleMenu('Chapter5');" 
+      href="http://www.codeproject.com/script/Content/Chapter.aspx?chptId=5">Languages</A></DIV>
+      <DIV class=MenuSectionBlock id=Chapter5>
+      <DIV class=MI id=Section71><A href="http://www.codeproject.com/KB/cpp/">C 
+      / C++ Language</A></DIV>
+      <DIV class=MI id=Section72><A 
+      href="http://www.codeproject.com/KB/mcpp/">C++ / CLI</A></DIV>
+      <DIV class=MIS id=Section93><A 
+      href="http://www.codeproject.com/KB/cs/">C#</A></DIV>
+      <DIV class=MI id=Section78><A 
+      href="http://www.codeproject.com/KB/msil/">MSIL</A></DIV>
+      <DIV class=MI id=Section86><A 
+      href="http://www.codeproject.com/KB/vbscript/">VBScript</A></DIV>
+      <DIV class=MI id=Section87><A 
+      href="http://www.codeproject.com/KB/vb/">VB.NET</A></DIV>
+      <DIV class=MI id=Section115><A 
+      href="http://www.codeproject.com/KB/vb-interop/">VB6 Interop</A></DIV>
+      <DIV class=MI id=Section77><A 
+      href="http://www.codeproject.com/KB/net-languages/">Other .NET 
+      Languages</A></DIV>
+      <DIV class=MI id=Section21><A 
+      href="http://www.codeproject.com/KB/XML/">XML</A></DIV>
+      <DIV class=MI id=Section96><A 
+      href="http://www.codeproject.com/KB/java/">Java</A></DIV></DIV>
+      <DIV class=MenuChapter><A onclick="return ToggleMenu('Chapter6');" 
+      href="http://www.codeproject.com/script/Content/Chapter.aspx?chptId=6">General 
+      Programming</A></DIV>
+      <DIV class=MenuSectionBlock id=Chapter6 style="DISPLAY: none">
+      <DIV class=MI id=Section57><A 
+      href="http://www.codeproject.com/KB/recipes/">Algorithms &amp; 
+      Recipes</A></DIV>
+      <DIV class=MI id=Section64><A 
+      href="http://www.codeproject.com/KB/bugs/">Bugs &amp; 
+Workarounds</A></DIV>
+      <DIV class=MI id=Section79><A 
+      href="http://www.codeproject.com/KB/collections/">Collections</A></DIV>
+      <DIV class=MI id=Section56><A 
+      href="http://www.codeproject.com/KB/security/">Cryptography &amp; 
+      Security</A></DIV>
+      <DIV class=MI id=Section50><A 
+      href="http://www.codeproject.com/KB/datetime/">Date and Time</A></DIV>
+      <DIV class=MI id=Section52><A 
+      href="http://www.codeproject.com/KB/DLL/">DLLs &amp; Assemblies</A></DIV>
+      <DIV class=MI id=Section80><A 
+      href="http://www.codeproject.com/KB/exception/">Exception 
+      Handling</A></DIV>
+      <DIV class=MI id=Section81><A 
+      href="http://www.codeproject.com/KB/locale/">Localisation</A></DIV>
+      <DIV class=MI id=Section53><A 
+      href="http://www.codeproject.com/KB/macros/">Macros and Add-ins</A></DIV>
+      <DIV class=MI id=Section54><A 
+      href="http://www.codeproject.com/KB/tips/">Programming Tips</A></DIV>
+      <DIV class=MI id=Section55><A 
+      href="http://www.codeproject.com/KB/string/">String handling</A></DIV>
+      <DIV class=MI id=Section58><A 
+      href="http://www.codeproject.com/KB/threads/">Threads, Processes &amp; 
+      IPC</A></DIV>
+      <DIV class=MI id=Section59><A 
+      href="http://www.codeproject.com/KB/winhelp/">WinHelp / 
+      HTMLHelp</A></DIV></DIV>
+      <DIV class=MenuChapter><A onclick="return ToggleMenu('Chapter10');" 
+      href="http://www.codeproject.com/script/Content/Chapter.aspx?chptId=10">Graphics 
+      / Design</A></DIV>
+      <DIV class=MenuSectionBlock id=Chapter10 style="DISPLAY: none">
+      <DIV class=MI id=Section40><A 
+      href="http://www.codeproject.com/KB/expression/">Expression</A></DIV>
+      <DIV class=MI id=Section114><A 
+      href="http://www.codeproject.com/KB/usability/">Usability</A></DIV></DIV>
+      <DIV class=MenuChapter><A onclick="return ToggleMenu('Chapter11');" 
+      href="http://www.codeproject.com/script/Content/Chapter.aspx?chptId=11">Development 
+      Lifecycle</A></DIV>
+      <DIV class=MenuSectionBlock id=Chapter11 style="DISPLAY: none">
+      <DIV class=MI id=Section51><A 
+      href="http://www.codeproject.com/KB/debug/">Debug Tips</A></DIV>
+      <DIV class=MI id=Section39><A 
+      href="http://www.codeproject.com/KB/architecture/">Design and 
+      Architecture</A></DIV>
+      <DIV class=MI id=Section112><A 
+      href="http://www.codeproject.com/KB/install/">Installation</A></DIV>
+      <DIV class=MI id=Section41><A 
+      href="http://www.codeproject.com/KB/work/">Work Issues</A></DIV></DIV>
+      <DIV class=MenuChapter><A onclick="return ToggleMenu('Chapter7');" 
+      href="http://www.codeproject.com/script/Content/Chapter.aspx?chptId=7">General 
+      Reading</A></DIV>
+      <DIV class=MenuSectionBlock id=Chapter7 style="DISPLAY: none">
+      <DIV class=MI id=Section60><A 
+      href="http://www.codeproject.com/KB/books/">Book Chapters</A></DIV>
+      <DIV class=MI id=Section61><A 
+      href="http://www.codeproject.com/KB/book-reviews/">Book Reviews</A></DIV>
+      <DIV class=MI id=Section109><A 
+      href="http://www.codeproject.com/KB/hardware-review/">Hardware 
+      Reviews</A></DIV>
+      <DIV class=MI id=Section63><A 
+      href="http://www.codeproject.com/KB/interviews/">Interviews</A></DIV>
+      <DIV class=MI id=Section65><A 
+      href="http://www.codeproject.com/KB/showcase/">Product Showcase</A></DIV>
+      <DIV class=MI id=Section62><A 
+      href="http://www.codeproject.com/KB/scrapbook/">Scrapbook</A></DIV></DIV></DIV><BR>
+      <DIV class=MenuCat>Feature Zones</DIV>
+      <DIV class=MenuChapter><A 
+      href="http://www.codeproject.com/kb/showcase/">Product Showcase</A></DIV>
+      <DIV class=MenuChapter><A 
+      href="http://www.codeproject.com/Zones/Install">Installshield 
+      2008</A></DIV>
+      <DIV class=MenuChapter><A href="http://www.codeproject.com/Zones/IBM">IBM 
+      DeveloperWorks</A></DIV><BR><IFRAME 
+      src="CodeProject Controlling The Screen Saver With C#_ Free source code and programming help_files/ServeHTML.htm" 
+      frameBorder=0 width=160 scrolling=no height=600></IFRAME><IMG height=1 
+      alt="" 
+      src="CodeProject Controlling The Screen Saver With C#_ Free source code and programming help_files/t.gif" 
+      width=160> </TD>
+    <TD class=ArticlePane vAlign=top>
+      <TABLE class=SearchHeaderBar cellSpacing=0 width="100%">
+        <TBODY>
+        <TR>
+          <TD style="WIDTH: 60%; WHITE-SPACE: nowrap" vAlign=center 
+            align=right><FORM style="MARGIN: 0px" name=Search 
+            action=/info/search.aspx method=get><B>Search &nbsp;</B> <INPUT 
+            class=SmallText style="WIDTH: 200px" name=artkw> <SELECT 
+            class=SmallText style="FONT-WEIGHT: bold" name=sbo> <OPTION 
+              value=kw selected>Articles</OPTION> <OPTION 
+              value=fm>Messages</OPTION></SELECT> <INPUT class=SmallText style="FONT-WEIGHT: bold" type=submit value=" Go! "> 
+            &nbsp; </FORM></TD>
+          <TD class=TinyText style="WHITE-SPACE: nowrap"><A 
+            href="http://www.codeproject.com/info/search.aspx">Advanced 
+            Search</A><BR><A 
+            href="http://www.codeproject.com/script/Content/SiteMap.aspx">Sitemap</A> 
+            | <A id=ctl00_SearchBarCtrl_AddToIESearchLnk 
+            title="Add CodeProject to your IE search Providers" 
+            onclick="window.external.AddSearchProvider('http://www.codeproject.com/info/OpenSearch.xml');return false;" 
+            href="http://www.codeproject.com/">Add to IE Search</A> 
+        </TD></TR></TBODY></TABLE><SPAN id=ctl00_ResultMessage></SPAN>
+      <DIV id=ctl00_ArtDiv>
+      <TABLE cellSpacing=0 cellPadding=0 width="100%" border=0>
+        <TBODY>
+        <TR vAlign=top>
+          <TD vAlign=top>
+            <TABLE>
+              <TBODY></TBODY></TABLE>
+            <TABLE cellSpacing=1 cellPadding=3 width=1 border=0>
+              <TBODY>
+              <TR class=smalltext vAlign=center>
+                <TD style="WHITE-SPACE: nowrap"><IMG 
+                  style="BORDER-RIGHT: 0px; BORDER-TOP: 0px; VERTICAL-ALIGN: middle; BORDER-LEFT: 0px; BORDER-BOTTOM: 0px" 
+                  height=16 alt=print 
+                  src="CodeProject Controlling The Screen Saver With C#_ Free source code and programming help_files/print.gif" 
+                  width=16> <A id=ctl00_ArticleHeaderLinks_PrintLnk 
+                  href="http://www.codeproject.com/KB/cs/ScreenSaverControl.aspx?display=Print">Print</A> 
+                </TD>
+                <TD style="WHITE-SPACE: nowrap"><IMG 
+                  style="BORDER-RIGHT: 0px; BORDER-TOP: 0px; VERTICAL-ALIGN: middle; BORDER-LEFT: 0px; BORDER-BOTTOM: 0px" 
+                  height=16 alt="Broken Article?" 
+                  src="CodeProject Controlling The Screen Saver With C#_ Free source code and programming help_files/broken.gif" 
+                  width=16> <A id=ctl00_ArticleHeaderLinks_BrokenLnk 
+                  href="http://www.codeproject.com/script/Articles/Report.aspx?aid=17067">Broken 
+                  Article?</A> </TD>
+                <TD style="WHITE-SPACE: nowrap"></TD>
+                <TD style="WHITE-SPACE: nowrap"><IMG 
+                  style="BORDER-RIGHT: 0px; BORDER-TOP: 0px; VERTICAL-ALIGN: middle; BORDER-LEFT: 0px; BORDER-BOTTOM: 0px" 
+                  height=16 alt=Discuss 
+                  src="CodeProject Controlling The Screen Saver With C#_ Free source code and programming help_files/discuss.gif" 
+                  width=15> <A 
+                  href="http://www.codeproject.com/KB/cs/ScreenSaverControl.aspx#_comments">Discuss</A> 
+                </TD>
+                <TD style="WHITE-SPACE: nowrap"><IMG 
+                  style="BORDER-RIGHT: 0px; BORDER-TOP: 0px; VERTICAL-ALIGN: middle; BORDER-LEFT: 0px; BORDER-BOTTOM: 0px" 
+                  height=16 alt="Recommend Article" 
+                  src="CodeProject Controlling The Screen Saver With C#_ Free source code and programming help_files/mail.gif" 
+                  width=16> <A id=ctl00_ArticleHeaderLinks_Recommend 
+                  href="http://www.codeproject.com/script/common/TellFriend.aspx?obtid=2&amp;obid=17067">Send 
+                  to a friend</A> </TD></TR></TBODY></TABLE></TD>
+          <TD align=right>
+            <TABLE>
+              <TBODY>
+              <TR>
+                <TD class=SmallText style="WHITE-SPACE: nowrap" 
+                  align=right><SPAN id=ctl00_ArticleRating_VoteLabel>12 votes 
+                  for this Article.</SPAN> </TD>
+                <TD>
+                  <TABLE cellSpacing=0 cellPadding=0 border=1>
+                    <TBODY>
+                    <TR>
+                      <TD width=20 bgColor=white height=5><IMG height=5 
+                        src="CodeProject Controlling The Screen Saver With C#_ Free source code and programming help_files/red.gif" 
+                        width=20 border=0></TD>
+                      <TD width=20 bgColor=white height=5><IMG height=5 
+                        src="CodeProject Controlling The Screen Saver With C#_ Free source code and programming help_files/red.gif" 
+                        width=20 border=0></TD>
+                      <TD width=20 bgColor=white height=5><IMG height=5 
+                        src="CodeProject Controlling The Screen Saver With C#_ Free source code and programming help_files/red.gif" 
+                        width=20 border=0></TD>
+                      <TD width=20 bgColor=white height=5><IMG height=5 
+                        src="CodeProject Controlling The Screen Saver With C#_ Free source code and programming help_files/red.gif" 
+                        width=20 border=0></TD>
+                      <TD noWrap width=20 bgColor=white height=5><IMG height=5 
+                        src="CodeProject Controlling The Screen Saver With C#_ Free source code and programming help_files/red.gif" 
+                        width=1 border=0></TD></TR></TBODY></TABLE></TD></TR>
+              <TR id=ctl00_ArticleRating_PopularityRow>
+                <TD class=SmallText align=right colSpan=2><A 
+                  id=ctl00_ArticleRating_PopularityLnk 
+                  title="Calculated as rating x Log10(# votes)" 
+                  href="http://www.codeproject.com/script/Articles/TopArticles.aspx?ta_so=1">Popularity: 
+                  4.39</A><SPAN id=ctl00_ArticleRating_PopularityLbl></SPAN> 
+                  Rating: <B>4.06</B> out of 5 
+      </TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE><SPAN id=intelliTXT>
+      <DIV id=contentdiv><!-- Main Page Contents Start --><!-- Article Starts -->
+      <UL class=download>
+        <LI><A 
+        href="http://www.codeproject.com/KB/cs/ScreenSaverControl/ScreenSaverControl_test.zip">Download 
+        test executable - 7 Kb </A>
+        <LI><A 
+        href="http://www.codeproject.com/KB/cs/ScreenSaverControl/ScreenSaverControl_src.zip">Download 
+        source code - 13 Kb</A> </LI></UL>
+      <P><IMG height=455 alt="Display Properties Dialog" 
+      src="CodeProject Controlling The Screen Saver With C#_ Free source code and programming help_files/DisplayProperties.png" 
+      width=404 align=top> </P>
+      <H2>Introduction</H2>
+      <P>Presented here is a C# class useful for monitoring and controlling the 
+      Windows screen saver. The class provides methods for getting information 
+      about the screen saver, such as whether or not it is active, it is 
+      running, and its time out setting. Additional methods are provided to 
+      change these settings and to terminate the screen saver if it is 
+      running.</P>
+      <H2>Background</H2>
+      <P>Some things aren't always as straight forward as you might think going 
+      in. Such was the case on a recent project where one of the requirements 
+      called for killing the screen saver on the occurrence of a real time 
+      event. The project involved a radio dispatch console, and in this case the 
+      real time event was a dispatch operator pressing the push-to-talk button 
+      on a radio handset. Also, the screen saver time out needed to be reset if 
+      the screen saver wasn't actually running when the button was pressed, 
+      similar to the action of a key press or mouse event.</P>
+      <P>The <A 
+      href="http://msdn2.microsoft.com/en-us/library/ms724947.aspx">SystemParametersInfo</A> 
+      API provided by the <I>user32.dll</I> supports a set of functions for 
+      accessing screen saver settings, including getting and setting activation, 
+      the time out value, and checking to see if the screen saver is running. 
+      However, there doesn't seem to be a function for terminating the screen 
+      saver if it is running. The <CODE>SPI_SETSCREENSAVERRUNNING</CODE> 
+      function oddly doesn't do the job as one might think, which instead is 
+      suggested as an obscure technique to <A 
+      href="http://support.microsoft.com/kb/226359">disable task switching</A> 
+      under Windows 95 and 98. Ultimately, the solution was found in another <A 
+      href="http://support.microsoft.com/kb/140723">knowledge base article</A> 
+      discussing <I>user32.dll</I> functions which can be used to find the 
+      running screen saver application and then force it to close. The main task 
+      now was to implement a class to call these unmanaged functions using 
+      C#.</P>
+      <H2>Using the code</H2>
+      <P>To use the code, just copy the class <CODE>ScreenSaver</CODE> into your 
+      program and call the exposed methods, which for the most part are just 
+      wrappers to the <I>user32.dll</I> functions: 
+      <UL>
+        <LI><CODE><SPAN class=code-keyword>bool</SPAN> GetScreenSaverActive( 
+        )</CODE> - returns TRUE if the screen saver is activate (but not 
+        necessarily running) 
+        <LI><CODE><SPAN class=code-keyword>void</SPAN> SetScreenSaverActive( 
+        <SPAN class=code-keyword>int</SPAN> Active )</CODE> - pass in 1 to 
+        activate, 0 to deactivate 
+        <LI><CODE><SPAN class=code-keyword>int</SPAN> GetScreenSaverTimeout( 
+        )</CODE> - returns the current timeout setting 
+        <LI><CODE><SPAN class=code-keyword>void</SPAN> SetScreenSaverTimeout( 
+        <SPAN class=code-keyword>int</SPAN> Value )</CODE> - pass in the desired 
+        timeout value 
+        <LI><CODE><SPAN class=code-keyword>bool</SPAN> GetScreenSaverRunning( 
+        )</CODE> - returns TRUE if the screen saver is running 
+        <LI><CODE><SPAN class=code-keyword>void</SPAN> KillScreenSaver( )</CODE> 
+        - terminates the screen saver 
+        <LI><CODE><SPAN class=code-SDKkeyword>IntPtr</SPAN> GetForegroundWindow( 
+        )</CODE> - returns the handle of the current foreground window 
+      </LI></UL>Here is the entire <CODE>ScreenSaver</CODE> class:
+      <P></P><PRE><SPAN class=code-keyword>public</SPAN> <SPAN class=code-keyword>static</SPAN> <SPAN class=code-keyword>class</SPAN> ScreenSaver
+{
+   <SPAN class=code-comment>//</SPAN><SPAN class=code-comment> Signatures for unmanaged calls
+</SPAN>   [DllImport( <SPAN class=code-string>"</SPAN><SPAN class=code-string>user32.dll"</SPAN>, CharSet = CharSet.Auto )]
+   <SPAN class=code-keyword>private</SPAN> <SPAN class=code-keyword>static</SPAN> <SPAN class=code-keyword>extern</SPAN> <SPAN class=code-keyword>bool</SPAN> SystemParametersInfo( 
+      <SPAN class=code-keyword>int</SPAN> uAction, <SPAN class=code-keyword>int</SPAN> uParam, <SPAN class=code-keyword>ref</SPAN> <SPAN class=code-keyword>int</SPAN> lpvParam, 
+      <SPAN class=code-keyword>int</SPAN> flags );
+
+   [DllImport( <SPAN class=code-string>"</SPAN><SPAN class=code-string>user32.dll"</SPAN>, CharSet = CharSet.Auto )]
+   <SPAN class=code-keyword>private</SPAN> <SPAN class=code-keyword>static</SPAN> <SPAN class=code-keyword>extern</SPAN> <SPAN class=code-keyword>bool</SPAN> SystemParametersInfo( 
+      <SPAN class=code-keyword>int</SPAN> uAction, <SPAN class=code-keyword>int</SPAN> uParam, <SPAN class=code-keyword>ref</SPAN> <SPAN class=code-keyword>bool</SPAN> lpvParam, 
+      <SPAN class=code-keyword>int</SPAN> flags );
+
+   [DllImport( <SPAN class=code-string>"</SPAN><SPAN class=code-string>user32.dll"</SPAN>, CharSet = CharSet.Auto )]
+   <SPAN class=code-keyword>private</SPAN> <SPAN class=code-keyword>static</SPAN> <SPAN class=code-keyword>extern</SPAN> <SPAN class=code-keyword>int</SPAN> PostMessage( <SPAN class=code-SDKkeyword>IntPtr</SPAN> hWnd, 
+      <SPAN class=code-keyword>int</SPAN> wMsg, <SPAN class=code-keyword>int</SPAN> wParam, <SPAN class=code-keyword>int</SPAN> lParam );
+
+   [DllImport( <SPAN class=code-string>"</SPAN><SPAN class=code-string>user32.dll"</SPAN>, CharSet = CharSet.Auto )]
+   <SPAN class=code-keyword>private</SPAN> <SPAN class=code-keyword>static</SPAN> <SPAN class=code-keyword>extern</SPAN> <SPAN class=code-SDKkeyword>IntPtr</SPAN> OpenDesktop( 
+      <SPAN class=code-SDKkeyword>string</SPAN> hDesktop, <SPAN class=code-keyword>int</SPAN> Flags, <SPAN class=code-keyword>bool</SPAN> Inherit, 
+      uint DesiredAccess );
+
+   [DllImport( <SPAN class=code-string>"</SPAN><SPAN class=code-string>user32.dll"</SPAN>, CharSet = CharSet.Auto )]
+   <SPAN class=code-keyword>private</SPAN> <SPAN class=code-keyword>static</SPAN> <SPAN class=code-keyword>extern</SPAN> <SPAN class=code-keyword>bool</SPAN> CloseDesktop( 
+      <SPAN class=code-SDKkeyword>IntPtr</SPAN> hDesktop );
+
+   [DllImport( <SPAN class=code-string>"</SPAN><SPAN class=code-string>user32.dll"</SPAN>, CharSet = CharSet.Auto )]
+   <SPAN class=code-keyword>private</SPAN> <SPAN class=code-keyword>static</SPAN> <SPAN class=code-keyword>extern</SPAN> <SPAN class=code-keyword>bool</SPAN> EnumDesktopWindows( 
+      <SPAN class=code-SDKkeyword>IntPtr</SPAN> hDesktop, EnumDesktopWindowsProc callback, 
+      <SPAN class=code-SDKkeyword>IntPtr</SPAN> lParam );
+
+   [DllImport( <SPAN class=code-string>"</SPAN><SPAN class=code-string>user32.dll"</SPAN>, CharSet = CharSet.Auto )]
+   <SPAN class=code-keyword>private</SPAN> <SPAN class=code-keyword>static</SPAN> <SPAN class=code-keyword>extern</SPAN> <SPAN class=code-keyword>bool</SPAN> IsWindowVisible( 
+      <SPAN class=code-SDKkeyword>IntPtr</SPAN> hWnd );
+
+   [DllImport( <SPAN class=code-string>"</SPAN><SPAN class=code-string>user32.dll"</SPAN>, CharSet = CharSet.Auto )]
+   <SPAN class=code-keyword>public</SPAN> <SPAN class=code-keyword>static</SPAN> <SPAN class=code-keyword>extern</SPAN> <SPAN class=code-SDKkeyword>IntPtr</SPAN> GetForegroundWindow( );
+
+   <SPAN class=code-comment>//</SPAN><SPAN class=code-comment> Callbacks
+</SPAN>   <SPAN class=code-keyword>private</SPAN> <SPAN class=code-keyword>delegate</SPAN> <SPAN class=code-keyword>bool</SPAN> EnumDesktopWindowsProc( 
+      <SPAN class=code-SDKkeyword>IntPtr</SPAN> hDesktop, <SPAN class=code-SDKkeyword>IntPtr</SPAN> lParam );
+
+   <SPAN class=code-comment>//</SPAN><SPAN class=code-comment> Constants
+</SPAN>   <SPAN class=code-keyword>private</SPAN> <SPAN class=code-keyword>const</SPAN> <SPAN class=code-keyword>int</SPAN> SPI_GETSCREENSAVERACTIVE = <SPAN class=code-digit>16</SPAN>;
+   <SPAN class=code-keyword>private</SPAN> <SPAN class=code-keyword>const</SPAN> <SPAN class=code-keyword>int</SPAN> SPI_SETSCREENSAVERACTIVE = <SPAN class=code-digit>17</SPAN>;
+   <SPAN class=code-keyword>private</SPAN> <SPAN class=code-keyword>const</SPAN> <SPAN class=code-keyword>int</SPAN> SPI_GETSCREENSAVERTIMEOUT = <SPAN class=code-digit>14</SPAN>;
+   <SPAN class=code-keyword>private</SPAN> <SPAN class=code-keyword>const</SPAN> <SPAN class=code-keyword>int</SPAN> SPI_SETSCREENSAVERTIMEOUT = <SPAN class=code-digit>15</SPAN>;
+   <SPAN class=code-keyword>private</SPAN> <SPAN class=code-keyword>const</SPAN> <SPAN class=code-keyword>int</SPAN> SPI_GETSCREENSAVERRUNNING = <SPAN class=code-digit>114</SPAN>;
+   <SPAN class=code-keyword>private</SPAN> <SPAN class=code-keyword>const</SPAN> <SPAN class=code-keyword>int</SPAN> SPIF_SENDWININICHANGE = <SPAN class=code-digit>2</SPAN>;
+
+   <SPAN class=code-keyword>private</SPAN> <SPAN class=code-keyword>const</SPAN> uint DESKTOP_WRITEOBJECTS = 0x0080;
+   <SPAN class=code-keyword>private</SPAN> <SPAN class=code-keyword>const</SPAN> uint DESKTOP_READOBJECTS = 0x0001;
+   <SPAN class=code-keyword>private</SPAN> <SPAN class=code-keyword>const</SPAN> <SPAN class=code-keyword>int</SPAN> WM_CLOSE = <SPAN class=code-digit>16</SPAN>;
+
+
+   <SPAN class=code-comment>//</SPAN><SPAN class=code-comment> Returns TRUE if the screen saver is active 
+</SPAN>   <SPAN class=code-comment>//</SPAN><SPAN class=code-comment> (enabled, but not necessarily running).
+</SPAN>   <SPAN class=code-keyword>public</SPAN> <SPAN class=code-keyword>static</SPAN> <SPAN class=code-keyword>bool</SPAN> GetScreenSaverActive( )
+   {
+      <SPAN class=code-keyword>bool</SPAN> isActive = <SPAN class=code-keyword>false</SPAN>;
+
+      SystemParametersInfo( SPI_GETSCREENSAVERACTIVE, <SPAN class=code-digit>0</SPAN>, 
+         <SPAN class=code-keyword>ref</SPAN> isActive, <SPAN class=code-digit>0</SPAN> );
+      <SPAN class=code-keyword>return</SPAN> isActive;
+   }
+
+   <SPAN class=code-comment>//</SPAN><SPAN class=code-comment> Pass in TRUE(1) to activate or FALSE(0) to deactivate
+</SPAN>   <SPAN class=code-comment>//</SPAN><SPAN class=code-comment> the screen saver.
+</SPAN>   <SPAN class=code-keyword>public</SPAN> <SPAN class=code-keyword>static</SPAN> <SPAN class=code-keyword>void</SPAN> SetScreenSaverActive( <SPAN class=code-keyword>int</SPAN> Active )
+   {
+      <SPAN class=code-keyword>int</SPAN> nullVar = <SPAN class=code-digit>0</SPAN>;
+
+      SystemParametersInfo( SPI_SETSCREENSAVERACTIVE, 
+         Active, <SPAN class=code-keyword>ref</SPAN> nullVar, SPIF_SENDWININICHANGE );
+   }
+
+   <SPAN class=code-comment>//</SPAN><SPAN class=code-comment> Returns the screen saver timeout setting, in seconds
+</SPAN>   <SPAN class=code-keyword>public</SPAN> <SPAN class=code-keyword>static</SPAN> <SPAN class=code-SDKkeyword>Int32</SPAN> GetScreenSaverTimeout( )
+   {
+      <SPAN class=code-SDKkeyword>Int32</SPAN> <SPAN class=code-keyword>value</SPAN> = <SPAN class=code-digit>0</SPAN>;
+
+      SystemParametersInfo( SPI_GETSCREENSAVERTIMEOUT, <SPAN class=code-digit>0</SPAN>, 
+         <SPAN class=code-keyword>ref</SPAN> <SPAN class=code-keyword>value</SPAN>, <SPAN class=code-digit>0</SPAN> );
+      <SPAN class=code-keyword>return</SPAN> <SPAN class=code-keyword>value</SPAN>;
+   }
+
+   <SPAN class=code-comment>//</SPAN><SPAN class=code-comment> Pass in the number of seconds to set the screen saver
+</SPAN>   <SPAN class=code-comment>//</SPAN><SPAN class=code-comment> timeout value.
+</SPAN>   <SPAN class=code-keyword>public</SPAN> <SPAN class=code-keyword>static</SPAN> <SPAN class=code-keyword>void</SPAN> SetScreenSaverTimeout( <SPAN class=code-SDKkeyword>Int32</SPAN> Value )
+   {
+      <SPAN class=code-keyword>int</SPAN> nullVar = <SPAN class=code-digit>0</SPAN>;
+
+      SystemParametersInfo( SPI_SETSCREENSAVERTIMEOUT, 
+         Value, <SPAN class=code-keyword>ref</SPAN> nullVar, SPIF_SENDWININICHANGE );
+   }
+
+   <SPAN class=code-comment>//</SPAN><SPAN class=code-comment> Returns TRUE if the screen saver is actually running
+</SPAN>   <SPAN class=code-keyword>public</SPAN> <SPAN class=code-keyword>static</SPAN> <SPAN class=code-keyword>bool</SPAN> GetScreenSaverRunning( )
+   {
+      <SPAN class=code-keyword>bool</SPAN> isRunning = <SPAN class=code-keyword>false</SPAN>;
+
+      SystemParametersInfo( SPI_GETSCREENSAVERRUNNING, <SPAN class=code-digit>0</SPAN>, 
+         <SPAN class=code-keyword>ref</SPAN> isRunning, <SPAN class=code-digit>0</SPAN> );
+      <SPAN class=code-keyword>return</SPAN> isRunning;
+   }
+
+   <SPAN class=code-comment>//</SPAN><SPAN class=code-comment> From Microsoft's Knowledge Base article #140723: 
+</SPAN>   <SPAN class=code-comment>//</SPAN><SPAN class=code-comment> http://support.microsoft.com/kb/140723
+</SPAN>   <SPAN class=code-comment>//</SPAN><SPAN class=code-comment> "How to force a screen saver to close once started 
+</SPAN>   <SPAN class=code-comment>//</SPAN><SPAN class=code-comment> in Windows NT, Windows 2000, and Windows Server 2003"
+</SPAN>
+   <SPAN class=code-keyword>public</SPAN> <SPAN class=code-keyword>static</SPAN> <SPAN class=code-keyword>void</SPAN> KillScreenSaver( )
+   {
+      <SPAN class=code-SDKkeyword>IntPtr</SPAN> hDesktop = OpenDesktop( <SPAN class=code-string>"</SPAN><SPAN class=code-string>Screen-saver"</SPAN>, <SPAN class=code-digit>0</SPAN>, 
+         <SPAN class=code-keyword>false</SPAN>,DESKTOP_READOBJECTS | DESKTOP_WRITEOBJECTS);
+      <SPAN class=code-keyword>if</SPAN>( hDesktop != <SPAN class=code-SDKkeyword>IntPtr</SPAN>.Zero )
+      {
+         EnumDesktopWindows( hDesktop, <SPAN class=code-keyword>new</SPAN> 
+            EnumDesktopWindowsProc( KillScreenSaverFunc ),
+            <SPAN class=code-SDKkeyword>IntPtr</SPAN>.Zero );
+         CloseDesktop( hDesktop );
+      }
+      <SPAN class=code-keyword>else</SPAN>
+      {
+         PostMessage( GetForegroundWindow( ), WM_CLOSE, 
+            <SPAN class=code-digit>0</SPAN>, <SPAN class=code-digit>0</SPAN> );
+      }
+   }
+
+   <SPAN class=code-keyword>private</SPAN> <SPAN class=code-keyword>static</SPAN> <SPAN class=code-keyword>bool</SPAN> KillScreenSaverFunc( <SPAN class=code-SDKkeyword>IntPtr</SPAN> hWnd, 
+      <SPAN class=code-SDKkeyword>IntPtr</SPAN> lParam )
+   {
+      <SPAN class=code-keyword>if</SPAN>( IsWindowVisible( hWnd ) )
+         PostMessage( hWnd, WM_CLOSE, <SPAN class=code-digit>0</SPAN>, <SPAN class=code-digit>0</SPAN> );
+      <SPAN class=code-keyword>return</SPAN> <SPAN class=code-keyword>true</SPAN>;
+   }
+}
+</PRE>
+      <P>The more interesting code here is the <CODE>KillScreenSaver( )</CODE> 
+      method. Beginning with Microsoft Windows NT, you cannot simply make a call 
+      to close the foreground window as you could under previous releases of 
+      Windows. Windows NT introduces the concept of separate desktops. 
+      Applications can run on one desktop, and screen savers can run on another. 
+      For example, under Windows XP, if you check the "On resume, display 
+      Welcome screen" option in the Screen Saver tab of Display Properties, the 
+      screen saver will be running on a desktop other than the one for your 
+      application. In this case, you need to find the screen saver desktop and 
+      close its foreground window to terminate the screen saver. If this option 
+      is not checked, the screen saver is running on the same desktop as your 
+      application, and may be killed merely by closing the foreground window in 
+      that desktop.</P>
+      <P>Another thing worth pointing out is in the <CODE>KillScreenSaverFunc( 
+      )</CODE> callback function. Notice the call to <CODE>IsWindowVisible( hWnd 
+      )</CODE> just before closing what presumably is the screen saver window. 
+      Apparently it's possible for the screen saver to be "running", yet not 
+      actually be seen as the foreground application on the desktop. As we'll 
+      see in our Test Program, we need to keep this in mind for when the screen 
+      saver is running on the same desktop as our application. Otherwise our 
+      application could end up being the one killed by the call to 
+      <CODE>PostMessage( GetForegroundWindow( ), WM_CLOSE, <SPAN 
+      class=code-digit>0</SPAN>, <SPAN class=code-digit>0</SPAN> )</CODE>, which 
+      might annoy the user.</P>
+      <H2>The Test Program</H2>
+      <P>The Screen Saver Test program demonstrates how to use the 
+      <CODE>ScreenSaver</CODE> class. It can also serve as a convenient utility 
+      to edit the screen saver settings as you're testing your own application. 
+      Since it can modify the screen saver values normally set with the Display 
+      Properties dialog, it saves off these values so they may be restored on 
+      exit or manually using the Restore button. The form is set to be "TopMost" 
+      to make it easily accessible when being used with full screen apps.</P>
+      <P><IMG height=253 alt="Screen Saver Test Dialog" 
+      src="CodeProject Controlling The Screen Saver With C#_ Free source code and programming help_files/ScreenSaverTest.png" 
+      width=339 align=top></P>
+      <P>To change the screen saver timeout, enter the number of seconds in the 
+      <CODE>NumericUpDown</CODE> control on the right and click the Write 
+      button. If the screen saver is "active", it should kick on that many 
+      seconds later. If any of the settings are changed outside of the test 
+      program, for example by using the Display Properties dialog, click the 
+      Refresh button to display the new values.</P>
+      <P>To facilitate testing the <CODE>KillScreenSaver( )</CODE> method, the 
+      test program uses a periodic timer. The timeout period can be set and the 
+      timer can be toggled using the Start/Stop Timer button. If the period is 
+      greater than the screen saver timeout, a call to <CODE>KillScreenSaver( 
+      )</CODE> will terminate the screen saver. If the period is less, the 
+      screen saver timeout is reset by invoking <CODE>SetScreenSaverActive( TRUE 
+      )</CODE>, preventing the screen saver from running until after a full 
+      timeout has expired.</P><PRE><SPAN class=code-comment>//</SPAN><SPAN class=code-comment> Kill event timer handler
+</SPAN><SPAN class=code-keyword>private</SPAN> <SPAN class=code-keyword>void</SPAN> KillTimer_Elapsed( <SPAN class=code-SDKkeyword>object</SPAN> state )
+{
+   <SPAN class=code-comment>//</SPAN><SPAN class=code-comment> Toggle kill state to indicate activity
+</SPAN>   killState = ( killState == <SPAN class=code-digit>1</SPAN> ) ? <SPAN class=code-digit>0</SPAN> : <SPAN class=code-digit>1</SPAN>;
+   <SPAN class=code-keyword>this</SPAN>.SetText( killState.ToString( ) );
+
+   <SPAN class=code-comment>//</SPAN><SPAN class=code-comment> Stop the screen saver if it's active and running, 
+</SPAN>   <SPAN class=code-comment>//</SPAN><SPAN class=code-comment> otherwise reset the screen saver timer.
+</SPAN>   <SPAN class=code-comment>//</SPAN><SPAN class=code-comment> Apparently it's possible for GetScreenSaverRunning()
+</SPAN>   <SPAN class=code-comment>//</SPAN><SPAN class=code-comment> to return TRUE before the screen saver has time to 
+</SPAN>   <SPAN class=code-comment>//</SPAN><SPAN class=code-comment> actually become the foreground application. So...
+</SPAN>   <SPAN class=code-comment>//</SPAN><SPAN class=code-comment> Make sure we're not the foreground window to avoid 
+</SPAN>   <SPAN class=code-comment>//</SPAN><SPAN class=code-comment> killing ourself.
+</SPAN>
+   <SPAN class=code-keyword>if</SPAN>( ScreenSaver.GetScreenSaverActive( ) )
+   {
+      <SPAN class=code-keyword>if</SPAN>( ScreenSaver.GetScreenSaverRunning( ) )
+      {
+         <SPAN class=code-keyword>if</SPAN>( ScreenSaver.GetForegroundWindow() != hThisWnd)
+            ScreenSaver.KillScreenSaver( );
+      }
+      <SPAN class=code-keyword>else</SPAN>
+      {
+         <SPAN class=code-comment>//</SPAN><SPAN class=code-comment> Reset the screen saver timer, so the screen 
+</SPAN>         <SPAN class=code-comment>//</SPAN><SPAN class=code-comment> saver doesn't turn on until after a full
+</SPAN>         <SPAN class=code-comment>//</SPAN><SPAN class=code-comment> timeout period. If killPeriod is less than 
+</SPAN>         <SPAN class=code-comment>//</SPAN><SPAN class=code-comment> ssTimeout the screen saver should never 
+</SPAN>         <SPAN class=code-comment>//</SPAN><SPAN class=code-comment> activate.
+</SPAN>         ScreenSaver.SetScreenSaverActive( TRUE );
+      }
+   }
+}
+</PRE>
+      <P>As pointed out earlier, it's possible for the 
+      <CODE>SPI_GETSCREENSAVERRUNNING</CODE> call to return TRUE before the 
+      screen saver actually becomes the foreground window. Perhaps this function 
+      should be renamed to <CODE>SPI_GETSCREENSAVERSORTAKINDARUNNING</CODE>. 
+      Anyways, make sure the foreground window isn't your own app before 
+      invoking <CODE>KillScreenSaver( )</CODE>, otherwise it might get closed 
+      instead.</P><!-- Article Ends --><!-- Main Page Contents End --></DIV></SPAN>
+      <FORM id=aspnetForm 
+      style="PADDING-RIGHT: 0px; PADDING-LEFT: 0px; PADDING-BOTTOM: 0px; MARGIN: 0px; PADDING-TOP: 0px" 
+      name=aspnetForm action=ScreenSaverControl.aspx method=post>
+      <DIV><INPUT id=__VIEWSTATE type=hidden 
+      value=/wEPDwULLTEwMDUyNjYzMjhkZPcaSJ1bki2F9WiTukc+rdjVAbHR 
+      name=__VIEWSTATE> </DIV>
+      <H2>License</H2>
+      <DIV id=ctl00_LicenseTerms>
+      <P>This article has no explicit license attached to it but may contain 
+      usage terms in the article text or the download files themselves. If in 
+      doubt please contact the author via the discussion board below.</P>
+      <P>A list of licenses authors might use can be found <A 
+      href="http://www.codeproject.com/info/Licenses.aspx">here</A></P></DIV>
+      <H2>About the Author</H2>
+      <TABLE cellSpacing=5 cellPadding=0 width="100%" border=0>
+        <TBODY>
+        <TR vAlign=top>
+          <TD id=ctl00_AboutAuthorRptr_ctl00_AboutAuthor_memberPhotoTable 
+          style="WIDTH: 155px" vAlign=top><B><A 
+            id=ctl00_AboutAuthorRptr_ctl00_AboutAuthor_memberProfileLink 
+            href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=2604657">kschulz</A></B><BR><BR>
+            <CENTER><IMG id=ctl00_AboutAuthorRptr_ctl00_AboutAuthor_memberPhoto 
+            style="BORDER-TOP-WIDTH: 0px; BORDER-LEFT-WIDTH: 0px; BORDER-BOTTOM-WIDTH: 0px; BORDER-RIGHT-WIDTH: 0px" 
+            src="CodeProject Controlling The Screen Saver With C#_ Free source code and programming help_files/{968B0141-29B6-4A62-97D0-17D46F837C87}.jpg"></CENTER><BR><SPAN 
+            class=SmallText 
+            id=ctl00_AboutAuthorRptr_ctl00_AboutAuthor_memberType></SPAN></TD>
+          <TD>Kurt's programming career began in 1978, developing firmware for 
+            the Zilog Z80-A microprocessor on a Mostek development workstation. 
+            For 23 years, Kurt led the development of Human Machine Interface 
+            (HMI) programs used in factory automation, marketed and sold 
+            worldwide by CTC and Parker Hannifin as ScreenWare, Interact and 
+            InteractX. For the last 2 years, Kurt has been consulting on agile 
+            development practices and working as an independent software 
+            contractor focusing on graphical and user interface 
+            development.<BR><BR>Other passions include spending time with his 
+            wife Janice, daughters Erica and Laura, scuba diving, target 
+            shooting, guitar, travel, and digital photo imaging and restoration. 
+            Currently residing in southwestern Ohio.<BR>
+            <TABLE>
+              <TBODY>
+              <TR id=ctl00_AboutAuthorRptr_ctl00_AboutAuthor_jobTitleRow>
+                <TD class=SmallText noWrap>Occupation: </TD>
+                <TD width="100%"><SPAN class=SmallText 
+                  id=ctl00_AboutAuthorRptr_ctl00_AboutAuthor_memberJobTitle>Web 
+                  Developer</SPAN></TD></TR>
+              <TR id=ctl00_AboutAuthorRptr_ctl00_AboutAuthor_locationRow>
+                <TD class=SmallText>Location: </TD>
+                <TD width="100%"><SPAN class=SmallText 
+                  id=ctl00_AboutAuthorRptr_ctl00_AboutAuthor_memberLocation><IMG 
+                  height=11 alt="United States" 
+                  src="CodeProject Controlling The Screen Saver With C#_ Free source code and programming help_files/US.gif" 
+                  width=16> United 
+        States</SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE><BR>
+      <TABLE id=ctl00_PopularArticlesRow cellSpacing=0 cellPadding=0 
+      width="100%" border=0>
+        <TBODY>
+        <TR vAlign=top>
+          <TD style="WIDTH: 100%">
+            <H2>Other popular C# articles:</H2>
+            <UL>
+              <LI><A 
+              href="http://www.codeproject.com/KB/cs/AsyncMethodInvocation.aspx">Asynchronous 
+              Method Invocation</A>
+              <DIV class=SmallText>How to use .NET to call methods in a 
+              non-blocking mode.</DIV>
+              <LI><A href="http://www.codeproject.com/KB/cs/csppleds.aspx">I/O 
+              Ports Uncensored - 1 - Controlling LEDs (Light Emiting Diodes) 
+              with Parallel Port</A>
+              <DIV class=SmallText>Controlling LEDs (Light Emiting Diodes) with 
+              Parallel Port</DIV>
+              <LI><A 
+              href="http://www.codeproject.com/KB/cs/IconLib.aspx">IconLib - 
+              Icons Unfolded (MultiIcon and Windows Vista supported)</A>
+              <DIV class=SmallText>Library to manipulate icons and icons 
+              libraries with support to create, load, save, import and export 
+              icons in ico, icl, dll, exe, cpl and src format. (Windows Vista 
+              icons supported).</DIV>
+              <LI><A href="http://www.codeproject.com/KB/cs/cspplcds.aspx">I/O 
+              Ports Uncensored Part 2 - Controlling LCDs (Liquid Crystal 
+              Displays) and VFDs (Vacuum Fluorescent Displays) with Parallel 
+              Port</A>
+              <DIV class=SmallText>Controlling LCDs (Liquid Crystal Displays) 
+              and VFDs (Vacuum Fluorescent Displays) with Parallel Port</DIV>
+              <LI><A 
+              href="http://www.codeproject.com/KB/cs/AutoDiagrammer.aspx">100% 
+              Reflective Class Diagram Creation Tool</A>
+              <DIV class=SmallText>100% Reflective Class Diagram Creation 
+              Tool</DIV></LI></UL>
+            <H2></H2></TD>
+          <TD>
+            <SCRIPT type=text/javascript>document.write(unescape("%3ca%20href%3d%22http%3a%2f%2fwww.codeproject.com%2fRedir.aspx%3fadid%3d5577%26way%3dban%22%20target%3d%22_blank%22%20rel%3d%22nofollow%22%3e%3cimg%20src%3d%22http%3a%2f%2fwww.codeproject.com%2fscript%2fAnn%2fServeImg.aspx%3fFile%3d%252fscript%252fadmentor%252fimages%252fJava1_300x250.gif%26C%3dFalse%26id%3d5577%22%20alt%3d%22%22%20border%3d%220%22%20width%3d%22300%22%20height%3d%22250%22%3e%3c%2fa%3e"));</SCRIPT>
+          </TD></TR></TBODY></TABLE>
+      <DIV id=ctl00_AddTo style="MARGIN: 10px">
+      <SCRIPT language=JavaScript type=text/javascript>
+			var addtoMethod=1;
+			var AddURL = document.location.href;
+			var AddTitle = escape(document.title);
+			DrawLinks(100, 0, "SmallText Bold", "AddTo") 
+			</SCRIPT>
+      </DIV>
+      <TABLE class=RatingBar id=ctl00_RateArticleRow cellSpacing=0 cellPadding=0 
+      width="100%" border=0>
+        <TBODY>
+        <TR>
+          <TD><A 
+            href="http://www.codeproject.com/KB/cs/ScreenSaverControl.aspx#_top">Article 
+            Top</A></TD>
+          <TD align=right>
+            <TABLE cellSpacing=0 cellPadding=0 width="100%">
+              <TBODY>
+              <TR>
+                <TD class=SmallText style="WHITE-SPACE: nowrap" align=right>
+                  <TABLE>
+                    <TBODY>
+                    <TR>
+                      <TD id=ctl00_RateArticle_SignIn><A 
+                        href="http://www.codeproject.com/KB/cs/ScreenSaverControl.aspx#SignUp">Sign 
+                        Up</A> to vote for this article</TD>
+                      <TD><SPAN 
+                    id=ctl00_RateArticle_ErrorMessage></SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></FORM>
+      <DIV 
+      style="PADDING-RIGHT: 10px; PADDING-LEFT: 10px; PADDING-BOTTOM: 10px; OVERFLOW: hidden; PADDING-TOP: 10px; WHITE-SPACE: nowrap; TEXT-ALIGN: center">
+      <SCRIPT type=text/javascript>document.write(unescape("%3ca%20href%3d%22http%3a%2f%2fwww.codeproject.com%2fRedir.aspx%3fadid%3d5508%26way%3dban%22%20target%3d%22_blank%22%20rel%3d%22nofollow%22%3e%3cimg%20src%3d%22http%3a%2f%2fwww.codeproject.com%2fscript%2fAnn%2fServeImg.aspx%3fFile%3d%252fscript%252fadmentor%252fimages%252fTallComp-pdfkit_468x60.gif%26C%3dFalse%26id%3d5508%22%20alt%3d%22%22%20border%3d%220%22%20width%3d%22486%22%20height%3d%2260%22%3e%3c%2fa%3e"));</SCRIPT>
+      <IFRAME 
+      src="C:\Documents and Settings\Administrator\Desktop\3d\CodeProject Controlling The Screen Saver With C#_ Free source code and programming help_files\ServeHTML(1).htm" 
+      frameBorder=0 width=300 scrolling=no height=60></IFRAME></DIV><A 
+      name=_comments></A><!-- Forum Start -->
+      <DIV id=_MessageBoard onclick="return SwitchMessage(event, null)">
+      <TABLE class=Frm_MainTable id=ForumTable cellSpacing=0 cellPadding=0>
+        <TBODY>
+        <TR>
+          <TD class=Frm_MsgAlert><B>You must <A 
+            href="http://www.codeproject.com/script/Membership/LogOn.aspx?rp=%2fKB%2fcs%2fScreenSaverControl.aspx%3ffid%3d373723">Sign 
+            In</A> to use this message board.</B></TD></TR>
+        <TR>
+          <TD>
+            <FORM 
+            action=/script/Forums/SetOptions.aspx?floc=%2fKB%2fcs%2fScreenSaverControl.aspx&amp;fid=373723 
+            method=get><INPUT type=hidden value=373723 name=fid><INPUT 
+            type=hidden 
+            value=?floc=%2fKB%2fcs%2fScreenSaverControl.aspx&amp;fid=373723 
+            name=currentQS><INPUT type=hidden 
+            value=/KB/cs/ScreenSaverControl.aspx name=floc>
+            <TABLE cellSpacing=0 cellPadding=3 width="100%" border=0>
+              <TBODY>
+              <TR class=Frm_HeaderRow1>
+                <TD style="WHITE-SPACE: nowrap"><IMG height=16 alt=FAQ 
+                  src="CodeProject Controlling The Screen Saver With C#_ Free source code and programming help_files/forum_faq.gif" 
+                  width=16 align=middle border=0>&nbsp;<A 
+                  href="http://www.codeproject.com/script/Forums/FAQ.aspx"><B>FAQ</B></A>&nbsp;</TD>
+                <TD style="WHITE-SPACE: nowrap; TEXT-ALIGN: right">Noise 
+                  Tolerance<SELECT class=Frm_DropDown size=1 name=noise> 
+                    <OPTION value=1>Very High</OPTION><OPTION 
+                    value=2>High</OPTION><OPTION value=3 
+                    selected>Medium</OPTION><OPTION value=4>Low</OPTION><OPTION 
+                    value=5>Very Low</OPTION></SELECT></TD>
+                <TD style="WHITE-SPACE: nowrap; TEXT-ALIGN: right" 
+                  colSpan=2><IMG height=15 alt=Search 
+                  src="CodeProject Controlling The Screen Saver With C#_ Free source code and programming help_files/forum_search.gif" 
+                  width=16 align=top border=0>&nbsp;<A 
+                  href="http://www.codeproject.com/script/Forums/Search.aspx?fid=373723">Search 
+                  comments</A>&nbsp;</TD>
+                <TD style="TEXT-ALIGN: right"><INPUT class=Frm_Button type=submit value="Set Options" name=submit></TD></TR>
+              <TR class=Frm_HeaderRow2>
+                <TD style="WIDTH: 100%">&nbsp;</TD>
+                <TD 
+                  style="WHITE-SPACE: nowrap; TEXT-ALIGN: right">Layout<SELECT 
+                  class=Frm_DropDown size=1 name=view> <OPTION value=Quick 
+                    selected>Normal</OPTION><OPTION value=Topic>Expand Root 
+                    Messages</OPTION><OPTION value=Expanded>Expand All 
+                    Messages</OPTION><OPTION value=Thread>Thread 
+                    View</OPTION><OPTION value=Normal>No Javascript 
+                    (slow)</OPTION><OPTION value=Preview>No Javascript 
+                    Preview</OPTION></SELECT>&nbsp;&nbsp;</TD>
+                <TD style="WHITE-SPACE: nowrap">Per page<SELECT 
+                  class=Frm_DropDown size=1 name=mpp> <OPTION 
+                    value=10>10</OPTION><OPTION value=25 
+                    selected>25</OPTION><OPTION 
+                  value=50>50</OPTION></SELECT>&nbsp;&nbsp;</TD>
+                <TD colSpan=2>&nbsp;</TD></TR></TBODY></TABLE></FORM></TD></TR>
+        <TR>
+          <TD><A name=xx0xx></A>
+            <TABLE cellSpacing=0 cellPadding=2 width="100%" border=0>
+              <TBODY>
+              <TR class=Frm_NavigationBar>
+                <TD>&nbsp;</TD>
+                <TD>Msgs 1 to 22 of 22 (Total in Forum: 22) (<A 
+                  href="http://www.codeproject.com/KB/cs/ScreenSaverControl.aspx?fid=373723">Refresh</A>)</TD>
+                <TD style="WHITE-SPACE: nowrap; TEXT-ALIGN: right"><SPAN 
+                  class=Frm_HL>First</SPAN><SPAN class=Frm_HL>Prev</SPAN><SPAN 
+                  class=Frm_HL>Next</SPAN></TD></TR></TBODY></TABLE></TD></TR>
+        <TR>
+          <TD><!-- Column Headers -->
+            <TABLE class=Frm_MsgTable cellSpacing=0 cellPadding=0 width="100%" 
+            border=0>
+              <TBODY>
+              <TR class=Frm_ColumnHeaders>
+                <TD style="WIDTH: 100%">
+                  <TABLE cellSpacing=0 cellPadding=2 width="100%" border=0>
+                    <TBODY>
+                    <TR>
+                      <TD>Subject&nbsp;</TD>
+                      <TD class=Frm_MsgAuthor>&nbsp;Author&nbsp;</TD>
+                      <TD 
+              class=Frm_MsgDate>Date&nbsp;</TD></TR></TBODY></TABLE></TD></TR>
+              <TR>
+                <TD><IMG height=5 alt="" 
+                  src="C:\Documents and Settings\Administrator\Desktop\3d\CodeProject Controlling The Screen Saver With C#_ Free source code and programming help_files\t(1).gif" 
+                  width=1 border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd Rt HdUnSel " id=F2462619_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=16><A 
+                        name=xx2462619xx></A><IMG height=16 alt=General 
+                        src="CodeProject Controlling The Screen Saver With C#_ Free source code and programming help_files/msg_general.gif" 
+                        width=16 align=top></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/cs/ScreenSaverControl.aspx?fid=373723&amp;select=2462619#xx2462619xx" 
+                        name=2462619>Setting SCREENSAVERRUNNING flag</A></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        height=16 alt=member 
+                        src="CodeProject Controlling The Screen Saver With C#_ Free source code and programming help_files/member_sm.gif" 
+                        border=0></TD>
+                      <TD class=Frm_MsgAuthor><A 
+                        href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=943806">czesiek120</A></TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">22:05 
+                        11 Mar '08 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=F2462619_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 16px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2>How about notifying the system 
+                                that the screensaver is running without actually 
+                                running it? In other words, I need to enable 
+                                SCREENSAVERRUNNING flag, so that 
+                                SPI_GETSCREENSAVERRUNNING will return TRUE. 
+                                Unfortunately SPI_SETSCREENSAVERRUNNING does not 
+                                do this, as one would think. 
+                                SPI_SETSCREENSAVEACTIVE succesfully sets the 
+                                screensaver active (as in enabled) without even 
+                                a screensaver present. The method someone wrote 
+                                here:<BR><CODE>SendMessage(GetDesktopWindow(), 
+                                WM_SYSCOMMAND, SC_SCREENSAVE, 0);</CODE> 
+                                requires that the screensaver is set in the 
+                                Screen properties dialog box as a system 
+                                screensaver. However, when system runs 
+                                screensaver it sets the ..RUNNING flags, because 
+                                then SPI_GETSCREENSAVERRUNNING returns true, but 
+                                I don't know how it does that.<BR><BR>Thanks for 
+                                any pointers. <BR></TD></TR>
+                                <TR style="VERTICAL-ALIGN: top">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL 
+                                href="http://www.codeproject.com/script/Membership/LogOn.aspx?rp=%2fKB%2fcs%2fScreenSaverControl.aspx">Sign 
+                                In</A>·<A class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/cs/ScreenSaverControl.aspx?fid=373723&amp;tid=2462619">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=373723&amp;msg=2462619">PermaLink</A></TD>
+                                <TD class=Frm_MsgFt 
+                                style="TEXT-ALIGN: right"><SPAN id=MVF2462619 
+                                style="WHITE-SPACE: nowrap"></SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR class=Quick>
+                <TD class=Frm_MsgRtDivide><IMG height=1 alt="" 
+                  src="C:\Documents and Settings\Administrator\Desktop\3d\CodeProject Controlling The Screen Saver With C#_ Free source code and programming help_files\t(1).gif" 
+                  width=1 border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd LoVote Rt HdUnSel " id=F2215440_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=16><A 
+                        name=xx2215440xx></A><IMG height=16 alt=Question 
+                        src="CodeProject Controlling The Screen Saver With C#_ Free source code and programming help_files/msg_question.gif" 
+                        width=16 align=top></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/cs/ScreenSaverControl.aspx?fid=373723&amp;select=2215440#xx2215440xx" 
+                        name=2215440>If 'On resume, password protect' option 
+                        selected, screen saver does not come.</A></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        height=16 alt=member 
+                        src="CodeProject Controlling The Screen Saver With C#_ Free source code and programming help_files/member_sm.gif" 
+                        border=0></TD>
+                      <TD class=Frm_MsgAuthor><A 
+                        href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=1970349">Ashwini 
+                        Appajigowda</A></TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">2:40 6 
+                        Sep '07 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=F2215440_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 16px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2>Hi,<BR><BR>I have an simple MFC 
+                                dialog based application. On launch of that 
+                                application ‘Password protected screen saver’ is 
+                                not getting activated. <BR><BR>If ‘On resume, 
+                                password protect’ option unchecked, I am getting 
+                                the Screen saver. <BR><BR>Application not 
+                                generating any of the keyboard or any user 
+                                events to disturb the system. If I exit the 
+                                application every thing works normal(Means 
+                                password protected screen saver gets activates 
+                                after screen saver time out 
+                                period.)<BR><BR>Please help me in understanding, 
+                                why ‘Password protected screen saver’ is not 
+                                getting activated.<BR><BR><BR>Thanks &amp; 
+                                regard’s<BR>Ashwini<BR><BR></TD></TR>
+                                <TR style="VERTICAL-ALIGN: top">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL 
+                                href="http://www.codeproject.com/script/Membership/LogOn.aspx?rp=%2fKB%2fcs%2fScreenSaverControl.aspx">Sign 
+                                In</A>·<A class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/cs/ScreenSaverControl.aspx?fid=373723&amp;tid=2215440">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=373723&amp;msg=2215440">PermaLink</A></TD>
+                                <TD class=Frm_MsgFt 
+                                style="TEXT-ALIGN: right"><SPAN id=MVF2215440 
+                                style="WHITE-SPACE: nowrap">1.00/5 (1 vote) 
+                                </SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR class=Quick>
+                <TD class=Frm_MsgRtDivide><IMG height=1 alt="" 
+                  src="C:\Documents and Settings\Administrator\Desktop\3d\CodeProject Controlling The Screen Saver With C#_ Free source code and programming help_files\t(1).gif" 
+                  width=1 border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd Rt HdUnSel " id=F2181183_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=16><A 
+                        name=xx2181183xx></A><IMG height=16 alt=General 
+                        src="CodeProject Controlling The Screen Saver With C#_ Free source code and programming help_files/msg_general.gif" 
+                        width=16 align=top></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/cs/ScreenSaverControl.aspx?fid=373723&amp;select=2181183#xx2181183xx" 
+                        name=2181183>The Easyist way to prevent the screensaver 
+                        and / or mmonitor power off</A></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        height=16 alt=member 
+                        src="CodeProject Controlling The Screen Saver With C#_ Free source code and programming help_files/member_sm.gif" 
+                        border=0></TD>
+                      <TD class=Frm_MsgAuthor><A 
+                        href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=556891">sagaert</A></TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">0:06 14 
+                        Aug '07 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=F2181183_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 16px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2>No need to make a timer kicking 
+                                the screensver,<BR>Simply capture the messages 
+                                and return -1 if you want to disable the 
+                                screensaver<BR>or monitor power off (wich are 2 
+                                different things !)<BR><BR><BR><CODE>protected 
+                                override void WndProc(ref Message 
+                                m)<BR>{<BR>const int SC_SCREENSAVE = 
+                                0xF140;<BR>const int SC_MONITORPOWER = 
+                                0xF170;<BR>const int WM_SYSCOMMAND = 
+                                0x0112;<BR><BR>if ((m.WParam == 
+                                (IntPtr)SC_SCREENSAVE) &amp;&amp; (m.Msg == 
+                                WM_SYSCOMMAND))<BR>m.Result = (IntPtr)(-1); // 
+                                prevent screensaver<BR>else if ((m.WParam == 
+                                (IntPtr)SC_MONITORPOWER) &amp;&amp; (m.Msg == 
+                                WM_SYSCOMMAND))<BR>m.Result = (IntPtr)(-1); // 
+                                prevent monitor 
+                                power-off<BR>else<BR>base.WndProc(ref 
+                                m);<BR>}</CODE> <BR></TD></TR>
+                                <TR style="VERTICAL-ALIGN: top">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL 
+                                href="http://www.codeproject.com/script/Membership/LogOn.aspx?rp=%2fKB%2fcs%2fScreenSaverControl.aspx">Sign 
+                                In</A>·<A class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/cs/ScreenSaverControl.aspx?fid=373723&amp;tid=2181183">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=373723&amp;msg=2181183">PermaLink</A></TD>
+                                <TD class=Frm_MsgFt 
+                                style="TEXT-ALIGN: right"><SPAN id=MVF2181183 
+                                style="WHITE-SPACE: nowrap"></SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR class=Quick>
+                <TD class=Frm_MsgDivide><IMG height=1 alt="" 
+                  src="C:\Documents and Settings\Administrator\Desktop\3d\CodeProject Controlling The Screen Saver With C#_ Free source code and programming help_files\t(1).gif" 
+                  width=1 border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd HdUnSel " id=F2181569_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=34><A 
+                        name=xx2181569xx></A><IMG height=16 alt=General 
+                        src="CodeProject Controlling The Screen Saver With C#_ Free source code and programming help_files/msg_general.gif" 
+                        width=16 align=top></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/cs/ScreenSaverControl.aspx?fid=373723&amp;select=2181569#xx2181569xx" 
+                        name=2181569>Re: The Easyist way to prevent the 
+                        screensaver and / or mmonitor power off</A></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        height=16 alt=member 
+                        src="CodeProject Controlling The Screen Saver With C#_ Free source code and programming help_files/member_sm.gif" 
+                        border=0></TD>
+                      <TD class=Frm_MsgAuthor><A 
+                        href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=2604657">kschulz</A></TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">3:43 14 
+                        Aug '07 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=F2181569_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 34px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2>The timer is only used by the test 
+                                program, as a convenient way to fire off the 
+                                screen saver disabling code after the screen 
+                                saver has kicked on. The timer would not be used 
+                                in an actual application.<BR><BR>Also, the goal 
+                                in this example is not to disable the screen 
+                                saver permanently, but rather to allow it to 
+                                work normally and disengage it programmatically 
+                                upon detection of some event. <BR><BR>
+                                <DIV class=ForumSig>-kschulz</DIV><BR></TD></TR>
+                                <TR style="VERTICAL-ALIGN: top">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL 
+                                href="http://www.codeproject.com/script/Membership/LogOn.aspx?rp=%2fKB%2fcs%2fScreenSaverControl.aspx">Sign 
+                                In</A>·<A class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/cs/ScreenSaverControl.aspx?fid=373723&amp;tid=2181183">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=373723&amp;msg=2181569">PermaLink</A></TD>
+                                <TD class=Frm_MsgFt 
+                                style="TEXT-ALIGN: right"><SPAN id=MVF2181569 
+                                style="WHITE-SPACE: nowrap"></SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR class=Quick>
+                <TD class=Frm_MsgRtDivide><IMG height=1 alt="" 
+                  src="C:\Documents and Settings\Administrator\Desktop\3d\CodeProject Controlling The Screen Saver With C#_ Free source code and programming help_files\t(1).gif" 
+                  width=1 border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd Rt HdUnSel " id=F2061065_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=16><A 
+                        name=xx2061065xx></A><IMG height=16 alt=General 
+                        src="CodeProject Controlling The Screen Saver With C#_ Free source code and programming help_files/msg_general.gif" 
+                        width=16 align=top></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/cs/ScreenSaverControl.aspx?fid=373723&amp;select=2061065#xx2061065xx" 
+                        name=2061065>ScreenSaver password</A></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        height=16 alt=member 
+                        src="CodeProject Controlling The Screen Saver With C#_ Free source code and programming help_files/member_sm.gif" 
+                        border=0></TD>
+                      <TD class=Frm_MsgAuthor><A 
+                        href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=3726450">JohannesAckermann</A></TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">1:05 31 
+                        May '07 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=F2061065_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 16px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2>Hi,<BR><BR>Is it possible to 
+                                programmatically enable/disable the "On resume, 
+                                display logon screen" option for the 
+                                screensaver? I'm writing a utility to manually 
+                                start the screensaver (easy enough) as a locking 
+                                mechanism, but want to ensure that the password 
+                                option is enabled. So the idea is that when the 
+                                utility is run, it automatically enables the 
+                                password option and then starts the 
+                                screensaver.<BR><BR>Thanks,<BR><BR><BR><BR>Johannes<BR></TD></TR>
+                                <TR style="VERTICAL-ALIGN: top">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL 
+                                href="http://www.codeproject.com/script/Membership/LogOn.aspx?rp=%2fKB%2fcs%2fScreenSaverControl.aspx">Sign 
+                                In</A>·<A class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/cs/ScreenSaverControl.aspx?fid=373723&amp;tid=2061065">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=373723&amp;msg=2061065">PermaLink</A></TD>
+                                <TD class=Frm_MsgFt 
+                                style="TEXT-ALIGN: right"><SPAN id=MVF2061065 
+                                style="WHITE-SPACE: nowrap"></SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR class=Quick>
+                <TD class=Frm_MsgDivide><IMG height=1 alt="" 
+                  src="C:\Documents and Settings\Administrator\Desktop\3d\CodeProject Controlling The Screen Saver With C#_ Free source code and programming help_files\t(1).gif" 
+                  width=1 border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd HdUnSel " id=F2061444_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=34><A 
+                        name=xx2061444xx></A><IMG height=16 alt=General 
+                        src="CodeProject Controlling The Screen Saver With C#_ Free source code and programming help_files/msg_general.gif" 
+                        width=16 align=top></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/cs/ScreenSaverControl.aspx?fid=373723&amp;select=2061444#xx2061444xx" 
+                        name=2061444>Re: ScreenSaver password</A></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        height=16 alt=member 
+                        src="CodeProject Controlling The Screen Saver With C#_ Free source code and programming help_files/member_sm.gif" 
+                        border=0></TD>
+                      <TD class=Frm_MsgAuthor><A 
+                        href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=2604657">kschulz</A></TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">4:04 31 
+                        May '07 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=F2061444_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 34px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2>Hi Johannes,<BR><BR>You may want 
+                                to look at the ScreenSaverIsSecure setting in 
+                                the system registry. Under WinXP, it's under 
+                                HKEY_CURRENT_USER\Control 
+                                Panel\Desktop\ScreenSaverIsSecure (you may also 
+                                need to look under 
+                                HKEY_CURRENT_USER\Software\Policies\Microsoft\Windows\Control 
+                                Panel\Desktop\ScreenSaverIsSecure).<BR><BR>Setting 
+                                this to a 1 will enable (check) the "On resume, 
+                                show Welcome screen" option, and setting to a 0 
+                                will disable (uncheck) it. I have not tried it 
+                                programmatically, but it appears this should 
+                                work.<BR><BR><BR><BR><BR>
+                                <DIV class=ForumSig>-kschulz</DIV><BR></TD></TR>
+                                <TR style="VERTICAL-ALIGN: top">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL 
+                                href="http://www.codeproject.com/script/Membership/LogOn.aspx?rp=%2fKB%2fcs%2fScreenSaverControl.aspx">Sign 
+                                In</A>·<A class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/cs/ScreenSaverControl.aspx?fid=373723&amp;tid=2061065">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=373723&amp;msg=2061444">PermaLink</A></TD>
+                                <TD class=Frm_MsgFt 
+                                style="TEXT-ALIGN: right"><SPAN id=MVF2061444 
+                                style="WHITE-SPACE: nowrap"></SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR class=Quick>
+                <TD class=Frm_MsgRtDivide><IMG height=1 alt="" 
+                  src="C:\Documents and Settings\Administrator\Desktop\3d\CodeProject Controlling The Screen Saver With C#_ Free source code and programming help_files\t(1).gif" 
+                  width=1 border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd Rt HdUnSel " id=F2024789_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=16><A 
+                        name=xx2024789xx></A><IMG height=16 alt=General 
+                        src="CodeProject Controlling The Screen Saver With C#_ Free source code and programming help_files/msg_general.gif" 
+                        width=16 align=top></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/cs/ScreenSaverControl.aspx?fid=373723&amp;select=2024789#xx2024789xx" 
+                        name=2024789>sizeof problem?</A></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        height=16 alt=member 
+                        src="CodeProject Controlling The Screen Saver With C#_ Free source code and programming help_files/member_sm.gif" 
+                        border=0></TD>
+                      <TD class=Frm_MsgAuthor><A 
+                        href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=733740">K-ballo</A></TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">15:40 7 
+                        May '07 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=F2024789_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 16px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2>SystemParameterInfo specifies that 
+                                screen saver parameters use BOOL values, is 
+                                sizeof(BOOL) == sizeof(bool) in C# or you are 
+                                just lucky?<BR>With C++, sizeof(BOOL) = 4 while 
+                                sizeof(bool) = 1 <BR></TD></TR>
+                                <TR style="VERTICAL-ALIGN: top">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL 
+                                href="http://www.codeproject.com/script/Membership/LogOn.aspx?rp=%2fKB%2fcs%2fScreenSaverControl.aspx">Sign 
+                                In</A>·<A class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/cs/ScreenSaverControl.aspx?fid=373723&amp;tid=2024789">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=373723&amp;msg=2024789">PermaLink</A></TD>
+                                <TD class=Frm_MsgFt 
+                                style="TEXT-ALIGN: right"><SPAN id=MVF2024789 
+                                style="WHITE-SPACE: nowrap"></SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR class=Quick>
+                <TD class=Frm_MsgDivide><IMG height=1 alt="" 
+                  src="C:\Documents and Settings\Administrator\Desktop\3d\CodeProject Controlling The Screen Saver With C#_ Free source code and programming help_files\t(1).gif" 
+                  width=1 border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd HdUnSel " id=F2338605_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=34><A 
+                        name=xx2338605xx></A><IMG height=16 alt=Answer 
+                        src="CodeProject Controlling The Screen Saver With C#_ Free source code and programming help_files/msg_answer.gif" 
+                        width=16 align=top></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/cs/ScreenSaverControl.aspx?fid=373723&amp;select=2338605#xx2338605xx" 
+                        name=2338605>Re: sizeof problem?</A></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        height=16 alt=member 
+                        src="CodeProject Controlling The Screen Saver With C#_ Free source code and programming help_files/member_sm.gif" 
+                        border=0></TD>
+                      <TD class=Frm_MsgAuthor><A 
+                        href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=1253860">TobiasP</A></TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">0:12 28 
+                        Nov '07 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=F2338605_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 34px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2>Just in case you are still looking 
+                                for an answer more than half a year after you 
+                                asked the question... <IMG 
+                                src="CodeProject Controlling The Screen Saver With C#_ Free source code and programming help_files/smiley_smile.gif" 
+                                align=top><BR><BR>A C# boolean is one byte but 
+                                marshalled as four bytes when used where a 
+                                native BOOL would be used. See, i.e., <A 
+                                href="http://msdn2.microsoft.com/en-us/library/t2t3725f(VS.80).aspx" 
+                                rel=nofollow>this MSDN entry</A> and <A 
+                                href="http://www.thescripts.com/forum/thread241511.html" 
+                                rel=nofollow>this "size of a *bool*" 
+                                discussion</A>. <BR></TD></TR>
+                                <TR style="VERTICAL-ALIGN: top">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL 
+                                href="http://www.codeproject.com/script/Membership/LogOn.aspx?rp=%2fKB%2fcs%2fScreenSaverControl.aspx">Sign 
+                                In</A>·<A class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/cs/ScreenSaverControl.aspx?fid=373723&amp;tid=2024789">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=373723&amp;msg=2338605">PermaLink</A></TD>
+                                <TD class=Frm_MsgFt 
+                                style="TEXT-ALIGN: right"><SPAN id=MVF2338605 
+                                style="WHITE-SPACE: nowrap"></SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR class=Quick>
+                <TD class=Frm_MsgRtDivide><IMG height=1 alt="" 
+                  src="C:\Documents and Settings\Administrator\Desktop\3d\CodeProject Controlling The Screen Saver With C#_ Free source code and programming help_files\t(1).gif" 
+                  width=1 border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd Rt HdUnSel " id=F1988907_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=16><A 
+                        name=xx1988907xx></A><IMG height=16 alt=General 
+                        src="CodeProject Controlling The Screen Saver With C#_ Free source code and programming help_files/msg_general.gif" 
+                        width=16 align=top></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/cs/ScreenSaverControl.aspx?fid=373723&amp;select=1988907#xx1988907xx" 
+                        name=1988907>Not working for me on XP-Pro</A></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        height=16 alt=member 
+                        src="CodeProject Controlling The Screen Saver With C#_ Free source code and programming help_files/member_sm.gif" 
+                        border=0></TD>
+                      <TD class=Frm_MsgAuthor><A 
+                        href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=3000062">jr0000000000</A></TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">15:43 
+                        13 Apr '07 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=F1988907_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 16px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2>I just downloaded this example 
+                                program and tried it and it did NOT work at all. 
+                                I set break points at each of the functions, and 
+                                they seem to be getting called fine. I'm using 
+                                XP-Pro on a corporate network. <BR><BR>I took a 
+                                look at the registry, and it was not changing 
+                                either. I know when I change the registry 
+                                myself, the change doesn't take effect until I 
+                                logout. Is this code supposed to resolve this 
+                                problem also?<BR><BR>For my code to function 
+                                correctly, I need to recieve an event when the 
+                                screen saver is started/finished. I also need to 
+                                be able to reset the screen saver time-out value 
+                                (the same as if the user had typed a key or 
+                                moved the mouse.)<BR><BR>Has anyone else had 
+                                this program fail? How can I debug it? What's 
+                                the next step?<BR><BR><BR>-Jim.<BR></TD></TR>
+                                <TR style="VERTICAL-ALIGN: top">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL 
+                                href="http://www.codeproject.com/script/Membership/LogOn.aspx?rp=%2fKB%2fcs%2fScreenSaverControl.aspx">Sign 
+                                In</A>·<A class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/cs/ScreenSaverControl.aspx?fid=373723&amp;tid=1988907">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=373723&amp;msg=1988907">PermaLink</A></TD>
+                                <TD class=Frm_MsgFt 
+                                style="TEXT-ALIGN: right"><SPAN id=MVF1988907 
+                                style="WHITE-SPACE: nowrap"></SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR class=Quick>
+                <TD class=Frm_MsgDivide><IMG height=1 alt="" 
+                  src="C:\Documents and Settings\Administrator\Desktop\3d\CodeProject Controlling The Screen Saver With C#_ Free source code and programming help_files\t(1).gif" 
+                  width=1 border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd HdUnSel " id=F1988959_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=34><A 
+                        name=xx1988959xx></A><IMG height=16 alt=General 
+                        src="CodeProject Controlling The Screen Saver With C#_ Free source code and programming help_files/msg_general.gif" 
+                        width=16 align=top></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/cs/ScreenSaverControl.aspx?fid=373723&amp;select=1988959#xx1988959xx" 
+                        name=1988959>Re: Not working for me on XP-Pro</A></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        height=16 alt=member 
+                        src="CodeProject Controlling The Screen Saver With C#_ Free source code and programming help_files/member_sm.gif" 
+                        border=0></TD>
+                      <TD class=Frm_MsgAuthor><A 
+                        href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=2604657">kschulz</A></TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">18:11 
+                        13 Apr '07 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=F1988959_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 34px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2>Jim - the examples were created 
+                                using VS2005 under XP-Pro. Are you logged in as 
+                                Admin? Not sure if that will make a difference - 
+                                I've only tested it under Admin accounts, mostly 
+                                using the set of screen savers that come with 
+                                XP-Pro. I would not expect to see any changes to 
+                                the registry. <BR><BR>
+                                <DIV class=ForumSig>-kschulz</DIV><BR></TD></TR>
+                                <TR style="VERTICAL-ALIGN: top">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL 
+                                href="http://www.codeproject.com/script/Membership/LogOn.aspx?rp=%2fKB%2fcs%2fScreenSaverControl.aspx">Sign 
+                                In</A>·<A class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/cs/ScreenSaverControl.aspx?fid=373723&amp;tid=1988907">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=373723&amp;msg=1988959">PermaLink</A></TD>
+                                <TD class=Frm_MsgFt 
+                                style="TEXT-ALIGN: right"><SPAN id=MVF1988959 
+                                style="WHITE-SPACE: nowrap"></SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR class=Quick>
+                <TD class=Frm_MsgDivide><IMG height=1 alt="" 
+                  src="C:\Documents and Settings\Administrator\Desktop\3d\CodeProject Controlling The Screen Saver With C#_ Free source code and programming help_files\t(1).gif" 
+                  width=1 border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd HdUnSel " id=F1991648_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=52><A 
+                        name=xx1991648xx></A><IMG height=16 alt=General 
+                        src="CodeProject Controlling The Screen Saver With C#_ Free source code and programming help_files/msg_general.gif" 
+                        width=16 align=top></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/cs/ScreenSaverControl.aspx?fid=373723&amp;select=1991648#xx1991648xx" 
+                        name=1991648>Re: Not working for me on XP-Pro 
+                        [modified]</A></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        height=16 alt=member 
+                        src="CodeProject Controlling The Screen Saver With C#_ Free source code and programming help_files/member_sm.gif" 
+                        border=0></TD>
+                      <TD class=Frm_MsgAuthor><A 
+                        href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=3000062">jr0000000000</A></TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">8:21 16 
+                        Apr '07 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=F1991648_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 52px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2>&gt;&gt;<B>VS2005 under 
+                                XP-Pro.</B><BR>- Yes, <BR>VS2005 version 
+                                8.0.50727.762 (SP.050727-7600)<BR>C# 2005 
+                                77626-009-...<BR><BR>&gt;&gt;<B>logged in as 
+                                Admin?</B><BR>- Yes<BR><BR>&gt;&gt;<B>...screen 
+                                savers that come with XP-Pro.</B><BR>- Using, 
+                                "3D Text"<BR><BR>&gt;&gt;<B>...not expect to see 
+                                any changes to the registry.</B><BR>- The 
+                                registry location for the Screen 
+                                Saver:<BR>[HKEY_CURRENT_USER\Software\Policies\Microsoft\Windows\Control 
+                                Panel\Desktop<BR>- My 
+                                Values:<BR>"ScreenSaveActive"="1"<BR>"ScreenSaverIsSecure"="1"<BR>"ScreenSaveTimeOut"="120"<BR>- 
+                                These values are correctly being read from the 
+                                registry and displayed in your appication. If I 
+                                change these values manually, they are not used 
+                                by Windows until after logging out. Your 
+                                application does not change any of these values, 
+                                and I would expect them to be changed by your 
+                                appication.<BR><BR>Should this also work in 
+                                Vista? <BR><BR>-Jim.<BR><BR><BR>-- modified at 
+                                13:33 Monday 16th April, 2007 <BR></TD></TR>
+                                <TR style="VERTICAL-ALIGN: top">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL 
+                                href="http://www.codeproject.com/script/Membership/LogOn.aspx?rp=%2fKB%2fcs%2fScreenSaverControl.aspx">Sign 
+                                In</A>·<A class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/cs/ScreenSaverControl.aspx?fid=373723&amp;tid=1988907">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=373723&amp;msg=1991648">PermaLink</A></TD>
+                                <TD class=Frm_MsgFt 
+                                style="TEXT-ALIGN: right"><SPAN id=MVF1991648 
+                                style="WHITE-SPACE: nowrap"></SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR class=Quick>
+                <TD class=Frm_MsgDivide><IMG height=1 alt="" 
+                  src="C:\Documents and Settings\Administrator\Desktop\3d\CodeProject Controlling The Screen Saver With C#_ Free source code and programming help_files\t(1).gif" 
+                  width=1 border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd HdUnSel " id=F1991723_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=70><A 
+                        name=xx1991723xx></A><IMG height=16 alt=General 
+                        src="CodeProject Controlling The Screen Saver With C#_ Free source code and programming help_files/msg_general.gif" 
+                        width=16 align=top></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/cs/ScreenSaverControl.aspx?fid=373723&amp;select=1991723#xx1991723xx" 
+                        name=1991723>Re: Not working for me on XP-Pro</A></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        height=16 alt=member 
+                        src="CodeProject Controlling The Screen Saver With C#_ Free source code and programming help_files/member_sm.gif" 
+                        border=0></TD>
+                      <TD class=Frm_MsgAuthor><A 
+                        href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=2604657">kschulz</A></TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">9:03 16 
+                        Apr '07 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=F1991723_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 70px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2>Jim - "3D Text" was one of the 
+                                screen savers not recognized as the foreground 
+                                window, and therefore did not close using the 
+                                method suggested by Microsoft (whereas seems 
+                                "Windows XP" is always recognized). Try the 
+                                method described by Kurt Callebaut posted below. 
+                                I tested this successfully using the "3D Text" 
+                                screen saver. Here's the code:<BR><BR><BR>..if( 
+                                ScreenSaver.GetScreenSaverActive( ) 
+                                )<BR>..{<BR>....if( 
+                                ScreenSaver.GetScreenSaverRunning( ) 
+                                )<BR>....{<BR>......bool ret = 
+                                ScreenSaver.KillProcessByName( 
+                                GetScreenSaverFilename( ) 
+                                );<BR>....}<BR>....else<BR>....{<BR>......// 
+                                Reset the screen saver 
+                                timer<BR>......ScreenSaver.SetScreenSaverActive( 
+                                TRUE );<BR>....}<BR>..}<BR><BR><BR><BR>public 
+                                static class 
+                                ScreenSaver<BR>{<BR><BR><BR><BR>..private static 
+                                string GetScreenSaverFileName( 
+                                )<BR>..{<BR>....string result = 
+                                string.Empty;<BR><BR>....try<BR>....{<BR>......string 
+                                keystr = "Control 
+                                Panel\\Desktop";<BR>......RegistryKey key = 
+                                Registry.CurrentUser.OpenSubKey( keystr, false 
+                                );<BR>......result = key.GetValue( 
+                                "SCRNSAVE.EXE" ).ToString( );<BR>......if( 
+                                result != string.Empty )<BR>........result = 
+                                Path.GetFileName( result );<BR>......key.Close( 
+                                );<BR>......key = null;<BR>......return 
+                                result;<BR>....}<BR>....catch<BR>....{<BR>......return 
+                                string.Empty;<BR>....}<BR>..}<BR><BR>..private 
+                                static bool KillProcessByName( string 
+                                ProcessName )<BR>..{<BR>....Process[ ] Processes 
+                                = Process.GetProcessesByName( ProcessName 
+                                );<BR><BR>....if( Processes.Length &gt; 0 
+                                )<BR>....{<BR>......Processes[ 0 ].Kill( 
+                                );<BR>......return 
+                                true;<BR>....}<BR>....else<BR>....{<BR>......return 
+                                false;<BR>....}<BR>..}<BR><BR><BR>}<BR><BR><BR>
+                                <DIV class=ForumSig>-kschulz</DIV><BR></TD></TR>
+                                <TR style="VERTICAL-ALIGN: top">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL 
+                                href="http://www.codeproject.com/script/Membership/LogOn.aspx?rp=%2fKB%2fcs%2fScreenSaverControl.aspx">Sign 
+                                In</A>·<A class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/cs/ScreenSaverControl.aspx?fid=373723&amp;tid=1988907">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=373723&amp;msg=1991723">PermaLink</A></TD>
+                                <TD class=Frm_MsgFt 
+                                style="TEXT-ALIGN: right"><SPAN id=MVF1991723 
+                                style="WHITE-SPACE: nowrap"></SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR class=Quick>
+                <TD class=Frm_MsgDivide><IMG height=1 alt="" 
+                  src="C:\Documents and Settings\Administrator\Desktop\3d\CodeProject Controlling The Screen Saver With C#_ Free source code and programming help_files\t(1).gif" 
+                  width=1 border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd HiVote HdUnSel " id=F1992136_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=88><A 
+                        name=xx1992136xx></A><IMG height=16 alt=Answer 
+                        src="CodeProject Controlling The Screen Saver With C#_ Free source code and programming help_files/msg_answer.gif" 
+                        width=16 align=top></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/cs/ScreenSaverControl.aspx?fid=373723&amp;select=1992136#xx1992136xx" 
+                        name=1992136>Re: Not working for me on XP-Pro</A></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        height=16 alt=member 
+                        src="CodeProject Controlling The Screen Saver With C#_ Free source code and programming help_files/member_sm.gif" 
+                        border=0></TD>
+                      <TD class=Frm_MsgAuthor><A 
+                        href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=3000062">jr0000000000</A></TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">13:33 
+                        16 Apr '07 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=F1992136_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 88px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2>Thanks for this additional 
+                                information. I have been playing around with 
+                                things, and finally got it working correctly. 
+                                The reason I knew it was not working was because 
+                                when the code asked for the current time-out 
+                                value [<I>ScreenSaver.GetScreenSaverTimeout( 
+                                ).ToString( );</I>], it always returned the same 
+                                value, not the new value that should have just 
+                                been set.<BR><BR>The clue provided that gives 
+                                the problem is the registry key 
+                                of:<BR><I>[HKEY_CURRENT_USER\Software\Policies\Microsoft\Windows\Control 
+                                Panel\Desktop</I><BR>which is NOT the location 
+                                of where the real values are stored, but the 
+                                location of where the corporate policy values 
+                                are stored. When these policy values exist, 
+                                items in the Screen Saver options dialog are 
+                                grayed-out, and it seems they are also not 
+                                available through these Win32 command sets 
+                                either. <BR><BR><B>Solution: Remove the policy 
+                                settings from the 
+registry.</B><BR><BR></TD></TR>
+                                <TR style="VERTICAL-ALIGN: top">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL 
+                                href="http://www.codeproject.com/script/Membership/LogOn.aspx?rp=%2fKB%2fcs%2fScreenSaverControl.aspx">Sign 
+                                In</A>·<A class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/cs/ScreenSaverControl.aspx?fid=373723&amp;tid=1988907">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=373723&amp;msg=1992136">PermaLink</A></TD>
+                                <TD class=Frm_MsgFt 
+                                style="TEXT-ALIGN: right"><SPAN id=MVF1992136 
+                                style="WHITE-SPACE: nowrap">5.00/5 (1 vote) 
+                                </SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR class=Quick>
+                <TD class=Frm_MsgRtDivide><IMG height=1 alt="" 
+                  src="C:\Documents and Settings\Administrator\Desktop\3d\CodeProject Controlling The Screen Saver With C#_ Free source code and programming help_files\t(1).gif" 
+                  width=1 border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd Rt HdUnSel " id=F1977811_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=16><A 
+                        name=xx1977811xx></A><IMG height=16 alt=General 
+                        src="CodeProject Controlling The Screen Saver With C#_ Free source code and programming help_files/msg_general.gif" 
+                        width=16 align=top></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/cs/ScreenSaverControl.aspx?fid=373723&amp;select=1977811#xx1977811xx" 
+                        name=1977811>set the screen saver to running</A></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        height=16 alt=member 
+                        src="CodeProject Controlling The Screen Saver With C#_ Free source code and programming help_files/member_sm.gif" 
+                        border=0></TD>
+                      <TD class=Frm_MsgAuthor><A 
+                        href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=28506">NikoTanghe</A></TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">5:06 6 
+                        Apr '07 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=F1977811_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 16px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2>Maybe a nice add-on to this 
+                                class:<BR>set the screen saver to 
+                                running<BR><BR><CODE><BR>[DllImport("user32.dll", 
+                                EntryPoint = "GetDesktopWindow")]<BR>private 
+                                static extern IntPtr 
+                                GetDesktopWindow();<BR><BR>[DllImport("user32.dll")]<BR>private 
+                                static extern IntPtr SendMessage(IntPtr hWnd, 
+                                uint Msg, int wParam, int 
+                                lParam);<BR><BR>//...<BR><BR>private const int 
+                                SC_SCREENSAVE = 0xF140;<BR>private const int 
+                                WM_SYSCOMMAND = 
+                                0x0112;<BR><BR>//...<BR><BR>public static void 
+                                SetScreenSaverRunning()<BR>{<BR>SendMessage(GetDesktopWindow(), 
+                                WM_SYSCOMMAND, SC_SCREENSAVE, 
+                                0);<BR>}<BR></CODE><BR><BR><BR><BR>
+                                <DIV class=ForumSig>&lt;&lt; Nearly all men can 
+                                stand adversity, but if you want to test a man's 
+                                character, give him power. 
+                                &gt;&gt;</DIV><BR></TD></TR>
+                                <TR style="VERTICAL-ALIGN: top">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL 
+                                href="http://www.codeproject.com/script/Membership/LogOn.aspx?rp=%2fKB%2fcs%2fScreenSaverControl.aspx">Sign 
+                                In</A>·<A class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/cs/ScreenSaverControl.aspx?fid=373723&amp;tid=1977811">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=373723&amp;msg=1977811">PermaLink</A></TD>
+                                <TD class=Frm_MsgFt 
+                                style="TEXT-ALIGN: right"><SPAN id=MVF1977811 
+                                style="WHITE-SPACE: nowrap"></SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR class=Quick>
+                <TD class=Frm_MsgDivide><IMG height=1 alt="" 
+                  src="C:\Documents and Settings\Administrator\Desktop\3d\CodeProject Controlling The Screen Saver With C#_ Free source code and programming help_files\t(1).gif" 
+                  width=1 border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd HdUnSel " id=F2372895_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=34><A 
+                        name=xx2372895xx></A><IMG height=16 alt=General 
+                        src="CodeProject Controlling The Screen Saver With C#_ Free source code and programming help_files/msg_general.gif" 
+                        width=16 align=top></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/cs/ScreenSaverControl.aspx?fid=373723&amp;select=2372895#xx2372895xx" 
+                        name=2372895>Re: Set the screen saver to running - 
+                        thanks</A></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        height=16 alt=member 
+                        src="CodeProject Controlling The Screen Saver With C#_ Free source code and programming help_files/member_sm.gif" 
+                        border=0></TD>
+                      <TD class=Frm_MsgAuthor><A 
+                        href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=4638083">RenniePet</A></TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">13:11 
+                        29 Dec '07 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=F2372895_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 34px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2>Thanks, this was very useful. 
+                                <BR></TD></TR>
+                                <TR style="VERTICAL-ALIGN: top">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL 
+                                href="http://www.codeproject.com/script/Membership/LogOn.aspx?rp=%2fKB%2fcs%2fScreenSaverControl.aspx">Sign 
+                                In</A>·<A class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/cs/ScreenSaverControl.aspx?fid=373723&amp;tid=1977811">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=373723&amp;msg=2372895">PermaLink</A></TD>
+                                <TD class=Frm_MsgFt 
+                                style="TEXT-ALIGN: right"><SPAN id=MVF2372895 
+                                style="WHITE-SPACE: nowrap"></SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR class=Quick>
+                <TD class=Frm_MsgRtDivide><IMG height=1 alt="" 
+                  src="C:\Documents and Settings\Administrator\Desktop\3d\CodeProject Controlling The Screen Saver With C#_ Free source code and programming help_files\t(1).gif" 
+                  width=1 border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd Rt HdUnSel " id=F1845725_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=16><A 
+                        name=xx1845725xx></A><IMG height=16 alt=General 
+                        src="CodeProject Controlling The Screen Saver With C#_ Free source code and programming help_files/msg_general.gif" 
+                        width=16 align=top></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/cs/ScreenSaverControl.aspx?fid=373723&amp;select=1845725#xx1845725xx" 
+                        name=1845725>more friendly method to stop the screen 
+                        saver</A></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        height=16 alt=member 
+                        src="CodeProject Controlling The Screen Saver With C#_ Free source code and programming help_files/member_sm.gif" 
+                        border=0></TD>
+                      <TD class=Frm_MsgAuthor><A 
+                        href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=28974">Rousset 
+                        de Pina</A></TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">20:24 
+                        15 Jan '07 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=F1845725_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 16px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2>You have a more friendly methode 
+                                to stop the screen saver :<BR><BR>first time 
+                                :<BR><BR>m_LastThreadExecState = 
+                                SetThreadExecutionState(ES_DISPLAY_REQUIRED);<BR><BR>then 
+                                on timer 
+                                :<BR><BR>SetThreadExecutionState(ES_DISPLAY_REQUIRED 
+                                | ES_CONTINUOUS);<BR><BR>then to restore the 
+                                previous state 
+                                :<BR><BR>SetThreadExecutionState(m_LastThreadExecState 
+                                | ES_CONTINUOUS);<BR><BR>best regards 
+                                <BR></TD></TR>
+                                <TR style="VERTICAL-ALIGN: top">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL 
+                                href="http://www.codeproject.com/script/Membership/LogOn.aspx?rp=%2fKB%2fcs%2fScreenSaverControl.aspx">Sign 
+                                In</A>·<A class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/cs/ScreenSaverControl.aspx?fid=373723&amp;tid=1845725">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=373723&amp;msg=1845725">PermaLink</A></TD>
+                                <TD class=Frm_MsgFt 
+                                style="TEXT-ALIGN: right"><SPAN id=MVF1845725 
+                                style="WHITE-SPACE: nowrap"></SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR class=Quick>
+                <TD class=Frm_MsgDivide><IMG height=1 alt="" 
+                  src="C:\Documents and Settings\Administrator\Desktop\3d\CodeProject Controlling The Screen Saver With C#_ Free source code and programming help_files\t(1).gif" 
+                  width=1 border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd LoVote HdUnSel " id=F1848769_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=34><A 
+                        name=xx1848769xx></A><IMG height=16 alt=General 
+                        src="CodeProject Controlling The Screen Saver With C#_ Free source code and programming help_files/msg_general.gif" 
+                        width=16 align=top></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/cs/ScreenSaverControl.aspx?fid=373723&amp;select=1848769#xx1848769xx" 
+                        name=1848769>Re: more friendly method to stop the screen 
+                        saver</A></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        height=16 alt=member 
+                        src="CodeProject Controlling The Screen Saver With C#_ Free source code and programming help_files/member_sm.gif" 
+                        border=0></TD>
+                      <TD class=Frm_MsgAuthor><A 
+                        href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=2604657">kschulz</A></TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">6:58 17 
+                        Jan '07 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=F1848769_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 34px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2>Yes, this approach is suggested 
+                                for preventing the Power Settings options from 
+                                kicking on, possibly causing your display to 
+                                blank, however it does not help control the 
+                                screen saver which still must be done using the 
+                                SystemParametersInfo calls. More specifically, 
+                                this will not allow you to kill the screen saver 
+                                once it has turned on. If you're interested in 
+                                managing the Power Settings from code, here is a 
+                                <A title="New Window" 
+                                href="http://www.intel.com/cd/ids/developer/asmo-na/eng/256886.htm?page=1" 
+                                target=_blank>good reference.</A> Thanks for 
+                                pointing this out.<BR><BR><BR>
+                                <DIV class=ForumSig>kschulz</DIV><BR></TD></TR>
+                                <TR style="VERTICAL-ALIGN: top">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL 
+                                href="http://www.codeproject.com/script/Membership/LogOn.aspx?rp=%2fKB%2fcs%2fScreenSaverControl.aspx">Sign 
+                                In</A>·<A class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/cs/ScreenSaverControl.aspx?fid=373723&amp;tid=1845725">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=373723&amp;msg=1848769">PermaLink</A></TD>
+                                <TD class=Frm_MsgFt 
+                                style="TEXT-ALIGN: right"><SPAN id=MVF1848769 
+                                style="WHITE-SPACE: nowrap">2.00/5 (1 vote) 
+                                </SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR class=Quick>
+                <TD class=Frm_MsgDivide><IMG height=1 alt="" 
+                  src="C:\Documents and Settings\Administrator\Desktop\3d\CodeProject Controlling The Screen Saver With C#_ Free source code and programming help_files\t(1).gif" 
+                  width=1 border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd HdUnSel " id=F1895521_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=52><A 
+                        name=xx1895521xx></A><IMG height=16 alt=General 
+                        src="CodeProject Controlling The Screen Saver With C#_ Free source code and programming help_files/msg_general.gif" 
+                        width=16 align=top></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/cs/ScreenSaverControl.aspx?fid=373723&amp;select=1895521#xx1895521xx" 
+                        name=1895521>Re: more friendly method to stop the screen 
+                        saver</A></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        height=16 alt=member 
+                        src="CodeProject Controlling The Screen Saver With C#_ Free source code and programming help_files/member_sm.gif" 
+                        border=0></TD>
+                      <TD class=Frm_MsgAuthor><A 
+                        href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=3332391">topcatalpha</A></TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">0:18 15 
+                        Feb '07 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=F1895521_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 52px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2>Sry, but this solution doesn't 
+                                seems to work well. The screensaver isn't always 
+                                the foregroundwindow.<BR><BR>So we solved the 
+                                problem by getting the screensaver filename in 
+                                the registry <BR>Extract the filename with 
+                                Path.GetFileName()<BR>Getting the process by 
+                                name and killing the process..<BR><BR>ofcours 
+                                after checking if it is active and 
+                                running...<BR><BR>greetz<BR><BR>Kurt 
+                                Callebaut<BR><BR><BR><BR>herewith the code 
+                                :<BR><BR>public static string 
+                                GetScreenSaverFileName()<BR>{<BR>string result = 
+                                string.Empty;<BR>try<BR>{<BR>string keystr = 
+                                "Control Panel\\Desktop";<BR>RegistryKey Tmp_Key 
+                                = Registry.CurrentUser.OpenSubKey(keystr, 
+                                false);<BR>result = 
+                                Tmp_Key.GetValue("SCRNSAVE.EXE").ToString();<BR>Tmp_Key.Close();<BR>Tmp_Key 
+                                = null;<BR>return 
+                                result;<BR>}<BR>catch<BR>{<BR>return 
+                                string.Empty;<BR>}<BR>}<BR>public static bool 
+                                KillProcessByName(string 
+                                ProcessName)<BR>{<BR>Process[] Processes = 
+                                Process.GetProcessesByName(ProcessName);<BR>if 
+                                (Processes.Length &gt; 
+                                0)<BR>{<BR>Processes[0].Kill();<BR>return 
+                                true;<BR>}<BR>else<BR>return 
+                                false;<BR>}<BR><BR><BR><BR></TD></TR>
+                                <TR style="VERTICAL-ALIGN: top">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL 
+                                href="http://www.codeproject.com/script/Membership/LogOn.aspx?rp=%2fKB%2fcs%2fScreenSaverControl.aspx">Sign 
+                                In</A>·<A class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/cs/ScreenSaverControl.aspx?fid=373723&amp;tid=1845725">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=373723&amp;msg=1895521">PermaLink</A></TD>
+                                <TD class=Frm_MsgFt 
+                                style="TEXT-ALIGN: right"><SPAN id=MVF1895521 
+                                style="WHITE-SPACE: nowrap"></SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR class=Quick>
+                <TD class=Frm_MsgDivide><IMG height=1 alt="" 
+                  src="C:\Documents and Settings\Administrator\Desktop\3d\CodeProject Controlling The Screen Saver With C#_ Free source code and programming help_files\t(1).gif" 
+                  width=1 border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd HdUnSel " id=F1963572_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=70><A 
+                        name=xx1963572xx></A><IMG height=16 alt=General 
+                        src="CodeProject Controlling The Screen Saver With C#_ Free source code and programming help_files/msg_general.gif" 
+                        width=16 align=top></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/cs/ScreenSaverControl.aspx?fid=373723&amp;select=1963572#xx1963572xx" 
+                        name=1963572>Re: more friendly method to stop the screen 
+                        saver</A></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        height=16 alt=member 
+                        src="CodeProject Controlling The Screen Saver With C#_ Free source code and programming help_files/member_sm.gif" 
+                        border=0></TD>
+                      <TD class=Frm_MsgAuthor><A 
+                        href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=2604657">kschulz</A></TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">5:49 28 
+                        Mar '07 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=F1963572_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 70px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2>I just tried this method and it 
+                                seems to work well. My only suggestion is to 
+                                have GetScreenSaverFileName( ) return only the 
+                                filename using Path.GetFilename( result ), as 
+                                the full path is not used. Then 
+                                KillProcessByName( GetScreenSaverFileName( ) ) 
+                                is all that's needed. Thanks for the suggestion 
+                                Kurt. <BR><BR>
+                                <DIV class=ForumSig>-kschulz</DIV><BR></TD></TR>
+                                <TR style="VERTICAL-ALIGN: top">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL 
+                                href="http://www.codeproject.com/script/Membership/LogOn.aspx?rp=%2fKB%2fcs%2fScreenSaverControl.aspx">Sign 
+                                In</A>·<A class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/cs/ScreenSaverControl.aspx?fid=373723&amp;tid=1845725">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=373723&amp;msg=1963572">PermaLink</A></TD>
+                                <TD class=Frm_MsgFt 
+                                style="TEXT-ALIGN: right"><SPAN id=MVF1963572 
+                                style="WHITE-SPACE: nowrap"></SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR class=Quick>
+                <TD class=Frm_MsgDivide><IMG height=1 alt="" 
+                  src="C:\Documents and Settings\Administrator\Desktop\3d\CodeProject Controlling The Screen Saver With C#_ Free source code and programming help_files\t(1).gif" 
+                  width=1 border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd HdUnSel " id=F2107754_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=88><A 
+                        name=xx2107754xx></A><IMG height=16 alt=General 
+                        src="CodeProject Controlling The Screen Saver With C#_ Free source code and programming help_files/msg_general.gif" 
+                        width=16 align=top></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/cs/ScreenSaverControl.aspx?fid=373723&amp;select=2107754#xx2107754xx" 
+                        name=2107754>Re: more friendly method to stop the screen 
+                        saver</A></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        height=16 alt=member 
+                        src="CodeProject Controlling The Screen Saver With C#_ Free source code and programming help_files/member_sm.gif" 
+                        border=0></TD>
+                      <TD class=Frm_MsgAuthor><A 
+                        href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=4115933">HomeRepairDude</A></TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">3:02 1 
+                        Jul '07 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=F2107754_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 88px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2>Thanks for providing your source 
+                                code. What language is it?<BR><BR>I use masm to 
+                                make 32 bit executables using assembly language. 
+                                <BR>I am trying to convert your code, but it is 
+                                so different from C and VB code that have 
+                                seen.<BR><BR>Thanks,<BR>Andy 
+                                Kennedy<BR><BR></TD></TR>
+                                <TR style="VERTICAL-ALIGN: top">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL 
+                                href="http://www.codeproject.com/script/Membership/LogOn.aspx?rp=%2fKB%2fcs%2fScreenSaverControl.aspx">Sign 
+                                In</A>·<A class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/cs/ScreenSaverControl.aspx?fid=373723&amp;tid=1845725">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=373723&amp;msg=2107754">PermaLink</A></TD>
+                                <TD class=Frm_MsgFt 
+                                style="TEXT-ALIGN: right"><SPAN id=MVF2107754 
+                                style="WHITE-SPACE: nowrap"></SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR class=Quick>
+                <TD class=Frm_MsgDivide><IMG height=1 alt="" 
+                  src="C:\Documents and Settings\Administrator\Desktop\3d\CodeProject Controlling The Screen Saver With C#_ Free source code and programming help_files\t(1).gif" 
+                  width=1 border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd HdUnSel " id=F2111866_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=106><A 
+                        name=xx2111866xx></A><IMG height=16 alt=General 
+                        src="CodeProject Controlling The Screen Saver With C#_ Free source code and programming help_files/msg_general.gif" 
+                        width=16 align=top></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/cs/ScreenSaverControl.aspx?fid=373723&amp;select=2111866#xx2111866xx" 
+                        name=2111866>Re: more friendly method to stop the screen 
+                        saver</A></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        height=16 alt=member 
+                        src="CodeProject Controlling The Screen Saver With C#_ Free source code and programming help_files/member_sm.gif" 
+                        border=0></TD>
+                      <TD class=Frm_MsgAuthor><A 
+                        href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=2604657">kschulz</A></TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">14:24 3 
+                        Jul '07 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=F2111866_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 106px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2>Example code is written in C#. 
+                                <BR><BR>
+                                <DIV class=ForumSig>-kschulz</DIV><BR></TD></TR>
+                                <TR style="VERTICAL-ALIGN: top">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL 
+                                href="http://www.codeproject.com/script/Membership/LogOn.aspx?rp=%2fKB%2fcs%2fScreenSaverControl.aspx">Sign 
+                                In</A>·<A class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/cs/ScreenSaverControl.aspx?fid=373723&amp;tid=1845725">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=373723&amp;msg=2111866">PermaLink</A></TD>
+                                <TD class=Frm_MsgFt 
+                                style="TEXT-ALIGN: right"><SPAN id=MVF2111866 
+                                style="WHITE-SPACE: nowrap"></SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR class=Quick>
+                <TD class=Frm_MsgDivide><IMG height=1 alt="" 
+                  src="C:\Documents and Settings\Administrator\Desktop\3d\CodeProject Controlling The Screen Saver With C#_ Free source code and programming help_files\t(1).gif" 
+                  width=1 border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd LoVote HdUnSel " id=F2142415_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=34><A 
+                        name=xx2142415xx></A><IMG height=16 alt=Answer 
+                        src="CodeProject Controlling The Screen Saver With C#_ Free source code and programming help_files/msg_answer.gif" 
+                        width=16 align=top></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/cs/ScreenSaverControl.aspx?fid=373723&amp;select=2142415#xx2142415xx" 
+                        name=2142415>Stop the Screen Saver with 1 Line of Code, 
+                        Enjoy.......</A></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        height=16 alt=member 
+                        src="CodeProject Controlling The Screen Saver With C#_ Free source code and programming help_files/member_sm.gif" 
+                        border=0></TD>
+                      <TD class=Frm_MsgAuthor><A 
+                        href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=1685128">dfhgesart</A></TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">10:34 
+                        20 Jul '07 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=F2142415_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 34px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2><CODE>// Dll 
+                                Import<BR>[System.Runtime.InteropServices.DllImport("user32.dll", 
+                                EntryPoint = "SetCursorPos")]<BR>internal extern 
+                                static Int32 SetCursorPos(Int32 x, Int32 
+                                y);<BR><BR>// Stops the screen saver by moving 
+                                the cursor. Clean and simple, don't have to 
+                                worry <BR>// about reinitializing the screen 
+                                saver, etc. Moves the cursor to a random 
+                                position <BR>// each time so you don't have to 
+                                worry about calling it twice and having the 
+                                cursor stay <BR>// in the same 
+                                spot.<BR>SetCursorPos(new Random().Next(100), 
+                                new Random().Next(100)); </CODE><BR></TD></TR>
+                                <TR style="VERTICAL-ALIGN: top">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL 
+                                href="http://www.codeproject.com/script/Membership/LogOn.aspx?rp=%2fKB%2fcs%2fScreenSaverControl.aspx">Sign 
+                                In</A>·<A class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/cs/ScreenSaverControl.aspx?fid=373723&amp;tid=1845725">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=373723&amp;msg=2142415">PermaLink</A></TD>
+                                <TD class=Frm_MsgFt 
+                                style="TEXT-ALIGN: right"><SPAN id=MVF2142415 
+                                style="WHITE-SPACE: nowrap">1.00/5 (1 vote) 
+                                </SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR>
+                <TD><IMG height=5 alt="" 
+                  src="C:\Documents and Settings\Administrator\Desktop\3d\CodeProject Controlling The Screen Saver With C#_ Free source code and programming help_files\t(1).gif" 
+                  width=1 border=0></TD></TR></TBODY></TABLE></TD></TR>
+        <TR>
+          <TD>
+            <TABLE cellSpacing=0 cellPadding=2 width="100%">
+              <TBODY>
+              <TR class=Frm_Footer>
+                <TD>Last Visit: Sunday, March 16, 2008 9:54 AM &nbsp; &nbsp; 
+                  Last Update:Sunday, March 16, 2008 9:54 AM</TD>
+                <TD 
+              style="WHITE-SPACE: nowrap; TEXT-ALIGN: right"></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></DIV>
+      <P class=SmallText><IMG height=16 alt=General 
+      src="CodeProject Controlling The Screen Saver With C#_ Free source code and programming help_files/msg_general.gif" 
+      width=16 align=top> General &nbsp;&nbsp; <IMG height=16 alt=News 
+      src="CodeProject Controlling The Screen Saver With C#_ Free source code and programming help_files/msg_news.gif" 
+      width=16 align=top> News &nbsp;&nbsp; <IMG height=16 alt=Question 
+      src="CodeProject Controlling The Screen Saver With C#_ Free source code and programming help_files/msg_question.gif" 
+      width=16 align=top> Question &nbsp;&nbsp; <IMG height=16 alt=Answer 
+      src="CodeProject Controlling The Screen Saver With C#_ Free source code and programming help_files/msg_answer.gif" 
+      width=16 align=top> Answer &nbsp;&nbsp; <IMG height=16 alt=Joke 
+      src="CodeProject Controlling The Screen Saver With C#_ Free source code and programming help_files/msg_joke.gif" 
+      width=16 align=top> Joke &nbsp;&nbsp; <IMG height=16 alt=Admin 
+      src="CodeProject Controlling The Screen Saver With C#_ Free source code and programming help_files/msg_admin.gif" 
+      width=16 align=top> Admin &nbsp;&nbsp; </P><!-- Forum End --></DIV>
+      <TABLE width="100%">
+        <TBODY>
+        <TR vAlign=top>
+          <TD class=TinyText align=left><A id=ctl00_PermaLink 
+            href="http://www.codeproject.com/script/Articles/Article.aspx?aid=17067">PermaLink</A> 
+            | <A id=ctl00_PrivacyLink 
+            href="http://www.codeproject.com/info/privacy.aspx">Privacy </A>| <A 
+            id=ctl00_TermsOfUseLink 
+            href="http://www.codeproject.com/info/TermsOfUse.aspx">Terms of 
+            Use</A> <BR>Last Updated: 8 Jan 2007<BR>Editor: <A 
+            id=ctl00_ArticleEditor 
+            href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=909438">Paul 
+            Conrad</A><BR></TD>
+          <TD class=TinyText vAlign=top align=right>Copyright 2007 by 
+            kschulz<BR>Everything else Copyright © <A 
+            href="mailto:webmaster@codeproject.com">CodeProject</A>, 1999-2008 
+            <BR>Web13 | <A id=ctl00_AdvertiseLink 
+            href="http://www.codeproject.com/info/MediaKit.aspx">Advertise on 
+            the Code Project </A></TD></TR></TBODY></TABLE></TD></TR>
+  <TR>
+    <TD align=middle colSpan=2></TD></TR></TBODY></TABLE>
+<SCRIPT language=Javascript type=text/javascript>//<![CDATA[
+if (document.all) try {window.attachEvent("oncopy",copyCode);}catch(e){};
+//]]></SCRIPT>
+
+<SCRIPT language=Javascript 
+src="CodeProject Controlling The Screen Saver With C#_ Free source code and programming help_files/TogglePre.js" 
+type=text/javascript></SCRIPT>
+
+<SCRIPT language=Javascript 
+src="CodeProject Controlling The Screen Saver With C#_ Free source code and programming help_files/menu132_com.js" 
+type=text/javascript></SCRIPT>
+
+<SCRIPT language=Javascript 
+src="CodeProject Controlling The Screen Saver With C#_ Free source code and programming help_files/TopNavBar.js" 
+type=text/javascript></SCRIPT>
+
+<SCRIPT language=Javascript type=text/javascript>//<![CDATA[
+new HVMenu(new menu_NavbarConfig());
+//]]></SCRIPT>
+</BODY></HTML>

@@ -1,0 +1,79 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!-- saved from url=(0086)http://www.planetsourcecode.com/vb/scripts/ShowCodeAsText.asp?txtCodeId=1005&lngWId=10 -->
+<HTML><HEAD>
+<META http-equiv=Content-Type content="text/html; charset=windows-1256">
+<META content="MSHTML 6.00.2900.2180" name=GENERATOR></HEAD>
+<BODY><XMP>    //**************************************
+    // Name: DNS - Retrieves ALL associated IP's
+    // Description:This short snippet shows how to retrieve all IP's associated with a given host. I've seen a couple of examples of this, but none of them retrieves all the ip's... So i couldn't help myself. Anyway, here you go... (nothing advanced). (I hope PSC formats the code properly <g> )
+    // By: Fanell
+    //
+    //
+    // Inputs:<hostname>
+    //
+    // Returns:Associated IP addresses and real DNS name
+    //
+    //Assumes:None
+    //
+    //Side Effects:None
+    //This code is copyrighted and has limited warranties.
+    //Please see http://www.Planet-Source-Code.com/xq/ASP/txtCodeId.1005/lngWId.10/qx/vb/scripts/ShowCode.htm
+    //for details.
+    //**************************************
+    
+    /*
+    	cDns.cs - Written by Thomas Fanell
+    	
+    	Short snippet demonstrating how to perform
+    	DNS lookups.	
+    	
+    	You are free to do anything you want with this.
+    */
+    using System;
+    namespace DNS
+    {
+    	class cDns
+    	{
+    		[STAThread]
+    		static void Main(string[] args)
+    		{
+    		/* 
+    			TODO: 
+    			
+    			Add switch support.
+    				Like /r to resolve all ip's in the IP array and
+    				/a to list aliases and so on...
+    		 
+    					ex:
+    						64.236.16.116	|	www8.cnn.com
+    		*/
+    			if (args.Length == 0)
+    				// Missing argument
+    				Console.WriteLine("Missing argument: Hostname\nUsage: dns <hostname>");
+    			else if (args.Length == 1)
+    			{
+    			
+    				Console.Write("Resolving...");
+    				try
+    				{
+    					int i = 1;
+    					System.Net.IPHostEntry hostEntry = System.Net.Dns.Resolve(args[0].ToString());
+    				
+    					// if the lookup fails, this line wont run....
+    					Console.WriteLine("\t[OK]\n"); // Confirm success
+    					foreach (System.Net.IPAddress ipAddr in hostEntry.AddressList)
+    					{
+    						Console.WriteLine("IP #{0}:\t{1}", i, ipAddr.ToString());
+    						i+=1;
+    					}
+    					Console.WriteLine("\nDNS Name: {0}", hostEntry.HostName.ToString());
+    				}
+    				catch ( Exception e )
+    				{
+    					Console.WriteLine("\tError; {0}", e.Message.ToString());
+    				}
+    		}
+    		}
+    	}
+    }
+		</XMP></BODY></HTML>

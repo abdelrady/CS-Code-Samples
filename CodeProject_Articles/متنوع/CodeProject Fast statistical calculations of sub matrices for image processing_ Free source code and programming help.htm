@@ -1,0 +1,2087 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!-- saved from url=(0068)http://www.codeproject.com/KB/recipes/efficientsumonsubmatrices.aspx -->
+<HTML><HEAD><TITLE>CodeProject: Fast statistical calculations of sub matrices for image processing. Free source code and programming help</TITLE>
+<META http-equiv=Content-Type content="text/html; charset=utf-8">
+<META 
+content="Describes the summed area table algorithm of Franklin Crow.; Author: ediazc; Section: Algorithms &amp; Recipes; Chapter: General Programming" 
+name=Description>
+<META 
+content="C#, Windows, .NET CF, .NET, Visual Studio, GDI, GDI+, Arch, Dev, QA, Intermediate,Algorithms &amp; Recipes,General Programming,Free source code, tutorials" 
+name=Keywords>
+<META content="The Code Project" name=Author>
+<META content=General name=Rating>
+<META content="index, follow" name=Robots>
+<META content="1 days" name=Revisit-After><LINK 
+title="CodeProject Lounge Postings" 
+href="http://www.codeproject.com/webservices/LoungeRSS.aspx" 
+type=application/rss+xml rel=alternate><LINK 
+title="CodeProject Latest articles - All topics" 
+href="http://www.codeproject.com/webservices/articlerss.aspx?cat=1" 
+type=application/rss+xml rel=alternate><LINK 
+title="CodeProject Latest articles - MFC / C++" 
+href="http://www.codeproject.com/webservices/articlerss.aspx?cat=2" 
+type=application/rss+xml rel=alternate><LINK 
+title="CodeProject Latest articles - C#" 
+href="http://www.codeproject.com/webservices/articlerss.aspx?cat=3" 
+type=application/rss+xml rel=alternate><LINK 
+title="CodeProject Latest articles - ASP.NET" 
+href="http://www.codeproject.com/webservices/articlerss.aspx?cat=4" 
+type=application/rss+xml rel=alternate><LINK 
+title="CodeProject Latest articles - .NET" 
+href="http://www.codeproject.com/webservices/articlerss.aspx?cat=5" 
+type=application/rss+xml rel=alternate><LINK 
+title="CodeProject Latest articles - VB.NET" 
+href="http://www.codeproject.com/webservices/articlerss.aspx?cat=6" 
+type=application/rss+xml rel=alternate><LINK title=CodeProject 
+href="http://www.codeproject.com/info/OpenSearch.xml" 
+type=application/opensearchdescription+xml rel=search><LINK 
+href="CodeProject Fast statistical calculations of sub matrices for image processing_ Free source code and programming help_files/CodeProject.css" 
+type=text/css rel=stylesheet><LINK 
+href="CodeProject Fast statistical calculations of sub matrices for image processing_ Free source code and programming help_files/ForumClassic.css" 
+type=text/css rel=stylesheet>
+<SCRIPT type=text/javascript>
+  var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+  document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</SCRIPT>
+
+<SCRIPT type=text/javascript>
+   var pageTracker = _gat._getTracker("UA-1735123-1");
+   pageTracker._setDomainName("codeproject.com");
+   pageTracker._setSessionTimeout("1200"); // 20 mins
+   pageTracker._initData();
+   pageTracker._trackPageview();
+</SCRIPT>
+
+<SCRIPT language=Javascript 
+src="CodeProject Fast statistical calculations of sub matrices for image processing_ Free source code and programming help_files/oncopy.js" 
+type=text/javascript></SCRIPT>
+
+<SCRIPT language=Javascript 
+src="CodeProject Fast statistical calculations of sub matrices for image processing_ Free source code and programming help_files/addto.js" 
+type=text/javascript></SCRIPT>
+
+<SCRIPT language=Javascript type=text/javascript>//<![CDATA[
+function ToggleMenu(itemName)
+{
+	var elm = document.getElementById(itemName);
+	var i,others = document.getElementById('SectionMenu');
+	for(i=0; i < others.childNodes.length; i++)
+	{
+		var other = others.childNodes[i];
+		if ((other.className == 'MenuSectionBlock') && (other != elm))
+			other.style.display='none';
+	}
+	if (elm.style.display == 'block') elm.style.display='none';
+	else elm.style.display='block';
+	return false;
+}
+
+//]]></SCRIPT>
+
+<SCRIPT language=Javascript type=text/javascript>//<![CDATA[
+function MsgVoteForm(MemberID, MsgID) {
+ document.write("Rate this message: ");
+ document.write(unescape("%3Ca href=\"#xx" + MsgID.toString() + "xx\" onclick=\"RateMsg(" + MemberID.toString() + ", " + MsgID.toString() + ",1)\"%3E"));
+ document.write(unescape("%3Cimg height=\"14\" width=\"14\" src=\"/script/Forums/Images/thumbs_down.gif\" alt=\"vote 1\" border=\"0\" align=\"middle\" /%3E%3C/a%3E "));
+ for (var i=1; i<=5;i++)
+  document.write(unescape("%3Ca class=\"Frm_MHL\" href=\"#xx" + MsgID.toString() + "xx\" title=\"give this message a vote of " + i.toString() + "\" onclick=\"RateMsg(" + MemberID.toString() + ", " + MsgID.toString() + ", " + i.toString() + ")\"%3E%3Cb%3E" + i.toString() + "%3C/b%3E%3C/a%3E "));
+ document.write(unescape("%3Ca href=\"#xx" + MsgID.toString() + "xx\" onclick=\"RateMsg(" + MemberID.toString() + ", " + MsgID.toString() + ",5)\"%3E"));
+ document.write(unescape("%3Cimg height=\"14\" width=\"14\" src=\"/script/Forums/Images/thumbs_up.gif\" alt=\"vote 5\" border=\"0\" align=\"middle\" /%3E%3C/a%3E "));
+}
+
+function ReportMsg(userid, msgid, score) {
+ if (confirm("Are you sure you want to report this message?") == true)
+  return RateMsg(userid, msgid, score);
+ else return false;
+}
+function RateMsg(memberid, msgid, score) {
+ var req = new ActiveXObject("MSXML2.XMLHTTP");
+ req.onreadystatechange = function() {
+  if (req.readyState == 4) {
+   if ( req.status == 200 ) {
+    var respText = req.responseText;
+    var re = new RegExp(unescape("\%3Cdiv\%3E([^\%3C]*)\%3C/div\%3E"), "g");
+    var match = re.exec(respText);
+    voteStatus.innerHTML = unescape("%3Cb%3E") + (match)?match[1]:"An error occured" + unescape("%3C/b%3E");
+   }
+   else
+   {
+    voteStatus.innerHTML = unescape("%3Cb style='color:red'%3EFailed!") + req.statusText + unescape("%3C/b%3E");
+   }
+  }
+ }
+ var voteStatus = document.getElementById("MVF" + msgid);
+ if (!voteStatus) return;
+ voteStatus.innerHTML = unescape("%3Cb style='color:green'%3EVoting...%3C/b%3E");
+ var strAction = "/script/Forums/Vote.aspx?js=1&fmid="+memberid.toString()+"&select="+msgid.toString()+"&score="+score.toString();
+ req.open("GET", strAction, true);
+ req.send(null);
+  return false;
+}
+//]]></SCRIPT>
+
+<SCRIPT language=Javascript type=text/javascript>//<![CDATA[
+var Selected = "-1";
+
+function SwitchMessage(e, msgId)
+{
+  if (!msgId) {
+    if(!e)e=window.event;
+    var target=e.target?e.target:e.srcElement;
+    while(target&&target.id!='DynMessLink')target=target.parentNode;
+    if(!target||target.id!='DynMessLink')return;
+    msgId=target.name;
+  }
+  if(Selected&&Selected!=""){
+    var body=eval("document.getElementById('F" + Selected + "_h1')");
+    if(body) body.style.display = 'none';
+    var head=eval("document.getElementById('F" + Selected + "_h0')");
+    if(head) head.className = head.className.replace("Sel", "UnSel");
+  }
+  if(Selected==msgId.toString())
+    Selected="";
+  else {
+    Selected=msgId.toString();
+    var body=eval("document.getElementById('F" + Selected + "_h1')");
+    if(body){
+      if(body.style.display=='none') body.style.display='';
+      else body.style.display = 'none';
+    }
+    var head=eval("document.getElementById('F" + Selected + "_h0')");
+    if (head) 
+      head.className = head.className.replace("UnSel", "Sel");
+    if(body&&head&&body.style.display!='none'){
+      document.body.scrollTop = getRealPos(head, "Top") - document.body.clientHeight/10;
+      EnsureMessageVisible(Selected, true);
+    }
+  }
+  if (e){if(e.preventDefault)e.preventDefault;else e.returnValue=false;}
+  return false;
+}
+
+//]]></SCRIPT>
+
+<SCRIPT language=Javascript 
+src="CodeProject Fast statistical calculations of sub matrices for image processing_ Free source code and programming help_files/ShortCuts.js" 
+type=text/javascript></SCRIPT>
+<LINK 
+href="CodeProject Fast statistical calculations of sub matrices for image processing_ Free source code and programming help_files/ForumClassicIE6.css" 
+type=text/css rel=stylesheet><LINK href="/favicon.ico" type=image/ico 
+rel=icon><LINK href="/favicon.ico" type=image/ico rel="shortcut icon">
+<SCRIPT type=text/javascript>
+	function SetAsAvailable() {
+	   var aid = document.getElementById("ArticleId");
+	   if(aid)
+		   window.location.href = "/script/Articles/UpdateArticleStatus.aspx?aid=" + articleId.value + "&rp=" + location.href;
+	}
+	</SCRIPT>
+
+<META content="MSHTML 6.00.2900.2180" name=GENERATOR></HEAD>
+<BODY>
+<TABLE id=ctl00_AT cellSpacing=0 cellPadding=0 border=0>
+  <TBODY>
+  <TR vAlign=top>
+    <TD colSpan=2>
+      <TABLE cellSpacing=0 cellPadding=0 border=0>
+        <TBODY>
+        <TR>
+          <TD class=HeaderLogo><A href="http://www.codeproject.com/"><IMG 
+            height=90 alt=Home 
+            src="CodeProject Fast statistical calculations of sub matrices for image processing_ Free source code and programming help_files/codeproject225x90.gif" 
+            width=225 border=0></A></TD>
+          <TD class=HeaderBanner align=right width="100%">
+            <SCRIPT type=text/javascript>document.write(unescape("%3ca%20href%3d%22http%3a%2f%2fwww.codeproject.com%2fRedir.aspx%3fadid%3d5581%26way%3dban%22%20target%3d%22_blank%22%20rel%3d%22nofollow%22%3e%3cimg%20src%3d%22http%3a%2f%2fwww.codeproject.com%2fscript%2fAnn%2fServeImg.aspx%3fFile%3d%252fscript%252fadmentor%252fimages%252fMailtrust_MEX-228x90.gif%26C%3dFalse%26id%3d5581%22%20alt%3d%22%22%20border%3d%220%22%20width%3d%22728%22%20height%3d%2290%22%3e%3c%2fa%3e"));</SCRIPT>
+          </TD></TR>
+        <TR>
+          <TD colSpan=2>
+            <TABLE class=MemberNavBar cellSpacing=0 cellPadding=5 
+              width="100%"><TBODY>
+              <TR>
+                <TD class=SmallText style="FONT-WEIGHT: bold">4,916,790 
+                  members and growing! (19,787 online)</TD>
+                <TD align=right>
+                  <DIV class=MemberNavBarText 
+                  id=ctl00_MemberMenu_LoggedOnOptions><A 
+                  id=ctl00_MemberMenu_MyProfile 
+                  href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=2959938">abdelrady2030</A> 
+                  | <A id=ctl00_MemberMenu_MySettings 
+                  href="http://www.codeproject.com/script/Membership/Modify.aspx"><IMG 
+                  height=16 
+                  src="CodeProject Fast statistical calculations of sub matrices for image processing_ Free source code and programming help_files/tools.gif" 
+                  width=16 align=absMiddle border=0> <B>My Settings</B></A> | <A 
+                  id=ctl00_MemberMenu_MyBookmarks 
+                  href="http://www.codeproject.com/script/Bookmarks/List.aspx?obtid=2"><IMG 
+                  height=16 
+                  src="CodeProject Fast statistical calculations of sub matrices for image processing_ Free source code and programming help_files/fave.gif" 
+                  width=16 align=absMiddle border=0> My Bookmarks</A> | <A 
+                  id=ctl00_MemberMenu_MyArticles 
+                  href="http://www.codeproject.com/script/Articles/MemberArticles.aspx?amid=2959938">My 
+                  Articles</A> | <A id=ctl00_MemberMenu_Signout 
+                  href="http://www.codeproject.com/script/Membership/LogOff.aspx?rp=%2fKB%2frecipes%2fefficientsumonsubmatrices.aspx">Sign 
+                  out</A> </DIV></TD></TR></TBODY></TABLE></TD></TR>
+        <TR>
+          <TD colSpan=2>
+            <TABLE class=SiteNavBar id=tblSiteToolbar cellSpacing=0 
+            cellPadding=0>
+              <TBODY>
+              <TR>
+                <TD><A href="http://www.codeproject.com/">Home</A></TD>
+                <TD class=SelCat noWrap><A 
+                  href="http://www.codeproject.com/?cat=1">All Topics</A></TD>
+                <TD noWrap><A 
+                  href="http://www.codeproject.com/?cat=2">MFC/C++</A></TD>
+                <TD noWrap><A 
+                href="http://www.codeproject.com/?cat=3">C#</A></TD>
+                <TD noWrap><A 
+                  href="http://www.codeproject.com/?cat=6">VB.NET</A></TD>
+                <TD noWrap><A 
+                  href="http://www.codeproject.com/?cat=4">ASP.NET</A></TD>
+                <TD noWrap><A 
+                href="http://www.codeproject.com/?cat=9">SQL</A></TD>
+                <TD noWrap><A 
+                  href="http://www.codeproject.com/?cat=8">Architect</A></TD>
+                <TD width="100%">&nbsp;</TD>
+                <TD id=ctl00_TopNavBar_RightMenus><!--380-->
+                  <DIV id=MenuPos 
+                  style="WIDTH: 305px; POSITION: relative; TOP: 1px; HEIGHT: 22px">
+                  <TABLE 
+                  style="BORDER-TOP-WIDTH: 0px; BORDER-LEFT-WIDTH: 0px; BORDER-BOTTOM-WIDTH: 0px; HEIGHT: 20px; BORDER-RIGHT-WIDTH: 0px" 
+                  cellSpacing=0 cellPadding=0 width=305>
+                    <TBODY>
+                    <TR vAlign=center>
+                      <TD 
+                      style="BORDER-TOP-WIDTH: 0px; BORDER-LEFT-WIDTH: 0px; BORDER-BOTTOM-WIDTH: 0px; BORDER-RIGHT-WIDTH: 0px" 
+                      noWrap><A 
+                        href="http://www.codeproject.com/info/FAQ.aspx">Help!</A></TD>
+                      <TD 
+                      style="BORDER-TOP-WIDTH: 0px; BORDER-LEFT-WIDTH: 0px; BORDER-BOTTOM-WIDTH: 0px; BORDER-RIGHT-WIDTH: 0px" 
+                      noWrap><A 
+                        href="http://www.codeproject.com/script/Articles/Latest.aspx">Articles</A></TD>
+                      <TD 
+                      style="BORDER-TOP-WIDTH: 0px; BORDER-LEFT-WIDTH: 0px; BORDER-BOTTOM-WIDTH: 0px; BORDER-RIGHT-WIDTH: 0px" 
+                      noWrap><A 
+                        href="http://www.codeproject.com/script/Forums/List.aspx">Message 
+                        Boards</A></TD>
+                      <TD 
+                      style="BORDER-TOP-WIDTH: 0px; BORDER-LEFT-WIDTH: 0px; BORDER-BOTTOM-WIDTH: 0px; BORDER-RIGHT-WIDTH: 0px" 
+                      noWrap><A 
+                        href="http://www.codeproject.com/Lounge.aspx">Lounge</A></TD></TR></TBODY></TABLE></DIV></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+  <TR>
+    <TD vAlign=top colSpan=2><A name=_top></A>
+      <TABLE class=ArticleHeader id=ctl00_ArticleTopHeader_HeaderTable 
+      cellSpacing=0 cellPadding=3 width="100%" border=0>
+        <TBODY>
+        <TR vAlign=top>
+          <TD class=SmallText><A id=ctl00_ArticleTopHeader_ChapterLink 
+            href="http://www.codeproject.com/script/Content/Chapter.aspx?chptId=6">General 
+            Programming</A> » <A id=ctl00_ArticleTopHeader_SectionLink 
+            href="http://www.codeproject.com/KB/recipes/">Algorithms &amp; 
+            Recipes</A> » <A id=ctl00_ArticleTopHeader_SubsectionLink 
+            href="http://www.codeproject.com/KB/recipes/index.aspx?#Algorithms &amp; Recipes - General">General</A> 
+            <SPAN class=ArticleIntermediate 
+            id=ctl00_ArticleTopHeader_SkillLevel>&nbsp;&nbsp;&nbsp; 
+            Intermediate</SPAN> <SPAN 
+            id=ctl00_ArticleTopHeader_LicenceTerms></SPAN><BR><BR>
+            <H1><SPAN class=ArticleTopTitle 
+            id=ctl00_ArticleTopHeader_ArticleTitle>Fast statistical calculations 
+            of sub matrices for image processing</SPAN></H1><B>By <A 
+            href="http://www.codeproject.com/script/Articles/MemberArticles.aspx?amid=969161">ediazc</A></B><BR><BR><SPAN 
+            class=ArticleTopDescr 
+            id=ctl00_ArticleTopHeader_ArticleDescr>Describes the summed area 
+            table algorithm of Franklin Crow.</SPAN> </TD>
+          <TD class=SmallText style="WIDTH: 210px"><SPAN 
+            id=ctl00_ArticleTopHeader_ArticleAttributes>C#, Windows, .NET CF, 
+            .NET, Visual Studio, PDA, GDI, GDI+, Arch, Dev, 
+            QA</SPAN><BR><BR><SPAN style="PADDING-RIGHT: 2ex">Posted</SPAN>: 
+            <B>1 Oct 2005</B><BR><SPAN 
+            style="PADDING-RIGHT: 0.5ex">Updated</SPAN>: <B>1 Oct 2005</B> 
+            <BR><SPAN style="PADDING-RIGHT: 3.2ex">Views</SPAN>: 
+            <B>22,745</B><BR></TD></TR>
+        <TR>
+          <TD colSpan=2>
+            <TABLE width="100%">
+              <TBODY>
+              <TR>
+                <TD></TD>
+                <TD class=SmallText style="WHITE-SPACE: nowrap" 
+              align=right></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+  <TR vAlign=top>
+    <TD class=LHNavBar id=ctl00_LeftNavCell>
+      <DIV style="PADDING-TOP: 5px; TEXT-ALIGN: center"><IFRAME 
+      src="CodeProject Fast statistical calculations of sub matrices for image processing_ Free source code and programming help_files/ServeHTML.htm" 
+      frameBorder=0 width=150 scrolling=no height=80></IFRAME></DIV>
+      <DIV class=FeatureBlockHeader>Announcements</DIV>
+      <DIV class="FeatureBlockContent RHFeatureBar">
+      <DIV style="PADDING-TOP: 0px"><IMG 
+      style="PADDING-RIGHT: 14px; FLOAT: left; MARGIN-LEFT: 7px; MARGIN-RIGHT: 10px" 
+      height=20 alt=Comp 
+      src="CodeProject Fast statistical calculations of sub matrices for image processing_ Free source code and programming help_files/prize_winner.gif" 
+      width=10> <A id=ctl00_Announcements_CompLink 
+      href="http://www.codeproject.com/Feature/ArticleCompetition/">Monthly 
+      Competition</A><BR clear=all>
+      <DIV style="PADDING-BOTTOM: 5px; PADDING-TOP: 3px"><IMG 
+      style="PADDING-RIGHT: 10px; FLOAT: left; MARGIN-LEFT: 7px; MARGIN-RIGHT: 8px" 
+      height=16 alt=Staff 
+      src="CodeProject Fast statistical calculations of sub matrices for image processing_ Free source code and programming help_files/staff_sm.gif" 
+      width=12> <A href="http://www.codeproject.com/info/jobs/">We're 
+      Hiring!</A></DIV>
+      <DIV style="PADDING-BOTTOM: 5px; PADDING-TOP: 3px"><IMG 
+      style="PADDING-RIGHT: 0px; MARGIN-TOP: 3px; FLOAT: left; MARGIN-LEFT: 0px; MARGIN-RIGHT: 0px" 
+      height=20 alt=Silverlight 
+      src="CodeProject Fast statistical calculations of sub matrices for image processing_ Free source code and programming help_files/silverlight_20.jpg" 
+      width=27> <A 
+      href="http://www.codeproject.com/script/News/View.aspx?nwid=6024">Add 
+      Silverlight to your articles</A></DIV></DIV></DIV>
+      <DIV class=MenuCat>Services</DIV>
+      <DIV class=MenuChapter><A 
+      href="http://www.codeproject.com/Services/coffee.aspx">Code Project 
+      Coffee</A></DIV>
+      <DIV class=MenuChapter><A 
+      href="http://www.codeproject.com/Services/TradePub.aspx">Free 
+      Magazines</A></DIV><BR>
+      <DIV id=SectionMenu>
+      <DIV class=MenuCat>Chapters</DIV>
+      <DIV class=MenuChapter><A onclick="return ToggleMenu('Chapter1');" 
+      href="http://www.codeproject.com/script/Content/Chapter.aspx?chptId=1">Desktop 
+      Development</A></DIV>
+      <DIV class=MenuSectionBlock id=Chapter1 style="DISPLAY: none">
+      <DIV class=MI id=Section1><A 
+      href="http://www.codeproject.com/KB/buttons/">Button Controls</A></DIV>
+      <DIV class=MI id=Section15><A 
+      href="http://www.codeproject.com/KB/clipboard/">Clipboard</A></DIV>
+      <DIV class=MI id=Section2><A 
+      href="http://www.codeproject.com/KB/combobox/">Combo &amp; List 
+      Boxes</A></DIV>
+      <DIV class=MI id=Section67><A 
+      href="http://www.codeproject.com/KB/dialog/">Dialogs and Windows</A></DIV>
+      <DIV class=MI id=Section107><A 
+      href="http://www.codeproject.com/KB/gadgets/">Desktop Gadgets</A></DIV>
+      <DIV class=MI id=Section16><A 
+      href="http://www.codeproject.com/KB/docview/">Document / View</A></DIV>
+      <DIV class=MI id=Section4><A 
+      href="http://www.codeproject.com/KB/edit/">Edit Controls</A></DIV>
+      <DIV class=MI id=Section17><A 
+      href="http://www.codeproject.com/KB/files/">Files and Folders</A></DIV>
+      <DIV class=MI id=Section3><A 
+      href="http://www.codeproject.com/KB/grid/">Grid &amp; Data 
+      Controls</A></DIV>
+      <DIV class=MI id=Section48><A 
+      href="http://www.codeproject.com/KB/system/">Hardware &amp; 
+      System</A></DIV>
+      <DIV class=MI id=Section5><A 
+      href="http://www.codeproject.com/KB/list/">List Controls</A></DIV>
+      <DIV class=MI id=Section6><A 
+      href="http://www.codeproject.com/KB/menus/">Menus</A></DIV>
+      <DIV class=MI id=Section14><A 
+      href="http://www.codeproject.com/KB/miscctrl/">Miscellaneous</A></DIV>
+      <DIV class=MI id=Section18><A 
+      href="http://www.codeproject.com/KB/printing/">Printing</A></DIV>
+      <DIV class=MI id=Section95><A 
+      href="http://www.codeproject.com/KB/progress/">Progress Controls</A></DIV>
+      <DIV class=MI id=Section11><A 
+      href="http://www.codeproject.com/KB/selection/">Selection 
+      Controls</A></DIV>
+      <DIV class=MI id=Section19><A 
+      href="http://www.codeproject.com/KB/shell/">Shell and IE 
+      programming</A></DIV>
+      <DIV class=MI id=Section68><A 
+      href="http://www.codeproject.com/KB/smart/">Smart Client</A></DIV>
+      <DIV class=MI id=Section8><A 
+      href="http://www.codeproject.com/KB/splitter/">Splitter Windows</A></DIV>
+      <DIV class=MI id=Section9><A 
+      href="http://www.codeproject.com/KB/static/">Static &amp; Panel 
+      Controls</A></DIV>
+      <DIV class=MI id=Section10><A 
+      href="http://www.codeproject.com/KB/statusbar/">Status Bar</A></DIV>
+      <DIV class=MI id=Section7><A 
+      href="http://www.codeproject.com/KB/tabs/">Tabs &amp; Property 
+      Pages</A></DIV>
+      <DIV class=MI id=Section12><A 
+      href="http://www.codeproject.com/KB/toolbars/">Toolbars &amp; Docking 
+      windows</A></DIV>
+      <DIV class=MI id=Section13><A 
+      href="http://www.codeproject.com/KB/tree/">Tree Controls</A></DIV></DIV>
+      <DIV class=MenuChapter><A onclick="return ToggleMenu('Chapter2');" 
+      href="http://www.codeproject.com/script/Content/Chapter.aspx?chptId=2">Web 
+      Development</A></DIV>
+      <DIV class=MenuSectionBlock id=Chapter2 style="DISPLAY: none">
+      <DIV class=MI id=Section70><A 
+      href="http://www.codeproject.com/KB/ajax/">AJAX and Atlas</A></DIV>
+      <DIV class=MI id=Section27><A 
+      href="http://www.codeproject.com/KB/applications/">Applications &amp; 
+      Tools</A></DIV>
+      <DIV class=MI id=Section85><A 
+      href="http://www.codeproject.com/KB/asp/">ASP</A></DIV>
+      <DIV class=MI id=Section89><A 
+      href="http://www.codeproject.com/KB/aspnet/">ASP.NET</A></DIV>
+      <DIV class=MI id=Section28><A 
+      href="http://www.codeproject.com/KB/webforms/">ASP.NET Controls</A></DIV>
+      <DIV class=MI id=Section38><A 
+      href="http://www.codeproject.com/KB/ATL-Server/">ATL Server</A></DIV>
+      <DIV class=MI id=Section29><A 
+      href="http://www.codeproject.com/KB/web-cache/">Caching</A></DIV>
+      <DIV class=MI id=Section91><A 
+      href="http://www.codeproject.com/KB/web-image/">Charts, Graphs and 
+      Images</A></DIV>
+      <DIV class=MI id=Section25><A 
+      href="http://www.codeproject.com/KB/scripting/">Client side 
+      scripting</A></DIV>
+      <DIV class=MI id=Section30><A 
+      href="http://www.codeproject.com/KB/custom-controls/">Custom 
+      Controls</A></DIV>
+      <DIV class=MI id=Section23><A 
+      href="http://www.codeproject.com/KB/HTML/">HTML / CSS</A></DIV>
+      <DIV class=MI id=Section22><A 
+      href="http://www.codeproject.com/KB/IP/">Internet / Network</A></DIV>
+      <DIV class=MI id=Section24><A 
+      href="http://www.codeproject.com/KB/ISAPI/">ISAPI</A></DIV>
+      <DIV class=MI id=Section33><A 
+      href="http://www.codeproject.com/KB/server-management/">Site &amp; Server 
+      Management</A></DIV>
+      <DIV class=MI id=Section34><A 
+      href="http://www.codeproject.com/KB/session/">Session State</A></DIV>
+      <DIV class=MI id=Section113><A 
+      href="http://www.codeproject.com/KB/silverlight/">Silverlight</A></DIV>
+      <DIV class=MI id=Section36><A 
+      href="http://www.codeproject.com/KB/trace/">Trace and Logs</A></DIV>
+      <DIV class=MI id=Section31><A 
+      href="http://www.codeproject.com/KB/user-controls/">User 
+Controls</A></DIV>
+      <DIV class=MI id=Section37><A 
+      href="http://www.codeproject.com/KB/validation/">Validation</A></DIV>
+      <DIV class=MI id=Section35><A 
+      href="http://www.codeproject.com/KB/viewstate/">View State</A></DIV>
+      <DIV class=MI id=Section26><A 
+      href="http://www.codeproject.com/KB/WAP/">WAP / WML</A></DIV>
+      <DIV class=MI id=Section32><A 
+      href="http://www.codeproject.com/KB/web-security/">Web Security</A></DIV>
+      <DIV class=MI id=Section20><A 
+      href="http://www.codeproject.com/KB/webservices/">Web 
+      Services</A></DIV></DIV>
+      <DIV class=MenuChapter><A onclick="return ToggleMenu('Chapter9');" 
+      href="http://www.codeproject.com/script/Content/Chapter.aspx?chptId=9">Enterprise 
+      Systems</A></DIV>
+      <DIV class=MenuSectionBlock id=Chapter9 style="DISPLAY: none">
+      <DIV class=MI id=Section98><A 
+      href="http://www.codeproject.com/KB/MCMS/">Content Management 
+      Server</A></DIV>
+      <DIV class=MI id=Section99><A 
+      href="http://www.codeproject.com/KB/biztalk/">Microsoft BizTalk 
+      Server</A></DIV>
+      <DIV class=MI id=Section102><A 
+      href="http://www.codeproject.com/KB/exchange/">Microsoft 
+Exchange</A></DIV>
+      <DIV class=MI id=Section90><A 
+      href="http://www.codeproject.com/KB/office/">Office Development</A></DIV>
+      <DIV class=MI id=Section101><A 
+      href="http://www.codeproject.com/KB/sharepoint/">SharePoint 
+      Server</A></DIV></DIV>
+      <DIV class=MenuChapter><A onclick="return ToggleMenu('Chapter3');" 
+      href="http://www.codeproject.com/script/Content/Chapter.aspx?chptId=3">Multimedia</A></DIV>
+      <DIV class=MenuSectionBlock id=Chapter3 style="DISPLAY: none">
+      <DIV class=MI id=Section42><A 
+      href="http://www.codeproject.com/KB/audio-video/">Audio and 
+Video</A></DIV>
+      <DIV class=MI id=Section44><A 
+      href="http://www.codeproject.com/KB/directx/">DirectX</A></DIV>
+      <DIV class=MI id=Section46><A 
+      href="http://www.codeproject.com/KB/GDI/">GDI</A></DIV>
+      <DIV class=MI id=Section47><A 
+      href="http://www.codeproject.com/KB/GDI-plus/">GDI+</A></DIV>
+      <DIV class=MI id=Section43><A 
+      href="http://www.codeproject.com/KB/graphics/">General Graphics</A></DIV>
+      <DIV class=MI id=Section45><A 
+      href="http://www.codeproject.com/KB/openGL/">OpenGL</A></DIV></DIV>
+      <DIV class=MenuChapter><A onclick="return ToggleMenu('Chapter4');" 
+      href="http://www.codeproject.com/script/Content/Chapter.aspx?chptId=4">Database</A></DIV>
+      <DIV class=MenuSectionBlock id=Chapter4 style="DISPLAY: none">
+      <DIV class=MI id=Section66><A 
+      href="http://www.codeproject.com/KB/database/">Database</A></DIV>
+      <DIV class=MI id=Section100><A 
+      href="http://www.codeproject.com/KB/reporting-services/">SQL Reporting 
+      Services</A></DIV></DIV>
+      <DIV class=MenuChapter><A onclick="return ToggleMenu('Chapter8');" 
+      href="http://www.codeproject.com/script/Content/Chapter.aspx?chptId=8">Platforms, 
+      Frameworks &amp; Libraries</A></DIV>
+      <DIV class=MenuSectionBlock id=Chapter8 style="DISPLAY: none">
+      <DIV class=MI id=Section83><A 
+      href="http://www.codeproject.com/KB/atl/">ATL</A></DIV>
+      <DIV class=MI id=Section117><A 
+      href="http://www.codeproject.com/KB/MFC/">MFC</A></DIV>
+      <DIV class=MI id=Section88><A 
+      href="http://www.codeproject.com/KB/stl/">STL</A></DIV>
+      <DIV class=MI id=Section84><A 
+      href="http://www.codeproject.com/KB/wtl/">WTL</A></DIV>
+      <DIV class=MI id=Section49><A 
+      href="http://www.codeproject.com/KB/COM/">COM / COM+</A></DIV>
+      <DIV class=MI id=Section76><A 
+      href="http://www.codeproject.com/KB/dotnet/">.NET Framework</A></DIV>
+      <DIV class=MI id=Section92><A 
+      href="http://www.codeproject.com/KB/winsdk/">Win32/64 SDK &amp; 
+      OS</A></DIV>
+      <DIV class=MI id=Section108><A 
+      href="http://www.codeproject.com/KB/vista/">Vista API</A></DIV>
+      <DIV class=MI id=Section110><A 
+      href="http://www.codeproject.com/KB/vista-security/">Vista 
+      Security</A></DIV>
+      <DIV class=MI id=Section82><A 
+      href="http://www.codeproject.com/KB/cross-platform/">Cross 
+      Platform</A></DIV>
+      <DIV class=MI id=Section69><A 
+      href="http://www.codeproject.com/KB/game/">Game Development</A></DIV>
+      <DIV class=MI id=Section73><A 
+      href="http://www.codeproject.com/KB/mobile/">Mobile Development</A></DIV>
+      <DIV class=MI id=Section106><A 
+      href="http://www.codeproject.com/KB/WC/">Windows CardSpace</A></DIV>
+      <DIV class=MI id=Section103><A 
+      href="http://www.codeproject.com/KB/WCF/">Windows Communication 
+      Foundation</A></DIV>
+      <DIV class=MI id=Section104><A 
+      href="http://www.codeproject.com/KB/WPF/">Windows Presentation 
+      Foundation</A></DIV>
+      <DIV class=MI id=Section105><A 
+      href="http://www.codeproject.com/KB/WF/">Windows Workflow 
+      Foundation</A></DIV>
+      <DIV class=MI id=Section119><A 
+      href="http://www.codeproject.com/KB/library/">Libraries</A></DIV>
+      <DIV class=MI id=Section122><A 
+      href="http://www.codeproject.com/KB/powershell/">Windows 
+      Powershell</A></DIV>
+      <DIV class=MI id=Section123><A 
+      href="http://www.codeproject.com/KB/linq/">LINQ</A></DIV></DIV>
+      <DIV class=MenuChapter><A onclick="return ToggleMenu('Chapter5');" 
+      href="http://www.codeproject.com/script/Content/Chapter.aspx?chptId=5">Languages</A></DIV>
+      <DIV class=MenuSectionBlock id=Chapter5 style="DISPLAY: none">
+      <DIV class=MI id=Section71><A href="http://www.codeproject.com/KB/cpp/">C 
+      / C++ Language</A></DIV>
+      <DIV class=MI id=Section72><A 
+      href="http://www.codeproject.com/KB/mcpp/">C++ / CLI</A></DIV>
+      <DIV class=MI id=Section93><A 
+      href="http://www.codeproject.com/KB/cs/">C#</A></DIV>
+      <DIV class=MI id=Section78><A 
+      href="http://www.codeproject.com/KB/msil/">MSIL</A></DIV>
+      <DIV class=MI id=Section86><A 
+      href="http://www.codeproject.com/KB/vbscript/">VBScript</A></DIV>
+      <DIV class=MI id=Section87><A 
+      href="http://www.codeproject.com/KB/vb/">VB.NET</A></DIV>
+      <DIV class=MI id=Section115><A 
+      href="http://www.codeproject.com/KB/vb-interop/">VB6 Interop</A></DIV>
+      <DIV class=MI id=Section77><A 
+      href="http://www.codeproject.com/KB/net-languages/">Other .NET 
+      Languages</A></DIV>
+      <DIV class=MI id=Section21><A 
+      href="http://www.codeproject.com/KB/XML/">XML</A></DIV>
+      <DIV class=MI id=Section96><A 
+      href="http://www.codeproject.com/KB/java/">Java</A></DIV></DIV>
+      <DIV class=MenuChapter><A onclick="return ToggleMenu('Chapter6');" 
+      href="http://www.codeproject.com/script/Content/Chapter.aspx?chptId=6">General 
+      Programming</A></DIV>
+      <DIV class=MenuSectionBlock id=Chapter6>
+      <DIV class=MIS id=Section57><A 
+      href="http://www.codeproject.com/KB/recipes/">Algorithms &amp; 
+      Recipes</A></DIV>
+      <DIV class=MI id=Section64><A 
+      href="http://www.codeproject.com/KB/bugs/">Bugs &amp; 
+Workarounds</A></DIV>
+      <DIV class=MI id=Section79><A 
+      href="http://www.codeproject.com/KB/collections/">Collections</A></DIV>
+      <DIV class=MI id=Section56><A 
+      href="http://www.codeproject.com/KB/security/">Cryptography &amp; 
+      Security</A></DIV>
+      <DIV class=MI id=Section50><A 
+      href="http://www.codeproject.com/KB/datetime/">Date and Time</A></DIV>
+      <DIV class=MI id=Section52><A 
+      href="http://www.codeproject.com/KB/DLL/">DLLs &amp; Assemblies</A></DIV>
+      <DIV class=MI id=Section80><A 
+      href="http://www.codeproject.com/KB/exception/">Exception 
+      Handling</A></DIV>
+      <DIV class=MI id=Section81><A 
+      href="http://www.codeproject.com/KB/locale/">Localisation</A></DIV>
+      <DIV class=MI id=Section53><A 
+      href="http://www.codeproject.com/KB/macros/">Macros and Add-ins</A></DIV>
+      <DIV class=MI id=Section54><A 
+      href="http://www.codeproject.com/KB/tips/">Programming Tips</A></DIV>
+      <DIV class=MI id=Section55><A 
+      href="http://www.codeproject.com/KB/string/">String handling</A></DIV>
+      <DIV class=MI id=Section58><A 
+      href="http://www.codeproject.com/KB/threads/">Threads, Processes &amp; 
+      IPC</A></DIV>
+      <DIV class=MI id=Section59><A 
+      href="http://www.codeproject.com/KB/winhelp/">WinHelp / 
+      HTMLHelp</A></DIV></DIV>
+      <DIV class=MenuChapter><A onclick="return ToggleMenu('Chapter10');" 
+      href="http://www.codeproject.com/script/Content/Chapter.aspx?chptId=10">Graphics 
+      / Design</A></DIV>
+      <DIV class=MenuSectionBlock id=Chapter10 style="DISPLAY: none">
+      <DIV class=MI id=Section40><A 
+      href="http://www.codeproject.com/KB/expression/">Expression</A></DIV>
+      <DIV class=MI id=Section114><A 
+      href="http://www.codeproject.com/KB/usability/">Usability</A></DIV></DIV>
+      <DIV class=MenuChapter><A onclick="return ToggleMenu('Chapter11');" 
+      href="http://www.codeproject.com/script/Content/Chapter.aspx?chptId=11">Development 
+      Lifecycle</A></DIV>
+      <DIV class=MenuSectionBlock id=Chapter11 style="DISPLAY: none">
+      <DIV class=MI id=Section51><A 
+      href="http://www.codeproject.com/KB/debug/">Debug Tips</A></DIV>
+      <DIV class=MI id=Section39><A 
+      href="http://www.codeproject.com/KB/architecture/">Design and 
+      Architecture</A></DIV>
+      <DIV class=MI id=Section112><A 
+      href="http://www.codeproject.com/KB/install/">Installation</A></DIV>
+      <DIV class=MI id=Section41><A 
+      href="http://www.codeproject.com/KB/work/">Work Issues</A></DIV></DIV>
+      <DIV class=MenuChapter><A onclick="return ToggleMenu('Chapter7');" 
+      href="http://www.codeproject.com/script/Content/Chapter.aspx?chptId=7">General 
+      Reading</A></DIV>
+      <DIV class=MenuSectionBlock id=Chapter7 style="DISPLAY: none">
+      <DIV class=MI id=Section60><A 
+      href="http://www.codeproject.com/KB/books/">Book Chapters</A></DIV>
+      <DIV class=MI id=Section61><A 
+      href="http://www.codeproject.com/KB/book-reviews/">Book Reviews</A></DIV>
+      <DIV class=MI id=Section109><A 
+      href="http://www.codeproject.com/KB/hardware-review/">Hardware 
+      Reviews</A></DIV>
+      <DIV class=MI id=Section63><A 
+      href="http://www.codeproject.com/KB/interviews/">Interviews</A></DIV>
+      <DIV class=MI id=Section65><A 
+      href="http://www.codeproject.com/KB/showcase/">Product Showcase</A></DIV>
+      <DIV class=MI id=Section62><A 
+      href="http://www.codeproject.com/KB/scrapbook/">Scrapbook</A></DIV></DIV></DIV><BR>
+      <DIV class=MenuCat>Feature Zones</DIV>
+      <DIV class=MenuChapter><A 
+      href="http://www.codeproject.com/kb/showcase/">Product Showcase</A></DIV>
+      <DIV class=MenuChapter><A 
+      href="http://www.codeproject.com/Zones/Install">Installshield 
+      2008</A></DIV>
+      <DIV class=MenuChapter><A href="http://www.codeproject.com/Zones/IBM">IBM 
+      DeveloperWorks</A></DIV><BR>
+      <SCRIPT type=text/javascript>document.write(unescape("%3ca%20href%3d%22http%3a%2f%2fwww.codeproject.com%2fRedir.aspx%3fadid%3d4285%26way%3dban%22%20target%3d%22_blank%22%20rel%3d%22nofollow%22%3e%3cimg%20src%3d%22http%3a%2f%2fwww.codeproject.com%2fscript%2fAnn%2fServeImg.aspx%3fFile%3d%252fscript%252fadmentor%252fimages%252fCWS_charting2_160x600.jpg%26C%3dFalse%26id%3d4285%22%20alt%3d%22%22%20border%3d%220%22%20width%3d%22160%22%20height%3d%22600%22%3e%3c%2fa%3e"));</SCRIPT>
+      <IMG height=1 alt="" 
+      src="CodeProject Fast statistical calculations of sub matrices for image processing_ Free source code and programming help_files/t.gif" 
+      width=160> </TD>
+    <TD class=ArticlePane vAlign=top>
+      <TABLE class=SearchHeaderBar cellSpacing=0 width="100%">
+        <TBODY>
+        <TR>
+          <TD style="WIDTH: 60%; WHITE-SPACE: nowrap" vAlign=center 
+            align=right><FORM style="MARGIN: 0px" name=Search 
+            action=/info/search.aspx method=get><B>Search &nbsp;</B> <INPUT 
+            class=SmallText style="WIDTH: 200px" name=artkw> <SELECT 
+            class=SmallText style="FONT-WEIGHT: bold" name=sbo> <OPTION 
+              value=kw selected>Articles</OPTION> <OPTION 
+              value=fm>Messages</OPTION></SELECT> <INPUT class=SmallText style="FONT-WEIGHT: bold" type=submit value=" Go! "> 
+            &nbsp; </FORM></TD>
+          <TD class=TinyText style="WHITE-SPACE: nowrap"><A 
+            href="http://www.codeproject.com/info/search.aspx">Advanced 
+            Search</A><BR><A 
+            href="http://www.codeproject.com/script/Content/SiteMap.aspx">Sitemap</A> 
+            | <A id=ctl00_SearchBarCtrl_AddToIESearchLnk 
+            title="Add CodeProject to your IE search Providers" 
+            onclick="window.external.AddSearchProvider('http://www.codeproject.com/info/OpenSearch.xml');return false;" 
+            href="http://www.codeproject.com/">Add to IE Search</A> 
+        </TD></TR></TBODY></TABLE><SPAN id=ctl00_ResultMessage></SPAN>
+      <DIV id=ctl00_ArtDiv>
+      <TABLE cellSpacing=0 cellPadding=0 width="100%" border=0>
+        <TBODY>
+        <TR vAlign=top>
+          <TD vAlign=top>
+            <TABLE>
+              <TBODY></TBODY></TABLE>
+            <TABLE cellSpacing=1 cellPadding=3 width=1 border=0>
+              <TBODY>
+              <TR class=smalltext vAlign=center>
+                <TD style="WHITE-SPACE: nowrap"><IMG 
+                  style="BORDER-RIGHT: 0px; BORDER-TOP: 0px; VERTICAL-ALIGN: middle; BORDER-LEFT: 0px; BORDER-BOTTOM: 0px" 
+                  height=16 alt=print 
+                  src="CodeProject Fast statistical calculations of sub matrices for image processing_ Free source code and programming help_files/print.gif" 
+                  width=16> <A id=ctl00_ArticleHeaderLinks_PrintLnk 
+                  href="http://www.codeproject.com/KB/recipes/efficientsumonsubmatrices.aspx?display=Print">Print</A> 
+                </TD>
+                <TD style="WHITE-SPACE: nowrap"><IMG 
+                  style="BORDER-RIGHT: 0px; BORDER-TOP: 0px; VERTICAL-ALIGN: middle; BORDER-LEFT: 0px; BORDER-BOTTOM: 0px" 
+                  height=16 alt="Broken Article?" 
+                  src="CodeProject Fast statistical calculations of sub matrices for image processing_ Free source code and programming help_files/broken.gif" 
+                  width=16> <A id=ctl00_ArticleHeaderLinks_BrokenLnk 
+                  href="http://www.codeproject.com/script/Articles/Report.aspx?aid=11837">Broken 
+                  Article?</A> </TD>
+                <TD style="WHITE-SPACE: nowrap"><IMG 
+                  id=ctl00_ArticleHeaderLinks_ArticleBmk_BookmarkImg 
+                  title="Add to bookmarks" 
+                  style="BORDER-RIGHT: 0px; BORDER-TOP: 0px; VERTICAL-ALIGN: middle; BORDER-LEFT: 0px; WIDTH: 16px; BORDER-BOTTOM: 0px; HEIGHT: 16px" 
+                  src="CodeProject Fast statistical calculations of sub matrices for image processing_ Free source code and programming help_files/link.png"> 
+                  <A id=ctl00_ArticleHeaderLinks_ArticleBmk_BookmarkLnk 
+                  href="http://www.codeproject.com/script/Bookmarks/Add.aspx?&amp;obid=11837&amp;obtid=2">Add 
+                  Bookmark</A> <SPAN 
+                  id=ctl00_ArticleHeaderLinks_ArticleBmk_Message></SPAN></TD>
+                <TD style="WHITE-SPACE: nowrap"><IMG 
+                  style="BORDER-RIGHT: 0px; BORDER-TOP: 0px; VERTICAL-ALIGN: middle; BORDER-LEFT: 0px; BORDER-BOTTOM: 0px" 
+                  height=16 alt=Discuss 
+                  src="CodeProject Fast statistical calculations of sub matrices for image processing_ Free source code and programming help_files/discuss.gif" 
+                  width=15> <A 
+                  href="http://www.codeproject.com/KB/recipes/efficientsumonsubmatrices.aspx#_comments">Discuss</A> 
+                </TD>
+                <TD style="WHITE-SPACE: nowrap"><IMG 
+                  style="BORDER-RIGHT: 0px; BORDER-TOP: 0px; VERTICAL-ALIGN: middle; BORDER-LEFT: 0px; BORDER-BOTTOM: 0px" 
+                  height=16 alt="Recommend Article" 
+                  src="CodeProject Fast statistical calculations of sub matrices for image processing_ Free source code and programming help_files/mail.gif" 
+                  width=16> <A id=ctl00_ArticleHeaderLinks_Recommend 
+                  href="http://www.codeproject.com/script/common/TellFriend.aspx?obtid=2&amp;obid=11837">Send 
+                  to a friend</A> </TD></TR></TBODY></TABLE></TD>
+          <TD align=right>
+            <TABLE>
+              <TBODY>
+              <TR>
+                <TD class=SmallText style="WHITE-SPACE: nowrap" 
+                  align=right><SPAN id=ctl00_ArticleRating_VoteLabel>8 votes for 
+                  this Article.</SPAN> </TD>
+                <TD>
+                  <TABLE cellSpacing=0 cellPadding=0 border=1>
+                    <TBODY>
+                    <TR>
+                      <TD width=20 bgColor=white height=5><IMG height=5 
+                        src="CodeProject Fast statistical calculations of sub matrices for image processing_ Free source code and programming help_files/red.gif" 
+                        width=20 border=0></TD>
+                      <TD width=20 bgColor=white height=5><IMG height=5 
+                        src="CodeProject Fast statistical calculations of sub matrices for image processing_ Free source code and programming help_files/red.gif" 
+                        width=20 border=0></TD>
+                      <TD width=20 bgColor=white height=5><IMG height=5 
+                        src="CodeProject Fast statistical calculations of sub matrices for image processing_ Free source code and programming help_files/red.gif" 
+                        width=20 border=0></TD>
+                      <TD width=20 bgColor=white height=5><IMG height=5 
+                        src="CodeProject Fast statistical calculations of sub matrices for image processing_ Free source code and programming help_files/red.gif" 
+                        width=20 border=0></TD>
+                      <TD noWrap width=20 bgColor=white height=5><IMG height=5 
+                        src="CodeProject Fast statistical calculations of sub matrices for image processing_ Free source code and programming help_files/red.gif" 
+                        width=9 border=0></TD></TR></TBODY></TABLE></TD></TR>
+              <TR id=ctl00_ArticleRating_PopularityRow>
+                <TD class=SmallText align=right colSpan=2><A 
+                  id=ctl00_ArticleRating_PopularityLnk 
+                  title="Calculated as rating x Log10(# votes)" 
+                  href="http://www.codeproject.com/script/Articles/TopArticles.aspx?ta_so=1">Popularity: 
+                  4.03</A><SPAN id=ctl00_ArticleRating_PopularityLbl></SPAN> 
+                  Rating: <B>4.47</B> out of 5 
+      </TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE>
+      <UL class=Callout id=ctl00_confirmError style="MARGIN-RIGHT: 20px">
+        <LI class=SmallText 
+        style="LIST-STYLE-IMAGE: url(/images/warning.gif)">You are signed up for 
+        one or more <A id=ctl00_SubscribeLink2 
+        href="http://www.codeproject.com/script/Membership/Subscribe.aspx?rp=%2fKB%2frecipes%2fefficientsumonsubmatrices.aspx">newsletters</A> 
+        but your email address is either unconfirmed, or has not been 
+        reconfirmed in a long time. Please click <A id=ctl00_RequestConfirmLink2 
+        href="http://www.codeproject.com/script/Membership/SendConfirmRequest.aspx?rp=%2fKB%2frecipes%2fefficientsumonsubmatrices.aspx">here</A> 
+        to have an email sent that will allow us to confirm your email address 
+        and start sending you newsletters again.</LI></UL><SPAN id=intelliTXT>
+      <DIV id=contentdiv><!-- Main Page Contents Start --><!-- Article Starts -->
+      <H2>Introduction</H2>
+      <P>When you are involved in image processing or graphic programming, 
+      pattern recognition is usually done with matrices that represent the 
+      images. This article shows an <A 
+      href="http://www.darksideprogramming.org/archives/2005/10/fast_sums_insid.html" 
+      target=_blank>algorithm</A> described first by Franklin Crow on SIGGRAPH 
+      '83. The algorithm is used to do efficient sums of sub matrices. These 
+      techniques are used, for example, for finding patterns inside pictures for 
+      <A 
+      href="http://www.darksideprogramming.org/archives/2005/10/face_recognitio.html" 
+      target=_blank>face recognition</A>.</P>
+      <H2>The summed area table</H2>
+      <P>We have a matrix i, of N rows x M columns, usually this matrix is 
+      denoted as i(x,y), where 0 &lt;= x &lt; N, and 0 &lt;= y &lt; M. We will 
+      build a summed area table, or integral image ii(x,y) by the following 
+      recurrence:</P><PRE lang=text>s(x, y) = s(x, y-1) + i(x,y)
+ii(x, y) = ii(x-1, y) + s(x,y)</PRE>
+      <P>where s(x,y) is the cumulative row sum, s(x, -1) = 0, and ii(-1,y) = 0. 
+      ii(x,y) is the sum over x' &lt; x, y' &lt; y of i(x',y') values.</P>
+      <P>Given the following matrix i:</P>
+      <TABLE cellSpacing=1 cellPadding=2 width="20%" align=middle border=1>
+        <TBODY>
+        <TR>
+          <TD>
+            <P align=right>1</P></TD>
+          <TD>
+            <P align=right>2</P></TD>
+          <TD>
+            <P align=right>3</P></TD></TR>
+        <TR>
+          <TD>
+            <P align=right>4</P></TD>
+          <TD>
+            <P align=right>5</P></TD>
+          <TD>
+            <P align=right>6</P></TD></TR>
+        <TR>
+          <TD>
+            <P align=right>7</P></TD>
+          <TD>
+            <P align=right>8</P></TD>
+          <TD>
+            <P align=right>9</P></TD></TR>
+        <TR>
+          <TD>
+            <P align=right>10</P></TD>
+          <TD>
+            <P align=right>11</P></TD>
+          <TD>
+            <P align=right>12</P></TD></TR></TBODY></TABLE>
+      <P>the ii matrix is:</P>
+      <TABLE cellSpacing=1 cellPadding=2 width="20%" border=1>
+        <TBODY>
+        <TR>
+          <TD>
+            <P align=right>1</P></TD>
+          <TD>
+            <P align=right>3</P></TD>
+          <TD>
+            <P align=right>6</P></TD></TR>
+        <TR>
+          <TD>
+            <P align=right>5</P></TD>
+          <TD>
+            <P align=right>12</P></TD>
+          <TD>
+            <P align=right>21</P></TD></TR>
+        <TR>
+          <TD>
+            <P align=right>12</P></TD>
+          <TD>
+            <P align=right>27</P></TD>
+          <TD>
+            <P align=right>45</P></TD></TR>
+        <TR>
+          <TD>
+            <P align=right>22</P></TD>
+          <TD>
+            <P align=right>48</P></TD>
+          <TD>
+            <P align=right>78</P></TD></TR></TBODY></TABLE>
+      <P>Now, if we want to calculate the sum of the sub matrix (1,1)-(2,2) = 
+      5+6+8+9 = 28. This value is equal to (45 + 1) - (12+6) = 28.</P>
+      <P>We have the following pattern:</P>
+      <TABLE cellSpacing=1 cellPadding=2 width="20%" border=1>
+        <TBODY>
+        <TR>
+          <TD>A <SUB>1</SUB></TD>
+          <TD>B <SUB>2</SUB></TD>
+          <TD></TD></TR>
+        <TR>
+          <TD>C <SUB>3</SUB></TD>
+          <TD>D <SUB>4</SUB></TD>
+          <TD></TD></TR>
+        <TR>
+          <TD></TD>
+          <TD></TD>
+          <TD></TD></TR></TBODY></TABLE>
+      <P>Here 1, 2, 3 and 4 are the cells at the right bottom corner on each sub 
+      matrix A, B, C and D.</P>
+      <P>If we choose x, y, a and b such as (x+a)*(y+b) is the sum of the 
+      internal rectangles, x*y is the sum of rectangle A, and a*b is the sum of 
+      the internal rectangle D, (x+a)*y is the sum of the rectangles A and B, 
+      (y+b)*x is the sum of the rectangles A and C.</P>
+      <P>We write |D| = a*b, |A+B+C+D| = (x+a)*(y+b), |A+B| = y*(x+a), |A+C| = 
+      x*(y+b).</P>
+      <P>We have (x+a)*(y+b) = x*y+a(x+y)+b(x+y)+a*b, this implies a*b = 
+      (x+a)*(y+b)-a(x+y)+b(x+y) = (x+a)*(y+b)-y(x+a)-x(y+b)+xy = 
+      |A+B+C+D|-|A+B|-|A+C| + |A| = |D|.</P>
+      <P>|A+B+C+D| is the value of the cell 4. |A| is the value on cell 1, |A+B| 
+      is the value on cell 2 and |A+C| is the value on cell 3. So the sum of D 
+      is given by (4+1)-(2+3).</P>
+      <H2>Implementation</H2>
+      <P>One of the things I like about C# is the multi-dimensional array. You 
+      can have an array indexed like in Pascal. For example, you can create a 
+      matrix of 4x3 this way:</P><PRE lang=cs><SPAN class=code-keyword>double</SPAN>[,] matrix = <SPAN class=code-keyword>new</SPAN> <SPAN class=code-keyword>double</SPAN>[<SPAN class=code-digit>2</SPAN>,<SPAN class=code-digit>3</SPAN>];
+<SPAN class=code-keyword>for</SPAN> (<SPAN class=code-keyword>int</SPAN> y = <SPAN class=code-digit>0</SPAN>; y &lt; <SPAN class=code-digit>3</SPAN>; y++)
+  <SPAN class=code-keyword>for</SPAN> (<SPAN class=code-keyword>int</SPAN> x = <SPAN class=code-digit>0</SPAN>; x &lt; <SPAN class=code-digit>2</SPAN>; x++)
+     matrix[x,y] = x*y;</PRE>
+      <P>Given this, I wrote a simple console program to demonstrate this 
+      algorithm, the program generates a matrix with random values and 
+      calculates the sum of a given sub matrix. You must provide 6 parameters to 
+      the program, the dimensions of matrix: N, M, and the "coordinates" of the 
+      sub matrix: left, top, right, bottom.</P>
+      <P>Here's the source code:</P><PRE lang=cs><SPAN class=code-keyword>using</SPAN> System;
+<SPAN class=code-keyword>using</SPAN> System.IO;
+<SPAN class=code-keyword>public</SPAN> <SPAN class=code-keyword>class</SPAN> FastMatrixSum
+{
+ <SPAN class=code-keyword>public</SPAN> <SPAN class=code-keyword>static</SPAN> <SPAN class=code-keyword>void</SPAN> Main(<SPAN class=code-keyword>string</SPAN>[] args)
+ {
+  <SPAN class=code-keyword>if</SPAN> (args.Length != <SPAN class=code-digit>6</SPAN>) {
+   Console.WriteLine(<SPAN class=code-string>"</SPAN><SPAN class=code-string>usage: matrixsum N M "</SPAN> + 
+                          <SPAN class=code-string>"</SPAN><SPAN class=code-string>left top right bottom"</SPAN>);
+   Console.WriteLine(<SPAN class=code-string>"</SPAN><SPAN class=code-string>This program build a random "</SPAN> + 
+                          <SPAN class=code-string>"</SPAN><SPAN class=code-string>matrix of N rows with M columns,"</SPAN>);
+   Console.WriteLine(<SPAN class=code-string>"</SPAN><SPAN class=code-string>and calculate the sum of the "</SPAN> + 
+                          <SPAN class=code-string>"</SPAN><SPAN class=code-string>sub matrix (left,top)-(right,bottom)"</SPAN>);
+   Console.WriteLine(<SPAN class=code-string>"</SPAN><SPAN class=code-string>This are the conditions for the parameters"</SPAN>);
+   Console.WriteLine(<SPAN class=code-string>"</SPAN><SPAN class=code-string>N &gt; 0 and M &gt; 0"</SPAN>);
+   Console.WriteLine(<SPAN class=code-string>"</SPAN><SPAN class=code-string>(0 &lt;= left &lt; M) and (0 &lt;= right &lt; M)"</SPAN>);
+   Console.WriteLine(<SPAN class=code-string>"</SPAN><SPAN class=code-string>(0 &lt;= top &lt; N) and (0 &lt;= bottom &lt; M)"</SPAN>);
+   Console.WriteLine(<SPAN class=code-string>"</SPAN><SPAN class=code-string>left &lt;= right and top &lt;= bottom"</SPAN>);
+
+  }
+
+  <SPAN class=code-keyword>int</SPAN> n = Convert.ToInt32(args[<SPAN class=code-digit>0</SPAN>]);
+  <SPAN class=code-keyword>int</SPAN> m = Convert.ToInt32(args[<SPAN class=code-digit>1</SPAN>]);
+  <SPAN class=code-keyword>int</SPAN> left = Convert.ToInt32(args[<SPAN class=code-digit>2</SPAN>]);
+  <SPAN class=code-keyword>int</SPAN> top  = Convert.ToInt32(args[<SPAN class=code-digit>3</SPAN>]);
+  <SPAN class=code-keyword>int</SPAN> right = Convert.ToInt32(args[<SPAN class=code-digit>4</SPAN>]);
+  <SPAN class=code-keyword>int</SPAN> bottom = Convert.ToInt32(args[<SPAN class=code-digit>5</SPAN>]);
+  <SPAN class=code-keyword>double</SPAN>[,] matrix = FillMatrix(n,m);
+  <SPAN class=code-keyword>double</SPAN>[,] sum = SumMatrix(matrix);
+
+  Console.WriteLine(<SPAN class=code-string>"</SPAN><SPAN class=code-string>Matrix"</SPAN>);
+  PrintMatrix(matrix);
+  Console.WriteLine(<SPAN class=code-string>"</SPAN><SPAN class=code-string>Sum(Matrix)"</SPAN>);
+  PrintMatrix(sum);
+
+
+  Console.WriteLine();
+  Console.WriteLine(<SPAN class=code-string>"</SPAN><SPAN class=code-string>The sum fo the sub matrix "</SPAN> + 
+                <SPAN class=code-string>"</SPAN><SPAN class=code-string>({0},{1})-({2},{3}) is = {4}"</SPAN>,
+                left,top,right,bottom,SumSubMatrix(sum, 
+                                  left,top,right,bottom));
+ }
+ <SPAN class=code-keyword>static</SPAN> <SPAN class=code-keyword>double</SPAN> SumSubMatrix(<SPAN class=code-keyword>double</SPAN>[,] sum, <SPAN class=code-keyword>int</SPAN> left, 
+                          <SPAN class=code-keyword>int</SPAN> top, <SPAN class=code-keyword>int</SPAN> right, <SPAN class=code-keyword>int</SPAN> bottom)
+ {
+  <SPAN class=code-keyword>double</SPAN> v1, v2, v3, v4;
+  v1 = (left == <SPAN class=code-digit>0</SPAN> || top == <SPAN class=code-digit>0</SPAN>) ? <SPAN class=code-digit>0</SPAN> : sum[left-1, top-1];
+  v2 = (top == <SPAN class=code-digit>0</SPAN>) ? <SPAN class=code-digit>0</SPAN> : sum[right,top-1];
+  v3 = (left == <SPAN class=code-digit>0</SPAN>) ? <SPAN class=code-digit>0</SPAN> : sum[left-1,bottom];
+  v4 = sum[right,bottom];
+  <SPAN class=code-keyword>return</SPAN> (v4+v1)-(v2+v3);
+
+ }
+ <SPAN class=code-keyword>static</SPAN> <SPAN class=code-keyword>double</SPAN>[,] FillMatrix(<SPAN class=code-keyword>int</SPAN> n, <SPAN class=code-keyword>int</SPAN> m)
+ {
+  Random rnd = <SPAN class=code-keyword>new</SPAN> Random();
+  <SPAN class=code-keyword>double</SPAN>[,] result = <SPAN class=code-keyword>new</SPAN> <SPAN class=code-keyword>double</SPAN>[m,n];
+  <SPAN class=code-keyword>for</SPAN> (<SPAN class=code-keyword>int</SPAN> i = <SPAN class=code-digit>0</SPAN>; i &lt; n; i++) 
+   <SPAN class=code-keyword>for</SPAN> (<SPAN class=code-keyword>int</SPAN> j = <SPAN class=code-digit>0</SPAN>; j &lt; m; j++) 
+    result[j,i] = rnd.NextDouble() * <SPAN class=code-digit>100</SPAN>.<SPAN class=code-digit>0</SPAN>;
+  <SPAN class=code-keyword>return</SPAN> result;
+ }
+
+
+ <SPAN class=code-keyword>static</SPAN> <SPAN class=code-keyword>double</SPAN>[,] SumMatrix(<SPAN class=code-keyword>double</SPAN>[,] matrix)
+ {
+  <SPAN class=code-keyword>int</SPAN> n = matrix.GetLength(<SPAN class=code-digit>0</SPAN>);
+  <SPAN class=code-keyword>int</SPAN> m = matrix.GetLength(<SPAN class=code-digit>1</SPAN>);
+  <SPAN class=code-keyword>double</SPAN>[,] s = <SPAN class=code-keyword>new</SPAN> <SPAN class=code-keyword>double</SPAN>[n,m];
+  <SPAN class=code-keyword>double</SPAN>[,] ii = <SPAN class=code-keyword>new</SPAN> <SPAN class=code-keyword>double</SPAN>[n,m];
+
+  s[<SPAN class=code-digit>0</SPAN>,<SPAN class=code-digit>0</SPAN>] = matrix[<SPAN class=code-digit>0</SPAN>,<SPAN class=code-digit>0</SPAN>];
+  ii[<SPAN class=code-digit>0</SPAN>,<SPAN class=code-digit>0</SPAN>] = s[<SPAN class=code-digit>0</SPAN>,<SPAN class=code-digit>0</SPAN>];
+  <SPAN class=code-keyword>for</SPAN> (<SPAN class=code-keyword>int</SPAN> x = <SPAN class=code-digit>1</SPAN>; x &lt; n; x++) 
+  {
+   s[x,<SPAN class=code-digit>0</SPAN>] = matrix[x,<SPAN class=code-digit>0</SPAN>];
+   ii[x,<SPAN class=code-digit>0</SPAN>] = ii[x-1,<SPAN class=code-digit>0</SPAN>] + s[x,<SPAN class=code-digit>0</SPAN>]; 
+  }
+  <SPAN class=code-keyword>for</SPAN> (<SPAN class=code-keyword>int</SPAN> y = <SPAN class=code-digit>1</SPAN>; y &lt; m; y++) {
+   ii[<SPAN class=code-digit>0</SPAN>,y] = s[<SPAN class=code-digit>0</SPAN>,y] = s[<SPAN class=code-digit>0</SPAN>,y-1] + matrix[<SPAN class=code-digit>0</SPAN>, y];
+   
+   <SPAN class=code-keyword>for</SPAN> (<SPAN class=code-keyword>int</SPAN> x = <SPAN class=code-digit>1</SPAN>; x &lt; n; x++) {
+    s[x,y] = s[x,y-1] + matrix[x,y];
+    ii[x,y] = ii[x-1,y] + s[x,y];
+   }
+  }
+  <SPAN class=code-keyword>return</SPAN> ii;
+ }
+
+ <SPAN class=code-keyword>static</SPAN> <SPAN class=code-keyword>void</SPAN> PrintMatrix(<SPAN class=code-keyword>double</SPAN>[,] matrix)
+ {
+  <SPAN class=code-keyword>int</SPAN> n = matrix.GetLength(<SPAN class=code-digit>0</SPAN>);
+  <SPAN class=code-keyword>int</SPAN> m = matrix.GetLength(<SPAN class=code-digit>1</SPAN>);
+  <SPAN class=code-keyword>for</SPAN> (<SPAN class=code-keyword>int</SPAN> y = <SPAN class=code-digit>0</SPAN>; y &lt; m; y++) 
+  {
+   <SPAN class=code-keyword>for</SPAN> (<SPAN class=code-keyword>int</SPAN> x = <SPAN class=code-digit>0</SPAN>; x &lt; n; x++) 
+    Console.Write(<SPAN class=code-string>"</SPAN><SPAN class=code-string> {0,8:00.00} "</SPAN>, matrix[x,y]);
+   Console.WriteLine();
+  }
+ }
+}</PRE>
+      <H2>Extensions</H2>
+      <P>You can build an integration image ii of the square values for the 
+      matrix, this allows to calculate the variance of a sub matrix.</P>
+      <P>Remember that the variance can be calculated by the following 
+      equation:</P><PRE lang=text>Var = m<SUP>2</SUP> - 1/N* SUM(x<SUP>2</SUP>)</PRE>
+      <P>where m is the mean and x is the value at each cell, and N is the total 
+      number of cells on the sub matrix.</P>
+      <P>You can calculate mean with the following method:</P><PRE lang=cs><SPAN class=code-keyword>static</SPAN> <SPAN class=code-keyword>double</SPAN> MeanSubMatrix(<SPAN class=code-keyword>double</SPAN>[,] sum, <SPAN class=code-keyword>int</SPAN> left, 
+                         <SPAN class=code-keyword>int</SPAN> top, <SPAN class=code-keyword>int</SPAN> right, <SPAN class=code-keyword>int</SPAN> bottom)
+ {
+  <SPAN class=code-keyword>double</SPAN> v1, v2, v3, v4;
+  v1 = (left == <SPAN class=code-digit>0</SPAN> || top == <SPAN class=code-digit>0</SPAN>) ? <SPAN class=code-digit>0</SPAN> : sum[left-1, top-1];
+  v2 = (top == <SPAN class=code-digit>0</SPAN>) ? <SPAN class=code-digit>0</SPAN> : sum[right,top-1];
+  v3 = (left == <SPAN class=code-digit>0</SPAN>) ? <SPAN class=code-digit>0</SPAN> : sum[left-1,bottom];
+  v4 = sum[right,bottom];
+  <SPAN class=code-keyword>return</SPAN> ((v4+v1)-(v2+v3)) / ((bottom-top)+(right-left));
+ }</PRE>
+      <P>and the variance as:</P><PRE lang=cs> <SPAN class=code-keyword>static</SPAN> <SPAN class=code-keyword>double</SPAN>[,] SumMatrixOfSquare(<SPAN class=code-keyword>double</SPAN>[,] matrix)
+ {
+  <SPAN class=code-keyword>int</SPAN> n = matrix.GetLength(<SPAN class=code-digit>0</SPAN>);
+  <SPAN class=code-keyword>int</SPAN> m = matrix.GetLength(<SPAN class=code-digit>1</SPAN>);
+  <SPAN class=code-keyword>double</SPAN>[,] s = <SPAN class=code-keyword>new</SPAN> <SPAN class=code-keyword>double</SPAN>[n,m];
+  <SPAN class=code-keyword>double</SPAN>[,] ii = <SPAN class=code-keyword>new</SPAN> <SPAN class=code-keyword>double</SPAN>[n,m];
+
+  s[<SPAN class=code-digit>0</SPAN>,<SPAN class=code-digit>0</SPAN>] = matrix[<SPAN class=code-digit>0</SPAN>,<SPAN class=code-digit>0</SPAN>];
+  ii[<SPAN class=code-digit>0</SPAN>,<SPAN class=code-digit>0</SPAN>] = s[<SPAN class=code-digit>0</SPAN>,<SPAN class=code-digit>0</SPAN>];
+  <SPAN class=code-keyword>for</SPAN> (<SPAN class=code-keyword>int</SPAN> x = <SPAN class=code-digit>1</SPAN>; x &lt; n; x++) 
+  {
+   s[x,<SPAN class=code-digit>0</SPAN>] = matrix[x,<SPAN class=code-digit>0</SPAN>]*matrix[x,<SPAN class=code-digit>0</SPAN>]; <SPAN class=code-comment>//</SPAN><SPAN class=code-comment> x*x
+</SPAN>   ii[x,<SPAN class=code-digit>0</SPAN>] = ii[x-1,<SPAN class=code-digit>0</SPAN>] + s[x,<SPAN class=code-digit>0</SPAN>]; 
+  }
+  <SPAN class=code-keyword>for</SPAN> (<SPAN class=code-keyword>int</SPAN> y = <SPAN class=code-digit>1</SPAN>; y &lt; m; y++) {
+   ii[<SPAN class=code-digit>0</SPAN>,y] = s[<SPAN class=code-digit>0</SPAN>,y] = s[<SPAN class=code-digit>0</SPAN>,y-1] + matrix[<SPAN class=code-digit>0</SPAN>, y]*matrix[<SPAN class=code-digit>0</SPAN>,y];
+   
+   <SPAN class=code-keyword>for</SPAN> (<SPAN class=code-keyword>int</SPAN> x = <SPAN class=code-digit>1</SPAN>; x &lt; n; x++) {
+    s[x,y] = s[x,y-1] + matrix[x,y]*matrix[x,y];
+    ii[x,y] = ii[x-1,y] + s[x,y];
+   }
+  }
+  <SPAN class=code-keyword>return</SPAN> ii;
+ }
+ <SPAN class=code-keyword>static</SPAN> <SPAN class=code-keyword>double</SPAN> VarSubMatrix(<SPAN class=code-keyword>double</SPAN>[,] sum, <SPAN class=code-keyword>double</SPAN>[,] sumxx, 
+                    <SPAN class=code-keyword>int</SPAN> left, <SPAN class=code-keyword>int</SPAN> top, <SPAN class=code-keyword>int</SPAN> right, <SPAN class=code-keyword>int</SPAN> bottom)
+ {
+   <SPAN class=code-keyword>double</SPAN> N = (bottom - top)+(right - left);
+   <SPAN class=code-keyword>double</SPAN>   m = MeanSubMatrix(sum, left, top, right, bottom);
+   <SPAN class=code-keyword>double</SPAN> v1, v2, v3, v4;
+   v1 = (left == <SPAN class=code-digit>0</SPAN> || top == <SPAN class=code-digit>0</SPAN>) ? <SPAN class=code-digit>0</SPAN> : sumxx[left-1, top-1];
+   v2 = (top == <SPAN class=code-digit>0</SPAN>) ? <SPAN class=code-digit>0</SPAN> : sumxx[right,top-1];
+   v3 = (left == <SPAN class=code-digit>0</SPAN>) ? <SPAN class=code-digit>0</SPAN> : sumxx[left-1,bottom];
+   v4 = sumxx[right,bottom];
+   <SPAN class=code-keyword>double</SPAN> sumS2 = (v4+v1)-(v2+v3);
+   <SPAN class=code-keyword>return</SPAN> m*m - sumS2/N;
+ }</PRE>
+      <H2>Conclusion</H2>
+      <P>The algorithm is useful for any kind of two dimensional matrix. This 
+      algorithm guarantees fewer operations when you have to calculate sums, 
+      other statistics values, like mean, and variance on sub matrices.</P><!-- Article Ends --><!-- Main Page Contents End --></DIV></SPAN>
+      <FORM id=aspnetForm 
+      style="PADDING-RIGHT: 0px; PADDING-LEFT: 0px; PADDING-BOTTOM: 0px; MARGIN: 0px; PADDING-TOP: 0px" 
+      name=aspnetForm action=efficientsumonsubmatrices.aspx method=post>
+      <DIV><INPUT id=__VIEWSTATE type=hidden 
+      value=/wEPDwULLTEwMDUyNjYzMjhkZA4Gipsor+MtAJaWAYpJ42AFyHYS 
+      name=__VIEWSTATE> </DIV>
+      <H2>License</H2>
+      <P>This article has no explicit license attached to it but may contain 
+      usage terms in the article text or the download files themselves. If in 
+      doubt please contact the author via the discussion board below.</P>
+      <P>A list of licenses authors might use can be found <A 
+      href="http://www.codeproject.com/info/Licenses.aspx">here</A></P>
+      <H2>About the Author</H2>
+      <TABLE cellSpacing=5 cellPadding=0 width="100%" border=0>
+        <TBODY>
+        <TR vAlign=top>
+          <TD id=ctl00_AboutAuthorRptr_ctl00_AboutAuthor_memberPhotoTable 
+          style="WIDTH: 155px" vAlign=top><B><A 
+            id=ctl00_AboutAuthorRptr_ctl00_AboutAuthor_memberProfileLink 
+            href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=969161">ediazc</A></B><BR><BR>
+            <CENTER><IMG id=ctl00_AboutAuthorRptr_ctl00_AboutAuthor_memberPhoto 
+            style="BORDER-TOP-WIDTH: 0px; BORDER-LEFT-WIDTH: 0px; BORDER-BOTTOM-WIDTH: 0px; BORDER-RIGHT-WIDTH: 0px" 
+            src="CodeProject Fast statistical calculations of sub matrices for image processing_ Free source code and programming help_files/{DEA7CB5C-9E90-4091-9408-33F126C1418F}.jpg"></CENTER><BR><SPAN 
+            class=SmallText 
+            id=ctl00_AboutAuthorRptr_ctl00_AboutAuthor_memberType></SPAN></TD>
+          <TD>Eduardo Diaz<BR><A href="http://www.lnds.net/">personal 
+            blog</A><BR>
+            <TABLE>
+              <TBODY>
+              <TR id=ctl00_AboutAuthorRptr_ctl00_AboutAuthor_jobTitleRow>
+                <TD class=SmallText noWrap>Occupation: </TD>
+                <TD width="100%"><SPAN class=SmallText 
+                  id=ctl00_AboutAuthorRptr_ctl00_AboutAuthor_memberJobTitle>Web 
+                  Developer</SPAN></TD></TR>
+              <TR id=ctl00_AboutAuthorRptr_ctl00_AboutAuthor_locationRow>
+                <TD class=SmallText>Location: </TD>
+                <TD width="100%"><SPAN class=SmallText 
+                  id=ctl00_AboutAuthorRptr_ctl00_AboutAuthor_memberLocation><IMG 
+                  height=11 alt=Chile 
+                  src="CodeProject Fast statistical calculations of sub matrices for image processing_ Free source code and programming help_files/CL.gif" 
+                  width=16> 
+      Chile</SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE><BR>
+      <TABLE id=ctl00_PopularArticlesRow cellSpacing=0 cellPadding=0 
+      width="100%" border=0>
+        <TBODY>
+        <TR vAlign=top>
+          <TD style="WIDTH: 100%">
+            <H2>Other popular Algorithms &amp; Recipes articles:</H2>
+            <UL>
+              <LI><A 
+              href="http://www.codeproject.com/KB/recipes/Differentiation.aspx">Symbolic 
+              Differentiation</A>
+              <DIV class=SmallText>This article demonstrates differentiating 
+              expressions using a stack and displaying the input expression and 
+              its derivative.</DIV>
+              <LI><A 
+              href="http://www.codeproject.com/KB/recipes/colorspace1.aspx">Manipulating 
+              colors in .NET - Part 1</A>
+              <DIV class=SmallText>Understand and use color models in .NET</DIV>
+              <LI><A 
+              href="http://www.codeproject.com/KB/recipes/graphs_astar.aspx">C#: 
+              A-Star is born</A>
+              <DIV class=SmallText>Understand graphs and A* path-finding 
+              algorithm with C#</DIV>
+              <LI><A 
+              href="http://www.codeproject.com/KB/recipes/sota_expression_evaluator.aspx">State 
+              of the Art Expression Evaluation</A>
+              <DIV class=SmallText>A tutorial on how to realize an expression 
+              evaluator in CSharp with ANTLR</DIV>
+              <LI><A 
+              href="http://www.codeproject.com/KB/recipes/FastMathParser.aspx">Fast 
+              mathematical expressions parser</A>
+              <DIV class=SmallText>Code for a fast math parser 
+              library.</DIV></LI></UL>
+            <H2></H2></TD>
+          <TD>
+            <SCRIPT type=text/javascript>document.write(unescape("%3ca%20href%3d%22http%3a%2f%2fwww.codeproject.com%2fRedir.aspx%3fadid%3d5304%26way%3dban%22%20target%3d%22_blank%22%20rel%3d%22nofollow%22%3e%3cimg%20src%3d%22http%3a%2f%2fwww.codeproject.com%2fscript%2fAnn%2fServeImg.aspx%3fFile%3d%252fscript%252fadmentor%252fimages%252fIBMdeveloperWorks_300x250.gif%26C%3dFalse%26id%3d5304%22%20alt%3d%22%22%20border%3d%220%22%20width%3d%22300%22%20height%3d%22250%22%3e%3c%2fa%3e"));</SCRIPT>
+          </TD></TR></TBODY></TABLE>
+      <DIV id=ctl00_AddTo style="MARGIN: 10px">
+      <SCRIPT language=JavaScript type=text/javascript>
+			var addtoMethod=1;
+			var AddURL = document.location.href;
+			var AddTitle = escape(document.title);
+			DrawLinks(100, 0, "SmallText Bold", "AddTo") 
+			</SCRIPT>
+      </DIV>
+      <TABLE class=RatingBar id=ctl00_RateArticleRow cellSpacing=0 cellPadding=0 
+      width="100%" border=0>
+        <TBODY>
+        <TR>
+          <TD><A 
+            href="http://www.codeproject.com/KB/recipes/efficientsumonsubmatrices.aspx#_top">Article 
+            Top</A></TD>
+          <TD align=right>
+            <TABLE cellSpacing=0 cellPadding=0 width="100%">
+              <TBODY>
+              <TR>
+                <TD class=SmallText style="WHITE-SPACE: nowrap" align=right>
+                  <TABLE>
+                    <TBODY>
+                    <TR>
+                      <TD id=ctl00_RateArticle_RateText 
+                      style="PADDING-RIGHT: 5px"><I><B>Rate this Article for 
+                        us!</B></I></TD>
+                      <TD id=ctl00_RateArticle_StartForm 
+                        align=right><I>&nbsp;&nbsp;Poor</I></TD>
+                      <TD id=ctl00_RateArticle_VoteFormDiv 
+                      style="WHITE-SPACE: nowrap" align=left>
+                        <TABLE id=ctl00_RateArticle_VoteRBL border=0>
+                          <TBODY>
+                          <TR>
+                            <TD><INPUT id=ctl00_RateArticle_VoteRBL_0 
+                              type=radio value=1 
+                            name=ctl00$RateArticle$VoteRBL></TD>
+                            <TD><INPUT id=ctl00_RateArticle_VoteRBL_1 
+                              type=radio value=2 
+                            name=ctl00$RateArticle$VoteRBL></TD>
+                            <TD><INPUT id=ctl00_RateArticle_VoteRBL_2 
+                              type=radio value=3 
+                            name=ctl00$RateArticle$VoteRBL></TD>
+                            <TD><INPUT id=ctl00_RateArticle_VoteRBL_3 
+                              type=radio value=4 
+                            name=ctl00$RateArticle$VoteRBL></TD>
+                            <TD><INPUT id=ctl00_RateArticle_VoteRBL_4 
+                              type=radio value=5 
+                            name=ctl00$RateArticle$VoteRBL></TD></TR></TBODY></TABLE></TD>
+                      <TD id=ctl00_RateArticle_EndForm 
+                        align=left><I>Excellent</I> <INPUT class=FormButton id=ctl00_RateArticle_SubmitRateBtn type=submit value=Vote name=ctl00$RateArticle$SubmitRateBtn> 
+                      </TD>
+                      <TD><SPAN 
+                    id=ctl00_RateArticle_ErrorMessage></SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE>
+      <DIV><INPUT id=__EVENTVALIDATION type=hidden 
+      value=/wEWCAL89vuhDALAlMXDBwLBlMXDBwLClMXDBwLDlMXDBwLElMXDBwLP+++tCwK5upDkC8sxFrOk+LpK7f1J9YsV0qFaEF6V 
+      name=__EVENTVALIDATION> </DIV></FORM>
+      <DIV 
+      style="PADDING-RIGHT: 10px; PADDING-LEFT: 10px; PADDING-BOTTOM: 10px; OVERFLOW: hidden; PADDING-TOP: 10px; WHITE-SPACE: nowrap; TEXT-ALIGN: center">
+      <SCRIPT type=text/javascript>document.write(unescape("%3ca%20href%3d%22http%3a%2f%2fwww.codeproject.com%2fRedir.aspx%3fadid%3d4287%26way%3dban%22%20target%3d%22_blank%22%20rel%3d%22nofollow%22%3e%3cimg%20src%3d%22http%3a%2f%2fwww.codeproject.com%2fscript%2fAnn%2fServeImg.aspx%3fFile%3d%252fscript%252fadmentor%252fimages%252fCWS_net_468x60.gif%26C%3dFalse%26id%3d4287%22%20alt%3d%22%22%20border%3d%220%22%20width%3d%22468%22%20height%3d%2260%22%3e%3c%2fa%3e"));</SCRIPT>
+      <IFRAME 
+      src="CodeProject Fast statistical calculations of sub matrices for image processing_ Free source code and programming help_files/ServeLinks.htm" 
+      frameBorder=0 width=300 scrolling=no height=60></IFRAME></DIV><A 
+      name=_comments></A><!-- Forum Start -->
+      <DIV id=_MessageBoard onclick="return SwitchMessage(event, null)">
+      <TABLE class=Frm_MainTable id=ForumTable cellSpacing=0 cellPadding=0>
+        <TBODY>
+        <TR>
+          <TD>
+            <FORM 
+            action=/script/Forums/SetOptions.aspx?floc=%2fKB%2frecipes%2fefficientsumonsubmatrices.aspx&amp;fid=221000 
+            method=get><INPUT type=hidden value=221000 name=fid><INPUT 
+            type=hidden 
+            value=?floc=%2fKB%2frecipes%2fefficientsumonsubmatrices.aspx&amp;fid=221000 
+            name=currentQS><INPUT type=hidden 
+            value=/KB/recipes/efficientsumonsubmatrices.aspx name=floc>
+            <TABLE cellSpacing=0 cellPadding=3 width="100%" border=0>
+              <TBODY>
+              <TR class=Frm_HeaderRow1>
+                <TD style="WHITE-SPACE: nowrap"><IMG height=16 alt=FAQ 
+                  src="CodeProject Fast statistical calculations of sub matrices for image processing_ Free source code and programming help_files/forum_faq.gif" 
+                  width=16 align=middle border=0>&nbsp;<A 
+                  href="http://www.codeproject.com/script/Forums/FAQ.aspx"><B>FAQ</B></A>&nbsp;</TD>
+                <TD style="WHITE-SPACE: nowrap; TEXT-ALIGN: right">Noise 
+                  Tolerance<SELECT class=Frm_DropDown size=1 name=noise> 
+                    <OPTION value=1>Very High</OPTION><OPTION 
+                    value=2>High</OPTION><OPTION value=3 
+                    selected>Medium</OPTION><OPTION value=4>Low</OPTION><OPTION 
+                    value=5>Very Low</OPTION></SELECT></TD>
+                <TD style="WHITE-SPACE: nowrap; TEXT-ALIGN: right" 
+                  colSpan=2><IMG height=15 alt=Search 
+                  src="CodeProject Fast statistical calculations of sub matrices for image processing_ Free source code and programming help_files/forum_search.gif" 
+                  width=16 align=top border=0>&nbsp;<A 
+                  href="http://www.codeproject.com/script/Forums/Search.aspx?fid=221000">Search 
+                  comments</A>&nbsp;</TD>
+                <TD style="TEXT-ALIGN: right"><INPUT class=Frm_Button type=submit value="Set Options" name=submit></TD></TR>
+              <TR class=Frm_HeaderRow2>
+                <TD style="WIDTH: 100%">&nbsp;</TD>
+                <TD 
+                  style="WHITE-SPACE: nowrap; TEXT-ALIGN: right">Layout<SELECT 
+                  class=Frm_DropDown size=1 name=view> <OPTION value=Quick 
+                    selected>Normal</OPTION><OPTION value=Topic>Expand Root 
+                    Messages</OPTION><OPTION value=Expanded>Expand All 
+                    Messages</OPTION><OPTION value=Thread>Thread 
+                    View</OPTION><OPTION value=Normal>No Javascript 
+                    (slow)</OPTION><OPTION value=Preview>No Javascript 
+                    Preview</OPTION></SELECT>&nbsp;&nbsp;</TD>
+                <TD style="WHITE-SPACE: nowrap">Per page<SELECT 
+                  class=Frm_DropDown size=1 name=mpp> <OPTION 
+                    value=10>10</OPTION><OPTION value=25 
+                    selected>25</OPTION><OPTION 
+                  value=50>50</OPTION></SELECT>&nbsp;&nbsp;</TD>
+                <TD colSpan=2>&nbsp;</TD></TR></TBODY></TABLE></FORM></TD></TR>
+        <TR>
+          <TD><A name=xx0xx></A>
+            <TABLE cellSpacing=0 cellPadding=2 width="100%" border=0>
+              <TBODY>
+              <TR class=Frm_NavigationBar>
+                <TD><IMG height=16 alt=new 
+                  src="CodeProject Fast statistical calculations of sub matrices for image processing_ Free source code and programming help_files/forum_newmsg.gif" 
+                  width=16 align=top border=0><A class=Frm_HL 
+                  title="Create a new message thread" 
+                  href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=221000&amp;floc=/KB/recipes/efficientsumonsubmatrices.aspx" 
+                  target=_top name=Frm_HoverNL><B>New Message</B></A></TD>
+                <TD>Msgs 1 to 9 of 9 (Total in Forum: 9) (<A 
+                  href="http://www.codeproject.com/KB/recipes/efficientsumonsubmatrices.aspx?fid=221000">Refresh</A>)</TD>
+                <TD style="WHITE-SPACE: nowrap; TEXT-ALIGN: right"><SPAN 
+                  class=Frm_HL>First</SPAN><SPAN class=Frm_HL>Prev</SPAN><SPAN 
+                  class=Frm_HL>Next</SPAN></TD></TR></TBODY></TABLE></TD></TR>
+        <TR>
+          <TD><!-- Column Headers -->
+            <TABLE class=Frm_MsgTable cellSpacing=0 cellPadding=0 width="100%" 
+            border=0>
+              <TBODY>
+              <TR class=Frm_ColumnHeaders>
+                <TD style="WIDTH: 100%">
+                  <TABLE cellSpacing=0 cellPadding=2 width="100%" border=0>
+                    <TBODY>
+                    <TR>
+                      <TD>Subject&nbsp;</TD>
+                      <TD class=Frm_MsgAuthor>&nbsp;Author&nbsp;</TD>
+                      <TD 
+              class=Frm_MsgDate>Date&nbsp;</TD></TR></TBODY></TABLE></TD></TR>
+              <TR>
+                <TD><IMG height=5 alt="" 
+                  src="C:\Documents and Settings\Administrator\Desktop\face4\CodeProject Fast statistical calculations of sub matrices for image processing_ Free source code and programming help_files\t(1).gif" 
+                  width=1 border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd HiVote Rt HdUnSel " id=F1467607_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=16><A 
+                        name=xx1467607xx></A><IMG height=16 alt=Joke 
+                        src="CodeProject Fast statistical calculations of sub matrices for image processing_ Free source code and programming help_files/msg_joke.gif" 
+                        width=16 align=top></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/recipes/efficientsumonsubmatrices.aspx?fid=221000&amp;select=1467607#xx1467607xx" 
+                        name=1467607>Why don't use managed DirectX 9...</A></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        height=16 alt=member 
+                        src="CodeProject Fast statistical calculations of sub matrices for image processing_ Free source code and programming help_files/member_sm.gif" 
+                        border=0></TD>
+                      <TD class=Frm_MsgAuthor><A 
+                        href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=956768">hakervytas</A></TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">5:07 29 
+                        Apr '06 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=F1467607_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 16px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2>Why don't use managed DirectX 9 in 
+                                .NET using Matrices operations, becouse using it 
+                                improved calculation speed a lot, only nead to 
+                                use vectors, and it's not to hard to implement 
+                                for do operations with Matrices... 
+<BR></TD></TR>
+                                <TR style="VERTICAL-ALIGN: top">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL title=Reply 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=221000&amp;select=1467607&amp;floc=/KB/recipes/efficientsumonsubmatrices.aspx&amp;fa=r">Reply</A>·<A 
+                                class=Frm_MHL title=Email 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=221000&amp;select=1467607&amp;floc=/KB/recipes/efficientsumonsubmatrices.aspx&amp;fa=e">Email</A>·<A 
+                                class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/recipes/efficientsumonsubmatrices.aspx?fid=221000&amp;tid=1467607">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=221000&amp;msg=1467607">PermaLink</A>·<A 
+                                class=Frm_MHL title="Bookmark this post" 
+                                href="http://www.codeproject.com/script/Bookmarks/Add.aspx?&amp;obid=1467607&amp;obtid=3">Bookmark</A></TD>
+                                <TD class=Frm_MsgFt 
+                                style="TEXT-ALIGN: right"><SPAN id=MVF1467607 
+                                style="WHITE-SPACE: nowrap">5.00/5 (1 vote)
+                                <SCRIPT language=Javascript 
+type=text/javascript>
+												MsgVoteForm(956768,1467607);
+											</SCRIPT>
+                                 
+                        </SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR class=Quick>
+                <TD class=Frm_MsgRtDivide><IMG height=1 alt="" 
+                  src="C:\Documents and Settings\Administrator\Desktop\face4\CodeProject Fast statistical calculations of sub matrices for image processing_ Free source code and programming help_files\t(1).gif" 
+                  width=1 border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd Rt HdUnSel " id=F1349450_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=16><A 
+                        name=xx1349450xx></A><IMG height=16 alt=General 
+                        src="CodeProject Fast statistical calculations of sub matrices for image processing_ Free source code and programming help_files/msg_general.gif" 
+                        width=16 align=top></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/recipes/efficientsumonsubmatrices.aspx?fid=221000&amp;select=1349450#xx1349450xx" 
+                        name=1349450>Small error in VarSubMatrix(), and 
+                        efficiency</A></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        height=16 alt=member 
+                        src="CodeProject Fast statistical calculations of sub matrices for image processing_ Free source code and programming help_files/member_sm.gif" 
+                        border=0></TD>
+                      <TD class=Frm_MsgAuthor><A 
+                        href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=2657938">mi5ke</A></TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">4:03 27 
+                        Jan '06 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=F1349450_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 16px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2>Hi,<BR><BR>In your VarSubMatrix 
+                                code, I noticed a small 
+                                error:<BR><BR>&nbsp;&nbsp; double N = (bottom - 
+                                top)+(right - left);<BR><BR>should 
+                                be:<BR><BR>&nbsp;&nbsp; double N = (bottom - 
+                                top)*(right - left);<BR><BR>since N is the 
+                                number of elements in the region.<BR><BR>By the 
+                                way, another optimisation often used is to 
+                                linearise the ii array (as others have 
+                                mentioned) and then to simply autoincrement an 
+                                index through the array, avoiding any 
+                                multiplication:<BR><BR>&nbsp;&nbsp; int p = 
+                                0;<BR>&nbsp;&nbsp; for(y = ....<BR>&nbsp;&nbsp; 
+                                &nbsp;&nbsp; &nbsp;&nbsp; for(x = 
+                                ....<BR>&nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; 
+                                &nbsp;&nbsp; ii[p] = ....<BR>&nbsp;&nbsp; 
+                                &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; 
+                                p++;<BR><BR>Lastly, a common trick for 
+                                linearising two-dimensional arrays is to use a 
+                                width which is rounded up to the next power of 
+                                two, referred to as the 'pitch' of the data 
+                                (rather than the 'width'). Then, the 
+                                conventional linearised array 
+                                access:<BR><BR>&nbsp;&nbsp; myArray[x + y * 
+                                width]<BR><BR>can make use of the fact that 
+                                width is known to be a power of 
+                                two:<BR><BR>&nbsp;&nbsp; myArray[x + y &lt;&lt; 
+                                pitchShift]<BR><BR>To initialise the pitch and 
+                                pitchShift, just use:<BR><BR>&nbsp;&nbsp; int 
+                                pitchShift = 0;<BR>&nbsp;&nbsp; int pitch = 
+                                1;<BR>&nbsp;&nbsp; while(pitch &lt; width) 
+                                {<BR>&nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; 
+                                pitchShift++;<BR>&nbsp;&nbsp; &nbsp;&nbsp; 
+                                &nbsp;&nbsp; pitch &lt;&lt; = 1;<BR>&nbsp;&nbsp; 
+                                } <BR><BR>Hope that 
+                                helps.<BR><BR>Mi5ke<BR></TD></TR>
+                                <TR style="VERTICAL-ALIGN: top">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL title=Reply 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=221000&amp;select=1349450&amp;floc=/KB/recipes/efficientsumonsubmatrices.aspx&amp;fa=r">Reply</A>·<A 
+                                class=Frm_MHL title=Email 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=221000&amp;select=1349450&amp;floc=/KB/recipes/efficientsumonsubmatrices.aspx&amp;fa=e">Email</A>·<A 
+                                class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/recipes/efficientsumonsubmatrices.aspx?fid=221000&amp;tid=1349450">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=221000&amp;msg=1349450">PermaLink</A>·<A 
+                                class=Frm_MHL title="Bookmark this post" 
+                                href="http://www.codeproject.com/script/Bookmarks/Add.aspx?&amp;obid=1349450&amp;obtid=3">Bookmark</A></TD>
+                                <TD class=Frm_MsgFt 
+                                style="TEXT-ALIGN: right"><SPAN id=MVF1349450 
+                                style="WHITE-SPACE: nowrap">
+                                <SCRIPT language=Javascript 
+type=text/javascript>
+												MsgVoteForm(2657938,1349450);
+											</SCRIPT>
+                                </SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR class=Quick>
+                <TD class=Frm_MsgDivide><IMG height=1 alt="" 
+                  src="C:\Documents and Settings\Administrator\Desktop\face4\CodeProject Fast statistical calculations of sub matrices for image processing_ Free source code and programming help_files\t(1).gif" 
+                  width=1 border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd HdUnSel " id=F1349796_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=34><A 
+                        name=xx1349796xx></A><IMG height=16 alt=General 
+                        src="CodeProject Fast statistical calculations of sub matrices for image processing_ Free source code and programming help_files/msg_general.gif" 
+                        width=16 align=top></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/recipes/efficientsumonsubmatrices.aspx?fid=221000&amp;select=1349796#xx1349796xx" 
+                        name=1349796>Re: Small error in VarSubMatrix(), and 
+                        efficiency</A></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        height=16 alt=member 
+                        src="CodeProject Fast statistical calculations of sub matrices for image processing_ Free source code and programming help_files/member_sm.gif" 
+                        border=0></TD>
+                      <TD class=Frm_MsgAuthor><A 
+                        href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=969161">ediazc</A></TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">8:35 27 
+                        Jan '06 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=F1349796_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 34px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2>Thanks, I will fix it.<BR><BR>The 
+                                pitchShift method is very useful when you work 
+                                with computer graphics. <BR><BR>Eduardo 
+                                Diaz<BR><BR><A 
+                                href="http://www.programando.org/">site</A> | <A 
+                                href="http://www.darksideprogramming.org/">english 
+                                blog</A> | <A 
+                                href="http://www.lnds.net/">spanish 
+                                blog</A><BR></TD></TR>
+                                <TR style="VERTICAL-ALIGN: top">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL title=Reply 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=221000&amp;select=1349796&amp;floc=/KB/recipes/efficientsumonsubmatrices.aspx&amp;fa=r">Reply</A>·<A 
+                                class=Frm_MHL title=Email 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=221000&amp;select=1349796&amp;floc=/KB/recipes/efficientsumonsubmatrices.aspx&amp;fa=e">Email</A>·<A 
+                                class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/recipes/efficientsumonsubmatrices.aspx?fid=221000&amp;tid=1349450">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=221000&amp;msg=1349796">PermaLink</A>·<A 
+                                class=Frm_MHL title="Bookmark this post" 
+                                href="http://www.codeproject.com/script/Bookmarks/Add.aspx?&amp;obid=1349796&amp;obtid=3">Bookmark</A></TD>
+                                <TD class=Frm_MsgFt 
+                                style="TEXT-ALIGN: right"><SPAN id=MVF1349796 
+                                style="WHITE-SPACE: nowrap">
+                                <SCRIPT language=Javascript 
+type=text/javascript>
+												MsgVoteForm(969161,1349796);
+											</SCRIPT>
+                                </SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR class=Quick>
+                <TD class=Frm_MsgRtDivide><IMG height=1 alt="" 
+                  src="C:\Documents and Settings\Administrator\Desktop\face4\CodeProject Fast statistical calculations of sub matrices for image processing_ Free source code and programming help_files\t(1).gif" 
+                  width=1 border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd Rt HdUnSel " id=F1312736_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=16><A 
+                        name=xx1312736xx></A><IMG height=16 alt=General 
+                        src="CodeProject Fast statistical calculations of sub matrices for image processing_ Free source code and programming help_files/msg_general.gif" 
+                        width=16 align=top></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/recipes/efficientsumonsubmatrices.aspx?fid=221000&amp;select=1312736#xx1312736xx" 
+                        name=1312736>one less array</A></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        height=16 alt=member 
+                        src="CodeProject Fast statistical calculations of sub matrices for image processing_ Free source code and programming help_files/member_sm.gif" 
+                        border=0></TD>
+                      <TD class=Frm_MsgAuthor><A 
+                        href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=2284980">regnwald</A></TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">17:32 
+                        20 Dec '05 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=F1312736_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 16px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2>I have used this approach using 
+                                only the ii array for the integrated image and 
+                                dumping the s array:<BR><BR>Sub to add the next 
+                                integrated image value to the integrated 
+                                image<BR><BR>ii(x, Y) = ii(x - 3, Y) +ii(x, Y - 
+                                1) - ii(x - 3, Y - 1) +i(x, 
+                                Y))<BR><BR><BR>Function to extract the sum of 
+                                submatrix (x1,y1)<IMG 
+                                src="CodeProject Fast statistical calculations of sub matrices for image processing_ Free source code and programming help_files/smiley_frown.gif" 
+                                align=top>x2,y2)<BR><BR>IIGet = ii(x2, y2) + 
+                                ii(x1 - 3, Y - 1) - ii(x2, y1 - 1) - ii(x1 - 3, 
+                                y2)<BR><BR>It avoids one of the for 
+                                loops<BR><BR><BR></TD></TR>
+                                <TR style="VERTICAL-ALIGN: top">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL title=Reply 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=221000&amp;select=1312736&amp;floc=/KB/recipes/efficientsumonsubmatrices.aspx&amp;fa=r">Reply</A>·<A 
+                                class=Frm_MHL title=Email 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=221000&amp;select=1312736&amp;floc=/KB/recipes/efficientsumonsubmatrices.aspx&amp;fa=e">Email</A>·<A 
+                                class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/recipes/efficientsumonsubmatrices.aspx?fid=221000&amp;tid=1312736">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=221000&amp;msg=1312736">PermaLink</A>·<A 
+                                class=Frm_MHL title="Bookmark this post" 
+                                href="http://www.codeproject.com/script/Bookmarks/Add.aspx?&amp;obid=1312736&amp;obtid=3">Bookmark</A></TD>
+                                <TD class=Frm_MsgFt 
+                                style="TEXT-ALIGN: right"><SPAN id=MVF1312736 
+                                style="WHITE-SPACE: nowrap">
+                                <SCRIPT language=Javascript 
+type=text/javascript>
+												MsgVoteForm(2284980,1312736);
+											</SCRIPT>
+                                </SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR class=Quick>
+                <TD class=Frm_MsgRtDivide><IMG height=1 alt="" 
+                  src="C:\Documents and Settings\Administrator\Desktop\face4\CodeProject Fast statistical calculations of sub matrices for image processing_ Free source code and programming help_files\t(1).gif" 
+                  width=1 border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd LoVote Rt HdUnSel " id=F1306022_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=16><A 
+                        name=xx1306022xx></A><IMG height=16 alt=General 
+                        src="CodeProject Fast statistical calculations of sub matrices for image processing_ Free source code and programming help_files/msg_general.gif" 
+                        width=16 align=top></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/recipes/efficientsumonsubmatrices.aspx?fid=221000&amp;select=1306022#xx1306022xx" 
+                        name=1306022>number plate recognition--- Need 
+                      Help!!</A></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        height=16 alt=member 
+                        src="CodeProject Fast statistical calculations of sub matrices for image processing_ Free source code and programming help_files/member_sm.gif" 
+                        border=0></TD>
+                      <TD class=Frm_MsgAuthor><A 
+                        href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=2407479">harshi_mm2</A></TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">3:05 14 
+                        Dec '05 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=F1306022_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 16px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2>Hi all<BR><BR>Can I use this 
+                                algorithm in order to identify the numbers of an 
+                                image of a car number palte taken from a web 
+                                cam.<BR>Need your Help!<BR>thanx <BR></TD></TR>
+                                <TR style="VERTICAL-ALIGN: top">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL title=Reply 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=221000&amp;select=1306022&amp;floc=/KB/recipes/efficientsumonsubmatrices.aspx&amp;fa=r">Reply</A>·<A 
+                                class=Frm_MHL title=Email 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=221000&amp;select=1306022&amp;floc=/KB/recipes/efficientsumonsubmatrices.aspx&amp;fa=e">Email</A>·<A 
+                                class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/recipes/efficientsumonsubmatrices.aspx?fid=221000&amp;tid=1306022">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=221000&amp;msg=1306022">PermaLink</A>·<A 
+                                class=Frm_MHL title="Bookmark this post" 
+                                href="http://www.codeproject.com/script/Bookmarks/Add.aspx?&amp;obid=1306022&amp;obtid=3">Bookmark</A></TD>
+                                <TD class=Frm_MsgFt 
+                                style="TEXT-ALIGN: right"><SPAN id=MVF1306022 
+                                style="WHITE-SPACE: nowrap">1.00/5 (1 vote)
+                                <SCRIPT language=Javascript 
+type=text/javascript>
+												MsgVoteForm(2407479,1306022);
+											</SCRIPT>
+                                 
+                        </SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR class=Quick>
+                <TD class=Frm_MsgRtDivide><IMG height=1 alt="" 
+                  src="C:\Documents and Settings\Administrator\Desktop\face4\CodeProject Fast statistical calculations of sub matrices for image processing_ Free source code and programming help_files\t(1).gif" 
+                  width=1 border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd Rt HdUnSel " id=F1253154_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=16><A 
+                        name=xx1253154xx></A><IMG height=16 alt=General 
+                        src="CodeProject Fast statistical calculations of sub matrices for image processing_ Free source code and programming help_files/msg_general.gif" 
+                        width=16 align=top></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/recipes/efficientsumonsubmatrices.aspx?fid=221000&amp;select=1253154#xx1253154xx" 
+                        name=1253154>A fast algorithm using slow 
+                      constructs</A></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        height=16 alt=member 
+                        src="CodeProject Fast statistical calculations of sub matrices for image processing_ Free source code and programming help_files/member_sm.gif" 
+                        border=0></TD>
+                      <TD class=Frm_MsgAuthor><A 
+                        href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=172930">Jeffrey 
+                        Sax</A></TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">19:33 
+                        13 Oct '05 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=F1253154_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 16px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2>Nice article on an interesting 
+                                algorithm.<BR><BR>There is one rather 
+                                significant detail you are overlooking that 
+                                neutralizes the benefits of using a fast 
+                                algorithm: the .NET implementation of 
+                                multi-dimensional arrays for value types is 
+                                extremely slow.<BR><BR>Where one-dimensional 
+                                arrays (called 'vectors' in the Common Language 
+                                Infrastructure specification) have been 
+                                optimized on all levels, multi-dimensional 
+                                arrays aren't optimized at all. The element 
+                                accessors are function calls to methods that 
+                                return objects. So there's a double overhead of 
+                                function calls and boxing/unboxing with every 
+                                access.<BR><BR>The net result is that your code 
+                                is an order of magnitude slower than it would be 
+                                if you used a 'linearized' array (a[x,y] -&gt; 
+                                a[x+y*width]). 
+                                <BR><BR>Jeffrey<BR><BR><I>Everything should be 
+                                as simple as possible, but not 
+                                simpler.<BR>&nbsp;&nbsp;&nbsp;&nbsp;-- Albert 
+                                Einstein</I><BR><A 
+                                href="http://www.extremeoptimization.com/">Numerical 
+                                components for C# and VB.NET</A><BR></TD></TR>
+                                <TR style="VERTICAL-ALIGN: top">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL title=Reply 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=221000&amp;select=1253154&amp;floc=/KB/recipes/efficientsumonsubmatrices.aspx&amp;fa=r">Reply</A>·<A 
+                                class=Frm_MHL title=Email 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=221000&amp;select=1253154&amp;floc=/KB/recipes/efficientsumonsubmatrices.aspx&amp;fa=e">Email</A>·<A 
+                                class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/recipes/efficientsumonsubmatrices.aspx?fid=221000&amp;tid=1253154">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=221000&amp;msg=1253154">PermaLink</A>·<A 
+                                class=Frm_MHL title="Bookmark this post" 
+                                href="http://www.codeproject.com/script/Bookmarks/Add.aspx?&amp;obid=1253154&amp;obtid=3">Bookmark</A></TD>
+                                <TD class=Frm_MsgFt 
+                                style="TEXT-ALIGN: right"><SPAN id=MVF1253154 
+                                style="WHITE-SPACE: nowrap">
+                                <SCRIPT language=Javascript 
+type=text/javascript>
+												MsgVoteForm(172930,1253154);
+											</SCRIPT>
+                                </SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR class=Quick>
+                <TD class=Frm_MsgDivide><IMG height=1 alt="" 
+                  src="C:\Documents and Settings\Administrator\Desktop\face4\CodeProject Fast statistical calculations of sub matrices for image processing_ Free source code and programming help_files\t(1).gif" 
+                  width=1 border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd HdUnSel " id=F1253211_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=34><A 
+                        name=xx1253211xx></A><IMG height=16 alt=General 
+                        src="CodeProject Fast statistical calculations of sub matrices for image processing_ Free source code and programming help_files/msg_general.gif" 
+                        width=16 align=top></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/recipes/efficientsumonsubmatrices.aspx?fid=221000&amp;select=1253211#xx1253211xx" 
+                        name=1253211>Re: A fast algorithm using slow 
+                        constructs</A></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        height=16 alt=member 
+                        src="CodeProject Fast statistical calculations of sub matrices for image processing_ Free source code and programming help_files/member_sm.gif" 
+                        border=0></TD>
+                      <TD class=Frm_MsgAuthor><A 
+                        href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=969161">ediazc</A></TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">20:53 
+                        13 Oct '05 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=F1253211_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 34px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2>Yes, you are right, I tried the 
+                                linearized array implementation and performance 
+                                impact is big. <BR>I will add a section on the 
+                                article about this issue, in fact, I pretend to 
+                                test an unmanaged version for my particular 
+                                project.<BR><BR>Is sad that multidimensional 
+                                array were not optimized, because syntax is more 
+                                clear, like in Delphi (Object 
+                                Pascal).<BR><BR>Sure, you are an expert on 
+                                optimization, is this is a compiler flaw, or a 
+                                restriction of CLI?<BR><BR><BR>Eduardo 
+                                Diaz<BR><BR><A 
+                                href="http://www.programando.org/">site</A> | <A 
+                                href="http://www.darksideprogramming.org/">english 
+                                blog</A> | <A 
+                                href="http://www.lnds.net/">spanish 
+                                blog</A><BR></TD></TR>
+                                <TR style="VERTICAL-ALIGN: top">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL title=Reply 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=221000&amp;select=1253211&amp;floc=/KB/recipes/efficientsumonsubmatrices.aspx&amp;fa=r">Reply</A>·<A 
+                                class=Frm_MHL title=Email 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=221000&amp;select=1253211&amp;floc=/KB/recipes/efficientsumonsubmatrices.aspx&amp;fa=e">Email</A>·<A 
+                                class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/recipes/efficientsumonsubmatrices.aspx?fid=221000&amp;tid=1253154">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=221000&amp;msg=1253211">PermaLink</A>·<A 
+                                class=Frm_MHL title="Bookmark this post" 
+                                href="http://www.codeproject.com/script/Bookmarks/Add.aspx?&amp;obid=1253211&amp;obtid=3">Bookmark</A></TD>
+                                <TD class=Frm_MsgFt 
+                                style="TEXT-ALIGN: right"><SPAN id=MVF1253211 
+                                style="WHITE-SPACE: nowrap">
+                                <SCRIPT language=Javascript 
+type=text/javascript>
+												MsgVoteForm(969161,1253211);
+											</SCRIPT>
+                                </SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR class=Quick>
+                <TD class=Frm_MsgDivide><IMG height=1 alt="" 
+                  src="C:\Documents and Settings\Administrator\Desktop\face4\CodeProject Fast statistical calculations of sub matrices for image processing_ Free source code and programming help_files\t(1).gif" 
+                  width=1 border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd HdUnSel " id=F1253253_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=52><A 
+                        name=xx1253253xx></A><IMG height=16 alt=General 
+                        src="CodeProject Fast statistical calculations of sub matrices for image processing_ Free source code and programming help_files/msg_general.gif" 
+                        width=16 align=top></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/recipes/efficientsumonsubmatrices.aspx?fid=221000&amp;select=1253253#xx1253253xx" 
+                        name=1253253>Re: A fast algorithm using slow 
+                        constructs</A></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        height=16 alt=member 
+                        src="CodeProject Fast statistical calculations of sub matrices for image processing_ Free source code and programming help_files/member_sm.gif" 
+                        border=0></TD>
+                      <TD class=Frm_MsgAuthor><A 
+                        href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=172930">Jeffrey 
+                        Sax</A></TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">21:48 
+                        13 Oct '05 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=F1253253_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 52px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2>
+                                <BLOCKQUOTE class=FQ>
+                                <DIV class=FQA>ediazc wrote:</DIV>is this is a 
+                                compiler flaw, or a restriction of 
+                                CLI?</BLOCKQUOTE><BR><BR>I would say it's mostly 
+                                a CLI issue.<BR><BR>There are specialized IL 
+                                (Intermediate Language) instructions for 
+                                handling one-dimensional, zero-based arrays or 
+                                'vectors' (<CODE>stelem</CODE>, 
+                                <CODE>ldelem</CODE> and <CODE>ldelema</CODE> to 
+                                store, load, and load the address of an array 
+                                element). The JIT compiler can convert these to 
+                                near-optimal code. If bounds checking can be 
+                                eliminated the resulting code's speed is of the 
+                                same order as C code.<BR><BR>In fact, the 
+                                optimizations are so good that the 'standard' 
+                                implementation of a nested loop (using 
+                                <CODE>a[x+width*y]</CODE>) outperforms any 
+                                attempt at manual optimization (for example, by 
+                                keeping the index in a helper variable that is 
+                                incremented rather than recalculating it each 
+                                time).<BR><BR>There are no such specialized 
+                                instructions for multi-dimensional (MD) arrays. 
+                                It has to go through generic methods that treat 
+                                each element as an <CODE>object</CODE>. So every 
+                                access causes the value to be boxed and 
+                                unboxed.<BR><BR>With the introduction of 
+                                generics in .NET 2.0, it would be fairly 
+                                straightforward to write a multi-dimensional 
+                                array class that easily outperforms the built-in 
+                                multidimensional arrays.<BR><BR>For an excellent 
+                                backgrounder on arrays, see Wesner Moise's <A 
+                                href="http://www.codeproject.com/dotnet/arrays.asp" 
+                                rel=nofollow>ARRAYS Undocumented</A>[<A 
+                                title="ARRAYS Undocumented" 
+                                href="http://www.codeproject.com/dotnet/arrays.asp" 
+                                target=_blank rel=nofollow>^</A>] article here 
+                                on the Code Project. 
+                                <BR><BR>Jeffrey<BR><BR><I>Everything should be 
+                                as simple as possible, but not 
+                                simpler.<BR>&nbsp;&nbsp;&nbsp;&nbsp;-- Albert 
+                                Einstein</I><BR><A 
+                                href="http://www.extremeoptimization.com/">Numerical 
+                                components for C# and VB.NET</A><BR></TD></TR>
+                                <TR style="VERTICAL-ALIGN: top">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL title=Reply 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=221000&amp;select=1253253&amp;floc=/KB/recipes/efficientsumonsubmatrices.aspx&amp;fa=r">Reply</A>·<A 
+                                class=Frm_MHL title=Email 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=221000&amp;select=1253253&amp;floc=/KB/recipes/efficientsumonsubmatrices.aspx&amp;fa=e">Email</A>·<A 
+                                class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/recipes/efficientsumonsubmatrices.aspx?fid=221000&amp;tid=1253154">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=221000&amp;msg=1253253">PermaLink</A>·<A 
+                                class=Frm_MHL title="Bookmark this post" 
+                                href="http://www.codeproject.com/script/Bookmarks/Add.aspx?&amp;obid=1253253&amp;obtid=3">Bookmark</A></TD>
+                                <TD class=Frm_MsgFt 
+                                style="TEXT-ALIGN: right"><SPAN id=MVF1253253 
+                                style="WHITE-SPACE: nowrap">
+                                <SCRIPT language=Javascript 
+type=text/javascript>
+												MsgVoteForm(172930,1253253);
+											</SCRIPT>
+                                </SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR class=Quick>
+                <TD class=Frm_MsgDivide><IMG height=1 alt="" 
+                  src="C:\Documents and Settings\Administrator\Desktop\face4\CodeProject Fast statistical calculations of sub matrices for image processing_ Free source code and programming help_files\t(1).gif" 
+                  width=1 border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd HdUnSel " id=F1253705_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=70><A 
+                        name=xx1253705xx></A><IMG height=16 alt=General 
+                        src="CodeProject Fast statistical calculations of sub matrices for image processing_ Free source code and programming help_files/msg_general.gif" 
+                        width=16 align=top></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/recipes/efficientsumonsubmatrices.aspx?fid=221000&amp;select=1253705#xx1253705xx" 
+                        name=1253705>Re: A fast algorithm using slow 
+                        constructs</A></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        height=16 alt=member 
+                        src="CodeProject Fast statistical calculations of sub matrices for image processing_ Free source code and programming help_files/member_sm.gif" 
+                        border=0></TD>
+                      <TD class=Frm_MsgAuthor><A 
+                        href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=969161">ediazc</A></TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">6:22 14 
+                        Oct '05 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=F1253705_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 70px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2>Very insightful, thanks<BR><IMG 
+                                src="CodeProject Fast statistical calculations of sub matrices for image processing_ Free source code and programming help_files/smiley_smile.gif" 
+                                align=top> <BR><BR>Eduardo Diaz<BR><BR><A 
+                                href="http://www.programando.org/">site</A> | <A 
+                                href="http://www.darksideprogramming.org/">english 
+                                blog</A> | <A 
+                                href="http://www.lnds.net/">spanish 
+                                blog</A><BR></TD></TR>
+                                <TR style="VERTICAL-ALIGN: top">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL title=Reply 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=221000&amp;select=1253705&amp;floc=/KB/recipes/efficientsumonsubmatrices.aspx&amp;fa=r">Reply</A>·<A 
+                                class=Frm_MHL title=Email 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=221000&amp;select=1253705&amp;floc=/KB/recipes/efficientsumonsubmatrices.aspx&amp;fa=e">Email</A>·<A 
+                                class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/recipes/efficientsumonsubmatrices.aspx?fid=221000&amp;tid=1253154">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=221000&amp;msg=1253705">PermaLink</A>·<A 
+                                class=Frm_MHL title="Bookmark this post" 
+                                href="http://www.codeproject.com/script/Bookmarks/Add.aspx?&amp;obid=1253705&amp;obtid=3">Bookmark</A></TD>
+                                <TD class=Frm_MsgFt 
+                                style="TEXT-ALIGN: right"><SPAN id=MVF1253705 
+                                style="WHITE-SPACE: nowrap">
+                                <SCRIPT language=Javascript 
+type=text/javascript>
+												MsgVoteForm(969161,1253705);
+											</SCRIPT>
+                                </SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR>
+                <TD><IMG height=5 alt="" 
+                  src="C:\Documents and Settings\Administrator\Desktop\face4\CodeProject Fast statistical calculations of sub matrices for image processing_ Free source code and programming help_files\t(1).gif" 
+                  width=1 border=0></TD></TR></TBODY></TABLE></TD></TR>
+        <TR>
+          <TD>
+            <TABLE cellSpacing=0 cellPadding=2 width="100%">
+              <TBODY>
+              <TR class=Frm_Footer>
+                <TD>Last Visit: Thursday, March 6, 2008 7:30 AM &nbsp; &nbsp; 
+                  Last Update:Wednesday, March 12, 2008 10:49 AM</TD>
+                <TD 
+              style="WHITE-SPACE: nowrap; TEXT-ALIGN: right"></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></DIV>
+      <P class=SmallText><IMG height=16 alt=General 
+      src="CodeProject Fast statistical calculations of sub matrices for image processing_ Free source code and programming help_files/msg_general.gif" 
+      width=16 align=top> General &nbsp;&nbsp; <IMG height=16 alt=News 
+      src="CodeProject Fast statistical calculations of sub matrices for image processing_ Free source code and programming help_files/msg_news.gif" 
+      width=16 align=top> News &nbsp;&nbsp; <IMG height=16 alt=Question 
+      src="CodeProject Fast statistical calculations of sub matrices for image processing_ Free source code and programming help_files/msg_question.gif" 
+      width=16 align=top> Question &nbsp;&nbsp; <IMG height=16 alt=Answer 
+      src="CodeProject Fast statistical calculations of sub matrices for image processing_ Free source code and programming help_files/msg_answer.gif" 
+      width=16 align=top> Answer &nbsp;&nbsp; <IMG height=16 alt=Joke 
+      src="CodeProject Fast statistical calculations of sub matrices for image processing_ Free source code and programming help_files/msg_joke.gif" 
+      width=16 align=top> Joke &nbsp;&nbsp; <IMG height=16 alt=Admin 
+      src="CodeProject Fast statistical calculations of sub matrices for image processing_ Free source code and programming help_files/msg_admin.gif" 
+      width=16 align=top> Admin &nbsp;&nbsp; </P><!-- Forum End --></DIV>
+      <TABLE width="100%">
+        <TBODY>
+        <TR vAlign=top>
+          <TD class=TinyText align=left><A id=ctl00_PermaLink 
+            href="http://www.codeproject.com/script/Articles/Article.aspx?aid=11837">PermaLink</A> 
+            | <A id=ctl00_PrivacyLink 
+            href="http://www.codeproject.com/info/privacy.aspx">Privacy </A>| <A 
+            id=ctl00_TermsOfUseLink 
+            href="http://www.codeproject.com/info/TermsOfUse.aspx">Terms of 
+            Use</A> <BR>Last Updated: 1 Oct 2005<BR>Editor: <A 
+            id=ctl00_ArticleEditor 
+            href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=1">Chris 
+            Maunder</A><BR></TD>
+          <TD class=TinyText vAlign=top align=right>Copyright 2005 by 
+            ediazc<BR>Everything else Copyright © <A 
+            href="mailto:webmaster@codeproject.com">CodeProject</A>, 1999-2008 
+            <BR>Web17 | <A id=ctl00_AdvertiseLink 
+            href="http://www.codeproject.com/info/MediaKit.aspx">Advertise on 
+            the Code Project </A></TD></TR></TBODY></TABLE></TD></TR>
+  <TR>
+    <TD align=middle colSpan=2></TD></TR></TBODY></TABLE>
+<SCRIPT language=Javascript 
+src="CodeProject Fast statistical calculations of sub matrices for image processing_ Free source code and programming help_files/front.asp" 
+type=text/javascript></SCRIPT>
+
+<SCRIPT language=Javascript type=text/javascript>//<![CDATA[
+if (document.all) try {window.attachEvent("oncopy",copyCode);}catch(e){};
+//]]></SCRIPT>
+
+<SCRIPT language=Javascript 
+src="CodeProject Fast statistical calculations of sub matrices for image processing_ Free source code and programming help_files/TogglePre.js" 
+type=text/javascript></SCRIPT>
+
+<SCRIPT language=Javascript 
+src="CodeProject Fast statistical calculations of sub matrices for image processing_ Free source code and programming help_files/menu132_com.js" 
+type=text/javascript></SCRIPT>
+
+<SCRIPT language=Javascript 
+src="CodeProject Fast statistical calculations of sub matrices for image processing_ Free source code and programming help_files/TopNavBar.js" 
+type=text/javascript></SCRIPT>
+
+<SCRIPT language=Javascript type=text/javascript>//<![CDATA[
+new HVMenu(new menu_NavbarConfig());
+//]]></SCRIPT>
+</BODY></HTML>

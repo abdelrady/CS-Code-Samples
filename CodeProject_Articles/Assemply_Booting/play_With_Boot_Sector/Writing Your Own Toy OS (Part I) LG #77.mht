@@ -1,0 +1,1026 @@
+From: "Saved by Windows Internet Explorer 7"
+Subject: Writing Your Own Toy OS (Part I) LG #77
+Date: Sun, 4 Jan 2009 01:46:30 +0200
+MIME-Version: 1.0
+Content-Type: multipart/related;
+	type="text/html";
+	boundary="----=_NextPart_000_0022_01C96E0E.43AF9DF0"
+X-MimeOLE: Produced By Microsoft MimeOLE V6.0.6000.16669
+
+This is a multi-part message in MIME format.
+
+------=_NextPart_000_0022_01C96E0E.43AF9DF0
+Content-Type: text/html;
+	charset="windows-1256"
+Content-Transfer-Encoding: quoted-printable
+Content-Location: http://linuxgazette.net/issue77/krishnakumar.html
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!--startcut  =
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D--><!-- =
+*** BEGIN HTML header *** --><HTML><HEAD><TITLE>Writing Your Own Toy OS =
+(Part I) LG #77</TITLE>
+<META http-equiv=3DContent-Type content=3D"text/html; =
+charset=3Dwindows-1256">
+<META content=3D"MSHTML 6.00.6000.16788" name=3DGENERATOR></HEAD>
+<BODY text=3D#000000 vLink=3D#0000af aLink=3D#ff0000 link=3D#0000ff =
+bgColor=3D#ffffff><!-- *** END HTML header *** -->
+<CENTER><A href=3D"http://www.linuxgazette.net/"><IMG height=3D124=20
+alt=3D"LINUX GAZETTE" src=3D"http://linuxgazette.net/gx/lglogo.png" =
+width=3D600=20
+border=3D0></A> <BR><!-- *** BEGIN navbar *** --><IMG height=3D45 =
+alt=3D""=20
+src=3D"http://linuxgazette.net/gx/navbar/left.jpg" width=3D14 =
+align=3Dbottom=20
+border=3D0><A href=3D"http://linuxgazette.net/issue77/kollar.html"><IMG =
+height=3D45=20
+alt=3D"[ Prev ]" src=3D"http://linuxgazette.net/gx/navbar/prev.jpg" =
+width=3D16=20
+align=3Dbottom border=3D0></A><A=20
+href=3D"http://linuxgazette.net/issue77/index.html"><IMG height=3D45=20
+alt=3D"[ Table of Contents ]" =
+src=3D"http://linuxgazette.net/gx/navbar/toc.jpg"=20
+width=3D220 align=3Dbottom border=3D0></A><A=20
+href=3D"http://linuxgazette.net/index.html"><IMG height=3D45 alt=3D"[ =
+Front Page ]"=20
+src=3D"http://linuxgazette.net/gx/navbar/frontpage.jpg" width=3D137 =
+align=3Dbottom=20
+border=3D0></A><IMG height=3D45 alt=3D"[ Talkback ]"=20
+src=3D"http://linuxgazette.net/gx/navbar/talkback.jpg" width=3D121 =
+align=3Dbottom=20
+border=3D0><A href=3D"http://linuxgazette.net/lg_faq.html"><IMG =
+height=3D45=20
+alt=3D"[ FAQ ]" src=3D"http://linuxgazette.net/gx/navbar/faq.jpg" =
+width=3D62=20
+align=3Dbottom border=3D0></A><A=20
+href=3D"http://linuxgazette.net/issue77/lechnyr.html"><IMG height=3D45=20
+alt=3D"[ Next ]" src=3D"http://linuxgazette.net/gx/navbar/next.jpg" =
+width=3D15=20
+align=3Dbottom border=3D0></A><IMG height=3D45 alt=3D""=20
+src=3D"http://linuxgazette.net/gx/navbar/right.jpg" width=3D15 =
+align=3Dbottom> <!-- *** END navbar *** -->
+<P></CENTER><!--endcut =
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D-->
+<H4 align=3Dcenter>"Linux Gazette...<I>making Linux just a little more =
+fun!</I>"=20
+</H4>
+<P>
+<HR>
+
+<P><!--=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D-->
+<CENTER>
+<H1><FONT color=3Dmaroon>Writing Your Own Toy OS (Part I)</FONT></H1>
+<H4>By <A href=3D"mailto:krishnakumar_r@bharatmail.com">Krishnakumar=20
+R.</A></H4></CENTER>
+<P>
+<HR>
+
+<P><!-- END header --><EM>This article is a hands-on tutorial for =
+building a=20
+small boot sector. The first section provides the theory behind what =
+happens at=20
+the time the computer is switched on. It also explains our plan. The =
+second=20
+section tells all the things you should have on hand before proceeding =
+further,=20
+and the third section deals with the programs. Our little startup =
+program won't=20
+actually boot Linux, but it will display something on the screen.</EM>=20
+<HR>
+
+<H2><A name=3Ds1>1. Background</A></H2>
+<H2>1.1 The Fancy Dress</H2>
+<P>The microprocessor controls the computer. At startup, every =
+microprocessor is=20
+just another 8086. Even though you may have a brand new Pentium, it will =
+only=20
+have the capabilities of an 8086. From this point, we can use some =
+software and=20
+switch processor to the infamous <EM>protected mode </EM>. Only then can =
+we=20
+utilize the processor's full power.=20
+<H2>1.2 Our Role</H2>
+<P>Initially, control is in the hands of the <EM>BIOS</EM>. This is =
+nothing but=20
+a collection of programs that are stored in ROM. BIOS performs the =
+<EM>POST</EM>=20
+(Power On Self Test). This checks the integrity of the computer (whether =
+the=20
+peripherals are working properly, whether the keyboard is connected, =
+etc.). This=20
+is when you hear those beeps from the computer. If everything is okay, =
+BIOS=20
+selects a boot device. It copies the first sector (boot sector) from the =
+device,=20
+to address location <EM>0x7C00</EM>. The control is then transferred to =
+this=20
+location. The boot device may be a floppy disk, CD-ROM, hard disk or =
+some device=20
+of your choice. Here we will take the boot device to be a floppy disk. =
+If we had=20
+written some code into the boot sector of the floppy, our code would be =
+executed=20
+now. Our role is clear: just write some programs to the boot sector of =
+the=20
+floppy.=20
+<H2>1.3 The Plan</H2>
+<P>First write a small program in 8086 assembly (don't be frightened; I =
+will=20
+teach you how to write it), and copy it to the boot sector of the =
+floppy. To=20
+copy, we will code a C program. Boot the computer with that floppy, and =
+then=20
+enjoy.=20
+<P>
+<H2><A name=3Ds2>2. Things You Should Have</A></H2>
+<P>
+<DL>
+  <DT><B>as86</B>
+  <DD>
+  <P>This is an assembler. The assembly code we write is converted to an =
+object=20
+  file by this tool. </P>
+  <DT><B>ld86</B>
+  <DD>
+  <P>This is the linker. The object code generated by as86 is converted =
+to=20
+  actual machine language code by this tool. Machine language will be in =
+a form=20
+  that 8086 understands. </P>
+  <DT><B>gcc</B>
+  <DD>
+  <P>The C compiler. For now we need to write a C program to transfer =
+our OS to=20
+  the floppy. </P>
+  <DT><B>A free floppy</B>
+  <DD>
+  <P>A floppy will be used to store our operating system. This also is =
+our boot=20
+  device. </P>
+  <DT><B>Good Old Linux box</B>
+  <DD>
+  <P>You know what this is for. </P></DD></DL>as86 and ld86 will be in =
+most of the=20
+standard distributions. If not, you can always get them from the site <A =
+
+href=3D"http://www.cix.co.uk/~mayday/">http://www.cix.co.uk/~mayday/</A>.=
+ Both of=20
+them are included in single package, bin86. Good documentation is =
+available at=20
+<A=20
+href=3D"http://www.linux.org/docs/ldp/howto/Assembly-HOWTO/as86.html">www=
+.linux.org/docs/ldp/howto/Assembly-HOWTO/as86.html</A>.=20
+
+<H2><A name=3Ds3>3. 1, 2, 3, Start!</A></H2>
+<H2>3.1 The Boot Sector </H2>
+<P>Grab your favourite editor and type in these few lines.=20
+<BLOCKQUOTE><CODE><PRE>entry start
+start:
+      mov ax,#0xb800
+      mov es,ax
+      seg es
+      mov [0],#0x41
+      seg es
+      mov [1],#0x1f
+loop1: jmp loop1
+</PRE></CODE></BLOCKQUOTE>
+<P>This is an assembly language that as86 will understand. The first =
+statement=20
+specifies the entry point where the control should enter the program. We =
+are=20
+stating that control should initially go to label =
+<EM><CODE>start</CODE></EM>.=20
+The 2nd line depicts the location of the label =
+<EM><CODE>start</CODE></EM>=20
+(don't forget to put ":" after the start). The first statement that will =
+be=20
+executed in this program is the statement just after <EM>start</EM>.=20
+<P>0xb800 is the address of the video memory. The # is for representing =
+an=20
+immediate value. After the execution of=20
+<BLOCKQUOTE><CODE><PRE>mov ax,#0xb800=20
+</PRE></CODE></BLOCKQUOTE>register ax will contain the value 0xb800, =
+that is,=20
+the address of the video memory. Now we move this value to the=20
+<EM><CODE>es</CODE></EM> register. <EM><CODE>es</CODE></EM> stands for =
+the extra=20
+segment register. Remember that 8086 has a segmented architecture. It =
+has=20
+segments like code segments, data segments, extra segments, etc.--hence =
+the=20
+segment registers cs, ds, es. Actually, we have made the video memory =
+our extra=20
+segment, so anything written to extra segment would go to video memory.=20
+<P>To display any character on the screen, you need to write two bytes =
+to the=20
+video memory. The first is the ascii value you are going to display. The =
+second=20
+is the attribute of the character. Attribute has to do with which colour =
+should=20
+be used as the foreground, which for the background, should the char =
+blink and=20
+so on. <EM><CODE>seg es</CODE></EM> is actually a prefix that tells =
+which=20
+instruction is to be executed next with reference to =
+<EM><CODE>es</CODE></EM>=20
+segment. So, we move value 0x41, which is the ascii value of character =
+A, into=20
+the first byte of the video memory. Next we need to move the attribute =
+of the=20
+character to the next byte. Here we enter 0x1f, which is the value for=20
+representing a white character on a blue background. So if we execute =
+this=20
+program, we get a white A on a blue background. Finally, there is the =
+loop. We=20
+need to stop the execution after the display of the character, or we =
+have a loop=20
+that loops forever. Save the file as <EM><CODE>boot.s</CODE></EM>.=20
+<P>The idea of video memory may not be very clear, so let me explain =
+further.=20
+Suppose we assume the screen consists of 80 columns and 25 rows. So for =
+each=20
+line we need 160 bytes, one for each character and one for each =
+character's=20
+attribute. If we need to write some character to column 3 then we need =
+to skip=20
+bytes 0 and 1 as they is for the 1st column; 2 and 3 as they are for the =
+2nd=20
+column; and then write our ascii value to the 4th byte and its attribute =
+to the=20
+5th location in the video memory.=20
+<H2>3.2 Writing Boot Sector to Floppy</H2>
+<P>We have to write a C program that copies our code (OS code) to first =
+sector=20
+of the floppy disk. Here it is:=20
+<BLOCKQUOTE><CODE><PRE>
+#include &lt;sys/types.h&gt; /* unistd.h needs this */
+#include &lt;unistd.h&gt;    /* contains read/write */
+#include &lt;fcntl.h&gt;
+
+int main()
+{
+        char boot_buf[512];
+        int floppy_desc, file_desc;
+=20
+       =20
+        file_desc =3D open("./boot", O_RDONLY);
+        read(file_desc, boot_buf, 510);
+        close(file_desc);
+       =20
+        boot_buf[510] =3D 0x55;
+        boot_buf[511] =3D 0xaa;
+
+        floppy_desc =3D open("/dev/fd0", O_RDWR);
+        lseek(floppy_desc, 0, SEEK_CUR);
+        write(floppy_desc, boot_buf, 512);
+        close(floppy_desc);
+}
+</PRE></CODE></BLOCKQUOTE>
+<P>First, we open the file <EM><CODE>boot</CODE></EM> in read-only mode, =
+and=20
+copy the file descripter of the opened file to variable=20
+<EM><CODE>file_desc</CODE></EM>. Read from the file 510 characters or =
+until the=20
+file ends. Here the code is small, so the latter case occurs. Be decent; =
+close=20
+the file.=20
+<P>The last four lines of code open the floppy disk device (which mostly =
+would=20
+be /dev/fd0). It brings the head to the beginning of the file using=20
+<EM><CODE>lseek</CODE></EM>, then writes the 512 bytes from the buffer =
+to=20
+floppy.=20
+<P>The man pages of read, write, open and lseek (refer to man 2) would =
+give you=20
+enough information on what the other parameters of those functions are =
+and how=20
+to use them. There are two lines in between, which may be slightly =
+mysterious.=20
+The lines:=20
+<P>
+<BLOCKQUOTE><CODE><PRE>boot_buf[510] =3D 0x55;
+boot_buf[511] =3D 0xaa;
+</PRE></CODE></BLOCKQUOTE>This information is for BIOS. If BIOS is to =
+recognize=20
+a device as a bootable device, then the device should have the values =
+0x55 and=20
+0xaa at the 510th and 511th location. Now we are done. The program reads =
+the=20
+file <EM><CODE>boot</CODE></EM> to a buffer named boot_buf. It makes the =
+
+required changes to 510th and 511th bytes and then writes boot_buf to =
+floppy=20
+disk. If we execute the code, the first 512 bytes of the floppy disk =
+will=20
+contain our boot code. Save the file as <EM><CODE>write.c</CODE></EM>.=20
+<H2>3.3 Let's Do It All</H2>
+<P>To make executables out of this file you need to type the following =
+at the=20
+Linux bash prompt.=20
+<BLOCKQUOTE><CODE><PRE>as86 boot.s -o boot.o
+
+ld86 -d boot.o -o boot
+
+cc write.c -o write
+</PRE></CODE></BLOCKQUOTE>
+<P>First, we assemble the <CODE><EM>boot.s</EM></CODE> to form an object =
+file=20
+<EM><CODE>boot.o</CODE></EM>. Then we link this file to get the final =
+file=20
+<EM><CODE>boot</CODE></EM>. The <EM><CODE>-d</CODE></EM> for ld86 is for =
+
+removing all headers and producing pure binary. Reading man pages for =
+as86 and=20
+ld86 will clear any doubts. We then compile the C program to form an =
+executable=20
+named <EM><CODE>write</CODE></EM>.=20
+<P>Insert a blank floppy into the floppy drive and type=20
+<BLOCKQUOTE><CODE><PRE>./write
+</PRE></CODE></BLOCKQUOTE>Reset the machine. Enter the BIOS setup and =
+make=20
+floppy the first boot device. Put the floppy in the drive and watch the =
+computer=20
+boot from your boot floppy.=20
+<P>Then you will see an 'A' (with white foreground color on a blue =
+background).=20
+That means that the system has booted from the boot floppy we have made =
+and then=20
+executed the boot sector program we wrote. It is now in the infinite =
+loop we had=20
+written at the end of our boot sector. We must now reboot the computer =
+and=20
+remove the our boot floppy to boot into Linux.=20
+<P>From here, we'll want to insert more code into our boot sector =
+program, to=20
+make it do more complex things (like using BIOS interrupts, =
+protected-mode=20
+switching, etc). The later parts (PART II, PART III etc. ) of this =
+article will=20
+guide you on further improvements. Till then GOOD BYE ! <!-- *** BEGIN =
+bio *** -->
+<P>
+<H4><IMG alt=3D"" src=3D"http://linuxgazette.net/gx/note.gif"=20
+align=3Dbottom>Krishnakumar R.</H4><EM>Krishnakumar is a final year =
+B.Tech student=20
+at Govt. Engg. College Thrissur, Kerala, India. His journey into the =
+land of=20
+Operating systems started with module programming in linux . He has =
+built a=20
+routing operating system by name GROS.(Details available at his home =
+page: <A=20
+href=3D"http://www.askus.way.to/">http://www.askus.way.to/</A> ) His =
+other=20
+interests include Networking, Device drivers, Compiler Porting and =
+Embedded=20
+systems.</EM> <!-- *** END bio *** --><!-- *** BEGIN copyright *** -->
+<P>
+<HR>
+<!-- P -->
+<H5 align=3Dcenter>Copyright =A9 2002, Krishnakumar R..<BR>Copying =
+license <A=20
+href=3D"http://linuxgazette.net/copying.html">http://linuxgazette.net/cop=
+ying.html</A><BR>Published=20
+in Issue 77 of <I>Linux Gazette</I>, April 2002</H5><!-- *** END =
+copyright *** --><!--startcut =
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D-->
+<HR>
+
+<P>
+<CENTER><!-- *** BEGIN navbar *** --><IMG height=3D45 alt=3D""=20
+src=3D"http://linuxgazette.net/gx/navbar/left.jpg" width=3D14 =
+align=3Dbottom=20
+border=3D0><A href=3D"http://linuxgazette.net/issue77/kollar.html"><IMG =
+height=3D45=20
+alt=3D"[ Prev ]" src=3D"http://linuxgazette.net/gx/navbar/prev.jpg" =
+width=3D16=20
+align=3Dbottom border=3D0></A><A=20
+href=3D"http://linuxgazette.net/issue77/index.html"><IMG height=3D45=20
+alt=3D"[ Table of Contents ]" =
+src=3D"http://linuxgazette.net/gx/navbar/toc.jpg"=20
+width=3D220 align=3Dbottom border=3D0></A><A=20
+href=3D"http://linuxgazette.net/index.html"><IMG height=3D45 alt=3D"[ =
+Front Page ]"=20
+src=3D"http://linuxgazette.net/gx/navbar/frontpage.jpg" width=3D137 =
+align=3Dbottom=20
+border=3D0></A><IMG height=3D45 alt=3D"[ Talkback ]"=20
+src=3D"http://linuxgazette.net/gx/navbar/talkback.jpg" width=3D121 =
+align=3Dbottom=20
+border=3D0><A href=3D"http://linuxgazette.net/lg_faq.html"><IMG =
+height=3D45=20
+alt=3D"[ FAQ ]" src=3D"http://linuxgazette.net/gx/navbar/faq.jpg" =
+width=3D62=20
+align=3Dbottom border=3D0></A><A=20
+href=3D"http://linuxgazette.net/issue77/lechnyr.html"><IMG height=3D45=20
+alt=3D"[ Next ]" src=3D"http://linuxgazette.net/gx/navbar/next.jpg" =
+width=3D15=20
+align=3Dbottom border=3D0></A><IMG height=3D45 alt=3D""=20
+src=3D"http://linuxgazette.net/gx/navbar/right.jpg" width=3D15 =
+align=3Dbottom> <!-- *** END navbar *** --></CENTER><!--endcut =
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D--></BODY></HTML>
+
+------=_NextPart_000_0022_01C96E0E.43AF9DF0
+Content-Type: image/png
+Content-Transfer-Encoding: base64
+Content-Location: http://linuxgazette.net/gx/lglogo.png
+
+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
+
+------=_NextPart_000_0022_01C96E0E.43AF9DF0
+Content-Type: image/jpeg
+Content-Transfer-Encoding: base64
+Content-Location: http://linuxgazette.net/gx/navbar/left.jpg
+
+/9j/4AAQSkZJRgABAQEASABIAAD/2wBDAAEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEB
+AQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQH/2wBDAQEBAQEBAQEBAQEBAQEBAQEBAQEB
+AQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQH/wAARCAAtAA4DASIA
+AhEBAxEB/8QAFgABAQEAAAAAAAAAAAAAAAAACgkG/8QAMhAAAAUDAgIHBwUAAAAAAAAAAQIDBAUG
+BxEACBIhCQoTMTVBwRQYUWFxcrJDUoGRov/EABgBAAIDAAAAAAAAAAAAAAAAAAABAwQF/8QAJREA
+AgIBBAEDBQAAAAAAAAAAAQMCEQQABSExQQYTNFVhgbHB/9oADAMBAAIRAxEAPwB9Mi6Bq2OqI44S
+iP8AXMPX11Mm8/SZbS7H1XVdI3f3DW3tNOUfUcbS8lGVzKPGT5xJS9Hwdcsjx7ONj5V2uxPAVDHK
+meqoN0CuRWagYyhA46RVOOIxf5kMH+TaIZZiM9p6x7vsUXUMdE+0qn+zII5BMyULssKbhDuKBuMR
+HHePPz1q7Ti4uUdynlQexeDtrM0QQ2CJznDJxEiJZNL4gGL53apc0fF6LAIvomv3pedT+GL/AGG/
+E2iGWpelQ6xVvmInnty7VoHiEA/SPT+y4fj+4oZ5aXnU/hi/2G/E2iKWTaFX6x3vsMoUBJ7pkCBT
+GxgTFg9lWQ+oAblnngR8tTbHft+oa+gP6PPz9t60j4NXUh31+f5960vGoETLx65CBkRIbH1wIev8
+6HpcGormbYumI3m34f7Q94dy6dqygKAoKia6tJYS5Nd2/qGMkrX7c5KdBlP01SMw3fP4aorfu4hy
+dk7WZNnbeRj3RkZFmoiDJFUyqEEpgyGB1k3tLxTxTjWQIYweYlARER+fL4jqttm4R2+eUZ4q8tWZ
+hzwnpYxigVTchxImkxYCJIiOJDgk3xRfRBHg3r//2Q==
+
+------=_NextPart_000_0022_01C96E0E.43AF9DF0
+Content-Type: image/jpeg
+Content-Transfer-Encoding: base64
+Content-Location: http://linuxgazette.net/gx/navbar/prev.jpg
+
+/9j/4AAQSkZJRgABAQEASABIAAD/2wBDAAEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEB
+AQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQH/2wBDAQEBAQEBAQEBAQEBAQEBAQEBAQEB
+AQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQH/wAARCAAtABADASIA
+AhEBAxEB/8QAGQABAAIDAAAAAAAAAAAAAAAACggJAAMH/8QAMxAAAAYCAQICBA8AAAAAAAAAAQID
+BAUGBwgJABESIRaTodEUFRkiMTJBSFFTYXFygbL/xAAXAQADAQAAAAAAAAAAAAAAAAAAAQYF/8QA
+KhEAAgEDAgQEBwAAAAAAAAAAAQIRAwQFEiEAMUFRBhVxoSIyYWKBkbH/2gAMAwEAAhEDEQA/AEll
+5ouOQ31t59fS/wApi3D/AJp5v79nWz5Z7jjH792u4fvLXXv7KSIdSyn16vVqurIyLlBsmiiAnUUE
+PITCUiZClADHOoqqYiSKSYGVWWOmkmQ6hyFNAMc9Q8hu/T9cI2SbqvTar37N1whSuF/hcOu6yTiG
+v0ZKQbFOZmZZeEmZ1+momUyqASCjUFVSFFVTctrbG3NO4rJjsoKVtRetVqHK2+gBAhKg+SfMSVWO
+S60DRqUMvz7en19fbseKy93+UbGFEzlZteMpQuW6HZKMzGTpLFeHRYMcjSjxoqav2KJsSD97FDV5
+gQcMYZ6kZy5ROSWjpZvG2Qr6vwlfPDRka3ZW5btgL1dZqQnZ2d1WtjlV1IOVnKjdoplDBajONbmW
+OcUmccgcjZsin4UyET7lIXxCHSCeUbiuoPIHhBFs2cx9QzZR0HkjibJKjU6hI18sVNV3VbODRMz5
+5S7GdBFKQBsVd7BPk2lii2z5Vk6hpg3XAjjLK+J+UfYPFubIKYreT8fax32AtMPOCCj1uuyyzgYG
+jhJ6Q6zaVi5GPcNJGDm2Lh1GTcK8YSsU7dxzxq4VrLHJY658H5Syt6C219a2SitSDMwqLrTVcUmc
+l9NaoQ9ZSdVOoQpGgUmZzus7iZkCIPUEDuJjuNo2PCY4/k0rgMQaO9VuRhL5vhEA0N2CWD6Owh3L
+WS+Xfv8Ah3/Tv5cSW2b11Vzqy2SJp/yJssvtMXz2HFrWz4/M/oOpTH8/aKtcTwk0CcEn8aliZ+ps
+3VfWdGE8OWTn0mvhJLuABGnoVC/YgT1Zff1noVC/kE9WX39RIyGNU/BiQkhkJTIXikowAZTvurCQ
+ymQwkEHqSft/X8kmOvLlt23/AP/Z
+
+------=_NextPart_000_0022_01C96E0E.43AF9DF0
+Content-Type: image/jpeg
+Content-Transfer-Encoding: base64
+Content-Location: http://linuxgazette.net/gx/navbar/toc.jpg
+
+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
+
+------=_NextPart_000_0022_01C96E0E.43AF9DF0
+Content-Type: image/jpeg
+Content-Transfer-Encoding: base64
+Content-Location: http://linuxgazette.net/gx/navbar/frontpage.jpg
+
+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
+AFcmj/v+6//Z
+
+------=_NextPart_000_0022_01C96E0E.43AF9DF0
+Content-Type: image/jpeg
+Content-Transfer-Encoding: base64
+Content-Location: http://linuxgazette.net/gx/navbar/talkback.jpg
+
+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
+
+------=_NextPart_000_0022_01C96E0E.43AF9DF0
+Content-Type: image/jpeg
+Content-Transfer-Encoding: base64
+Content-Location: http://linuxgazette.net/gx/navbar/faq.jpg
+
+/9j/4AAQSkZJRgABAQEASABIAAD/2wBDAAEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEB
+AQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQH/2wBDAQEBAQEBAQEBAQEBAQEBAQEBAQEB
+AQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQH/wAARCAAtAD4DASIA
+AhEBAxEB/8QAHAAAAgIDAQEAAAAAAAAAAAAABwoACQECCAYE/8QAQxAAAAUDAgEGCwMKBwAAAAAA
+AQMEBQYCBwgACRETFhlUWNYSFBUYITFBUZKV0gqxwRciIzJScZOY0ddVYYGIobfG/8QAGgEAAgMB
+AQAAAAAAAAAAAAAAAAECAwUHBv/EADgRAAIBAgEJBQUHBQAAAAAAAAECAwQRBQAGEiFBUWFx8BMW
+MYGRIkJFkrEyUlZiZaLRlaHh4vH/2gAMAwEAAhEDEQA/AGTR3nduX2Z347fN5qH/AIYfx1jpndub
+t3Y6/OJt3F1XHjPu/YhL5zk9Z3LWCydtm1isgbo2/jkkhaeVuCKVwlin0oY46evRNEhb0ze6trc0
+pkSwykukF9dPjfg8oYYIdd9KBtKh6fJN2A4+9guD+My169s3JVI0M3sanQpG6TQYnTSRSK6I6sjr
+gguCCL3AZTdWAKlcgWO39vr73PoazD0zu3N27sdfnE27i6nTO7c3bux1+cTbuLoODuh7Sv8AhN2R
+/cwXB75hrUd0TaU9rPdvh/mw3A76aj3en/DOcGz4hB+X9E4fTjk9W8/L/tz6Gsy9M7tzdu7HX5xN
+u4up0zu3N27sdfnE27i6DHSi7SQDx8kXaDh7fIFwO+nDWo7pW0lwHi03aH38I/cD7+eYffo7vT/h
+nOD+oQbNH9E4fTx13LDf+3l+bn0Dc09M7tzdu/HX5xNu4utw3nduP25347fNpt3ID7tBKjdN2kKK
+gEGm7VIgIfnDHrgiAcB9Yhzzq4gHr9Q+j1AOvWYh5Ow3LhkuzPoLG+a8FjF4Hm38QbTlC9WuNZGa
+JQl5LcHQ5wVrFHlBarkSw0woDeTIJ5AgKfCLqqrpqcHWip5KqswLGKWCNokLz4pTJpPIwVFQHBLs
+fZJIGoAXJ8LlvGx8N4ttA8dI7+ra0j3CsKc1c9+PD05O3j9Y8PVdieaZo2ClL4QpzcURZ8YozJk1
+lGA+OySTnFERqPvpZk0raHyRHnJVpJDG0uFCde7mmolhZbenUVmJT6KRKrVzmUojsZzZzxLkL+ys
+PL5O3nBPU8uiFspUiVdqd0m0pxXHkAdUVxpEykvwhoCugauAVBxs+wO3IrC4lRPK6PytybpUpyAs
+0sttHj49MoaQQxup7bKERa958pPCcypv5R/IrrFDQoU00EG+CRXVVQA9QxulnrszzS0kTT1EtLhn
+ZxIRpNoVNHI9rkD2URmNyLBTlFSNWsfaPH3v7+I53y6bz8f8vbtOtgLd3bzCxlzVeZTKJC0W1j2L
+8lt1KFkYlLqphrGUhlJkMttbutApmqp3a0UVKcz3IhcazPYkghFGdWovLOYLLu0TlGxo2CxmyON4
+Zt8mSTo1yVom+rIml3KuDWlUtNXguVSk5+dY5fGpI3nqqDo2tfG1UWWQlEoxUbAvMTFnGjJeF30v
+ItQT5lt0nd3qLxqLyiBGmnzs5J5Nj7o6UyJ3TJqEUeLXL5C3qER1LillDXHlJH6ElQIdnRL7Q9lE
+hvIxzGYZDW/e7TUXBTPsktC3NNjEKdRATX0FblB2eWUxYmWpjk7CYa0sr8sfVDpQpJRr3VS41gqo
+U5mL4LiU5go8Op6aODCqd66GeMR4bHNissunE0FNTwTRSyU0MIQKwhRpJyZZlsoZ34j15fyPXI37
+Utm7cRCKZp5gXltoluRKsL4XU4wS1snJpNa0twSGuauq52kjOqblZadyYlcUbmxldFRLkVFzVkhk
+hbNXIWCNuCDo3CbceuRuIZCFYd5l22tJdi0N/GyfltzemiYx1dbV4jcIk81SK4q6EL1bpSQW2MLk
+1t7kctGdMrseySJnmqFQ0LUzzXhH95GyNpsy8lL2WujEIlGNmWSfk71Y7XJl0OI50KXVlUUyZwMd
+0q2VNXji+Vvk3daiXBrdWNyj05kUZcGGk05ue2u23FC4W2sltHPcjNrRLjvRleni7ogPgOSGRihn
+f7MtaxuNUyFwb0Uxf5Ghc2xrJJKOF/QvjIzv7AD22r7oNhiZ5jSnOxvTiWtxDFsOqJKrEIaE4TWr
+IYYMFqGgRGhndpwaJqWrJmWRUdKsgN2qlj2YCCbDbs8dl/8AJ3A7slm8g7eIrNX5vbaBuc1T03Wq
+u7cm26B4XElJljsig0yeYwlc1aZOIkEqlxDXQqUEkiJRRptdBYjRTSOr59iSrwsY7wj7ByXmP/XF
+pf6jpZmb3ki0imMsf5Hd6Gy+RPklfXh+lfPBsVjJ3lzdFS10kNStYelVqhelp57kKhUlTqDhU8oe
+nJNqqLpZQ+z/ADy3yjE+7rs0qKFSEzJyaFln0CIU1DTba0VY8PCDj6aTKR9IAPDW3nwGGaiq0gll
+7XD9NwT7bgXZxcKw0muw0lU2OsA6smpF9mzy1g39PrkDriYo7Slz5zMrkTDAvc1XzK4ErkM2lzvT
+hfm8iB2k8rd1j6/ufk9uumhakHj7qvVKgRNiFE3JeV5BEkTpqCiaPFeYts6dgXc2H/ZvnR+F3Q07
+HzIZOr0fww+rU5jsnV6PgD6tcyXOSRVVVOJqqqqhVx3ElVVUKAqgPYAC4AAAFgOa8l4+yNfXG/8A
+KTnmL7OnYE3Nv5N86f7vanmL7OnYE3Nv5N86f7vadj5jsnV6PgD6tTmOydXo+APq0+80338V2fHs
+T4X9/n6eq8k+Ret/Q1pOhgvs5gPpwD3NhD3eZvnSH3Xe19IYO7NgU8B2+dzOof2hw9zvAf38AvAA
+f8adZ5jsnV6PgD6tTmOydXo+APq0d5pvv4rs+PYnwv7/AD9PU8k+Ret/Q1pQeYzs4jVxDb/3NuHH
+9QMOc6x9Hu4/le4/68dWBYtXNwuw0gTtbTHnEXc0g0MfZWum7q0jgRlLJ/GpQ5NDEwrXQF81k8md
+E4HtUaZUooUy4luLFF4wUkLUqVZyhl3mOydXo+APq1nmQydXL/h0/wBdUz48tVH2VVHXVERKkxT4
+zXzRkixDaMjMukpJ0TokjYdeT8lHJQN3X/Nf/9k=
+
+------=_NextPart_000_0022_01C96E0E.43AF9DF0
+Content-Type: image/jpeg
+Content-Transfer-Encoding: base64
+Content-Location: http://linuxgazette.net/gx/navbar/next.jpg
+
+/9j/4AAQSkZJRgABAQEASABIAAD/2wBDAAEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEB
+AQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQH/2wBDAQEBAQEBAQEBAQEBAQEBAQEBAQEB
+AQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQH/wAARCAAtAA8DASIA
+AhEBAxEB/8QAGgAAAQUBAAAAAAAAAAAAAAAACgABBQgJB//EAC8QAAAGAgECAwcEAwAAAAAAAAEC
+AwQFBgcICQARFBYhEiJBU2GT0RMVMYG21vD/xAAXAQADAQAAAAAAAAAAAAAAAAAAAQYF/8QAKhEA
+AgEDAgQEBwAAAAAAAAAAAQIDBAUREiExQWFxABMVUgYUI1GRofD/2gAMAwEAAhEDEQA/ACUA5neO
+Lv67367dvpLXbv8A4T048zvHD8N79d+/1lrr/pPUNr7mCvZPz5uphH9zZ+etc7pi6aYQQvXKz15j
+m+4TxlPLOvCKiLVi1j7ZJSoIqt/YBw4k1/FdxEiid8mUXAy8MmukKft+4Bg9AEB7h3AQHsICA9wE
+B9Q7CA/DrZqYbXStEJLdc/q09NUIfVqYKUqaeGpQA+ikEhJFB5ZB9p8GPufwO2eY6/ruQdM/bF3H
+WbnV2jyFV5ScbR5obEMXcYaFkzxp7LVXmCcQoyUSsb3kDqFRUO4YGXTEqD5JFQDph7Zut8tKeT/B
+e0WX7DhPXiKzBc4utwStgst4ma0g3rFQUKJkwQsU+rKA0WNPSqa7CACHK/fzL5J5IM4s8G1mpaFG
+U5CdaM57X83WxGAMDM3KlluZcOEskyY7lrAVKjk1/wAPeYbXcZJsmoaPrEWi7RI6ApVXUw/dR1eh
+2kjOzEXGPDPNBePfEmhmvkHijHyISEgr+jL329P2iLWfyFcnCCKUjYpUiai/gmoAQGcDBJu3TeBh
+kWseV0+dEeSb+rv1dbI/h2yUjwfMXKSz0GnDlUgiNPEY55ShBeRT5gp01YOuQyjyyFkS5wfbqbG3
+E5HDtzPXA54p1RNmNWsd5Qy/matan8lDfJOdZeoy2SLUrxx50XlZktFpMBQapEJOj91WcDDQlfSX
+aRCJ/CkmJOclQL4mUXEO/OuTDGyzYrcmufJkQpRD1Hjpzv29BAf4AP6/4OtnvJUL8gn2w/PS8lQv
+yCfbL+eotq63ucyWxnOEXLXCpY6I1VEUEoSFRFCKAQFVVVcKoHh5O3Dbp24778/7j//Z
+
+------=_NextPart_000_0022_01C96E0E.43AF9DF0
+Content-Type: image/jpeg
+Content-Transfer-Encoding: base64
+Content-Location: http://linuxgazette.net/gx/navbar/right.jpg
+
+/9j/4AAQSkZJRgABAQEASABIAAD/2wBDAAEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEB
+AQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQH/2wBDAQEBAQEBAQEBAQEBAQEBAQEBAQEB
+AQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQH/wAARCAAtAA8DASIA
+AhEBAxEB/8QAFwABAAMAAAAAAAAAAAAAAAAACgUGCP/EADAQAAAEBQEFBQkAAAAAAAAAAAECAwUE
+BgcIEQAKITFBwRITNHKhCRQYM1FSYXGR/8QAFwEAAwEAAAAAAAAAAAAAAAAAAQIEBf/EACgRAAED
+AwEGBwAAAAAAAAAAAAMBAgQFERIAExUhcYHwIjFCUVZyhP/aAAwDAQACEQMRAD8AXtQG+23K4Z2a
+GuildadVgVeGeZX9E0hukc4DCNkovMusLys5w7g3NcY3ik5zSzw8MERClCMBZVWHMomkY+t9QqoL
+IkOA5yAD/QDgO/PPnoidojeaC2jW/wDBNQwQxbc5FSIkBsk7YSLZmp3gl4drBxKA8QDIc9LhaRzA
+o5+wvXWpVogIZorY+1RkmnQp2JiMK9iywoZRqRgwtcg0cjMkGzK2WKZKiBFv0W3fPv30Se0NYVto
+lv2E3zDW7SQc/DiMh2YgGfzuHS2GjwKHkDroltpyPdbRjf4JAHuvh2kghDchEsh2Y5APrjOMhpaT
+R4FDyB11RX77el3+PUXh+IXTjoN9X2XRV7FUZmqj7YqvlfGS3K7CmdOp8txdEY6o1wVB54o+wPs1
+Mj5bZJ7EwS+WaGaEIi4xMtSPHPKjRFukU4L+6OsRBJqQLeusRVjamKcIkQQwIEKHpnrqDb5cbIE2
+UESlEN+QKADuEOPr+tWkpQIUChwDUVRnbwMIiBZHYCJGhiGx7yWDFEgh3e/xOdiiXVefnfTa/9k=
+
+------=_NextPart_000_0022_01C96E0E.43AF9DF0
+Content-Type: image/gif
+Content-Transfer-Encoding: base64
+Content-Location: http://linuxgazette.net/gx/note.gif
+
+R0lGODlhQQAnAPMAAP///9nZ2b+/v7Ozs4fO+v//4DLNMiKLItK0jHJ3hVVrLy9PTwAAAAAAAAAA
+AAAAACH+HE5pY29sYXMuUGlvY2hAZW5zdC5mctl/skAKJJAAIfkEAQAAAgAsAAAAAEEAJwAABP5Q
+yEmrvTjrSshaWyiOWeeBZJWsSeqa3+dOa2GvM0YI5hnngppt2AJKer0YaiYcEo0dXkc5kDETzizu
+Ff1MP4PqcsTKFsLPFMzrC1tJTSeaWNwg2WD3m4zNhgdmdSULUx4nf0opcUNzgXaGeEo/fH1mjYGC
+HCeGbZIbLItygGZOmROQkDF6ZKR+o3JaFz6EbWJjGqGMlzZ/sRY+tZ4ilZavfqSmX4e2k8MFoLqw
+vK3JhHmSeyFYCQgIoZfGpYJfC8yJis/dZdG8xuHjCZKIt6wr3d59jfrhzzTL80bs3cM37Uw4fs9A
+gRFmJAi3e3F2tbrxcMFAbw0pCMSRD2FBOsPdPlw01ZCFhHyMXIE0wLIlS3UZcYkS9WqFywM4cx4w
+QDLmSXbt6HAzAAAAS50HFCj1iaHSq0sCiRo1gDTnUqYqjom7J7Voy6pJD2DVODPhQ64ADky9qfPq
+WIfizl4k6pJt27c0QF4cSLXu17YK8P68MQDUSKo761Z1+1ZIgsJ/ztrM+Rep0sCC4T7+UxiiAMRg
+rSoVmzkIxcgwJRzdCfgy6dKmOXfeotrA5duuYWtMEKA3N9oTQufUrQJUT+E4iStPEQEAOw==
+
+------=_NextPart_000_0022_01C96E0E.43AF9DF0--

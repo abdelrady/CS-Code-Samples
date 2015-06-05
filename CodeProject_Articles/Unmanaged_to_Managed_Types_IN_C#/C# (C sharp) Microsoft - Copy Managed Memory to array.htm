@@ -1,0 +1,685 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3c.org/TR/1999/REC-html401-19991224/loose.dtd">
+<!-- saved from url=(0059)http://www.tek-tips.com/viewthread.cfm?qid=1045412&page=186 -->
+<HTML xmlns="http://www.w3.org/1999/xhtml"><HEAD><TITLE>C# (C sharp): Microsoft - Copy Managed Memory to array</TITLE>
+<META http-equiv=Content-Type content="text/html; charset=utf-8"><LINK 
+href="C# (C sharp) Microsoft - Copy Managed Memory to array_files/frame.css" 
+type=text/css rel=stylesheet><LINK 
+href="C# (C sharp) Microsoft - Copy Managed Memory to array_files/main.css" 
+type=text/css rel=stylesheet><LINK 
+href="C# (C sharp) Microsoft - Copy Managed Memory to array_files/tgml-new.css" 
+type=text/css rel=stylesheet><LINK href="/favicon.ico" type=image/x-icon 
+rel="shortcut icon">
+<SCRIPT 
+src="C# (C sharp) Microsoft - Copy Managed Memory to array_files/scroll.js"></SCRIPT>
+
+<SCRIPT language=javascript1.2 
+src="C# (C sharp) Microsoft - Copy Managed Memory to array_files/jsource.js" 
+type=text/javascript></SCRIPT>
+
+<STYLE>#scrollerContainer {
+	MARGIN-BOTTOM: 3px; OVERFLOW: hidden; HEIGHT: 120px
+}
+</STYLE>
+
+<SCRIPT language=javascript>
+function gofaq(pid,fid) {
+	var theURL = "faqs.cfm?pid="+pid+"&fid="+fid; window.top.location.href=theURL;
+}
+function gothread(pid,qid) {
+	var theURL = "viewthread.cfm?qid="+qid;
+	window.top.location.href=theURL;
+}
+function goforum(pid) {
+	var theURL = "threadminder.cfm?pid="+pid;
+	window.top.location.href=theURL;
+}
+function golink(pid) {
+	var theURL = "links.cfm?pid="+pid;
+	window.top.location.href=theURL;
+}
+</SCRIPT>
+<LINK media=print 
+href="C# (C sharp) Microsoft - Copy Managed Memory to array_files/printthread.css" 
+type=text/css rel=stylesheet>
+<META content="MSHTML 6.00.2900.2912" name=GENERATOR></HEAD>
+<BODY onload="document.forms['pass'].Handle.focus();">
+<TABLE id=header>
+  <TBODY>
+  <TR vAlign=top>
+    <TD width=213><A class=logo href="http://www.tek-tips.com/"><IMG 
+      alt="Tek-Tips Forums" 
+      src="C# (C sharp) Microsoft - Copy Managed Memory to array_files/logo.gif"></A></TD>
+    <TD vAlign=top align=middle>
+      <DIV class=links>
+      <DIV><A href="http://www.tek-tips.com/about.cfm">About Us</A> | <A 
+      onmouseover="window.status='Contact Us';return true;" 
+      onmouseout="window.status='';return true;" 
+      href="javascript:cont('')">Contact Us</A> | <A 
+      href="http://www.tecumsehgroup.com/administration.htm">Site 
+      Policies</A></DIV></DIV>
+      <DIV class=promo><A 
+      href="http://www.tek-tips.com/supportus.cfm">Donate</A> | <A 
+      href="http://www.tek-tips.com/groups">Start A Group</A> | <A 
+      href="http://tek-tips.4jobs.com/" target=jobs>Jobs</A> | <A 
+      href="http://www.tek-tips.com/whitepapers/">Whitepapers</A><BR></DIV>
+      <DIV class=banner><A 
+      href="http://www.microsoftaffiliates.net/t.aspx?kbid=1469&amp;p=http%3a%2f%2fonecare.live.com%2f&amp;m=4&amp;cid=1&amp;i=17"><IMG 
+      src="C# (C sharp) Microsoft - Copy Managed Memory to array_files/SFY_WLLIG_wrinkles_102006_468x60.gif" 
+      border=0></A></DIV></TD></TR></TBODY></TABLE>
+<TABLE id=main style="TABLE-LAYOUT: fixed">
+  <TBODY>
+  <TR vAlign=top>
+    <TD id=leftcol style="WIDTH: 185px! important" width=185>
+      <DIV class=cont>
+      <DIV class=tagline>INTELLIGENT WORK FORUMS<BR>FOR COMPUTER 
+      PROFESSIONALS</DIV>
+      <DIV class=wrapper>
+      <H4>Member Login</H4>
+      <DIV class=a>
+      <DIV class=b>
+      <DIV class=c>
+      <FORM id=pass name=pass action=/passcheck.cfm method=post><INPUT 
+      type=hidden value=login name=method> 
+      <TABLE>
+        <TBODY>
+        <TR>
+          <TD>HANDLE<BR><INPUT style="WIDTH: 70px" maxLength=20 size=8 
+            name=Handle><BR><INPUT style="WIDTH: 70px" type=password 
+            maxLength=20 size=8 name=Pass><BR>PASSWORD</TD>
+          <TD><INPUT type=image 
+            src="C# (C sharp) Microsoft - Copy Managed Memory to array_files/btn-login.gif"></TD></TR></TBODY></TABLE><INPUT 
+      type=checkbox value=1 name=Remember><A 
+      href="javascript:rememberme()">Remember Me</A><BR><A 
+      href="javascript:popforgotpassword();">Forgot Password?</A> 
+      </FORM></DIV></DIV></DIV></DIV>
+      <DIV class=wrapper>
+      <H4>Navigation</H4>
+      <DIV class=a>
+      <DIV class=b>
+      <DIV class=c><A href="http://www.tek-tips.com/register.cfm">Join 
+      Us!</A><BR><A 
+      href="javascript:openindex(200,200,'http://www.tipmaster.com/includes/gsearchinfo.cfm?w=250&amp;h=250')">Keyword 
+      Search</A><BR><A href="http://www.tek-tips.com/threadarea.cfm">Browse 
+      Forums</A><BR><A href="http://tek-tips.4jobs.com/" 
+      target=jobs>Jobs</A><BR><A href="http://www.tek-tips.com/groups">Start A 
+      Group</A><BR><A 
+      href="javascript:openindex(600,550,'/pops/emailfriend.cfm?w=600&amp;h=550')">Tell 
+      A Friend</A><BR><A 
+      href="http://www.tek-tips.com/supportus.cfm">Donate</A><BR><A 
+      href="http://www.tek-tips.com/whitepapers/">Whitepapers</A> 
+      </DIV></DIV></DIV></DIV>
+      <DIV class=wrapper>
+      <H4>Come Join Us!</H4>
+      <DIV class=a>
+      <DIV class=b>
+      <DIV class=c>
+      <UL>
+        <LI>Talk With Other Members 
+        <LI>Be Notified Of Responses<BR>To Your Posts 
+        <LI>Keyword Search 
+        <LI>Turn Off Ad Banners 
+        <LI>One-Click Access To Your<BR>Favorite Forums 
+        <LI>Automated Signatures<BR>On Your Posts 
+        <LI>Best Of All, It's Free! </LI></UL>
+      <HR width="80%" SIZE=2>
+
+      <FORM name=Register action=/registermanager.cfm method=post>
+      <DIV style="TEXT-ALIGN: right">E-mail* <INPUT style="WIDTH: 85px" 
+      maxLength=50 size=8 name=email><BR>Handle <INPUT style="WIDTH: 85px" 
+      maxLength=20 size=8 name=Handle><BR><SELECT name=UserType> <OPTION 
+        value="Select A Type" selected>Select A Type</OPTION> <OPTION 
+        value=MIS>MIS</OPTION> <OPTION 
+        value=IS/IT--Management>IS/IT--Management</OPTION> <OPTION 
+        value=Programmer>Programmer</OPTION> <OPTION value=ISP>ISP</OPTION> 
+        <OPTION value=Instructor>Instructor</OPTION> <OPTION 
+        value=Vendor>Vendor</OPTION> <OPTION 
+        value=TechnicalUser>TechnicalUser</OPTION></SELECT><BR>Password <INPUT 
+      style="WIDTH: 85px" type=password maxLength=10 size=8 name=pass><BR>Verify 
+      P'word <INPUT style="WIDTH: 85px" type=password maxLength=10 size=8 
+      name=pass2></DIV>
+      <DIV align=center><INPUT type=image 
+      src="C# (C sharp) Microsoft - Copy Managed Memory to array_files/btn-join.gif"></DIV></FORM>
+      <DIV style="MARGIN-TOP: 6px; FONT-SIZE: 9px">*Tek-Tips's functionality 
+      depends on members receiving e-mail. By joining you are opting in to 
+      receive e-mail.</DIV></DIV></DIV></DIV></DIV>
+      <DIV class=wrapper>
+      <H4>Partner With Us!</H4>
+      <DIV class=a>
+      <DIV class=b>
+      <DIV class=c><B>"Best Of Breed" Forums Add Stickiness To Your 
+      Site</B><BR><A href="http://www.tek-tips.com/affiliates/"><IMG height=60 
+      alt="Partner Button" 
+      src="C# (C sharp) Microsoft - Copy Managed Memory to array_files/partnerbtn120x60.gif" 
+      width=120></A><BR>(Download This Button Today!) </DIV></DIV></DIV></DIV>
+      <DIV class=wrapper>
+      <H4>Member Feedback</H4>
+      <DIV class=a>
+      <DIV class=b>
+      <DIV class=c>"...I've gotten solutions within a day - it saved a lot of 
+      time and actually got me one ATTABOY from my boss..." 
+      <DIV class=col align=center><A 
+      href="http://www.tek-tips.com/feedback.cfm"><B>More...</B></A></DIV></DIV></DIV></DIV></DIV>
+      <DIV class=wrapper>
+      <H4>Geography</H4>
+      <DIV class=a>
+      <DIV class=b>
+      <DIV class=c>Where in the world do Tek-Tips members come from? 
+      <DIV class=col align=center><A 
+      href="http://www.tek-tips.com/geography.cfm"><B>Click Here To Find 
+      Out!</B></A></DIV></DIV></DIV></DIV></DIV>
+      <DIV class=wrapper>
+      <H4>Partners</H4>
+      <DIV class=a>
+      <DIV class=b>
+      <DIV class=c><A href="http://www.aspalliance.com/" target=Blank>ASP 
+      Alliance</A><BR><A href="http://www.codeproject.com/" target=Blank>Code 
+      Project</A><BR><A href="http://www.developerfusion.co.uk/" 
+      target=Blank>Developer Fusion</A><BR><A 
+      href="http://www.developersdex.com/" target=Blank>Developers Dex</A><BR><A 
+      href="http://www.devguru.com/" target=Blank>devGuru</A><BR><A 
+      href="http://www.planet-source-code.com/" target=Blank>Planet Source 
+      Code</A><BR><A href="http://www.programmersheaven.com/" 
+      target=Blank>Programmers Heaven</A><BR><A href="http://www.tek-tips.com/" 
+      target=Blank>Tek-Tips Forums</A><BR></DIV></DIV></DIV></DIV></DIV></TD>
+    <TD class=nonleft>
+      <TABLE class=nonleft style="WIDTH: 100%">
+        <TBODY>
+        <TR>
+          <TD id=pagetitle colSpan=2>
+            <DIV id=search 
+            style="BACKGROUND-IMAGE: url(images/srchfrm-bg2.gif); BACKGROUND-COLOR: #cccccc">
+            <DIV class=s>
+            <TABLE cellSpacing=0 cellPadding=0>
+              <TBODY>
+              <TR>
+                <TD style="WIDTH: 270px" noWrap align=middle width="50%">
+                  <FORM action=/forumsearch.cfm method=post>
+                  <TABLE>
+                    <TBODY>
+                    <TR>
+                      <TD width=100><INPUT class=frmsearch size=25 
+                        name=SearchString></TD>
+                      <TD style="PADDING-LEFT: 3px"><INPUT type=image 
+                        src="C# (C sharp) Microsoft - Copy Managed Memory to array_files/btn-search.gif" 
+                        name=sub></TD></TR>
+                    <TR>
+                      <TD style="PADDING-TOP: 10px" colSpan=2><INPUT id=srch1 
+                        type=radio CHECKED value=forum name=type><LABEL 
+                        for=srch1> Find A Forum</LABEL> <INPUT id=srch2 
+                        type=radio value=member name=type><LABEL for=srch2> Find 
+                        An Expert</LABEL></TD></TR></TBODY></TABLE></FORM></TD>
+                <TD align=middle><!-- SiteSearch Google -->
+                  <FORM action=http://www.google.com/custom method=get 
+                  target=_blank>
+                  <TABLE style="BORDER-LEFT: #999999 2px solid" cellSpacing=0 
+                  cellPadding=0 border=0>
+                    <TBODY>
+                    <TR>
+                      <TD vAlign=top noWrap align=left height=32><A 
+                        href="http://www.google.com/"><IMG alt=Google 
+                        src="C# (C sharp) Microsoft - Copy Managed Memory to array_files/Logo_25wht.gif" 
+                        align=middle border=0></A> </TD>
+                      <TD noWrap><INPUT type=hidden value=tek-tips.com 
+                        name=domains> <INPUT maxLength=255 size=23 name=q> <INPUT type=submit value=Search name=sa> </TD></TR>
+                    <TR style="PADDING-TOP: 0px">
+                      <TD style="PADDING-TOP: 0px" noWrap><INPUT type=radio 
+                        value="" name=sitesearch> Web</TD>
+                      <TD><INPUT type=radio CHECKED value=tek-tips.com 
+                        name=sitesearch> Tek-Tips 
+                  Forums</TD></TD></TR></TBODY></TABLE><INPUT type=hidden 
+                  value=pub-8000425157908189 name=client> <INPUT type=hidden 
+                  value=1 name=forid> <INPUT type=hidden value=4770171969 
+                  name=channel> <INPUT type=hidden value=ISO-8859-1 name=ie> 
+                  <INPUT type=hidden value=ISO-8859-1 name=oe> <INPUT 
+                  type=hidden value=active name=safe> <INPUT type=hidden 
+                  value=GALT:#008000;GL:1;DIV:#336699;VLC:663399;AH:center;BGC:FFFFFF;LBGC:336699;ALC:0000FF;LC:0000FF;T:000000;GFNT:0000FF;GIMP:0000FF;FORID:1; 
+                  name=cof> <INPUT type=hidden value=en name=hl> </FORM><!-- SiteSearch Google --></TD></TR></TBODY></TABLE></DIV></DIV>
+            <DIV class=title>
+            <DIV class=bcrumb><A href="http://www.tek-tips.com/index.cfm" 
+            name=top>Home</A> &gt; <A 
+            href="http://www.tek-tips.com/threadarea.cfm">Forums</A> &gt; <A 
+            href="http://www.tek-tips.com/threadcategory.cfm?lev2=4">Programmers</A> 
+            &gt; <A 
+            href="http://www.tek-tips.com/threadforum.cfm?lev3=32">Languages</A> 
+            &gt; <A 
+            href="http://www.tek-tips.com/threadminder.cfm?pid=732&amp;page=186">C# 
+            (C sharp): Microsoft Forum</A></DIV>
+            <H1>Copy Managed Memory to array</H1>
+            <DIV class=forumshortcut><A 
+            href="javascript:openindex(450,450,'http://www.tipmaster.com/includes/refinfo.cfm?w=450&amp;h=450')">thread732-1045412</A></DIV></DIV>
+            <DIV id=tabs>
+            <TABLE class=b>
+              <TBODY>
+              <TR>
+                <TD><A id=current title="Forum Home Page" 
+                  href="http://www.tek-tips.com/threadminder.cfm?pid=732">Forum</A></TD>
+                <TD><A title="Keyword Search" 
+                  href="http://www.tek-tips.com/search.cfm?pid=732">Search</A></TD>
+                <TD><A title="Forum FAQs" 
+                  href="http://www.tek-tips.com/faq.cfm?pid=732">FAQs</A></TD>
+                <TD><A title=Links 
+                  href="http://www.tek-tips.com/links.cfm?pid=732">Links</A></TD>
+                <TD><A href="http://tek-tips.4jobs.com/" 
+                target=jobs>Jobs</A></TD>
+                <TD><A style="WIDTH: 77px" 
+                  href="http://www.tek-tips.com/whitepapers">Whitepapers</A></TD></TR></TBODY></TABLE></DIV></TD></TR></TBODY></TABLE>
+      <TABLE class=nonleft style="WIDTH: 100%">
+        <TBODY>
+        <TR>
+          <TD class=nonleft id=content>
+            <DIV class=tgml><SPAN id=intelliTxt>
+            <TABLE class=post>
+              <TBODY>
+              <TR bgColor=#b5b5ff>
+                <TD>
+                  <TABLE cellSpacing=3 cellPadding=3>
+                    <TBODY>
+                    <TR>
+                      <TD class=handle 
+                      style="PADDING-RIGHT: 3px; PADDING-LEFT: 3px; PADDING-BOTTOM: 3px; PADDING-TOP: 3px"><A 
+                        href="http://www.tek-tips.com/userinfo.cfm?member=JRudisill">JRudisill</A> 
+                        (Programmer)</TD>
+                      <TD class=date 
+                      style="PADDING-RIGHT: 3px; PADDING-LEFT: 3px; PADDING-BOTTOM: 3px; PADDING-TOP: 3px">
+                        <DIV title="Current Server Time: 21 Oct 07 15:03">18 Apr 
+                        05 15:39 </DIV></TD></TR></TBODY></TABLE>
+                  <TABLE>
+                    <TBODY>
+                    <TR>
+                      <TD class=tgml>
+                        <DIV class=wordwrap>void* bufftempSize = stackalloc 
+                        uint[TemplateSize];<BR>byte[] blob = new 
+                        byte[TemplateSize];<BR><BR>Manager.ATBuildMatchTemplate(pImageItem,bufftempSize);<BR>Marshal.Copy((IntPtr) 
+                        bufftempSize,blob,0,TemplateSize);<BR><BR>I am using the 
+                        code above to read from memory block. It seems to work 
+                        except the template that I read back from the array is 
+                        not right. I think it has something to do with 
+                        Marshal.Copy().(Changing from managed to unmanaged) Is 
+                        there a way I can copy the memory to an array without 
+                        Marshalling?</DIV></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE>
+            <DIV class=plug 
+            style="FONT-WEIGHT: bold; PADDING-BOTTOM: 5px; COLOR: red; PADDING-TOP: 5px" 
+            align=center><B><FONT color=red>Start your own Tek-Tips Group! <A 
+            href="http://www.tek-tips.com/groups">Click 
+            Here!</A></FONT></B></DIV>
+            <TABLE class=post>
+              <TBODY>
+              <TR bgColor=#dedeff>
+                <TD>
+                  <TABLE cellSpacing=3 cellPadding=3>
+                    <TBODY>
+                    <TR>
+                      <TD class=handle 
+                      style="PADDING-RIGHT: 3px; PADDING-LEFT: 3px; PADDING-BOTTOM: 3px; PADDING-TOP: 3px"><A 
+                        href="http://www.tek-tips.com/userinfo.cfm?member=chiph">chiph</A> 
+                        (Programmer)</TD>
+                      <TD class=date 
+                      style="PADDING-RIGHT: 3px; PADDING-LEFT: 3px; PADDING-BOTTOM: 3px; PADDING-TOP: 3px">
+                        <DIV title="Current Server Time: 21 Oct 07 15:03">18 Apr 
+                        05 21:35 </DIV></TD></TR></TBODY></TABLE>
+                  <TABLE>
+                    <TBODY>
+                    <TR>
+                      <TD class=tgml>
+                        <DIV class=wordwrap>Try using the C# unsafe keyword to 
+                        surround that bit of code.<BR><BR>Chip H.<BR>
+                        <P>____________________________________________________________________<BR><I>If 
+                        you want to get the best response to a question, please 
+                        read <A 
+                        href="javascript:gofaq(222,2244)">FAQ222-2244</A> 
+                        first</I></P></DIV></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></SPAN></DIV>
+            <DIV style="MARGIN-TOP: 15px" align=center><A 
+            href="http://www.microsoftaffiliates.net/t.aspx?kbid=1469&amp;p=http%3a%2f%2fonecare.live.com%2f&amp;m=4&amp;cid=1&amp;i=17"><IMG 
+            src="C# (C sharp) Microsoft - Copy Managed Memory to array_files/SFY_WLLIG_wrinkles_102006_468x60.gif" 
+            border=0></A></DIV>
+            <DIV style="FONT-SIZE: 9px; MARGIN-BOTTOM: 5px; COLOR: red" 
+            align=center>Click This Banner To Support Our Sponsors</DIV></TD>
+          <TD id=rightcol style="WIDTH: 143px" width=143>
+            <DIV class=cont>
+            <DIV class=wrapper>
+            <H4>Whitepapers</H4>
+            <DIV class=a>
+            <DIV class=b>
+            <DIV class=c>
+            <DIV id=whitepapers>
+            <DIV>
+            <DIV id=scrollerContainer>
+            <DIV class=list><A href="http://www.tek-tips.com/whitepapers/#82">10 
+            Hosted CRM Features That Will Help You Build Customer 
+            Loyalty</A></DIV>
+            <DIV class=list><A href="http://www.tek-tips.com/whitepapers/#71">10 
+            Questions to Ask Your Hosted IP PBX Provider</A></DIV>
+            <DIV class=list><A href="http://www.tek-tips.com/whitepapers/#94">10 
+            Reasons to Deploy Power-Over-Ethernet</A></DIV>
+            <DIV class=list><A href="http://www.tek-tips.com/whitepapers/#72">5 
+            Common VPN Security Mistakes</A></DIV>
+            <DIV class=list><A href="http://www.tek-tips.com/whitepapers/#66">7 
+            Essential Steps to Achieve, Measure and Prove Optimal Security Risk 
+            Reduction</A></DIV>
+            <DIV class=list><A 
+            href="http://www.tek-tips.com/whitepapers/#51">Best Practices in 
+            Lifecycle Management: Comparing KACE, Altiris, LANDesk, and 
+            Microsoft SMS</A></DIV>
+            <DIV class=list><A 
+            href="http://www.tek-tips.com/whitepapers/#48">Better security for 
+            more users - thawte's SGC SuperCert SSL certificates</A></DIV>
+            <DIV class=list><A 
+            href="http://www.tek-tips.com/whitepapers/#26">Building Blocks of 
+            Transparent Web Security: Server-Gated Cryptography</A></DIV>
+            <DIV class=list><A 
+            href="http://www.tek-tips.com/whitepapers/#11">Business Enablement 
+            with On Demand Vulnerability Management</A></DIV>
+            <DIV class=list><A 
+            href="http://www.tek-tips.com/whitepapers/#88">Buying a Stackable 
+            Ethernet Switch Checklist</A></DIV>
+            <DIV class=list><A 
+            href="http://www.tek-tips.com/whitepapers/#47">Certify your Software 
+            Integrity with thawte Code Signing</A></DIV>
+            <DIV class=list><A 
+            href="http://www.tek-tips.com/whitepapers/#93">Checklist For Buying 
+            Power-Over-Ethernet</A></DIV>
+            <DIV class=list><A 
+            href="http://www.tek-tips.com/whitepapers/#84">CRM Buyers 
+            Guide</A></DIV>
+            <DIV class=list><A 
+            href="http://www.tek-tips.com/whitepapers/#85">CRM Comparison 
+            Guide</A></DIV>
+            <DIV class=list><A 
+            href="http://www.tek-tips.com/whitepapers/#44">CRM: On-Demand or 
+            On-Site? Choose the Right Deployment Option</A></DIV>
+            <DIV class=list><A 
+            href="http://www.tek-tips.com/whitepapers/#87">Data Management 
+            Buyer’s Guide</A></DIV>
+            <DIV class=list><A 
+            href="http://www.tek-tips.com/whitepapers/#86">Data Management 
+            Comparison Guide</A></DIV>
+            <DIV class=list><A 
+            href="http://www.tek-tips.com/whitepapers/#54">Don't Wait to 
+            Automate: Achieve Immediate Cost, Productivity, and Security 
+            Benefits by Automating IT</A></DIV>
+            <DIV class=list><A 
+            href="http://www.tek-tips.com/whitepapers/#12">Dynamic Best 
+            Practices of Vulnerability Management</A></DIV>
+            <DIV class=list><A 
+            href="http://www.tek-tips.com/whitepapers/#74">Email Security 
+            Comparison Guide</A></DIV>
+            <DIV class=list><A 
+            href="http://www.tek-tips.com/whitepapers/#33">Exploring Exchange 
+            Compatible Appliance-Based Messaging - Tolly Group</A></DIV>
+            <DIV class=list><A 
+            href="http://www.tek-tips.com/whitepapers/#36">FREE DEMO: 
+            Vulnerability Management &amp; Policy Compliance Overview</A></DIV>
+            <DIV class=list><A 
+            href="http://www.tek-tips.com/whitepapers/#55">Got The Enterprise 
+            Software Blues? Appliances Come to the Rescue </A></DIV>
+            <DIV class=list><A 
+            href="http://www.tek-tips.com/whitepapers/#79">Guide to Effective 
+            Remediation of Network Vulnerabilities and Policy 
+            Compliance</A></DIV>
+            <DIV class=list><A 
+            href="http://www.tek-tips.com/whitepapers/#83">Hosted CRM 
+            Checklist</A></DIV>
+            <DIV class=list><A 
+            href="http://www.tek-tips.com/whitepapers/#70">Hosted PBX 
+            Checklist</A></DIV>
+            <DIV class=list><A 
+            href="http://www.tek-tips.com/whitepapers/#89">How To Manage 
+            Directory Services</A></DIV>
+            <DIV class=list><A 
+            href="http://www.tek-tips.com/whitepapers/#28">How to Offer the 
+            Strongest SSL Encryption</A></DIV>
+            <DIV class=list><A 
+            href="http://www.tek-tips.com/whitepapers/#76">IDC Analyst Brief - 
+            Taking Content Collaboration to the Next Level</A></DIV>
+            <DIV class=list><A 
+            href="http://www.tek-tips.com/whitepapers/#68">Implementing or 
+            Upgrading SAP® Solutions? Don’t Forget the Data </A></DIV>
+            <DIV class=list><A 
+            href="http://www.tek-tips.com/whitepapers/#73">Internet Security 
+            Trends for 2007</A></DIV>
+            <DIV class=list><A 
+            href="http://www.tek-tips.com/whitepapers/#64">Introduction to 
+            crystalreports.com</A></DIV>
+            <DIV class=list><A href="http://www.tek-tips.com/whitepapers/#61">IP 
+            PBX Systems: Compare the Top 7 Solutions</A></DIV>
+            <DIV class=list><A href="http://www.tek-tips.com/whitepapers/#62">IP 
+            Phones: Compare the 5 Most Popular</A></DIV>
+            <DIV class=list><A 
+            href="http://www.tek-tips.com/whitepapers/#17">Managing the Life 
+            Cycle of Encryption Keys with RSA* Key Manager</A></DIV>
+            <DIV class=list><A 
+            href="http://www.tek-tips.com/whitepapers/#32">Maximizing the 
+            Business Benefits of Hosted and Managed Email and Email Security 
+            Services</A></DIV>
+            <DIV class=list><A 
+            href="http://www.tek-tips.com/whitepapers/#52">Migration to the 2007 
+            Microsoft Office System: A Roadmap for Success</A></DIV>
+            <DIV class=list><A 
+            href="http://www.tek-tips.com/whitepapers/#30">Mirapoint RazorGate 
+            Security Appliance Technical Overview</A></DIV>
+            <DIV class=list><A 
+            href="http://www.tek-tips.com/whitepapers/#81">NAC Comparison 
+            Guide</A></DIV>
+            <DIV class=list><A 
+            href="http://www.tek-tips.com/whitepapers/#13">On-Demand Security 
+            Audits and Vulnerability Management</A></DIV>
+            <DIV class=list><A 
+            href="http://www.tek-tips.com/whitepapers/#56">OPERATIONALIZING 
+            SECURITY &amp; POLICY COMPLIANCE - A Unified Approach for IT, Audit 
+            and Operation Teams</A></DIV>
+            <DIV class=list><A 
+            href="http://www.tek-tips.com/whitepapers/#63">Pocket Guide to IP 
+            Telephony</A></DIV>
+            <DIV class=list><A 
+            href="http://www.tek-tips.com/whitepapers/#91">Power-Over-Ethernet 
+            Buyer’s Guide </A></DIV>
+            <DIV class=list><A 
+            href="http://www.tek-tips.com/whitepapers/#92">Power-Over-Ethernet 
+            Comparison Guide</A></DIV>
+            <DIV class=list><A 
+            href="http://www.tek-tips.com/whitepapers/#65">Profitable 
+            Three-Screen Services: Creating Value for Three-Screen 
+            Consumers</A></DIV>
+            <DIV class=list><A 
+            href="http://www.tek-tips.com/whitepapers/#39">QualysGuard PCI 
+            Demo</A></DIV>
+            <DIV class=list><A 
+            href="http://www.tek-tips.com/whitepapers/#43">Report Analysis: 
+            Lower TCO with 3rd Generation CRM</A></DIV>
+            <DIV class=list><A 
+            href="http://www.tek-tips.com/whitepapers/#34">ROI: Incentive Comp 
+            Provides Measurable Results.</A></DIV>
+            <DIV class=list><A 
+            href="http://www.tek-tips.com/whitepapers/#45">Running a Business on 
+            Commercial Open Source Software: The Benefits for your Sales 
+            Organization</A></DIV>
+            <DIV class=list><A 
+            href="http://www.tek-tips.com/whitepapers/#42">Secure multiple 
+            servers</A></DIV>
+            <DIV class=list><A 
+            href="http://www.tek-tips.com/whitepapers/#49">Secure your Apache 
+            Server - free trial</A></DIV>
+            <DIV class=list><A 
+            href="http://www.tek-tips.com/whitepapers/#50">Secure your MS IIS 
+            Server - a How-To Guide</A></DIV>
+            <DIV class=list><A 
+            href="http://www.tek-tips.com/whitepapers/#78">Socialtext Wikis - 
+            Technical Whitepaper</A></DIV>
+            <DIV class=list><A 
+            href="http://www.tek-tips.com/whitepapers/#46">SSL - enabling a 
+            trusted digital future for all</A></DIV>
+            <DIV class=list><A 
+            href="http://www.tek-tips.com/whitepapers/#29">SSL in High-Security 
+            Browsers</A></DIV>
+            <DIV class=list><A 
+            href="http://www.tek-tips.com/whitepapers/#75">SSL VPN Products 
+            Comparison Guide</A></DIV>
+            <DIV class=list><A 
+            href="http://www.tek-tips.com/whitepapers/#80">SSL VPN vs. IPSec 
+            VPN</A></DIV>
+            <DIV class=list><A 
+            href="http://www.tek-tips.com/whitepapers/#53">Taking the Leg-Work 
+            out of Systems Provisioning: Best Practices for Reducing Deployment 
+            Costs</A></DIV>
+            <DIV class=list><A 
+            href="http://www.tek-tips.com/whitepapers/#31">The Changing Role of 
+            Email in the Government Sector - Grey Consulting</A></DIV>
+            <DIV class=list><A 
+            href="http://www.tek-tips.com/whitepapers/#14">The Laws of 
+            Vulnerabilities: Six Axioms for Understanding Risk</A></DIV>
+            <DIV class=list><A 
+            href="http://www.tek-tips.com/whitepapers/#41">The Value of 
+            Authentication: Learn about the three elements required to create 
+            trust on the Internet</A></DIV>
+            <DIV class=list><A 
+            href="http://www.tek-tips.com/whitepapers/#69">Top 5 Things to Know 
+            About Hosted PBX Solutions</A></DIV>
+            <DIV class=list><A 
+            href="http://www.tek-tips.com/whitepapers/#67">Using QualysGuard to 
+            Meet SOX Compliance &amp; IT Control Objectives</A></DIV>
+            <DIV class=list><A 
+            href="http://www.tek-tips.com/whitepapers/#60">VoIP for Small 
+            Business: Compare the Top 9 Vendors</A></DIV>
+            <DIV class=list><A 
+            href="http://www.tek-tips.com/whitepapers/#27">What Every E-Business 
+            Should Know about SSL Security and Consumer Trust </A></DIV>
+            <DIV class=list><A 
+            href="http://www.tek-tips.com/whitepapers/#77">Wikinomics - Chapter 
+            9 excerpt from Socialtext</A></DIV>
+            <DIV class=list><A 
+            href="http://www.tek-tips.com/whitepapers/#38">Winning the PCI 
+            compliance battle</A></DIV>
+            <DIV class=list><A 
+            href="http://www.tek-tips.com/whitepapers/#35">Worldwide Outbound 
+            Content Compliance 2005 – 2009 IDC</A></DIV></DIV></DIV></DIV>
+            <DIV class=list><A class=attention 
+            href="http://www.tek-tips.com/whitepapers/" target=jobs>(See All 
+            Whitepapers)</A></DIV></DIV></DIV></DIV></DIV>
+            <DIV class=wrapper>
+            <H4>Tek-Tips Jobs</H4>
+            <DIV class=a>
+            <DIV class=b>
+            <DIV class=c>
+            <DIV class=list><A class=attention href="http://tek-tips.4jobs.com/" 
+            target=jobs>Job Search</A></DIV>
+            <DIV class=list><A class=attention 
+            href="http://tek-tips.4jobs.com/JS/Form/SignUpForm.asp" 
+            target=jobs>Post Your Resume</A></DIV>
+            <DIV class=list><A class=attention 
+            href="http://tek-tips.4jobs.com/MKT/Content/EMP/Default.asp" 
+            target=jobs>Post A Job Opening</A></DIV></DIV></DIV></DIV></DIV>
+            <DIV class=wrapper>
+            <H4>Back To Forum</H4>
+            <DIV class=a>
+            <DIV class=b>
+            <DIV class=c><A class=list 
+            href="http://www.tek-tips.com/threadminder.cfm?pid=732">Back To C# 
+            (C sharp): Microsoft</A> </DIV></DIV></DIV></DIV>
+            <DIV class=wrapper>
+            <H4 
+            title="Members voted most helpful by their peers over the last 6 weeks">MVPs</H4>
+            <DIV class=a>
+            <DIV class=b>
+            <DIV class=c>
+            <DIV class=list><A 
+            href="http://www.tek-tips.com/userinfo.cfm?member=JurkMonkey">JurkMonkey</A></DIV>
+            <DIV class=list><A 
+            href="http://www.tek-tips.com/userinfo.cfm?member=jmeckley">jmeckley</A></DIV>
+            <DIV class=list><A 
+            href="http://www.tek-tips.com/userinfo.cfm?member=AlexCuse">AlexCuse</A></DIV>
+            <DIV class=list><A 
+            href="http://www.tek-tips.com/userinfo.cfm?member=chrissie1">chrissie1</A></DIV>
+            <DIV class=list><A 
+            href="http://www.tek-tips.com/userinfo.cfm?member=Aptitude">Aptitude</A></DIV>
+            <DIV class=list><A 
+            href="http://www.tek-tips.com/userinfo.cfm?member=chiph">chiph</A></DIV>
+            <DIV class=list><A 
+            href="http://www.tek-tips.com/userinfo.cfm?member=obislavu">obislavu</A></DIV>
+            <DIV class=list><A 
+            href="http://www.tek-tips.com/userinfo.cfm?member=dseaver">dseaver</A></DIV>
+            <DIV class=list><A 
+            href="http://www.tek-tips.com/userinfo.cfm?member=onpnt">onpnt</A></DIV>
+            <DIV class=list><A 
+            href="http://www.tek-tips.com/userinfo.cfm?member=tsuji">tsuji</A></DIV>
+            <DIV class=list><A 
+            title="Click here to see the full list of MVPs for the C# (C sharp): Microsoft forum" 
+            href="http://www.tek-tips.com/tipmasters.cfm?pid=732"><B>(Full 
+            List)</B></A></DIV></DIV></DIV></DIV></DIV></DIV><IMG height=1 
+            src="" width=143></TD></TR>
+        <TR>
+          <TD colSpan=2>
+            <DIV id=form>
+            <DIV class=wrapper>
+            <H4>Start A New Thread</H4>
+            <DIV class=a>
+            <DIV class=b>
+            <DIV class=c>
+            <H3>Posting in the Tek-Tips forums is a member-only feature.</H3>
+            <P align=center><A 
+            href="http://www.tek-tips.com/register.cfm"><B>Click Here to join 
+            Tek-Tips</B></A> and talk with other 
+            members!</P></DIV></DIV></DIV></DIV>
+            <H5 align=center>Promoting, selling, recruiting and student 
+            posting<BR>are not allowed in the forums.<BR><A 
+            href="http://www.tek-tips.com/market.cfm">Posting Policies</A></H5>
+            <HR width="50%">
+
+            <TABLE 
+            style="BORDER-RIGHT: black 1px solid; BORDER-TOP: black 1px solid; BACKGROUND: #fff; BORDER-LEFT: black 1px solid; BORDER-BOTTOM: black 1px solid" 
+            width=540 align=center>
+              <TBODY>
+              <TR>
+                <TD 
+                style="PADDING-RIGHT: 3px; PADDING-LEFT: 3px; PADDING-BOTTOM: 3px; PADDING-TOP: 3px">
+                  <H5 align=center>LINK TO THIS FORUM!</H5>
+                  <DIV style="FONT-SIZE: 9px">(Add Stickiness To Your Site By 
+                  Linking To This Professionally Managed Technical Forum)</DIV>
+                  <DIV style="FONT-SIZE: 11px"><B>TITLE:</B> C# (C sharp): 
+                  Microsoft Forum at Tek-Tips</DIV>
+                  <DIV style="FONT-SIZE: 11px"><B>URL:</B> 
+                  http://www.tek-tips.com/threadminder.cfm?pid=732</DIV>
+                  <DIV style="FONT-SIZE: 11px"><B>DESCRIPTION:</B> C# (C sharp): 
+                  Microsoft technical support forum and mutual help system for 
+                  computer professionals. Selling and recruiting 
+                forbidden.</DIV></TD></TR></TBODY></TABLE><BR>&nbsp; 
+        </DIV></TD></TR></TBODY></TABLE></TD></TR>
+  <TR vAlign=top>
+    <TD id=footer colSpan=2>
+      <HR>
+
+      <P style="FONT-WEIGHT: bold; TEXT-ALIGN: center"><A style="COLOR: red" 
+      href="http://www.tek-tips.com/groups" target=_blank>Start A Group</A> | <A 
+      style="COLOR: red" href="http://www.tecumsehgroup.com/opportunities.cfm" 
+      target=_blank>Advertise With Us</A> | <A style="COLOR: red" 
+      href="http://www.tecumsehgroup.com/opportunities.cfm" target=_blank>E-mail 
+      Our Members</A> | <A style="COLOR: red" 
+      href="http://www.tek-tips.com/supportus.cfm">Donate</A> | <A 
+      style="COLOR: red" 
+      href="javascript:openindex(600,400,'/pops/whitepaperinfo.cfm?w=500&amp;h=400')">Publish 
+      A Whitepaper</A></P>
+      <HR>
+
+      <P style="FONT-SIZE: 10px" align=center>Copyright © 1998-2007 <A 
+      href="http://www.tecumsehgroup.com/">Tecumseh Group, Inc.</A> All rights 
+      reserved.<BR>Unauthorized reproduction or linking forbidden without 
+      express written permission.</P></TD></TR></TBODY></TABLE>
+<DIV id=vibrant><!-- start Vibrant Media IntelliTXT Tooltip style sheet -->
+<STYLE type=text/css>.iTt {
+	BORDER-RIGHT: black 1px solid; PADDING-RIGHT: 2px; BORDER-TOP: black 1px solid; PADDING-LEFT: 2px; FONT-WEIGHT: normal; FONT-SIZE: 11px; PADDING-BOTTOM: 2px; BORDER-LEFT: black 1px solid; COLOR: black; PADDING-TOP: 2px; BORDER-BOTTOM: black 1px solid; FONT-STYLE: normal; FONT-FAMILY: Verdana, Arial, Helvetica; BACKGROUND-COLOR: lightyellow
+}
+</STYLE>
+<!-- end Vibrant Media IntelliTXT style sheet --><!-- start Vibrant Media IntelliTXT script section -->
+<SCRIPT language=javascript 
+src="C# (C sharp) Microsoft - Copy Managed Memory to array_files/front.asp"></SCRIPT>
+<!-- end Vibrant Media IntelliTXT script section --></DIV>
+<SCRIPT 
+src="C# (C sharp) Microsoft - Copy Managed Memory to array_files/urchin.js" 
+type=text/javascript> 
+</SCRIPT>
+
+<SCRIPT type=text/javascript> 
+_uacct = "UA-1698869-2"; 
+try {urchinTracker(); 
+} catch(e) {} 
+</SCRIPT>
+</BODY></HTML>

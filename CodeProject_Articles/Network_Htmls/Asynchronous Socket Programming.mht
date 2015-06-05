@@ -1,0 +1,717 @@
+From: "Saved by Windows Internet Explorer 7"
+Subject: Asynchronous Socket Programming
+Date: Sun, 15 Jun 2008 07:04:14 +0300
+MIME-Version: 1.0
+Content-Type: multipart/related;
+	type="text/html";
+	boundary="----=_NextPart_000_0064_01C8CEB6.0538D700"
+X-MimeOLE: Produced By Microsoft MimeOLE V6.0.6000.16545
+
+This is a multi-part message in MIME format.
+
+------=_NextPart_000_0064_01C8CEB6.0538D700
+Content-Type: text/html;
+	charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
+Content-Location: http://squirl.nightmare.com/medusa/async_sockets.html
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD><TITLE>Asynchronous Socket Programming</TITLE>
+<META http-equiv=3DContent-Type content=3D"text/html; =
+charset=3Diso-8859-1">
+<META content=3D"MSHTML 6.00.6000.16643" name=3DGENERATOR></HEAD>
+<BODY>
+<H1>Asynchronous Socket Programming</H1><B>What is 'asynchronous socket=20
+programming'?</B>=20
+<P>a.k.a. <I>event-driven programming</I> or <I>select()-based =
+multiplexing</I>,=20
+it's a solution to a network programming problem: How do I talk to bunch =
+of=20
+different network connections at once, all within one =
+process/thread?</P>
+<P>Let's say you're writing a database server that accepts requests via =
+a tcp=20
+connection. If you expect to have many simultaneous requests coming in, =
+you=20
+might look at the following options:=20
+<UL>
+  <LI><B>synchronous</B>: you handle one request at a time, each in=20
+  turn.<BR><I>pros</I>: simple <BR><I>cons</I>: any one request can hold =
+up all=20
+  the other requests=20
+  <LI><B>fork</B>: you start a new process to handle each=20
+  request.<BR><I>pros</I>: easy <BR><I>cons</I>: does not scale well, =
+hundreds=20
+  of connections means hundreds of processes.<BR><CODE>fork()</CODE> is =
+the Unix=20
+  programmer's hammer. Because it's available, every problem looks like =
+a nail.=20
+  <I>It's usually overkill</I>=20
+  <LI><B>threads</B>: start a new thread to handle each =
+request.<BR><I>pros</I>:=20
+  easy, and kinder to the kernel than using fork, since threads usually =
+have=20
+  much less overhead<BR><I>cons</I>: your machine may not have threads, =
+and=20
+  threaded programming can get very complicated very fast, with worries =
+about=20
+  controlling access to shared resources. </LI></UL><I>[Note: there is a =
+similar=20
+discussion in the file SocketServer.py, in the standard python library. =
+I had=20
+planned to integrate this software with the SocketServer classes, but =
+haven't=20
+had the time.] </I>
+<P></P>
+<P>With async, or 'event-driven' programming, you cooperatively schedule =
+the cpu=20
+or other resources you wish to apply to each connection. How you do this =
+really=20
+depends on the application - and it's not always possible or reasonable =
+to try.=20
+But if you can capture the state of any one connection, and divide the =
+work it=20
+will do into relatively small pieces, then this solution might work for =
+you. If=20
+your connections do not require much (or any) state, then this is an =
+ideal=20
+approach.</P>
+<P><I>pros</I>:=20
+<UL>
+  <LI>efficient and elegant=20
+  <LI>scales well - hundreds of connections means only hundreds of =
+socket/state=20
+  objects, not hundreds of threads or processes.=20
+  <LI>requires no interlocking for access to shared resources. If your =
+database=20
+  provides no interlocking of its own (as is the case for dbm, dbz, and =
+berkeley=20
+  db), than the need to serialize access to the database is provided =
+trivially.=20
+  <LI>integrates easily with event-driven window-system programming. GUI =
+
+  programs that use blocking network calls are not very graceful.=20
+</LI></UL><I>cons</I>:=20
+<UL>
+  <LI>more complex - you may need to build state machines.=20
+  <LI>requires a fundamentally different approach to programming that =
+can be=20
+  confusing at first. </LI></UL>
+<HR>
+
+<H2>How does it work? </H2>
+<P>Here's a good visual metaphor to help describe the advantages of =
+multiplexed=20
+asynchronous I/O. Picture your program as a person, with a bucket in =
+front of=20
+him, and a bucket behind him. The bucket in front of him fills with =
+water, and=20
+his job is to wait until the bucket is full, and empty it into the =
+bucket behind=20
+him. [which might have yet another person behind it...] The bucket fills =
+
+sporadically, sometimes very quickly, and sometimes at just a trickle, =
+but in=20
+general your program sits there doing nothing most of the time. <BR><IMG =
+
+src=3D"http://squirl.nightmare.com/medusa/bucket_1.gif">=20
+<P>Now what if your program needs to talk to more than one connection =
+(or file)=20
+at a time? Forking another process is the equivalent of bringing in =
+another=20
+person to handle each pair of buckets. The typical server is written in =
+just=20
+this style! A server may be handling 20 simultaneous clients, and in our =
+
+metaphor that means a line of 20 people, sitting idle for 99% of the =
+time, each=20
+waiting for his bucket to fill! <BR><IMG=20
+src=3D"http://squirl.nightmare.com/medusa/bucket_2.gif">=20
+<P>The obvious solution to this is to have a single person walk up and =
+down the=20
+aisle of bucket pairs. When he comes to a bucket that's full, he dumps =
+it into=20
+the other side, and then moves on. By walking up and down the aisle of =
+buckets,=20
+one busy person does the job of 20 idle people. <BR><IMG=20
+src=3D"http://squirl.nightmare.com/medusa/bucket_3.gif">=20
+<P>The only time when this technique doesn't work well is when something =
+other=20
+than just dumping one bucket into the next needs to be done - say, =
+turning the=20
+water into gold first. If turning a bucket of water into a bucket of =
+gold takes=20
+a long time, then the other buckets may not get processed in a timely =
+fashion.=20
+For example, if your server program needs to crunch on the data it =
+receives=20
+before responding.=20
+<H2>Writing a single-process multiplexing socket program</H2>
+<P>Now how do we apply our bucket wisdom to network programming?=20
+<P>Depending on the operating system, there are several different ways =
+to=20
+achieve our 'bucket-trickling' affect. By far the most common, and =
+simplest=20
+mechanism uses the <CODE>select()</CODE> system call. The =
+<CODE>select()</CODE>=20
+function takes (in effect) four arguments: three 'lists' of sockets, and =
+a=20
+timeout. The three socket lists indicate interest in <I>read</I>, =
+<I>write</I>,=20
+and <I>exception</I> events for each socket listed. The function will =
+return=20
+whenever the indicated socket fires one of these events. If nothing =
+happens=20
+within the timeout period, the function simply returns.=20
+<P>The result of the <CODE>select()</CODE> function is three lists =
+telling you=20
+which sockets fired which events.=20
+<P>Your application will have a handler for each expected event type. =
+This=20
+handler will perform different tasks depending on your application. If a =
+
+connection has a need to keep state information, you'll probably end up =
+writing=20
+a state machine to handle transitions between different behaviors. =
+Diving back=20
+into the bucket [paradigm], these events might be the equivalent of =
+adding=20
+little "I'm full now" mailbox-like flags to the buckets.=20
+<P>Animating the server using <CODE>select()</CODE> is easy: A simple =
+event loop=20
+will suffice. I usually use a loop with a 30-second timeout. That way, I =
+can do=20
+any necessary housekeeping tasks at least every 30 seconds.=20
+<HR>
+
+<H2>Sounds like a lot of work. </H2>
+<P>[<B>Note:</B> for those of you coming to this page through an =
+Internet search=20
+engine, the following description is of a library written in <A=20
+href=3D"http://www.python.org/">Python</A>.]=20
+<P>Well, lucky for you, there's a set of common code that makes writing =
+these=20
+programs a snap. In fact, all you need to do is pick from two connection =
+styles,=20
+and plug in your own event handlers. As an extra added bonus, the =
+differences=20
+between Windows and Unix socket multiplexing have been abstracted - =
+using the=20
+async base classes (<CODE>asyncore.dispatcher</CODE> and=20
+<CODE>asynchat.async_chat</CODE>) - you can write asynchronous programs =
+that=20
+will work on Unix, Windows, or the Macintosh (in fact, it should work on =
+any=20
+platform that correctly implements the <B>socket</B> and <B>select</B> =
+modules).=20
+
+<P>The first class is the simpler one, =
+<CODE>'asyncore.dispatcher'</CODE>. This=20
+class manages the association between a <CODE>socket descriptor</CODE> =
+(which is=20
+how the operating system refers to the socket) and your socket object.=20
+<CODE>dispatcher</CODE> is really a container for a system-level socket, =
+but=20
+it's been wrapped to look as much like a socket as possible. The main =
+difference=20
+is that creating the underlying socket operation is done by calling the=20
+<CODE>create_socket</CODE> method.=20
+<P>Aside from the default 'low-level' event handlers, (for =
+<CODE>read</CODE>,=20
+<CODE>write</CODE>, and <CODE>expt</CODE>), there are a few extra =
+implied events=20
+that are captured by the <CODE>asyncore.dispatcher</CODE> class for you. =
+
+<UL>
+  <LI><CODE>handle_read:</CODE> called whenever the socket has more data =
+to be=20
+  read, meaning that <CODE>recv()</CODE> can be called with an =
+expectation of=20
+  success.=20
+  <LI><CODE>handle_write:</CODE> called whenever a socket is ready to be =
+written=20
+  to - a call to <CODE>send()</CODE> can be expected to succeed.=20
+  <LI><CODE>handle_oob:</CODE> called when out-of-band data is present.=20
+  <LI><CODE>handle_accept:</CODE> called when a new connection has been =
+accepted=20
+  on a listening socket.=20
+  <LI><CODE>handle_connect:</CODE> called when an outgoing=20
+  <CODE>connect()</CODE> has succeeded.=20
+  <LI><CODE>handle_close:</CODE> called when the socket has closed. =
+</LI></UL>
+<P></P>The second class, <CODE>asynchat.async_chat</CODE>, provides =
+support for=20
+typical command/response protocols like SMTP, NNTP, FTP, etc... It helps =
+solve=20
+several problems for you:=20
+<UL>
+  <LI>It lets you divide the stream of incoming data into blocks =
+delimited by a=20
+  'terminator' of your own choosing. Almost all the internet protocols =
+use a=20
+  combination of <CODE>'\r\n'</CODE> and <CODE>'\r\n.\r\n'</CODE> as=20
+  terminators, the latter being a common end-of-message delimiter. You =
+can=20
+  change the current terminator by calling the =
+<CODE>set_terminator</CODE>=20
+  method. Input is accumulated by calling your own=20
+  <CODE>collect_incoming_data</CODE> method. When the terminator is =
+located, the=20
+  <CODE>found_terminator</CODE> method is called.=20
+  <LI>It provides a mechanism for queueing output, using a simple fifo =
+and the=20
+  concept of a <I>producer</I>. A producer is an object that knows how =
+to=20
+  incrementally produce output for delivery to the socket. All output to =
+the=20
+  socket is in the form of a producer. When you call =
+<CODE>send()</CODE>,=20
+  <CODE>async_chat</CODE> first wraps the data in a simple producer, =
+called=20
+  (strangely enough) <CODE>'simple_producer'</CODE>: =
+</LI></UL><PRE>class simple_producer:
+    def __init__ (self, data):
+        self.data =3D data
+
+    def more (self):
+        if len (self.data) &gt; 512:
+            result =3D self.data[:512]
+            self.data =3D self.data[512:]
+            return result
+        else:
+            result =3D self.data
+            self.data =3D ''
+            return result
+</PRE>
+<P>Each producer must have a <CODE>more()</CODE> method, which is called =
+
+whenever more output is needed. Note how the data is deliberately sent =
+in=20
+fixed-size chunks: If you create a <CODE>simple_producer</CODE> with a=20
+15-Megabyte long string (ghastly!), this will keep that one socket from=20
+monopolizing the whole program. When the producer is exhausted, it =
+returns an=20
+empty string, like a file object signifying an end-of-file condition.=20
+<P>A producer can compute its output 'on-the-fly', if so desired. It can =
+keep=20
+state information, too, like a file pointer, a database index, or a =
+partial=20
+computation.=20
+<P>Each producer is filed into a queue (fifo), which is progressively =
+emptied.=20
+The <CODE>more</CODE> method of the front-most element of the queue is =
+called=20
+until it is exhausted, and then the producer is popped off the queue.=20
+<P>The combination of delimiting the input and scheduling the output =
+with a fifo=20
+allows you to design a server that will correctly handle an impatient =
+client.=20
+For example, some NNTP clients send a barrage of commands to the server, =
+and=20
+then count out the responses as they are made (rather than sending a =
+command,=20
+waiting for a response, etc...). If a call to <CODE>recv()</CODE> =
+reveals a=20
+buffer full of these impatient commands, async_chat will handle the =
+situation=20
+correctly, calling <CODE>collect_incoming_data</CODE> and=20
+<CODE>found_terminator</CODE> in sequence for each command.=20
+<HR>
+
+<H2>An Example </H2>
+<P><I>The following discussion assumes a basic familiarity with socket=20
+programming</I>=20
+<P>We'll start with a simple async finger client. Finger is a trivial =
+tcp=20
+protocol that's completely stateless. You just connect to the finger =
+port, send=20
+a request line, and read until the connection closes. [This is very =
+similar to=20
+HTTP, by the way] <PRE>import socket
+import asyncore
+import string
+
+<HR>
+
+# simple demo of the asyncore dispatcher class.
+
+class finger_client (asyncore.dispatcher):
+    def __init__ (self, account, done_fun, long=3D1):
+        self.name, self.host =3D tuple(string.split (account, '@'))
+        self.done_fun =3D done_fun
+        self.data =3D ''
+        self.long =3D long
+        self.create_socket (socket.AF_INET, socket.SOCK_STREAM)
+        asyncore.dispatcher.__init__ (self)
+        self.connect ((host, 79))
+</PRE><CODE>done_fun</CODE> is a function that will be called when the =
+finger=20
+server has sent all the data and closed the connection. [this =
+programming style=20
+- passing functions around that represent an execution path - is called=20
+<I>continuation-passing style</I>] The call to =
+<CODE>create_socket</CODE> will=20
+register the socket with the underlying event mechanism, enabling the =
+following=20
+callback procedures.=20
+<HR>
+<PRE>    # once connected, send the account name
+    def handle_connect (self):
+        self.log ('connected')
+        if self.long:
+            # this requests 'long' output.
+            self.send ('/w %s\r\n' % self.name)
+        else:
+            self.send ('%s\r\n' % self.name)
+</PRE>This function is called when the socket has made a connection. =
+This tells=20
+us that we can now send the finger request.=20
+<HR>
+<PRE>    # collect some more finger server output.
+    def handle_read (self):
+        more =3D self.recv(512)
+        if not more:
+            self.handle_close()
+        self.data =3D self.data + more
+</PRE>When data is available for reading on the socket, this callback =
+will=20
+collect it into the member variable <CODE>self.data</CODE>=20
+<HR>
+<PRE>    # the other side closed, we're done.
+    def handle_close (self):
+        print '<CLOSE>'
+        self.done_fun (self.data)
+        self.close()
+
+</PRE>Now that we're all done, call the user's <CODE>done_fun</CODE> =
+with the=20
+finger data as an argument.=20
+<HR>
+<PRE>def demo_done_fun (stuff):
+    print stuff
+
+def demo (who=3D'asynfingdemo@squirl.nightmare.com'):
+    f =3D finger_client (who, demo_done_fun, long=3D0)
+    asyncore.loop()
+</PRE>The call to <CODE>asyncore.loop()</CODE> kicks of the default =
+select loop,=20
+one that will run until its list of channels becomes empty. Once the =
+finger=20
+client connection closes, the loop will exit, returning control to the=20
+interpreter. [Go ahead and try this one, I'm counting my readership with =
+a=20
+python script]=20
+<HR>
+
+<H2>Discussion of other examples </H2>A few other examples are =
+available:=20
+<DL>
+  <DT><CODE>pop3.py</CODE>=20
+  <DD>An implementation of the Post Office Protocol (version 3), as =
+described in=20
+  RFC 1725. Uses the facilities of <CODE>consumer.py</CODE>.=20
+  <DT><CODE>ftp.py</CODE>=20
+  <DD>An implementation of the File Transfer Protocol, as described in =
+RFC 959.=20
+  <DT><CODE>ftpgrab.py</CODE>=20
+  <DD>A client of <CODE>ftp.py</CODE>; shows how to use an async client =
+class to=20
+  build a useful program. This one allows you to simultaneously grab =
+many files=20
+  from different servers from the command line.=20
+  <DT><CODE>asynhttp.py</CODE>=20
+  <DD>is very similar to the finger client described above. It's an=20
+  <CODE>asyncore.dispatcher</CODE>-based http client. It's not much of =
+an http=20
+  client, though: it neither sends or processes HTTP headers - it merely =
+sends a=20
+  <CODE>'GET'</CODE> command and collects the output.=20
+  <DT><CODE>servhttp.py</CODE>=20
+  <DD>A more complete example. It's a bare-bones asynchronous http =
+server, [the=20
+  only one I've ever heard of], supporting only the <CODE>'GET'</CODE> =
+command=20
+  and capable only of delivering files. Just like the HTTP server that =
+is now=20
+  part of the python distribution, though, it is easily extensible. What =
+makes=20
+  this server interesting is its performance: In a bit of informal =
+testing=20
+  against <CODE>apache 0.6.2</CODE>, it seems to be able to handle a=20
+  substantially higher number of hits, with a much lower load on the =
+machine.=20
+  See the file <CODE>'abuse.py'</CODE> for more information and timings. =
+
+  <P><I>Historical Note:</I> <A=20
+  href=3D"http://www.nightmare.com/medusa">Medusa</A> grew, starting in =
+March=20
+  1996, from experimentation with this sample program. Medusa is a =
+full-fledged=20
+  TCP/IP server platform built upon the principles (and library) =
+described here.=20
+  </P></DD></DL>It is possible to build complicated state machines for =
+use with=20
+<CODE>async_chat</CODE>; I have built a fully RFC977-compliant (plus all =
+common=20
+extensions) NNTP server, and several other sophisticated NNTP =
+retrieval/filter=20
+engines. (If you'd like to see some of these as examples, drop me a =
+note).=20
+<HR>
+
+<H2>A Platform Note </H2>
+<P>On Unix, the arguments to <CODE>select()</CODE> are not limited to =
+tcp=20
+sockets, they can in fact be any file descriptor - including such =
+objects as=20
+unix domain sockets, pipes and fifos. This means that the library can be =
+used to=20
+communicate with these objects efficiently. To do this, it is necessary =
+to make=20
+sure that these descriptors are placed in non-blocking mode. There are =
+also a=20
+few API differences - the non-socket objects will need to use=20
+<CODE>read()</CODE> and <CODE>write()</CODE>, rather than =
+<CODE>recv()</CODE>=20
+and <CODE>send()</CODE>. Simple support for this is provided in the =
+class=20
+<CODE>asyncore.py:file_dispatcher</CODE>=20
+<H2>First-Class Continuations, Coroutines... </H2>
+<P>Work with this library has taken me down an interesting path. One =
+strange and=20
+exciting fork has been some experimentation in other languages with a =
+feature=20
+called 'first-class continuations'. A first-class continuation is an =
+object that=20
+captures the current state of a program in such a way that it can be =
+stored away=20
+and invoked later, even invoked multiple times. This feature is an =
+extremely=20
+powerful tool for changing the control flow of a program. Usually =
+delivered to=20
+the user as a function, <CODE>call-with-current-continuation</CODE> =
+(a.k.a.=20
+'<CODE>call/cc</CODE>') in languages like Scheme and ML, it can be used =
+to write=20
+asynchronous programs that <I>look</I> synchronous; in effect,=20
+<CODE>call/cc</CODE> allows one to write programs in a multi-threaded =
+style, but=20
+without using an operating-system-supplied thread capability (the =
+technical term=20
+is 'coroutines'). <CODE>call/cc</CODE> can also be used to synthesize =
+all other=20
+known higher-level control structures, such as Python and C++-style =
+exception=20
+handling.=20
+<P>There is some chance that Python will gain this wonderful feature, =
+and I=20
+await the day anxiously. In the meanwhile, something along these lines =
+has been=20
+written using the <A =
+href=3D"http://www.iro.umontreal.ca/~gambit/">Gambit</A>=20
+Scheme compiler. <A=20
+href=3D"http://www.nightmare.com/squirl/scheme/gambit-socket.tar.gz">Here=
+</A> is=20
+some code that implements a portable socket interface to Gambit, and a=20
+coroutine-based socket-event 'scheduler'.=20
+<P>For more information on <CODE>call/cc</CODE>, see <A=20
+href=3D"http://www.cs.indiana.edu/scheme-repository/R4RS/r4rs_toc.html">t=
+he=20
+Revised^4 Report on Scheme</A>=20
+<H2>A C++ Implementation </H2>A straightforward translation of the=20
+<CODE>asyncore</CODE> and <CODE>asynchat</CODE> modules to C++ classes =
+has been=20
+written (see the 'cpp' directory). It hasn't been tested extensively, =
+but=20
+appears to work as advertised. The code makes heavy use of the =
+up-and-coming=20
+'Standard C++ Library', including the string classes and STL. It can be =
+very=20
+difficult to compile, because most vendor's implementations of these =
+features=20
+are in flux (i.e., buggy as hell - for instance, juggling the order and =
+naming=20
+of include files can keep the source from compiling). The provided code =
+has been=20
+tested with Microsoft Visual C++ Version 4.2 on Win32, and with the GNU =
+C++=20
+compiler and library version 2.7.2.=20
+<P>
+<HR>
+
+<H2>Getting the Library</H2>The Async Socket Library is available from =
+<A=20
+href=3D"http://www.nightmare.com/">nightmare.com</A> as <A=20
+href=3D"http://www.nightmare.com/squirl/python-ext/async.tar.gz">async.ta=
+r.gz</A>=20
+<P>
+<ADDRESS>Sam Rushing / <A=20
+href=3D"mailto:rushing@nightmare.com">mailto:rushing@nightmare.com</A></A=
+DDRESS></BODY></HTML>
+
+------=_NextPart_000_0064_01C8CEB6.0538D700
+Content-Type: image/gif
+Content-Transfer-Encoding: base64
+Content-Location: http://squirl.nightmare.com/medusa/bucket_1.gif
+
+R0lGODdh6wAuAfcAAAAAAAAAMwAAZgAAmQAAzAAA/zMAADMAMzMAZjMAmTMAzDMA/2YAAGYAM2YA
+ZmYAmWYAzGYA/5kAAJkAM5kAZpkAmZkAzJkA/8wAAMwAM8wAZswAmcwAzMwA//8AAP8AM/8AZv8A
+mf8AzP8A/wAzAAAzMwAzZgAzmQAzzAAz/zMzADMzMzMzZjMzmTMzzDMz/2YzAGYzM2YzZmYzmWYz
+zGYz/5kzAJkzM5kzZpkzmZkzzJkz/8wzAMwzM8wzZswzmcwzzMwz//8zAP8zM/8zZv8zmf8zzP8z
+/wBmAABmMwBmZgBmmQBmzABm/zNmADNmMzNmZjNmmTNmzDNm/2ZmAGZmM2ZmZmZmmWZmzGZm/5lm
+AJlmM5lmZplmmZlmzJlm/8xmAMxmM8xmZsxmmcxmzMxm//9mAP9mM/9mZv9mmf9mzP9m/wCZAACZ
+MwCZZgCZmQCZzACZ/zOZADOZMzOZZjOZmTOZzDOZ/2aZAGaZM2aZZmaZmWaZzGaZ/5mZAJmZM5mZ
+ZpmZmZmZzJmZ/8yZAMyZM8yZZsyZmcyZzMyZ//+ZAP+ZM/+ZZv+Zmf+ZzP+Z/wDMAADMMwDMZgDM
+mQDMzADM/zPMADPMMzPMZjPMmTPMzDPM/2bMAGbMM2bMZmbMmWbMzGbM/5nMAJnMM5nMZpnMmZnM
+zJnM/8zMAMzMM8zMZszMmczMzMzM///MAP/MM//MZv/Mmf/MzP/M/wD/AAD/MwD/ZgD/mQD/zAD/
+/zP/ADP/MzP/ZjP/mTP/zDP//2b/AGb/M2b/Zmb/mWb/zGb//5n/AJn/M5n/Zpn/mZn/zJn//8z/
+AMz/M8z/Zsz/mcz/zMz/////AP//M///Zv//mf//zP///wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACwAAAAA6wAuAQAI/gCvCRxI
+sKDBgwgTKlzIsKHDhxAjSpxIsaLFixgzatzIsaPHjyBDihxJsqTJkyhTqlzJsqXLlzBjypxJs6bN
+mzhz6tzJs6fPn0CDCh1KtKjRo0iTKl3KtKnTp1CjSp1KtarVq1izat3KtavXr2DDih3LFIDZs2jP
+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
+OM4xZAICADs=
+
+------=_NextPart_000_0064_01C8CEB6.0538D700
+Content-Type: image/gif
+Content-Transfer-Encoding: base64
+Content-Location: http://squirl.nightmare.com/medusa/bucket_2.gif
+
+R0lGODdhegHiAPcAAAAAAAAAMwAAZgAAmQAAzAAA/zMAADMAMzMAZjMAmTMAzDMA/2YAAGYAM2YA
+ZmYAmWYAzGYA/5kAAJkAM5kAZpkAmZkAzJkA/8wAAMwAM8wAZswAmcwAzMwA//8AAP8AM/8AZv8A
+mf8AzP8A/wAzAAAzMwAzZgAzmQAzzAAz/zMzADMzMzMzZjMzmTMzzDMz/2YzAGYzM2YzZmYzmWYz
+zGYz/5kzAJkzM5kzZpkzmZkzzJkz/8wzAMwzM8wzZswzmcwzzMwz//8zAP8zM/8zZv8zmf8zzP8z
+/wBmAABmMwBmZgBmmQBmzABm/zNmADNmMzNmZjNmmTNmzDNm/2ZmAGZmM2ZmZmZmmWZmzGZm/5lm
+AJlmM5lmZplmmZlmzJlm/8xmAMxmM8xmZsxmmcxmzMxm//9mAP9mM/9mZv9mmf9mzP9m/wCZAACZ
+MwCZZgCZmQCZzACZ/zOZADOZMzOZZjOZmTOZzDOZ/2aZAGaZM2aZZmaZmWaZzGaZ/5mZAJmZM5mZ
+ZpmZmZmZzJmZ/8yZAMyZM8yZZsyZmcyZzMyZ//+ZAP+ZM/+ZZv+Zmf+ZzP+Z/wDMAADMMwDMZgDM
+mQDMzADM/zPMADPMMzPMZjPMmTPMzDPM/2bMAGbMM2bMZmbMmWbMzGbM/5nMAJnMM5nMZpnMmZnM
+zJnM/8zMAMzMM8zMZszMmczMzMzM///MAP/MM//MZv/Mmf/MzP/M/wD/AAD/MwD/ZgD/mQD/zAD/
+/zP/ADP/MzP/ZjP/mTP/zDP//2b/AGb/M2b/Zmb/mWb/zGb//5n/AJn/M5n/Zpn/mZn/zJn//8z/
+AMz/M8z/Zsz/mcz/zMz/////AP//M///Zv//mf//zP///wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACwAAAAAegHiAAAI/gCvCRxI
+sKDBgwgTKlzIsKHDhxAjSpxIsaLFixgzatzIsaPHjyBDihxJsqTJkyhTqlzJsqXLlzBjypxJs6bN
+mzhz6tzJs6fPn0CDCh1KtKjRo0iTKl3KtKnTp1CjSp1KtarVq1izat3KtavXr2DDih1LtqzZs2jT
+ql3Ltq3bt3Djyp1Lt67du3jz6t3Lt6/fv4ADCx5MuLDhw4gTK17MuLHjr3UiS5b8uLLTyZgzRz6q
+ebPllJ3rTA1N2vPP0pmhhtaKGnPT1qh7wtasdLbpqLZdJ81NWidv2kV/32YqXHfw4sBtIjcOdPlw
+pM4pD43euSZ16aepL73+nCf35C+//k/2+R26+O45z4+HqR47zvbH4ctu754lfdHp6RO9P/8+epP+
+4XcTf0IFuFOA66mEoIA0Gdgcgr4tyOBJEk7IHoTkSfhehRaSVGGDGvaHoXIcglaiTB96dyKIHHYY
+UosorphfiizKOFKL/6EEY4Q7zoSjix/9eGGPA+JonZEAIumSkDPaGN6PQHbE5JJKFknkkFW+COWT
+V9bYZUtQRrlRmFROeaSZXGYJEplgbmmlmm2iuaab9tF5Jpx1yhmknQry6aOfceIpJaAUEorll3kK
+yhGbiSJ6qJOBOrqooSUxeqekfWI6JqUechoppJ8uWKimN3oa6ogxkqqRniaq2miI/n+6ihGrOir6
+qKiXotqprHPy2iqoZcKaJI3BEvsmriQiO6qwxep6rLOpQrurtCv5Wi2zucqXKbXXKssjtzE5+Kq2
+0YqrorlNnnereM+SK6K76bK77nXxqlugftnZO6929XK3H74P0uulv9/qe6/BATu3ocDnymtUeQ8r
+3O9vQUG8G7/mUdxwcdNhXJvE29lWsXARL6cayVKtVjJsH2ucssifWaTyZTBjNXPMdN2M88489+zz
+z0AHLfTQRFsEQNFI63S0VP8kLVLTYC0dFdRaUT2W1V1JDRXWV3ENltdaaf0U2FSR3ZXZV4ntFNpT
+m8V2VWo39fbYbocVN1Nzr113/tRT5S333l+pfTdRfuMNeNoGiT044QYVznhZXDsulOIELd5T5AVJ
+PhTmXTeeuVVah44U1lZrzhPnA5leFOkEqT75QFJb/lPprbdde+pc0Y47Vkv3brhAVLt++u3An737
+NcIPdfTyeiNffNnHJ28U1NRnDYDsjDct/eXPbz+9894rz/Q/4Q+v/dXkOy1R+ZenTxb76m8d//z0
+12///fjnr//+/Pfv//8ADKAAB0jAAhrwgPHDnvKuh0C1XE+BQYkd7xjYQIdAkCgXPIoExZJBlTyw
+dyCMHQWv8UDYifAgHazIBwVCwRKycIQuJOEJEZJCpNTQKSPEiQR9x0ISws6H/j30HQ8rd5Id9jCI
+PzSiD4dIxJesUIYvFKEUTUhFGnLwhiZRohJN6ELRobCISTziEgvyQSbeDYsb0WIYkchG5gGxcmgU
+yRNbCMM6zhCKZHyjDte4RTE20Y8/zCIf1xjIPBbykC5RIxu52MI/fvEmihzjIt1IyTzGcSSRdKMk
+JVlJQ5Ykk2/UZCXNOBNQUi5xjvRkTUxJxjmmEoiXlGMXuUjLKFYRj6rE5CxtyUsZ3jGHvgSmBwc5
+yVDC8piFjKVHWPlKPSruiXuEijKB4spexvCad6wlJIm5SVEek4mItMk0V7mVcWpwl77UJjZvmcsK
+osScRoGnO4cmz3na8574/synPvfJz376858ADahAB0rQghr0oFmBH0IRo1CZNDRpD/VJRF8y0ZtU
+FCgX1UlGV7LRmXR0eF/rW+4OZzymjRRyYfkoSlQKE5bmxKUeFelWYGrRlMq0aiQ9KfGSQlOW9LQm
+P12p53bK06He9GpGtd3xnPe9zxFVqUuFnlOjClXdNXWpQe0I6p6HFdZR1aRczapFrMpUuu1UrCch
+K1pHUr2yFjWsRyVrQqM3U/A1r603Dd5X2rpWk5Cvrxg5H2A9wlebns8rgw2s+zp32JQu9n+JBclf
+UbrQ2VX2sjzTGWZjlhvOVAeBmn0NyvLFsqeEdjQ1axly3pXalbWGKhy7/lh0CjbajrlMtCZzLciy
+VVvSxjZks7Wtw8q1W9b+NmMeyxC8xpXcifVWuBYzLsHShLBkDXdky23XdbulHtpGN2HV1W54l5Xd
+cAEMvN317nlrhS7ijte53+VteUVirH3FF77bda9/ttXeZhFoY/sV73qn5S3/DljA82Vuf7VUXwUf
+WL4PNvCC92Qtj1SYvNiiboZ7BSwMF3hgH5ZwgCtlKxJf2MQd5m+KN3XiVZVYxP81L60mNWMUN1i/
+IeZuix1iKRXf2L4jBnKMGfxiIu+Yw0d2cY2VXGQkr9jBE/bxhge1ZPqaSsdPHlaTZXZlJ/9Yw1/+
+VZIX0mMxZ1nKOUYz/riYPOaJlBnHa2bvmS/yZg9PGcx3VvOQrdxmN3dZzxGGcqCpPGcvx/lUUcZy
+mgkdZhvnGc+JVnSQCfxoSi8a0pOWcaVpvOlS9dnChbZzgincaU+XWtDvxXSqjZxpRA8azqtW9XTN
+vGcY5xfBt47Vq/ncalvfd2G9hnBwfV1cWM9aur+2bqwdnWwhFxvZzVXvsGWdW2AvG9fV9u2ziX1b
+bK/2X9dW9rfFnW1pbxu95T7YuL39WnSv27PT1u1soD1vdacb3u9Gbru1XW9w51u1nX0ZeKAbG9ny
+Bratjd9p9V1wm312sziGuMQnTvGKW/ziGM+4xjfO8Y57/OMgD7nIHkdO8pKb/OQoT7nKV87ylrv8
+5TCPucxnTvOaYzwgAAA7
+
+------=_NextPart_000_0064_01C8CEB6.0538D700
+Content-Type: image/gif
+Content-Transfer-Encoding: base64
+Content-Location: http://squirl.nightmare.com/medusa/bucket_3.gif
+
+R0lGODdhegHiAPcAAAAAAAAAMwAAZgAAmQAAzAAA/zMAADMAMzMAZjMAmTMAzDMA/2YAAGYAM2YA
+ZmYAmWYAzGYA/5kAAJkAM5kAZpkAmZkAzJkA/8wAAMwAM8wAZswAmcwAzMwA//8AAP8AM/8AZv8A
+mf8AzP8A/wAzAAAzMwAzZgAzmQAzzAAz/zMzADMzMzMzZjMzmTMzzDMz/2YzAGYzM2YzZmYzmWYz
+zGYz/5kzAJkzM5kzZpkzmZkzzJkz/8wzAMwzM8wzZswzmcwzzMwz//8zAP8zM/8zZv8zmf8zzP8z
+/wBmAABmMwBmZgBmmQBmzABm/zNmADNmMzNmZjNmmTNmzDNm/2ZmAGZmM2ZmZmZmmWZmzGZm/5lm
+AJlmM5lmZplmmZlmzJlm/8xmAMxmM8xmZsxmmcxmzMxm//9mAP9mM/9mZv9mmf9mzP9m/wCZAACZ
+MwCZZgCZmQCZzACZ/zOZADOZMzOZZjOZmTOZzDOZ/2aZAGaZM2aZZmaZmWaZzGaZ/5mZAJmZM5mZ
+ZpmZmZmZzJmZ/8yZAMyZM8yZZsyZmcyZzMyZ//+ZAP+ZM/+ZZv+Zmf+ZzP+Z/wDMAADMMwDMZgDM
+mQDMzADM/zPMADPMMzPMZjPMmTPMzDPM/2bMAGbMM2bMZmbMmWbMzGbM/5nMAJnMM5nMZpnMmZnM
+zJnM/8zMAMzMM8zMZszMmczMzMzM///MAP/MM//MZv/Mmf/MzP/M/wD/AAD/MwD/ZgD/mQD/zAD/
+/zP/ADP/MzP/ZjP/mTP/zDP//2b/AGb/M2b/Zmb/mWb/zGb//5n/AJn/M5n/Zpn/mZn/zJn//8z/
+AMz/M8z/Zsz/mcz/zMz/////AP//M///Zv//mf//zP///wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACwAAAAAegHiAAAI/gCvCRxI
+sKDBgwgTKlzIsKHDhxAjSpxIsaLFixgzatzIsaPHjyBDihxJsqTJkyhTqlzJsqXLlzBjypxJs6bN
+mzhz6tzJs6fPn0CDCh1KtKjRo0iTKl3KtKnTp1CjSp1KtarVq1izat3KtavXr2DDih1LtqzZs2jT
+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
+
+------=_NextPart_000_0064_01C8CEB6.0538D700--

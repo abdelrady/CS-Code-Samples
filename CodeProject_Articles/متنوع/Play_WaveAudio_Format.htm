@@ -1,0 +1,155 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<HTML xmlns:MSHelp="http://msdn.microsoft.com/mshelp" DIR="LTR"><HEAD>
+<META NAME="msdnID" CONTENT="nmpdue_MMSDK_2917">
+<META NAME="Description" CONTENT="The following example illustrates the steps required to allocate and set up a WAVEHDR structure and write a block of data to a waveform output device.">
+
+<META HTTP-EQUIV="Content-Type" Content="text/html; charset=Windows-1252">
+<TITLE>Windows Multimedia SDK Example of Writing Waveform Data</TITLE>
+<xml>
+<MSHelp:TOCTitle Title="Example of Writing Waveform Data" />
+<MSHelp:RLTitle Title="Example of Writing Waveform Data" />
+<MSHelp:Keyword Index="A" Term="_win32_Example_of_Writing_Waveform_Data" />
+<MSHelp:Keyword Index="K" Term="Example of Writing Waveform Data" />
+<MSHelp:Attr Name="TopicType" Value="kbArticle" />
+<MSHelp:Attr Name="DocSet" Value="LHSDK" />
+<MSHelp:Attr Name="DocSet" Value="PSDK" />
+<MSHelp:Attr Name="Locale" Value="kbEnglish" />
+<MSHelp:Attr Name="ProgModel" Value="win32" />
+<MSHelp:Attr Name="Technology" Value="MM" />
+</xml>
+<META NAME="MS.LOCALE" CONTENT="EN-US"><link rel="stylesheet" type="text/css" href="../Multimedia.css"></HEAD>
+<BODY>
+<BODY TOPMARGIN="0">
+<TABLE CLASS="buttonbarshade" CELLSPACING=0><TR><TD>&nbsp;</TD></TR></TABLE>
+<TABLE CLASS="buttonbartable" CELLSPACING=0>
+<TR ID="hdr"><TD CLASS="runninghead" NOWRAP>Windows Multimedia</TD></TR>
+</TABLE><TABLE>
+<TR><TD class="main"><a STYLE="color:black" href="_win32_determining_nonstandard_format_support.htm"><B>Previous</B></a></TD><TD class="main" Width=200></TD><TD class="main"><a STYLE="color:black" href="_win32_processing_the_mm_wom_done_message.htm"><B>Next</B></a></TD></TR>
+</TABLE>
+<!-- Document last modified on  Tuesday, April 26, 2005 at 11:23 AM-->
+
+
+<H1><A NAME="_win32_example_of_writing_waveform_data"></A>Example of Writing Waveform Data</H1>
+
+<P>The following example illustrates the steps required to allocate and set up a <A HREF="_win32_wavehdr_str.htm"><B>WAVEHDR</B></A> structure and write a block of data to a waveform output device. </P>
+
+<PRE class=syntax><CODE>// Global variables. 
+
+HANDLE hData  = NULL;  // handle of waveform data memory 
+HPSTR  lpData = NULL;  // pointer to waveform data memory 
+ 
+void WriteWaveData(void) 
+{ 
+    HWAVEOUT    hWaveOut; 
+    HGLOBAL     hWaveHdr; 
+    LPWAVEHDR   lpWaveHdr; 
+    HMMIO       hmmio; 
+    UINT        wResult; 
+    HANDLE      hFormat; 
+    WAVEFORMAT  *pFormat; 
+    DWORD       dwDataSize; 
+
+    // Open a waveform device for output using window callback. 
+
+    if (waveOutOpen((LPHWAVEOUT)&amp;hWaveOut, WAVE_MAPPER, 
+                    (LPWAVEFORMAT)pFormat, 
+                    (LONG)hwndApp, 0L, CALLBACK_WINDOW)) 
+    { 
+        MessageBox(hwndApp, 
+                   "Failed to open waveform output device.", 
+                   NULL, MB_OK | MB_ICONEXCLAMATION); 
+        LocalUnlock(hFormat); 
+        LocalFree(hFormat); 
+        mmioClose(hmmio, 0); 
+        return; 
+    } 
+ 
+    // Allocate and lock memory for the waveform data. 
+ 
+    hData = GlobalAlloc(GMEM_MOVEABLE | GMEM_SHARE, dwDataSize ); 
+    if (!hData) 
+    { 
+        MessageBox(hwndApp, "Out of memory.", 
+                   NULL, MB_OK | MB_ICONEXCLAMATION); 
+        mmioClose(hmmio, 0); 
+        return; 
+    } 
+    if ((lpData = GlobalLock(hData)) == NULL) 
+    { 
+        MessageBox(hwndApp, "Failed to lock memory for data chunk.", 
+                   NULL, MB_OK | MB_ICONEXCLAMATION); 
+        GlobalFree(hData); 
+        mmioClose(hmmio, 0); 
+        return; 
+    } 
+ 
+    // Read the waveform data subchunk. 
+ 
+    if(mmioRead(hmmio, (HPSTR) lpData, dwDataSize) != (LRESULT)dwDataSize) 
+    { 
+        MessageBox(hwndApp, "Failed to read data chunk.", 
+                   NULL, MB_OK | MB_ICONEXCLAMATION); 
+        GlobalUnlock(hData); 
+        GlobalFree(hData); 
+        mmioClose(hmmio, 0); 
+        return; 
+    } 
+ 
+    // Allocate and lock memory for the header. 
+
+    hWaveHdr = GlobalAlloc(GMEM_MOVEABLE | GMEM_SHARE, 
+        (DWORD) sizeof(WAVEHDR)); 
+    if (hWaveHdr == NULL) 
+    { 
+        GlobalUnlock(hData); 
+        GlobalFree(hData); 
+        MessageBox(hwndApp, "Not enough memory for header.", 
+            NULL, MB_OK | MB_ICONEXCLAMATION); 
+        return; 
+    } 
+ 
+    lpWaveHdr = (LPWAVEHDR) GlobalLock(hWaveHdr); 
+    if (lpWaveHdr == NULL) 
+    { 
+        GlobalUnlock(hData); 
+        GlobalFree(hData); 
+        MessageBox(hwndApp, 
+            "Failed to lock memory for header.", 
+            NULL, MB_OK | MB_ICONEXCLAMATION); 
+        return; 
+    } 
+ 
+    // After allocation, set up and prepare header. 
+ 
+    lpWaveHdr-&gt;lpData = lpData; 
+    lpWaveHdr-&gt;dwBufferLength = dwDataSize; 
+    lpWaveHdr-&gt;dwFlags = 0L; 
+    lpWaveHdr-&gt;dwLoops = 0L; 
+    waveOutPrepareHeader(hWaveOut, lpWaveHdr, sizeof(WAVEHDR)); 
+ 
+    // Now the data block can be sent to the output device. The 
+    // waveOutWrite function returns immediately and waveform 
+    // data is sent to the output device in the background. 
+ 
+    wResult = waveOutWrite(hWaveOut, lpWaveHdr, sizeof(WAVEHDR)); 
+    if (wResult != 0) 
+    { 
+        waveOutUnprepareHeader(hWaveOut, lpWaveHdr, 
+                               sizeof(WAVEHDR)); 
+        GlobalUnlock( hData); 
+        GlobalFree(hData); 
+        MessageBox(hwndApp, "Failed to write block to device", 
+                   NULL, MB_OK | MB_ICONEXCLAMATION); 
+        return; 
+    } 
+} </CODE></PRE>
+<TABLE>
+<TR><TD class="main"><a STYLE="color:black" href="_win32_determining_nonstandard_format_support.htm"><B>Previous</B></a></TD><TD class="main" Width=200></TD><TD class="main"><a STYLE="color:black" href="_win32_processing_the_mm_wom_done_message.htm"><B>Next</B></a></TD></TR>
+</TABLE>
+<hr size=1><br>
+<font size=-1><A HREF="legal.htm">
+&copy; 2005 Microsoft Corporation. All rights reserved.</a><br>
+</font>
+<P><BR>
+</BODY>
+</HTML>

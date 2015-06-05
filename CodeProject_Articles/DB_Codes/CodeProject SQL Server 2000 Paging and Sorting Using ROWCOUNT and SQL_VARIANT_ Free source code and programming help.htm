@@ -1,0 +1,1827 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!-- saved from url=(0068)http://www.codeproject.com/KB/database/SQLServer2KPagingSorting.aspx -->
+<HTML><HEAD><TITLE>CodeProject: SQL Server 2000 Paging and Sorting Using ROWCOUNT and SQL_VARIANT. Free source code and programming help</TITLE>
+<META http-equiv=Content-Type content="text/html; charset=utf-8">
+<META 
+content="An article discussing how to accomplish paging and sorting in Microsoft SQL Server 2000 without using concatenated SQL.; Author: DejaVudew; Section: Database; Chapter: Database" 
+name=Description>
+<META 
+content="SQL 2000, C#, SQL, Windows, .NET, DBA, Dev, Intermediate,Database,Database,Free source code, tutorials" 
+name=Keywords>
+<META content="The Code Project" name=Author>
+<META content=General name=Rating>
+<META content="index, follow" name=Robots>
+<META content="1 days" name=Revisit-After><LINK 
+title="CodeProject Latest articles - All topics" 
+href="http://www.codeproject.com/webservices/articlerss.aspx?cat=1" 
+type=application/rss+xml rel=alternate><LINK 
+title="CodeProject Latest articles - MFC / C++" 
+href="http://www.codeproject.com/webservices/articlerss.aspx?cat=2" 
+type=application/rss+xml rel=alternate><LINK 
+title="CodeProject Latest articles - C#" 
+href="http://www.codeproject.com/webservices/articlerss.aspx?cat=3" 
+type=application/rss+xml rel=alternate><LINK 
+title="CodeProject Latest articles - ASP.NET" 
+href="http://www.codeproject.com/webservices/articlerss.aspx?cat=4" 
+type=application/rss+xml rel=alternate><LINK 
+title="CodeProject Latest articles - .NET" 
+href="http://www.codeproject.com/webservices/articlerss.aspx?cat=5" 
+type=application/rss+xml rel=alternate><LINK 
+title="CodeProject Latest articles - VB.NET" 
+href="http://www.codeproject.com/webservices/articlerss.aspx?cat=6" 
+type=application/rss+xml rel=alternate><LINK title="CodeProject Lounge Postings" 
+href="http://www.codeproject.com/webservices/LoungeRSS.aspx" 
+type=application/rss+xml rel=alternate><LINK title=CodeProject 
+href="http://www.codeproject.com/info/OpenSearch.xml" 
+type=application/opensearchdescription+xml rel=search><LINK 
+href="CodeProject SQL Server 2000 Paging and Sorting Using ROWCOUNT and SQL_VARIANT_ Free source code and programming help_files/CodeProject.css" 
+type=text/css rel=stylesheet><LINK 
+href="CodeProject SQL Server 2000 Paging and Sorting Using ROWCOUNT and SQL_VARIANT_ Free source code and programming help_files/ForumClassic.css" 
+type=text/css rel=stylesheet>
+<SCRIPT type=text/javascript>
+  var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+  document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</SCRIPT>
+
+<SCRIPT type=text/javascript>
+   var pageTracker = _gat._getTracker("UA-1735123-1");
+   pageTracker._setDomainName("www.codeproject.com");
+   pageTracker._setSessionTimeout("1200"); // 20 mins
+   pageTracker._initData();
+   pageTracker._trackPageview();
+</SCRIPT>
+
+<SCRIPT language=Javascript 
+src="CodeProject SQL Server 2000 Paging and Sorting Using ROWCOUNT and SQL_VARIANT_ Free source code and programming help_files/oncopy.js" 
+type=text/javascript></SCRIPT>
+
+<SCRIPT language=Javascript 
+src="CodeProject SQL Server 2000 Paging and Sorting Using ROWCOUNT and SQL_VARIANT_ Free source code and programming help_files/jxs.js" 
+type=text/javascript></SCRIPT>
+
+<SCRIPT language=Javascript 
+src="CodeProject SQL Server 2000 Paging and Sorting Using ROWCOUNT and SQL_VARIANT_ Free source code and programming help_files/bookmark.js" 
+type=text/javascript></SCRIPT>
+
+<SCRIPT language=Javascript 
+src="CodeProject SQL Server 2000 Paging and Sorting Using ROWCOUNT and SQL_VARIANT_ Free source code and programming help_files/rateitem.js" 
+type=text/javascript></SCRIPT>
+
+<SCRIPT language=Javascript type=text/javascript>//<![CDATA[
+function ToggleMenu(itemName)
+{
+	var elm = document.getElementById(itemName);
+	var i,others = document.getElementById('SectionMenu');
+	for(i=0; i < others.childNodes.length; i++)
+	{
+		var other = others.childNodes[i];
+		if ((other.className == 'MenuSectionBlock') && (other != elm))
+			other.style.display='none';
+	}
+	if (elm.style.display == 'block') elm.style.display='none';
+	else elm.style.display='block';
+	return false;
+}
+
+//]]></SCRIPT>
+
+<SCRIPT language=Javascript 
+src="CodeProject SQL Server 2000 Paging and Sorting Using ROWCOUNT and SQL_VARIANT_ Free source code and programming help_files/addto.js" 
+type=text/javascript></SCRIPT>
+
+<SCRIPT language=Javascript type=text/javascript>//<![CDATA[
+function MsgVoteForm(MemberID,MsgID,GB,gp,bp,mt) {
+ if(!GB)document.write("Rate this message: ");
+ document.write(unescape("%3Ca href=\"#xx" + MsgID.toString() + "xx\" onclick=\"RateMsg(" + MemberID.toString() + ", " + MsgID.toString() + ","));document.write((GB?"5":"1")+unescape(");\"%3E"));
+ if(GB) document.write(unescape("%3Cimg height=\"24\" width=\"24\" src=\"/script/Forums/Images/good.png\" alt=\"good\" border=\"0\" align=\"absmiddle\" /%3E "+gp+" "+mt+"%3C/a%3E "));
+ else document.write(unescape("%3Cimg height=\"14\" width=\"14\" src=\"/script/Forums/Images/thumbs_down.gif\" alt=\"vote 1\" border=\"0\" align=\"middle\" /%3E%3C/a%3E "));
+ if(GB)document.write(" &nbsp;"); else for(var i=1; i<=5;i++)
+  document.write(unescape("%3Ca class=\"Frm_MHL\" href=\"#xx" + MsgID.toString() + "xx\" title=\"vote this message a " + i.toString() + "\" onclick=\"RateMsg(" + MemberID.toString() + ", " + MsgID.toString() + ", " + i.toString() + ")\"%3E%3Cb%3E" + i.toString() + "%3C/b%3E%3C/a%3E "));
+ document.write(unescape("%3Ca href=\"#xx" + MsgID.toString() + "xx\" onclick=\"RateMsg(" + MemberID.toString() + ", " + MsgID.toString() + ","));document.write((GB?"1":"5")+unescape(");\"%3E"));
+ if(GB)document.write(unescape("%3Cimg height=\"24\" width=\"24\" src=\"/script/Forums/Images/bad.png\" alt=\"bad\" border=\"0\" align=\"absmiddle\" /%3E "+bp+" "+mt+"%3C/a%3E"));
+ else document.write(unescape("%3Cimg height=\"14\" width=\"14\" src=\"/script/Forums/Images/thumbs_up.gif\" border=\"0\" alt=\"vote 5\" align=\"middle\" /%3E%3C/a%3E "));
+}
+
+function ReportMsg(userid, msgid, score) {
+ if (confirm("Are you sure you want to report this message?") == true)
+  return RateMsg(userid, msgid, score);
+ else return false;
+}
+function RateMsg(memberid, msgid, score) {
+ var req = new ActiveXObject("MSXML2.XMLHTTP");
+ req.onreadystatechange = function() {
+  if (req.readyState == 4) {
+   if ( req.status == 200 ) {
+    var respText = req.responseText;
+    var re = new RegExp(unescape("\%3Cdiv\%3E([^\%3C]*)\%3C/div\%3E"), "g");
+    var match = re.exec(respText);
+    voteStatus.innerHTML = unescape("%3Cb%3E") + (match)?match[1]:"An error occured" + unescape("%3C/b%3E");
+   }
+   else
+   {
+    voteStatus.innerHTML = unescape("%3Cb style='color:red'%3EFailed!") + req.statusText + unescape("%3C/b%3E");
+   }
+  }
+ }
+ var voteStatus = document.getElementById("MVF" + msgid);
+ if (!voteStatus) return;
+ voteStatus.innerHTML = unescape("%3Cb style='color:green'%3EVoting...%3C/b%3E");
+ var strAction = "/script/Forums/Vote.aspx?js=1&fmid="+memberid.toString()+"&select="+msgid.toString()+"&score="+score.toString();
+ req.open("GET", strAction, true);
+ req.send(null);
+  return false;
+}
+//]]></SCRIPT>
+
+<SCRIPT language=Javascript type=text/javascript>//<![CDATA[
+var Selected = "-1";
+
+function SwitchMessage(e, msgId)
+{
+  if (!msgId) {
+    if(!e)e=window.event;
+    var target=e.target?e.target:e.srcElement;
+    while(target&&target.id!='DynMessLink')target=target.parentNode;
+    if(!target||target.id!='DynMessLink')return;
+    msgId=target.name;
+  }
+  if(Selected&&Selected!=""){
+    var body=eval("document.getElementById('F" + Selected + "_h1')");
+    if(body) body.style.display = 'none';
+    var head=eval("document.getElementById('F" + Selected + "_h0')");
+    if(head) head.className = head.className.replace("Sel", "UnSel");
+  }
+  if(Selected==msgId.toString())
+    Selected="";
+  else {
+    Selected=msgId.toString();
+    var body=eval("document.getElementById('F" + Selected + "_h1')");
+    if(body){
+      if(body.style.display=='none') body.style.display='';
+      else body.style.display = 'none';
+    }
+    var head=eval("document.getElementById('F" + Selected + "_h0')");
+    if (head) 
+      head.className = head.className.replace("UnSel", "Sel");
+    if(body&&head&&body.style.display!='none'){
+      document.body.scrollTop = getRealPos(head, "Top") - document.body.clientHeight/10;
+      EnsureMessageVisible(Selected, true);
+    }
+  }
+  if (e){if(e.preventDefault)e.preventDefault;else e.returnValue=false;}
+  return false;
+}
+
+//]]></SCRIPT>
+
+<SCRIPT language=Javascript 
+src="CodeProject SQL Server 2000 Paging and Sorting Using ROWCOUNT and SQL_VARIANT_ Free source code and programming help_files/ShortCuts.js" 
+type=text/javascript></SCRIPT>
+<LINK 
+href="CodeProject SQL Server 2000 Paging and Sorting Using ROWCOUNT and SQL_VARIANT_ Free source code and programming help_files/ForumClassicIE6.css" 
+type=text/css rel=stylesheet><LINK href="/favicon.ico" type=image/ico 
+rel=icon><LINK href="/favicon.ico" type=image/ico rel="shortcut icon">
+<META content="MSHTML 6.00.2900.2180" name=GENERATOR></HEAD>
+<BODY>
+<TABLE id=ctl00_AT cellSpacing=0 cellPadding=0 border=0>
+  <TBODY>
+  <TR vAlign=top>
+    <TD colSpan=2>
+      <TABLE cellSpacing=0 cellPadding=0 border=0>
+        <TBODY>
+        <TR>
+          <TD class=HeaderLogo><A href="http://www.codeproject.com/"><IMG 
+            id=ctl00_Logo 
+            style="BORDER-TOP-WIDTH: 0px; BORDER-LEFT-WIDTH: 0px; BORDER-BOTTOM-WIDTH: 0px; WIDTH: 225px; HEIGHT: 90px; BORDER-RIGHT-WIDTH: 0px" 
+            alt="The Code Project" 
+            src="CodeProject SQL Server 2000 Paging and Sorting Using ROWCOUNT and SQL_VARIANT_ Free source code and programming help_files/logo225x90.gif"></A></TD>
+          <TD class=HeaderBanner align=right width="100%">
+            <SCRIPT type=text/javascript>document.write(unescape("%3ca%20href%3d%22http%3a%2f%2fwww.codeproject.com%2fRedir.aspx%3fadid%3d6155%26way%3dban%22%20target%3d%22_blank%22%20rel%3d%22nofollow%22%3e%3cimg%20src%3d%22http%3a%2f%2fwww.codeproject.com%2fscript%2fAnn%2fServeImg.aspx%3fFile%3d%252fscript%252fadmentor%252fimages%252fScaleout_SSI_728x90.gif%26C%3dFalse%26id%3d6155%22%20alt%3d%22%22%20border%3d%220%22%20width%3d%22728%22%20height%3d%2290%22%3e%3c%2fa%3e"));</SCRIPT>
+          </TD></TR>
+        <TR>
+          <TD colSpan=2>
+            <TABLE class=MemberNavBar cellSpacing=0 cellPadding=5 
+              width="100%"><TBODY>
+              <TR>
+                <TD class=SmallText style="FONT-WEIGHT: bold">5,215,143 
+                  members and growing! (21,110 online)</TD>
+                <TD align=right>
+                  <DIV class=MemberNavBarText 
+                  id=ctl00_MemberMenu_LoggedOnOptions><A 
+                  id=ctl00_MemberMenu_MyProfile 
+                  href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=2959938">abdelrady2030</A> 
+                  | <A id=ctl00_MemberMenu_MySettings 
+                  href="http://www.codeproject.com/script/Membership/Modify.aspx">My 
+                  Settings</A> | <A id=ctl00_MemberMenu_MyCodeProject 
+                  href="http://www.codeproject.com/script/Membership/MyCodeProject.aspx"><B>My 
+                  CodeProject</B></A> | <A id=ctl00_MemberMenu_MyBookmarks 
+                  href="http://www.codeproject.com/script/Bookmarks/List.aspx?obtid=2"><IMG 
+                  height=16 
+                  src="CodeProject SQL Server 2000 Paging and Sorting Using ROWCOUNT and SQL_VARIANT_ Free source code and programming help_files/fave.gif" 
+                  width=16 align=absMiddle border=0> My Bookmarks</A> | <A 
+                  id=ctl00_MemberMenu_MyArticles 
+                  href="http://www.codeproject.com/script/Articles/MemberArticles.aspx?amid=2959938">My 
+                  Articles</A> | <A id=ctl00_MemberMenu_Signout 
+                  href="http://www.codeproject.com/script/Membership/LogOff.aspx?rp=%2fKB%2fdatabase%2fSQLServer2KPagingSorting.aspx">Sign 
+                  out</A> </DIV></TD></TR></TBODY></TABLE></TD></TR>
+        <TR>
+          <TD colSpan=2>
+            <TABLE class=SiteNavBar id=tblSiteToolbar cellSpacing=0 
+            cellPadding=0>
+              <TBODY>
+              <TR>
+                <TD noWrap><A href="http://www.codeproject.com/">Home</A></TD>
+                <TD>&nbsp; </TD>
+                <TD noWrap align=right>Current Site: </TD>
+                <TD class=SelCat noWrap><A 
+                  href="http://www.codeproject.com/">Main Site</A></TD>
+                <TD noWrap><A href="http://java.codeproject.com/">Java</A></TD>
+                <TD noWrap><A href="http://lamp.codeproject.com/">Linux Apache 
+                  MySQL PHP</A></TD>
+                <TD width="100%">&nbsp;</TD>
+                <TD id=ctl00_TopNavBar_RightMenus><!--380-->
+                  <DIV id=MenuPos 
+                  style="WIDTH: 305px; POSITION: relative; TOP: 1px; HEIGHT: 22px">
+                  <TABLE 
+                  style="BORDER-TOP-WIDTH: 0px; BORDER-LEFT-WIDTH: 0px; BORDER-BOTTOM-WIDTH: 0px; HEIGHT: 20px; BORDER-RIGHT-WIDTH: 0px" 
+                  cellSpacing=0 cellPadding=0 width=305>
+                    <TBODY>
+                    <TR vAlign=center>
+                      <TD 
+                      style="BORDER-TOP-WIDTH: 0px; BORDER-LEFT-WIDTH: 0px; BORDER-BOTTOM-WIDTH: 0px; BORDER-RIGHT-WIDTH: 0px" 
+                      noWrap><A 
+                        href="http://www.codeproject.com/info/FAQ.aspx">Help!</A></TD>
+                      <TD 
+                      style="BORDER-TOP-WIDTH: 0px; BORDER-LEFT-WIDTH: 0px; BORDER-BOTTOM-WIDTH: 0px; BORDER-RIGHT-WIDTH: 0px" 
+                      noWrap><A 
+                        href="http://www.codeproject.com/script/Articles/Latest.aspx">Articles</A></TD>
+                      <TD 
+                      style="BORDER-TOP-WIDTH: 0px; BORDER-LEFT-WIDTH: 0px; BORDER-BOTTOM-WIDTH: 0px; BORDER-RIGHT-WIDTH: 0px" 
+                      noWrap><A 
+                        href="http://www.codeproject.com/script/Forums/List.aspx">Message 
+                        Boards</A></TD>
+                      <TD 
+                      style="BORDER-TOP-WIDTH: 0px; BORDER-LEFT-WIDTH: 0px; BORDER-BOTTOM-WIDTH: 0px; BORDER-RIGHT-WIDTH: 0px" 
+                      noWrap><A 
+                        href="http://www.codeproject.com/Lounge.aspx">Lounge</A></TD></TR></TBODY></TABLE></DIV></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+  <TR>
+    <TD vAlign=top colSpan=2><A name=_top></A>
+      <TABLE class=ArticleUneditedHeader id=ctl00_ArticleTopHeader_HeaderTable 
+      cellSpacing=0 cellPadding=3 width="100%" border=0>
+        <TBODY>
+        <TR vAlign=top>
+          <TD class=SmallText><A id=ctl00_ArticleTopHeader_ChapterLink 
+            href="http://www.codeproject.com/script/Content/Chapter.aspx?chptId=4">Database</A> 
+            » <A id=ctl00_ArticleTopHeader_SectionLink 
+            href="http://www.codeproject.com/KB/database/">Database</A> » <A 
+            id=ctl00_ArticleTopHeader_SubsectionLink 
+            href="http://www.codeproject.com/KB/database/index.aspx?#Database - General">General</A> 
+            <SPAN class=ArticleIntermediate 
+            id=ctl00_ArticleTopHeader_SkillLevel>&nbsp;&nbsp;&nbsp; 
+            Intermediate</SPAN> <SPAN 
+            id=ctl00_ArticleTopHeader_LicenceTerms></SPAN><BR><BR>
+            <H1><SPAN class=ArticleTopTitle 
+            id=ctl00_ArticleTopHeader_ArticleTitle>SQL Server 2000 Paging and 
+            Sorting Using ROWCOUNT and SQL_VARIANT</SPAN></H1><B>By <A 
+            href="http://www.codeproject.com/script/Articles/MemberArticles.aspx?amid=864994">DejaVudew</A></B><BR><BR><SPAN 
+            class=ArticleTopDescr id=ctl00_ArticleTopHeader_ArticleDescr>An 
+            article discussing how to accomplish paging and sorting in Microsoft 
+            SQL Server 2000 without using concatenated SQL.</SPAN> </TD>
+          <TD class=SmallText style="WIDTH: 210px"><SPAN 
+            id=ctl00_ArticleTopHeader_ArticleAttributes>C#, SQL, Windows, 
+            .NETSQL 2000, SQL, DBA, Dev</SPAN><BR><BR><SPAN 
+            style="PADDING-RIGHT: 2ex">Posted</SPAN>: <B>5 Mar 2006</B><BR><SPAN 
+            style="PADDING-RIGHT: 0.5ex">Updated</SPAN>: <B>29 Sep 2007</B> 
+            <BR><SPAN style="PADDING-RIGHT: 3.2ex">Views</SPAN>: 
+            <B>34,716</B><BR></TD></TR>
+        <TR>
+          <TD colSpan=2>
+            <TABLE width="100%">
+              <TBODY>
+              <TR>
+                <TD>
+                  <DIV id=ctl00_ArticleTopHeader_UneditedDiv><B>Note: <A 
+                  id=ctl00_ArticleTopHeader_UneditedLnk 
+                  href="http://www.codeproject.com/script/Articles/Unedited.aspx">This 
+                  is an unedited reader contribution</A></B> </DIV></TD>
+                <TD class=SmallText style="WHITE-SPACE: nowrap" 
+              align=right></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+  <TR vAlign=top>
+    <TD class=LHNavBar id=ctl00_LeftNavCell>
+      <DIV style="PADDING-TOP: 5px; TEXT-ALIGN: center">
+      <SCRIPT type=text/javascript>document.write(unescape("%3ca%20href%3d%22http%3a%2f%2fwww.codeproject.com%2fRedir.aspx%3fadid%3d6247%26way%3dban%22%20target%3d%22_blank%22%20rel%3d%22nofollow%22%3e%3cimg%20src%3d%22http%3a%2f%2fwww.codeproject.com%2fscript%2fAnn%2fServeImg.aspx%3fFile%3d%252fscript%252fadmentor%252fimages%252fcp_daily_150x80.gif%26C%3dFalse%26id%3d6247%22%20alt%3d%22%22%20border%3d%220%22%20width%3d%22150%22%20height%3d%2280%22%3e%3c%2fa%3e"));</SCRIPT>
+      </DIV>
+      <DIV class=FeatureBlockHeader>Announcements</DIV>
+      <DIV class="FeatureBlockContent RHFeatureBar">
+      <DIV style="PADDING-TOP: 0px"><IMG 
+      style="FLOAT: left; MARGIN-LEFT: 8px; MARGIN-RIGHT: 9px" height=20 
+      alt=Comp 
+      src="CodeProject SQL Server 2000 Paging and Sorting Using ROWCOUNT and SQL_VARIANT_ Free source code and programming help_files/prize_winner.gif" 
+      width=10> <A href="http://www.codeproject.com/Feature/CodeGenComp/">Code 
+      Generation<BR>comp. $1,000 prize!</A></DIV>
+      <DIV style="MARGIN-TOP: 4px; MARGIN-BOTTOM: 3px"><IMG 
+      style="FLOAT: left; MARGIN-LEFT: 6px; MARGIN-RIGHT: 6px" height=16 
+      alt=Comp 
+      src="CodeProject SQL Server 2000 Paging and Sorting Using ROWCOUNT and SQL_VARIANT_ Free source code and programming help_files/coffee.gif" 
+      width=16> <A href="http://www.codeproject.com/Zones/IBM/">Win CodeProject 
+      Coffee!</A></DIV>
+      <DIV style="PADDING-TOP: 0px"><IMG 
+      style="FLOAT: left; MARGIN-LEFT: 8px; MARGIN-RIGHT: 9px" height=20 
+      alt=Comp 
+      src="CodeProject SQL Server 2000 Paging and Sorting Using ROWCOUNT and SQL_VARIANT_ Free source code and programming help_files/prize_winner.gif" 
+      width=10> <A id=ctl00_Announcements_CompLink 
+      href="http://www.codeproject.com/Feature/ArticleCompetition/">Monthly 
+      Competition</A><BR clear=all>
+      <DIV style="PADDING-BOTTOM: 5px; PADDING-TOP: 3px"><IMG 
+      style="PADDING-RIGHT: 10px; FLOAT: left; MARGIN-LEFT: 7px; MARGIN-RIGHT: 8px" 
+      height=16 alt=Staff 
+      src="CodeProject SQL Server 2000 Paging and Sorting Using ROWCOUNT and SQL_VARIANT_ Free source code and programming help_files/staff_sm.gif" 
+      width=12> <A href="http://www.codeproject.com/info/jobs/">We're 
+      Hiring</A></DIV></DIV></DIV>
+      <DIV class=MenuCat>Services</DIV>
+      <DIV class=MenuChapter><A 
+      href="http://www.codeproject.com/script/Jobs/List.aspx">Job 
+Board</A></DIV>
+      <DIV class=MenuChapter><A 
+      href="http://www.codeproject.com/Services/coffee.aspx">Code Project 
+      Coffee</A></DIV>
+      <DIV class=MenuChapter><A 
+      href="http://www.codeproject.com/Services/TradePub.aspx">Free 
+      Magazines</A></DIV><BR>
+      <DIV id=SectionMenu>
+      <DIV class=MenuCat>Chapters</DIV>
+      <DIV class=MenuChapter><A onclick="return ToggleMenu('Chapter1');" 
+      href="http://www.codeproject.com/script/Content/Chapter.aspx?chptId=1">Desktop 
+      Development</A></DIV>
+      <DIV class=MenuSectionBlock id=Chapter1 style="DISPLAY: none">
+      <DIV class=MI id=Section1><A 
+      href="http://www.codeproject.com/KB/buttons/">Button Controls</A></DIV>
+      <DIV class=MI id=Section15><A 
+      href="http://www.codeproject.com/KB/clipboard/">Clipboard</A></DIV>
+      <DIV class=MI id=Section2><A 
+      href="http://www.codeproject.com/KB/combobox/">Combo &amp; List 
+      Boxes</A></DIV>
+      <DIV class=MI id=Section67><A 
+      href="http://www.codeproject.com/KB/dialog/">Dialogs and Windows</A></DIV>
+      <DIV class=MI id=Section107><A 
+      href="http://www.codeproject.com/KB/gadgets/">Desktop Gadgets</A></DIV>
+      <DIV class=MI id=Section16><A 
+      href="http://www.codeproject.com/KB/docview/">Document / View</A></DIV>
+      <DIV class=MI id=Section4><A 
+      href="http://www.codeproject.com/KB/edit/">Edit Controls</A></DIV>
+      <DIV class=MI id=Section17><A 
+      href="http://www.codeproject.com/KB/files/">Files and Folders</A></DIV>
+      <DIV class=MI id=Section3><A 
+      href="http://www.codeproject.com/KB/grid/">Grid &amp; Data 
+      Controls</A></DIV>
+      <DIV class=MI id=Section5><A 
+      href="http://www.codeproject.com/KB/list/">List Controls</A></DIV>
+      <DIV class=MI id=Section6><A 
+      href="http://www.codeproject.com/KB/menus/">Menus</A></DIV>
+      <DIV class=MI id=Section14><A 
+      href="http://www.codeproject.com/KB/miscctrl/">Miscellaneous</A></DIV>
+      <DIV class=MI id=Section18><A 
+      href="http://www.codeproject.com/KB/printing/">Printing</A></DIV>
+      <DIV class=MI id=Section95><A 
+      href="http://www.codeproject.com/KB/progress/">Progress Controls</A></DIV>
+      <DIV class=MI id=Section11><A 
+      href="http://www.codeproject.com/KB/selection/">Selection 
+      Controls</A></DIV>
+      <DIV class=MI id=Section19><A 
+      href="http://www.codeproject.com/KB/shell/">Shell and IE 
+      programming</A></DIV>
+      <DIV class=MI id=Section68><A 
+      href="http://www.codeproject.com/KB/smart/">Smart Client</A></DIV>
+      <DIV class=MI id=Section8><A 
+      href="http://www.codeproject.com/KB/splitter/">Splitter Windows</A></DIV>
+      <DIV class=MI id=Section9><A 
+      href="http://www.codeproject.com/KB/static/">Static &amp; Panel 
+      Controls</A></DIV>
+      <DIV class=MI id=Section10><A 
+      href="http://www.codeproject.com/KB/statusbar/">Status Bar</A></DIV>
+      <DIV class=MI id=Section7><A 
+      href="http://www.codeproject.com/KB/tabs/">Tabs &amp; Property 
+      Pages</A></DIV>
+      <DIV class=MI id=Section12><A 
+      href="http://www.codeproject.com/KB/toolbars/">Toolbars &amp; Docking 
+      windows</A></DIV>
+      <DIV class=MI id=Section13><A 
+      href="http://www.codeproject.com/KB/tree/">Tree Controls</A></DIV></DIV>
+      <DIV class=MenuChapter><A onclick="return ToggleMenu('Chapter2');" 
+      href="http://www.codeproject.com/script/Content/Chapter.aspx?chptId=2">Web 
+      Development</A></DIV>
+      <DIV class=MenuSectionBlock id=Chapter2 style="DISPLAY: none">
+      <DIV class=MI id=Section70><A 
+      href="http://www.codeproject.com/KB/ajax/">Ajax and Atlas</A></DIV>
+      <DIV class=MI id=Section27><A 
+      href="http://www.codeproject.com/KB/applications/">Applications &amp; 
+      Tools</A></DIV>
+      <DIV class=MI id=Section85><A 
+      href="http://www.codeproject.com/KB/asp/">ASP</A></DIV>
+      <DIV class=MI id=Section89><A 
+      href="http://www.codeproject.com/KB/aspnet/">ASP.NET</A></DIV>
+      <DIV class=MI id=Section28><A 
+      href="http://www.codeproject.com/KB/webforms/">ASP.NET Controls</A></DIV>
+      <DIV class=MI id=Section38><A 
+      href="http://www.codeproject.com/KB/ATL-Server/">ATL Server</A></DIV>
+      <DIV class=MI id=Section29><A 
+      href="http://www.codeproject.com/KB/web-cache/">Caching</A></DIV>
+      <DIV class=MI id=Section91><A 
+      href="http://www.codeproject.com/KB/web-image/">Charts, Graphs and 
+      Images</A></DIV>
+      <DIV class=MI id=Section25><A 
+      href="http://www.codeproject.com/KB/scripting/">Client side 
+      scripting</A></DIV>
+      <DIV class=MI id=Section30><A 
+      href="http://www.codeproject.com/KB/custom-controls/">Custom 
+      Controls</A></DIV>
+      <DIV class=MI id=Section23><A 
+      href="http://www.codeproject.com/KB/HTML/">HTML / CSS</A></DIV>
+      <DIV class=MI id=Section22><A 
+      href="http://www.codeproject.com/KB/IP/">Internet / Network</A></DIV>
+      <DIV class=MI id=Section24><A 
+      href="http://www.codeproject.com/KB/ISAPI/">ISAPI</A></DIV>
+      <DIV class=MI id=Section33><A 
+      href="http://www.codeproject.com/KB/server-management/">Site &amp; Server 
+      Management</A></DIV>
+      <DIV class=MI id=Section34><A 
+      href="http://www.codeproject.com/KB/session/">Session State</A></DIV>
+      <DIV class=MI id=Section113><A 
+      href="http://www.codeproject.com/KB/silverlight/">Silverlight</A></DIV>
+      <DIV class=MI id=Section36><A 
+      href="http://www.codeproject.com/KB/trace/">Trace and Logs</A></DIV>
+      <DIV class=MI id=Section31><A 
+      href="http://www.codeproject.com/KB/user-controls/">User 
+Controls</A></DIV>
+      <DIV class=MI id=Section37><A 
+      href="http://www.codeproject.com/KB/validation/">Validation</A></DIV>
+      <DIV class=MI id=Section35><A 
+      href="http://www.codeproject.com/KB/viewstate/">View State</A></DIV>
+      <DIV class=MI id=Section26><A 
+      href="http://www.codeproject.com/KB/WAP/">WAP / WML</A></DIV>
+      <DIV class=MI id=Section32><A 
+      href="http://www.codeproject.com/KB/web-security/">Web Security</A></DIV>
+      <DIV class=MI id=Section20><A 
+      href="http://www.codeproject.com/KB/webservices/">Web 
+      Services</A></DIV></DIV>
+      <DIV class=MenuChapter><A onclick="return ToggleMenu('Chapter9');" 
+      href="http://www.codeproject.com/script/Content/Chapter.aspx?chptId=9">Enterprise 
+      Systems</A></DIV>
+      <DIV class=MenuSectionBlock id=Chapter9 style="DISPLAY: none">
+      <DIV class=MI id=Section98><A 
+      href="http://www.codeproject.com/KB/MCMS/">Content Management 
+      Server</A></DIV>
+      <DIV class=MI id=Section99><A 
+      href="http://www.codeproject.com/KB/biztalk/">Microsoft BizTalk 
+      Server</A></DIV>
+      <DIV class=MI id=Section102><A 
+      href="http://www.codeproject.com/KB/exchange/">Microsoft 
+Exchange</A></DIV>
+      <DIV class=MI id=Section90><A 
+      href="http://www.codeproject.com/KB/office/">Office Development</A></DIV>
+      <DIV class=MI id=Section101><A 
+      href="http://www.codeproject.com/KB/sharepoint/">SharePoint 
+      Server</A></DIV></DIV>
+      <DIV class=MenuChapter><A onclick="return ToggleMenu('Chapter3');" 
+      href="http://www.codeproject.com/script/Content/Chapter.aspx?chptId=3">Multimedia</A></DIV>
+      <DIV class=MenuSectionBlock id=Chapter3 style="DISPLAY: none">
+      <DIV class=MI id=Section42><A 
+      href="http://www.codeproject.com/KB/audio-video/">Audio and 
+Video</A></DIV>
+      <DIV class=MI id=Section44><A 
+      href="http://www.codeproject.com/KB/directx/">DirectX</A></DIV>
+      <DIV class=MI id=Section46><A 
+      href="http://www.codeproject.com/KB/GDI/">GDI</A></DIV>
+      <DIV class=MI id=Section47><A 
+      href="http://www.codeproject.com/KB/GDI-plus/">GDI+</A></DIV>
+      <DIV class=MI id=Section43><A 
+      href="http://www.codeproject.com/KB/graphics/">General Graphics</A></DIV>
+      <DIV class=MI id=Section45><A 
+      href="http://www.codeproject.com/KB/openGL/">OpenGL</A></DIV></DIV>
+      <DIV class=MenuChapter><A onclick="return ToggleMenu('Chapter4');" 
+      href="http://www.codeproject.com/script/Content/Chapter.aspx?chptId=4">Database</A></DIV>
+      <DIV class=MenuSectionBlock id=Chapter4>
+      <DIV class=MIS id=Section66><A 
+      href="http://www.codeproject.com/KB/database/">Database</A></DIV>
+      <DIV class=MI id=Section100><A 
+      href="http://www.codeproject.com/KB/reporting-services/">SQL Reporting 
+      Services</A></DIV></DIV>
+      <DIV class=MenuChapter><A onclick="return ToggleMenu('Chapter8');" 
+      href="http://www.codeproject.com/script/Content/Chapter.aspx?chptId=8">Platforms, 
+      Frameworks &amp; Libraries</A></DIV>
+      <DIV class=MenuSectionBlock id=Chapter8 style="DISPLAY: none">
+      <DIV class=MI id=Section83><A 
+      href="http://www.codeproject.com/KB/atl/">ATL</A></DIV>
+      <DIV class=MI id=Section117><A 
+      href="http://www.codeproject.com/KB/MFC/">MFC</A></DIV>
+      <DIV class=MI id=Section88><A 
+      href="http://www.codeproject.com/KB/stl/">STL</A></DIV>
+      <DIV class=MI id=Section84><A 
+      href="http://www.codeproject.com/KB/wtl/">WTL</A></DIV>
+      <DIV class=MI id=Section49><A 
+      href="http://www.codeproject.com/KB/COM/">COM / COM+</A></DIV>
+      <DIV class=MI id=Section76><A 
+      href="http://www.codeproject.com/KB/dotnet/">.NET Framework</A></DIV>
+      <DIV class=MI id=Section92><A 
+      href="http://www.codeproject.com/KB/winsdk/">Win32/64 SDK &amp; 
+      OS</A></DIV>
+      <DIV class=MI id=Section108><A 
+      href="http://www.codeproject.com/KB/vista/">Vista API</A></DIV>
+      <DIV class=MI id=Section110><A 
+      href="http://www.codeproject.com/KB/vista-security/">Vista 
+      Security</A></DIV>
+      <DIV class=MI id=Section82><A 
+      href="http://www.codeproject.com/KB/cross-platform/">Cross 
+      Platform</A></DIV>
+      <DIV class=MI id=Section69><A 
+      href="http://www.codeproject.com/KB/game/">Game Development</A></DIV>
+      <DIV class=MI id=Section73><A 
+      href="http://www.codeproject.com/KB/mobile/">Mobile Development</A></DIV>
+      <DIV class=MI id=Section106><A 
+      href="http://www.codeproject.com/KB/WC/">Windows CardSpace</A></DIV>
+      <DIV class=MI id=Section103><A 
+      href="http://www.codeproject.com/KB/WCF/">Windows Communication 
+      Foundation</A></DIV>
+      <DIV class=MI id=Section104><A 
+      href="http://www.codeproject.com/KB/WPF/">Windows Presentation 
+      Foundation</A></DIV>
+      <DIV class=MI id=Section105><A 
+      href="http://www.codeproject.com/KB/WF/">Windows Workflow 
+      Foundation</A></DIV>
+      <DIV class=MI id=Section119><A 
+      href="http://www.codeproject.com/KB/library/">Libraries</A></DIV>
+      <DIV class=MI id=Section122><A 
+      href="http://www.codeproject.com/KB/powershell/">Windows 
+      Powershell</A></DIV>
+      <DIV class=MI id=Section123><A 
+      href="http://www.codeproject.com/KB/linq/">LINQ</A></DIV></DIV>
+      <DIV class=MenuChapter><A onclick="return ToggleMenu('Chapter5');" 
+      href="http://www.codeproject.com/script/Content/Chapter.aspx?chptId=5">Languages</A></DIV>
+      <DIV class=MenuSectionBlock id=Chapter5 style="DISPLAY: none">
+      <DIV class=MI id=Section71><A href="http://www.codeproject.com/KB/cpp/">C 
+      / C++ Language</A></DIV>
+      <DIV class=MI id=Section72><A 
+      href="http://www.codeproject.com/KB/mcpp/">C++ / CLI</A></DIV>
+      <DIV class=MI id=Section93><A 
+      href="http://www.codeproject.com/KB/cs/">C#</A></DIV>
+      <DIV class=MI id=Section78><A 
+      href="http://www.codeproject.com/KB/msil/">MSIL</A></DIV>
+      <DIV class=MI id=Section86><A 
+      href="http://www.codeproject.com/KB/vbscript/">VBScript</A></DIV>
+      <DIV class=MI id=Section87><A 
+      href="http://www.codeproject.com/KB/vb/">VB.NET</A></DIV>
+      <DIV class=MI id=Section115><A 
+      href="http://www.codeproject.com/KB/vb-interop/">VB6 Interop</A></DIV>
+      <DIV class=MI id=Section77><A 
+      href="http://www.codeproject.com/KB/net-languages/">Other .NET 
+      Languages</A></DIV>
+      <DIV class=MI id=Section21><A 
+      href="http://www.codeproject.com/KB/XML/">XML</A></DIV>
+      <DIV class=MI id=Section96><A 
+      href="http://www.codeproject.com/KB/java/">Java</A></DIV></DIV>
+      <DIV class=MenuChapter><A onclick="return ToggleMenu('Chapter6');" 
+      href="http://www.codeproject.com/script/Content/Chapter.aspx?chptId=6">General 
+      Programming</A></DIV>
+      <DIV class=MenuSectionBlock id=Chapter6 style="DISPLAY: none">
+      <DIV class=MI id=Section57><A 
+      href="http://www.codeproject.com/KB/recipes/">Algorithms &amp; 
+      Recipes</A></DIV>
+      <DIV class=MI id=Section64><A 
+      href="http://www.codeproject.com/KB/bugs/">Bugs &amp; 
+Workarounds</A></DIV>
+      <DIV class=MI id=Section79><A 
+      href="http://www.codeproject.com/KB/collections/">Collections</A></DIV>
+      <DIV class=MI id=Section56><A 
+      href="http://www.codeproject.com/KB/security/">Cryptography &amp; 
+      Security</A></DIV>
+      <DIV class=MI id=Section50><A 
+      href="http://www.codeproject.com/KB/datetime/">Date and Time</A></DIV>
+      <DIV class=MI id=Section52><A 
+      href="http://www.codeproject.com/KB/DLL/">DLLs &amp; Assemblies</A></DIV>
+      <DIV class=MI id=Section80><A 
+      href="http://www.codeproject.com/KB/exception/">Exception 
+      Handling</A></DIV>
+      <DIV class=MI id=Section81><A 
+      href="http://www.codeproject.com/KB/locale/">Localisation</A></DIV>
+      <DIV class=MI id=Section53><A 
+      href="http://www.codeproject.com/KB/macros/">Macros and Add-ins</A></DIV>
+      <DIV class=MI id=Section54><A 
+      href="http://www.codeproject.com/KB/tips/">Programming Tips</A></DIV>
+      <DIV class=MI id=Section55><A 
+      href="http://www.codeproject.com/KB/string/">String handling</A></DIV>
+      <DIV class=MI id=Section58><A 
+      href="http://www.codeproject.com/KB/threads/">Threads, Processes &amp; 
+      IPC</A></DIV>
+      <DIV class=MI id=Section59><A 
+      href="http://www.codeproject.com/KB/winhelp/">WinHelp / 
+      HTMLHelp</A></DIV></DIV>
+      <DIV class=MenuChapter><A onclick="return ToggleMenu('Chapter10');" 
+      href="http://www.codeproject.com/script/Content/Chapter.aspx?chptId=10">Graphics 
+      / Design</A></DIV>
+      <DIV class=MenuSectionBlock id=Chapter10 style="DISPLAY: none">
+      <DIV class=MI id=Section40><A 
+      href="http://www.codeproject.com/KB/expression/">Expression</A></DIV>
+      <DIV class=MI id=Section114><A 
+      href="http://www.codeproject.com/KB/usability/">Usability</A></DIV></DIV>
+      <DIV class=MenuChapter><A onclick="return ToggleMenu('Chapter11');" 
+      href="http://www.codeproject.com/script/Content/Chapter.aspx?chptId=11">Development 
+      Lifecycle</A></DIV>
+      <DIV class=MenuSectionBlock id=Chapter11 style="DISPLAY: none">
+      <DIV class=MI id=Section51><A 
+      href="http://www.codeproject.com/KB/debug/">Debug Tips</A></DIV>
+      <DIV class=MI id=Section39><A 
+      href="http://www.codeproject.com/KB/architecture/">Design and 
+      Architecture</A></DIV>
+      <DIV class=MI id=Section112><A 
+      href="http://www.codeproject.com/KB/install/">Installation</A></DIV>
+      <DIV class=MI id=Section41><A 
+      href="http://www.codeproject.com/KB/work/">Work Issues</A></DIV>
+      <DIV class=MI id=Section126><A 
+      href="http://www.codeproject.com/KB/codegen/">Code 
+      Generation</A></DIV></DIV>
+      <DIV class=MenuChapter><A onclick="return ToggleMenu('Chapter7');" 
+      href="http://www.codeproject.com/script/Content/Chapter.aspx?chptId=7">General 
+      Reading</A></DIV>
+      <DIV class=MenuSectionBlock id=Chapter7 style="DISPLAY: none">
+      <DIV class=MI id=Section60><A 
+      href="http://www.codeproject.com/KB/books/">Book Chapters</A></DIV>
+      <DIV class=MI id=Section61><A 
+      href="http://www.codeproject.com/KB/book-reviews/">Book Reviews</A></DIV>
+      <DIV class=MI id=Section109><A 
+      href="http://www.codeproject.com/KB/hardware-review/">Hardware 
+      Reviews</A></DIV>
+      <DIV class=MI id=Section63><A 
+      href="http://www.codeproject.com/KB/interviews/">Interviews</A></DIV>
+      <DIV class=MI id=Section62><A 
+      href="http://www.codeproject.com/KB/scrapbook/">Scrapbook</A></DIV>
+      <DIV class=MI id=Section48><A 
+      href="http://www.codeproject.com/KB/system/">Hardware &amp; 
+      System</A></DIV></DIV>
+      <DIV class=MenuChapter><A onclick="return ToggleMenu('Chapter12');" 
+      href="http://www.codeproject.com/script/Content/Chapter.aspx?chptId=12">Third 
+      Party Products</A></DIV>
+      <DIV class=MenuSectionBlock id=Chapter12 style="DISPLAY: none">
+      <DIV class=MI id=Section65><A 
+      href="http://www.codeproject.com/KB/showcase/">Product Showcase</A></DIV>
+      <DIV class=MI id=Section124><A 
+      href="http://www.codeproject.com/KB/solution-center/">Solution 
+      Center</A></DIV></DIV></DIV><BR>
+      <DIV class=MenuCat>Feature Zones</DIV>
+      <DIV class=MenuChapter><A href="http://www.codeproject.com/Zones/IBM">IBM 
+      DeveloperWorks</A></DIV>
+      <DIV class=MenuChapter><A 
+      href="http://www.codeproject.com/Zones/WhitePapers">WhitePapers</A></DIV>
+      <DIV class=MenuChapter><A 
+      href="http://www.codeproject.com/Zones/CodeGeneration">Code 
+      Generation</A></DIV>
+      <DIV class=MenuChapter><A 
+      href="http://www.codeproject.com/Zones/QuestSQL">Quest SQL 
+      Zone</A></DIV><BR>
+      <SCRIPT type=text/javascript>document.write(unescape("%3ca%20href%3d%22http%3a%2f%2fwww.codeproject.com%2fRedir.aspx%3fadid%3d6171%26way%3dban%22%20target%3d%22_blank%22%20rel%3d%22nofollow%22%3e%3cimg%20src%3d%22http%3a%2f%2fwww.codeproject.com%2fscript%2fAnn%2fServeImg.aspx%3fFile%3d%252fscript%252fadmentor%252fimages%252f160by600.gif%26C%3dFalse%26id%3d6171%22%20alt%3d%22%22%20border%3d%220%22%20width%3d%22160%22%20height%3d%22600%22%3e%3c%2fa%3e"));</SCRIPT>
+      <IMG height=1 alt="" 
+      src="CodeProject SQL Server 2000 Paging and Sorting Using ROWCOUNT and SQL_VARIANT_ Free source code and programming help_files/t.gif" 
+      width=160> </TD>
+    <TD class=ArticlePane vAlign=top>
+      <TABLE class=SearchHeaderBar cellSpacing=0 width="100%">
+        <TBODY>
+        <TR>
+          <TD style="WIDTH: 60%; WHITE-SPACE: nowrap" vAlign=center 
+            align=right><FORM style="MARGIN: 0px" name=Search 
+            action=/info/search.aspx method=get><B>Search &nbsp;</B> <INPUT 
+            class=SmallText style="WIDTH: 200px" name=artkw> <SELECT 
+            class=SmallText style="FONT-WEIGHT: bold" name=sbo> <OPTION 
+              value=kw selected>Articles</OPTION> <OPTION 
+              value=fm>Messages</OPTION></SELECT> <INPUT class=SmallText style="FONT-WEIGHT: bold" type=submit value=" Go! "> 
+            &nbsp; </FORM></TD>
+          <TD class=TinyText style="WHITE-SPACE: nowrap"><A 
+            href="http://www.codeproject.com/info/search.aspx">Advanced 
+            Search</A><BR><A 
+            href="http://www.codeproject.com/script/Content/SiteMap.aspx">Sitemap</A> 
+            | <A id=ctl00_SearchBarCtrl_AddToIESearchLnk 
+            title="Add The Code Project to your IE search Providers" 
+            onclick="window.external.AddSearchProvider('http://www.codeproject.com/info/OpenSearch.xml');return false;" 
+            href="http://www.codeproject.com/">Add to IE Search</A> 
+        </TD></TR></TBODY></TABLE><SPAN id=ctl00_ResultMessage></SPAN>
+      <DIV id=ctl00_ArtDiv>
+      <TABLE cellSpacing=0 cellPadding=0 width="100%" border=0>
+        <TBODY>
+        <TR vAlign=top>
+          <TD vAlign=top>
+            <TABLE>
+              <TBODY></TBODY></TABLE>
+            <DIV class=SmallText><IMG style="VERTICAL-ALIGN: middle" height=16 
+            alt=print 
+            src="CodeProject SQL Server 2000 Paging and Sorting Using ROWCOUNT and SQL_VARIANT_ Free source code and programming help_files/print.gif" 
+            width=16> <A id=ctl00_ArticleHeaderLinks_PrintLnk 
+            href="http://www.codeproject.com/KB/database/SQLServer2KPagingSorting.aspx?display=Print">Print</A> 
+            &nbsp; <IMG style="VERTICAL-ALIGN: middle" height=16 
+            alt="Broken Article?" 
+            src="CodeProject SQL Server 2000 Paging and Sorting Using ROWCOUNT and SQL_VARIANT_ Free source code and programming help_files/report.gif" 
+            width=16> <A id=ctl00_ArticleHeaderLinks_BrokenLnk 
+            href="http://www.codeproject.com/script/Articles/Report.aspx?aid=13316">Report 
+            Article</A> &nbsp; <IMG style="VERTICAL-ALIGN: middle" alt=Watch 
+            src="CodeProject SQL Server 2000 Paging and Sorting Using ROWCOUNT and SQL_VARIANT_ Free source code and programming help_files/watchon.png"> 
+            <A class="" id=bmw_13316,2 onclick="return watchMe(13316, 2);" 
+            href="http://www.codeproject.com/script/Bookmarks/Add.aspx?&amp;obid=13316&amp;obtid=2&amp;bma=AddWatch" 
+            name=ajaxBookmarkWatchLink>Watch</A> <SPAN class=TinyText 
+            style="VISIBILITY: hidden"></SPAN><SPAN 
+            id=ctl00_ArticleHeaderLinks_ArticleBmkWatch_Message></SPAN>&nbsp; 
+            <IMG style="VERTICAL-ALIGN: middle" height=16 alt=Bookmark 
+            src="CodeProject SQL Server 2000 Paging and Sorting Using ROWCOUNT and SQL_VARIANT_ Free source code and programming help_files/link.png" 
+            width=16> <A class="" id=bm_13316,2 
+            onclick="return bookmarkMe(13316, 2);" 
+            href="http://www.codeproject.com/script/Bookmarks/Add.aspx?&amp;obid=13316&amp;obtid=2&amp;bma=AddBookmark" 
+            name=ajaxBookmarkLink>Bookmark</A> <SPAN class=TinyText 
+            style="VISIBILITY: hidden"></SPAN><SPAN 
+            id=ctl00_ArticleHeaderLinks_ArticleBmk_Message></SPAN>&nbsp; <IMG 
+            style="VERTICAL-ALIGN: middle" height=16 alt=Discuss 
+            src="CodeProject SQL Server 2000 Paging and Sorting Using ROWCOUNT and SQL_VARIANT_ Free source code and programming help_files/discuss.gif" 
+            width=15> <A 
+            href="http://www.codeproject.com/KB/database/SQLServer2KPagingSorting.aspx#_comments">Discuss</A> 
+            &nbsp; <IMG style="VERTICAL-ALIGN: middle" height=16 
+            alt="Recommend Article" 
+            src="CodeProject SQL Server 2000 Paging and Sorting Using ROWCOUNT and SQL_VARIANT_ Free source code and programming help_files/mail.gif" 
+            width=16>&nbsp;<A id=ctl00_ArticleHeaderLinks_Recommend 
+            href="http://www.codeproject.com/script/common/TellFriend.aspx?obtid=2&amp;obid=13316">Send&nbsp;to&nbsp;a&nbsp;friend</A> 
+            </DIV></TD>
+          <TD style="WIDTH: 100px; WHITE-SPACE: nowrap; TEXT-ALIGN: right">
+            <TABLE id=CurRat>
+              <TBODY>
+              <TR>
+                <TD>
+                  <TABLE>
+                    <TBODY>
+                    <TR>
+                      <TD class=SmallText style="WHITE-SPACE: nowrap" 
+                      align=right><SPAN id=ctl00_ArticleRating_VoteLabel>17 
+                        votes for this Article.</SPAN></TD>
+                      <TD>
+                        <TABLE cellSpacing=0 cellPadding=0 border=1>
+                          <TBODY>
+                          <TR>
+                            <TD width=20 bgColor=white height=7><IMG height=7 
+                              src="CodeProject SQL Server 2000 Paging and Sorting Using ROWCOUNT and SQL_VARIANT_ Free source code and programming help_files/red.gif" 
+                              width=20 align=center border=0></TD>
+                            <TD width=20 bgColor=white height=7><IMG height=7 
+                              src="CodeProject SQL Server 2000 Paging and Sorting Using ROWCOUNT and SQL_VARIANT_ Free source code and programming help_files/red.gif" 
+                              width=20 align=center border=0></TD>
+                            <TD width=20 bgColor=white height=7><IMG height=7 
+                              src="CodeProject SQL Server 2000 Paging and Sorting Using ROWCOUNT and SQL_VARIANT_ Free source code and programming help_files/red.gif" 
+                              width=20 align=center border=0></TD>
+                            <TD width=20 bgColor=white height=7><IMG height=7 
+                              src="CodeProject SQL Server 2000 Paging and Sorting Using ROWCOUNT and SQL_VARIANT_ Free source code and programming help_files/red.gif" 
+                              width=20 align=center border=0></TD>
+                            <TD noWrap width=20 bgColor=white height=7><IMG 
+                              height=7 
+                              src="CodeProject SQL Server 2000 Paging and Sorting Using ROWCOUNT and SQL_VARIANT_ Free source code and programming help_files/red.gif" 
+                              width=3 align=center 
+                      border=0></TD></TR></TBODY></TABLE></TD></TR>
+                    <TR id=ctl00_ArticleRating_PopularityRow>
+                      <TD class=SmallText align=right colSpan=2><A 
+                        id=ctl00_ArticleRating_PopularityLnk 
+                        title="Calculated as rating x Log10(# votes)" 
+                        href="http://www.codeproject.com/script/Articles/TopArticles.aspx?ta_so=1">Popularity: 
+                        5.09</A> <SPAN 
+                        id=ctl00_ArticleRating_PopularityLbl></SPAN><SPAN 
+                        id=ratingVal>Rating: <B>4.14</B> out of 
+                    5</SPAN></TD></TR></TBODY></TABLE></TD>
+                <TD>
+                  <DIV>
+                  <TABLE class=HistTable 
+                  title="Voting Distribution. Recent data only">
+                    <TBODY>
+                    <TR>
+                      <TD><IMG title="2 votes, 11.8%" height=3 
+                        alt="2 votes, 11.8%" 
+                        src="CodeProject SQL Server 2000 Paging and Sorting Using ROWCOUNT and SQL_VARIANT_ Free source code and programming help_files/pollcol.gif" 
+                        width=10 border=0><BR>1</TD>
+                      <TD><IMG title="1 vote, 5.9%" height=1 
+                        alt="1 vote, 5.9%" 
+                        src="CodeProject SQL Server 2000 Paging and Sorting Using ROWCOUNT and SQL_VARIANT_ Free source code and programming help_files/pollcol.gif" 
+                        width=10 border=0><BR>2</TD>
+                      <TD><IMG title="0 votes, 0.0%" height=1 
+                        alt="0 votes, 0.0%" src="" width=10 border=0><BR>3</TD>
+                      <TD><IMG title="3 votes, 17.6%" height=5 
+                        alt="3 votes, 17.6%" 
+                        src="CodeProject SQL Server 2000 Paging and Sorting Using ROWCOUNT and SQL_VARIANT_ Free source code and programming help_files/pollcol.gif" 
+                        width=10 border=0><BR>4</TD>
+                      <TD><IMG title="11 votes, 64.7%" height=20 
+                        alt="11 votes, 64.7%" 
+                        src="CodeProject SQL Server 2000 Paging and Sorting Using ROWCOUNT and SQL_VARIANT_ Free source code and programming help_files/pollcol.gif" 
+                        width=10 
+              border=0><BR>5</TD></TD></TR></TBODY></TABLE></DIV></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE>
+      <DIV class=SmallText id=ctl00_UneditedRow 
+      style="PADDING-RIGHT: 5px; BORDER-TOP: #ff9900 1px dashed; PADDING-LEFT: 5px; PADDING-BOTTOM: 5px; MARGIN: 5px; PADDING-TOP: 5px; BORDER-BOTTOM: #ff9900 1px dashed"><B>Note:</B> 
+      This is an unedited contribution. If this article is inappropriate, needs 
+      attention or copies someone else's work without reference then please <A 
+      id=ctl00_ReportProblem 
+      href="http://www.codeproject.com/script/Articles/Report.aspx?aid=13316">Report 
+      This Article</A> </DIV>
+      <UL class=Callout id=ctl00_confirmError style="MARGIN-RIGHT: 20px">
+        <LI class=SmallText 
+        style="LIST-STYLE-IMAGE: url(/images/warning.gif)">You are signed up for 
+        one or more <A id=ctl00_SubscribeLink2 
+        href="http://www.codeproject.com/script/Membership/Subscribe.aspx?rp=%2fKB%2fdatabase%2fSQLServer2KPagingSorting.aspx">newsletters</A> 
+        but your email address is either unconfirmed, or has not been 
+        reconfirmed in a long time. Please click <A id=ctl00_RequestConfirmLink2 
+        href="http://www.codeproject.com/script/Membership/SendConfirmRequest.aspx?rp=%2fKB%2fdatabase%2fSQLServer2KPagingSorting.aspx">here</A> 
+        to have an email sent that will allow us to confirm your email address 
+        and start sending you newsletters again.</LI></UL><SPAN id=intelliTXT>
+      <DIV id=contentdiv><!-- Main Page Contents Start --><!-- Article Starts -->
+      <H2>Purpose</H2>
+      <P>Provide an efficient method for sorting and paging large datasets on a 
+      Microsoft SQL Server 2000 database that does not require the use of 
+      concatenated SQL. Primarily, this is a proof-of-concept piece and you will 
+      need to do your own performance testing to see if it meets your goals. 
+</P>
+      <H2>Introduction</H2>
+      <P>Ever since I heard about SQL injection attacks and the hope of 
+      improving a query's performance and maintainability by using the same 
+      query every time, I've been trying to avoid concatenated SQL. At the very 
+      least, static SQL tends to be easier to understand -- which generally 
+      results in fewer bugs. But, I always had a problem when trying to 
+      implement a paging solution that had dynamic sort values. </P>
+      <P>Then I ran into this article (<A 
+      href="http://www.codeproject.com/aspnet/PagingLarge.asp">http://www.codeproject.com/aspnet/PagingLarge.asp</A>) 
+      and noticed that the queries using <CODE>ROWCOUNT</CODE> tended to 
+      outperform other queries. But getting that to work for a dynamic sort 
+      value without concatenation tended to involve a temporary table, and that 
+      performed worse than using a <CODE>CURSOR</CODE> when you got past the 
+      first couple of pages. So I decided there had to be a way to do it... </P>
+      <H2>The SQL</H2>
+      <P>This stored procedure is built to run on <A 
+      href="http://www.microsoft.com/downloads/details.aspx?FamilyId=E719ECF7-9F46-4312-AF89-6AD8702E4E6E&amp;displaylang=en">Microsoft's 
+      Adventure Works sample database</A>. I just picked a table that had a 
+      decent amount of rows. Without further ado, here's the SQL. </P><PRE lang=sql><SPAN class=code-keyword>CREATE</SPAN> <SPAN class=code-keyword>PROCEDURE</SPAN> dbo.up_GetSortedSalesOrdersByPageUsingRowset
+    @orderedOnStart <SPAN class=code-keyword>datetime</SPAN>,
+    @orderedOnEnd <SPAN class=code-keyword>datetime</SPAN>,
+    @pageNumber <SPAN class=code-keyword>int</SPAN>,
+    @pageSize <SPAN class=code-keyword>int</SPAN>,
+    @sortExpression <SPAN class=code-keyword>varchar</SPAN>(<SPAN class=code-digit>100</SPAN>),
+    @sortOrder <SPAN class=code-keyword>varchar</SPAN>(<SPAN class=code-digit>4</SPAN>),
+    @virtualCount <SPAN class=code-keyword>int</SPAN> OUTPUT
+<SPAN class=code-keyword>AS</SPAN>
+
+    <SPAN class=code-comment>/*</SPAN><SPAN class=code-comment>
+        Make sure that the page number is at least 1
+    */</SPAN>
+    <SPAN class=code-keyword>IF</SPAN> @pageNumber &lt; <SPAN class=code-digit>1</SPAN>
+    <SPAN class=code-keyword>BEGIN</SPAN>
+        <SPAN class=code-keyword>SET</SPAN> @pageNumber = <SPAN class=code-digit>1</SPAN>
+    <SPAN class=code-keyword>END</SPAN>
+
+    <SPAN class=code-keyword>SELECT</SPAN>
+        @virtualCount = COUNT(*)
+    <SPAN class=code-keyword>FROM</SPAN>
+        Sales.SalesOrderHeader Header
+    <SPAN class=code-keyword>WHERE</SPAN>
+        Header.[OrderDate] &gt;= @orderedOnStart
+        <SPAN class=code-keyword>AND</SPAN> Header.[OrderDate] &lt; @orderedOnEnd
+
+    <SPAN class=code-keyword>DECLARE</SPAN> @lastKeyValue <SPAN class=code-keyword>numeric</SPAN>(<SPAN class=code-digit>18</SPAN>,<SPAN class=code-digit>0</SPAN>)
+    <SPAN class=code-keyword>DECLARE</SPAN> @lastAscendingSortValue <SPAN class=code-keyword>SQL_Variant</SPAN>
+    <SPAN class=code-keyword>DECLARE</SPAN> @lastDescendingSortValue <SPAN class=code-keyword>SQL_Variant</SPAN>
+
+    <SPAN class=code-keyword>DECLARE</SPAN> @numberToIgnore <SPAN class=code-keyword>int</SPAN>
+
+    <SPAN class=code-keyword>SET</SPAN> @numberToIgnore = (@pageNumber-1) * @pageSize
+
+    <SPAN class=code-keyword>IF</SPAN> @numberToIgnore &gt; <SPAN class=code-digit>0</SPAN>
+    <SPAN class=code-keyword>BEGIN</SPAN>
+        <SPAN class=code-comment>/*</SPAN><SPAN class=code-comment>
+        Get the last available sort data and unique key
+        value from the last page.
+        */</SPAN>
+        <SPAN class=code-keyword>SET</SPAN> <SPAN class=code-keyword>ROWCOUNT</SPAN> @numberToIgnore
+
+        <SPAN class=code-keyword>SELECT</SPAN>
+            @lastKeyValue = [UniqueValue],
+            @lastAscendingSortValue = [AscendingSort],
+            @lastDescendingSortValue = [DescendingSort]
+        <SPAN class=code-keyword>FROM</SPAN>
+        (
+            <SPAN class=code-keyword>SELECT</SPAN>
+                Header.[SalesOrderID] <SPAN class=code-keyword>AS</SPAN> [UniqueValue],
+                <SPAN class=code-keyword>CASE</SPAN>
+                    <SPAN class=code-keyword>WHEN</SPAN>
+                        UPPER(@sortOrder) = <SPAN class=code-string>'</SPAN><SPAN class=code-string>DESC'</SPAN>
+                        <SPAN class=code-keyword>AND</SPAN> UPPER(@sortExpression) = <SPAN class=code-string>'</SPAN><SPAN class=code-string>CUSTOMERID'</SPAN>
+                    <SPAN class=code-keyword>THEN</SPAN>
+                        <SPAN class=code-keyword>CONVERT</SPAN>(<SPAN class=code-keyword>SQL_Variant</SPAN>, [CustomerID])
+                    <SPAN class=code-keyword>WHEN</SPAN>
+                        UPPER(@sortOrder) = <SPAN class=code-string>'</SPAN><SPAN class=code-string>DESC'</SPAN>
+                        <SPAN class=code-keyword>AND</SPAN> UPPER(@sortExpression) = <SPAN class=code-string>'</SPAN><SPAN class=code-string>TOTALDUE'</SPAN>
+                    <SPAN class=code-keyword>THEN</SPAN>
+                        <SPAN class=code-keyword>CONVERT</SPAN>(<SPAN class=code-keyword>SQL_Variant</SPAN>, [TotalDue])
+                    <SPAN class=code-keyword>WHEN</SPAN>
+                        UPPER(@sortOrder) = <SPAN class=code-string>'</SPAN><SPAN class=code-string>DESC'</SPAN>
+                        <SPAN class=code-keyword>AND</SPAN> UPPER(@sortExpression) = <SPAN class=code-string>'</SPAN><SPAN class=code-string>ORDERDATE'</SPAN>
+                    <SPAN class=code-keyword>THEN</SPAN>
+                        <SPAN class=code-keyword>CONVERT</SPAN>(<SPAN class=code-keyword>SQL_Variant</SPAN>, [OrderDate])
+                    <SPAN class=code-keyword>ELSE</SPAN>
+                        <SPAN class=code-keyword>NULL</SPAN>
+                <SPAN class=code-keyword>END</SPAN> <SPAN class=code-keyword>AS</SPAN> [DescendingSort],
+                <SPAN class=code-keyword>CASE</SPAN>
+                    <SPAN class=code-keyword>WHEN</SPAN>
+                        UPPER(@sortOrder) = <SPAN class=code-string>'</SPAN><SPAN class=code-string>ASC'</SPAN>
+                        <SPAN class=code-keyword>AND</SPAN> UPPER(@sortExpression) = <SPAN class=code-string>'</SPAN><SPAN class=code-string>CUSTOMERID'</SPAN>
+                    <SPAN class=code-keyword>THEN</SPAN>
+                        <SPAN class=code-keyword>CONVERT</SPAN>(<SPAN class=code-keyword>SQL_Variant</SPAN>, [CustomerID])
+                    <SPAN class=code-keyword>WHEN</SPAN>
+                        UPPER(@sortOrder) = <SPAN class=code-string>'</SPAN><SPAN class=code-string>ASC'</SPAN>
+                        <SPAN class=code-keyword>AND</SPAN> UPPER(@sortExpression) = <SPAN class=code-string>'</SPAN><SPAN class=code-string>TOTALDUE'</SPAN>
+                    <SPAN class=code-keyword>THEN</SPAN>
+                        <SPAN class=code-keyword>CONVERT</SPAN>(<SPAN class=code-keyword>SQL_Variant</SPAN>, [TotalDue])
+                    <SPAN class=code-keyword>WHEN</SPAN>
+                        UPPER(@sortOrder) = <SPAN class=code-string>'</SPAN><SPAN class=code-string>ASC'</SPAN>
+                        <SPAN class=code-keyword>AND</SPAN> UPPER(@sortExpression) = <SPAN class=code-string>'</SPAN><SPAN class=code-string>ORDERDATE'</SPAN>
+                    <SPAN class=code-keyword>THEN</SPAN>
+                        <SPAN class=code-keyword>CONVERT</SPAN>(<SPAN class=code-keyword>SQL_Variant</SPAN>, [OrderDate])
+                    <SPAN class=code-keyword>ELSE</SPAN>
+                        <SPAN class=code-keyword>NULL</SPAN>
+                <SPAN class=code-keyword>END</SPAN> <SPAN class=code-keyword>AS</SPAN> [AscendingSort]
+            <SPAN class=code-keyword>FROM</SPAN>
+                Sales.SalesOrderHeader Header
+            <SPAN class=code-keyword>WHERE</SPAN>
+                Header.[OrderDate] &gt;= @orderedOnStart
+                <SPAN class=code-keyword>AND</SPAN> Header.[OrderDate] &lt; @orderedOnEnd
+            ) <SPAN class=code-keyword>AS</SPAN> Derived
+        <SPAN class=code-keyword>ORDER</SPAN> <SPAN class=code-keyword>BY</SPAN>
+            [AscendingSort] <SPAN class=code-keyword>ASC</SPAN>,
+            [DescendingSort] <SPAN class=code-keyword>DESC</SPAN>,
+            [UniqueValue] <SPAN class=code-keyword>ASC</SPAN>
+    <SPAN class=code-keyword>END</SPAN>
+
+    <SPAN class=code-comment>/*</SPAN><SPAN class=code-comment>
+    Select the first @pageSize records that come after the last sort
+    data/unique value from the last page. If this is the first page,
+    just get the first @pageSize records.
+    */</SPAN>
+
+    <SPAN class=code-keyword>SET</SPAN> <SPAN class=code-keyword>ROWCOUNT</SPAN> @pageSize
+
+    <SPAN class=code-keyword>SELECT</SPAN>
+        [SalesOrderID],
+        [OrderDate],
+        [TotalDue],
+        [CustomerID]
+    <SPAN class=code-keyword>FROM</SPAN>
+    (
+        <SPAN class=code-keyword>SELECT</SPAN>
+            [SalesOrderID],
+            [OrderDate],
+            [TotalDue],
+            [CustomerID],
+            [SalesOrderID] <SPAN class=code-keyword>As</SPAN> [UniqueValue],
+            <SPAN class=code-keyword>CASE</SPAN>
+                <SPAN class=code-keyword>WHEN</SPAN>
+                    UPPER(@sortOrder) = <SPAN class=code-string>'</SPAN><SPAN class=code-string>DESC'</SPAN>
+                    <SPAN class=code-keyword>AND</SPAN> UPPER(@sortExpression) = <SPAN class=code-string>'</SPAN><SPAN class=code-string>CUSTOMERID'</SPAN>
+                <SPAN class=code-keyword>THEN</SPAN>
+                    <SPAN class=code-keyword>CONVERT</SPAN>(<SPAN class=code-keyword>SQL_Variant</SPAN>, [CustomerID])
+                <SPAN class=code-keyword>WHEN</SPAN>
+                    UPPER(@sortOrder) = <SPAN class=code-string>'</SPAN><SPAN class=code-string>DESC'</SPAN>
+                    <SPAN class=code-keyword>AND</SPAN> UPPER(@sortExpression) = <SPAN class=code-string>'</SPAN><SPAN class=code-string>TOTALDUE'</SPAN>
+                <SPAN class=code-keyword>THEN</SPAN>
+                    <SPAN class=code-keyword>CONVERT</SPAN>(<SPAN class=code-keyword>SQL_Variant</SPAN>, [TotalDue])
+                <SPAN class=code-keyword>WHEN</SPAN>
+                    UPPER(@sortOrder) = <SPAN class=code-string>'</SPAN><SPAN class=code-string>DESC'</SPAN>
+                    <SPAN class=code-keyword>AND</SPAN> UPPER(@sortExpression) = <SPAN class=code-string>'</SPAN><SPAN class=code-string>ORDERDATE'</SPAN>
+                <SPAN class=code-keyword>THEN</SPAN>
+                    <SPAN class=code-keyword>CONVERT</SPAN>(<SPAN class=code-keyword>SQL_Variant</SPAN>, [OrderDate])
+                <SPAN class=code-keyword>ELSE</SPAN>
+                    <SPAN class=code-keyword>NULL</SPAN>
+            <SPAN class=code-keyword>END</SPAN> <SPAN class=code-keyword>AS</SPAN> [DescendingSort],
+            <SPAN class=code-keyword>CASE</SPAN>
+                <SPAN class=code-keyword>WHEN</SPAN>
+                    UPPER(@sortOrder) = <SPAN class=code-string>'</SPAN><SPAN class=code-string>ASC'</SPAN>
+                    <SPAN class=code-keyword>AND</SPAN> UPPER(@sortExpression) = <SPAN class=code-string>'</SPAN><SPAN class=code-string>CUSTOMERID'</SPAN>
+                <SPAN class=code-keyword>THEN</SPAN>
+                    <SPAN class=code-keyword>CONVERT</SPAN>(<SPAN class=code-keyword>SQL_Variant</SPAN>, [CustomerID])
+                <SPAN class=code-keyword>WHEN</SPAN>
+                    UPPER(@sortOrder) = <SPAN class=code-string>'</SPAN><SPAN class=code-string>ASC'</SPAN>
+                    <SPAN class=code-keyword>AND</SPAN> UPPER(@sortExpression) = <SPAN class=code-string>'</SPAN><SPAN class=code-string>TOTALDUE'</SPAN>
+                <SPAN class=code-keyword>THEN</SPAN>
+                    <SPAN class=code-keyword>CONVERT</SPAN>(<SPAN class=code-keyword>SQL_Variant</SPAN>, [TotalDue])
+                <SPAN class=code-keyword>WHEN</SPAN>
+                    UPPER(@sortOrder) = <SPAN class=code-string>'</SPAN><SPAN class=code-string>ASC'</SPAN>
+                    <SPAN class=code-keyword>AND</SPAN> UPPER(@sortExpression) = <SPAN class=code-string>'</SPAN><SPAN class=code-string>ORDERDATE'</SPAN>
+                <SPAN class=code-keyword>THEN</SPAN>
+                    <SPAN class=code-keyword>CONVERT</SPAN>(<SPAN class=code-keyword>SQL_Variant</SPAN>, [OrderDate])
+                <SPAN class=code-keyword>ELSE</SPAN>
+                    <SPAN class=code-keyword>NULL</SPAN>
+            <SPAN class=code-keyword>END</SPAN> <SPAN class=code-keyword>AS</SPAN> [AscendingSort]
+        <SPAN class=code-keyword>FROM</SPAN>
+            Sales.SalesOrderHeader Header
+        <SPAN class=code-keyword>WHERE</SPAN>
+            Header.[OrderDate] &gt;= @orderedOnStart
+            <SPAN class=code-keyword>AND</SPAN> Header.[OrderDate] &lt; @orderedOnEnd
+    ) Derived
+    <SPAN class=code-keyword>WHERE</SPAN>
+    (
+        @lastAscendingSortValue <SPAN class=code-keyword>IS</SPAN> <SPAN class=code-keyword>NULL</SPAN>
+        <SPAN class=code-keyword>AND</SPAN> @lastDescendingSortValue <SPAN class=code-keyword>IS</SPAN> <SPAN class=code-keyword>NULL</SPAN>
+        <SPAN class=code-keyword>AND</SPAN> @lastKeyValue <SPAN class=code-keyword>IS</SPAN> <SPAN class=code-keyword>NULL</SPAN>
+    )
+    <SPAN class=code-keyword>OR</SPAN>
+    (
+        (@lastAscendingSortValue <SPAN class=code-keyword>IS</SPAN> <SPAN class=code-keyword>NOT</SPAN> <SPAN class=code-keyword>NULL</SPAN>)
+        <SPAN class=code-keyword>AND</SPAN>
+        (
+            ([AscendingSort] &gt; @lastAscendingSortValue)
+            <SPAN class=code-keyword>OR</SPAN>
+            (
+                [AscendingSort] = @lastAscendingSortValue
+                <SPAN class=code-keyword>AND</SPAN> [UniqueValue] &gt; @lastKeyValue
+            )
+        )
+    )
+    <SPAN class=code-keyword>OR</SPAN>
+    (
+        (@lastDescendingSortValue <SPAN class=code-keyword>IS</SPAN> <SPAN class=code-keyword>NOT</SPAN> <SPAN class=code-keyword>NULL</SPAN>)
+        <SPAN class=code-keyword>AND</SPAN>
+        (
+            ([DescendingSort] &lt; @lastDescendingSortValue)
+            <SPAN class=code-keyword>OR</SPAN>
+            (
+                [DescendingSort] = @lastDescendingSortValue
+                <SPAN class=code-keyword>AND</SPAN> [UniqueValue] &gt; @lastKeyValue
+            )
+        )
+    )
+    <SPAN class=code-keyword>ORDER</SPAN> <SPAN class=code-keyword>BY</SPAN>
+        [AscendingSort] <SPAN class=code-keyword>ASC</SPAN>,
+        [DescendingSort] <SPAN class=code-keyword>DESC</SPAN>,
+        [SalesOrderID] <SPAN class=code-keyword>ASC</SPAN>
+
+    <SPAN class=code-keyword>SET</SPAN> <SPAN class=code-keyword>ROWCOUNT</SPAN> <SPAN class=code-digit>0</SPAN>
+<SPAN class=code-keyword>GO</SPAN>
+</PRE>
+      <H2>A Quick Caveat</H2>
+      <P>This method requires that your data set has at least 1 unique value (or 
+      combination of values) in it per row. I think that tends to be most of 
+      what we use these for anyway. </P>
+      <H2>The Explanation</H2>
+      <P>What does it do? It gets a page of sales orders that are in a 
+      particular date range and sorted in a particular way. </P>
+      <P>How does it work? First, the paging. This is described elsewhere is 
+      better detail, but the idea behind using <CODE>ROWCOUNT</CODE> is that you 
+      ignore a specific series of rows. So, if I'm on the 4th page and I have 10 
+      records on a page, I want to ignore the first 40 rows. How do we do that? 
+      <CODE>ROWCOUNT</CODE> specifies the number of rows that will be returned, 
+      in our case 40, and we simply store unique information about the last row 
+      (row #40) and force the last select statement to return rows after #40. 
+      </P>
+      <P>As mentioned, this causes some difficulty when you add sorting. A 
+      common response to using this method has been, "Well, that works if I 
+      hardcode my sort value", or, "Well, that only works if my sort value is 
+      unique.". So, enter <CODE>SQL_VARIANT</CODE>. <CODE>SQL_VARIANT</CODE> is 
+      interesting in that it preserves the data types, not unlike variant types 
+      in other languages like Javascript and Visual Basic. So, we store your 
+      sort values and your unique value from the last row. It's important that 
+      we have both because what if I want to sort by a field with non-unique 
+      values, like <CODE>[OrderDate]</CODE>? In order to garauntee a sequence in 
+      SQL, we need to make sure that something unique about the row is included 
+      in the <CODE>ORDER BY</CODE> clause. This is the "magic" that gets us 
+      around the sort value uniqueness problem. </P>
+      <P>But what about the hardcoded sort values? Well, that's what those 
+      <CODE>CASE</CODE> statements are doing. If you look, you'll see that the 
+      values coming out of the <CODE>CASE</CODE> statements are just used in the 
+      <CODE>ORDER BY</CODE>. I guess there's a sense in which we've moved from 
+      hardcoding a single sort value to hardcoding the available sort values, 
+      but that's something I'm willing to live with. If you really need ad hoc 
+      queries, there are other methods which will probably suit your needs 
+      better. Since <CODE>SQL_VARIANT</CODE> preserves the types of the sort 
+      values and we're returning the columns we want to sort on in the derived 
+      query, the sort works just like it should. The <CODE>IS NULL</CODE> checks 
+      are there because if we're on the first page, those values should be 
+      <CODE>NULL</CODE>. </P>
+      <H2>That's It?</H2>
+      <P>You wanted more?!? Personally, this was just something that made me 
+      smack myself in the forehead and think, "<STRONG>OF COURSE!</STRONG> 
+      <EM>THAT'S</EM> how you do it." There are some things left to do, however. 
+      </P>
+      <OL>
+        <LI>Performance testing really needs to be done on larger sets of data. 
+        If anyone wants to, I'll gladly post the results (giving credit where 
+        credit is due, of course). I ran this procedure at home on SQL Server 
+        2005 (because that's what I have) and it looked very speedy. </LI></OL>
+      <P>Any rate, I hope this helps some of you out and happy coding! </P><!-- Article Ends --><!-- Main Page Contents End --></DIV></SPAN>
+      <FORM id=aspnetForm 
+      style="PADDING-RIGHT: 0px; PADDING-LEFT: 0px; PADDING-BOTTOM: 0px; MARGIN: 0px; PADDING-TOP: 0px" 
+      name=aspnetForm action=SQLServer2KPagingSorting.aspx method=post>
+      <DIV><INPUT id=__VIEWSTATE type=hidden 
+      value=/wEPDwULLTEwMDUyNjYzMjhkZLmti8iY9CZIeyWqI04Fc7QaAt9x 
+      name=__VIEWSTATE> </DIV>
+      <H2>License</H2>
+      <DIV id=ctl00_LicenseTerms>
+      <P>This article has no explicit license attached to it but may contain 
+      usage terms in the article text or the download files themselves. If in 
+      doubt please contact the author via the discussion board below.</P>
+      <P>A list of licenses authors might use can be found <A 
+      href="http://www.codeproject.com/info/Licenses.aspx">here</A></P></DIV>
+      <H2>About the Author</H2>
+      <TABLE cellSpacing=5 cellPadding=0 width="100%" border=0>
+        <TBODY>
+        <TR vAlign=top>
+          <TD id=ctl00_AboutAuthorRptr_ctl00_AboutAuthor_memberPhotoTable 
+          style="WIDTH: 155px" vAlign=top><B><A 
+            id=ctl00_AboutAuthorRptr_ctl00_AboutAuthor_memberProfileLink 
+            href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=864994">DejaVudew</A></B><BR><BR>
+            <CENTER></CENTER><BR><SPAN class=SmallText 
+            id=ctl00_AboutAuthorRptr_ctl00_AboutAuthor_memberType></SPAN></TD>
+          <TD><BR>
+            <TABLE>
+              <TBODY>
+              <TR id=ctl00_AboutAuthorRptr_ctl00_AboutAuthor_locationRow>
+                <TD class=SmallText>Location: </TD>
+                <TD width="100%"><SPAN class=SmallText 
+                  id=ctl00_AboutAuthorRptr_ctl00_AboutAuthor_memberLocation><IMG 
+                  height=11 alt="United States" 
+                  src="CodeProject SQL Server 2000 Paging and Sorting Using ROWCOUNT and SQL_VARIANT_ Free source code and programming help_files/US.gif" 
+                  width=16> United 
+        States</SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE><BR>
+      <TABLE id=ctl00_PopularArticlesRow cellSpacing=0 cellPadding=0 
+      width="100%" border=0>
+        <TBODY>
+        <TR vAlign=top>
+          <TD style="WIDTH: 100%">
+            <H2>Other popular Database articles:</H2>
+            <UL>
+              <LI><A 
+              href="http://www.codeproject.com/KB/database/caaadoclass1.aspx">A 
+              set of ADO classes - version 2.20</A>
+              <DIV class=SmallText>Simple database access using an ADO 
+              class.</DIV>
+              <LI><A 
+              href="http://www.codeproject.com/KB/database/filehelpers.aspx">FileHelpers 
+              v2.0 - Delimited (CSV) or Fixed Data Import/Export Framework</A>
+              <DIV class=SmallText>An easy to use .NET library to read/write 
+              strong typed data from files with fixed length or delimited 
+              records (CSV). Also has support to import/export data from 
+              different data storages (Excel, Acces, SqlServer, MySql)</DIV>
+              <LI><A 
+              href="http://www.codeproject.com/KB/database/sqldodont.aspx">SQL 
+              Server DO's and DONT's</A>
+              <DIV class=SmallText>SQL Server database best practices</DIV>
+              <LI><A 
+              href="http://www.codeproject.com/KB/database/connectionstrings.aspx">ADO 
+              Connection Strings</A>
+              <DIV class=SmallText>A list of ODBC DSN Connection Strings.</DIV>
+              <LI><A 
+              href="http://www.codeproject.com/KB/database/DynamicMethod_ILGenerator.aspx">Dynamic... 
+              but fast: The tale of three monkeys, a wolf and the DynamicMethod 
+              and ILGenerator classes</A>
+              <DIV class=SmallText>How to use the DynamicMethod and ILGenerator 
+              classes to create dynamic code at runtime that out performs 
+              reflection</DIV></LI></UL>
+            <H2></H2></TD>
+          <TD>
+            <SCRIPT type=text/javascript>document.write(unescape("%3ca%20href%3d%22http%3a%2f%2fwww.codeproject.com%2fRedir.aspx%3fadid%3d5240%26way%3dban%22%20target%3d%22_blank%22%20rel%3d%22nofollow%22%3e%3cimg%20src%3d%22http%3a%2f%2fwww.codeproject.com%2fscript%2fAnn%2fServeImg.aspx%3fFile%3d%252fscript%252fadmentor%252fimages%252fIBM_RationalAssetManagerV7_300x250.gif%26C%3dFalse%26id%3d5240%22%20alt%3d%22%22%20border%3d%220%22%20width%3d%22300%22%20height%3d%22250%22%3e%3c%2fa%3e"));</SCRIPT>
+          </TD></TR></TBODY></TABLE>
+      <DIV id=ctl00_AddTo_AddTo style="MARGIN: 10px">
+      <SCRIPT language=JavaScript type=text/javascript>
+var addtoMethod=1;
+var AddURL = document.location.href;
+var AddTitle = escape(document.title);
+DrawLinks(100, 0, "SmallText Bold", "AddTo") 
+</SCRIPT>
+      </DIV>
+      <TABLE class=ArticleUneditedHeader id=ctl00_RateArticleRow cellSpacing=0 
+      cellPadding=0 width="100%" border=0>
+        <TBODY>
+        <TR>
+          <TD><A 
+            href="http://www.codeproject.com/KB/database/SQLServer2KPagingSorting.aspx#_top">Article 
+            Top</A></TD>
+          <TD align=right>
+            <TABLE cellSpacing=0 cellPadding=0 width="100%">
+              <TBODY>
+              <TR>
+                <TD id=ctl00_RateArticle_VoteResultDiv noWrap align=right 
+                width="100%"><SPAN id=voteRes></SPAN><IMG id=loaderImg 
+                  style="DISPLAY: none" height=16 alt=loading... 
+                  src="CodeProject SQL Server 2000 Paging and Sorting Using ROWCOUNT and SQL_VARIANT_ Free source code and programming help_files/ajax-loader.gif" 
+                  width=16> </TD>
+                <TD class=SmallText id=voteTbl style="WHITE-SPACE: nowrap" 
+                align=right>
+                  <TABLE>
+                    <TBODY>
+                    <TR>
+                      <TD id=ctl00_RateArticle_RateText 
+                      style="PADDING-RIGHT: 5px; WHITE-SPACE: nowrap"><I><B>Rate 
+                        this Article for us!</B></I></TD>
+                      <TD id=ctl00_RateArticle_StartForm 
+                        align=right><I>&nbsp;&nbsp;Poor</I></TD>
+                      <TD id=ctl00_RateArticle_VoteFormDiv 
+                      style="WHITE-SPACE: nowrap" align=left>
+                        <TABLE id=ctl00_RateArticle_VoteRBL border=0>
+                          <TBODY>
+                          <TR>
+                            <TD><INPUT id=ctl00_RateArticle_VoteRBL_0 
+                              type=radio value=1 
+                            name=ctl00$RateArticle$VoteRBL></TD>
+                            <TD><INPUT id=ctl00_RateArticle_VoteRBL_1 
+                              type=radio value=2 
+                            name=ctl00$RateArticle$VoteRBL></TD>
+                            <TD><INPUT id=ctl00_RateArticle_VoteRBL_2 
+                              type=radio value=3 
+                            name=ctl00$RateArticle$VoteRBL></TD>
+                            <TD><INPUT id=ctl00_RateArticle_VoteRBL_3 
+                              type=radio value=4 
+                            name=ctl00$RateArticle$VoteRBL></TD>
+                            <TD><INPUT id=ctl00_RateArticle_VoteRBL_4 
+                              type=radio value=5 
+                            name=ctl00$RateArticle$VoteRBL></TD></TR></TBODY></TABLE></TD>
+                      <TD id=ctl00_RateArticle_EndForm noWrap 
+                        align=left><I>Excellent</I> <INPUT class=FormButton id=ctl00_RateArticle_SubmitRateBtn onclick="return rateItem(13316,2);" type=submit value=Vote name=ctl00$RateArticle$SubmitRateBtn> 
+                      </TD>
+                      <TD><SPAN 
+                    id=ctl00_RateArticle_ErrorMessage></SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE>
+      <DIV><INPUT id=__EVENTVALIDATION type=hidden 
+      value=/wEWCALv+rmxAwLAlMXDBwLBlMXDBwLClMXDBwLDlMXDBwLElMXDBwLP+++tCwK5upDkCyy0JYQdukRGoRj4pZVfzD3Y8+gt 
+      name=__EVENTVALIDATION> </DIV></FORM>
+      <DIV 
+      style="PADDING-RIGHT: 10px; PADDING-LEFT: 10px; PADDING-BOTTOM: 10px; OVERFLOW: hidden; PADDING-TOP: 10px; WHITE-SPACE: nowrap; TEXT-ALIGN: center"><IFRAME 
+      src="CodeProject SQL Server 2000 Paging and Sorting Using ROWCOUNT and SQL_VARIANT_ Free source code and programming help_files/ServeLinks.htm" 
+      frameBorder=0 width=468 scrolling=no height=60></IFRAME><IFRAME 
+      src="CodeProject SQL Server 2000 Paging and Sorting Using ROWCOUNT and SQL_VARIANT_ Free source code and programming help_files/blank.htm" 
+      frameBorder=0 width=300 scrolling=no height=60></IFRAME></DIV><A 
+      name=_comments></A><!-- Forum Start -->
+      <DIV id=_MessageBoard onclick="return SwitchMessage(event, null)">
+      <TABLE class=Frm_MainTable id=ForumTable cellSpacing=0 cellPadding=0>
+        <TBODY>
+        <TR>
+          <TD>
+            <FORM 
+            style="PADDING-RIGHT: 0px; PADDING-LEFT: 0px; PADDING-BOTTOM: 0px; MARGIN: 0px; PADDING-TOP: 0px" 
+            action=/script/Forums/SetOptions.aspx?floc=%2fKB%2fdatabase%2fSQLServer2KPagingSorting.aspx&amp;fid=276162 
+            method=get><INPUT type=hidden value=276162 name=fid><INPUT 
+            type=hidden 
+            value=?floc=%2fKB%2fdatabase%2fSQLServer2KPagingSorting.aspx&amp;fid=276162 
+            name=currentQS><INPUT type=hidden 
+            value=/KB/database/SQLServer2KPagingSorting.aspx name=floc>
+            <TABLE cellSpacing=0 cellPadding=3 width="100%" border=0>
+              <TBODY>
+              <TR class=Frm_HeaderRow1>
+                <TD style="WHITE-SPACE: nowrap"><IMG height=16 alt=FAQ 
+                  src="CodeProject SQL Server 2000 Paging and Sorting Using ROWCOUNT and SQL_VARIANT_ Free source code and programming help_files/forum_faq.gif" 
+                  width=16 align=middle border=0>&nbsp;<A 
+                  href="http://www.codeproject.com/script/Forums/FAQ.aspx"><B>FAQ</B></A>&nbsp;</TD>
+                <TD style="WHITE-SPACE: nowrap; TEXT-ALIGN: right">Noise 
+                  Tolerance<SELECT class=Frm_DropDown size=1 name=noise> 
+                    <OPTION value=1>Very High</OPTION><OPTION 
+                    value=2>High</OPTION><OPTION value=3 
+                    selected>Medium</OPTION><OPTION value=4>Low</OPTION><OPTION 
+                    value=5>Very Low</OPTION></SELECT></TD>
+                <TD style="WHITE-SPACE: nowrap; TEXT-ALIGN: right" 
+                  colSpan=2><IMG height=15 alt=Search 
+                  src="CodeProject SQL Server 2000 Paging and Sorting Using ROWCOUNT and SQL_VARIANT_ Free source code and programming help_files/forum_search.gif" 
+                  width=16 align=top border=0>&nbsp;<A 
+                  href="http://www.codeproject.com/script/Forums/Search.aspx?fid=276162">Search 
+                  Messages</A>&nbsp;</TD>
+                <TD style="TEXT-ALIGN: right"><INPUT class=Frm_Button type=submit value="Set Options" name=submit></TD></TR>
+              <TR class=Frm_HeaderRow2>
+                <TD style="WIDTH: 100%">&nbsp;</TD>
+                <TD 
+                  style="WHITE-SPACE: nowrap; TEXT-ALIGN: right">Layout<SELECT 
+                  class=Frm_DropDown size=1 name=view> <OPTION value=Quick 
+                    selected>Normal</OPTION><OPTION value=Topic>Expand Root 
+                    Messages</OPTION><OPTION value=Expanded>Expand All 
+                    Messages</OPTION><OPTION value=Thread>Thread 
+                    View</OPTION><OPTION value=Normal>No Javascript 
+                    (slow)</OPTION><OPTION value=Preview>No Javascript 
+                    Preview</OPTION></SELECT>&nbsp;&nbsp;</TD>
+                <TD style="WHITE-SPACE: nowrap">Per page<SELECT 
+                  class=Frm_DropDown size=1 name=mpp> <OPTION 
+                    value=10>10</OPTION><OPTION value=25 
+                    selected>25</OPTION><OPTION 
+                  value=50>50</OPTION></SELECT>&nbsp;&nbsp;</TD>
+                <TD colSpan=2>&nbsp;</TD></TR></TBODY></TABLE></FORM></TD></TR>
+        <TR>
+          <TD><A name=xx0xx></A>
+            <TABLE cellSpacing=0 cellPadding=2 width="100%" border=0>
+              <TBODY>
+              <TR class=Frm_NavigationBar>
+                <TD><IMG height=16 alt=new 
+                  src="CodeProject SQL Server 2000 Paging and Sorting Using ROWCOUNT and SQL_VARIANT_ Free source code and programming help_files/forum_newmsg.gif" 
+                  width=16 align=top border=0><A class=Frm_HL 
+                  title="Create a new message thread" 
+                  href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=276162&amp;floc=/KB/database/SQLServer2KPagingSorting.aspx" 
+                  target=_top name=Frm_HoverNL><B>New Message</B></A></TD>
+                <TD>Msgs 1 to 6 of 6 (Total in Forum: 6) (<A 
+                  href="http://www.codeproject.com/KB/database/SQLServer2KPagingSorting.aspx?fid=276162">Refresh</A>)</TD>
+                <TD style="WHITE-SPACE: nowrap; TEXT-ALIGN: right"><SPAN 
+                  class=Frm_HL>First</SPAN><SPAN class=Frm_HL>Prev</SPAN><SPAN 
+                  class=Frm_HL>Next</SPAN></TD></TR></TBODY></TABLE></TD></TR>
+        <TR>
+          <TD>
+            <TABLE class=Frm_MsgTable cellSpacing=0 cellPadding=0 width="100%" 
+            border=0><!-- Column Headers -->
+              <TBODY>
+              <TR class=Frm_ColumnHeaders>
+                <TD style="WIDTH: 100%">
+                  <TABLE cellSpacing=0 cellPadding=2 width="100%" border=0>
+                    <TBODY>
+                    <TR>
+                      <TD>Subject&nbsp;</TD>
+                      <TD class=Frm_MsgAuthor>&nbsp;Author&nbsp;</TD>
+                      <TD 
+              class=Frm_MsgDate>Date&nbsp;</TD></TR></TBODY></TABLE></TD></TR>
+              <TR>
+                <TD><IMG height=5 alt="" 
+                  src="C:\Documents and Settings\valley\Desktop\New Folder\CodeProject SQL Server 2000 Paging and Sorting Using ROWCOUNT and SQL_VARIANT_ Free source code and programming help_files\t(1).gif" 
+                  width=1 border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd Rt HdUnSel " id=F2051093_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=16><A 
+                        name=xx2051093xx></A><IMG height=16 alt=General 
+                        src="CodeProject SQL Server 2000 Paging and Sorting Using ROWCOUNT and SQL_VARIANT_ Free source code and programming help_files/msg_general.gif" 
+                        width=16 align=top></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/database/SQLServer2KPagingSorting.aspx?fid=276162&amp;select=2051093#xx2051093xx" 
+                        name=2051093>Thanks for the helpful article</A></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        title=member height=16 alt=member 
+                        src="CodeProject SQL Server 2000 Paging and Sorting Using ROWCOUNT and SQL_VARIANT_ Free source code and programming help_files/member_sm.gif" 
+                        border=0></TD>
+                      <TD class=Frm_MsgAuthor><A 
+                        href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=309280">yem583</A></TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">16:23 
+                        23 May '07 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=F2051093_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 16px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2>This is exactly what I was looking 
+                                for. My initial testing (up to 10,000 rows) 
+                                shows the performance to be outstanding. Very 
+                                nice work.<BR><BR><BR></TD></TR>
+                                <TR style="VERTICAL-ALIGN: middle">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL title=Reply 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=276162&amp;select=2051093&amp;floc=/KB/database/SQLServer2KPagingSorting.aspx&amp;fa=r">Reply</A>·<A 
+                                class=Frm_MHL title=Email 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=276162&amp;select=2051093&amp;floc=/KB/database/SQLServer2KPagingSorting.aspx&amp;fa=e">Email</A>·<A 
+                                class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/database/SQLServer2KPagingSorting.aspx?fid=276162&amp;tid=2051093">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=276162&amp;msg=2051093">PermaLink</A>·<A 
+                                class=Frm_MHL title="Bookmark this post" 
+                                href="http://www.codeproject.com/script/Bookmarks/Add.aspx?&amp;obid=2051093&amp;obtid=3&amp;bma=AddBookmark">Bookmark</A></TD>
+                                <TD class=Frm_MsgFt 
+                                style="TEXT-ALIGN: right"><SPAN id=MVF2051093 
+                                style="WHITE-SPACE: nowrap">
+                                <SCRIPT type=text/javascript>
+												MsgVoteForm(309280,2051093,false,"","","");
+											</SCRIPT>
+                                </SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR class=Quick>
+                <TD class=Frm_MsgRtDivide><IMG height=1 alt="" 
+                  src="C:\Documents and Settings\valley\Desktop\New Folder\CodeProject SQL Server 2000 Paging and Sorting Using ROWCOUNT and SQL_VARIANT_ Free source code and programming help_files\t(1).gif" 
+                  width=1 border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd Rt HdUnSel " id=F1887406_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=16><A 
+                        name=xx1887406xx></A><IMG height=16 alt=General 
+                        src="CodeProject SQL Server 2000 Paging and Sorting Using ROWCOUNT and SQL_VARIANT_ Free source code and programming help_files/msg_general.gif" 
+                        width=16 align=top></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/database/SQLServer2KPagingSorting.aspx?fid=276162&amp;select=1887406#xx1887406xx" 
+                        name=1887406>A suggestion</A></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        title=member height=16 alt=member 
+                        src="CodeProject SQL Server 2000 Paging and Sorting Using ROWCOUNT and SQL_VARIANT_ Free source code and programming help_files/member_sm.gif" 
+                        border=0></TD>
+                      <TD class=Frm_MsgAuthor><A 
+                        href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=1644034">http://www.codeproject.com/script/Membership/Profiles.aspx?mid=1644034</A></TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">22:14 9 
+                        Feb '07 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=F1887406_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 16px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2>Instead of count(*), using 
+                                count(1) will improve the performance 
+                                <BR></TD></TR>
+                                <TR style="VERTICAL-ALIGN: middle">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL title=Reply 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=276162&amp;select=1887406&amp;floc=/KB/database/SQLServer2KPagingSorting.aspx&amp;fa=r">Reply</A>·<A 
+                                class=Frm_MHL title=Email 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=276162&amp;select=1887406&amp;floc=/KB/database/SQLServer2KPagingSorting.aspx&amp;fa=e">Email</A>·<A 
+                                class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/database/SQLServer2KPagingSorting.aspx?fid=276162&amp;tid=1887406">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=276162&amp;msg=1887406">PermaLink</A>·<A 
+                                class=Frm_MHL title="Bookmark this post" 
+                                href="http://www.codeproject.com/script/Bookmarks/Add.aspx?&amp;obid=1887406&amp;obtid=3&amp;bma=AddBookmark">Bookmark</A></TD>
+                                <TD class=Frm_MsgFt 
+                                style="TEXT-ALIGN: right"><SPAN id=MVF1887406 
+                                style="WHITE-SPACE: nowrap">
+                                <SCRIPT type=text/javascript>
+												MsgVoteForm(1644034,1887406,false,"","","");
+											</SCRIPT>
+                                </SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR class=Quick>
+                <TD class=Frm_MsgRtDivide><IMG height=1 alt="" 
+                  src="C:\Documents and Settings\valley\Desktop\New Folder\CodeProject SQL Server 2000 Paging and Sorting Using ROWCOUNT and SQL_VARIANT_ Free source code and programming help_files\t(1).gif" 
+                  width=1 border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd Rt HdUnSel " id=F1708169_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=16><A 
+                        name=xx1708169xx></A><IMG height=16 alt=General 
+                        src="CodeProject SQL Server 2000 Paging and Sorting Using ROWCOUNT and SQL_VARIANT_ Free source code and programming help_files/msg_general.gif" 
+                        width=16 align=top></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/database/SQLServer2KPagingSorting.aspx?fid=276162&amp;select=1708169#xx1708169xx" 
+                        name=1708169>Works for me</A></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        title=member height=16 alt=member 
+                        src="CodeProject SQL Server 2000 Paging and Sorting Using ROWCOUNT and SQL_VARIANT_ Free source code and programming help_files/member_sm.gif" 
+                        border=0></TD>
+                      <TD class=Frm_MsgAuthor><A 
+                        href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=1902004">frankosaurus</A></TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">12:50 
+                        11 Oct '06 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=F1708169_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 16px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2>Thanks for the code-- appears to 
+                                be a good paging solution until client moves to 
+                                SQL Server 2005.<BR><BR>I need to check on the 
+                                issue brought up by poster "DBA_NA", but I 
+                                haven't encountered any problems so 
+                                far.<BR><BR><BR></TD></TR>
+                                <TR style="VERTICAL-ALIGN: middle">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL title=Reply 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=276162&amp;select=1708169&amp;floc=/KB/database/SQLServer2KPagingSorting.aspx&amp;fa=r">Reply</A>·<A 
+                                class=Frm_MHL title=Email 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=276162&amp;select=1708169&amp;floc=/KB/database/SQLServer2KPagingSorting.aspx&amp;fa=e">Email</A>·<A 
+                                class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/database/SQLServer2KPagingSorting.aspx?fid=276162&amp;tid=1708169">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=276162&amp;msg=1708169">PermaLink</A>·<A 
+                                class=Frm_MHL title="Bookmark this post" 
+                                href="http://www.codeproject.com/script/Bookmarks/Add.aspx?&amp;obid=1708169&amp;obtid=3&amp;bma=AddBookmark">Bookmark</A></TD>
+                                <TD class=Frm_MsgFt 
+                                style="TEXT-ALIGN: right"><SPAN id=MVF1708169 
+                                style="WHITE-SPACE: nowrap">
+                                <SCRIPT type=text/javascript>
+												MsgVoteForm(1902004,1708169,false,"","","");
+											</SCRIPT>
+                                </SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR class=Quick>
+                <TD class=Frm_MsgDivide><IMG height=1 alt="" 
+                  src="C:\Documents and Settings\valley\Desktop\New Folder\CodeProject SQL Server 2000 Paging and Sorting Using ROWCOUNT and SQL_VARIANT_ Free source code and programming help_files\t(1).gif" 
+                  width=1 border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd LoVote HdUnSel " id=F1712084_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=34><A 
+                        name=xx1712084xx></A><IMG height=16 alt=General 
+                        src="CodeProject SQL Server 2000 Paging and Sorting Using ROWCOUNT and SQL_VARIANT_ Free source code and programming help_files/msg_general.gif" 
+                        width=16 align=top></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/database/SQLServer2KPagingSorting.aspx?fid=276162&amp;select=1712084#xx1712084xx" 
+                        name=1712084>Re: Works for me</A></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        title=member height=16 alt=member 
+                        src="CodeProject SQL Server 2000 Paging and Sorting Using ROWCOUNT and SQL_VARIANT_ Free source code and programming help_files/member_sm.gif" 
+                        border=0></TD>
+                      <TD class=Frm_MsgAuthor><A 
+                        href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=864994">DejaVudew</A></TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">18:41 
+                        13 Oct '06 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=F1712084_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 34px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2>Yeah. I still haven't seen the 
+                                problem that was mentioned.<BR><BR>And 
+                                yeah...this solution is very specific to Sql 
+                                Server 2000. While it works in Sql Server 2005, 
+                                you wouldn't want to use it. <BR></TD></TR>
+                                <TR style="VERTICAL-ALIGN: middle">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL title=Reply 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=276162&amp;select=1712084&amp;floc=/KB/database/SQLServer2KPagingSorting.aspx&amp;fa=r">Reply</A>·<A 
+                                class=Frm_MHL title=Email 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=276162&amp;select=1712084&amp;floc=/KB/database/SQLServer2KPagingSorting.aspx&amp;fa=e">Email</A>·<A 
+                                class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/database/SQLServer2KPagingSorting.aspx?fid=276162&amp;tid=1708169">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=276162&amp;msg=1712084">PermaLink</A>·<A 
+                                class=Frm_MHL title="Bookmark this post" 
+                                href="http://www.codeproject.com/script/Bookmarks/Add.aspx?&amp;obid=1712084&amp;obtid=3&amp;bma=AddBookmark">Bookmark</A></TD>
+                                <TD class=Frm_MsgFt 
+                                style="TEXT-ALIGN: right"><SPAN id=MVF1712084 
+                                style="WHITE-SPACE: nowrap">1.00/5 (1 vote)
+                                <SCRIPT type=text/javascript>
+												MsgVoteForm(864994,1712084,false,"","","");
+											</SCRIPT>
+                                 
+                        </SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR class=Quick>
+                <TD class=Frm_MsgRtDivide><IMG height=1 alt="" 
+                  src="C:\Documents and Settings\valley\Desktop\New Folder\CodeProject SQL Server 2000 Paging and Sorting Using ROWCOUNT and SQL_VARIANT_ Free source code and programming help_files\t(1).gif" 
+                  width=1 border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd HiVote Rt HdUnSel " id=F1689870_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=16><A 
+                        name=xx1689870xx></A><IMG height=16 alt=General 
+                        src="CodeProject SQL Server 2000 Paging and Sorting Using ROWCOUNT and SQL_VARIANT_ Free source code and programming help_files/msg_general.gif" 
+                        width=16 align=top></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/database/SQLServer2KPagingSorting.aspx?fid=276162&amp;select=1689870#xx1689870xx" 
+                        name=1689870>Alternate to account for more than a page 
+                        full of nulls in sort column</A></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        title=member height=16 alt=member 
+                        src="CodeProject SQL Server 2000 Paging and Sorting Using ROWCOUNT and SQL_VARIANT_ Free source code and programming help_files/member_sm.gif" 
+                        border=0></TD>
+                      <TD class=Frm_MsgAuthor><A 
+                        href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=3407370">DBA_NA</A></TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">10:58 
+                        28 Sep '06 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=F1689870_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 16px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2>Awesome! Thanks so much for 
+                                posting that. But, if you have more than a page 
+                                full of nulls in your sort, subsequent pages 
+                                return no rows.<BR>So I changed the CASE to not 
+                                return nulls:<BR>ELSE<BR>CONVERT(SQL_Variant, 
+                                'No Sort Chosen')<BR>And I changed the paging 
+                                criteria, as so:<BR>WHERE<BR>--page 1, no paging 
+                                criteria<BR>( @NumberToIgnore = 
+                                0<BR>)<BR>OR<BR>(<BR>@SortOrder='ASC'<BR>AND 
+                                ([AscendingSort] &gt;= @lastAscendingSortValue 
+                                <BR>OR @lastAscendingSortValue IS NULL)<BR>AND 
+                                [UniqueValue] &gt; 
+                                @lastKeyValue<BR>)<BR>OR<BR>(<BR>@SortOrder='DESC'<BR>AND 
+                                ([DescendingSort] &lt;= @lastDescendingSortValue 
+                                <BR>OR @lastDescendingSortValue IS NULL)<BR>AND 
+                                [UniqueValue] &gt; @lastKeyValue<BR>)<BR>My 
+                                alternate is possible, because I also added 
+                                default values to all the input 
+                                params:<BR>@sortExpression 
+                                varchar(100)='CreatedOn',<BR>@sortOrder 
+                                varchar(4)='ASC',<BR>@pageNumber 
+                                int=1,<BR>@pageSize int=10<BR><BR>Seems to be 
+                                working the way I need now, and I'm impressed 
+                                with the speed <BR></TD></TR>
+                                <TR style="VERTICAL-ALIGN: middle">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL title=Reply 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=276162&amp;select=1689870&amp;floc=/KB/database/SQLServer2KPagingSorting.aspx&amp;fa=r">Reply</A>·<A 
+                                class=Frm_MHL title=Email 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=276162&amp;select=1689870&amp;floc=/KB/database/SQLServer2KPagingSorting.aspx&amp;fa=e">Email</A>·<A 
+                                class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/database/SQLServer2KPagingSorting.aspx?fid=276162&amp;tid=1689870">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=276162&amp;msg=1689870">PermaLink</A>·<A 
+                                class=Frm_MHL title="Bookmark this post" 
+                                href="http://www.codeproject.com/script/Bookmarks/Add.aspx?&amp;obid=1689870&amp;obtid=3&amp;bma=AddBookmark">Bookmark</A></TD>
+                                <TD class=Frm_MsgFt 
+                                style="TEXT-ALIGN: right"><SPAN id=MVF1689870 
+                                style="WHITE-SPACE: nowrap">5.00/5 (2 votes)
+                                <SCRIPT type=text/javascript>
+												MsgVoteForm(3407370,1689870,false,"","","");
+											</SCRIPT>
+                                 
+                        </SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR class=Quick>
+                <TD class=Frm_MsgDivide><IMG height=1 alt="" 
+                  src="C:\Documents and Settings\valley\Desktop\New Folder\CodeProject SQL Server 2000 Paging and Sorting Using ROWCOUNT and SQL_VARIANT_ Free source code and programming help_files\t(1).gif" 
+                  width=1 border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd HdUnSel " id=F2432488_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=34><A 
+                        name=xx2432488xx></A><IMG height=16 alt=General 
+                        src="CodeProject SQL Server 2000 Paging and Sorting Using ROWCOUNT and SQL_VARIANT_ Free source code and programming help_files/msg_general.gif" 
+                        width=16 align=top></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/database/SQLServer2KPagingSorting.aspx?fid=276162&amp;select=2432488#xx2432488xx" 
+                        name=2432488>Re: Alternate to account for more than a 
+                        page full of nulls in sort column</A></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        title=member height=16 alt=member 
+                        src="CodeProject SQL Server 2000 Paging and Sorting Using ROWCOUNT and SQL_VARIANT_ Free source code and programming help_files/member_sm.gif" 
+                        border=0></TD>
+                      <TD class=Frm_MsgAuthor><A 
+                        href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=207055">Yingbiao</A></TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">20:11 
+                        18 Feb '08 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=F2432488_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 34px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2>The where condition seems has 
+                                minor issue, for example, the following 
+                                ascending sort, assume @pageNumber = 2, 
+                                @pageSize = 5, according to the query, 
+                                @lastKeyValue = 50, @lastAscendingSortValue = 
+                                NULL, and the original condition won't return 
+                                correct records because of the condition 
+                                "[UniqueValue] &gt; @lastKeyValue"<BR><PRE><BR>UniqueValue      AscendingSort<BR>----------------------------------  Page 1<BR>       1		NULL	<BR>       2		NULL	<BR>       3		NULL	<BR>       4		NULL	<BR>       50		NULL	<BR>----------------------------------- Page 2<BR>       5		A	<BR>       6		A <BR>       7		A<BR></PRE><BR>The 
+                                same thing holds true for Descending order, so I 
+                                modified the where condition to the following 
+                                one<BR><PRE><BR>	WHERE<BR>	( <BR>		@NumberToIgnore = 0<BR>	)<BR>	OR<BR>	(<BR>		@sortOrder='ASC'<BR>		AND<BR>		(<BR>			(<BR>				@lastAscendingSortValue IS NULL <BR>				AND <BR>				(<BR>					([UniqueValue] &gt; @lastKeyValue AND [AscendingSort] IS NULL)<BR>					OR <BR>					[AscendingSort] IS NOT NULL<BR>				)<BR>			)<BR>			OR<BR>			(<BR>				@lastAscendingSortValue IS NOT NULL <BR>				AND <BR>				(<BR>					[AscendingSort] &gt; @lastAscendingSortValue<BR>					OR <BR>					([AscendingSort] = @lastAscendingSortValue AND [UniqueValue] &gt; @lastKeyValue)<BR>				)<BR>			)			<BR>		)<BR>	)<BR>	OR<BR>	(<BR>		@sortOrder='DESC'<BR>		AND <BR>		(	<BR>			(<BR>				@lastDescendingSortValue IS NOT NULL <BR>				AND (<BR>					([DescendingSort] IS NOT NULL AND <BR>						([DescendingSort] = @lastDescendingSortValue AND [UniqueValue] &gt; @lastKeyValue)<BR>						OR<BR>						([DescendingSort] &lt; @lastDescendingSortValue)<BR>					)<BR>					OR <BR>					([DescendingSort] IS NULL)<BR>				)<BR>			)<BR>			OR <BR>			(@lastDescendingSortValue IS NULL AND [DescendingSort] IS NULL AND [UniqueValue] &gt; @lastKeyValue)<BR>		)<BR>	)</PRE><BR></TD></TR>
+                                <TR style="VERTICAL-ALIGN: middle">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL title=Reply 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=276162&amp;select=2432488&amp;floc=/KB/database/SQLServer2KPagingSorting.aspx&amp;fa=r">Reply</A>·<A 
+                                class=Frm_MHL title=Email 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=276162&amp;select=2432488&amp;floc=/KB/database/SQLServer2KPagingSorting.aspx&amp;fa=e">Email</A>·<A 
+                                class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/database/SQLServer2KPagingSorting.aspx?fid=276162&amp;tid=1689870">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=276162&amp;msg=2432488">PermaLink</A>·<A 
+                                class=Frm_MHL title="Bookmark this post" 
+                                href="http://www.codeproject.com/script/Bookmarks/Add.aspx?&amp;obid=2432488&amp;obtid=3&amp;bma=AddBookmark">Bookmark</A></TD>
+                                <TD class=Frm_MsgFt 
+                                style="TEXT-ALIGN: right"><SPAN id=MVF2432488 
+                                style="WHITE-SPACE: nowrap">
+                                <SCRIPT type=text/javascript>
+												MsgVoteForm(207055,2432488,false,"","","");
+											</SCRIPT>
+                                </SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR>
+                <TD><IMG height=5 alt="" 
+                  src="C:\Documents and Settings\valley\Desktop\New Folder\CodeProject SQL Server 2000 Paging and Sorting Using ROWCOUNT and SQL_VARIANT_ Free source code and programming help_files\t(1).gif" 
+                  width=1 border=0></TD></TR></TBODY></TABLE></TD></TR>
+        <TR>
+          <TD>
+            <TABLE cellSpacing=0 cellPadding=2 width="100%">
+              <TBODY>
+              <TR class=Frm_Footer>
+                <TD>Last Visit: Monday, June 9, 2008 5:35 AM &nbsp; &nbsp; 
+                  Last Update:Thursday, June 12, 2008 8:43 AM</TD>
+                <TD 
+              style="WHITE-SPACE: nowrap; TEXT-ALIGN: right"></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></DIV>
+      <P class=SmallText><IMG height=16 alt=General 
+      src="CodeProject SQL Server 2000 Paging and Sorting Using ROWCOUNT and SQL_VARIANT_ Free source code and programming help_files/msg_general.gif" 
+      width=16 align=top> General &nbsp;&nbsp; <IMG height=16 alt=News 
+      src="CodeProject SQL Server 2000 Paging and Sorting Using ROWCOUNT and SQL_VARIANT_ Free source code and programming help_files/msg_news.gif" 
+      width=16 align=top> News &nbsp;&nbsp; <IMG height=16 alt=Question 
+      src="CodeProject SQL Server 2000 Paging and Sorting Using ROWCOUNT and SQL_VARIANT_ Free source code and programming help_files/msg_question.gif" 
+      width=16 align=top> Question &nbsp;&nbsp; <IMG height=16 alt=Answer 
+      src="CodeProject SQL Server 2000 Paging and Sorting Using ROWCOUNT and SQL_VARIANT_ Free source code and programming help_files/msg_answer.gif" 
+      width=16 align=top> Answer &nbsp;&nbsp; <IMG height=16 alt=Joke 
+      src="CodeProject SQL Server 2000 Paging and Sorting Using ROWCOUNT and SQL_VARIANT_ Free source code and programming help_files/msg_joke.gif" 
+      width=16 align=top> Joke &nbsp;&nbsp; <IMG height=16 alt=Rant 
+      src="CodeProject SQL Server 2000 Paging and Sorting Using ROWCOUNT and SQL_VARIANT_ Free source code and programming help_files/msg_rant.gif" 
+      width=16 align=top> Rant &nbsp;&nbsp; <IMG height=16 alt=Admin 
+      src="CodeProject SQL Server 2000 Paging and Sorting Using ROWCOUNT and SQL_VARIANT_ Free source code and programming help_files/msg_admin.gif" 
+      width=16 align=top> Admin &nbsp;&nbsp; </P><!-- Forum End --></DIV>
+      <TABLE width="100%">
+        <TBODY>
+        <TR vAlign=top>
+          <TD class=TinyText align=left><A id=ctl00_PermaLink 
+            href="http://www.codeproject.com/script/Articles/Article.aspx?aid=13316">PermaLink</A> 
+            | <A id=ctl00_PrivacyLink 
+            href="http://www.codeproject.com/info/privacy.aspx">Privacy </A>| <A 
+            id=ctl00_TermsOfUseLink 
+            href="http://www.codeproject.com/info/TermsOfUse.aspx">Terms of 
+            Use</A> <BR>Last Updated: 29 Sep 2007<BR>Editor: <A 
+            id=ctl00_ArticleEditor></A><BR></TD>
+          <TD class=TinyText vAlign=top align=right>Copyright 2006 by 
+            DejaVudew<BR>Everything else Copyright © <A 
+            href="mailto:webmaster@codeproject.com">CodeProject</A>, 1999-2008 
+            <BR>Web11 | <A id=ctl00_AdvertiseLink 
+            href="http://www.codeproject.com/info/MediaKit.aspx">Advertise on 
+            the Code Project </A></TD></TR></TBODY></TABLE>
+      <CENTER></CENTER></TD></TR>
+  <TR>
+    <TD align=middle colSpan=2></TD></TR></TBODY></TABLE><BR>
+<SCRIPT language=Javascript type=text/javascript>//<![CDATA[
+if (document.all) try {window.attachEvent("oncopy",copyCode);}catch(e){};
+//]]></SCRIPT>
+
+<SCRIPT language=Javascript 
+src="CodeProject SQL Server 2000 Paging and Sorting Using ROWCOUNT and SQL_VARIANT_ Free source code and programming help_files/TogglePre.js" 
+type=text/javascript></SCRIPT>
+
+<SCRIPT language=Javascript 
+src="CodeProject SQL Server 2000 Paging and Sorting Using ROWCOUNT and SQL_VARIANT_ Free source code and programming help_files/menu132_com.js" 
+type=text/javascript></SCRIPT>
+
+<SCRIPT language=Javascript 
+src="CodeProject SQL Server 2000 Paging and Sorting Using ROWCOUNT and SQL_VARIANT_ Free source code and programming help_files/TopNavBar.js" 
+type=text/javascript></SCRIPT>
+
+<SCRIPT language=Javascript type=text/javascript>//<![CDATA[
+new HVMenu(new menu_NavbarConfig());
+//]]></SCRIPT>
+</BODY></HTML>

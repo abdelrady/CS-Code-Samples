@@ -1,0 +1,761 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!-- saved from url=(0060)http://www.stackasterisk.jp/tech/program/howtosniff02_01.jsp -->
+<HTML><HEAD><TITLE>偽装 生ソケットの恐怖</TITLE><!-- #BeginTemplate "/Templates/program01.dwt" --><!-- #BeginEditable "doctitle" -->
+<META content=偽装,ソケット,生ソケット,IPヘッダ,IPアドレス name=keywords>
+<META 
+content=" ソケットってなんですか？生ソケットってなんですか？IPアドレスの偽装が簡単に行われてしまうことを実感してください。盗聴(http://www.stackasterisk.jp/tech/program/howtosniff01_01.jsp)と同様に、Windows上で動く簡単なサンプルを使って解説します。" 
+name=description><LINK href="impressive_Article_files/excp1.css" type=text/css 
+rel=stylesheet><!-- #EndEditable -->
+<META http-equiv=Content-Type content="text/html; charset=shift_jis"><LINK 
+href="impressive_Article_files/base.css" type=text/css rel=stylesheet><LINK 
+href="impressive_Article_files/tech.css" type=text/css rel=stylesheet><LINK 
+href="impressive_Article_files/source.css" type=text/css rel=stylesheet>
+<META content="MSHTML 6.00.2900.2180" name=GENERATOR></HEAD>
+<BODY text=#000000 bgColor=#ffffff leftMargin=0 topMargin=0 marginheight="0" 
+marginwidth="0"><!-- #BeginLibraryItem "/Library/variableInc.lbi" --><!-- #EndLibraryItem -->
+<TABLE cellSpacing=0 cellPadding=0 width="100%" border=0>
+  <TBODY>
+  <TR>
+    <TD><!-- #BeginLibraryItem "/Library/head1.lbi" -->
+      <TABLE cellSpacing=0 cellPadding=0 width="100%" border=0><!-- fwtable fwsrc="head1.png" fwbase="head.gif" fwstyle="Dreamweaver" fwdocid = "742308039" fwnested="0" -->
+        <TBODY>
+        <TR>
+          <TD><A 
+            href="http://www.stackasterisk.jp/;jsessionid=aFLemSaCs_yh"><IMG 
+            height=60 alt=" SE/システムエンジニアのIT系就職/転職/派遣サイト" 
+            src="impressive_Article_files/hd_n_01.gif" width=289 border=0 
+            name=stackasterisk></A></TD>
+          <TD><A href="http://school.itboost.co.jp/" target=_blank><IMG 
+            height=60 alt="システムエンジニアになるためのJava Linux資格の講座（スクール）IT Boost" 
+            src="impressive_Article_files/hd_n_02.gif" width=184 
+border=0></A></TD>
+          <TD vAlign=center align=right width="100%" bgColor=#ffffff>
+            <OBJECT 
+            codeBase=http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,29,0 
+            height=60 width=468 
+            classid=clsid:D27CDB6E-AE6D-11cf-96B8-444553540000><PARAM NAME="movie" VALUE="/banner/brsBannerAdplan.swf"><PARAM NAME="quality" VALUE="high">
+               <embed src="/banner/brsBannerAdplan.swf" quality="high" 
+            pluginspage="http://www.macromedia.com/go/getflashplayer" 
+            type="application/x-shockwave-flash" width="468" height="60" /> 
+            </OBJECT></TD>
+          <TD vAlign=center align=right bgColor=#ffffff><IMG height=1 
+            src="impressive_Article_files/spacer.gif" 
+      width=20></TD></TR></TBODY></TABLE><!-- #EndLibraryItem --></TD></TR>
+  <TR>
+    <TD background=impressive_Article_files/headBg3.gif><!-- #BeginLibraryItem "/Library/head2.lbi" -->
+      <TABLE cellSpacing=0 cellPadding=0 width="100%" border=0><!-- fwtable fwsrc="head2.png" fwbase="head2.gif" fwstyle="Dreamweaver" fwdocid = "742308039" fwnested="0" -->
+        <TBODY>
+        <TR>
+          <TD background=impressive_Article_files/headBg1.gif colSpan=2><IMG 
+            height=30 alt=ITエンジニアとして src="impressive_Article_files/hd_nm.gif" 
+            width=150></TD>
+          <TD><A 
+            href="http://www.stackasterisk.jp/recruitSite/top.htm;jsessionid=aFLemSaCs_yh"><IMG 
+            height=30 alt=働く src="impressive_Article_files/tab_01_off.gif" 
+            width=126 border=0 name=jobBtn></A></TD>
+          <TD><A 
+            href="http://www.stackasterisk.jp/tech/index.jsp;jsessionid=aFLemSaCs_yh"><IMG 
+            height=30 alt=知る src="impressive_Article_files/tab_02.gif" width=126 
+            border=0 name=itBtn></A></TD>
+          <TD><A 
+            href="http://www.stackasterisk.jp/school/index.jsp;jsessionid=aFLemSaCs_yh"><IMG 
+            height=30 alt=学ぶ src="impressive_Article_files/tab_03_off.gif" 
+            width=126 border=0 name=itBtn></A></TD>
+          <TD><A 
+            href="http://www.stackasterisk.jp/ec/index.jsp;jsessionid=aFLemSaCs_yh"><IMG 
+            height=30 alt=買う src="impressive_Article_files/tab_04_off.gif" 
+            width=126 border=0 name=itBtn></A></TD>
+          <TD><A 
+            href="http://www.stackasterisk.jp/community/index.jsp;jsessionid=aFLemSaCs_yh"><IMG 
+            height=30 alt=群れる src="impressive_Article_files/tab_05_off.gif" 
+            width=126 border=0 name=itBtn></A></TD>
+          <TD vAlign=bottom align=right width="100%">
+            <TABLE cellSpacing=0 cellPadding=0 border=0>
+              <FORM 
+              action=https://www.stackasterisk.jp/tech/program/howtosniff02_01.jsp;jsessionid=aFLemSaCs_yh 
+              method=post>
+              <TBODY>
+              <TR>
+                <TD><INPUT type=hidden value=/tech/program/howtosniff02_01.jsp 
+                  name=u> <INPUT type=hidden value=https name=p> <INPUT 
+                  type=image src="impressive_Article_files/sec01_btn.gif"> 
+              </TD></TR></FORM></TBODY></TABLE></TD>
+          <TD><IMG height=1 
+            src="E:\29-7-2008\Raw_Sockets\impressive_Article_files\spacer(1).gif" 
+            width=20></TD></TR></TBODY></TABLE>
+      <TABLE cellSpacing=0 cellPadding=0 width=740 border=0><!-- fwtable fwsrc="head2.png" fwbase="head2.gif" fwstyle="Dreamweaver" fwdocid = "742308039" fwnested="0" -->
+        <TBODY>
+        <TR>
+          <TD><IMG height=19 alt="" 
+            src="impressive_Article_files/loginFace.gif" width=21 
+            align=absMiddle border=0 name=loginFace> <FONT 
+            class=strongGray>ゲストさん こんにちは </FONT></TD></TR></TBODY></TABLE><!-- #EndLibraryItem --></TD></TR>
+  <TR>
+    <TD>
+      <TABLE cellSpacing=0 cellPadding=0 width="100%" border=0>
+        <TBODY>
+        <TR>
+          <TD vAlign=top width=150 
+          background=impressive_Article_files/leftBg2.gif><!-- #BeginLibraryItem "/Library/programSide.lbi" -->
+            <TABLE cellSpacing=0 cellPadding=0 width=150 border=0>
+              <TBODY>
+              <TR>
+                <TD><IMG height=18 src="impressive_Article_files/iCenter.gif" 
+                  width=150></TD></TR>
+              <TR>
+                <TD class=close><IMG height=10 
+                  src="impressive_Article_files/spacer.gif" width=19 
+                  align=absMiddle border=0><A 
+                  href="http://www.stackasterisk.jp/tech/java/index.jsp;jsessionid=aFLemSaCs_yh">Java</A></TD></TR>
+              <TR>
+                <TD class=close><IMG height=10 
+                  src="impressive_Article_files/spacer.gif" width=19 
+                  align=absMiddle border=0><A 
+                  href="http://www.stackasterisk.jp/tech/dotNet/index.jsp;jsessionid=aFLemSaCs_yh">.NET</A></TD></TR>
+              <TR>
+                <TD class=close><IMG height=10 
+                  src="impressive_Article_files/spacer.gif" width=19 
+                  align=absMiddle border=0><A 
+                  href="http://www.stackasterisk.jp/tech/php/index.jsp;jsessionid=aFLemSaCs_yh">PHP</A></TD></TR>
+              <TR>
+                <TD class="open&#10;&#9;"><IMG height=10 
+                  src="impressive_Article_files/spacer.gif" width=19 
+                  align=absMiddle border=0><A 
+                  href="http://www.stackasterisk.jp/tech/program/index.jsp;jsessionid=aFLemSaCs_yh">プログラミング一般</A></TD></TR>
+              <TR>
+                <TD class=close><IMG height=10 
+                  src="impressive_Article_files/spacer.gif" width=19 
+                  align=absMiddle border=0><A 
+                  href="http://www.stackasterisk.jp/tech/dataBase/index.jsp;jsessionid=aFLemSaCs_yh">DataBase</A></TD></TR>
+              <TR>
+                <TD class=close><IMG height=10 
+                  src="impressive_Article_files/spacer.gif" width=19 
+                  align=absMiddle border=0><A 
+                  href="http://www.stackasterisk.jp/tech/systemConstruction/index.jsp;jsessionid=aFLemSaCs_yh">システム/サーバ構築</A></TD></TR>
+              <TR>
+                <TD class=close><IMG height=10 
+                  src="impressive_Article_files/spacer.gif" width=19 
+                  align=absMiddle border=0><A 
+                  href="http://www.stackasterisk.jp/tech/systemManagement/index.jsp;jsessionid=aFLemSaCs_yh">システム/サーバ運用</A></TD></TR>
+              <TR>
+                <TD class=close><IMG height=10 
+                  src="impressive_Article_files/spacer.gif" width=19 
+                  align=absMiddle border=0><A 
+                  href="http://www.stackasterisk.jp/tech/engineer/index.jsp;jsessionid=aFLemSaCs_yh">技術系一般知識</A></TD></TR>
+              <TR>
+                <TD align=middle 
+                  background=impressive_Article_files/leftBg3.gif><A 
+                  href="http://www.stackasterisk.jp/tech/sonomama/index.jsp;jsessionid=aFLemSaCs_yh"><IMG 
+                  class=photoPadding height=60 
+                  src="impressive_Article_files/sonomama.gif" width=144 
+                  border=0></A></TD>
+              <TR>
+                <TD align=middle 
+                  background=impressive_Article_files/leftBg3.gif><A 
+                  href="http://www.stackasterisk.jp/tech/java/index.jsp;jsessionid=aFLemSaCs_yh"><IMG 
+                  class=photoPadding height=60 
+                  src="impressive_Article_files/j2ee.gif" width=144 
+                border=0></A></TD></TR>
+              <TR>
+                <TD align=middle 
+                  background=impressive_Article_files/leftBg3.gif><A 
+                  href="http://www.stackasterisk.jp/tech/php/phptips_init.do;jsessionid=aFLemSaCs_yh"><IMG 
+                  class=photoPadding height=96 
+                  src="impressive_Article_files/phptips144_96.gif" width=144 
+                  border=0></A></TD></TR>
+              <TR>
+                <TD 
+              background=impressive_Article_files/leftBg3.gif>&nbsp;</TD></TR>
+              <TR>
+                <TD><IMG height=3 src="impressive_Article_files/leftBg1.gif" 
+                  width=150></TD></TR>
+              <TR>
+                <TD>&nbsp;</TD></TR></TBODY></TABLE><!-- #EndLibraryItem --></TD>
+          <TD vAlign=top width=15><IMG height=18 
+            src="impressive_Article_files/topicPath.gif" width=15></TD>
+          <TD vAlign=top>
+            <TABLE cellSpacing=0 cellPadding=0 width="100%" border=0>
+              <TBODY>
+              <TR>
+                <TD class=prevNext vAlign=center bgColor=#e3dffd 
+                  height=18><SPAN class=f8pt120>&gt;<A 
+                  href="http://www.stackasterisk.jp/tech/index.jsp;jsessionid=aFLemSaCs_yh">IT技術情報</A>&gt;<A 
+                  href="http://www.stackasterisk.jp/tech/program/index.jsp;jsessionid=aFLemSaCs_yh">プログラミング一般</A>&gt;<!-- #BeginEditable "topicPath" -->偽装 
+                  生ソケットの恐怖<!-- #EndEditable --></SPAN> </TD></TR>
+              <TR>
+                <TD align=right><A 
+                  href="http://www.stackasterisk.jp/tech/program/index.jsp;jsessionid=aFLemSaCs_yh"><IMG 
+                  height=28 src="impressive_Article_files/ProgrammingCenter.gif" 
+                  width=320 border=0></A></TD></TR>
+              <TR>
+                <TD bgColor=#666666><IMG height=1 
+                  src="impressive_Article_files/spacer.gif" width=1></TD></TR>
+              <TR>
+                <TD><!-- #BeginEditable "pageTitle" -->
+                  <TABLE cellSpacing=0 cellPadding=0 width="98%" border=0>
+                    <TBODY>
+                    <TR>
+                      <TD>
+                        <H1><SPAN class=shoulder>ザキヨシ条一郎の実験シリーズ </SPAN></H1>
+                        <H1><STRONG><SPAN class=f14pt120b><FONT 
+                        face="ＭＳ Ｐ明朝, 細明朝体">【偽装】</FONT></SPAN><SPAN 
+                        class=f12pt120b>生ソケットの恐怖？</SPAN></STRONG></H1>
+                        <TABLE class=KaisetuTable cellSpacing=2 cellPadding=2 
+                        border=0>
+                          <TBODY>
+                          <TR>
+                            <TD><B>本稿の目的</B><BR>ソケットってなんですか？生ソケットってなんですか？IPアドレスの偽装が簡単に行われてしまうことを実感してください。<A 
+                              href="http://www.stackasterisk.jp/tech/program/howtosniff01_01.jsp">盗聴</A>と同様に、Windows上で動く簡単なサンプルを使って解説します。</TD></TR></TBODY></TABLE>
+                        <TABLE cellSpacing=1 cellPadding=0 width=350 border=0>
+                          <TBODY>
+                          <TR>
+                            <TD 
+                          vAlign=top><B>ザキヨシ　条一郎</B><BR>2003/06/30</TD></TR></TBODY></TABLE>
+                        <TABLE class=profile cellSpacing=1 cellPadding=0 
+                        width=350 border=0>
+                          <TBODY>
+                          <TR>
+                            <TD class=tdExample><B><SPAN 
+                              class=f8pt120>【著者プロフィール】<BR></SPAN></B><SPAN 
+                              class=f8pt120>妄想と現実のあいだ</SPAN></TD></TR></TBODY></TABLE></TD>
+                      <TD vAlign=top align=left width=5><IMG height=1 
+                        src="E:\29-7-2008\Raw_Sockets\impressive_Article_files\spacer(1).gif" 
+                        width=5></TD>
+                      <TD vAlign=top align=left>&nbsp;</TD></TR></TBODY></TABLE><!-- #EndEditable --><IMG 
+                  height=1 src="impressive_Article_files/spacer.gif" 
+              width=1></TD></TR>
+              <TR>
+                <TD bgColor=#666666><IMG height=1 
+                  src="impressive_Article_files/spacer.gif" width=1></TD></TR>
+              <TR>
+                <TD><!-- #BeginEditable "main" --><BR>
+                  <TABLE class=Sotowaku borderColor=#000000 cellSpacing=0 
+                  cellPadding=8 border=1>
+                    <TBODY>
+                    <TR>
+                      <TD vAlign=top noWrap>
+                        <P><A 
+                        href="http://www.zdnet.co.jp/news/0106/08/e_gibson.html" 
+                        target=_blank>Windows 
+                        XPは「サイト攻撃者の味方」か？</A><BR>ちょっと古い記事です。<BR><BR>Windows2000/XPからWinsock2に完全な生ソケットの実装がされたことに対して抗議する人たちがいるのです。<BR>生ソケットの完全な実装を提供することがおろかであると怒っています。<BR>なぜかというと、生ソケットを使うことでIPアドレスを偽装できるからであるからとしています。<BR><BR>XPは今後、多くの一般家庭向けのPCのOSとして使われる 
+                        = 導入数がかなりの桁の予感<BR>一般家庭 = 
+                        セキュリティへの認識が甘い<BR><BR>つまりXPが多くの家庭に導入されるということは、IPアドレスを偽装してDoS攻撃を行うトロイなどをより広範囲に広める可能性があると<BR>いう結論に達しているようです。</P>
+                        <P>生ソケットって使い方によっちゃ怖いよね、っていう感じですが私はIPアドレスを偽装してみたくなりました。</P>
+                        <HR>
+
+                        <P><STRONG>ソケットってなんですか？</STRONG><BR>ソケットはTCP/IP ( 
+                        UDPとかも含む ) 
+                        を利用した通信を行うアプリケーションを作成するための抽象化されたインターフェースです。<BR>TCPやUDPで通信するプログラムを書く場合は、ストリームソケットやデータグラムソケットを使用しますが、IPヘッダのデータを<BR>1から作るということはしません。ですが生ソケット(Raw 
+                        Socket)を使えばそこで作られるデータを<BR>プログラマ自身が作ることもできるようになるのです。IPヘッダを作るには、IPヘッダの構造を知らないといけません。</P><BR><BR>
+                        <CENTER>
+                        <TABLE class=tableCaution cellSpacing=0 cellPadding=20 
+                        width=400 border=0>
+                          <TBODY>
+                          <TR>
+                            <TD bgColor=#ffff99>
+                              <CENTER>
+                              <TABLE cellSpacing=0 cellPadding=0 align=center 
+                              border=0>
+                                <TBODY>
+                                <TR vAlign=top>
+                                <TD align=left width=40><A 
+                                href="http://www.stackasterisk.jp/person/merit.jsp"><IMG 
+                                height=27 alt=会員登録のメリット！ 
+                                src="impressive_Article_files/profile.gif" 
+                                width=36 border=0> </A></TD>
+                                <TD><A 
+                                href="http://school.itboost.co.jp/ss/">▼Java や 
+                                Linux 
+                                を体系的に学びましょう！▼</A><BR>Stack*のアイティーブーストが、<BR>新学習方式のカリキュラムを開発しました！<BR><B>14700円から</B><SPAN 
+                                style="FONT-SIZE: 8pt">(*1)</SPAN>、Java や Linux 
+                                を体系的に学べます！！<BR><SPAN style="FONT-SIZE: 8pt">(*1 
+                                テキスト代のみの税込料金です)</SPAN> 
+                              </TD></TR></TBODY></TABLE></CENTER></TD></TR></TBODY></TABLE></CENTER><BR><BR><BR>
+                        <TABLE class=KaisetuTable borderColor=#c2c1c5 
+                        cellSpacing=0 cellPadding=3 width="68%" border=1>
+                          <TBODY>
+                          <TR>
+                            <TD noWrap 
+width="20%"><STRONG>バイトオフセット</STRONG></TD>
+                            <TD noWrap width="10%"><STRONG>ビット長</STRONG></TD>
+                            <TD noWrap width="21%"><STRONG>内容</STRONG></TD>
+                            <TD noWrap width="49%"><STRONG>説明</STRONG></TD></TR>
+                          <TR>
+                            <TD noWrap rowSpan=2>0</TD>
+                            <TD noWrap>4</TD>
+                            <TD noWrap>バージョン情報</TD>
+                            <TD noWrap>IPv4の場合は4</TD></TR>
+                          <TR>
+                            <TD noWrap>4</TD>
+                            <TD noWrap>ヘッダの長さ</TD>
+                            <TD noWrap>ヘッダ部の長さを32bit単位で表す</TD></TR>
+                          <TR>
+                            <TD noWrap height=20>1</TD>
+                            <TD noWrap>8</TD>
+                            <TD noWrap>サービスタイプ</TD>
+                            <TD noWrap>パケットの優先度とかを表すのに使われる。</TD></TR>
+                          <TR>
+                            <TD noWrap>2</TD>
+                            <TD noWrap>16</TD>
+                            <TD noWrap>Total Length</TD>
+                            <TD noWrap>IPパケット全体の長さ</TD></TR>
+                          <TR>
+                            <TD noWrap>4</TD>
+                            <TD noWrap>16</TD>
+                            <TD noWrap>ID</TD>
+                            <TD 
+                          noWrap>パケットのID。フラグメント化されたパケットを再構築する時に使われる。</TD></TR>
+                          <TR>
+                            <TD noWrap rowSpan=2>6</TD>
+                            <TD noWrap>3</TD>
+                            <TD noWrap>Flags</TD>
+                            <TD 
+                              noWrap>0xx：ここは0で固定<BR>x1x：1だとフラグメント不可。0だとフラグメントされている<BR>xx1：後続のフラグメントがある</TD></TR>
+                          <TR>
+                            <TD noWrap height=20>13</TD>
+                            <TD noWrap>Flagment Offset</TD>
+                            <TD 
+                              noWrap>元のデータ中の位置を8オクテット単位で表す。つまりフラグメントされたできた<BR>データのかけらは、最後を除いて8の倍数のサイズでなければならない</TD></TR>
+                          <TR>
+                            <TD noWrap>8</TD>
+                            <TD noWrap height=20>8</TD>
+                            <TD noWrap>TTL</TD>
+                            <TD noWrap>パケットの生存期間</TD></TR>
+                          <TR>
+                            <TD noWrap>9</TD>
+                            <TD noWrap height=32>8</TD>
+                            <TD noWrap>プロトコル</TD>
+                            <TD noWrap>
+                              <P>0　：　IP<BR>1　：　ICMP<BR>6　：　TCP<BR>17　：　UDP 
+                              <BR>255　：　RAW<BR>DATA部のフォーマットを規定します。</P></TD></TR>
+                          <TR>
+                            <TD noWrap>10</TD>
+                            <TD noWrap height=21>16</TD>
+                            <TD noWrap>チェックサム</TD>
+                            <TD noWrap>IPヘッダ部分のチェックサム</TD></TR>
+                          <TR>
+                            <TD noWrap>12</TD>
+                            <TD noWrap height=20>32</TD>
+                            <TD noWrap>送信元IPアドレス</TD>
+                            <TD noWrap>&nbsp;</TD></TR>
+                          <TR>
+                            <TD noWrap>16</TD>
+                            <TD noWrap height=20>32</TD>
+                            <TD noWrap>宛先IPアドレス</TD>
+                            <TD noWrap>&nbsp;</TD></TR>
+                          <TR>
+                            <TD noWrap rowSpan=2>20</TD>
+                            <TD noWrap height=20>可変</TD>
+                            <TD noWrap>オプション</TD>
+                            <TD noWrap>さまざまなIPのオプションデータ。基本的に使われない</TD></TR>
+                          <TR>
+                            <TD noWrap height=20>可変</TD>
+                            <TD noWrap>パディング</TD>
+                            <TD 
+                          noWrap>IPヘッダのサイズが4の倍数となるように意味なきデータを詰める</TD></TR></TBODY></TABLE>
+                        <P>で、今回はとりあえずIPアドレスを偽装して適当なパケットを投げてみることにしましょう。<BR>パケットが届いてることを確認するのに前回紹介した「<STRONG>WatchHouse</STRONG>」を使うことにします。</P>
+                        <HR SIZE=1>
+
+                        <P><SPAN 
+                        class=SubTitle>では送信元がおかしなIPパケットを飛ばしてみましょう</SPAN></P>
+                        <P><IMG height=88 
+                        src="impressive_Article_files/howtosniff02_01.gif" 
+                        width=277><STRONG><BR>今回作るアプリの図</STRONG></P>
+                        <P>今回作るアプリ名は「Nightmare」です。Nightmareってなによ？って思った人はgooにでも行って調べてみるといいと思います。<BR>一応<A 
+                        href="http://dictionary.goo.ne.jp/search.php?MT=nightmare&amp;kind=ej&amp;mode=0">直リン</A>置いときます。だめだったら消します。<BR><BR>ターゲットに悪夢を見せてやるぜ！という意気込みのもとに作られたわけですが、実際そこまで至っていません。<BR>つーか至れそうにないですね。へたれなんで。<BR>今回はいかに簡単にIPを偽れるかを実感してもらいたいと思います。<BR>ということで<A 
+                        href="http://www.stackasterisk.jp/tech/program/img/howtosniff02_02.lzh">ソース一式</A>置いておきます。これもまた自分でビルドして下さいね。<BR>では簡単にポイントとなりそうなメソッドだけ解説しておきます。</P>
+                        <TABLE class=KaisetuTable cellSpacing=2 cellPadding=2 
+                        width="59%" border=0>
+                          <TBODY>
+                          <TR>
+                            <TD class=MethodName noWrap>public void 
+                              StartSendPacket ( string ip )</TD></TR>
+                          <TR>
+                            <TD noWrap>
+                              <P>this.keepSending = true;<BR>this.rawSocket = 
+                              new Socket(AddressFamily.InterNetwork, 
+                              SocketType.Raw, ProtocolType.Raw 
+                              );<BR>this.rawSocket.Blocking = false;</P>
+                              <P>this.target = 
+                              IPAddress.Parse(ip);<BR>this.rawSocket.SetSocketOption(SocketOptionLevel.IP, 
+                              SocketOptionName.HeaderIncluded, 
+                              1);<BR>this.SendCamouflagedPacket();</P></TD></TR>
+                          <TR>
+                            <TD noWrap height=52>
+                              <P><STRONG>解説：<BR></STRONG>変なパケット送信を開始する部分です。引数のIPアドレスがターゲットとなります。<BR>SetSocketOption()でHeaderIncludedを1、すなわちtrueにしています。これはそのソケットを使ってデータを<BR>送るとき、そのデータにIPヘッダーが含まれているのかどうかを表します。<BR>これをtrueにしておかないと自分でIPヘッダ作れません。</P></TD></TR></TBODY></TABLE>
+                        <P>スタートが呼ばれたので、送信元を偽ったパケットを送信するところに入ります。</P>
+                        <TABLE class=KaisetuTable cellSpacing=2 cellPadding=2 
+                        width="99%" border=0>
+                          <TBODY>
+                          <TR>
+                            <TD class=MethodName noWrap>unsafe private void 
+                              SendCamouflagedPacket ()</TD></TR>
+                          <TR>
+                            <TD noWrap>
+                              <P>fixed(byte* _pBuff = 
+                              headerBuffer)<BR>{<BR>　this.SetIpHeader(_pBuff);<BR>　this.rawSocket.BeginSendTo( 
+                              <BR>　　 headerBuffer, 0, headerBuffer.Length , 
+                              SocketFlags.None, new IPEndPoint(this.target, 0) , 
+                              new AsyncCallback(.CallSend), 
+this);<BR>}</P></TD></TR>
+                          <TR>
+                            <TD noWrap height=40>
+                              <P><STRONG>解説：<BR></STRONG>SetIpHeaderで必要な値を埋め込みます。headerBufferはメンバ変数であり、byteの配列です。<BR>大きさは20で、IPヘッダの最小サイズと同じです。IPヘッダとして必要な値が全てセットされたらパケットを送り出します。</P></TD></TR></TBODY></TABLE>
+                        <P>SetIpHeaderで値が入っている様を見てみましょう。</P>
+                        <TABLE class=KaisetuTable cellSpacing=2 cellPadding=2 
+                        width="66%" border=0>
+                          <TBODY>
+                          <TR>
+                            <TD class=MethodName noWrap>unsafe private void 
+                              SetIpHeader ( byte* ipHeaderPoint )</TD></TR>
+                          <TR>
+                            <TD noWrap height=183>
+                              <P>IPHeader* header = 
+                              (IPHeader*)ipHeaderPoint;<BR>this.SetNewRand();</P>
+                              <P>header-&gt;VersionAndLength = 
+                              69;<BR>header-&gt;TotalLength = 
+                              (ushort)IPAddress.HostToNetworkOrder( 
+                              this.headerBuffer.Length 
+                              );<BR><BR>//プロトコルタイプも適当に<BR>header-&gt;ProtocolType 
+                              = 
+                              (byte)this.rand.Next(255);<BR><BR>//送信元のIPアドレスを適当に作成する<BR>IPAddress 
+                              src = new 
+                              IPAddress(this.rand.Next(int.MaxValue));<BR><BR>header-&gt;DestinationAddress 
+                              = 
+                              (uint)this.target.Address;<BR>header-&gt;SourceAddress 
+                              = (uint)src.Address;</P>
+                              <P>header-&gt;TTL = 60;<BR>header-&gt;Offset = 
+                              0;<BR>header-&gt;ID = 0;</P>
+                              <P>header-&gt;Checksum = 
+                              0;<BR>header-&gt;TypeOfService = 0;</P>
+                              <P>header-&gt;Checksum = 
+                              this.Checksum((ushort*)&amp;header, 
+                              sizeof(IPHeader));</P></TD></TR>
+                          <TR>
+                            <TD noWrap height=124>
+                              <P><STRONG>解説：<BR></STRONG>IPヘッダに必要な値をここで設定します。<BR>headerAndLengthに入れられる69という値は何ですか？と思う方は多いかもしれません。<BR>69を二進数にしてみましょう。" 
+                              01000101 
+                              "　になりますね。<BR>ここで上から4bitがバージョン情報で、残りの4bitがヘッダの長さを32bit単位で表したものとなります。<BR>0100がバージョン情報で、0101がヘッダの長さです。IPバージョンは4であり、ヘッダの長さは20オクテットなので<BR>5になりますね。69はそういう意味があります。0x45と書いた方がわかりやすそうですね。<BR>続いてプロトコルタイプと送信元アドレスを乱数で適当に作ってしまいます。<BR>残りの値は適当です。最後にチェックサムの計算をして値を入れなおします。<BR></P></TD></TR></TBODY></TABLE>
+                        <HR SIZE=1>
+                        実験してみましょう。<BR>とりあえず自分のIP宛にぶっぱなしてみたところ以下のようになりました。 
+                        <P><IMG height=259 
+                        src="impressive_Article_files/howtosniff02_02.gif" 
+                        width=481></P>
+                        <P>送信元がむちゃくちゃになってますね。一応これでパケットが届いてることが確認できていると思います。<BR>宛先はまずいので消してます。 
+                        </P>
+                        <TABLE class=DefaultFont cellSpacing=0 cellPadding=3 
+                        width="80%" bgColor=#efefef border=1>
+                          <TBODY>
+                          <TR>
+                            <TD noWrap height=44>
+                              <P><STRONG>最後に</STRONG><BR>今回は偽りの送信元IPアドレスを持ったパケットを送り出してみました。IPを偽ることは意外と簡単ですね。<BR>TCPじゃ３ウェイハンドシェイクのせいでIP偽ったF5アタックみたいなこと難しそうだーと思いつつ<BR>次はSYN　FLOOD攻撃でもやってみてえなあ、、、とか思ってみたり。<BR></P></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE><BR><BR><BR>
+                  <CENTER>
+                  <TABLE class=tableCaution cellSpacing=0 cellPadding=20 
+                  width=400 border=0>
+                    <TBODY>
+                    <TR>
+                      <TD bgColor=#ffff99>
+                        <CENTER>
+                        <TABLE cellSpacing=0 cellPadding=0 align=center 
+border=0>
+                          <TBODY>
+                          <TR vAlign=top>
+                            <TD align=left width=40><A 
+                              href="http://www.stackasterisk.jp/person/merit.jsp"><IMG 
+                              height=27 alt=会員登録のメリット！ 
+                              src="impressive_Article_files/profile.gif" 
+                              width=36 border=0> </A></TD>
+                            <TD><A 
+                              href="http://school.itboost.co.jp/ss/">▼Java や 
+                              Linux 
+                              を体系的に学びましょう！▼</A><BR>Stack*のアイティーブーストが、<BR>新学習方式のカリキュラムを開発しました！<BR><B>14700円から</B><SPAN 
+                              style="FONT-SIZE: 8pt">(*1)</SPAN>、Java や Linux 
+                              を体系的に学べます！！<BR><SPAN style="FONT-SIZE: 8pt">(*1 
+                              テキスト代のみの税込料金です)</SPAN> 
+                        </TD></TR></TBODY></TABLE></CENTER></TD></TR></TBODY></TABLE></CENTER><BR><BR><BR>
+                  <TABLE cellSpacing=0 cellPadding=0 width="98%" border=0>
+                    <TBODY>
+                    <TR>
+                      <TD>
+                        <TABLE class=sourceWaku cellSpacing=0 cellPadding=10 
+                        width="98%" border=0>
+                          <TBODY>
+                          <TR>
+                            <TD bgColor=#c4f5c2>
+                              <TABLE cellSpacing=0 cellPadding=2 width="100%" 
+                              border=0>
+                                <FORM name=talTechSurveyForm 
+                                action=/tech/talTechSurveyAction.htm;jsessionid=aFLemSaCs_yh 
+                                method=post><INPUT type=hidden 
+                                value=/tech/program/howtosniff02_01.jsp 
+                                name=requestURI> 
+                                <TBODY>
+                                <TR>
+                                <TD><FONT 
+                                color=#333333><B>●この記事はあなたのお役に立ちましたか？</B></FONT><BR><INPUT 
+                                type=radio value=5 
+                                name=score1>非常に役に立った<BR><INPUT type=radio 
+                                value=4 name=score1>役に立った<BR><INPUT type=radio 
+                                value=3 name=score1>どちらでもない<BR><INPUT type=radio 
+                                value=2 name=score1>役に立たなかった<BR><INPUT 
+                                type=radio value=1 
+                                name=score1>全く役に立たなかった</TD></TR>
+                                <TR>
+                                <TD><FONT 
+                                color=#333333><BR><B>●ご意見・ご感想があればご記入ください。</B></FONT><BR><TEXTAREA name=text1 rows=5 cols=65></TEXTAREA> 
+                                </TD></TR>
+                                <TR>
+                                <TD><INPUT type=submit value=送信する name=submit> 
+                                <INPUT type=hidden value=rcvScore name=action> 
+                                <INPUT type=hidden 
+                                value=http://www.stackasterisk.jp/tech/program/howtosniff02_01.jsp 
+                                name=fullPath> <INPUT type=hidden 
+                                value="偽装 生ソケットの恐怖" name=subject> 
+                                </TD></TR></FORM></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE><BR><BR><!-- #EndEditable --><BR></TD></TR>
+              <TR>
+                <TD bgColor=#666666><IMG height=1 
+                  src="impressive_Article_files/spacer.gif" width=1></TD></TR>
+              <TR>
+                <TD align=right><A 
+                  href="http://www.stackasterisk.jp/tech/program/howtosniff02_01.jsp#"><IMG 
+                  height=19 src="impressive_Article_files/pageTop.gif" width=84 
+                  border=0></A></TD></TR></TBODY></TABLE></TD>
+          <TD vAlign=top align=middle width=140 
+          background=impressive_Article_files/rightBg.gif><!-- #BeginLibraryItem "/Library/mystackLogin.lbi" -->
+            <TABLE cellSpacing=0 cellPadding=0 width="100%" border=0>
+              <TBODY>
+              <TR>
+                <TD align=middle><IMG height=24 
+                  src="impressive_Article_files/mystackLogin01.gif" 
+              width=140></TD></TR>
+              <TR>
+                <TD align=middle 
+                background=impressive_Article_files/mystackLogin02.gif>
+                  <TABLE cellSpacing=0 cellPadding=0 width=128 border=0>
+                    <FORM name=talentLoginForm 
+                    action=/person/login.htm;jsessionid=aFLemSaCs_yh 
+method=post>
+                    <TBODY>
+                    <TR>
+                      <TD width=10><IMG height=16 
+                        src="impressive_Article_files/mystackLogin4.gif" 
+                        width=10></TD>
+                      <TD width=118><FONT 
+                    color=#ffffff>ＩＤ(メールアドレス)</FONT></TD></TR>
+                    <TR>
+                      <TD colSpan=2><INPUT size=15 name=loginMail></TD></TR>
+                    <TR>
+                      <TD width=10><IMG height=16 
+                        src="impressive_Article_files/mystackLogin4.gif" 
+                        width=10></TD>
+                      <TD width=118><FONT color=#ffffff>パスワード</FONT></TD></TR>
+                    <TR>
+                      <TD colSpan=2><INPUT type=password size=15 
+                        name=password><BR><INPUT type=checkbox value=true 
+                        name=useCookie>次回以降自動ログインする<BR><INPUT type=submit value=ログイン name=submit> 
+                      </TD></TR>
+                    <TR>
+                      <TD colSpan=2><IMG height=5 
+                        src="impressive_Article_files/spacer.gif" width=1></TD></TR>
+                    <TR>
+                      <TD><IMG height=12 
+                        src="impressive_Article_files/mystackLogin05.gif" 
+                        width=10></TD>
+                      <TD class=f8pt120 vAlign=center><A 
+                        href="http://www.stackasterisk.jp/person/inputLoginInfo1.do;jsessionid=aFLemSaCs_yh?action=inputLoginInfo1"><FONT 
+                        color=#ffff00>新規ユーザ登録</FONT></A></TD></TR>
+                    <TR>
+                      <TD><IMG height=12 
+                        src="impressive_Article_files/mystackLogin05.gif" 
+                        width=10></TD>
+                      <TD class=f8pt120 vAlign=center><A 
+                        href="http://www.stackasterisk.jp/person/toReissue.do;jsessionid=aFLemSaCs_yh?action=toReissue"><FONT 
+                        color=#ffff00>パスワード再発行</FONT></A></TD></TR></FORM></TBODY></TABLE></TD></TR>
+              <TR>
+                <TD align=middle><IMG height=6 
+                  src="impressive_Article_files/mystackLogin03.gif" 
+              width=140></TD></TR></TBODY></TABLE><!-- #EndLibraryItem --><!-- #BeginLibraryItem "/Library/googleSearch.lbi" -->
+            <TABLE cellSpacing=0 cellPadding=0 width=136 border=0>
+              <TBODY>
+              <TR>
+                <TD><B><IMG height=19 
+                  src="impressive_Article_files/search_icon.gif" width=19 
+                  align=absMiddle></B><B>サイト内全文検索</B></TD></TR>
+              <TR>
+                <TD 
+                  class=f8pt110>スタックアスタリスクのサイトを検索します。検索には、Googleを利用しています。そのため、最新の情報で検索されない可能性があります。</TD></TR>
+              <TR>
+                <FORM action=http://www.google.com/search>
+                <TD><INPUT type=hidden value=www.stackasterisk.jp 
+                  name=as_sitesearch> <INPUT type=hidden value=ja name=hl> 
+                  <INPUT maxLength=255 size=16 name=q> <INPUT type=submit value=検索 name=btnG> 
+            </TD></FORM></TR></TBODY></TABLE><!-- #EndLibraryItem --><BR>
+            <SCRIPT type=text/javascript><!--
+  amazon_ad_tag = "stackasterisk-22";  amazon_ad_width = "120";  amazon_ad_height = "600";  amazon_ad_logo = "hide";//--></SCRIPT>
+
+            <SCRIPT src="impressive_Article_files/ads.js" 
+            type=text/javascript></SCRIPT>
+            <BR><!-- #BeginLibraryItem "/Library/bannerRightSide.lbi" -->
+            <TABLE cellSpacing=0 cellPadding=0 width=140 border=0><!-- プレゼント広告開始 --><!-- プレゼント広告終了 -->
+              <TBODY>
+              <TR>
+                <TD><IMG height=5 src="impressive_Article_files/spacer.gif" 
+                  width=1><A href="http://www.xform.jp/" target=_blank><IMG 
+                  alt=簡単レンタルメールフォーム 
+                  src="impressive_Article_files/xformBannerStack.gif" 
+                  border=0></A><BR>
+                  <TABLE>
+                    <TBODY>
+                    <TR>
+                      <TD></TD></TR></TBODY></TABLE><A href="http://www.xbit.jp/" 
+                  target=_blank><IMG alt="300メガ1000円～ XBitのレンタルサーバー" 
+                  src="impressive_Article_files/xbitBanner140x80.gif" 
+                  border=0></A><BR>
+                  <TABLE>
+                    <TBODY>
+                    <TR>
+                      <TD></TD></TR></TBODY></TABLE><A 
+                  href="http://www.premierx.jp/" target=_blank><IMG 
+                  alt="500メガ1995円～ 電話サポート/PostgreSQL/専用SSLなどにも対応！お客様のニーズを網羅したレンタルサーバ" 
+                  src="impressive_Article_files/premireBanner140x80.gif" 
+                  border=0></A> 
+                  <TABLE>
+                    <TBODY>
+                    <TR>
+                      <TD></TD></TR></TBODY></TABLE><A 
+                  href="http://www.assistweb.jp/" target=_blank><IMG 
+                  alt=ホームページ制作のアシストウェブ 
+                  src="impressive_Article_files/assistwebBanner.gif" 
+                  border=0></A></TD></TR>
+              <TR>
+                <TD><IMG height=5 src="impressive_Article_files/spacer.gif" 
+                  width=1></TD></TR>
+              <TR>
+                <TD><IMG height=5 src="impressive_Article_files/spacer.gif" 
+                  width=1><A href="http://school.itboost.co.jp/" 
+                  target=_blank><IMG height=100 
+                  alt=STACK*　執筆の講師陣から習得する！！　ITエンジニアスクール　アイティブースト 
+                  src="impressive_Article_files/school_140x100.gif" width=140 
+                  border=0></A></TD></TR>
+              <TR>
+                <TD><IMG height=5 src="impressive_Article_files/spacer.gif" 
+                  width=1></TD></TR><!--
+  <tr> 
+    <td><img src="../banner/itbtech140_50.gif" width="140" height="50"></td>
+  </tr>
+  <tr> 
+    <td><img src="../img/spacer.gif" width="1" height="5"></td>
+  </tr>
+-->
+              <TR>
+                <TD><A 
+                  href="http://www.stackasterisk.jp/redirect.jsp?url=http%3A%2F%2Fwww.maildealer.jp&amp;td_cid=md" 
+                  target=_blank><IMG height=100 
+                  alt="統合メールサポートシステム ～MailDealer(メールディーラー)～" 
+                  src="impressive_Article_files/maildealer140_100.gif" width=140 
+                  border=0 ;></A></TD></TR>
+              <TR>
+                <TD><IMG height=5 src="impressive_Article_files/spacer.gif" 
+                  width=1></TD></TR>
+              <TR>
+                <TD><A 
+                  href="http://www.stackasterisk.jp/redirect.jsp?url=http%3A%2F%2Fwww.itboost.co.jp&amp;td_cid=www" 
+                  target=_blank><IMG height=50 
+                  alt="システム開発,IT教育 ～株式会社アイティーブースト(ITBoost)～" 
+                  src="impressive_Article_files/itboost140_50.gif" width=140 
+                  border=0></A></TD></TR></TBODY></TABLE><!-- #EndLibraryItem --></TD></TR></TBODY></TABLE></TD></TR><!-- AdSense BigBanner<<start>> -->
+  <TR>
+    <TD align=middle>
+      <SCRIPT type=text/javascript><!--
+google_ad_client = "pub-5882399005532051";
+google_ad_width = 728;
+google_ad_height = 90;
+google_ad_format = "728x90_as";
+google_ad_channel ="";
+//--></SCRIPT>
+
+      <SCRIPT src="impressive_Article_files/show_ads.js" type=text/javascript>
+</SCRIPT>
+    </TD></TR><!-- AdSense BigBanner<<end>> -->
+  <TR>
+    <TD background=impressive_Article_files/footBg1.gif><!-- #BeginLibraryItem "/Library/foot.lbi" -->
+      <TABLE cellSpacing=0 cellPadding=0 width="100%" border=0>
+        <TBODY>
+        <TR>
+          <TD width=5><IMG height=18 
+            src="impressive_Article_files/footBg2.gif" width=5></TD>
+          <TD class=f10pt110 width=160>&nbsp;</TD>
+          <TD class=f10pt110 vAlign=center><IMG height=12 
+            src="impressive_Article_files/arrow03.gif" width=8><SPAN 
+            class=f8pt120><A 
+            href="http://www.stackasterisk.jp/policy/kiyaku.jsp;jsessionid=aFLemSaCs_yh">利用規約</A></SPAN>　<IMG 
+            height=12 src="impressive_Article_files/arrow03.gif" width=8><SPAN 
+            class=f8pt120><A 
+            href="http://www.stackasterisk.jp/person/inquireAction.do;jsessionid=aFLemSaCs_yh?action=toInput">お問い合わせ・ご意見</A></SPAN>　<IMG 
+            height=12 src="impressive_Article_files/arrow03.gif" width=8><SPAN 
+            class=f8pt120><A 
+            href="http://www.stackasterisk.jp/policy/about.jsp;jsessionid=aFLemSaCs_yh">スタックアスタリスクについて</A></SPAN>　<IMG 
+            height=12 src="impressive_Article_files/arrow03.gif" width=8><SPAN 
+            class=f8pt120><A 
+            href="http://www.stackasterisk.jp/policy/aboutUS.jsp;jsessionid=aFLemSaCs_yh">運営会社について</A></SPAN>　<IMG 
+            height=12 src="impressive_Article_files/arrow03.gif" width=8><SPAN 
+            class=f8pt120><A 
+            href="http://www.stackasterisk.jp/person/recruitSiteContactForm.jsp;jsessionid=aFLemSaCs_yh">求人掲載お問合せ</A></SPAN>　</TD></TR></TBODY></TABLE>
+      <TABLE cellSpacing=0 cellPadding=0 width="100%" border=0>
+        <TBODY>
+        <TR>
+          <TD width=5><IMG height=18 
+            src="impressive_Article_files/footBg2.gif" width=5></TD>
+          <TD class=f10pt110 width=100>&nbsp;</TD>
+          <TD class=f10pt110 vAlign=center><SPAN class=f8pt120><A 
+            title=レンタルサーバー href="http://www.xbit.jp/" 
+            target=_blank>レンタルサーバー</A></SPAN> <SPAN class=f8pt120><A 
+            title=ホスティング href="http://www.premierx.jp/" 
+            target=_blank>ホスティング</A></SPAN> <SPAN class=f8pt120><A title=専用サーバー 
+            href="http://www.xunit.jp/" target=_blank>専用サーバー</A></SPAN> <SPAN 
+            class=f8pt120><A title=メールフォーム href="http://www.xform.jp/" 
+            target=_blank>メールフォーム</A></SPAN> <SPAN class=f8pt120><A 
+            title=ショッピングカート href="http://www.xcart.jp/" 
+            target=_blank>ショッピングカート</A></SPAN> <SPAN class=f8pt120><A 
+            title=メール共有 href="http://www.maildealer.jp/" 
+            target=_blank>メール共有</A></SPAN> <SPAN class=f8pt120><A 
+            title=ITエンジニア派遣 href="http://hr.itboost.co.jp/" 
+            target=_blank>ITエンジニア派遣</A></SPAN> <SPAN class=f8pt120><A 
+            title=Linux講座 href="http://school.itboost.co.jp/" 
+            target=_blank>Linux講座</A></SPAN> <SPAN class=f8pt120><A title=Java講座 
+            href="http://school.itboost.co.jp/" target=_blank>Java講座</A></SPAN> 
+            <SPAN class=f8pt120><A title=メール配信 href="http://www.haihaimail.jp/" 
+            target=_blank>メール配信</A></SPAN> <SPAN class=f8pt120><A title=レンタルサーバー 
+            href="http://www.gigaan.jp/" target=_blank>レンタルサーバー</A></SPAN> <SPAN 
+            class=f8pt120><A title=Webデータベース href="http://www.hatarakudb.jp/" 
+            target=_blank>Webデータベース</A></SPAN> </TD></TR></TBODY></TABLE><!-- --------- D O     N O T     R E M O V E ! ! -------- --><NOSCRIPT><IMG 
+      src=""></NOSCRIPT>
+      <SCRIPT language=JavaScript><!--
+var td_proto = 'https', td_cid = 'stackasterisk', td_uid;
+  // -->
+</SCRIPT>
+
+      <SCRIPT language=JavaScript src="impressive_Article_files/td.js"></SCRIPT>
+       <!-- --------- D O     N O T     R E M O V E ! ! -------- --><!-- #EndLibraryItem --></TD></TR>
+  <TR>
+    <TD background=impressive_Article_files/footBg4.gif><!-- #BeginLibraryItem "/Library/footer.lbi" -->
+      <TABLE cellSpacing=0 cellPadding=0 width="100%" border=0>
+        <TBODY>
+        <TR>
+          <TD><IMG height=1 src="impressive_Article_files/spacer.gif" 
+          width=2></TD>
+          <TD align=left><IMG height=30 
+            src="impressive_Article_files/ft_n_01.gif" width=302><A 
+            href="http://www.maildealer.jp/" target=_blank><IMG height=30 
+            alt=メール管理・共有　顧客管理(CRM）もできるメール対応サポートシステム 
+            src="impressive_Article_files/ft_bnr_01.gif" width=244 
+            border=0></A><IMG height=1 src="impressive_Article_files/spacer.gif" 
+            width=5><A href="http://www.itboost.co.jp/outsourcing.html" 
+            target=_blank><IMG height=30 alt="JAVA LINUX CISCO　技術者派遣　育成事業" 
+            src="impressive_Article_files/ft_bnr_02.gif" width=179 
+          border=0></A></TD>
+          <TD align=right><A href="http://school.itboost.co.jp/" 
+            target=_blank><IMG height=30 
+            alt="システムエンジニアになるためのJava Linux資格の講座（スクール）" 
+            src="impressive_Article_files/ft_n_02.gif" width=175 
+        border=0></A></TD></TR></TBODY></TABLE><!-- #EndLibraryItem --></TD></TR></TBODY></TABLE><!-- #EndTemplate --></BODY></HTML>

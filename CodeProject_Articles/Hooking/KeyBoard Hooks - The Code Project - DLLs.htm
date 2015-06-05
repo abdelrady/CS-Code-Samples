@@ -1,0 +1,2617 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!-- saved from url=(0047)http://www.codeproject.com/dll/keyboardhook.asp -->
+<HTML><HEAD><TITLE>KeyBoard Hooks - The Code Project - DLLs</TITLE>
+<META http-equiv=Reply-to content=mailto:webmaster@codeproject.com>
+<META http-equiv=Content-Type content="text/html; charset=iso-8859-1">
+<META content=en-US name=MS.LOCALE>
+<META 
+content="This example shows how to write global hooks .This program captures all the Keyboard events and save the keys  to a text file." 
+name=Description>
+<META content=kbArticle name=Search.TopicType>
+<META content="H. Joseph" name=Author>
+<META content="23 Jul 2001 14:00:00 GMT" name=Search.PublishDate>
+<META content="23 Jul 2001 14:00:00 GMT" name=Search.RevisedDate>
+<META content="Free source code, , Visual C++, MFC, Windows, Hooks,Win32" 
+name=keywords>
+<META 
+content="Article content copyright H. Joseph, 2001, everthing else Copyright © CodeProject, 1999-2006, All Rights Reserved." 
+name=Copyright><LINK title="CodeProject Lounge Postings" 
+href="http://www.codeproject.com/webservices/LoungeRSS.aspx" 
+type=application/rss+xml rel=alternate><LINK 
+title="CodeProject Latest articles - All topics" 
+href="http://www.codeproject.com/webservices/articlerss.aspx?cat=1" 
+type=application/rss+xml rel=alternate><LINK 
+title="CodeProject Latest articles - MFC / C++" 
+href="http://www.codeproject.com/webservices/articlerss.aspx?cat=2" 
+type=application/rss+xml rel=alternate><LINK 
+title="CodeProject Latest articles - C#" 
+href="http://www.codeproject.com/webservices/articlerss.aspx?cat=3" 
+type=application/rss+xml rel=alternate><LINK 
+title="CodeProject Latest articles - ASP.NET" 
+href="http://www.codeproject.com/webservices/articlerss.aspx?cat=4" 
+type=application/rss+xml rel=alternate><LINK 
+title="CodeProject Latest articles - .NET" 
+href="http://www.codeproject.com/webservices/articlerss.aspx?cat=5" 
+type=application/rss+xml rel=alternate><LINK href="/favicon.ico" type=image/ico 
+rel=icon><LINK href="/favicon.ico" rel="SHORTCUT ICON"><LINK 
+href="KeyBoard Hooks - The Code Project - DLLs_files/global.css" type=text/css 
+rel=stylesheet>
+<SCRIPT language=javascript 
+src="KeyBoard Hooks - The Code Project - DLLs_files/oncopy.js"></SCRIPT>
+
+<META content="MSHTML 6.00.2900.2180" name=GENERATOR></HEAD>
+<BODY style="MARGIN: 0px" oncopy="return copyCode();" text=black vLink=navy 
+aLink=red link=blue bgColor=white><!-- COPYRIGHT 2006 I/PRO Corporation ALL RIGHTS RESERVED. - Page view auditing -->
+<SCRIPT language=JavaScript type=text/javascript>
+var LSPT="";
+LSPT += "?durl=" + escape(document.URL);
+LSPT += "&hostname=" + location.hostname;
+LSPT += "&url=" + location.pathname;
+LSPT += "&query=" + escape(location.search) + escape(location.hash);
+LSPT += "&referrer=" + escape(document.referrer);
+LSPT += "&browser=" + escape(navigator.appName);
+LSPT += "&version=" + escape(navigator.appVersion);
+LSPT += "&os=" + escape(navigator.platform);
+LSPT += "&xdomain=codeproject.com";
+LSPT += "&custid=codeproject";
+</SCRIPT>
+
+<SCRIPT type=text/javascript>
+document.write('<img src=http://'+'content.ipro.com/images/pixel.gif'+LSPT+' height="1" width="1" style="position:absolute; top:0px; left:0px">');
+</SCRIPT>
+<NOSCRIPT><IMG style="LEFT: 0px; POSITION: absolute; TOP: 0px" height=1 src="" 
+width=1> </NOSCRIPT><!-- END I/PRO PAGE TAG -->
+<TABLE cellSpacing=0 cellPadding=0 width="100%" border=0>
+  <TBODY>
+  <TR>
+    <TD class=HeaderLogo><A href="http://www.codeproject.com/"><IMG height=90 
+      alt=Home 
+      src="KeyBoard Hooks - The Code Project - DLLs_files/codeproject225x90.gif" 
+      border=0></A></TD>
+    <TD class=HeaderBanner><SPAN id=AdBanner4>
+      <SCRIPT language=javascript>document.write("<a href=\"/script/admentor/admentorredir.asp?id=2246&way=ban\" target=_blank><img src=\"/script/ann/ServeImg.aspx?File=%2Fscript%2Fadmentor%2Fimages%2FToolbox%5F728x90%2Egif&C=False&id=2246&cb=6133130\" alt=\"\" border=0 width=728 height=90></a>");</SCRIPT>
+      </SPAN></TD></TR>
+  <TR>
+    <TD colSpan=2>
+      <TABLE class=MemberNavBar cellSpacing=0 cellPadding=5 width="100%" 
+      border=0>
+        <TBODY>
+        <TR vAlign=center>
+          <TD class=smallText style="FONT-WEIGHT: bold">3,560,216 members and 
+            growing! &nbsp; 7,472 now online. </TD>
+          <TD class=userNavText align=right>
+            <SCRIPT type=text/javascript>
+function signup(){document.location.href="/script/profile/modify.asp";}
+function ShowJoin()
+{
+document.write("<input type=\"button\" class=FormButton onclick=\"return signup();\" value='Join!'>");
+document.write("<input type=\"hidden\" name=\"fld_quicksign\" value=\"true\" />");
+}
+</SCRIPT>
+
+            <FORM id=subForm 
+            style="PADDING-RIGHT: 0px; PADDING-LEFT: 0px; PADDING-BOTTOM: 0px; MARGIN: 0px; PADDING-TOP: 0px" 
+            name=subForm action=/script/profile/process_logon.asp 
+            method=post>Email <INPUT class=tinyText id=Email 
+            style="WIDTH: 100px" name=Email> Password <INPUT class=tinyText 
+            id=Password style="WIDTH: 60px" type=password name=Password> <INPUT class=FormButton type=submit value="Sign in">
+            <SCRIPT type=text/javascript>ShowJoin();</SCRIPT>
+             <INPUT id=RememberMeCheck type=checkbox CHECKED name=cookie><LABEL 
+            for=RememberMeCheck>Remember me?</LABEL> <A 
+            href="http://www.codeproject.com/script/profile/forgot.asp"><IMG 
+            height=16 
+            src="KeyBoard Hooks - The Code Project - DLLs_files/HLP.gif" 
+            width=16 align=absMiddle border=0> Password problem?</A> 
+        </FORM></TD></TR></TBODY></TABLE></TD></TR>
+  <TR>
+    <TD colSpan=2>
+      <TABLE class=SiteNavBar id=tblSiteToolbar cellSpacing=0 cellPadding=0>
+        <TBODY>
+        <TR>
+          <TD><A href="http://www.codeproject.com/">Home</A></TD>
+          <TD noWrap><A 
+            href="http://www.codeproject.com/index.asp?cat=2">MFC/C++</A></TD>
+          <TD><A href="http://www.codeproject.com/index.asp?cat=3">C#</A></TD>
+          <TD noWrap><A 
+            href="http://www.codeproject.com/index.asp?cat=4">ASP.NET</A></TD>
+          <TD><A href="http://www.codeproject.com/index.asp?cat=5">.NET</A></TD>
+          <TD noWrap><A 
+            href="http://www.codeproject.com/index.asp?cat=6">VB.NET</A></TD>
+          <TD class=SelCat noWrap><A 
+            href="http://www.codeproject.com/index.asp?cat=1">All Topics</A></TD>
+          <TD width="100%">&nbsp;</TD>
+          <TD>
+            <DIV id=MenuPos 
+            style="WIDTH: 380px; POSITION: relative; TOP: 1px; HEIGHT: 22px">
+            <TABLE id=MPH 
+            style="BORDER-TOP-WIDTH: 0px; BORDER-LEFT-WIDTH: 0px; BORDER-BOTTOM-WIDTH: 0px; HEIGHT: 20px; BORDER-RIGHT-WIDTH: 0px" 
+            cellSpacing=0 cellPadding=0 width=380>
+              <TBODY>
+              <TR vAlign=center>
+                <TD 
+                style="BORDER-TOP-WIDTH: 0px; BORDER-LEFT-WIDTH: 0px; BORDER-BOTTOM-WIDTH: 0px; BORDER-RIGHT-WIDTH: 0px" 
+                noWrap><A 
+                  href="http://www.codeproject.com/info/faq.asp">Help!</A></TD>
+                <TD 
+                style="BORDER-TOP-WIDTH: 0px; BORDER-LEFT-WIDTH: 0px; BORDER-BOTTOM-WIDTH: 0px; BORDER-RIGHT-WIDTH: 0px" 
+                noWrap><A 
+                  href="http://www.codeproject.com/info/latest.asp">Articles</A></TD>
+                <TD 
+                style="BORDER-TOP-WIDTH: 0px; BORDER-LEFT-WIDTH: 0px; BORDER-BOTTOM-WIDTH: 0px; BORDER-RIGHT-WIDTH: 0px" 
+                noWrap><A 
+                  href="http://www.codeproject.com/script/comments/forums.asp">Message 
+                  Boards</A></TD>
+                <TD 
+                style="BORDER-TOP-WIDTH: 0px; BORDER-LEFT-WIDTH: 0px; BORDER-BOTTOM-WIDTH: 0px; BORDER-RIGHT-WIDTH: 0px" 
+                noWrap><A 
+                  href="http://www.codeproject.com/store/">StoreFront</A></TD>
+                <TD 
+                style="BORDER-TOP-WIDTH: 0px; BORDER-LEFT-WIDTH: 0px; BORDER-BOTTOM-WIDTH: 0px; BORDER-RIGHT-WIDTH: 0px" 
+                noWrap><A 
+                  href="http://www.codeproject.com/lounge.asp">Lounge</A></TD></TR></TBODY></TABLE></DIV></TD></TR></TBODY></TABLE>
+      <SCRIPT type=text/javascript>function Go(){return}</SCRIPT>
+
+      <SCRIPT src="KeyBoard Hooks - The Code Project - DLLs_files/cpmenu_var.js" 
+      type=text/javascript></SCRIPT>
+
+      <SCRIPT src="KeyBoard Hooks - The Code Project - DLLs_files/menu10_com.js" 
+      type=text/javascript></SCRIPT>
+
+      <SCRIPT type=text/javascript>
+var MPH = document.getElementById("MPH");
+if (MPH) MPH.style.display='none';
+</SCRIPT>
+    </TD></TR>
+  <TR>
+    <TD colSpan=2>
+      <TABLE class=ArticleHeader cellSpacing=0 cellPadding=3 width="100%">
+        <TBODY>
+        <TR vAlign=top>
+          <TD class=smallText style="PADDING-RIGHT: 10px"><A 
+            href="http://www.codeproject.com/?cat=1">All Topics</A>, <A 
+            href="http://www.codeproject.com/?cat=2">MFC / C++</A> &gt;&gt; <A 
+            href="http://www.codeproject.com/dll/">DLLs</A> &gt;&gt; <A 
+            href="http://www.codeproject.com/dll/#Hooks">Hooks</A><BR><BR>
+            <DIV style="FONT-WEIGHT: bold; FONT-SIZE: 16pt">KeyBoard 
+            Hooks</DIV><B>By <A 
+            href="http://www.codeproject.com/script/Articles/list_articles.asp?userid=15965">H. 
+            Joseph</A></B>. <BR><BR>
+            <DIV style="FONT-SIZE: 12px">This example shows how to write global 
+            hooks .This program captures all the Keyboard events and save the 
+            keys to a text file.</DIV></TD>
+          <TD class=smallText style="WIDTH: 200px">C++ (VC6)<BR>Windows 
+            (Win95, NT4, Win2K, Win98)<BR>Win32, VS (VS6)<BR>Dev<BR><SPAN 
+            style="PADDING-RIGHT: 2ex">Posted</SPAN>: <B>24 Jul 
+            2001</B><BR><SPAN style="PADDING-RIGHT: 3ex">Views</SPAN>: 
+            <B>180,065</B> </TD></TR></TD></TR></TD></TR></TBODY></TABLE>
+      <TABLE cellSpacing=0 cellPadding=0 border=0>
+        <TBODY>
+        <TR vAlign=top>
+          <TD class=LHNavBar rowSpan=2><!-- Yes, there are IE hacks that will allow us to create a min-width DIV 
+	     (eg http://www.webreference.com/programming/min-width/) but I couldn't
+	     be arsed. Wait for it in v2.0 -->
+            <TABLE class=MemberNavBar 
+            style="BORDER-RIGHT: 0px; BORDER-TOP: 0px; MARGIN-BOTTOM: 10px; BORDER-LEFT: 0px; BORDER-BOTTOM: 0px" 
+            cellSpacing=0>
+              <TBODY>
+              <TR vAlign=top>
+                <TD><IMG height=16 
+                  src="KeyBoard Hooks - The Code Project - DLLs_files/books2_sml.gif" 
+                  width=16></TD>
+                <TD class=smallText><A 
+                  href="http://www.amazon.com/gp/redirect.html?link_code=ur2&amp;tag=thecodeprojec-20&amp;camp=1789&amp;creative=9325&amp;location=/gp/browse%3Fnode=5">Programming 
+                  books</A></TD></TR>
+              <TR vAlign=top>
+                <TD></TD>
+                <TD></TD></TR>
+              <TR vAlign=top>
+                <TD><IMG height=16 
+                  src="KeyBoard Hooks - The Code Project - DLLs_files/support_icon.gif" 
+                  width=16></TD>
+                <TD class=smallText><A 
+                  href="http://www.codeproject.com/store/"><B>Ultimate 
+                  Combo<BR>MFC tools $449</B></A></TD></TR>
+              <TR vAlign=top>
+                <TD></TD>
+                <TD></TD></TR></TR>
+              <TR vAlign=top>
+                <TD><IMG height=16 
+                  src="KeyBoard Hooks - The Code Project - DLLs_files/mail.gif" 
+                  width=16></TD>
+                <TD class=SmallText><A 
+                  href="http://www.codeproject.com/script/recommend/form.asp?guid=%2Fdll%2FKeyboardhook%2Easp">Send 
+                  to a friend</A></TD></TR></TBODY></TABLE>
+            <CENTER>
+            <SCRIPT language=javascript>document.write("<a href=\"/script/admentor/admentorredir.asp?id=2251&way=ban\" target=_blank><img src=\"/script/ann/ServeImg.aspx?File=%2Fscript%2Fadmentor%2Fimages%2FGrid%5F160x600%2Egif&C=False&id=2251&cb=6133136\" alt=\"\" border=0 width=160 height=600></a>");</SCRIPT>
+            </CENTER><BR><BR><IMG height=1 
+            src="KeyBoard Hooks - The Code Project - DLLs_files/t.gif" 
+            width=160> </TD>
+          <TD width="100%">
+            <TABLE class=SearchHeaderBar cellSpacing=0 width="100%">
+              <TBODY>
+              <TR>
+                <TD vAlign=center noWrap align=right width="60%">
+                  <FORM style="MARGIN: 0px" name=Search action=/info/search.asp 
+                  method=post><B>Search &nbsp;</B><INPUT class=smallText 
+                  style="WIDTH: 200px" name=target> <SELECT 
+                  style="FONT-WEIGHT: bold; FONT-SIZE: 8pt" name=st> <OPTION 
+                    value=kw selected>Articles</OPTION> <OPTION 
+                    value=au>Authors</OPTION></SELECT> <INPUT style="FONT-WEIGHT: bold; FONT-SIZE: 8pt" type=submit value=" Go! "> 
+                  &nbsp; </FORM></TD>
+                <TD class=tinyText noWrap><A 
+                  href="http://www.codeproject.com/info/search.asp">Advanced 
+                  Search</A><BR><A 
+                  href="http://www.codeproject.com/script/articles/sections.asp">Sitemap</A> 
+                </TD></TR></TBODY></TABLE>
+            <TABLE width="100%">
+              <TBODY>
+              <TR vAlign=top>
+                <TD class=SmallText noWrap>
+                  <TABLE>
+                    <TBODY>
+                    <TR>
+                      <TD class=smallText noWrap><IMG 
+                        src="KeyBoard Hooks - The Code Project - DLLs_files/print.gif" 
+                        align=absMiddle> <A 
+                        href="http://www.codeproject.com/dll/keyboardhook.asp?print=true" 
+                        target=_print>Print</A></TD>
+                      <TD class=smallText noWrap><IMG 
+                        src="KeyBoard Hooks - The Code Project - DLLs_files/sitebuild_icon.gif" 
+                        align=absMiddle><A 
+                        href="http://www.codeproject.com/script/submit/ReportProblem.asp?GUID=%2Fdll%2FKeyboardhook%2Easp">Broken 
+                        Article?</A></TD>
+                      <TD class=smallText noWrap><IMG 
+                        src="KeyBoard Hooks - The Code Project - DLLs_files/link.gif" 
+                        align=absMiddle><A 
+                        href="http://www.codeproject.com/script/profile/add_bookmark.asp?t=0&amp;ct=%2Fdll%2Fkeyboardhook%2Easp&amp;guid=%2Fdll%2FKeyboardhook%2Easp">Bookmark</A></TD>
+                      <TD class=smallText noWrap><IMG 
+                        src="KeyBoard Hooks - The Code Project - DLLs_files/mail_small.gif" 
+                        align=absMiddle> <A 
+                        href="http://www.codeproject.com/dll/keyboardhook.asp#__comments">Discuss</A></TD></TR></TBODY></TABLE></TD>
+                <TD noWrap align=right><A name=__top></A>
+                  <TABLE>
+                    <TBODY>
+                    <TR>
+                      <TD class=smallText align=right>39 votes for this 
+                        article.</TD>
+                      <TD>
+                        <TABLE cellSpacing=0 cellPadding=0 border=2>
+                          <TBODY>
+                          <TR>
+                            <TD><IMG height=5 
+                              src="KeyBoard Hooks - The Code Project - DLLs_files/red.gif" 
+                              width=20 border=0></TD>
+                            <TD><IMG height=5 
+                              src="KeyBoard Hooks - The Code Project - DLLs_files/red.gif" 
+                              width=20 border=0></TD>
+                            <TD><IMG height=5 
+                              src="KeyBoard Hooks - The Code Project - DLLs_files/red.gif" 
+                              width=20 border=0></TD>
+                            <TD><IMG height=5 
+                              src="KeyBoard Hooks - The Code Project - DLLs_files/red.gif" 
+                              width=18 border=0><IMG height=5 
+                              src="KeyBoard Hooks - The Code Project - DLLs_files/white.gif" 
+                              width=2 border=0></TD>
+                            <TD><IMG height=5 
+                              src="KeyBoard Hooks - The Code Project - DLLs_files/white.gif" 
+                              width=20 border=0></TD></TR></TBODY></TABLE></TD></TR>
+                    <TR>
+                      <TD class=smallText align=right colSpan=2><A 
+                        title="Calculated as rating x Log10(# votes)" 
+                        href="http://www.codeproject.com/script/articles/top_articles.asp?st=2">Popularity: 
+                        6.2</A>. Rating: <B>3.9</B> out of 
+                5.</TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+        <TR>
+          <TD class=ArticlePane><SPAN id=intelliTXT>
+            <DIV id=contentdiv><!-- Article Starts --><!-- Download Links -->
+            <UL class=download>
+              <LI class=download><A 
+              href="http://www.codeproject.com/dll/Keyboardhook/Keyboardhook.zip">Download 
+              demo project - 18 Kb</A> </LI></UL><!-- Main HTML starts here -->
+            <H2>Introduction</H2>
+            <P>Hooks are one of the most powerful features of Windows. We can 
+            hooks to trp all the events in the Windows environment. This example 
+            shows how to trap keyboard events and save the keys to a text 
+            file.</P>
+            <P>In the Microsoft® Windows™ operating system, a hook is a 
+            mechanism by which a function can intercept events (messages, mouse 
+            actions, keystrokes) before they reach an application. The function 
+            can act on events and, in some cases, modify or discard them. 
+            Functions that receive events are called filter functions and are 
+            classified according to the type of event they intercept. For 
+            example, a filter function might want to receive all keyboard or 
+            mouse events. For Windows to call a filter function, the filter 
+            function must be installed — that is, attached to a Windows hook 
+            (for example, to a keyboard hook). Attaching one or more filter 
+            functions to a hook is known as setting a hook. If a hook has more 
+            than one filter function attached, Windows maintains a chain of 
+            filter functions. The most recently installed function is at the 
+            beginning of the chain, and the least recently installed function is 
+            at the end.</P>
+            <P>When a hook has one or more filter functions attached and an 
+            event occurs that triggers the hook, Windows calls the first filter 
+            function in the filter function chain. This action is known as 
+            calling the hook. For example, if a filter function is attached to 
+            the Computer Based Training (CBT) hook and an event that triggers 
+            the hook occurs (for example, a window is about to be created), 
+            Windows calls the CBT hook by calling the first function in the 
+            filter function chain. 
+            <P>To maintain and access filter functions, applications use the 
+            <CODE>SetWindowsHookEx</CODE> and the 
+            <CODE>UnhookWindowsHookEx</CODE> functions. </P>
+            <H2>An Example</H2>
+            <P>The CALLBACK function in my example is given below..</P><PRE>LRESULT __declspec(dllexport)__stdcall  CALLBACK KeyboardProc(<SPAN class=cpp-keyword>int</SPAN> nCode,WPARAM wParam, 
+                            LPARAM lParam)
+{
+    <SPAN class=cpp-keyword>char</SPAN> ch;            
+    <SPAN class=cpp-keyword>if</SPAN> (((DWORD)lParam &amp; <SPAN class=cpp-literal>0x40000000</SPAN>) &amp;&amp;(HC_ACTION==nCode))
+    {        
+        <SPAN class=cpp-keyword>if</SPAN> ((wParam==VK_SPACE)||(wParam==VK_RETURN)||(wParam&gt;=<SPAN class=cpp-literal>0x2f</SPAN> ) &amp;&amp;(wParam&lt;=<SPAN class=cpp-literal>0x100</SPAN>)) 
+        {
+            f1=fopen("c:\\report.txt","a+");
+            <SPAN class=cpp-keyword>if</SPAN> (wParam==VK_RETURN)
+            {
+                ch=<SPAN class=cpp-string>'\n'</SPAN>;
+                fwrite(&amp;ch,<SPAN class=cpp-literal>1</SPAN>,<SPAN class=cpp-literal>1</SPAN>,f1);
+            }
+            <SPAN class=cpp-keyword>else</SPAN>
+            {
+                   BYTE ks[<SPAN class=cpp-literal>256</SPAN>];
+                GetKeyboardState(ks);
+
+                WORD w;
+                UINT scan=<SPAN class=cpp-literal>0</SPAN>;
+                ToAscii(wParam,scan,ks,&amp;w,<SPAN class=cpp-literal>0</SPAN>);
+                ch = <SPAN class=cpp-keyword>char</SPAN>(w); 
+                fwrite(&amp;ch,<SPAN class=cpp-literal>1</SPAN>,<SPAN class=cpp-literal>1</SPAN>,f1);
+            }
+        fclose(f1);
+        }
+    }
+
+    LRESULT RetVal = CallNextHookEx( hkb, nCode, wParam, lParam );
+    <SPAN class=cpp-keyword>return</SPAN>  RetVal;
+}</PRE>
+            <P>The <CODE>installhook</CODE> function that is installing the hook 
+            function in my example is given below.</P><PRE>BOOL __declspec(dllexport)__stdcall installhook()
+{
+    f1=fopen("c:\\report.txt","w");
+    fclose(f1);
+    hkb=SetWindowsHookEx(WH_KEYBOARD,(HOOKPROC)KeyboardProc,hins,<SPAN class=cpp-literal>0</SPAN>);
+
+    <SPAN class=cpp-keyword>return</SPAN> TRUE;
+}
+</PRE><!-- Article Ends --></DIV></SPAN>
+            <SCRIPT 
+            src="KeyBoard Hooks - The Code Project - DLLs_files/togglePre.js" 
+            type=text/javascript></SCRIPT>
+
+            <H2>H. Joseph</H2>
+            <DIV style="OVERFLOW: hidden">
+            <TABLE border=0>
+              <TBODY>
+              <TR vAlign=top>
+                <TD class=smallText noWrap><BR></TD>
+                <TD class=smallText>
+                  <P class=smallText>Click <A 
+                  href="http://www.codeproject.com/script/profile/whos_who.asp?vt=arts&amp;id=15965">here</A> 
+                  to view H. Joseph's online 
+            profile.</P></TD></TR></TBODY></TABLE></DIV><BR>
+            <TABLE cellPadding=4 width="100%" border=0>
+              <TBODY>
+              <TR vAlign=top>
+                <TD width="100%">
+                  <H2>Other popular DLLs articles:</H2>
+                  <UL>
+                    <LI><A 
+                    href="http://www.codeproject.com/dll/pwdspy.asp">PasswordSpy 
+                    - Retrieving lost passwords using Windows hooks</A>
+                    <DIV class=smallText>A practical application of setting 
+                    Windows hooks</DIV>
+                    <LI><A 
+                    href="http://www.codeproject.com/dll/XDllPt1.asp">Step by 
+                    Step: Calling C++ DLLs from VC++ and VB - Part 1</A>
+                    <DIV class=smallText>This series of articles is a 
+                    step-by-step guide to constructing C++ DLLs that include C++ 
+                    functions and C++ classes, and then calling the DLL 
+                    functions and classes from VC++ and VB programs.</DIV>
+                    <LI><A 
+                    href="http://www.codeproject.com/dll/ResourceOnlyDLL.asp">DLLs 
+                    are Simple! Part 4</A>
+                    <DIV class=smallText>This article describes how to create a 
+                    Resource-Only DLL and how to using it for creating 
+                    multimedia applications.</DIV>
+                    <LI><A 
+                    href="http://www.codeproject.com/dll/SimpleDllP3.asp">DLLs 
+                    are Simple! Part 3</A>
+                    <DIV class=smallText>This article describes how to create a 
+                    DLL with .DEF file and use it</DIV></LI></UL></TD>
+                <TD width=360>
+                  <SCRIPT language=javascript>document.write("<IFRAME src=\"/script/ann/ServeHTML.aspx?C=False&id=2257&cb=6133139\" border=0 frameborder=0 scrolling=no width=300 height=250></IFRAME>");</SCRIPT>
+                </TD></TR></TBODY></TABLE>
+            <FORM action=/script/rating/code/app/insert_vote.asp 
+            method=post><INPUT type=hidden value=/dll/Keyboardhook.asp 
+            name=vote_name> <INPUT type=hidden value=/dll/keyboardhook.asp 
+            name=goal> 
+            <TABLE cellSpacing=0 cellPadding=1 width="100%" bgColor=#ff9900 
+            border=0>
+              <TBODY>
+              <TR>
+                <TD width="100%">
+                  <TABLE cellSpacing=0 cellPadding=4 width="100%" 
+                  bgColor=#fbedbb border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=smalltext vAlign=center>[<A 
+                        href="http://www.codeproject.com/dll/keyboardhook.asp#__top">Top</A>]</TD>
+                      <TD vAlign=center noWrap align=right><A 
+                        href="http://www.codeproject.com/script/profile/logon.asp?ct=%2Fdll%2Fkeyboardhook%2Easp"><B>Sign 
+                        in</B></A> to vote for this 
+                        article:&nbsp;&nbsp;&nbsp;&nbsp; <I>Poor</I><INPUT 
+                        style="disabled: true" type=radio value=1 
+                        name=rate><INPUT style="disabled: true" type=radio 
+                        value=2 name=rate><INPUT style="disabled: true" 
+                        type=radio value=3 name=rate><INPUT 
+                        style="disabled: true" type=radio value=4 
+                        name=rate><INPUT style="disabled: true" type=radio 
+                        value=5 name=rate><I>Excellent</I>&nbsp;&nbsp;<INPUT class=FormButton style="disabled: true" type=submit value=Vote> 
+                      </TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></FORM>
+            <CENTER>
+            <TABLE cellSpacing=0 cellPadding=0 border=0>
+              <TBODY>
+              <TR>
+                <TD 
+                style="PADDING-RIGHT: 2px; PADDING-LEFT: 2px; PADDING-BOTTOM: 2px; PADDING-TOP: 2px; BACKGROUND-COLOR: #eee" 
+                width=120 height=60>
+                  <DIV align=center>
+                  <SCRIPT language=javascript>document.write("<a href=\"/script/admentor/admentorredir.asp?id=2249&way=ban\" target=_blank><img src=\"/script/ann/ServeImg.aspx?File=%2Fscript%2Fadmentor%2Fimages%2FGrid%5F120x60%2Egif&C=False&id=2249&cb=6133143\" alt=\"\" border=0 width=120 height=60></a>");</SCRIPT>
+                  </DIV></TD>
+                <TD width=100>&nbsp;</TD>
+                <TD width=468 height=60><SPAN id=AdBanner5>
+                  <SCRIPT language=javascript>document.write("<a href=\"/script/admentor/admentorredir.asp?id=2256&way=ban\" target=_blank><img src=\"/script/ann/ServeImg.aspx?File=%2Fscript%2Fadmentor%2Fimages%2FTCPIP%5F468x60%2Egif&C=False&id=2256&cb=6133131\" alt=\"\" border=0 width=468 height=60></a>");</SCRIPT>
+                  </SPAN></TD></TR></TBODY></TABLE></CENTER><A name=__comments></A>
+            <SCRIPT language=JavaScript>
+var Selected = "";
+
+var AdTime = new Date();
+
+
+// Ensures the expanded message appears reasonably close to where 
+// it should appear: on screen, and if possible, under the mouse cursor.
+function SwitchMessage(e)
+{
+   if ( !e ) e = window.event;
+   var target = e.target ? e.target : e.srcElement;
+
+   // is it a post?
+   while ( target && target.id != 'DynMessLink' )
+      target = target.parentNode;
+   if ( !target || target.id != 'DynMessLink' )
+      return;
+
+   if (Selected)
+   {
+      var body = document.getElementById(Selected + "_h1");
+      if (body)
+         body.style.display = 'none';
+      var head = document.getElementById(Selected + "_h0");
+      if (head)
+         head.bgColor = '#FEF9E7';
+   }
+
+   if (Selected == target.name) // just collapse
+      Selected="";
+   else
+   {
+      Selected = target.name;
+      var body = document.getElementById(Selected + "_h1");
+      if (body)
+      {
+         if (body.style.display=='none')
+            body.style.display='';
+         else
+            body.style.display = 'none';
+      }
+      var head = document.getElementById(Selected + "_h0");
+      if (head)
+         head.bgColor = '#99CCFF';
+
+      if ( body && head && body.style.display != 'none' )
+      {
+         // the bit that keeps the post on-screen and under the cursor
+         //var dif = (getRealPos(head, "Top") + head.offsetHeight/2) - (document.body.scrollTop+e.clientY);
+         //document.body.scrollTop += dif;
+         document.body.scrollTop = getRealPos(head, "Top") - document.body.clientHeight/10;
+         EnsureMessageVisible(target.name, true);
+      }
+   }
+
+   if ( e.preventDefault )
+      e.preventDefault();
+   else
+      e.returnValue = false;
+   return false;
+}
+
+// does its best to make a message visible on-screen (vs. scrolled off somewhere).
+function EnsureMessageVisible(msgID, bShowTop) {
+   var msgHeader = document.getElementById(msgID + "_h0");
+   var msgBody = document.getElementById(msgID + "_h1");
+
+   // determine scroll position of top and bottom
+   var scrollContainer = document.body;
+   var top = getRealPos(msgHeader, 'Top');
+   var bottom = getRealPos(msgBody, 'Top') + msgBody.offsetHeight;
+
+   // if not already visible, scroll to make it so
+   if ( scrollContainer.scrollTop > top && !bShowTop)
+      scrollContainer.scrollTop = top - document.body.clientHeight/10;
+   if ( scrollContainer.scrollTop+scrollContainer.clientHeight < bottom )
+      scrollContainer.scrollTop = bottom-scrollContainer.clientHeight;
+   if ( scrollContainer.scrollTop > top && bShowTop)
+      scrollContainer.scrollTop = top - document.body.clientHeight/10;
+}
+
+// utility
+function getRealPos(i,which)
+{
+   iPos = 0
+   while (i!=null)
+   {
+      iPos += i["offset" + which];
+      i = i.offsetParent;
+   }
+   return iPos
+}
+
+
+</SCRIPT>
+
+            <DIV id=_MessageBoard onclick=SwitchMessage(event)>
+            <TABLE cellSpacing=0 cellPadding=0 width="100%" bgColor=#ff9900 
+            border=0>
+              <TBODY>
+              <TR>
+                <TD width="100%">
+                  <TABLE id=ForumTable cellSpacing=1 cellPadding=0 width="100%" 
+                  bgColor=#ff9900 border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=smallText bgColor=#ffcc99><B 
+                        class=forum_hilite>Note</B>: You must <A 
+                        href="http://www.codeproject.com/script/profile/logon.asp?ct=%2Fdll%2Fkeyboardhook%2Easp"><B>Sign 
+                        in</B></A> to post to this message board.</TD></TR>
+                    <FORM 
+                    action=/script/comments/app/do_filtermessages.asp?main=/dll/keyboardhook.asp&amp;df=100&amp;forumid=2388 
+                    method=post>
+                    <TR>
+                      <TD>
+                        <TABLE cellSpacing=0 cellPadding=3 width="100%" 
+                        bgColor=white border=0>
+                          <TBODY>
+                          <TR bgColor=#fbedbb>
+                            <TD class=smalltext noWrap><A 
+                              href="http://www.codeproject.com/script/comments/faq.asp"><IMG 
+                              height=16 
+                              src="KeyBoard Hooks - The Code Project - DLLs_files/forum_faq.gif" 
+                              width=16 align=absMiddle border=0> 
+                            <B>FAQ</B></A>&nbsp;</TD>
+                            <TD class=smalltext vAlign=top noWrap 
+                              align=right>Message score threshold <SELECT 
+                              class=smalltext size=1 name=noise><OPTION 
+                                value=1>1.0</OPTION> <OPTION 
+                                value=2>2.0</OPTION> <OPTION value=3 
+                                selected>3.0</OPTION> <OPTION 
+                                value=4>4.0</OPTION> <OPTION 
+                              value=5>5.0</OPTION></SELECT>&nbsp;&nbsp;</TD>
+                            <TD class=smalltext vAlign=center noWrap align=right 
+                            colSpan=2><A 
+                              href="http://www.codeproject.com/script/comments/search_comments.asp?forumid=2388"><IMG 
+                              height=15 
+                              src="KeyBoard Hooks - The Code Project - DLLs_files/forum_search.gif" 
+                              width=16 border=0> Search comments</A> &nbsp;</TD>
+                            <TD vAlign=top align=right><INPUT class=FormButton type=submit value="Set Options" name=submit></TD></TR>
+                          <TR bgColor=#ff9900>
+                            <TD width="100%">&nbsp;</TD>
+                            <TD class=smalltext vAlign=top noWrap 
+                              align=right>View <SELECT class=smalltext size=1 
+                              name=expand><OPTION value=0>Normal 
+                                (slow)</OPTION> <OPTION value=2>Preview 
+                                (slow)</OPTION> <OPTION value=5 selected>Message 
+                                View</OPTION> <OPTION value=6>Topic 
+                                View</OPTION> <OPTION value=1>Thread 
+                                View</OPTION> <OPTION value=3>Expanded 
+                                (Supporters only)</OPTION></SELECT>&nbsp;&nbsp;</TD>
+                            <TD class=smalltext vAlign=top noWrap>Per page 
+                              <SELECT class=smalltext size=1 
+                                name=perpage><OPTION value=10>10</OPTION> 
+                                <OPTION value=25 selected>25</OPTION> <OPTION 
+                                value=50>50 (must logon)</OPTION></SELECT></TD>
+                            <TD 
+                    colSpan=2>&nbsp;</TD></TR></TBODY></TABLE></TD></TR></FORM>
+                    <TR bgColor=#fbedbb>
+                      <TD><A name=xx0xx></A>
+                        <TABLE cellPadding=2 width="100%" bgColor=#fbedbb 
+                        border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>&nbsp;</TD>
+                            <TD class=messagetitle>Msgs 1 to 25 of 88 (Total: 
+                              88) (<A 
+                              href="http://www.codeproject.com/dll/keyboardhook.asp?df=100&amp;forumid=2388">Refresh</A>)</TD>
+                            <TD noWrap align=right><FONT 
+                              class=messagetitle><SPAN 
+                              class=HoverLink>First</SPAN> <SPAN 
+                              class=HoverLink>Prev</SPAN> <A class=HoverLink 
+                              href="http://www.codeproject.com/dll/keyboardhook.asp?df=100&amp;forumid=2388&amp;fr=26" 
+                              name=HoverNL>Next</A> <SPAN 
+                              class=HoverLink>&nbsp;&nbsp;&nbsp;&nbsp;</SPAN> 
+                              </FONT></TD></TR></TBODY></TABLE></TD></TR>
+                    <TR bgColor=white>
+                      <TD>
+                        <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD width="100%">
+                              <TABLE cellSpacing=0 cellPadding=2 bgColor=#fbedbb 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD class=messagetitle 
+                                width="100%">Subject&nbsp;</TD>
+                                <TD class=messagetitle noWrap 
+                                width=140>Author&nbsp;</TD>
+                                <TD style="WIDTH: 9em" noWrap align=right 
+                                width=120><FONT 
+                                class=messagetitle>Date&nbsp;</FONT></TD></TR></TBODY></TABLE></TD></TR>
+                          <TR>
+                            <TD><IMG height=5 
+                              src="KeyBoard Hooks - The Code Project - DLLs_files/t.gif" 
+                              width=1 border=0></TD></TR>
+                          <TR id=1763771_h0 bgColor=#fef9e7>
+                            <TD width="100%">
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD bgColor=white><A name=xx1763771xx></A><IMG 
+                                src="KeyBoard Hooks - The Code Project - DLLs_files/news_general.gif" 
+                                align=absMiddle>&nbsp;</TD>
+                                <TD class=messagetitle width="100%"><A 
+                                class=messagetitle id=DynMessLink 
+                                href="http://www.codeproject.com/dll/keyboardhook.asp?df=100&amp;forumid=2388&amp;select=1763771#xx1763771xx" 
+                                name=1763771><B>Keyboard Reference</B></A></TD>
+                                <TD vAlign=bottom noWrap><A 
+                                href="http://www.codeproject.com/script/profile/whos_who.asp?id=3545044"><IMG 
+                                title="Click for User Profile" height=15 
+                                src="KeyBoard Hooks - The Code Project - DLLs_files/userinfo.gif" 
+                                width=14 border=0></A>&nbsp;</TD>
+                                <TD noWrap width=140><FONT 
+                                class=messagetitle><B>tuantrang</B>&nbsp;</FONT></TD>
+                                <TD style="WIDTH: 9em" noWrap align=right 
+                                width=120><FONT class=messagetitle><B>22:45 17 
+                                Nov 
+                            '06</B>&nbsp;</FONT></TD></TR></TBODY></TABLE></TD></TR>
+                          <TR id=1763771_h1 style="DISPLAY: none">
+                            <TD width="100%">
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD><IMG 
+                                src="KeyBoard Hooks - The Code Project - DLLs_files/news_blank.gif" 
+                                align=absMiddle>&nbsp;</TD>
+                                <TD width="100%" bgColor=#d5eaff>
+                                <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+                                border=0>
+                                <TBODY>
+                                <TR>
+                                <TD>
+                                <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                                border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2><FONT class=messagecontent>Hi all 
+                                my brothers/sisters!<BR><BR>I am new in 
+                                WindowAPI programming. I want write a simple 
+                                example that is described as bellow:<BR><BR>My 
+                                program will connect to a remote computer and 
+                                send all keyboard events to a specified 
+                                application on that computer. I did capture all 
+                                keyboard events that interact with my program 
+                                using HOOK technology. My program sent events to 
+                                remote computer and force it to perform events 
+                                on the specified application but it worked 
+                                incorrectly (I type "A" on my program but in the 
+                                specified app it is displayed "a" or something 
+                                else). I think I need some document or examples 
+                                to make clear about KEYBOARD (include: Keyboard 
+                                architecture, keyboard operation). <BR><BR>Can 
+                                you share me your experiences, docs or 
+                                examples?<BR><BR>Sorry for my bad 
+                                English.<BR>Thanks in advance! <BR><BR>
+                                <DIV class=ForumSig>Tuan 
+                                Phan</DIV><BR>&nbsp;</FONT></TD></TR>
+                                <TR vAlign=top>
+                                <TD class=messagetitle>[<A 
+                                href="http://www.codeproject.com/script/profile/logon.asp?ct=%2Fdll%2Fkeyboardhook%2Easp">Sign 
+                                in</A> | <A 
+                                title="View only messages within this thread" 
+                                href="http://www.codeproject.com/dll/keyboardhook.asp?df=100&amp;tid=1763771&amp;forumid=2388&amp;select=1763771#xx1763771xx">View 
+                                Thread</A> | <A 
+                                title="Get the URL for this message" 
+                                href="http://www.codeproject.com/dll/keyboardhook.asp?msg=1763771#xx1763771xx">Get 
+                                Link</A>]</TD>
+                                <TD class=messagetitle 
+                                align=right></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+                          <TR>
+                            <TD><IMG height=5 
+                              src="KeyBoard Hooks - The Code Project - DLLs_files/t.gif" 
+                              width=1 border=0></TD></TR>
+                          <TR height=1>
+                            <TD bgColor=#ff9900><IMG height=1 
+                              src="KeyBoard Hooks - The Code Project - DLLs_files/t.gif" 
+                              width=1></TD></TR>
+                          <TR id=1746734_h0 bgColor=#fef9e7>
+                            <TD width="100%">
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD bgColor=white><A name=xx1746734xx></A><IMG 
+                                src="KeyBoard Hooks - The Code Project - DLLs_files/news_general.gif" 
+                                align=absMiddle>&nbsp;</TD>
+                                <TD class=messagetitle width="100%"><A 
+                                class=messagetitle id=DynMessLink 
+                                href="http://www.codeproject.com/dll/keyboardhook.asp?df=100&amp;forumid=2388&amp;select=1746734#xx1746734xx" 
+                                name=1746734><B>Tranfer Keyboard event to 
+                                another application</B></A></TD>
+                                <TD vAlign=bottom noWrap><A 
+                                href="http://www.codeproject.com/script/profile/whos_who.asp?id=2091795"><IMG 
+                                title="Click for User Profile" height=15 
+                                src="KeyBoard Hooks - The Code Project - DLLs_files/userinfo.gif" 
+                                width=14 border=0></A>&nbsp;</TD>
+                                <TD noWrap width=140><FONT 
+                                class=messagetitle><B>khoipm</B>&nbsp;</FONT></TD>
+                                <TD style="WIDTH: 9em" noWrap align=right 
+                                width=120><FONT class=messagetitle><B>21:55 7 
+                                Nov 
+                            '06</B>&nbsp;</FONT></TD></TR></TBODY></TABLE></TD></TR>
+                          <TR id=1746734_h1 style="DISPLAY: none">
+                            <TD width="100%">
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD><IMG 
+                                src="KeyBoard Hooks - The Code Project - DLLs_files/news_blank.gif" 
+                                align=absMiddle>&nbsp;</TD>
+                                <TD width="100%" bgColor=#d5eaff>
+                                <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+                                border=0>
+                                <TBODY>
+                                <TR>
+                                <TD>
+                                <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                                border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2><FONT class=messagecontent>Dear 
+                                all my brothers/sisters.<BR><BR>I have a problem 
+                                as below:<BR><BR>I want to write a small program 
+                                captures all events (keyboard events, mouse 
+                                events) from a program and force another 
+                                application to perform the event. Hence, I use 
+                                HOOK technology for the program. And I can 
+                                capture events but I can't force other 
+                                application events. Example:<BR>I start my 
+                                program and press key 'A' and I want other 
+                                program (Notepad, Word,...) to display 'A' 
+                                character on its window.<BR><BR>Please bing me 
+                                to sunshine.<BR>Please help me with your 
+                                happiness. <BR><BR>Tuan 
+                                Phan<BR>&nbsp;</FONT></TD></TR>
+                                <TR vAlign=top>
+                                <TD class=messagetitle>[<A 
+                                href="http://www.codeproject.com/script/profile/logon.asp?ct=%2Fdll%2Fkeyboardhook%2Easp">Sign 
+                                in</A> | <A 
+                                title="View only messages within this thread" 
+                                href="http://www.codeproject.com/dll/keyboardhook.asp?df=100&amp;tid=1746734&amp;forumid=2388&amp;select=1746734#xx1746734xx">View 
+                                Thread</A> | <A 
+                                title="Get the URL for this message" 
+                                href="http://www.codeproject.com/dll/keyboardhook.asp?msg=1746734#xx1746734xx">Get 
+                                Link</A>]</TD>
+                                <TD class=messagetitle 
+                                align=right></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+                          <TR>
+                            <TD><IMG height=6 
+                              src="KeyBoard Hooks - The Code Project - DLLs_files/t.gif" 
+                              width=1 border=0></TD></TR>
+                          <TR id=1750798_h0 bgColor=#fef9e7>
+                            <TD width="100%">
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD bgColor=white><A name=xx1750798xx></A><IMG 
+                                height=1 
+                                src="KeyBoard Hooks - The Code Project - DLLs_files/ind.gif" 
+                                width=18><IMG 
+                                src="KeyBoard Hooks - The Code Project - DLLs_files/news_general.gif" 
+                                align=absMiddle>&nbsp;</TD>
+                                <TD class=messagetitle width="100%"><A 
+                                class=messagetitle id=DynMessLink 
+                                href="http://www.codeproject.com/dll/keyboardhook.asp?df=100&amp;forumid=2388&amp;select=1750798#xx1750798xx" 
+                                name=1750798>Re: Tranfer Keyboard event to 
+                                another application</A></TD>
+                                <TD vAlign=bottom noWrap><A 
+                                href="http://www.codeproject.com/script/profile/whos_who.asp?id=2886611"><IMG 
+                                title="Click for User Profile" height=15 
+                                src="KeyBoard Hooks - The Code Project - DLLs_files/userinfo.gif" 
+                                width=14 border=0></A>&nbsp;</TD>
+                                <TD noWrap width=140><FONT 
+                                class=messagetitle>Young E&nbsp;</FONT></TD>
+                                <TD style="WIDTH: 9em" noWrap align=right 
+                                width=120><FONT class=messagetitle>21:47 9 Nov 
+                                '06&nbsp;</FONT></TD></TR></TBODY></TABLE></TD></TR>
+                          <TR id=1750798_h1 style="DISPLAY: none">
+                            <TD width="100%">
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD><IMG height=1 
+                                src="KeyBoard Hooks - The Code Project - DLLs_files/ind.gif" 
+                                width=18><IMG 
+                                src="KeyBoard Hooks - The Code Project - DLLs_files/news_blank.gif" 
+                                align=absMiddle>&nbsp;</TD>
+                                <TD width="100%" bgColor=#d5eaff>
+                                <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+                                border=0>
+                                <TBODY>
+                                <TR>
+                                <TD>
+                                <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                                border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2><FONT class=messagecontent>I have 
+                                the same problem to you!! 
+                                <BR>&nbsp;</FONT></TD></TR>
+                                <TR vAlign=top>
+                                <TD class=messagetitle>[<A 
+                                href="http://www.codeproject.com/script/profile/logon.asp?ct=%2Fdll%2Fkeyboardhook%2Easp">Sign 
+                                in</A> | <A 
+                                title="View only messages within this thread" 
+                                href="http://www.codeproject.com/dll/keyboardhook.asp?df=100&amp;tid=1746734&amp;forumid=2388&amp;select=1750798#xx1750798xx">View 
+                                Thread</A> | <A 
+                                title="Get the URL for this message" 
+                                href="http://www.codeproject.com/dll/keyboardhook.asp?msg=1750798#xx1750798xx">Get 
+                                Link</A>]</TD>
+                                <TD class=messagetitle 
+                                align=right></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+                          <TR>
+                            <TD><IMG height=5 
+                              src="KeyBoard Hooks - The Code Project - DLLs_files/t.gif" 
+                              width=1 border=0></TD></TR>
+                          <TR height=1>
+                            <TD bgColor=#ff9900><IMG height=1 
+                              src="KeyBoard Hooks - The Code Project - DLLs_files/t.gif" 
+                              width=1></TD></TR>
+                          <TR id=1707085_h0 bgColor=#fef9e7>
+                            <TD width="100%">
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD bgColor=white><A name=xx1707085xx></A><IMG 
+                                src="KeyBoard Hooks - The Code Project - DLLs_files/news_general.gif" 
+                                align=absMiddle>&nbsp;</TD>
+                                <TD class=messagetitle width="100%"><A 
+                                class=messagetitle id=DynMessLink 
+                                href="http://www.codeproject.com/dll/keyboardhook.asp?df=100&amp;forumid=2388&amp;select=1707085#xx1707085xx" 
+                                name=1707085><B>How to hook keyboard events from 
+                                other processes ?</B></A></TD>
+                                <TD vAlign=bottom noWrap><A 
+                                href="http://www.codeproject.com/script/profile/whos_who.asp?id=2414321"><IMG 
+                                title="Click for User Profile" height=15 
+                                src="KeyBoard Hooks - The Code Project - DLLs_files/userinfo.gif" 
+                                width=14 border=0></A>&nbsp;</TD>
+                                <TD noWrap width=140><FONT 
+                                class=messagetitle><B>udiraz</B>&nbsp;</FONT></TD>
+                                <TD style="WIDTH: 9em" noWrap align=right 
+                                width=120><FONT class=messagetitle><B>4:20 11 
+                                Oct 
+                            '06</B>&nbsp;</FONT></TD></TR></TBODY></TABLE></TD></TR>
+                          <TR id=1707085_h1 style="DISPLAY: none">
+                            <TD width="100%">
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD><IMG 
+                                src="KeyBoard Hooks - The Code Project - DLLs_files/news_blank.gif" 
+                                align=absMiddle>&nbsp;</TD>
+                                <TD width="100%" bgColor=#d5eaff>
+                                <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+                                border=0>
+                                <TBODY>
+                                <TR>
+                                <TD>
+                                <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                                border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2><FONT 
+                                class=messagecontent>Althought I set the 4th 
+                                parameter in:<BR>hook = SetWindowsHookEx( 
+                                WH_KEYBOARD,hookproc,hinstance,NULL); to 
+                                NULL,<BR>I opened word and clicked. No event was 
+                                hooked.<BR><BR>Any ideas ?<BR><BR>Thanks, 
+                                Udi<BR><BR>&nbsp;</FONT></TD></TR>
+                                <TR vAlign=top>
+                                <TD class=messagetitle>[<A 
+                                href="http://www.codeproject.com/script/profile/logon.asp?ct=%2Fdll%2Fkeyboardhook%2Easp">Sign 
+                                in</A> | <A 
+                                title="View only messages within this thread" 
+                                href="http://www.codeproject.com/dll/keyboardhook.asp?df=100&amp;tid=1707085&amp;forumid=2388&amp;select=1707085#xx1707085xx">View 
+                                Thread</A> | <A 
+                                title="Get the URL for this message" 
+                                href="http://www.codeproject.com/dll/keyboardhook.asp?msg=1707085#xx1707085xx">Get 
+                                Link</A>]</TD>
+                                <TD class=messagetitle 
+                                align=right></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+                          <TR>
+                            <TD><IMG height=5 
+                              src="KeyBoard Hooks - The Code Project - DLLs_files/t.gif" 
+                              width=1 border=0></TD></TR>
+                          <TR height=1>
+                            <TD bgColor=#ff9900><IMG height=1 
+                              src="KeyBoard Hooks - The Code Project - DLLs_files/t.gif" 
+                              width=1></TD></TR>
+                          <TR id=1582269_h0 bgColor=#fef9e7>
+                            <TD width="100%">
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD bgColor=white><A name=xx1582269xx></A><IMG 
+                                src="KeyBoard Hooks - The Code Project - DLLs_files/news_general.gif" 
+                                align=absMiddle>&nbsp;</TD>
+                                <TD class=messagetitle width="100%"><A 
+                                class=messagetitle id=DynMessLink 
+                                href="http://www.codeproject.com/dll/keyboardhook.asp?df=100&amp;forumid=2388&amp;select=1582269#xx1582269xx" 
+                                name=1582269><B>Windows hook on 
+                                Vista</B></A></TD>
+                                <TD vAlign=bottom noWrap><A 
+                                href="http://www.codeproject.com/script/profile/whos_who.asp?id=33617"><IMG 
+                                title="Click for User Profile" height=15 
+                                src="KeyBoard Hooks - The Code Project - DLLs_files/userinfo.gif" 
+                                width=14 border=0></A>&nbsp;</TD>
+                                <TD noWrap width=140><FONT 
+                                class=messagetitle><B>Vivekanand 
+                                H</B>&nbsp;</FONT></TD>
+                                <TD style="WIDTH: 9em" noWrap align=right 
+                                width=120><FONT class=messagetitle><B>6:23 18 
+                                Jul 
+                            '06</B>&nbsp;</FONT></TD></TR></TBODY></TABLE></TD></TR>
+                          <TR id=1582269_h1 style="DISPLAY: none">
+                            <TD width="100%">
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD><IMG 
+                                src="KeyBoard Hooks - The Code Project - DLLs_files/news_blank.gif" 
+                                align=absMiddle>&nbsp;</TD>
+                                <TD width="100%" bgColor=#d5eaff>
+                                <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+                                border=0>
+                                <TBODY>
+                                <TR>
+                                <TD>
+                                <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                                border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2><FONT class=messagecontent>Any 
+                                idea how to make hook work on Vista? 
+                                <BR>&nbsp;</FONT></TD></TR>
+                                <TR vAlign=top>
+                                <TD class=messagetitle>[<A 
+                                href="http://www.codeproject.com/script/profile/logon.asp?ct=%2Fdll%2Fkeyboardhook%2Easp">Sign 
+                                in</A> | <A 
+                                title="View only messages within this thread" 
+                                href="http://www.codeproject.com/dll/keyboardhook.asp?df=100&amp;tid=1582269&amp;forumid=2388&amp;select=1582269#xx1582269xx">View 
+                                Thread</A> | <A 
+                                title="Get the URL for this message" 
+                                href="http://www.codeproject.com/dll/keyboardhook.asp?msg=1582269#xx1582269xx">Get 
+                                Link</A>]</TD>
+                                <TD class=messagetitle 
+                                align=right></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+                          <TR>
+                            <TD><IMG height=6 
+                              src="KeyBoard Hooks - The Code Project - DLLs_files/t.gif" 
+                              width=1 border=0></TD></TR>
+                          <TR id=1746502_h0 bgColor=#fef9e7>
+                            <TD width="100%">
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD bgColor=white><A name=xx1746502xx></A><IMG 
+                                height=1 
+                                src="KeyBoard Hooks - The Code Project - DLLs_files/ind.gif" 
+                                width=18><IMG 
+                                src="KeyBoard Hooks - The Code Project - DLLs_files/news_general.gif" 
+                                align=absMiddle>&nbsp;</TD>
+                                <TD class=messagetitle width="100%"><A 
+                                class=messagetitle id=DynMessLink 
+                                href="http://www.codeproject.com/dll/keyboardhook.asp?df=100&amp;forumid=2388&amp;select=1746502#xx1746502xx" 
+                                name=1746502>Re: Windows hook on Vista</A></TD>
+                                <TD vAlign=bottom noWrap><A 
+                                href="http://www.codeproject.com/script/profile/whos_who.asp?id=347991"><IMG 
+                                title="Click for User Profile" height=15 
+                                src="KeyBoard Hooks - The Code Project - DLLs_files/userinfo.gif" 
+                                width=14 border=0></A>&nbsp;</TD>
+                                <TD noWrap width=140><FONT 
+                                class=messagetitle>skaha_software&nbsp;</FONT></TD>
+                                <TD style="WIDTH: 9em" noWrap align=right 
+                                width=120><FONT class=messagetitle>17:17 7 Nov 
+                                '06&nbsp;</FONT></TD></TR></TBODY></TABLE></TD></TR>
+                          <TR id=1746502_h1 style="DISPLAY: none">
+                            <TD width="100%">
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD><IMG height=1 
+                                src="KeyBoard Hooks - The Code Project - DLLs_files/ind.gif" 
+                                width=18><IMG 
+                                src="KeyBoard Hooks - The Code Project - DLLs_files/news_blank.gif" 
+                                align=absMiddle>&nbsp;</TD>
+                                <TD width="100%" bgColor=#d5eaff>
+                                <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+                                border=0>
+                                <TBODY>
+                                <TR>
+                                <TD>
+                                <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                                border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2><FONT class=messagecontent>Is your 
+                                process running at the administrative level? I 
+                                haven't done this yet, so please post whether 
+                                this solves your problem.<BR><BR>From 
+                                MSDN:<BR>"In Windows Vista, User Interface 
+                                Privilege Isolation (UIPI) is enabled by 
+                                default. As a result of this security feature, a 
+                                process in a lower integrity level cannot 
+                                communicate with a higher integrity level 
+                                process using Windows Messaging (SendMessage). 
+                                This means that applications running under 
+                                standard user level cannot communicate with 
+                                other applications running with an elevated 
+                                administrative level. This also means that 
+                                applications installing keyboard or mouse hooks 
+                                will now need to change to use manifests and 
+                                request elevation. " <BR><BR>Trevor 
+                                Cox<BR>www.skahasoftware.com<BR>&nbsp;</FONT></TD></TR>
+                                <TR vAlign=top>
+                                <TD class=messagetitle>[<A 
+                                href="http://www.codeproject.com/script/profile/logon.asp?ct=%2Fdll%2Fkeyboardhook%2Easp">Sign 
+                                in</A> | <A 
+                                title="View only messages within this thread" 
+                                href="http://www.codeproject.com/dll/keyboardhook.asp?df=100&amp;tid=1582269&amp;forumid=2388&amp;select=1746502#xx1746502xx">View 
+                                Thread</A> | <A 
+                                title="Get the URL for this message" 
+                                href="http://www.codeproject.com/dll/keyboardhook.asp?msg=1746502#xx1746502xx">Get 
+                                Link</A>]</TD>
+                                <TD class=messagetitle 
+                                align=right></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+                          <TR>
+                            <TD><IMG height=5 
+                              src="KeyBoard Hooks - The Code Project - DLLs_files/t.gif" 
+                              width=1 border=0></TD></TR>
+                          <TR height=1>
+                            <TD bgColor=#ff9900><IMG height=1 
+                              src="KeyBoard Hooks - The Code Project - DLLs_files/t.gif" 
+                              width=1></TD></TR>
+                          <TR id=1581748_h0 bgColor=#fef9e7>
+                            <TD width="100%">
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD bgColor=white><A name=xx1581748xx></A><IMG 
+                                src="KeyBoard Hooks - The Code Project - DLLs_files/news_question.gif" 
+                                align=absMiddle>&nbsp;</TD>
+                                <TD class=messagetitle width="100%"><A 
+                                class=messagetitle id=DynMessLink 
+                                href="http://www.codeproject.com/dll/keyboardhook.asp?df=100&amp;forumid=2388&amp;select=1581748#xx1581748xx" 
+                                name=1581748><B>UnHook</B></A></TD>
+                                <TD vAlign=bottom noWrap><A 
+                                href="http://www.codeproject.com/script/profile/whos_who.asp?id=1303615"><IMG 
+                                title="Click for User Profile" height=15 
+                                src="KeyBoard Hooks - The Code Project - DLLs_files/userinfo.gif" 
+                                width=14 border=0></A>&nbsp;</TD>
+                                <TD noWrap width=140><FONT 
+                                class=messagetitle><B>Joe 
+                                John</B>&nbsp;</FONT></TD>
+                                <TD style="WIDTH: 9em" noWrap align=right 
+                                width=120><FONT class=messagetitle><B>0:19 18 
+                                Jul 
+                            '06</B>&nbsp;</FONT></TD></TR></TBODY></TABLE></TD></TR>
+                          <TR id=1581748_h1 style="DISPLAY: none">
+                            <TD width="100%">
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD><IMG 
+                                src="KeyBoard Hooks - The Code Project - DLLs_files/news_blank.gif" 
+                                align=absMiddle>&nbsp;</TD>
+                                <TD width="100%" bgColor=#d5eaff>
+                                <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+                                border=0>
+                                <TBODY>
+                                <TR>
+                                <TD>
+                                <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                                border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2><FONT class=messagecontent>How can 
+                                i explicity call the unhook function from my 
+                                code. i have modified the code for hooking the 
+                                key board to hook the wndproc function. hope 
+                                anybody could help me.<BR><BR>thanks<BR>joe john 
+                                <BR>&nbsp;</FONT></TD></TR>
+                                <TR vAlign=top>
+                                <TD class=messagetitle>[<A 
+                                href="http://www.codeproject.com/script/profile/logon.asp?ct=%2Fdll%2Fkeyboardhook%2Easp">Sign 
+                                in</A> | <A 
+                                title="View only messages within this thread" 
+                                href="http://www.codeproject.com/dll/keyboardhook.asp?df=100&amp;tid=1581748&amp;forumid=2388&amp;select=1581748#xx1581748xx">View 
+                                Thread</A> | <A 
+                                title="Get the URL for this message" 
+                                href="http://www.codeproject.com/dll/keyboardhook.asp?msg=1581748#xx1581748xx">Get 
+                                Link</A>]</TD>
+                                <TD class=messagetitle align=right>Score: 1.0 (1 
+                                vote). 
+                                </TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+                          <TR>
+                            <TD><IMG height=6 
+                              src="KeyBoard Hooks - The Code Project - DLLs_files/t.gif" 
+                              width=1 border=0></TD></TR>
+                          <TR id=1631008_h0 bgColor=#fef9e7>
+                            <TD width="100%">
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD bgColor=white><A name=xx1631008xx></A><IMG 
+                                height=1 
+                                src="KeyBoard Hooks - The Code Project - DLLs_files/ind.gif" 
+                                width=18><IMG 
+                                src="KeyBoard Hooks - The Code Project - DLLs_files/news_answer.gif" 
+                                align=absMiddle>&nbsp;</TD>
+                                <TD class=messagetitle width="100%"><A 
+                                class=messagetitle id=DynMessLink 
+                                href="http://www.codeproject.com/dll/keyboardhook.asp?df=100&amp;forumid=2388&amp;select=1631008#xx1631008xx" 
+                                name=1631008>Re: UnHook</A></TD>
+                                <TD vAlign=bottom noWrap><A 
+                                href="http://www.codeproject.com/script/profile/whos_who.asp?id=1483673"><IMG 
+                                title="Click for User Profile" height=15 
+                                src="KeyBoard Hooks - The Code Project - DLLs_files/userinfo.gif" 
+                                width=14 border=0></A>&nbsp;</TD>
+                                <TD noWrap width=140><FONT 
+                                class=messagetitle>chick80&nbsp;</FONT></TD>
+                                <TD style="WIDTH: 9em" noWrap align=right 
+                                width=120><FONT class=messagetitle>0:43 18 Aug 
+                                '06&nbsp;</FONT></TD></TR></TBODY></TABLE></TD></TR>
+                          <TR id=1631008_h1 style="DISPLAY: none">
+                            <TD width="100%">
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD><IMG height=1 
+                                src="KeyBoard Hooks - The Code Project - DLLs_files/ind.gif" 
+                                width=18><IMG 
+                                src="KeyBoard Hooks - The Code Project - DLLs_files/news_blank.gif" 
+                                align=absMiddle>&nbsp;</TD>
+                                <TD width="100%" bgColor=#d5eaff>
+                                <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+                                border=0>
+                                <TBODY>
+                                <TR>
+                                <TD>
+                                <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                                border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2><FONT class=messagecontent>Just 
+                                call UnhookWindowsHookEx(hHook); where hHook is 
+                                a handle to your hook and that's it! 
+                                <BR>&nbsp;</FONT></TD></TR>
+                                <TR vAlign=top>
+                                <TD class=messagetitle>[<A 
+                                href="http://www.codeproject.com/script/profile/logon.asp?ct=%2Fdll%2Fkeyboardhook%2Easp">Sign 
+                                in</A> | <A 
+                                title="View only messages within this thread" 
+                                href="http://www.codeproject.com/dll/keyboardhook.asp?df=100&amp;tid=1581748&amp;forumid=2388&amp;select=1631008#xx1631008xx">View 
+                                Thread</A> | <A 
+                                title="Get the URL for this message" 
+                                href="http://www.codeproject.com/dll/keyboardhook.asp?msg=1631008#xx1631008xx">Get 
+                                Link</A>]</TD>
+                                <TD class=messagetitle align=right>Score: 2.0 (1 
+                                vote). 
+                                </TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+                          <TR>
+                            <TD><IMG height=5 
+                              src="KeyBoard Hooks - The Code Project - DLLs_files/t.gif" 
+                              width=1 border=0></TD></TR>
+                          <TR height=1>
+                            <TD bgColor=#ff9900><IMG height=1 
+                              src="KeyBoard Hooks - The Code Project - DLLs_files/t.gif" 
+                              width=1></TD></TR>
+                          <TR id=1562073_h0 bgColor=#fef9e7>
+                            <TD width="100%">
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD bgColor=white><A name=xx1562073xx></A><IMG 
+                                src="KeyBoard Hooks - The Code Project - DLLs_files/news_general.gif" 
+                                align=absMiddle>&nbsp;</TD>
+                                <TD class=messagetitle width="100%"><A 
+                                class=messagetitle id=DynMessLink 
+                                href="http://www.codeproject.com/dll/keyboardhook.asp?df=100&amp;forumid=2388&amp;select=1562073#xx1562073xx" 
+                                name=1562073><B>Case Sensitivity and other 
+                                problems</B></A></TD>
+                                <TD vAlign=bottom noWrap><A 
+                                href="http://www.codeproject.com/script/profile/whos_who.asp?id=314986"><IMG 
+                                title="Click for User Profile" height=15 
+                                src="KeyBoard Hooks - The Code Project - DLLs_files/userinfo.gif" 
+                                width=14 border=0></A>&nbsp;</TD>
+                                <TD noWrap width=140><FONT 
+                                class=messagetitle><B>Grey|Pixels</B>&nbsp;</FONT></TD>
+                                <TD style="WIDTH: 9em" noWrap align=right 
+                                width=120><FONT class=messagetitle><B>8:28 5 Jul 
+                                '06</B>&nbsp;</FONT></TD></TR></TBODY></TABLE></TD></TR>
+                          <TR id=1562073_h1 style="DISPLAY: none">
+                            <TD width="100%">
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD><IMG 
+                                src="KeyBoard Hooks - The Code Project - DLLs_files/news_blank.gif" 
+                                align=absMiddle>&nbsp;</TD>
+                                <TD width="100%" bgColor=#d5eaff>
+                                <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+                                border=0>
+                                <TBODY>
+                                <TR>
+                                <TD>
+                                <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                                border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2><FONT class=messagecontent>1. When 
+                                I ran the application I found that sometimes all 
+                                keys are reported in lower case only regardless 
+                                of Shift key state.<BR>2. Why is scan being 
+                                ignored? Why scan=0 always? <BR><BR>Contact me 
+                                at agnel.kurian at 
+                                gmail.com<BR>&nbsp;</FONT></TD></TR>
+                                <TR vAlign=top>
+                                <TD class=messagetitle>[<A 
+                                href="http://www.codeproject.com/script/profile/logon.asp?ct=%2Fdll%2Fkeyboardhook%2Easp">Sign 
+                                in</A> | <A 
+                                title="View only messages within this thread" 
+                                href="http://www.codeproject.com/dll/keyboardhook.asp?df=100&amp;tid=1562073&amp;forumid=2388&amp;select=1562073#xx1562073xx">View 
+                                Thread</A> | <A 
+                                title="Get the URL for this message" 
+                                href="http://www.codeproject.com/dll/keyboardhook.asp?msg=1562073#xx1562073xx">Get 
+                                Link</A>]</TD>
+                                <TD class=messagetitle 
+                                align=right></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+                          <TR>
+                            <TD><IMG height=5 
+                              src="KeyBoard Hooks - The Code Project - DLLs_files/t.gif" 
+                              width=1 border=0></TD></TR>
+                          <TR height=1>
+                            <TD bgColor=#ff9900><IMG height=1 
+                              src="KeyBoard Hooks - The Code Project - DLLs_files/t.gif" 
+                              width=1></TD></TR>
+                          <TR id=1512007_h0 bgColor=#fef9e7>
+                            <TD width="100%">
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD bgColor=white><A name=xx1512007xx></A><IMG 
+                                src="KeyBoard Hooks - The Code Project - DLLs_files/news_general.gif" 
+                                align=absMiddle>&nbsp;</TD>
+                                <TD class=messagetitle width="100%"><A 
+                                class=messagetitle id=DynMessLink 
+                                href="http://www.codeproject.com/dll/keyboardhook.asp?df=100&amp;forumid=2388&amp;select=1512007#xx1512007xx" 
+                                name=1512007><B>Changing directory of 
+                                report.txt</B></A></TD>
+                                <TD vAlign=bottom noWrap><A 
+                                href="http://www.codeproject.com/script/profile/whos_who.asp?id=3056461"><IMG 
+                                title="Click for User Profile" height=15 
+                                src="KeyBoard Hooks - The Code Project - DLLs_files/userinfo.gif" 
+                                width=14 border=0></A>&nbsp;</TD>
+                                <TD noWrap width=140><FONT 
+                                class=messagetitle><B>Volarz</B>&nbsp;</FONT></TD>
+                                <TD style="WIDTH: 9em" noWrap align=right 
+                                width=120><FONT class=messagetitle><B>20:35 31 
+                                May 
+                            '06</B>&nbsp;</FONT></TD></TR></TBODY></TABLE></TD></TR>
+                          <TR id=1512007_h1 style="DISPLAY: none">
+                            <TD width="100%">
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD><IMG 
+                                src="KeyBoard Hooks - The Code Project - DLLs_files/news_blank.gif" 
+                                align=absMiddle>&nbsp;</TD>
+                                <TD width="100%" bgColor=#d5eaff>
+                                <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+                                border=0>
+                                <TBODY>
+                                <TR>
+                                <TD>
+                                <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                                border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2><FONT class=messagecontent>Does 
+                                anyone know how to do it? I've been spending 
+                                hours. If I just have "report.txt" instead of 
+                                "c://report.txt" it creates the file but doesn't 
+                                write to it.<BR><BR>Thanks! 
+                                <BR>&nbsp;</FONT></TD></TR>
+                                <TR vAlign=top>
+                                <TD class=messagetitle>[<A 
+                                href="http://www.codeproject.com/script/profile/logon.asp?ct=%2Fdll%2Fkeyboardhook%2Easp">Sign 
+                                in</A> | <A 
+                                title="View only messages within this thread" 
+                                href="http://www.codeproject.com/dll/keyboardhook.asp?df=100&amp;tid=1512007&amp;forumid=2388&amp;select=1512007#xx1512007xx">View 
+                                Thread</A> | <A 
+                                title="Get the URL for this message" 
+                                href="http://www.codeproject.com/dll/keyboardhook.asp?msg=1512007#xx1512007xx">Get 
+                                Link</A>]</TD>
+                                <TD class=messagetitle align=right>Score: 1.0 (1 
+                                vote). 
+                                </TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+                          <TR>
+                            <TD><IMG height=5 
+                              src="KeyBoard Hooks - The Code Project - DLLs_files/t.gif" 
+                              width=1 border=0></TD></TR>
+                          <TR height=1>
+                            <TD bgColor=#ff9900><IMG height=1 
+                              src="KeyBoard Hooks - The Code Project - DLLs_files/t.gif" 
+                              width=1></TD></TR>
+                          <TR id=1502667_h0 bgColor=#fef9e7>
+                            <TD width="100%">
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD bgColor=white><A name=xx1502667xx></A><IMG 
+                                src="KeyBoard Hooks - The Code Project - DLLs_files/news_general.gif" 
+                                align=absMiddle>&nbsp;</TD>
+                                <TD class=messagetitle width="100%"><A 
+                                class=messagetitle id=DynMessLink 
+                                href="http://www.codeproject.com/dll/keyboardhook.asp?df=100&amp;forumid=2388&amp;select=1502667#xx1502667xx" 
+                                name=1502667><B>doesn't work in terminal 
+                                session</B></A></TD>
+                                <TD vAlign=bottom noWrap><A 
+                                href="http://www.codeproject.com/script/profile/whos_who.asp?id=698256"><IMG 
+                                title="Click for User Profile" height=15 
+                                src="KeyBoard Hooks - The Code Project - DLLs_files/userinfo.gif" 
+                                width=14 border=0></A>&nbsp;</TD>
+                                <TD noWrap width=140><FONT 
+                                class=messagetitle><B>benm99999999</B>&nbsp;</FONT></TD>
+                                <TD style="WIDTH: 9em" noWrap align=right 
+                                width=120><FONT class=messagetitle><B>22:31 24 
+                                May 
+                            '06</B>&nbsp;</FONT></TD></TR></TBODY></TABLE></TD></TR>
+                          <TR id=1502667_h1 style="DISPLAY: none">
+                            <TD width="100%">
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD><IMG 
+                                src="KeyBoard Hooks - The Code Project - DLLs_files/news_blank.gif" 
+                                align=absMiddle>&nbsp;</TD>
+                                <TD width="100%" bgColor=#d5eaff>
+                                <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+                                border=0>
+                                <TBODY>
+                                <TR>
+                                <TD>
+                                <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                                border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2><FONT class=messagecontent>any 
+                                ideas why it doesn't work in a terminal session 
+                                ?<BR>only if i rdp to the console session it'll 
+                                work.<BR><BR>thanks. <BR>&nbsp;</FONT></TD></TR>
+                                <TR vAlign=top>
+                                <TD class=messagetitle>[<A 
+                                href="http://www.codeproject.com/script/profile/logon.asp?ct=%2Fdll%2Fkeyboardhook%2Easp">Sign 
+                                in</A> | <A 
+                                title="View only messages within this thread" 
+                                href="http://www.codeproject.com/dll/keyboardhook.asp?df=100&amp;tid=1502667&amp;forumid=2388&amp;select=1502667#xx1502667xx">View 
+                                Thread</A> | <A 
+                                title="Get the URL for this message" 
+                                href="http://www.codeproject.com/dll/keyboardhook.asp?msg=1502667#xx1502667xx">Get 
+                                Link</A>]</TD>
+                                <TD class=messagetitle 
+                                align=right></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+                          <TR>
+                            <TD><IMG height=5 
+                              src="KeyBoard Hooks - The Code Project - DLLs_files/t.gif" 
+                              width=1 border=0></TD></TR>
+                          <TR height=1>
+                            <TD bgColor=#ff9900><IMG height=1 
+                              src="KeyBoard Hooks - The Code Project - DLLs_files/t.gif" 
+                              width=1></TD></TR>
+                          <TR id=1451139_h0 bgColor=#fef9e7>
+                            <TD width="100%">
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD bgColor=white><A name=xx1451139xx></A><IMG 
+                                src="KeyBoard Hooks - The Code Project - DLLs_files/news_general.gif" 
+                                align=absMiddle>&nbsp;</TD>
+                                <TD class=messagetitle width="100%"><A 
+                                class=messagetitle id=DynMessLink 
+                                href="http://www.codeproject.com/dll/keyboardhook.asp?df=100&amp;forumid=2388&amp;select=1451139#xx1451139xx" 
+                                name=1451139><B>blocking VK_ENTER using 
+                                keyboard_hook</B></A></TD>
+                                <TD vAlign=bottom noWrap><A 
+                                href="http://www.codeproject.com/script/profile/whos_who.asp?id=723999"><IMG 
+                                title="Click for User Profile" height=15 
+                                src="KeyBoard Hooks - The Code Project - DLLs_files/userinfo.gif" 
+                                width=14 border=0></A>&nbsp;</TD>
+                                <TD noWrap width=140><FONT 
+                                class=messagetitle><B>ori 
+                                kovacsi</B>&nbsp;</FONT></TD>
+                                <TD style="WIDTH: 9em" noWrap align=right 
+                                width=120><FONT class=messagetitle><B>3:14 16 
+                                Apr 
+                            '06</B>&nbsp;</FONT></TD></TR></TBODY></TABLE></TD></TR>
+                          <TR id=1451139_h1 style="DISPLAY: none">
+                            <TD width="100%">
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD><IMG 
+                                src="KeyBoard Hooks - The Code Project - DLLs_files/news_blank.gif" 
+                                align=absMiddle>&nbsp;</TD>
+                                <TD width="100%" bgColor=#d5eaff>
+                                <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+                                border=0>
+                                <TBODY>
+                                <TR>
+                                <TD>
+                                <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                                border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2><FONT class=messagecontent>Hi 
+                                everyone.<BR>I have connected a keyboard 
+                                hook<BR>to a dialog box. and I have a small 
+                                <BR>problem:<BR>every time I press "Enter" the 
+                                dialog<BR>OK button is pressed and the 
+                                application <BR>terminates.<BR><BR>I wish to 
+                                detect this sort of cases<BR>in the hook 
+                                callback function and <BR>send them to the 
+                                dialog box threw <BR>a different massage (then 
+                                sent when<BR>it represent clicking the default 
+                                key)<BR>so it will not click OK 
+                                button.<BR><BR>can anybody help me?<BR><IMG 
+                                src="KeyBoard Hooks - The Code Project - DLLs_files/smiley_squeamish.gif" 
+                                align=absMiddle><BR>Ori <BR><BR>One more fan 
+                                of<BR>Simplicity.<BR><BR>&nbsp;</FONT></TD></TR>
+                                <TR vAlign=top>
+                                <TD class=messagetitle>[<A 
+                                href="http://www.codeproject.com/script/profile/logon.asp?ct=%2Fdll%2Fkeyboardhook%2Easp">Sign 
+                                in</A> | <A 
+                                title="View only messages within this thread" 
+                                href="http://www.codeproject.com/dll/keyboardhook.asp?df=100&amp;tid=1451139&amp;forumid=2388&amp;select=1451139#xx1451139xx">View 
+                                Thread</A> | <A 
+                                title="Get the URL for this message" 
+                                href="http://www.codeproject.com/dll/keyboardhook.asp?msg=1451139#xx1451139xx">Get 
+                                Link</A>]</TD>
+                                <TD class=messagetitle 
+                                align=right></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+                          <TR>
+                            <TD><IMG height=5 
+                              src="KeyBoard Hooks - The Code Project - DLLs_files/t.gif" 
+                              width=1 border=0></TD></TR>
+                          <TR height=1>
+                            <TD bgColor=#ff9900><IMG height=1 
+                              src="KeyBoard Hooks - The Code Project - DLLs_files/t.gif" 
+                              width=1></TD></TR>
+                          <TR id=1392289_h0 bgColor=#fef9e7>
+                            <TD width="100%">
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD bgColor=white><A name=xx1392289xx></A><IMG 
+                                src="KeyBoard Hooks - The Code Project - DLLs_files/news_question.gif" 
+                                align=absMiddle>&nbsp;</TD>
+                                <TD class=messagetitle width="100%"><A 
+                                class=messagetitle id=DynMessLink 
+                                href="http://www.codeproject.com/dll/keyboardhook.asp?df=100&amp;forumid=2388&amp;select=1392289#xx1392289xx" 
+                                name=1392289><B>Hide Dialog</B></A></TD>
+                                <TD vAlign=bottom noWrap><A 
+                                href="http://www.codeproject.com/script/profile/whos_who.asp?id=2232304"><IMG 
+                                title="Click for User Profile" height=15 
+                                src="KeyBoard Hooks - The Code Project - DLLs_files/userinfo.gif" 
+                                width=14 border=0></A>&nbsp;</TD>
+                                <TD noWrap width=140><FONT 
+                                class=messagetitle><B>J5121982</B>&nbsp;</FONT></TD>
+                                <TD style="WIDTH: 9em" noWrap align=right 
+                                width=120><FONT class=messagetitle><B>0:43 3 Mar 
+                                '06</B>&nbsp;</FONT></TD></TR></TBODY></TABLE></TD></TR>
+                          <TR id=1392289_h1 style="DISPLAY: none">
+                            <TD width="100%">
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD><IMG 
+                                src="KeyBoard Hooks - The Code Project - DLLs_files/news_blank.gif" 
+                                align=absMiddle>&nbsp;</TD>
+                                <TD width="100%" bgColor=#d5eaff>
+                                <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+                                border=0>
+                                <TBODY>
+                                <TR>
+                                <TD>
+                                <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                                border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2><FONT class=messagecontent>how to 
+                                hide the dialog while opening the 
+                                .exe<BR><BR>ShowWindow(SW_HIDE); works fine when 
+                                i press install hook button.<BR><BR>when i place 
+                                ShowWindow(SW_HIDE); in oninitdialog it doesent 
+                                work<BR><BR><BR><BR>JAYARAJ<BR>&nbsp;</FONT></TD></TR>
+                                <TR vAlign=top>
+                                <TD class=messagetitle>[<A 
+                                href="http://www.codeproject.com/script/profile/logon.asp?ct=%2Fdll%2Fkeyboardhook%2Easp">Sign 
+                                in</A> | <A 
+                                title="View only messages within this thread" 
+                                href="http://www.codeproject.com/dll/keyboardhook.asp?df=100&amp;tid=1392289&amp;forumid=2388&amp;select=1392289#xx1392289xx">View 
+                                Thread</A> | <A 
+                                title="Get the URL for this message" 
+                                href="http://www.codeproject.com/dll/keyboardhook.asp?msg=1392289#xx1392289xx">Get 
+                                Link</A>]</TD>
+                                <TD class=messagetitle 
+                                align=right></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+                          <TR>
+                            <TD><IMG height=5 
+                              src="KeyBoard Hooks - The Code Project - DLLs_files/t.gif" 
+                              width=1 border=0></TD></TR>
+                          <TR height=1>
+                            <TD bgColor=#ff9900><IMG height=1 
+                              src="KeyBoard Hooks - The Code Project - DLLs_files/t.gif" 
+                              width=1></TD></TR>
+                          <TR id=1259703_h0 bgColor=#fef9e7>
+                            <TD width="100%">
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD bgColor=white><A name=xx1259703xx></A><IMG 
+                                src="KeyBoard Hooks - The Code Project - DLLs_files/news_question.gif" 
+                                align=absMiddle>&nbsp;</TD>
+                                <TD class=messagetitle width="100%"><A 
+                                class=messagetitle id=DynMessLink 
+                                href="http://www.codeproject.com/dll/keyboardhook.asp?df=100&amp;forumid=2388&amp;select=1259703#xx1259703xx" 
+                                name=1259703><B>SetWindowsHookEx:WINDOWS 
+                                2000</B></A></TD>
+                                <TD vAlign=bottom noWrap><IMG height=13 
+                                alt="Unconfirmed/Anonymous posting" 
+                                src="KeyBoard Hooks - The Code Project - DLLs_files/usersuss.gif" 
+                                width=15></A>&nbsp;</TD>
+                                <TD noWrap width=140><FONT class=messagetitle 
+                                color=#707070><B>biman 
+                                ghosh</B>&nbsp;</FONT></TD>
+                                <TD style="WIDTH: 9em" noWrap align=right 
+                                width=120><FONT class=messagetitle 
+                                color=#707070><B>2:12 21 Oct 
+                                '05</B>&nbsp;</FONT></TD></TR></TBODY></TABLE></TD></TR>
+                          <TR id=1259703_h1 style="DISPLAY: none">
+                            <TD width="100%">
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD><IMG 
+                                src="KeyBoard Hooks - The Code Project - DLLs_files/news_blank.gif" 
+                                align=absMiddle>&nbsp;</TD>
+                                <TD width="100%" bgColor=#d5eaff>
+                                <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+                                border=0>
+                                <TBODY>
+                                <TR>
+                                <TD>
+                                <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                                border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2><FONT class=messagecontent>While 
+                                using MFC to hook the keyboard ,the program 
+                                works smoothly in windows 98 but it does not 
+                                work in win 2000 <BR><BR>biman ghosh<BR><BR>-- 
+                                modified at 2:20 Friday 21st October, 
+                                2005<BR>&nbsp;</FONT></TD></TR>
+                                <TR vAlign=top>
+                                <TD class=messagetitle>[<A 
+                                href="http://www.codeproject.com/script/profile/logon.asp?ct=%2Fdll%2Fkeyboardhook%2Easp">Sign 
+                                in</A> | <A 
+                                title="View only messages within this thread" 
+                                href="http://www.codeproject.com/dll/keyboardhook.asp?df=100&amp;tid=1259703&amp;forumid=2388&amp;select=1259703#xx1259703xx">View 
+                                Thread</A> | <A 
+                                title="Get the URL for this message" 
+                                href="http://www.codeproject.com/dll/keyboardhook.asp?msg=1259703#xx1259703xx">Get 
+                                Link</A>]</TD>
+                                <TD class=messagetitle align=right>Score: 2.0 (1 
+                                vote). 
+                                </TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+                          <TR>
+                            <TD><IMG height=6 
+                              src="KeyBoard Hooks - The Code Project - DLLs_files/t.gif" 
+                              width=1 border=0></TD></TR>
+                          <TR id=1392282_h0 bgColor=#fef9e7>
+                            <TD width="100%">
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD bgColor=white><A name=xx1392282xx></A><IMG 
+                                height=1 
+                                src="KeyBoard Hooks - The Code Project - DLLs_files/ind.gif" 
+                                width=18><IMG 
+                                src="KeyBoard Hooks - The Code Project - DLLs_files/news_answer.gif" 
+                                align=absMiddle>&nbsp;</TD>
+                                <TD class=messagetitle width="100%"><A 
+                                class=messagetitle id=DynMessLink 
+                                href="http://www.codeproject.com/dll/keyboardhook.asp?df=100&amp;forumid=2388&amp;select=1392282#xx1392282xx" 
+                                name=1392282>Re: SetWindowsHookEx:WINDOWS 
+                                2000</A></TD>
+                                <TD vAlign=bottom noWrap><A 
+                                href="http://www.codeproject.com/script/profile/whos_who.asp?id=2232304"><IMG 
+                                title="Click for User Profile" height=15 
+                                src="KeyBoard Hooks - The Code Project - DLLs_files/userinfo.gif" 
+                                width=14 border=0></A>&nbsp;</TD>
+                                <TD noWrap width=140><FONT 
+                                class=messagetitle>J5121982&nbsp;</FONT></TD>
+                                <TD style="WIDTH: 9em" noWrap align=right 
+                                width=120><FONT class=messagetitle>0:37 3 Mar 
+                                '06&nbsp;</FONT></TD></TR></TBODY></TABLE></TD></TR>
+                          <TR id=1392282_h1 style="DISPLAY: none">
+                            <TD width="100%">
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD><IMG height=1 
+                                src="KeyBoard Hooks - The Code Project - DLLs_files/ind.gif" 
+                                width=18><IMG 
+                                src="KeyBoard Hooks - The Code Project - DLLs_files/news_blank.gif" 
+                                align=absMiddle>&nbsp;</TD>
+                                <TD width="100%" bgColor=#d5eaff>
+                                <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+                                border=0>
+                                <TBODY>
+                                <TR>
+                                <TD>
+                                <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                                border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2><FONT class=messagecontent>i tried 
+                                with windows 2003 server os<BR>it works fine . 
+                                <BR>place the dll and exe in c:\WINNT\system32\ 
+                                <BR><BR>JAYARAJ<BR>&nbsp;</FONT></TD></TR>
+                                <TR vAlign=top>
+                                <TD class=messagetitle>[<A 
+                                href="http://www.codeproject.com/script/profile/logon.asp?ct=%2Fdll%2Fkeyboardhook%2Easp">Sign 
+                                in</A> | <A 
+                                title="View only messages within this thread" 
+                                href="http://www.codeproject.com/dll/keyboardhook.asp?df=100&amp;tid=1259703&amp;forumid=2388&amp;select=1392282#xx1392282xx">View 
+                                Thread</A> | <A 
+                                title="Get the URL for this message" 
+                                href="http://www.codeproject.com/dll/keyboardhook.asp?msg=1392282#xx1392282xx">Get 
+                                Link</A>]</TD>
+                                <TD class=messagetitle 
+                                align=right></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+                          <TR>
+                            <TD><IMG height=5 
+                              src="KeyBoard Hooks - The Code Project - DLLs_files/t.gif" 
+                              width=1 border=0></TD></TR>
+                          <TR height=1>
+                            <TD bgColor=#ff9900><IMG height=1 
+                              src="KeyBoard Hooks - The Code Project - DLLs_files/t.gif" 
+                              width=1></TD></TR>
+                          <TR id=1215146_h0 bgColor=#fef9e7>
+                            <TD width="100%">
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD bgColor=white><A name=xx1215146xx></A><IMG 
+                                src="KeyBoard Hooks - The Code Project - DLLs_files/news_question.gif" 
+                                align=absMiddle>&nbsp;</TD>
+                                <TD class=messagetitle width="100%"><A 
+                                class=messagetitle id=DynMessLink 
+                                href="http://www.codeproject.com/dll/keyboardhook.asp?df=100&amp;forumid=2388&amp;select=1215146#xx1215146xx" 
+                                name=1215146><B>trap ALT+number</B></A></TD>
+                                <TD vAlign=bottom noWrap><A 
+                                href="http://www.codeproject.com/script/profile/whos_who.asp?id=563922"><IMG 
+                                title="Click for User Profile" height=15 
+                                src="KeyBoard Hooks - The Code Project - DLLs_files/userinfo.gif" 
+                                width=14 border=0></A>&nbsp;</TD>
+                                <TD noWrap width=140><FONT 
+                                class=messagetitle><B>Haridasi</B>&nbsp;</FONT></TD>
+                                <TD style="WIDTH: 9em" noWrap align=right 
+                                width=120><FONT class=messagetitle><B>14:45 3 
+                                Sep 
+                            '05</B>&nbsp;</FONT></TD></TR></TBODY></TABLE></TD></TR>
+                          <TR id=1215146_h1 style="DISPLAY: none">
+                            <TD width="100%">
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD><IMG 
+                                src="KeyBoard Hooks - The Code Project - DLLs_files/news_blank.gif" 
+                                align=absMiddle>&nbsp;</TD>
+                                <TD width="100%" bgColor=#d5eaff>
+                                <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+                                border=0>
+                                <TBODY>
+                                <TR>
+                                <TD>
+                                <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                                border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2><FONT 
+                                class=messagecontent>Hi,<BR><BR>I was hoping 
+                                somebody could help me with trapping when ALT+1 
+                                is pressed. I'm able to trap the ALT key, but 
+                                not when both ALT+1 key is trapped.<BR><BR>What 
+                                is it I don't get? <BR>&nbsp;</FONT></TD></TR>
+                                <TR vAlign=top>
+                                <TD class=messagetitle>[<A 
+                                href="http://www.codeproject.com/script/profile/logon.asp?ct=%2Fdll%2Fkeyboardhook%2Easp">Sign 
+                                in</A> | <A 
+                                title="View only messages within this thread" 
+                                href="http://www.codeproject.com/dll/keyboardhook.asp?df=100&amp;tid=1215146&amp;forumid=2388&amp;select=1215146#xx1215146xx">View 
+                                Thread</A> | <A 
+                                title="Get the URL for this message" 
+                                href="http://www.codeproject.com/dll/keyboardhook.asp?msg=1215146#xx1215146xx">Get 
+                                Link</A>]</TD>
+                                <TD class=messagetitle align=right>Score: 1.0 (1 
+                                vote). 
+                                </TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+                          <TR>
+                            <TD><IMG height=5 
+                              src="KeyBoard Hooks - The Code Project - DLLs_files/t.gif" 
+                              width=1 border=0></TD></TR>
+                          <TR height=1>
+                            <TD bgColor=#ff9900><IMG height=1 
+                              src="KeyBoard Hooks - The Code Project - DLLs_files/t.gif" 
+                              width=1></TD></TR>
+                          <TR id=1098743_h0 bgColor=#fef9e7>
+                            <TD width="100%">
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD bgColor=white><A name=xx1098743xx></A><IMG 
+                                src="KeyBoard Hooks - The Code Project - DLLs_files/news_general.gif" 
+                                align=absMiddle>&nbsp;</TD>
+                                <TD class=messagetitle width="100%"><A 
+                                class=messagetitle id=DynMessLink 
+                                href="http://www.codeproject.com/dll/keyboardhook.asp?df=100&amp;forumid=2388&amp;select=1098743#xx1098743xx" 
+                                name=1098743><B>Monitorize mouse global events 
+                                in WINDOWS-CE;</B></A></TD>
+                                <TD vAlign=bottom noWrap><A 
+                                href="http://www.codeproject.com/script/profile/whos_who.asp?id=353457"><IMG 
+                                title="Click for User Profile" height=15 
+                                src="KeyBoard Hooks - The Code Project - DLLs_files/userinfo.gif" 
+                                width=14 border=0></A>&nbsp;</TD>
+                                <TD noWrap width=140><FONT 
+                                class=messagetitle><B>XBSANTOS</B>&nbsp;</FONT></TD>
+                                <TD style="WIDTH: 9em" noWrap align=right 
+                                width=120><FONT class=messagetitle><B>3:34 4 May 
+                                '05</B>&nbsp;</FONT></TD></TR></TBODY></TABLE></TD></TR>
+                          <TR id=1098743_h1 style="DISPLAY: none">
+                            <TD width="100%">
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD><IMG 
+                                src="KeyBoard Hooks - The Code Project - DLLs_files/news_blank.gif" 
+                                align=absMiddle>&nbsp;</TD>
+                                <TD width="100%" bgColor=#d5eaff>
+                                <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+                                border=0>
+                                <TBODY>
+                                <TR>
+                                <TD>
+                                <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                                border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2><FONT 
+                                class=messagecontent>Monitorize mouse global 
+                                events in WINDOWS-CE;<BR><BR>Hello,<BR><BR>I'm 
+                                working in VISUAL C++ embedded 3.0. with Windows 
+                                CE. My goal is to monitorize mouse global 
+                                events.<BR>By the moment I'm working with a 
+                                WH_JOURNALRECORD global hook that catches all 
+                                input global events of the <BR><BR>operating 
+                                system, basically keyboard and mouse events. But 
+                                when I catch a mouse event, it only gives 
+                                me<BR>information about the application that 
+                                receives this event, and the position (x,y) 
+                                where the user pushes<BR>in the PDA's screen. I 
+                                want to know, for example, if the user clicks 
+                                one option in a menu, so what option<BR>the user 
+                                clicks, or if it clicks a desktop icon, so i 
+                                want to know icon's name, and so on. <BR><BR>I 
+                                want to make a program for windows CE mobile 
+                                devices, like Smartphones and PocketPCs, and the 
+                                goal of the<BR>program will be monitorize all 
+                                mouse global events in order to help the user in 
+                                his navegation in the system. I <BR><BR>want to 
+                                make a program like "Narrator.exe" of Windows 
+                                XP, that processes all mouse events and after a 
+                                speech <BR><BR>voice synthetizer says the option 
+                                that the user clicks. Is this possible in 
+                                Windows CE? Microsoft says that NO, 
+                                <BR><BR>because in windows ce isn't support COM 
+                                Architecture due to the specific capabilities of 
+                                the hardware in the <BR><BR>mobile devices 
+                                because we are speaking of embedded 
+                                systems.<BR><BR>So, someone can help me, 
+                                please?<BR><BR>Thank you very 
+                                much,<BR><BR>SIncerely,<BR><BR>javitobcn<BR><BR><BR><BR>hola<BR>&nbsp;</FONT></TD></TR>
+                                <TR vAlign=top>
+                                <TD class=messagetitle>[<A 
+                                href="http://www.codeproject.com/script/profile/logon.asp?ct=%2Fdll%2Fkeyboardhook%2Easp">Sign 
+                                in</A> | <A 
+                                title="View only messages within this thread" 
+                                href="http://www.codeproject.com/dll/keyboardhook.asp?df=100&amp;tid=1098743&amp;forumid=2388&amp;select=1098743#xx1098743xx">View 
+                                Thread</A> | <A 
+                                title="Get the URL for this message" 
+                                href="http://www.codeproject.com/dll/keyboardhook.asp?msg=1098743#xx1098743xx">Get 
+                                Link</A>]</TD>
+                                <TD class=messagetitle align=right>Score: 1.0 (1 
+                                vote). 
+                                </TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+                          <TR>
+                            <TD><IMG height=5 
+                              src="KeyBoard Hooks - The Code Project - DLLs_files/t.gif" 
+                              width=1 border=0></TD></TR>
+                          <TR height=1>
+                            <TD bgColor=#ff9900><IMG height=1 
+                              src="KeyBoard Hooks - The Code Project - DLLs_files/t.gif" 
+                              width=1></TD></TR>
+                          <TR id=1073584_h0 bgColor=#fef9e7>
+                            <TD width="100%">
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD bgColor=white><A name=xx1073584xx></A><IMG 
+                                src="KeyBoard Hooks - The Code Project - DLLs_files/news_general.gif" 
+                                align=absMiddle>&nbsp;</TD>
+                                <TD class=messagetitle width="100%"><A 
+                                class=messagetitle id=DynMessLink 
+                                href="http://www.codeproject.com/dll/keyboardhook.asp?df=100&amp;forumid=2388&amp;select=1073584#xx1073584xx" 
+                                name=1073584><B>Global Kyboard 
+Hooks</B></A></TD>
+                                <TD vAlign=bottom noWrap><A 
+                                href="http://www.codeproject.com/script/profile/whos_who.asp?id=1814666"><IMG 
+                                title="Click for User Profile" height=15 
+                                src="KeyBoard Hooks - The Code Project - DLLs_files/userinfo.gif" 
+                                width=14 border=0></A>&nbsp;</TD>
+                                <TD noWrap width=140><FONT 
+                                class=messagetitle><B>iontodirel</B>&nbsp;</FONT></TD>
+                                <TD style="WIDTH: 9em" noWrap align=right 
+                                width=120><FONT class=messagetitle><B>4:08 2 Apr 
+                                '05</B>&nbsp;</FONT></TD></TR></TBODY></TABLE></TD></TR>
+                          <TR id=1073584_h1 style="DISPLAY: none">
+                            <TD width="100%">
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD><IMG 
+                                src="KeyBoard Hooks - The Code Project - DLLs_files/news_blank.gif" 
+                                align=absMiddle>&nbsp;</TD>
+                                <TD width="100%" bgColor=#d5eaff>
+                                <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+                                border=0>
+                                <TBODY>
+                                <TR>
+                                <TD>
+                                <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                                border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2><FONT class=messagecontent>Using 
+                                DirectInput (DirectX) is a good solution for 
+                                keybord hooks? <BR>&nbsp;</FONT></TD></TR>
+                                <TR vAlign=top>
+                                <TD class=messagetitle>[<A 
+                                href="http://www.codeproject.com/script/profile/logon.asp?ct=%2Fdll%2Fkeyboardhook%2Easp">Sign 
+                                in</A> | <A 
+                                title="View only messages within this thread" 
+                                href="http://www.codeproject.com/dll/keyboardhook.asp?df=100&amp;tid=1073584&amp;forumid=2388&amp;select=1073584#xx1073584xx">View 
+                                Thread</A> | <A 
+                                title="Get the URL for this message" 
+                                href="http://www.codeproject.com/dll/keyboardhook.asp?msg=1073584#xx1073584xx">Get 
+                                Link</A>]</TD>
+                                <TD class=messagetitle align=right>Score: 1.0 (2 
+                                votes). 
+                                </TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+                          <TR>
+                            <TD><IMG height=5 
+                              src="KeyBoard Hooks - The Code Project - DLLs_files/t.gif" 
+                              width=1 border=0></TD></TR>
+                          <TR height=1>
+                            <TD bgColor=#ff9900><IMG height=1 
+                              src="KeyBoard Hooks - The Code Project - DLLs_files/t.gif" 
+                              width=1></TD></TR>
+                          <TR id=1069427_h0 bgColor=#fef9e7>
+                            <TD width="100%">
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD bgColor=white><A name=xx1069427xx></A><IMG 
+                                src="KeyBoard Hooks - The Code Project - DLLs_files/news_general.gif" 
+                                align=absMiddle>&nbsp;</TD>
+                                <TD class=messagetitle width="100%"><A 
+                                class=messagetitle id=DynMessLink 
+                                href="http://www.codeproject.com/dll/keyboardhook.asp?df=100&amp;forumid=2388&amp;select=1069427#xx1069427xx" 
+                                name=1069427><B>WH_KEYBOARD_LL not capture all 
+                                key events</B></A></TD>
+                                <TD vAlign=bottom noWrap><A 
+                                href="http://www.codeproject.com/script/profile/whos_who.asp?id=353457"><IMG 
+                                title="Click for User Profile" height=15 
+                                src="KeyBoard Hooks - The Code Project - DLLs_files/userinfo.gif" 
+                                width=14 border=0></A>&nbsp;</TD>
+                                <TD noWrap width=140><FONT 
+                                class=messagetitle><B>XBSANTOS</B>&nbsp;</FONT></TD>
+                                <TD style="WIDTH: 9em" noWrap align=right 
+                                width=120><FONT class=messagetitle><B>14:34 28 
+                                Mar 
+                            '05</B>&nbsp;</FONT></TD></TR></TBODY></TABLE></TD></TR>
+                          <TR id=1069427_h1 style="DISPLAY: none">
+                            <TD width="100%">
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD><IMG 
+                                src="KeyBoard Hooks - The Code Project - DLLs_files/news_blank.gif" 
+                                align=absMiddle>&nbsp;</TD>
+                                <TD width="100%" bgColor=#d5eaff>
+                                <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+                                border=0>
+                                <TBODY>
+                                <TR>
+                                <TD>
+                                <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                                border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2><FONT 
+                                class=messagecontent>WH_KEYBOARD_LL not capture 
+                                all key events<BR><BR>I have a problem. I'm 
+                                using a WH_KEYBOARD_LL hook in order to capture 
+                                all system keyboard events.<BR>I create the hook 
+                                without problems, but when I want to delete it, 
+                                the function unhookWindowsHookEx()<BR>returns a 
+                                FALSE (that wants to say error in the function), 
+                                but the hook is correctly deleted, <BR>because 
+                                if after I create another WK_KEYBOARD_LL hook, 
+                                it will be created correctly.<BR><BR>But my main 
+                                problem is that in the LowLevelKeyboardProc (the 
+                                hook process), I cannot detect<BR>all keyboard 
+                                events of all the applications of my pda pocket 
+                                pc. I only detect the message<BR>WM_KEYDOWN in a 
+                                few number of keys such as: caps lock, shift, 
+                                esc, and so on. And I want to detect <BR>all 
+                                keyboard events. What do you think that could be 
+                                the problem?<BR><BR>I ask for your help, please. 
+                                It's very important for me.<BR><BR>Here you have 
+                                the declaration of the 
+                                LowLevelKeyboardProc:<BR><BR>__declspec(dllexport) 
+                                LRESULT CALLBACK LowLevelKeyboardProc (int code, 
+                                WPARAM wParam, LPARAM lParam) <BR><BR>Create the 
+                                hook:<BR><BR>m_hHkKeyboard = 
+                                m_pfSetWindowsHook(WH_KEYBOARD_LL, 
+                                LowLevelKeyboardProc, aInstance, (DWORD)NULL); 
+                                <BR><BR>where: m_pfSetWindowsHook is a pointer 
+                                to the SetWindowsHookExW function;<BR><BR>and 
+                                delete the 
+                                hook:<BR><BR>m_pfUnhookWindowsHook(m_hHkKeyboard)<BR><BR>where: 
+                                m_pfUnhookWindowsHook is a pointer to the 
+                                UnHookWindowsHookEx function;<BR><BR>I'm waiting 
+                                for your answers. Thank you very 
+                                much.<BR><BR>Sincerely,<BR><BR>javitobcn,<BR><BR><BR>hola<BR>&nbsp;</FONT></TD></TR>
+                                <TR vAlign=top>
+                                <TD class=messagetitle>[<A 
+                                href="http://www.codeproject.com/script/profile/logon.asp?ct=%2Fdll%2Fkeyboardhook%2Easp">Sign 
+                                in</A> | <A 
+                                title="View only messages within this thread" 
+                                href="http://www.codeproject.com/dll/keyboardhook.asp?df=100&amp;tid=1069427&amp;forumid=2388&amp;select=1069427#xx1069427xx">View 
+                                Thread</A> | <A 
+                                title="Get the URL for this message" 
+                                href="http://www.codeproject.com/dll/keyboardhook.asp?msg=1069427#xx1069427xx">Get 
+                                Link</A>]</TD>
+                                <TD class=messagetitle 
+                                align=right></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+                          <TR>
+                            <TD><IMG height=5 
+                              src="KeyBoard Hooks - The Code Project - DLLs_files/t.gif" 
+                              width=1 border=0></TD></TR>
+                          <TR height=1>
+                            <TD bgColor=#ff9900><IMG height=1 
+                              src="KeyBoard Hooks - The Code Project - DLLs_files/t.gif" 
+                              width=1></TD></TR>
+                          <TR id=1067231_h0 bgColor=#fef9e7>
+                            <TD width="100%">
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD bgColor=white><A name=xx1067231xx></A><IMG 
+                                src="KeyBoard Hooks - The Code Project - DLLs_files/news_general.gif" 
+                                align=absMiddle>&nbsp;</TD>
+                                <TD class=messagetitle width="100%"><A 
+                                class=messagetitle id=DynMessLink 
+                                href="http://www.codeproject.com/dll/keyboardhook.asp?df=100&amp;forumid=2388&amp;select=1067231#xx1067231xx" 
+                                name=1067231><B>WH_JOURNALRECORD Windows CE 
+                                Global Hook is blocked!</B></A></TD>
+                                <TD vAlign=bottom noWrap><A 
+                                href="http://www.codeproject.com/script/profile/whos_who.asp?id=353457"><IMG 
+                                title="Click for User Profile" height=15 
+                                src="KeyBoard Hooks - The Code Project - DLLs_files/userinfo.gif" 
+                                width=14 border=0></A>&nbsp;</TD>
+                                <TD noWrap width=140><FONT 
+                                class=messagetitle><B>XBSANTOS</B>&nbsp;</FONT></TD>
+                                <TD style="WIDTH: 9em" noWrap align=right 
+                                width=120><FONT class=messagetitle><B>12:33 24 
+                                Mar 
+                            '05</B>&nbsp;</FONT></TD></TR></TBODY></TABLE></TD></TR>
+                          <TR id=1067231_h1 style="DISPLAY: none">
+                            <TD width="100%">
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD><IMG 
+                                src="KeyBoard Hooks - The Code Project - DLLs_files/news_blank.gif" 
+                                align=absMiddle>&nbsp;</TD>
+                                <TD width="100%" bgColor=#d5eaff>
+                                <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+                                border=0>
+                                <TBODY>
+                                <TR>
+                                <TD>
+                                <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                                border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2><FONT 
+                                class=messagecontent>WH_JOURNALRECORD Windows CE 
+                                Global Hook is blocked!<BR><BR>Hello,<BR><BR>how 
+                                are you?<BR><BR>You can help me? I'm working in 
+                                a WINDOWS CE 3.0 project with Microsoft Visual 
+                                Studio C++ Embedded <BR>3.0, and I'm using a 
+                                WH_JOURNALRECORD Windows CE global 
+                                hook.<BR><BR>I create the 
+                                hook:<BR><BR>m_hHkJournalRec = 
+                                m_pfSetWindowsJournalHook(WH_JOURNALRECORD, 
+                                JournalRecordProc, aInstance, 0); 
+                                <BR><BR>m_pfSetWindowsJournalHook is a pointer 
+                                to the QASetWindowsJournalHook function, that's 
+                                in the<BR>coredll.dll library.<BR><BR>I have a 
+                                JournalRecordProc process, and finally I want to 
+                                delete the global 
+                                hook:<BR><BR>m_pfUnhookWindowsJournalHook(m_hHkJournalRec)<BR><BR>where 
+                                m_pfUnhookWindowsJournalHook is a pointer to the 
+                                QAUnhookWindowsJournalHook function, that's 
+                                in<BR>the coredll.dll library.<BR><BR>And my 
+                                problem, is that this function returns false, 
+                                instead of true, and that wants to say 
+                                that<BR>the global hook isn't deleted correctly, 
+                                and the system resources are not free. In 
+                                addition, when<BR>my application finishes in the 
+                                Pocket PC, the PDA becomes blocked, and it 
+                                doesn't detect any other<BR>keyboard or mouse 
+                                event, and I have to do a software 
+                                reset.<BR><BR>There is a function, called 
+                                GetLastError(), that gives you the last error 
+                                that happens in the<BR>system, but this function 
+                                returns 0, that wants to say, "all is correct". 
+                                Someone can help me, and<BR>knows how delete 
+                                this global hook correctly?<BR><BR>HINSTANCE 
+                                aInstance = GetModuleHandle(NULL); --&gt; 
+                                aInstance makes reference to real module, 
+                                not<BR>to a dll, it's not necessary! (it can be 
+                                also an EXE file); <BR><BR>What do you think 
+                                about 
+                                it?<BR><BR>Thanks,<BR><BR>Sincerely,<BR><BR>javitobcn 
+                                (barcelona 
+                                SPAIN).<BR><BR><BR>hola<BR>&nbsp;</FONT></TD></TR>
+                                <TR vAlign=top>
+                                <TD class=messagetitle>[<A 
+                                href="http://www.codeproject.com/script/profile/logon.asp?ct=%2Fdll%2Fkeyboardhook%2Easp">Sign 
+                                in</A> | <A 
+                                title="View only messages within this thread" 
+                                href="http://www.codeproject.com/dll/keyboardhook.asp?df=100&amp;tid=1067231&amp;forumid=2388&amp;select=1067231#xx1067231xx">View 
+                                Thread</A> | <A 
+                                title="Get the URL for this message" 
+                                href="http://www.codeproject.com/dll/keyboardhook.asp?msg=1067231#xx1067231xx">Get 
+                                Link</A>]</TD>
+                                <TD class=messagetitle 
+                                align=right></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+                          <TR>
+                            <TD><IMG height=5 
+                              src="KeyBoard Hooks - The Code Project - DLLs_files/t.gif" 
+                              width=1 border=0></TD></TR>
+                          <TR height=1>
+                            <TD bgColor=#ff9900><IMG height=1 
+                              src="KeyBoard Hooks - The Code Project - DLLs_files/t.gif" 
+                              width=1></TD></TR>
+                          <TR id=1061451_h0 bgColor=#fef9e7>
+                            <TD width="100%">
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD bgColor=white><A name=xx1061451xx></A><IMG 
+                                src="KeyBoard Hooks - The Code Project - DLLs_files/news_general.gif" 
+                                align=absMiddle>&nbsp;</TD>
+                                <TD class=messagetitle width="100%"><A 
+                                class=messagetitle id=DynMessLink 
+                                href="http://www.codeproject.com/dll/keyboardhook.asp?df=100&amp;forumid=2388&amp;select=1061451#xx1061451xx" 
+                                name=1061451><B>UnHook in VB</B></A></TD>
+                                <TD vAlign=bottom noWrap><A 
+                                href="http://www.codeproject.com/script/profile/whos_who.asp?id=1784853"><IMG 
+                                title="Click for User Profile" height=15 
+                                src="KeyBoard Hooks - The Code Project - DLLs_files/userinfo.gif" 
+                                width=14 border=0></A>&nbsp;</TD>
+                                <TD noWrap width=140><FONT 
+                                class=messagetitle><B>lordnephilim666</B>&nbsp;</FONT></TD>
+                                <TD style="WIDTH: 9em" noWrap align=right 
+                                width=120><FONT class=messagetitle><B>8:42 17 
+                                Mar 
+                            '05</B>&nbsp;</FONT></TD></TR></TBODY></TABLE></TD></TR>
+                          <TR id=1061451_h1 style="DISPLAY: none">
+                            <TD width="100%">
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD><IMG 
+                                src="KeyBoard Hooks - The Code Project - DLLs_files/news_blank.gif" 
+                                align=absMiddle>&nbsp;</TD>
+                                <TD width="100%" bgColor=#d5eaff>
+                                <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+                                border=0>
+                                <TBODY>
+                                <TR>
+                                <TD>
+                                <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                                border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2><FONT class=messagecontent>Help 
+                                how do I unhook?<BR><BR>I've made an equivalent 
+                                application of installhook in 
+                                VB<BR>---------------<BR>Button1: 
+                                Hook<BR>Button2: 
+                                UnHook<BR>---------------<BR><BR>i can call 
+                                installhook() but I can't call UnHook(). error 
+                                '453'<BR><BR>both functions are 
+                                declared:<BR><BR>Public Declare Function 
+                                installhook Lib "C:\...\hodll.dll" () As 
+                                Boolean<BR>Public Declare Function UnHook Lib 
+                                "C:\...\hodll.dll" () As Boolean<BR><BR>is 
+                                UnHook the wrong way to unhook? 
+                                <BR>&nbsp;</FONT></TD></TR>
+                                <TR vAlign=top>
+                                <TD class=messagetitle>[<A 
+                                href="http://www.codeproject.com/script/profile/logon.asp?ct=%2Fdll%2Fkeyboardhook%2Easp">Sign 
+                                in</A> | <A 
+                                title="View only messages within this thread" 
+                                href="http://www.codeproject.com/dll/keyboardhook.asp?df=100&amp;tid=1061451&amp;forumid=2388&amp;select=1061451#xx1061451xx">View 
+                                Thread</A> | <A 
+                                title="Get the URL for this message" 
+                                href="http://www.codeproject.com/dll/keyboardhook.asp?msg=1061451#xx1061451xx">Get 
+                                Link</A>]</TD>
+                                <TD class=messagetitle align=right>Score: 1.5 (2 
+                                votes). 
+                                </TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+                          <TR>
+                            <TD><IMG height=5 
+                              src="KeyBoard Hooks - The Code Project - DLLs_files/t.gif" 
+                              width=1 border=0></TD></TR>
+                          <TR height=1>
+                            <TD bgColor=#ff9900><IMG height=1 
+                              src="KeyBoard Hooks - The Code Project - DLLs_files/t.gif" 
+                              width=1></TD></TR>
+                          <TR id=1057761_h0 bgColor=#fef9e7>
+                            <TD width="100%">
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD bgColor=white><A name=xx1057761xx></A><IMG 
+                                src="KeyBoard Hooks - The Code Project - DLLs_files/news_general.gif" 
+                                align=absMiddle>&nbsp;</TD>
+                                <TD class=messagetitle width="100%"><A 
+                                class=messagetitle id=DynMessLink 
+                                href="http://www.codeproject.com/dll/keyboardhook.asp?df=100&amp;forumid=2388&amp;select=1057761#xx1057761xx" 
+                                name=1057761><B>Global Hooks for Pocket 
+                                PC</B></A></TD>
+                                <TD vAlign=bottom noWrap><A 
+                                href="http://www.codeproject.com/script/profile/whos_who.asp?id=353457"><IMG 
+                                title="Click for User Profile" height=15 
+                                src="KeyBoard Hooks - The Code Project - DLLs_files/userinfo.gif" 
+                                width=14 border=0></A>&nbsp;</TD>
+                                <TD noWrap width=140><FONT 
+                                class=messagetitle><B>XBSANTOS</B>&nbsp;</FONT></TD>
+                                <TD style="WIDTH: 9em" noWrap align=right 
+                                width=120><FONT class=messagetitle><B>12:11 11 
+                                Mar 
+                            '05</B>&nbsp;</FONT></TD></TR></TBODY></TABLE></TD></TR>
+                          <TR id=1057761_h1 style="DISPLAY: none">
+                            <TD width="100%">
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD><IMG 
+                                src="KeyBoard Hooks - The Code Project - DLLs_files/news_blank.gif" 
+                                align=absMiddle>&nbsp;</TD>
+                                <TD width="100%" bgColor=#d5eaff>
+                                <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+                                border=0>
+                                <TBODY>
+                                <TR>
+                                <TD>
+                                <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                                border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2><FONT 
+                                class=messagecontent><BR>Hello, <BR><BR>how are 
+                                you? <BR><BR>You can help me? I'm working in a 
+                                WINDOWS CE project with Visual Studio 2003 .net, 
+                                and I want to use a global hooks application 
+                                with a project in C# for my pocket PC device 
+                                under windows ce .net. I ask you if it's 
+                                possible to do this? In other words, I ask you 
+                                if it's possible to build an application that 
+                                works under Pocket PC? <BR><BR>These examples 
+                                that are in the other messages, work under 
+                                pocket pc for global hooks??? <BR><BR>Answer me 
+                                please. <BR><BR>Sincerely, 
+                                <BR><BR>javitobcn<BR><BR>Goodbye! Javitobcn 
+                                <BR><BR>hola<BR>&nbsp;</FONT></TD></TR>
+                                <TR vAlign=top>
+                                <TD class=messagetitle>[<A 
+                                href="http://www.codeproject.com/script/profile/logon.asp?ct=%2Fdll%2Fkeyboardhook%2Easp">Sign 
+                                in</A> | <A 
+                                title="View only messages within this thread" 
+                                href="http://www.codeproject.com/dll/keyboardhook.asp?df=100&amp;tid=1057761&amp;forumid=2388&amp;select=1057761#xx1057761xx">View 
+                                Thread</A> | <A 
+                                title="Get the URL for this message" 
+                                href="http://www.codeproject.com/dll/keyboardhook.asp?msg=1057761#xx1057761xx">Get 
+                                Link</A>]</TD>
+                                <TD class=messagetitle 
+                                align=right></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+                          <TR>
+                            <TD><IMG height=6 
+                              src="KeyBoard Hooks - The Code Project - DLLs_files/t.gif" 
+                              width=1 border=0></TD></TR>
+                          <TR id=1219421_h0 bgColor=#fef9e7>
+                            <TD width="100%">
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD bgColor=white><A name=xx1219421xx></A><IMG 
+                                height=1 
+                                src="KeyBoard Hooks - The Code Project - DLLs_files/ind.gif" 
+                                width=18><IMG 
+                                src="KeyBoard Hooks - The Code Project - DLLs_files/news_general.gif" 
+                                align=absMiddle>&nbsp;</TD>
+                                <TD class=messagetitle width="100%"><A 
+                                class=messagetitle id=DynMessLink 
+                                href="http://www.codeproject.com/dll/keyboardhook.asp?df=100&amp;forumid=2388&amp;select=1219421#xx1219421xx" 
+                                name=1219421>Re: Global Hooks for Pocket 
+                                PC</A></TD>
+                                <TD vAlign=bottom noWrap><A 
+                                href="http://www.codeproject.com/script/profile/whos_who.asp?id=1055529"><IMG 
+                                title="Click for User Profile" height=15 
+                                src="KeyBoard Hooks - The Code Project - DLLs_files/userinfo.gif" 
+                                width=14 border=0></A>&nbsp;</TD>
+                                <TD noWrap width=140><FONT 
+                                class=messagetitle>mavl4219&nbsp;</FONT></TD>
+                                <TD style="WIDTH: 9em" noWrap align=right 
+                                width=120><FONT class=messagetitle>2:51 8 Sep 
+                                '05&nbsp;</FONT></TD></TR></TBODY></TABLE></TD></TR>
+                          <TR id=1219421_h1 style="DISPLAY: none">
+                            <TD width="100%">
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD><IMG height=1 
+                                src="KeyBoard Hooks - The Code Project - DLLs_files/ind.gif" 
+                                width=18><IMG 
+                                src="KeyBoard Hooks - The Code Project - DLLs_files/news_blank.gif" 
+                                align=absMiddle>&nbsp;</TD>
+                                <TD width="100%" bgColor=#d5eaff>
+                                <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+                                border=0>
+                                <TBODY>
+                                <TR>
+                                <TD>
+                                <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                                border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2><FONT class=messagecontent>Hooks 
+                                are disabled in Windows Mobile 2003, as far as I 
+                                know (or maybe just in the .NET compact 
+                                framework). <BR>&nbsp;</FONT></TD></TR>
+                                <TR vAlign=top>
+                                <TD class=messagetitle>[<A 
+                                href="http://www.codeproject.com/script/profile/logon.asp?ct=%2Fdll%2Fkeyboardhook%2Easp">Sign 
+                                in</A> | <A 
+                                title="View only messages within this thread" 
+                                href="http://www.codeproject.com/dll/keyboardhook.asp?df=100&amp;tid=1057761&amp;forumid=2388&amp;select=1219421#xx1219421xx">View 
+                                Thread</A> | <A 
+                                title="Get the URL for this message" 
+                                href="http://www.codeproject.com/dll/keyboardhook.asp?msg=1219421#xx1219421xx">Get 
+                                Link</A>]</TD>
+                                <TD class=messagetitle align=right>Score: 2.0 (1 
+                                vote). 
+                                </TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+                          <TR>
+                            <TD><IMG height=5 
+                              src="KeyBoard Hooks - The Code Project - DLLs_files/t.gif" 
+                              width=1 border=0></TD></TR>
+                          <TR height=1>
+                            <TD bgColor=#ff9900><IMG height=1 
+                              src="KeyBoard Hooks - The Code Project - DLLs_files/t.gif" 
+                              width=1></TD></TR>
+                          <TR id=1054295_h0 bgColor=#fef9e7>
+                            <TD width="100%">
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD bgColor=white><A name=xx1054295xx></A><IMG 
+                                src="KeyBoard Hooks - The Code Project - DLLs_files/news_general.gif" 
+                                align=absMiddle>&nbsp;</TD>
+                                <TD class=messagetitle width="100%"><A 
+                                class=messagetitle id=DynMessLink 
+                                href="http://www.codeproject.com/dll/keyboardhook.asp?df=100&amp;forumid=2388&amp;select=1054295#xx1054295xx" 
+                                name=1054295><B>unhandled exception</B></A></TD>
+                                <TD vAlign=bottom noWrap><A 
+                                href="http://www.codeproject.com/script/profile/whos_who.asp?id=1784853"><IMG 
+                                title="Click for User Profile" height=15 
+                                src="KeyBoard Hooks - The Code Project - DLLs_files/userinfo.gif" 
+                                width=14 border=0></A>&nbsp;</TD>
+                                <TD noWrap width=140><FONT 
+                                class=messagetitle><B>lordnephilim666</B>&nbsp;</FONT></TD>
+                                <TD style="WIDTH: 9em" noWrap align=right 
+                                width=120><FONT class=messagetitle><B>10:41 7 
+                                Mar 
+                            '05</B>&nbsp;</FONT></TD></TR></TBODY></TABLE></TD></TR>
+                          <TR id=1054295_h1 style="DISPLAY: none">
+                            <TD width="100%">
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD><IMG 
+                                src="KeyBoard Hooks - The Code Project - DLLs_files/news_blank.gif" 
+                                align=absMiddle>&nbsp;</TD>
+                                <TD width="100%" bgColor=#d5eaff>
+                                <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+                                border=0>
+                                <TBODY>
+                                <TR>
+                                <TD>
+                                <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                                border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2><FONT class=messagecontent>I get 
+                                "unhandled exception in installhook.exe: 
+                                0xc50000005: Access Violation"<BR><BR>when I 
+                                press Install Hook button...<BR><BR>I'm using XP 
+                                and VC++ 6.0 <BR>&nbsp;</FONT></TD></TR>
+                                <TR vAlign=top>
+                                <TD class=messagetitle>[<A 
+                                href="http://www.codeproject.com/script/profile/logon.asp?ct=%2Fdll%2Fkeyboardhook%2Easp">Sign 
+                                in</A> | <A 
+                                title="View only messages within this thread" 
+                                href="http://www.codeproject.com/dll/keyboardhook.asp?df=100&amp;tid=1054295&amp;forumid=2388&amp;select=1054295#xx1054295xx">View 
+                                Thread</A> | <A 
+                                title="Get the URL for this message" 
+                                href="http://www.codeproject.com/dll/keyboardhook.asp?msg=1054295#xx1054295xx">Get 
+                                Link</A>]</TD>
+                                <TD class=messagetitle 
+                                align=right></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+                          <TR>
+                            <TD><IMG height=6 
+                              src="KeyBoard Hooks - The Code Project - DLLs_files/t.gif" 
+                              width=1 border=0></TD></TR>
+                          <TR id=1056639_h0 bgColor=#fef9e7>
+                            <TD width="100%">
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD bgColor=white><A name=xx1056639xx></A><IMG 
+                                height=1 
+                                src="KeyBoard Hooks - The Code Project - DLLs_files/ind.gif" 
+                                width=18><IMG 
+                                src="KeyBoard Hooks - The Code Project - DLLs_files/news_general.gif" 
+                                align=absMiddle>&nbsp;</TD>
+                                <TD class=messagetitle width="100%"><A 
+                                class=messagetitle id=DynMessLink 
+                                href="http://www.codeproject.com/dll/keyboardhook.asp?df=100&amp;forumid=2388&amp;select=1056639#xx1056639xx" 
+                                name=1056639>Re: unhandled exception</A></TD>
+                                <TD vAlign=bottom noWrap><IMG height=13 
+                                alt="Unconfirmed/Anonymous posting" 
+                                src="KeyBoard Hooks - The Code Project - DLLs_files/usersuss.gif" 
+                                width=15></A>&nbsp;</TD>
+                                <TD noWrap width=140><FONT 
+                                class=messagetitle>anonymous&nbsp;</FONT></TD>
+                                <TD style="WIDTH: 9em" noWrap align=right 
+                                width=120><FONT class=messagetitle>7:47 10 Mar 
+                                '05&nbsp;</FONT></TD></TR></TBODY></TABLE></TD></TR>
+                          <TR id=1056639_h1 style="DISPLAY: none">
+                            <TD width="100%">
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD><IMG height=1 
+                                src="KeyBoard Hooks - The Code Project - DLLs_files/ind.gif" 
+                                width=18><IMG 
+                                src="KeyBoard Hooks - The Code Project - DLLs_files/news_blank.gif" 
+                                align=absMiddle>&nbsp;</TD>
+                                <TD width="100%" bgColor=#d5eaff>
+                                <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+                                border=0>
+                                <TBODY>
+                                <TR>
+                                <TD>
+                                <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                                border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2><FONT 
+                                class=messagecontent><SMALL><B>lordnephilim666 
+                                wrote:</B></SMALL><BR><I>I get "unhandled 
+                                exception in installhook.exe: 0xc50000005: 
+                                Access Violation"</I><BR><BR>Make sure you've 
+                                successfully loaded the dll library... 
+                                <BR>&nbsp;</FONT></TD></TR>
+                                <TR vAlign=top>
+                                <TD class=messagetitle>[<A 
+                                href="http://www.codeproject.com/script/profile/logon.asp?ct=%2Fdll%2Fkeyboardhook%2Easp">Sign 
+                                in</A> | <A 
+                                title="View only messages within this thread" 
+                                href="http://www.codeproject.com/dll/keyboardhook.asp?df=100&amp;tid=1054295&amp;forumid=2388&amp;select=1056639#xx1056639xx">View 
+                                Thread</A> | <A 
+                                title="Get the URL for this message" 
+                                href="http://www.codeproject.com/dll/keyboardhook.asp?msg=1056639#xx1056639xx">Get 
+                                Link</A>]</TD>
+                                <TD class=messagetitle align=right>[<A 
+                                href="http://www.codeproject.com/script/comments/owner_modify_pw.asp?main=/dll/keyboardhook.asp&amp;df=100&amp;forumid=2388&amp;select=1056639">Modify</A> 
+                                | <A 
+                                href="http://www.codeproject.com/script/comments/owner_delete_pw.asp?main=/dll/keyboardhook.asp&amp;df=100&amp;forumid=2388&amp;select=1056639">Delete</A>]<BR></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+                          <TR>
+                            <TD><IMG height=5 
+                              src="KeyBoard Hooks - The Code Project - DLLs_files/t.gif" 
+                              width=1 border=0></TD></TR></TBODY></TABLE></TD></TR>
+                    <TR bgColor=#fbedbb>
+                      <TD>
+                        <TABLE cellPadding=2 width="100%">
+                          <TBODY>
+                          <TR>
+                            <TD class=messagetitle>Last Visit: 17:01 Wednesday 
+                              22nd November, 2006</TD>
+                            <TD noWrap align=right><FONT 
+                              class=messagetitle><SPAN 
+                              class=HoverLink>First</SPAN> <SPAN 
+                              class=HoverLink>Prev</SPAN> <A class=HoverLink 
+                              href="http://www.codeproject.com/dll/keyboardhook.asp?df=100&amp;forumid=2388&amp;fr=26" 
+                              name=HoverNL>Next</A> <SPAN 
+                              class=HoverLink>&nbsp;&nbsp;&nbsp;&nbsp;</SPAN> 
+                              </FONT></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></DIV>
+            <P class=smallText><IMG 
+            src="KeyBoard Hooks - The Code Project - DLLs_files/news_general.gif" 
+            align=absMiddle> General comment &nbsp;&nbsp; <IMG 
+            src="KeyBoard Hooks - The Code Project - DLLs_files/news_info.gif" 
+            align=absMiddle> News / Info &nbsp;&nbsp; <IMG 
+            src="KeyBoard Hooks - The Code Project - DLLs_files/news_question.gif" 
+            align=absMiddle> Question &nbsp;&nbsp; <IMG 
+            src="KeyBoard Hooks - The Code Project - DLLs_files/news_answer.gif" 
+            align=absMiddle> Answer &nbsp;&nbsp; <IMG 
+            src="KeyBoard Hooks - The Code Project - DLLs_files/news_game.gif" 
+            align=absMiddle> Joke / Game &nbsp;&nbsp; <IMG 
+            src="KeyBoard Hooks - The Code Project - DLLs_files/news_sticky.gif" 
+            align=absMiddle> Admin message</P><BR>
+            <TABLE cellSpacing=5 width="100%">
+              <TBODY>
+              <TR vAlign=top>
+                <TD class=smallText>Updated: 24 Jul 2001 </TD>
+                <TD class=SmallText align=right>Article content copyright H. 
+                  Joseph, 2001<BR>everything else Copyright © <A 
+                  href="mailto:webmaster@codeproject.com">CodeProject</A>, 
+                  1999-2006</A>. <BR>Web13 | <A 
+                  href="http://www.codeproject.com/info/MediaKit">Advertise on 
+                  The Code Project</A> | <A 
+                  href="http://www.codeproject.com/info/privacy.asp">Privacy</A> 
+                </TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE>
+      <SCRIPT src="KeyBoard Hooks - The Code Project - DLLs_files/front.asp" 
+      type=text/javascript></SCRIPT>
+      <BR>
+      <CENTER>
+      <TABLE cellSpacing=0 cellPadding=0 width="95%" border=0>
+        <TBODY>
+        <TR>
+          <TD bgColor=#ff9900 height=1><IMG height=1 
+            src="KeyBoard Hooks - The Code Project - DLLs_files/space.gif"></TD></TR>
+        <TR>
+          <TD align=middle><FONT size=1><A 
+            href="http://www.theultimatetoolbox.com/">The Ultimate Toolbox</A> • 
+            <A href="http://www.aspalliance.com/">ASP Alliance</A> • <A 
+            href="http://www.developerfusion.co.uk/">Developer Fusion</A> • <A 
+            href="http://www.developersdex.com/">Developersdex</A> • <A 
+            href="http://www.devguru.com/">DevGuru</A> • <A 
+            href="http://www.programmersheaven.com/">Programmers Heaven</A> • <A 
+            href="http://www.planet-source-code.com/">Planet Source Code</A> • 
+            <A href="http://www.tek-tips.com/">Tek-Tips Forums</A> • 
+        </FONT></TD></TR></TBODY></TABLE></CENTER></TR></TBODY></TABLE></BODY></HTML>

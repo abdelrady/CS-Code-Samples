@@ -1,0 +1,292 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3c.org/TR/1999/REC-html401-19991224/loose.dtd">
+<!-- saved from url=(0112)http://www.tech-archive.net/Archive/Development/microsoft.public.win32.programmer.networks/2006-08/msg00057.html -->
+<HTML><HEAD><TITLE>Re: Packet drop by .Net</TITLE>
+<META http-equiv=Content-Type content="text/html; charset=windows-1256"><LINK 
+media=all href="Re Packet drop by _Net_files/dk.css" type=text/css 
+rel=stylesheet><LINK title="PDF version" media=print 
+href="http://www.tech-archive.net/pdf/Archive/Development/microsoft.public.win32.programmer.networks/2006-08/msg00057.pdf" 
+type=application/pdf rel=alternate><LINK 
+href="http://www.tech-archive.net/Archive/Development/microsoft.public.win32.programmer.networks/rss.xml" 
+type=application/rss+xml rel=alternate>
+<META content="MSHTML 6.00.2900.2180" name=GENERATOR></HEAD>
+<BODY>
+<DIV id=content><!-- google_ad_section_start -->
+<H1>Re: Packet drop by .Net</H1>
+<HR>
+
+<UL>
+  <LI><EM>From</EM>: "Arkady Frenkel" &lt;<A 
+  href="mailto:arkadyf@DOMAIN.HIDDEN">mailto:arkadyf@DOMAIN.HIDDEN</A>&gt; 
+  <LI><EM>Date</EM>: Mon, 24 Jul 2006 19:22:39 +0200 </LI></UL>
+<HR>
+Check what kind of packets it drops, maybe that will give some 
+hints<BR>Arkady<BR><BR>"Olanga" &lt;itsmeolanga@xxxxxxxxx&gt; wrote in message 
+<BR><A href="news:#TGskMxrGHA.3324@xxxxxxxxxxxxxxxxxxxxxxx" 
+rel=nofollow>news:#TGskMxrGHA.3324@xxxxxxxxxxxxxxxxxxxxxxx</A><BR>
+<BLOCKQUOTE 
+style="PADDING-LEFT: 0.85em; MARGIN: 0em; BORDER-LEFT: #5555ee 0.2em solid">Hi,<BR>Thanks 
+  for answering<BR>But still same problem , some time it drops or some time 
+  not<BR><BR><BR>"Arkady Frenkel" &lt;arkadyf@xxxxxxxxxxxxxxxx&gt; wrote in 
+  message<BR><A href="news:umFwGdurGHA.1732@xxxxxxxxxxxxxxxxxxxxxxx" 
+  rel=nofollow>news:umFwGdurGHA.1732@xxxxxxxxxxxxxxxxxxxxxxx</A><BR>
+  <BLOCKQUOTE 
+  style="PADDING-LEFT: 0.85em; MARGIN: 0em; BORDER-LEFT: #5555ee 0.2em solid">Check 
+    if rcvall work for you ( C:\Program Files\Microsoft 
+    Platform<BR>SDK\Samples\NetDS\WinSock\rcvall ) that WinAPI version of the 
+    same<BR>code. Ethereal use winpcap which itself use protocol driver ( 
+    tcpip.sys )<BR>opposite your code which use winsock ( user mode 
+    )<BR>Arkady<BR><BR>"Olanga" &lt;itsmeolanga@xxxxxxxxx&gt; wrote in 
+    message<BR><A href="news:uAMwDVurGHA.4480@xxxxxxxxxxxxxxxxxxxxxxx" 
+    rel=nofollow>news:uAMwDVurGHA.4480@xxxxxxxxxxxxxxxxxxxxxxx</A><BR>
+    <BLOCKQUOTE 
+    style="PADDING-LEFT: 0.85em; MARGIN: 0em; BORDER-LEFT: #5555ee 0.2em solid">I 
+      am working on OS fingerprinting.<BR>I am sending a TCP packet , that whole 
+      packet form by me , means ip<BR>header and tcp hedare both are develop by 
+      me i send that packet using<BR>socket.<BR><BR>Sending packet:<BR>here 
+      bWholePacket is a byte array , and it contain both ip header 
+    and<BR></BLOCKQUOTE></BLOCKQUOTE>tcp<BR>
+  <BLOCKQUOTE 
+  style="PADDING-LEFT: 0.85em; MARGIN: 0em; BORDER-LEFT: #5555ee 0.2em solid">
+    <BLOCKQUOTE 
+    style="PADDING-LEFT: 0.85em; MARGIN: 0em; BORDER-LEFT: #5555ee 0.2em solid">header 
+      form by me.<BR>Socket oRecSocket = new 
+      Socket(AddressFamily.InterNetwork,<BR></BLOCKQUOTE></BLOCKQUOTE>SocketType.Raw,<BR>
+  <BLOCKQUOTE 
+  style="PADDING-LEFT: 0.85em; MARGIN: 0em; BORDER-LEFT: #5555ee 0.2em solid">
+    <BLOCKQUOTE 
+    style="PADDING-LEFT: 0.85em; MARGIN: 0em; BORDER-LEFT: #5555ee 0.2em solid">ProtocolType.Raw);<BR><BR>oRecSocket 
+      .SetSocketOption(SocketOptionLevel.IP,<BR>SocketOptionName.HeaderIncluded, 
+      1);<BR><BR>oRecSocket. SendTo(bWholePacket, 
+    moEndPoint);<BR><BR><BR></BLOCKQUOTE></BLOCKQUOTE>////////////////////////////////////////////////////////////////////////////<BR>
+  <BLOCKQUOTE 
+  style="PADDING-LEFT: 0.85em; MARGIN: 0em; BORDER-LEFT: #5555ee 0.2em solid">
+    <BLOCKQUOTE 
+    style="PADDING-LEFT: 0.85em; MARGIN: 0em; BORDER-LEFT: #5555ee 0.2em solid">//////////////////////////////////////////////////////////////<BR><BR>Recieving 
+      packet in response:<BR><BR>Socket oRecSocket = new 
+      Socket(AddressFamily.InterNetwork,<BR></BLOCKQUOTE></BLOCKQUOTE>SocketType.Raw,<BR>
+  <BLOCKQUOTE 
+  style="PADDING-LEFT: 0.85em; MARGIN: 0em; BORDER-LEFT: #5555ee 0.2em solid">
+    <BLOCKQUOTE 
+    style="PADDING-LEFT: 0.85em; MARGIN: 0em; BORDER-LEFT: #5555ee 0.2em solid">ProtocolType.IP);<BR><BR>EndPoint 
+      oEndPointloc = new 
+      IPEndPoint(IPAddress.Parse("192.168.11.9"),<BR>0);<BR><BR>oRecSocket.Bind(oEndPointloc);<BR><BR>byte[] 
+      optionInValue = new byte[4] { 1, 0, 0, 0 };<BR><BR>byte[] optionOutValue = 
+      new byte[4];<BR><BR>int SIO_RCVALL = 
+      unchecked((int)0x98000001);<BR><BR>oRecSocket.IOControl(SIO_RCVALL, 
+      optionInValue, optionOutValue);<BR><BR>oRecSocket.ReceiveFrom(RecBuffer, 
+      ref 
+  oEndPointloc);<BR><BR><BR></BLOCKQUOTE></BLOCKQUOTE>////////////////////////////////////////////////////////////////////////////<BR>
+  <BLOCKQUOTE 
+  style="PADDING-LEFT: 0.85em; MARGIN: 0em; BORDER-LEFT: #5555ee 0.2em solid">
+    <BLOCKQUOTE 
+    style="PADDING-LEFT: 0.85em; MARGIN: 0em; BORDER-LEFT: #5555ee 0.2em solid">//////////////////////////////////////////////////////////////<BR><BR>Problem 
+      is that when i saw packets by ethereal there is an tcp packet<BR>response 
+      by remote machine but the above code did not catch that 
+    packet<BR></BLOCKQUOTE></BLOCKQUOTE>,<BR>
+  <BLOCKQUOTE 
+  style="PADDING-LEFT: 0.85em; MARGIN: 0em; BORDER-LEFT: #5555ee 0.2em solid">
+    <BLOCKQUOTE 
+    style="PADDING-LEFT: 0.85em; MARGIN: 0em; BORDER-LEFT: #5555ee 0.2em solid">some 
+      time it catches and some it does not catches that 
+  packet(In<BR></BLOCKQUOTE></BLOCKQUOTE>dotnet),<BR>
+  <BLOCKQUOTE 
+  style="PADDING-LEFT: 0.85em; MARGIN: 0em; BORDER-LEFT: #5555ee 0.2em solid">
+    <BLOCKQUOTE 
+    style="PADDING-LEFT: 0.85em; MARGIN: 0em; BORDER-LEFT: #5555ee 0.2em solid">This 
+      packet is tcp type packet.<BR><BR>So why some time it drop the packet but 
+      etheral always catch that<BR></BLOCKQUOTE></BLOCKQUOTE>packet.<BR>
+  <BLOCKQUOTE 
+  style="PADDING-LEFT: 0.85em; MARGIN: 0em; BORDER-LEFT: #5555ee 0.2em solid">
+    <BLOCKQUOTE 
+    style="PADDING-LEFT: 0.85em; MARGIN: 0em; BORDER-LEFT: #5555ee 0.2em solid"><BR>SO 
+      How i can catch that packet , i does not want any winpcap 
+      <BR>library<BR>used in my 
+  project.<BR><BR><BR></BLOCKQUOTE><BR><BR></BLOCKQUOTE><BR><BR></BLOCKQUOTE><BR><BR>.<BR><BR>
+<HR>
+
+<UL>
+  <LI><STRONG>Follow-Ups</STRONG>: 
+  <UL>
+    <LI><STRONG><A 
+    href="http://www.tech-archive.net/Archive/Development/microsoft.public.win32.programmer.networks/2006-08/msg00070.html" 
+    name=00070>Re: Packet drop by .Net</A></STRONG> 
+    <UL>
+      <LI><EM>From:</EM> Olanga</LI></UL></LI></UL></LI></UL>
+<UL>
+  <LI><STRONG>References</STRONG>: 
+  <UL>
+    <LI><STRONG><A 
+    href="http://www.tech-archive.net/Archive/Development/microsoft.public.win32.programmer.networks/2006-08/msg00052.html" 
+    name=00052>Packet drop by .Net</A></STRONG> 
+    <UL>
+      <LI><EM>From:</EM> Olanga</LI></UL>
+    <LI><STRONG><A 
+    href="http://www.tech-archive.net/Archive/Development/microsoft.public.win32.programmer.networks/2006-08/msg00053.html" 
+    name=00053>Re: Packet drop by .Net</A></STRONG> 
+    <UL>
+      <LI><EM>From:</EM> Arkady Frenkel</LI></UL>
+    <LI><STRONG><A 
+    href="http://www.tech-archive.net/Archive/Development/microsoft.public.win32.programmer.networks/2006-08/msg00055.html" 
+    name=00055>Re: Packet drop by .Net</A></STRONG> 
+    <UL>
+      <LI><EM>From:</EM> Olanga</LI></UL></LI></UL></LI></UL>
+<UL>
+  <LI>Prev by Date: <STRONG><A 
+  href="http://www.tech-archive.net/Archive/Development/microsoft.public.win32.programmer.networks/2006-08/msg00056.html">Re: 
+  RTP streaming</A></STRONG> 
+  <LI>Next by Date: <STRONG><A 
+  href="http://www.tech-archive.net/Archive/Development/microsoft.public.win32.programmer.networks/2006-08/msg00058.html">Re: 
+  RTP streaming</A></STRONG> 
+  <LI>Previous by thread: <STRONG><A 
+  href="http://www.tech-archive.net/Archive/Development/microsoft.public.win32.programmer.networks/2006-08/msg00055.html">Re: 
+  Packet drop by .Net</A></STRONG> 
+  <LI>Next by thread: <STRONG><A 
+  href="http://www.tech-archive.net/Archive/Development/microsoft.public.win32.programmer.networks/2006-08/msg00070.html">Re: 
+  Packet drop by .Net</A></STRONG> 
+  <LI>Index(es): 
+  <UL>
+    <LI><A 
+    href="http://www.tech-archive.net/Archive/Development/microsoft.public.win32.programmer.networks/2006-08/maillist.html#00057"><STRONG>Date</STRONG></A> 
+
+    <LI><A 
+    href="http://www.tech-archive.net/Archive/Development/microsoft.public.win32.programmer.networks/2006-08/threads.html#00057"><STRONG>Thread</STRONG></A> 
+    </LI></UL></LI></UL>
+<HR>
+
+<TABLE cellSpacing=10 width="100%" border=0>
+  <TBODY>
+  <TR>
+    <TD>
+      <H2>Relevant Pages</H2>
+      <UL><!-- ffM -->
+        <LI><A 
+        href="http://www.tech-archive.net/Archive/Development/microsoft.public.win32.programmer.networks/2006-08/msg00073.html">Re: 
+        Packet drop by .Net</A><BR><B>...</B> So is that enough that you start 
+        to listen before send or without <B>sleep</B> <B>...</B> Tjis problem 
+        solved by sleep thread before <B>sending packet</B> and i start 
+        <B>...</B> <B>Socket oRecSocket</B> = new 
+        Socket(AddressFamily.InterNetwork, <B>...</B> 
+        <BR>(microsoft.public.win32.programmer.networks)
+        <LI><A 
+        href="http://www.tech-archive.net/Archive/Development/microsoft.public.win32.programmer.networks/2006-08/msg00055.html">Re: 
+        Packet drop by .Net</A><BR><B>...</B> I am sending a <B>TCP packet,</B> 
+        that whole packet form by me, means ip <B>...</B> <B>Socket 
+        oRecSocket</B> = new Socket(AddressFamily.InterNetwork, <B>...</B> 
+        Problem is that when i saw packets by ethereal there is an <B>tcp 
+        packet</B> <B>...</B> SO How i can catch that packet, i does not want 
+        any <B>winpcap library</B> <B>...</B> 
+        <BR>(microsoft.public.win32.programmer.networks)
+        <LI><A 
+        href="http://www.tech-archive.net/Archive/Development/microsoft.public.win32.programmer.networks/2006-08/msg00053.html">Re: 
+        Packet drop by .Net</A><BR><B>...</B> I am sending a <B>TCP packet,</B> 
+        that whole packet form by me, means ip <B>...</B> <B>Socket 
+        oRecSocket</B> = new Socket(AddressFamily.InterNetwork, SocketType.Raw, 
+        <B>...</B> SO How i can catch that packet, i does not want any 
+        <B>winpcap library</B> <B>...</B> 
+        <BR>(microsoft.public.win32.programmer.networks)
+        <LI><A 
+        href="http://www.tech-archive.net/Archive/Development/microsoft.public.win32.programmer.networks/2006-08/msg00084.html">Re: 
+        Packet drop by .Net</A><BR><B>...</B> because .net has to initlaize all 
+        <B>listening</B> before sending a <B>packet.</B> <B>...</B> Listenieng 
+        of <B>socket</B> for all packets may be take time to initialize. 
+        <B>...</B> <B>Socket oRecSocket</B> = new 
+        Socket(AddressFamily.InterNetwork, <B>...</B> 
+        <BR>(microsoft.public.win32.programmer.networks)
+        <LI><A 
+        href="http://www.tech-archive.net/Archive/Development/microsoft.public.win32.programmer.networks/2006-08/msg00082.html">Re: 
+        Packet drop by .Net</A><BR><B>...</B> No without sleep droping of 
+        <B>packet</B> still exist, <B>...</B> because .net has to initlaize all 
+        <B>listening</B> before sending a packet. <B>...</B> Listenieng of 
+        <B>socket</B> for all packets may be take time to initialize. <B>...</B> 
+        <B>Socket oRecSocket</B> = new Socket(AddressFamily.InterNetwork, 
+        <B>...</B> <BR>(microsoft.public.win32.programmer.networks)</LI></UL></TD>
+    <TD><!--- start of derkeiler.com_(300x250 Right1)_247RealMediaAdTag --->
+      <SCRIPT language=JavaScript1.1 
+      src="Re Packet drop by _Net_files/@Right1"></SCRIPT>
+
+      <SCRIPT language=JavaScript>
+<!--
+if (parseFloat(navigator.appVersion) == 0){ document.write("<IFRAME WIDTH=300 HEIGHT=250 MARGINWIDTH=0 MARGINHEIGHT=0 HSPACE=0 VSPACE=0 FRAMEBORDER=0 SCROLLING=no BORDERCOLOR='#000000' SRC='http://208.71.124.75/RealMedia/ads/adstream_sx.ads/derkeiler.com/@Right1'></IFRAME>");}
+//-->
+</SCRIPT>
+      <NOSCRIPT><A 
+      href="http://208.71.124.75/RealMedia/ads/click_nx.ads/derkeiler.com/@Right1?x"><IMG 
+      src=""></A></NOSCRIPT> <!--- end of derkeiler.com_(300x250 Right1)_247RealMediaAdTag --->
+      <DIV id=beacon_62 
+      style="LEFT: 0px; VISIBILITY: hidden; POSITION: absolute; TOP: 0px"><IMG 
+      style="WIDTH: 0px; HEIGHT: 0px" height=0 alt="" src="" 
+  width=0></DIV></TD></TR></TBODY></TABLE>
+<HR>
+<!-- google_ad_section_end -->
+<DIV id=footer>We are proud to have <A href="http://www.9na.de/" 
+target=_blank>Web Hosting and Rack Housing</A> from 9 Net Avenue Deutschland. 
+<BR>(04) </DIV></DIV>
+<P id=logo><A title=Home href="http://www.tech-archive.net/"><IMG title=Home 
+height=313 alt=tech-archive.net src="Re Packet drop by _Net_files/logo.png" 
+width=46></A></P>
+<DIV id=menu1>
+<UL>
+  <LI id=selected1><A href="http://www.tech-archive.net/">Windows</A> </LI>
+  <LI><A href="http://sci.tech-archive.net/">Science</A> </LI>
+  <LI><A href="http://newsgroups.derkeiler.com/">Usenet</A> </LI></UL></DIV>
+<DIV id=menu2>
+<UL>
+  <LI id=selected2><A 
+  href="http://www.tech-archive.net/Archive/">Archive</A></LI>
+  <LI><A href="http://www.derkeiler.com/about/">About</A></LI>
+  <LI><A href="http://www.tech-archive.net/privacy/">Privacy</A></LI>
+  <LI><A href="http://www.tech-archive.net/search/">Search</A></LI>
+  <LI><A href="http://www.derkeiler.com/about/imprint">Imprint</A> 
+</LI></UL></DIV>
+<DIV id=nav><IMG height=7 alt=Path: src="Re Packet drop by _Net_files/arrow.gif" 
+width=15> <A 
+href="http://www.tech-archive.net/">http://www.tech-archive.net/</A> 
+&nbsp;&gt;&nbsp;<A href="http://www.tech-archive.net/Archive/">Archive</A> 
+&nbsp;&gt;&nbsp;<A 
+href="http://www.tech-archive.net/Archive/Development/">Development</A> 
+&nbsp;&gt;&nbsp;<A 
+href="http://www.tech-archive.net/Archive/Development/microsoft.public.win32.programmer.networks/">microsoft.public.win32.programmer.networks</A> 
+&nbsp;&gt;&nbsp;<A 
+href="http://www.tech-archive.net/Archive/Development/microsoft.public.win32.programmer.networks/2006-08/">2006-08</A>&nbsp;&nbsp;&nbsp;&nbsp;<A 
+href="http://www.tech-archive.net/pdf/Archive/Development/microsoft.public.win32.programmer.networks/2006-08/msg00057.pdf"><IMG 
+style="BOTTOM: -2px; POSITION: relative" height=15 alt="Print as PDF" 
+src="Re Packet drop by _Net_files/pdf.jpg" width=16></A>&nbsp;&nbsp;<A 
+href="http://www.tech-archive.net/Archive/Development/microsoft.public.win32.programmer.networks/rss.xml"><IMG 
+style="BOTTOM: -2px; POSITION: relative" height=13 alt="RSS Feed" 
+src="Re Packet drop by _Net_files/xml.gif" width=35></A> </DIV>
+<DIV id=topbanner><!--- start of derkeiler.com_(728x90 Top)_247RealMediaAdTag --->
+<SCRIPT language=JavaScript1.1 src="Re Packet drop by _Net_files/@Top"></SCRIPT>
+
+<SCRIPT language=JavaScript> 
+<!--
+if (parseFloat(navigator.appVersion) == 0){ document.write("<IFRAME WIDTH=728 HEIGHT=90 MARGINWIDTH=0 MARGINHEIGHT=0 HSPACE=0 VSPACE=0 FRAMEBORDER=0 SCROLLING=no BORDERCOLOR='#000000' SRC='http://208.71.124.75/RealMedia/ads/adstream_sx.ads/derkeiler.com/@Top'></IFRAME>");}
+//--> 
+</SCRIPT>
+<NOSCRIPT><A 
+href="http://208.71.124.75/RealMedia/ads/click_nx.ads/derkeiler.com/@Top?x"><IMG 
+src=""></A></NOSCRIPT> <!--- end of derkeiler.com_(728x90 Top)_247RealMediaAdTag ---></DIV>
+<DIV id=beacon_61 
+style="LEFT: 0px; VISIBILITY: hidden; POSITION: absolute; TOP: 0px"><IMG 
+style="WIDTH: 0px; HEIGHT: 0px" height=0 alt="" src="" width=0></DIV>
+<DIV id=skyscraper><!--- start of derkeiler.com_(120x600/160x600 Right3)_247RealMediaAdTag --->
+<SCRIPT language=JavaScript1.1 
+src="Re Packet drop by _Net_files/@Right3"></SCRIPT>
+
+<SCRIPT language=JavaScript> 
+<!--
+if (parseFloat(navigator.appVersion) == 0){ document.write("<IFRAME WIDTH=160 HEIGHT=600 MARGINWIDTH=0 MARGINHEIGHT=0 HSPACE=0 VSPACE=0 FRAMEBORDER=0 SCROLLING=no BORDERCOLOR='#000000' SRC='http://208.71.124.75/RealMedia/ads/adstream_sx.ads/derkeiler.com/@Right3'></IFRAME>");} 
+//--> 
+</SCRIPT>
+<NOSCRIPT><A 
+href="http://208.71.124.75/RealMedia/ads/click_nx.ads/derkeiler.com/@Right3?x"><IMG 
+src=""></A></NOSCRIPT> <!--- end of derkeiler.com_(120x600/160x600 Right3)_247RealMediaAdTag --->
+<DIV id=beacon_63 
+style="LEFT: 0px; VISIBILITY: hidden; POSITION: absolute; TOP: 0px"><IMG 
+style="WIDTH: 0px; HEIGHT: 0px" height=0 alt="" src="" width=0></DIV></DIV><!-- Start Quantcast tag -->
+<SCRIPT src="Re Packet drop by _Net_files/quant.js" 
+type=text/javascript></SCRIPT>
+
+<SCRIPT type=text/javascript>_qacct="p-abMz3F92T4IJ2";quantserve();</SCRIPT>
+<NOSCRIPT><A href="http://www.quantcast.com/p-abMz3F92T4IJ2" target=_blank><IMG 
+style="DISPLAY: none" height=1 alt=Quantcast src="" width=1 border=0></A> 
+</NOSCRIPT><!-- End Quantcast tag --></BODY></HTML>

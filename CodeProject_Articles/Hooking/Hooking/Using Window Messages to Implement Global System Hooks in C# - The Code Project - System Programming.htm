@@ -1,0 +1,2612 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!-- saved from url=(0064)http://www.codeproject.com/cs/system/WilsonSystemGlobalHooks.asp -->
+<HTML><HEAD><TITLE>Using Window Messages to Implement Global System Hooks in C# - The Code Project - System Programming</TITLE>
+<META http-equiv=Reply-to content=mailto:webmaster@codeproject.com>
+<META http-equiv=Content-Type content="text/html; charset=ISO-8859-1">
+<META content=en-US name=MS.LOCALE>
+<META 
+content="Explains how to implement any type of global system hook in C# by using an unmanaged C++ DLL and Windows messages." 
+name=Description>
+<META content=kbArticle name=Search.TopicType>
+<META content=ChrisP1118 name=Author>
+<META content="02 May 2007 14:00:00 GMT" name=Search.PublishDate>
+<META content="02 May 2007 14:00:00 GMT" name=Search.RevisedDate>
+<META content="Free source code, , Visual C++, MFC, Windows, Article" 
+name=keywords>
+<META 
+content="Article content copyright ChrisP1118, 2007, everthing else Copyright © CodeProject, 1999-2007, All Rights Reserved." 
+name=Copyright><LINK title="CodeProject Lounge Postings" 
+href="http://www.codeproject.com/webservices/LoungeRSS.aspx" 
+type=application/rss+xml rel=alternate><LINK 
+title="CodeProject Latest articles - All topics" 
+href="http://www.codeproject.com/webservices/articlerss.aspx?cat=1" 
+type=application/rss+xml rel=alternate><LINK 
+title="CodeProject Latest articles - MFC / C++" 
+href="http://www.codeproject.com/webservices/articlerss.aspx?cat=2" 
+type=application/rss+xml rel=alternate><LINK 
+title="CodeProject Latest articles - C#" 
+href="http://www.codeproject.com/webservices/articlerss.aspx?cat=3" 
+type=application/rss+xml rel=alternate><LINK 
+title="CodeProject Latest articles - ASP.NET" 
+href="http://www.codeproject.com/webservices/articlerss.aspx?cat=4" 
+type=application/rss+xml rel=alternate><LINK 
+title="CodeProject Latest articles - .NET" 
+href="http://www.codeproject.com/webservices/articlerss.aspx?cat=5" 
+type=application/rss+xml rel=alternate><LINK 
+title="CodeProject Latest articles - VB.NET" 
+href="http://www.codeproject.com/webservices/articlerss.aspx?cat=6" 
+type=application/rss+xml rel=alternate><LINK title="The Code Project" 
+href="http://www.codeproject.com/info/OpenSearch.xml" 
+type=application/opensearchdescription+xml rel=search><LINK href="/favicon.ico" 
+type=image/ico rel=icon><LINK href="/favicon.ico" rel="SHORTCUT ICON"><LINK 
+href="Using Window Messages to Implement Global System Hooks in C# - The Code Project - System Programming_files/global.css" 
+type=text/css rel=stylesheet>
+<SCRIPT language=javascript 
+src="Using Window Messages to Implement Global System Hooks in C# - The Code Project - System Programming_files/oncopy.js"></SCRIPT>
+
+<SCRIPT language=javascript>
+if (top != self) top.location.href = location.href;
+if (typeof(DemoUrl) != "undefined")
+	document.write('<me' + 'ta http' + '-equiv="re' + 'fresh" con' + 'tent="1;url=' + DemoUrl + '">');
+</SCRIPT>
+
+<META content="MSHTML 6.00.2900.2180" name=GENERATOR></HEAD>
+<BODY style="MARGIN: 0px" oncopy="return copyCode();" text=black vLink=navy 
+aLink=red link=blue bgColor=white>
+<SCRIPT 
+src="Using Window Messages to Implement Global System Hooks in C# - The Code Project - System Programming_files/urchin.js" 
+type=text/javascript>
+</SCRIPT>
+
+<SCRIPT type=text/javascript>
+_uacct = "UA-1735123-1";
+urchinTracker();
+</SCRIPT>
+
+<TABLE cellSpacing=0 cellPadding=0 width="100%" border=0>
+  <TBODY>
+  <TR>
+    <TD class=HeaderLogo><A href="http://www.codeproject.com/"><IMG height=90 
+      alt=Home 
+      src="Using Window Messages to Implement Global System Hooks in C# - The Code Project - System Programming_files/codeproject225x90.gif" 
+      border=0></A></TD>
+    <TD class=HeaderBanner><SPAN id=AdBanner4>
+      <SCRIPT language=javascript>document.write("<a href=\"/script/admentor/admentorredir.asp?id=3887&way=ban\" target=_blank><img src=\"/script/ann/ServeImg.aspx?File=%2Fscript%2Fadmentor%2Fimages%2Faspose%5F728x90%5FAni%5FSSRS%5Fleader%2Egif&C=False&id=3887&cb=7993868\" alt=\"Aspose – The .NET and Java component Publisher\" border=0 width=728 height=90></a>");</SCRIPT>
+      </SPAN></TD></TR>
+  <TR>
+    <TD colSpan=2>
+      <TABLE class=MemberNavBar cellSpacing=0 cellPadding=5 width="100%" 
+      border=0>
+        <TBODY>
+        <TR vAlign=center>
+          <TD class=smallText style="FONT-WEIGHT: bold">4,359,639 members and 
+            growing! &nbsp; 11,236 now online. </TD>
+          <TD class=userNavText align=right><A 
+            href="http://www.codeproject.com/script/profile/whos_who.asp?id=2959938">abdelrady2030 
+            </A>| <A 
+            href="http://www.codeproject.com/script/profile/modify.asp?ct=/cs/system/WilsonSystemGlobalHooks.asp"><B>My 
+            Settings</B></A> | <A 
+            href="http://www.codeproject.com/script/profile/bookmark_list.asp">My 
+            Bookmarks</A> | <A 
+            href="http://www.codeproject.com/script/articles/list_articles.asp?userid=2959938">My 
+            Articles</A> | <A 
+            href="http://www.codeproject.com/script/profile/logoff.asp?ct=/cs/system/WilsonSystemGlobalHooks.asp">Sign 
+            out</A> </TD></TR></TBODY></TABLE></TD></TR>
+  <TR>
+    <TD colSpan=2>
+      <TABLE class=SiteNavBar id=tblSiteToolbar cellSpacing=0 cellPadding=0>
+        <TBODY>
+        <TR>
+          <TD><A href="http://www.codeproject.com/">Home</A></TD>
+          <TD noWrap><A 
+            href="http://www.codeproject.com/index.asp?cat=2">MFC/C++</A></TD>
+          <TD class=SelCat><A 
+            href="http://www.codeproject.com/index.asp?cat=3">C#</A></TD>
+          <TD noWrap><A 
+            href="http://www.codeproject.com/index.asp?cat=4">ASP.NET</A></TD>
+          <TD noWrap><A 
+            href="http://www.codeproject.com/index.asp?cat=6">VB.NET</A></TD>
+          <TD noWrap><A 
+            href="http://www.codeproject.com/index.asp?cat=8">Architect</A></TD>
+          <TD noWrap><A 
+            href="http://www.codeproject.com/index.asp?cat=9">SQL</A></TD>
+          <TD noWrap><A href="http://www.codeproject.com/index.asp?cat=1">All 
+            Topics</A></TD>
+          <TD width="100%">&nbsp;</TD>
+          <TD>
+            <DIV id=MenuPos 
+            style="WIDTH: 300px; POSITION: relative; TOP: 1px; HEIGHT: 22px">
+            <TABLE id=MPH 
+            style="BORDER-TOP-WIDTH: 0px; BORDER-LEFT-WIDTH: 0px; BORDER-BOTTOM-WIDTH: 0px; HEIGHT: 20px; BORDER-RIGHT-WIDTH: 0px" 
+            cellSpacing=0 cellPadding=0 width=300>
+              <TBODY>
+              <TR vAlign=center>
+                <TD 
+                style="BORDER-TOP-WIDTH: 0px; BORDER-LEFT-WIDTH: 0px; BORDER-BOTTOM-WIDTH: 0px; BORDER-RIGHT-WIDTH: 0px" 
+                noWrap><A 
+                  href="http://www.codeproject.com/info/faq.asp">Help!</A></TD>
+                <TD 
+                style="BORDER-TOP-WIDTH: 0px; BORDER-LEFT-WIDTH: 0px; BORDER-BOTTOM-WIDTH: 0px; BORDER-RIGHT-WIDTH: 0px" 
+                noWrap><A 
+                  href="http://www.codeproject.com/info/latest.asp">Articles</A></TD>
+                <TD 
+                style="BORDER-TOP-WIDTH: 0px; BORDER-LEFT-WIDTH: 0px; BORDER-BOTTOM-WIDTH: 0px; BORDER-RIGHT-WIDTH: 0px" 
+                noWrap><A 
+                  href="http://www.codeproject.com/script/comments/forums.asp">Message 
+                  Boards</A></TD>
+                <TD 
+                style="BORDER-TOP-WIDTH: 0px; BORDER-LEFT-WIDTH: 0px; BORDER-BOTTOM-WIDTH: 0px; BORDER-RIGHT-WIDTH: 0px" 
+                noWrap><A 
+                  href="http://www.codeproject.com/lounge.asp">Lounge</A></TD></TR></TBODY></TABLE></DIV></TD></TR></TBODY></TABLE>
+      <SCRIPT type=text/javascript>function Go(){return}</SCRIPT>
+
+      <SCRIPT 
+      src="Using Window Messages to Implement Global System Hooks in C# - The Code Project - System Programming_files/cpmenu_var.js" 
+      type=text/javascript></SCRIPT>
+
+      <SCRIPT 
+      src="Using Window Messages to Implement Global System Hooks in C# - The Code Project - System Programming_files/menu10_com.js" 
+      type=text/javascript></SCRIPT>
+
+      <SCRIPT type=text/javascript>
+var MPH = document.getElementById("MPH");
+if (MPH) MPH.style.display='none';
+</SCRIPT>
+    </TD></TR>
+  <TR>
+    <TD colSpan=2>
+      <TABLE class=ArticleHeader cellSpacing=0 cellPadding=3 width="100%">
+        <TBODY>
+        <TR vAlign=top>
+          <TD class=smallText style="PADDING-RIGHT: 10px"><A 
+            href="http://www.codeproject.com/?cat=1">All Topics</A>, <A 
+            href="http://www.codeproject.com/?cat=3">C#</A>, <A 
+            href="http://www.codeproject.com/?cat=5">.NET</A> &gt;&gt; <A 
+            href="http://www.codeproject.com/cs/system/">System Programming</A> 
+            &gt;&gt; <A 
+            href="http://www.codeproject.com/cs/system/#General">General</A> 
+            &nbsp;(<SPAN class=SmallText 
+            style="FONT-WEIGHT: bold; COLOR: green">Beginner</SPAN>)<BR><BR>
+            <DIV style="FONT-WEIGHT: bold; FONT-SIZE: 16pt">Using Window 
+            Messages to Implement Global System Hooks in C#</DIV><B>By <A 
+            href="http://www.codeproject.com/script/Articles/list_articles.asp?userid=83302">ChrisP1118</A></B>. 
+            <BR><BR>
+            <DIV style="FONT-SIZE: 12px">Explains how to implement any type of 
+            global system hook in C# by using an unmanaged C++ DLL and Windows 
+            messages.</DIV></TD>
+          <TD class=smallText style="WIDTH: 200px">C++ (VC7.1), C# (C# 
+            1.0)<BR>Windows (Win2K, WinXP, Win2003, Vista), .NET (.NET 
+            1.1)<BR>Win32, VS (VS.NET2003)<BR>Dev<BR><SPAN 
+            style="PADDING-RIGHT: 2ex">Posted</SPAN>: <B>3 May 2007 
+            </B><BR><SPAN style="PADDING-RIGHT: 3ex">Views</SPAN>: <B>14,928</B> 
+          </TD></TR></TD></TR></TD></TR></TBODY></TABLE>
+      <TABLE cellSpacing=0 cellPadding=0 border=0>
+        <TBODY>
+        <TR vAlign=top>
+          <TD class=LHNavBar rowSpan=2><!-- Yes, there are IE hacks that will allow us to create a min-width DIV 
+	     (eg http://www.webreference.com/programming/min-width/) but I couldn't
+	     be arsed. Wait for it in v2.0 -->
+            <DIV class=FeatureBlockHeader>Announcements</DIV>
+            <DIV class="FeatureBlockContent RHFeatureBar">
+            <DIV style="PADDING-TOP: 5px"><IMG 
+            style="PADDING-RIGHT: 10px; FLOAT: left; MARGIN-LEFT: 5px; MARGIN-RIGHT: 10px" 
+            height=20 alt=Comp 
+            src="Using Window Messages to Implement Global System Hooks in C# - The Code Project - System Programming_files/prize_winner_sm.gif" 
+            width=10><A 
+            href="http://www.codeproject.com/script/competitions/monthly/">Monthly 
+            Competition</A></DIV></DIV>
+            <CENTER>
+            <SCRIPT language=javascript>document.write("<a href=\"/script/admentor/admentorredir.asp?id=3765&way=ban\" target=_blank><img src=\"/script/ann/ServeImg.aspx?File=%2Fscript%2Fadmentor%2Fimages%2FChangeSigExtTowerApr07%5F160x600%2Egif&C=False&id=3765&cb=7993886\" alt=\"The intellisense upgrade for Visual Studio .NET - make your IDE as smart as you.\" border=0 width=160 height=600></a>");</SCRIPT>
+            </CENTER><BR><BR><IMG height=1 
+            src="Using Window Messages to Implement Global System Hooks in C# - The Code Project - System Programming_files/t.gif" 
+            width=160> </TD>
+          <TD width="100%">
+            <TABLE class=SearchHeaderBar cellSpacing=0 width="100%">
+              <TBODY>
+              <TR>
+                <TD vAlign=center noWrap align=right width="60%">
+                  <FORM style="MARGIN: 0px" name=Search action=/info/search.asp 
+                  method=post><B>Search &nbsp;</B><INPUT class=smallText 
+                  style="WIDTH: 200px" name=target> <SELECT 
+                  style="FONT-WEIGHT: bold; FONT-SIZE: 8pt" name=st> <OPTION 
+                    value=kw selected>Articles</OPTION> <OPTION 
+                    value=au>Authors</OPTION></SELECT> <INPUT style="FONT-WEIGHT: bold; FONT-SIZE: 8pt" type=submit value=" Go! "> 
+                  &nbsp; </FORM></TD>
+                <TD class=tinyText noWrap><A 
+                  href="http://www.codeproject.com/info/search.asp">Advanced 
+                  Search</A><BR><A 
+                  href="http://www.codeproject.com/script/articles/sections.asp">Sitemap</A> 
+                </TD></TR></TBODY></TABLE>
+            <TABLE width="100%">
+              <TBODY>
+              <TR vAlign=top>
+                <TD class=SmallText noWrap>
+                  <TABLE>
+                    <TBODY>
+                    <TR>
+                      <TD class=smallText noWrap><IMG 
+                        src="Using Window Messages to Implement Global System Hooks in C# - The Code Project - System Programming_files/print.gif" 
+                        align=absMiddle> <A 
+                        href="http://www.codeproject.com/cs/system/WilsonSystemGlobalHooks.asp?print=true" 
+                        target=_print>Print</A></TD>
+                      <TD class=smallText noWrap><IMG 
+                        src="Using Window Messages to Implement Global System Hooks in C# - The Code Project - System Programming_files/sitebuild_icon.gif" 
+                        align=absMiddle><A 
+                        href="http://www.codeproject.com/script/submit/ReportProblem.asp?GUID=WilsonSystemGlobalHooks%2Fuseritems5%2F3%2F2007">Broken 
+                        Article?</A></TD>
+                      <TD class=smallText noWrap><IMG 
+                        src="Using Window Messages to Implement Global System Hooks in C# - The Code Project - System Programming_files/link.gif" 
+                        align=absMiddle><A 
+                        href="http://www.codeproject.com/script/profile/add_bookmark.asp?t=0&amp;ct=%2Fcs%2Fsystem%2FWilsonSystemGlobalHooks%2Easp&amp;guid=WilsonSystemGlobalHooks%2Fuseritems5%2F3%2F2007">Bookmark</A></TD>
+                      <TD class=smallText noWrap><IMG 
+                        src="Using Window Messages to Implement Global System Hooks in C# - The Code Project - System Programming_files/mail_small.gif" 
+                        align=absMiddle> <A 
+                        href="http://www.codeproject.com/cs/system/WilsonSystemGlobalHooks.asp#__comments">Discuss</A></TD>
+                      <TD class=smallText noWrap><IMG 
+                        src="Using Window Messages to Implement Global System Hooks in C# - The Code Project - System Programming_files/mail.gif" 
+                        align=absMiddle> <A 
+                        href="http://www.codeproject.com/script/recommend/form.asp?guid=WilsonSystemGlobalHooks%2Fuseritems5%2F3%2F2007">Send 
+                        to a friend</A></TD></TR></TBODY></TABLE></TD>
+                <TD noWrap align=right><A name=__top></A>
+                  <TABLE>
+                    <TBODY>
+                    <TR>
+                      <TD class=smallText align=right>19 votes for this 
+                        article.</TD>
+                      <TD>
+                        <TABLE cellSpacing=0 cellPadding=0 border=2>
+                          <TBODY>
+                          <TR>
+                            <TD><IMG height=5 
+                              src="Using Window Messages to Implement Global System Hooks in C# - The Code Project - System Programming_files/red.gif" 
+                              width=20 border=0></TD>
+                            <TD><IMG height=5 
+                              src="Using Window Messages to Implement Global System Hooks in C# - The Code Project - System Programming_files/red.gif" 
+                              width=20 border=0></TD>
+                            <TD><IMG height=5 
+                              src="Using Window Messages to Implement Global System Hooks in C# - The Code Project - System Programming_files/red.gif" 
+                              width=20 border=0></TD>
+                            <TD><IMG height=5 
+                              src="Using Window Messages to Implement Global System Hooks in C# - The Code Project - System Programming_files/red.gif" 
+                              width=20 border=0></TD>
+                            <TD><IMG height=5 
+                              src="Using Window Messages to Implement Global System Hooks in C# - The Code Project - System Programming_files/red.gif" 
+                              width=17 border=0><IMG height=5 
+                              src="Using Window Messages to Implement Global System Hooks in C# - The Code Project - System Programming_files/white.gif" 
+                              width=3 border=0></TD></TR></TBODY></TABLE></TD></TR>
+                    <TR>
+                      <TD class=smallText align=right colSpan=2><A 
+                        title="Calculated as rating x Log10(# votes)" 
+                        href="http://www.codeproject.com/script/articles/top_articles.asp?st=2">Popularity: 
+                        6.22</A>. Rating: <B>4.86</B> out of 
+                  5.</TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+        <TR>
+          <TD class=ArticlePane><SPAN id=intelliTXT>
+            <DIV id=contentdiv><!-- Article Starts -->
+            <UL class=download>
+              <LI><A 
+              href="http://www.codeproject.com/cs/system/WilsonSystemGlobalHooks/WilsonGlobalSystemHooks_src.zip">Download 
+              source and two demo projects - 113 Kb </A></LI></UL>
+            <P><IMG height=336 alt="Screenshot - WilsonGlobalSystemHooks1.jpg" 
+            src="Using Window Messages to Implement Global System Hooks in C# - The Code Project - System Programming_files/WilsonGlobalSystemHooks1.jpg" 
+            width=600></P>
+            <P><IMG height=420 alt="Screenshot - WilsonGlobalSystemHooks1.jpg" 
+            src="Using Window Messages to Implement Global System Hooks in C# - The Code Project - System Programming_files/WilsonGlobalSystemHooks2.jpg" 
+            width=600></P>
+            <H2>Introduction</H2>
+            <P>Global system hooks allow an application to intercept Windows 
+            messages intended for other applications. This has always been 
+            difficult (impossible, according to MSDN) to implement in C#. This 
+            article attempts to implement global system hooks by creating a DLL 
+            wrapper in C++ that posts messages to the hooking application's 
+            message queue. Put simply, this lets you implement any type of 
+            global Windows hook from managed code. </P>
+            <H2>Why Global System Hooks and C# Don't Play Well Together</H2>
+            <P>Global system hooks have always been a problem for .NET 
+            developers. To understand why, we first need to discuss how hooks 
+            work at a system level and how Windows processes these event 
+            notifications. </P>
+            <P>Normally, an application implements hooks by creating a callback 
+            function and informing Windows of this function. When Windows 
+            processes a hookable event, such as mouse movement or the creation 
+            of a window, it calls this callback function, which the hooking 
+            application handles accordingly. With local hooks (when an 
+            application hooks other events taking place in the same process), 
+            this callback function can be located anywhere, and local hooks can 
+            be written pretty easily in C# -- a quick look around CodeProject 
+            reveals several examples. Unfortunately, Windows is not so 
+            permissive with global system hooks, which allow one process to 
+            intercept events from another process. Windows insists that the 
+            callback functions for global system hooks be located in DLLs. 
+            Neither C# nor VB.NET are able to produce standard Windows DLLs, 
+            which means they're also unable to process global system hooks -- 
+            the MSDN library even explicitly says global system hooks cannot be 
+            handled within managed code applications. How discouraging! </P>
+            <P>Luckily, C# programmers are a clever and crafty bunch. Michael 
+            Kennedy, in his CodeProject article <A 
+            href="http://www.codeproject.com/csharp/globalsystemhook.asp">"Global 
+            System Hooks in .NET"</A>, came up with a workaround. Using C++, he 
+            created a DLL that essentially worked as a wrapper to managed code. 
+            The C++ DLL registered a callback function with Windows. When a hook 
+            notification arrived in that callback, it called a managed code 
+            function. Using this technique, he was able to trap several hook 
+            notifications, such as low-level keyboard and mouse events. The 
+            problem he discovered, though, was that Windows changes the 
+            execution context when sending out certain hook notifications. When 
+            Windows hooked a low-level mouse or keyboard event, it called any 
+            hooking application from within the context of the hooking 
+            application. But for most other events, the callback function was 
+            called from the context of the hooked application. This essentially 
+            meant that his wrapper functions couldn't be used with most Windows 
+            hooks. </P>
+            <H2>The Workaround</H2>
+            <P>I've created my own workaround to this problem, although as 
+            you'll see below, it comes with some definite caveats. In a 
+            nutshell, what I've done is (like Kennedy) to create a C++ DLL which 
+            contains the actual callback function. However, the DLL doesn't just 
+            serve as a wrapper to a managed code delegate. Instead, when it 
+            receives a hook notification, it posts a custom Windows message to 
+            the managed application's Windows message queue. This message can 
+            then be intercepted in the C# program's <CODE>WndProc</CODE> event. 
+            So, just as a window regularly receives messages like 
+            <CODE>WM_MOUSEMOVE</CODE>, your managed application will now also 
+            receive messages like <CODE>WILSON_HOOK_SHELL_WINDOWCREATED</CODE>. 
+            </P>
+            <H2>The Projects</H2>
+            <P>The code consists of three projects. First, there's the 
+            GlobalCbtHook, a C++ project which creates the DLL used for the 
+            callback functions. Second, there's GlobalHooksTest, a simple 
+            application designed to demonstrate this code, which implements 
+            <CODE>WH_SHELL</CODE> and <CODE>WH_CBT</CODE> hooks. The third (and 
+            coolest) of the three projects is TransparencyMenu. This is also a 
+            demonstration project, showing an actual practical application of 
+            global system hooks. </P>
+            <H2>GlobalCbtHook -- the DLL Project</H2>
+            <P>This project is deceptively simple. There are, however, a few 
+            quirks to my programming, which have created the potential for some 
+            bugs in your application, as described below. One other note: with 
+            some minor exceptions, all the similarly-named functions in the DLL 
+            do the same thing, just for different types of hooks. That is, 
+            <CODE>InitializeCbtHook</CODE> and <CODE>InitializeShellHook</CODE> 
+            work in the same way -- so in my explanations below, I use 
+            <CODE>ABC</CODE> as a sort of generic hook. </P>
+            <H3>Warning One: SetProp and GetProp</H3>
+            <P>Because Windows injects the callback function into all running 
+            processes, there will always be multiple instances of this code 
+            loaded. Yet they all need to share at least one piece of 
+            information, namely, the handle to the window that needs to receive 
+            the hook event notifications. After several frustrating hours 
+            reading up on shared memory, I decided I wanted an easier solution. 
+            That's when the MSDN documentation threw me a lifesaver in the form 
+            of <CODE>GetProp</CODE> and <CODE>SetProp</CODE>. </P>
+            <P><CODE>GetProp</CODE> and <CODE>SetProp</CODE> are API functions 
+            that allow you to associate any type of handle with any window. That 
+            is, if you have a window handle (<CODE>hWnd</CODE>), you can 
+            associate any other handle with it, and in such a way that any 
+            application can access that data. Luckily, there's one window handle 
+            that's essentially constant in any Windows session, the desktop 
+            handle. So, in order to store the handle to the window receiving 
+            hook events, I use the desktop window's properties. This is kind of 
+            a hack, but works pretty reliably and effectively. The 
+            <CODE>InitializeAbcHook</CODE> functions checks to see if there is 
+            already a handle named <CODE>WILSON_HOOK_HWND_ABC</CODE> already 
+            associated with the desktop window. Assuming there's not, this 
+            handle is set to the handle of the window that will receive the hook 
+            events. </P>
+            <P>This code is in <CODE>InitializeCbtHook</CODE>, showing 
+            <CODE>GetProp</CODE>: </P><PRE>if (GetProp(GetDesktopWindow(), <SPAN class=cpp-string>"WILSON_HOOK_HWND_CBT"</SPAN>) != NULL)
+{
+  SendNotifyMessage((HWND)GetProp(GetDesktopWindow(), 
+      <SPAN class=cpp-string>"WILSON_HOOK_HWND_CBT"</SPAN>), 
+      RegisterWindowMessage(<SPAN class=cpp-string>"WILSON_HOOK_CBT_REPLACED"</SPAN>), 0, 0);
+}
+
+SetProp(GetDesktopWindow(), <SPAN class=cpp-string>"WILSON_HOOK_HWND_CBT"</SPAN>, destination);</PRE>
+            <P>And <CODE>SetProp</CODE> is used in <CODE>CbtHookCallback</CODE> 
+            to retreive the window handle: </P><PRE>HWND dstWnd = (HWND)GetProp(GetDesktopWindow(),
+               <SPAN class=cpp-string>"WILSON_HOOK_HWND_CBT"</SPAN>);</PRE>
+            <P>There is one major problem to this approach: it means that only 
+            one application can be hooking these events at a time. When a second 
+            application (that uses the same DLL) starts hooking events, a 
+            message (<CODE>WILSON_HOOK_CBT_REPLACED</CODE>) is sent to the first 
+            application, informing it that it's now out of luck and no longer 
+            hooking anything. So, if you use this code in your own software, 
+            it'd be a good idea to recompile it, changing the 
+            <EM>WILSON_HOOK</EM> strings to something different, so that your 
+            application will not conflict with any other software using this 
+            approach. </P>
+            <H3>Warning Two: Return Values</H3>
+            <P>The other major problem with my particular approach to hooking is 
+            that it doesn't allow you to return a value when a hook callback is 
+            called. Normally, a hook callback function is allowed to return a 
+            value, which can affect whatever event is happening that generated 
+            the hook. For instance, when the CBT <CODE>CREATEWND</CODE> hook is 
+            raised, setting a non-zero return value prevents the window from 
+            being created. This functionality could be used to prevent certain 
+            classes or types of windows from being created. However, in its 
+            current form, my solution doesn't allow you to set a return value. 
+            There is, theoretically, a fairly easy workaround for this. I use 
+            the <CODE>SendNotifyMessage</CODE> in the C++ DLL to send the 
+            message to the hooking application, which means the DLL just posts a 
+            message and then doesn't wait around to see if the hooking 
+            application actually processes it. However, you could instead use 
+            the <CODE>SendMessage</CODE> command, which forces the DLL to wait 
+            for the hooking application to process the hook and return the value 
+            set in <CODE>Message.Result</CODE> in the managed code. The downside 
+            to this approach, and the reason I didn't implement it this way, is 
+            that it can very easily lead to system crashes. If your managed code 
+            encounters an unhandled exception, execution won't return to the 
+            calling <CODE>SendMessage</CODE> function, which in turn hangs the 
+            application being hooked. A dozen hard reboots in the span of about 
+            20 minutes convinced me of the wisdom of 
+            <CODE>SendNotifyMessage</CODE>. </P>
+            <H3>The RegisterWindowMessage Function</H3>
+            <P>My code uses the <CODE>RegisterWindowMessage</CODE> function. 
+            This is an API function which generates a unique message ID that can 
+            be used among multiple applications. When one application registers 
+            a message with a certain name, any other application that registers 
+            a message of the same name will get the same message ID in response. 
+            All the messages posted by the DLL use message IDs generated by this 
+            function. Thus, managed code must also call this function to know 
+            what message IDs to watch for in <CODE>WndProc</CODE>. </P>
+            <H3>Inside the DLL</H3>
+            <P>The C++ DLL contains code to handle eight different types of 
+            hooks. If you are so inclined, you should be able to follow the 
+            model and easily create additional code to handle the other hook 
+            types. For each type of hook, there are three functions in the DLL. 
+            These three functions are more-or-less the same between all the 
+            different hook types. </P>
+            <P><CODE>InitializeAbcHook</CODE> is an exported function that's 
+            called from managed code. The first parameter is the ID of the 
+            thread to hook. Setting this to zero will hook all processes -- 
+            giving you a global hook. You could also use this to only hook 
+            events from one thread, which in many scenarios would be far more 
+            efficient than hooking events in all threads. The second parameter 
+            is the handle of the window that hook events will be broadcast to. 
+            This should be the handle of a form or a control. The 
+            <CODE>InitializeAbcHook</CODE> function checks to see if a message 
+            handle has already been stored (a.k.a., another application is 
+            already hooking using our DLL), then stores this handle, and finally 
+            installs the hook using this line: </P><PRE>hookAbc = SetWindowsHookEx(WH_ABC, (HOOKPROC)AbcHookCallback, 
+                                g_appInstance, threadID);</PRE>
+            <P><CODE>UninitializeAbcHook</CODE> just removes the hook. Make sure 
+            your managed code application calls this before quitting -- if you 
+            don't, the DLL will keep hooking, even though your application 
+            (that's supposed to receive the hooks) has ended. This can lead to 
+            some major problems, as well as needlessly degrades performance. 
+</P>
+            <P><CODE>AbcHookCallback</CODE> is the actual callback function, and 
+            varies a bit depending on the hook type. For the simplest hooks, 
+            like mouse and keyboard hooks, this function just sends the 
+            necessary message to the queue of the hooking application, and then 
+            continues the hook chain by calling <CODE>CallNextHookEx</CODE>. For 
+            hooks like CBT or Shell, there are multiple types of events that 
+            could be occuring -- such as <CODE>ACTIVATE</CODE> or 
+            <CODE>CREATEWND</CODE>. The callback function determines which type 
+            of sub-hook is being called, and then raises the appropriate event. 
+            For <CODE>CallWndProc</CODE> and <CODE>GetMsg</CODE>, there is too 
+            much data to send to the hooking application using only one message. 
+            For these two hooks, after all, there are four pieces of data we 
+            want to know in our managed application: the handle of the hooked 
+            window, the message that was hooked, and the <CODE>lParam</CODE> and 
+            <CODE>wParam</CODE> values -- however, when sending our own messages 
+            to the hooking application, we can only send data in 
+            <CODE>lParam</CODE> and <CODE>wParam</CODE>. So these two callback 
+            functions send two messages, one with the handle and intercepted 
+            message, the other with the intercepted <CODE>lParam</CODE> and 
+            <CODE>wParam</CODE>. They also have a check to prevent infinite 
+            recursion -- <CODE>GetMsg</CODE> sends a message to the hooking 
+            application, which is in turn intercepted by the same callback 
+            function that posted the message. </P>
+            <H2>The Managed Code: GlobalHooks.cs</H2>
+            <P>I've created a class called <CODE>GlobalHooks</CODE> which 
+            functions as an intermediary between a managed application and the 
+            DLL, making it easy to implement global hooks in your own projects. 
+            The class contains an abstract internal class called 
+            <CODE>Hook</CODE>, as well as eight subclasses of <CODE>Hook</CODE>, 
+            one for each type of hook supported. </P>
+            <P>To use global system hooks in your own code, the first thing to 
+            do is create an instance of the <CODE>GlobalHooks</CODE> class: </P><PRE>    private GlobalHooks _GlobalHooks;
+</PRE>
+            <P>When you instantiate this class, you must pass it a window 
+            handle: </P><PRE>    _GlobalHooks = new GlobalHooks(this.Handle);
+</PRE>
+            <P>You also need to override the <CODE>WndProc</CODE> function to 
+            allow the <CODE>GlobalHooks</CODE> function to process all incoming 
+            messages. This <CODE>ProcessWindowMessage</CODE> function checks for 
+            messages coming from the DLL, indicating a hook notification has 
+            been raised. </P><PRE>    protected override void WndProc(ref Message m)
+    {
+        if (_GlobalHooks != null)
+            _GlobalHooks.ProcessWindowMessage(ref m);
+
+        base.WndProc (ref m);
+    }
+</PRE>
+            <P>Next, you need to create some event handlers for whatever you 
+            want to hook. For instance, to receive notification every time a 
+            top-level window is created, create an event handler for the 
+            <CODE>GlobalHooks.Shell.WindowCreated</CODE>, as follows: </P><PRE>    _GlobalHooks.Shell.WindowCreated += 
+               new GlobalHooks.WindowEventHandler(Shell_WindowCreated);</PRE>
+            <P>To begin hooking events, you must call the <CODE>Start</CODE> 
+            function in the appropriate class. </P><PRE>    _GlobalHooks.Shell.Start();
+</PRE>
+            <P>Just as important are the corresponding <CODE>Stop</CODE> 
+            functions, which must be called when you want to stop hooking 
+            events. Make sure you stop hooking events before your application 
+            terminates. </P><PRE>    _GlobalHooks.Shell.Stop();
+</PRE>
+            <P>That's all it takes! </P>
+            <H2>Final Thoughts</H2>
+            <P>Despite the potential pitfalls, the technique described here has 
+            worked quite well for me when I've needed to hook global events. 
+            However, if you're creating an application that only needs to hook 
+            low-level mouse or keyboard events, Michael Kennedy's code might be 
+            better suited for you. Also, the <CODE>CallWndProc</CODE> and 
+            <CODE>GetMsg</CODE> hooks are both pretty inefficient, as they 
+            essentially duplicate every message generated by Windows (creating a 
+            copy to send to the hooking application). If your application only 
+            needs to hook one or two messages, you can easily rewrite the DLL to 
+            only post notification messages to the hooking application when the 
+            hooked program receives those one or two messages you're looking 
+            for. </P><!-- Article Ends --></DIV></SPAN>
+            <SCRIPT 
+            src="Using Window Messages to Implement Global System Hooks in C# - The Code Project - System Programming_files/togglePre.js" 
+            type=text/javascript></SCRIPT>
+
+            <H2>About ChrisP1118</H2>
+            <DIV style="OVERFLOW: hidden">
+            <TABLE border=0>
+              <TBODY>
+              <TR vAlign=top>
+                <TD class=smallText noWrap><BR></TD>
+                <TD class=smallText>I currently live in a small town in 
+                  Burkina Faso, where I spend some of my free time (during the 
+                  hours when there's electricity) playing around with C#. For a 
+                  bit more about my less nerdy activities, check out <A 
+                  href="http://chrisburkina.blogspot.com/">http://chrisburkina.blogspot.com/</A> 
+                  or <A 
+                  href="http://www.youtube.com/watch?v=Rw1Pb7hlIWw">http://www.youtube.com/watch?v=Rw1Pb7hlIWw</A> 
+                  -- neither of them, however, has anything to do with C#.
+                  <P class=smallText>Click <A 
+                  href="http://www.codeproject.com/script/profile/whos_who.asp?vt=arts&amp;id=83302">here</A> 
+                  to view ChrisP1118's online 
+            profile.</P></TD></TR></TBODY></TABLE></DIV><BR>
+            <TABLE cellPadding=4 width="100%" border=0>
+              <TBODY>
+              <TR vAlign=top>
+                <TD width="100%">
+                  <H2>Other popular System Programming articles:</H2>
+                  <UL>
+                    <LI><A 
+                    href="http://www.codeproject.com/cs/system/wmi.asp">Windows 
+                    Management Instrumentation (WMI) Implementation</A>
+                    <DIV class=smallText>Implementing Windows Management 
+                    Instrumentation (WMI) in your application.</DIV>
+                    <LI><A 
+                    href="http://www.codeproject.com/cs/system/floppystepper.asp">Controlling 
+                    Floppy Drive Stepper Motor via Parallel Port</A>
+                    <DIV class=smallText>Controlling a floppy drive stepper 
+                    motor using computer's parallel port</DIV>
+                    <LI><A 
+                    href="http://www.codeproject.com/cs/system/wmiproviderguide.asp">A 
+                    simple guide to WMI providers</A>
+                    <DIV class=smallText>How to write WMI providers in C#</DIV>
+                    <LI><A 
+                    href="http://www.codeproject.com/cs/system/CSLLKeyboard.asp">Low-level 
+                    Windows API hooks from C# to stop unwanted keystrokes</A>
+                    <DIV class=smallText>Babies and other animals love nothing 
+                    better than to have a whack at the keyboard, with all sorts 
+                    of unpredictable results. This application demonstrates how 
+                    to trap keystrokes before they can do any 
+                  damage.</DIV></LI></UL></TD>
+                <TD width=360>
+                  <SCRIPT language=javascript>document.write("<IFRAME src=\"/script/ann/ServeHTML.aspx?C=False&id=2257&cb=7993903\" border=0 frameborder=0 scrolling=no width=300 height=250></IFRAME>");</SCRIPT>
+                </TD></TR></TBODY></TABLE>
+            <FORM action=/script/rating/code/app/insert_vote.asp 
+            method=post><INPUT type=hidden 
+            value=WilsonSystemGlobalHooks/useritems5/3/2007 name=vote_name> 
+            <INPUT type=hidden value=/cs/system/WilsonSystemGlobalHooks.asp 
+            name=goal> 
+            <TABLE cellSpacing=0 cellPadding=1 width="100%" bgColor=#ff9900 
+            border=0>
+              <TBODY>
+              <TR>
+                <TD width="100%">
+                  <TABLE cellSpacing=0 cellPadding=4 width="100%" 
+                  bgColor=#fbedbb border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=smalltext vAlign=center>[<A 
+                        href="http://www.codeproject.com/cs/system/WilsonSystemGlobalHooks.asp#__top">Top</A>]</TD>
+                      <TD vAlign=center noWrap align=right><I><B>Rate this 
+                        Article for us!</B></I>&nbsp;&nbsp;&nbsp;&nbsp; 
+                        <I>Poor</I><INPUT type=radio value=1 name=rate><INPUT 
+                        type=radio value=2 name=rate><INPUT type=radio value=3 
+                        name=rate><INPUT type=radio value=4 name=rate><INPUT 
+                        type=radio value=5 
+name=rate><I>Excellent</I>&nbsp;&nbsp;<INPUT class=FormButton type=submit value=Vote> 
+                      </TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></FORM>
+            <CENTER>
+            <TABLE cellSpacing=0 cellPadding=0 border=0>
+              <TBODY>
+              <TR>
+                <TD 
+                style="PADDING-RIGHT: 2px; PADDING-LEFT: 2px; PADDING-BOTTOM: 2px; PADDING-TOP: 2px; BACKGROUND-COLOR: #eee" 
+                width=120 height=60>
+                  <DIV align=center>
+                  <SCRIPT language=javascript>document.write("<a href=\"/script/admentor/admentorredir.asp?id=3024&way=ban\" target=_blank><img src=\"/script/ann/ServeImg.aspx?File=%2Fscript%2Fadmentor%2Fimages%2FDundas%5F120x60%2Egif&C=False&id=3024&cb=7993908\" alt=\"\" border=0 width=120 height=60></a>");</SCRIPT>
+                  </DIV></TD>
+                <TD width=100>&nbsp;</TD>
+                <TD width=468 height=60><SPAN id=AdBanner5>
+                  <SCRIPT language=javascript>document.write("<a href=\"/script/admentor/admentorredir.asp?id=3485&way=ban\" target=_blank><img src=\"/script/ann/ServeImg.aspx?File=%2Fscript%2Fadmentor%2Fimages%2Fcp%5Fdaily%5F468x60%2Egif&C=False&id=3485&cb=7993869\" alt=\"\" border=0 width=468 height=60></a>");</SCRIPT>
+                  </SPAN></TD></TR></TBODY></TABLE></CENTER><A name=__comments></A>
+            <SCRIPT language=JavaScript>
+
+function MsgVoteForm(MemberID, MsgID)
+{
+	document.write("<span id=\"MVF" + MsgID + "\">");
+	document.write("Rate this message: ");
+	for (var i=1; i<=5;i++)
+	{
+		document.write("<a href='#xx" + MsgID.toString() + "xx' title='give this message a vote of " + i.toString());
+		document.write("' onclick='return RateMsg(" + MemberID.toString() + ", " + MsgID.toString() + ", ");
+		document.write(i.toString() + ")'><b>" + i.toString() + "</b></a> ");
+	}
+	document.write(" (out of 5)");
+	document.writeln("</span>");
+	
+	
+}
+
+function RetypeForm(MemberID, MsgID)
+{
+	var types = [
+				 {pic:'news_general.gif',  id: 1},
+	             {pic:'news_info.gif',     id: 2},
+	             {pic:'news_question.gif', id: 4},
+	             {pic:'news_answer.gif',   id: 8},
+	             {pic:'news_game.gif',     id: 16},
+	             {pic:'news_spam.gif',     id: 32}
+	            ];
+	
+	document.write("<span id=\"RTF" + MsgID + "\">");
+	for (var i=0;i<types.length;i++)
+	{
+		document.write("<a href='/script/comments/retype?msg=" + MsgID.toString());
+		document.write("&mid=" + MemberID.toString() + "&type=" + types[i].id + "'>");
+		document.write("<img border=0 src='/script/images/" + types[i].pic + "'></a><br />");
+	}
+	document.writeln("</span>");
+}
+
+function ReportMsg(userid, msgid, score)
+{
+	if (confirm("Are you sure you want to report this message?") == true)
+		return RateMsg(userid, msgid, score);
+	else return false;
+}
+
+
+function RateMsg(userid, msgid, score)
+{
+
+   var req = new ActiveXObject("Msxml2.XMLHTTP"); 
+
+   req.onreadystatechange = function()
+   {
+      if ( req.readyState == 4 )
+      {
+         if ( req.status == 200 )
+         {
+         	var respText = req.responseText;
+         	var re = new RegExp("\<div\>([^\<]*)\</div\>", "g");
+         	var match = re.exec(respText);
+         	status.innerHTML = "<b>" + (match)?match[1]:"An error occured" + "</b>";
+         }
+         else
+         {
+            status.innerHTML = "<b style='color:red'>Failed!" + req.statusText + "</b>";
+         }
+      }
+   }
+   
+   var status = document.getElementById("MVF" + msgid);
+   if (!status) return;  // should never happen...   
+   status.innerHTML = "<b style='color:green'>Voting...</b>";
+   
+   var strAction = "/script/comments/vote.asp?js=1&user="+userid+"&msg="+msgid+"&score="+score;
+   req.open("GET", strAction, true);
+   req.send(null);
+   return false;
+}
+
+</SCRIPT>
+
+            <SCRIPT language=JavaScript>
+var Selected = "";
+
+var AdTime = new Date();
+
+
+// Ensures the expanded message appears reasonably close to where 
+// it should appear: on screen, and if possible, under the mouse cursor.
+function SwitchMessage(e)
+{
+   if ( !e ) e = window.event;
+   var target = e.target ? e.target : e.srcElement;
+
+   // is it a post?
+   while ( target && target.id != 'DynMessLink' )
+      target = target.parentNode;
+   if ( !target || target.id != 'DynMessLink' )
+      return;
+
+   if (Selected)
+   {
+      var body = document.getElementById(Selected + "_h1");
+      if (body)
+         body.style.display = 'none';
+      var head = document.getElementById(Selected + "_h0");
+      if (head)
+         head.bgColor = '#FEF9E7';
+   }
+
+   if (Selected == target.name) // just collapse
+      Selected="";
+   else
+   {
+      Selected = target.name;
+      var body = document.getElementById(Selected + "_h1");
+      if (body)
+      {
+         if (body.style.display=='none')
+            body.style.display='';
+         else
+            body.style.display = 'none';
+      }
+      var head = document.getElementById(Selected + "_h0");
+      if (head)
+         head.bgColor = '#99CCFF';
+
+      if ( body && head && body.style.display != 'none' )
+      {
+         // the bit that keeps the post on-screen and under the cursor
+         //var dif = (getRealPos(head, "Top") + head.offsetHeight/2) - (document.body.scrollTop+e.clientY);
+         //document.body.scrollTop += dif;
+         document.body.scrollTop = getRealPos(head, "Top") - document.body.clientHeight/10;
+         EnsureMessageVisible(target.name, true);
+      }
+   }
+
+   if ( e.preventDefault )
+      e.preventDefault();
+   else
+      e.returnValue = false;
+   return false;
+}
+
+// does its best to make a message visible on-screen (vs. scrolled off somewhere).
+function EnsureMessageVisible(msgID, bShowTop) {
+   var msgHeader = document.getElementById(msgID + "_h0");
+   var msgBody = document.getElementById(msgID + "_h1");
+
+   // determine scroll position of top and bottom
+   var scrollContainer = document.body;
+   var top = getRealPos(msgHeader, 'Top');
+   var bottom = getRealPos(msgBody, 'Top') + msgBody.offsetHeight;
+
+   // if not already visible, scroll to make it so
+   if ( scrollContainer.scrollTop > top && !bShowTop)
+      scrollContainer.scrollTop = top - document.body.clientHeight/10;
+   if ( scrollContainer.scrollTop+scrollContainer.clientHeight < bottom )
+      scrollContainer.scrollTop = bottom-scrollContainer.clientHeight;
+   if ( scrollContainer.scrollTop > top && bShowTop)
+      scrollContainer.scrollTop = top - document.body.clientHeight/10;
+}
+
+// utility
+function getRealPos(i,which)
+{
+   iPos = 0
+   while (i!=null)
+   {
+      iPos += i["offset" + which];
+      i = i.offsetParent;
+   }
+   return iPos
+}
+
+
+</SCRIPT>
+
+            <DIV id=_MessageBoard onclick=SwitchMessage(event)>
+            <TABLE cellSpacing=0 cellPadding=0 width="100%" bgColor=#ff9900 
+            border=0>
+              <TBODY>
+              <TR>
+                <TD width="100%">
+                  <TABLE id=ForumTable cellSpacing=1 cellPadding=0 width="100%" 
+                  bgColor=#ff9900 border=0>
+                    <FORM 
+                    action=/script/comments/app/do_filtermessages.asp?main=/cs/system/WilsonSystemGlobalHooks.asp&amp;df=100&amp;forumid=414057 
+                    method=post>
+                    <TBODY>
+                    <TR>
+                      <TD>
+                        <TABLE cellSpacing=0 cellPadding=3 width="100%" 
+                        bgColor=white border=0>
+                          <TBODY>
+                          <TR bgColor=#fbedbb>
+                            <TD class=smalltext noWrap><A 
+                              href="http://www.codeproject.com/script/comments/faq.asp"><IMG 
+                              height=16 
+                              src="Using Window Messages to Implement Global System Hooks in C# - The Code Project - System Programming_files/forum_faq.gif" 
+                              width=16 align=absMiddle border=0> 
+                            <B>FAQ</B></A>&nbsp;</TD>
+                            <TD class=smalltext vAlign=top noWrap 
+                              align=right>Message score threshold <SELECT 
+                              class=smalltext size=1 name=noise><OPTION 
+                                value=1>1.0</OPTION> <OPTION 
+                                value=2>2.0</OPTION> <OPTION value=3 
+                                selected>3.0</OPTION> <OPTION 
+                                value=4>4.0</OPTION> <OPTION 
+                              value=5>5.0</OPTION></SELECT>&nbsp;&nbsp;</TD>
+                            <TD class=smalltext vAlign=center noWrap align=right 
+                            colSpan=2><A 
+                              href="http://www.codeproject.com/script/comments/search_comments.asp?forumid=414057"><IMG 
+                              height=15 
+                              src="Using Window Messages to Implement Global System Hooks in C# - The Code Project - System Programming_files/forum_search.gif" 
+                              width=16 border=0> Search comments</A> &nbsp;</TD>
+                            <TD vAlign=top align=right><INPUT class=FormButton type=submit value="Set Options" name=submit></TD></TR>
+                          <TR bgColor=#ff9900>
+                            <TD width="100%">&nbsp;</TD>
+                            <TD class=smalltext vAlign=top noWrap 
+                              align=right>View <SELECT class=smalltext size=1 
+                              name=expand><OPTION value=0>Normal 
+                                (slow)</OPTION> <OPTION value=2>Preview 
+                                (slow)</OPTION> <OPTION value=5 selected>Message 
+                                View</OPTION> <OPTION value=6>Topic 
+                                View</OPTION> <OPTION value=1>Thread 
+                                View</OPTION> <OPTION 
+                              value=3>Expanded</OPTION></SELECT>&nbsp;&nbsp;</TD>
+                            <TD class=smalltext vAlign=top noWrap>Per page 
+                              <SELECT class=smalltext size=1 
+                                name=perpage><OPTION value=10>10</OPTION> 
+                                <OPTION value=25 selected>25</OPTION> <OPTION 
+                                value=50>50</OPTION></SELECT></TD>
+                            <TD 
+                    colSpan=2>&nbsp;</TD></TR></TBODY></TABLE></TD></TR></FORM>
+                    <TR bgColor=#fbedbb>
+                      <TD><A name=xx0xx></A>
+                        <TABLE cellPadding=2 width="100%" bgColor=#fbedbb 
+                        border=0>
+                          <TBODY>
+                          <TR>
+                            <TD class=messagetitle><IMG height=16 
+                              src="Using Window Messages to Implement Global System Hooks in C# - The Code Project - System Programming_files/forum_newmsg.gif" 
+                              width=16 align=top border=0><A class=HoverLink 
+                              title="Add a new message to the discussions" 
+                              href="http://www.codeproject.com/script/comments/user_new.asp?main=/cs/system/WilsonSystemGlobalHooks.asp&amp;df=100&amp;forumid=414057" 
+                              target=_top name=HoverNL><B>New Message</B></A></TD>
+                            <TD class=messagetitle>Msgs 1 to 19 of 19 (Total: 
+                              19) (<A 
+                              href="http://www.codeproject.com/cs/system/WilsonSystemGlobalHooks.asp?df=100&amp;forumid=414057">Refresh</A>)</TD>
+                            <TD noWrap align=right><FONT 
+                              class=messagetitle><SPAN 
+                              class=HoverLink>First</SPAN> <SPAN 
+                              class=HoverLink>Prev</SPAN> <SPAN 
+                              class=HoverLink>Next</SPAN> <SPAN 
+                              class=HoverLink>&nbsp;&nbsp;&nbsp;&nbsp;</SPAN> 
+                              </FONT></TD></TR></TBODY></TABLE></TD></TR>
+                    <TR bgColor=white>
+                      <TD>
+                        <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD width="100%">
+                              <TABLE cellSpacing=0 cellPadding=2 bgColor=#fbedbb 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD class=messagetitle 
+                                width="100%">Subject&nbsp;</TD>
+                                <TD class=messagetitle noWrap 
+                                width=140>Author&nbsp;</TD>
+                                <TD style="WIDTH: 9em" noWrap align=right 
+                                width=120><FONT 
+                                class=messagetitle>Date&nbsp;</FONT></TD></TR></TBODY></TABLE></TD></TR>
+                          <TR>
+                            <TD><IMG height=5 
+                              src="Using Window Messages to Implement Global System Hooks in C# - The Code Project - System Programming_files/t.gif" 
+                              width=1 border=0></TD></TR>
+                          <TR id=2100393_h0 bgColor=#fef9e7>
+                            <TD width="100%">
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD bgColor=white><A name=xx2100393xx></A><IMG 
+                                src="Using Window Messages to Implement Global System Hooks in C# - The Code Project - System Programming_files/news_general.gif" 
+                                align=absMiddle>&nbsp;</TD>
+                                <TD class=messagetitle width="100%"><A 
+                                class=messagetitle id=DynMessLink 
+                                href="http://www.codeproject.com/cs/system/WilsonSystemGlobalHooks.asp?df=100&amp;forumid=414057&amp;select=2100393#xx2100393xx" 
+                                name=2100393><B>Hooks in WinCE</B></A></TD>
+                                <TD vAlign=bottom noWrap><A 
+                                href="http://www.codeproject.com/script/profile/whos_who.asp?id=3068947"><IMG 
+                                title="Click for User Profile" height=15 
+                                src="Using Window Messages to Implement Global System Hooks in C# - The Code Project - System Programming_files/userinfo.gif" 
+                                width=14 border=0></A>&nbsp;</TD>
+                                <TD noWrap width=140><FONT 
+                                class=messagetitle><B>Rahul P. 
+                                Shukla</B>&nbsp;</FONT></TD>
+                                <TD style="WIDTH: 9em" noWrap align=right 
+                                width=120><FONT class=messagetitle><B>8:54 26 
+                                Jun 
+                            '07</B>&nbsp;</FONT></TD></TR></TBODY></TABLE></TD></TR>
+                          <TR id=2100393_h1 style="DISPLAY: none">
+                            <TD width="100%">
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD><IMG 
+                                src="Using Window Messages to Implement Global System Hooks in C# - The Code Project - System Programming_files/news_blank.gif" 
+                                align=absMiddle>&nbsp;</TD>
+                                <TD width="100%" bgColor=#d5eaff>
+                                <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+                                border=0>
+                                <TBODY>
+                                <TR>
+                                <TD>
+                                <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                                border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2><FONT 
+                                class=messagecontent>Hi,<BR>Can we create same 
+                                hooks in WinCE. I have to trap the keyboard 
+                                messages intended for other 
+                                application.<BR>please reply if its possible 
+                                anyway in WinCE.<BR><BR>thanks <BR><BR>
+                                <DIV class=ForumSig>Thanks,<BR>Rahul <IMG 
+                                src="Using Window Messages to Implement Global System Hooks in C# - The Code Project - System Programming_files/smiley_smile.gif" 
+                                align=absMiddle></DIV><BR>&nbsp;</FONT></TD></TR>
+                                <TR vAlign=top>
+                                <TD class=messagetitle>[<A 
+                                title="Reply to this current thread" 
+                                href="http://www.codeproject.com/script/comments/user_reply.asp?main=/cs/system/WilsonSystemGlobalHooks.asp&amp;df=100&amp;forumid=414057&amp;select=2100393">Reply</A> 
+                                | <A 
+                                title="Email a reply to the author of this message" 
+                                href="http://www.codeproject.com/script/comments/user_mail.asp?main=/cs/system/WilsonSystemGlobalHooks.asp&amp;df=100&amp;forumid=414057&amp;select=2100393">Email</A> 
+                                | <A 
+                                title="View only messages within this thread" 
+                                href="http://www.codeproject.com/cs/system/WilsonSystemGlobalHooks.asp?df=100&amp;tid=2100393&amp;forumid=414057&amp;select=2100393#xx2100393xx">View 
+                                Thread</A> | <A 
+                                title="Get the URL for this message" 
+                                href="http://www.codeproject.com/cs/system/WilsonSystemGlobalHooks.asp?msg=2100393#xx2100393xx">PermaLink</A> 
+                                | <A title="Go to Thread Start" 
+                                href="http://www.codeproject.com/cs/system/WilsonSystemGlobalHooks.asp?msg=2100393#xx2100393xx">Go 
+                                to Thread Start</A>]</TD>
+                                <TD class=messagetitle align=right>
+                                <SCRIPT language=Javascript>MsgVoteForm(3068947,2100393);</SCRIPT>
+                                </TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+                          <TR>
+                            <TD><IMG height=5 
+                              src="Using Window Messages to Implement Global System Hooks in C# - The Code Project - System Programming_files/t.gif" 
+                              width=1 border=0></TD></TR>
+                          <TR height=1>
+                            <TD bgColor=#ff9900><IMG height=1 
+                              src="Using Window Messages to Implement Global System Hooks in C# - The Code Project - System Programming_files/t.gif" 
+                              width=1></TD></TR>
+                          <TR id=2061665_h0 bgColor=#fef9e7>
+                            <TD width="100%">
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD bgColor=white><A name=xx2061665xx></A><IMG 
+                                src="Using Window Messages to Implement Global System Hooks in C# - The Code Project - System Programming_files/news_question.gif" 
+                                align=absMiddle>&nbsp;</TD>
+                                <TD class=messagetitle width="100%"><A 
+                                class=messagetitle id=DynMessLink 
+                                href="http://www.codeproject.com/cs/system/WilsonSystemGlobalHooks.asp?df=100&amp;forumid=414057&amp;select=2061665#xx2061665xx" 
+                                name=2061665><B>problem with IE7 in protect 
+                                mode</B></A></TD>
+                                <TD vAlign=bottom noWrap><A 
+                                href="http://www.codeproject.com/script/profile/whos_who.asp?id=2556547"><IMG 
+                                title="Click for User Profile" height=15 
+                                src="Using Window Messages to Implement Global System Hooks in C# - The Code Project - System Programming_files/userinfo.gif" 
+                                width=14 border=0></A>&nbsp;</TD>
+                                <TD noWrap width=140><FONT 
+                                class=messagetitle><B>LuxNw</B>&nbsp;</FONT></TD>
+                                <TD style="WIDTH: 9em" noWrap align=right 
+                                width=120><FONT class=messagetitle><B>10:58 31 
+                                May 
+                            '07</B>&nbsp;</FONT></TD></TR></TBODY></TABLE></TD></TR>
+                          <TR id=2061665_h1 style="DISPLAY: none">
+                            <TD width="100%">
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD><IMG 
+                                src="Using Window Messages to Implement Global System Hooks in C# - The Code Project - System Programming_files/news_blank.gif" 
+                                align=absMiddle>&nbsp;</TD>
+                                <TD width="100%" bgColor=#d5eaff>
+                                <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+                                border=0>
+                                <TBODY>
+                                <TR>
+                                <TD>
+                                <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                                border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2><FONT 
+                                class=messagecontent>Hi,<BR>i try your app on 
+                                Vista with IE7 in protect mode, and it doesn't 
+                                work fine...<BR>your app doesn't detect IE7 
+                                message.<BR>If i turn off protect mode all work 
+                                fine.<BR>Have you any idea how to solve the 
+                                problem?<BR><BR><BR>&nbsp;</FONT></TD></TR>
+                                <TR vAlign=top>
+                                <TD class=messagetitle>[<A 
+                                title="Reply to this current thread" 
+                                href="http://www.codeproject.com/script/comments/user_reply.asp?main=/cs/system/WilsonSystemGlobalHooks.asp&amp;df=100&amp;forumid=414057&amp;select=2061665">Reply</A> 
+                                | <A 
+                                title="Email a reply to the author of this message" 
+                                href="http://www.codeproject.com/script/comments/user_mail.asp?main=/cs/system/WilsonSystemGlobalHooks.asp&amp;df=100&amp;forumid=414057&amp;select=2061665">Email</A> 
+                                | <A 
+                                title="View only messages within this thread" 
+                                href="http://www.codeproject.com/cs/system/WilsonSystemGlobalHooks.asp?df=100&amp;tid=2061665&amp;forumid=414057&amp;select=2061665#xx2061665xx">View 
+                                Thread</A> | <A 
+                                title="Get the URL for this message" 
+                                href="http://www.codeproject.com/cs/system/WilsonSystemGlobalHooks.asp?msg=2061665#xx2061665xx">PermaLink</A> 
+                                | <A title="Go to Thread Start" 
+                                href="http://www.codeproject.com/cs/system/WilsonSystemGlobalHooks.asp?msg=2061665#xx2061665xx">Go 
+                                to Thread Start</A>]</TD>
+                                <TD class=messagetitle align=right>
+                                <SCRIPT language=Javascript>MsgVoteForm(2556547,2061665);</SCRIPT>
+                                </TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+                          <TR>
+                            <TD><IMG height=5 
+                              src="Using Window Messages to Implement Global System Hooks in C# - The Code Project - System Programming_files/t.gif" 
+                              width=1 border=0></TD></TR>
+                          <TR height=1>
+                            <TD bgColor=#ff9900><IMG height=1 
+                              src="Using Window Messages to Implement Global System Hooks in C# - The Code Project - System Programming_files/t.gif" 
+                              width=1></TD></TR>
+                          <TR id=2045533_h0 bgColor=#fef9e7>
+                            <TD width="100%">
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD bgColor=white><A name=xx2045533xx></A><IMG 
+                                src="Using Window Messages to Implement Global System Hooks in C# - The Code Project - System Programming_files/news_question.gif" 
+                                align=absMiddle>&nbsp;</TD>
+                                <TD class=messagetitle width="100%"><A 
+                                class=messagetitle id=DynMessLink 
+                                href="http://www.codeproject.com/cs/system/WilsonSystemGlobalHooks.asp?df=100&amp;forumid=414057&amp;select=2045533#xx2045533xx" 
+                                name=2045533><B>getting text of currently 
+                                selected menu</B></A></TD>
+                                <TD vAlign=bottom noWrap><A 
+                                href="http://www.codeproject.com/script/profile/whos_who.asp?id=2992753"><IMG 
+                                title="Click for User Profile" height=15 
+                                src="Using Window Messages to Implement Global System Hooks in C# - The Code Project - System Programming_files/userinfo.gif" 
+                                width=14 border=0></A>&nbsp;</TD>
+                                <TD noWrap width=140><FONT 
+                                class=messagetitle><B>neo786</B>&nbsp;</FONT></TD>
+                                <TD style="WIDTH: 9em" noWrap align=right 
+                                width=120><FONT class=messagetitle><B>18:05 20 
+                                May 
+                            '07</B>&nbsp;</FONT></TD></TR></TBODY></TABLE></TD></TR>
+                          <TR id=2045533_h1 style="DISPLAY: none">
+                            <TD width="100%">
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD><IMG 
+                                src="Using Window Messages to Implement Global System Hooks in C# - The Code Project - System Programming_files/news_blank.gif" 
+                                align=absMiddle>&nbsp;</TD>
+                                <TD width="100%" bgColor=#d5eaff>
+                                <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+                                border=0>
+                                <TBODY>
+                                <TR>
+                                <TD>
+                                <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                                border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2><FONT class=messagecontent>Hi, Is 
+                                it possible to find out the text of the 
+                                currently selected menu item e.g. file/edit 
+                                save/print... <BR>using the GetMsg hook? Is 
+                                there a message fired everytime a user 
+                                hhighlights a menu item.<BR>Thanks, D 
+                                <BR>&nbsp;</FONT></TD></TR>
+                                <TR vAlign=top>
+                                <TD class=messagetitle>[<A 
+                                title="Reply to this current thread" 
+                                href="http://www.codeproject.com/script/comments/user_reply.asp?main=/cs/system/WilsonSystemGlobalHooks.asp&amp;df=100&amp;forumid=414057&amp;select=2045533">Reply</A> 
+                                | <A 
+                                title="Email a reply to the author of this message" 
+                                href="http://www.codeproject.com/script/comments/user_mail.asp?main=/cs/system/WilsonSystemGlobalHooks.asp&amp;df=100&amp;forumid=414057&amp;select=2045533">Email</A> 
+                                | <A 
+                                title="View only messages within this thread" 
+                                href="http://www.codeproject.com/cs/system/WilsonSystemGlobalHooks.asp?df=100&amp;tid=2045533&amp;forumid=414057&amp;select=2045533#xx2045533xx">View 
+                                Thread</A> | <A 
+                                title="Get the URL for this message" 
+                                href="http://www.codeproject.com/cs/system/WilsonSystemGlobalHooks.asp?msg=2045533#xx2045533xx">PermaLink</A> 
+                                | <A title="Go to Thread Start" 
+                                href="http://www.codeproject.com/cs/system/WilsonSystemGlobalHooks.asp?msg=2045533#xx2045533xx">Go 
+                                to Thread Start</A>]</TD>
+                                <TD class=messagetitle align=right>
+                                <SCRIPT language=Javascript>MsgVoteForm(2992753,2045533);</SCRIPT>
+                                </TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+                          <TR>
+                            <TD><IMG height=5 
+                              src="Using Window Messages to Implement Global System Hooks in C# - The Code Project - System Programming_files/t.gif" 
+                              width=1 border=0></TD></TR>
+                          <TR height=1>
+                            <TD bgColor=#ff9900><IMG height=1 
+                              src="Using Window Messages to Implement Global System Hooks in C# - The Code Project - System Programming_files/t.gif" 
+                              width=1></TD></TR>
+                          <TR id=2044403_h0 bgColor=#fef9e7>
+                            <TD width="100%">
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD bgColor=white><A name=xx2044403xx></A><IMG 
+                                src="Using Window Messages to Implement Global System Hooks in C# - The Code Project - System Programming_files/news_question.gif" 
+                                align=absMiddle>&nbsp;</TD>
+                                <TD class=messagetitle width="100%"><A 
+                                class=messagetitle id=DynMessLink 
+                                href="http://www.codeproject.com/cs/system/WilsonSystemGlobalHooks.asp?df=100&amp;forumid=414057&amp;select=2044403#xx2044403xx" 
+                                name=2044403><B>Hello , I need to use your hook 
+                                model in more than one application at a 
+                                time</B></A></TD>
+                                <TD vAlign=bottom noWrap><A 
+                                href="http://www.codeproject.com/script/profile/whos_who.asp?id=3208448"><IMG 
+                                title="Click for User Profile" height=15 
+                                src="Using Window Messages to Implement Global System Hooks in C# - The Code Project - System Programming_files/userinfo.gif" 
+                                width=14 border=0></A>&nbsp;</TD>
+                                <TD noWrap width=140><FONT 
+                                class=messagetitle><B>Ky 
+                                Nam</B>&nbsp;</FONT></TD>
+                                <TD style="WIDTH: 9em" noWrap align=right 
+                                width=120><FONT class=messagetitle><B>23:39 18 
+                                May 
+                            '07</B>&nbsp;</FONT></TD></TR></TBODY></TABLE></TD></TR>
+                          <TR id=2044403_h1 style="DISPLAY: none">
+                            <TD width="100%">
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD><IMG 
+                                src="Using Window Messages to Implement Global System Hooks in C# - The Code Project - System Programming_files/news_blank.gif" 
+                                align=absMiddle>&nbsp;</TD>
+                                <TD width="100%" bgColor=#d5eaff>
+                                <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+                                border=0>
+                                <TBODY>
+                                <TR>
+                                <TD>
+                                <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                                border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2><FONT class=messagecontent>Hello , 
+                                can you help me with this piece of code 
+                                ?<BR><BR>I need to use your hook model in more 
+                                than one application at a time , so i write this 
+                                :<BR><BR>#include 
+                                &lt;stdlib.h&gt;<BR><BR>#include 
+                                &lt;list&gt;<BR><BR>void 
+                                ClearRegisteredWindows(LPCTSTR 
+                                HookMessage)<BR><BR>{<BR><BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RemoveProp(GetDesktopWindow(), 
+                                HookMessage);<BR><BR>}<BR><BR>void 
+                                RegisterWindow(HWND Window , LPCTSTR 
+                                HookMessage)<BR><BR>{<BR><BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;std::list&lt;HWND&gt;* 
+                                l;<BR><BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;l 
+                                = (std::list&lt;HWND&gt;*) 
+                                GetProp(GetDesktopWindow(), 
+                                HookMessage);<BR><BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if 
+                                (l==NULL)<BR><BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{<BR><BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;l 
+                                = new 
+                                std::list&lt;HWND&gt;;<BR><BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;BOOL 
+                                kq = SetProp(GetDesktopWindow(), HookMessage, 
+                                l);<BR><BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<BR><BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;l-&gt;push_back(Window);<BR><BR>}<BR><BR>void 
+                                SendHookNotifyMessage(LPCTSTR HookMessage, UINT 
+                                msg, WPARAM wparam, LPARAM 
+                                lparam)<BR><BR>{<BR><BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;std::list&lt;HWND&gt;* 
+                                l;<BR><BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;l 
+                                = (std::list&lt;HWND&gt;* ) 
+                                GetProp(GetDesktopWindow(), 
+                                HookMessage);<BR><BR><BR><BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//i 
+                                think the error occurs 
+                                here<BR><BR><BR><BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;for 
+                                (std::list&lt;HWND&gt;::iterator i = 
+                                l-&gt;begin() ; i != l-&gt;end() ; 
+                                i++)<BR><BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SendNotifyMessage(*i, 
+                                msg, wparam, 
+                                lparam);<BR><BR>}<BR><BR><BR><BR>Some other 
+                                codes :<BR><BR>#include 
+                                &lt;malloc.h&gt;<BR><BR><BR><BR>LPCTSTR 
+                                HookMessagePrefix=TEXT("WILSON_HOOK_");<BR><BR>int 
+                                HookMessagePrefixSize=lstrlen(HookMessagePrefix);<BR><BR>LPTSTR 
+                                NewText ;<BR><BR>LPCTSTR AddPrefix(LPCTSTR 
+                                Text)<BR><BR>{<BR><BR>#ifdef 
+                                UNICODE&nbsp;&nbsp;<BR><BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;NewText 
+                                = (LPTSTR) realloc(NewText, 
+                                (HookMessagePrefixSize + lstrlen(Text) ) * 2 + 
+                                1);<BR><BR>#else 
+                                <BR><BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;NewText 
+                                = (LPTSTR) realloc(NewText, 
+                                HookMessagePrefixSize + lstrlen(Text) 
+                                +1);<BR><BR>#endif 
+                                <BR><BR><BR><BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lstrcpy(NewText,HookMessagePrefix);<BR><BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return 
+                                lstrcat(NewText,Text);<BR><BR>}<BR><BR><BR><BR>And 
+                                use it :<BR><BR>bool InitializeShellHook(int 
+                                threadID, HWND 
+                                destination)<BR><BR>{<BR><BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if 
+                                (g_appInstance == 
+                                NULL)<BR><BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{<BR><BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return 
+                                false;<BR><BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<BR><BR><BR><BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RegisterWindow(destination, 
+                                AddPrefix(TEXT("HWND_SHELL")));<BR><BR><BR><BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;hookShell 
+                                = SetWindowsHookEx(WH_SHELL, 
+                                (HOOKPROC)ShellHookCallback, g_appInstance, 
+                                threadID);<BR><BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return 
+                                hookShell != 
+                                NULL;<BR><BR>}<BR><BR><BR><BR>static LRESULT 
+                                CALLBACK ShellHookCallback(int code, WPARAM 
+                                wparam, LPARAM 
+                                lparam)<BR><BR>{<BR><BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if 
+                                (code &gt;= 
+                                0)<BR><BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{<BR><BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;UINT 
+                                msg = 
+                                0;<BR><BR><BR><BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if 
+                                (code == 
+                                HSHELL_ACTIVATESHELLWINDOW)<BR><BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;msg 
+                                = 
+                                RegisterWindowMessage(AddPrefix(TEXT("HSHELL_ACTIVATESHELLWINDOW")));<BR><BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;else 
+                                if (code == 
+                                HSHELL_GETMINRECT)<BR><BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;msg 
+                                = 
+                                RegisterWindowMessage(AddPrefix(TEXT("HSHELL_GETMINRECT")));<BR><BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;else 
+                                if (code == 
+                                HSHELL_LANGUAGE)<BR><BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;msg 
+                                = 
+                                RegisterWindowMessage(AddPrefix(TEXT("HSHELL_LANGUAGE")));<BR><BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;else 
+                                if (code == 
+                                HSHELL_REDRAW)<BR><BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;msg 
+                                = 
+                                RegisterWindowMessage(AddPrefix(TEXT("HSHELL_REDRAW")));<BR><BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;else 
+                                if (code == 
+                                HSHELL_TASKMAN)<BR><BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;msg 
+                                = 
+                                RegisterWindowMessage(AddPrefix(TEXT("HSHELL_TASKMAN")));<BR><BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;else 
+                                if (code == 
+                                HSHELL_WINDOWACTIVATED)<BR><BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;msg 
+                                = 
+                                RegisterWindowMessage(AddPrefix(TEXT("HSHELL_WINDOWACTIVATED")));<BR><BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;else 
+                                if (code == 
+                                HSHELL_WINDOWCREATED)<BR><BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;msg 
+                                = 
+                                RegisterWindowMessage(AddPrefix(TEXT("HSHELL_WINDOWCREATED")));<BR><BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;else 
+                                if (code == 
+                                HSHELL_WINDOWDESTROYED)<BR><BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;msg 
+                                = 
+                                RegisterWindowMessage(AddPrefix(TEXT("HSHELL_WINDOWDESTROYED")));<BR><BR><BR><BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if 
+                                (msg != 
+                                0)<BR><BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SendHookNotifyMessage(AddPrefix(TEXT("HWND_SHELL")), 
+                                msg, wparam, 
+                                lparam);<BR><BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<BR><BR><BR><BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return 
+                                CallNextHookEx(hookShell, code, wparam, 
+                                lparam);<BR><BR>}<BR><BR><BR><BR>I can not send 
+                                message to windows in list . The list i get from 
+                                desktop window’s property have no entry , even i 
+                                often can not get the size of list 
+                                .<BR><BR>Excuse me , i very rarely write C++ 
+                                code&nbsp;&nbsp;.<BR><BR>&nbsp;</FONT></TD></TR>
+                                <TR vAlign=top>
+                                <TD class=messagetitle>[<A 
+                                title="Reply to this current thread" 
+                                href="http://www.codeproject.com/script/comments/user_reply.asp?main=/cs/system/WilsonSystemGlobalHooks.asp&amp;df=100&amp;forumid=414057&amp;select=2044403">Reply</A> 
+                                | <A 
+                                title="Email a reply to the author of this message" 
+                                href="http://www.codeproject.com/script/comments/user_mail.asp?main=/cs/system/WilsonSystemGlobalHooks.asp&amp;df=100&amp;forumid=414057&amp;select=2044403">Email</A> 
+                                | <A 
+                                title="View only messages within this thread" 
+                                href="http://www.codeproject.com/cs/system/WilsonSystemGlobalHooks.asp?df=100&amp;tid=2044403&amp;forumid=414057&amp;select=2044403#xx2044403xx">View 
+                                Thread</A> | <A 
+                                title="Get the URL for this message" 
+                                href="http://www.codeproject.com/cs/system/WilsonSystemGlobalHooks.asp?msg=2044403#xx2044403xx">PermaLink</A> 
+                                | <A title="Go to Thread Start" 
+                                href="http://www.codeproject.com/cs/system/WilsonSystemGlobalHooks.asp?msg=2044403#xx2044403xx">Go 
+                                to Thread Start</A>]</TD>
+                                <TD class=messagetitle align=right>
+                                <SCRIPT language=Javascript>MsgVoteForm(3208448,2044403);</SCRIPT>
+                                </TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+                          <TR>
+                            <TD><IMG height=6 
+                              src="Using Window Messages to Implement Global System Hooks in C# - The Code Project - System Programming_files/t.gif" 
+                              width=1 border=0></TD></TR>
+                          <TR id=2044577_h0 bgColor=#fef9e7>
+                            <TD width="100%">
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD bgColor=white><A name=xx2044577xx></A><IMG 
+                                height=1 
+                                src="Using Window Messages to Implement Global System Hooks in C# - The Code Project - System Programming_files/ind.gif" 
+                                width=18><IMG 
+                                src="Using Window Messages to Implement Global System Hooks in C# - The Code Project - System Programming_files/news_answer.gif" 
+                                align=absMiddle>&nbsp;</TD>
+                                <TD class=messagetitle width="100%"><A 
+                                class=messagetitle id=DynMessLink 
+                                href="http://www.codeproject.com/cs/system/WilsonSystemGlobalHooks.asp?df=100&amp;forumid=414057&amp;select=2044577#xx2044577xx" 
+                                name=2044577>Re: Hello , I need to use your hook 
+                                model in more than one application at a 
+                                time</A></TD>
+                                <TD vAlign=bottom noWrap><A 
+                                href="http://www.codeproject.com/script/profile/whos_who.asp?id=83302"><IMG 
+                                title="Click for User Profile" height=15 
+                                src="Using Window Messages to Implement Global System Hooks in C# - The Code Project - System Programming_files/userinfo.gif" 
+                                width=14 border=0></A>&nbsp;</TD>
+                                <TD noWrap width=140><FONT 
+                                class=messagetitle>ChrisP1118&nbsp;</FONT></TD>
+                                <TD style="WIDTH: 9em" noWrap align=right 
+                                width=120><FONT class=messagetitle>6:03 19 May 
+                                '07&nbsp;</FONT></TD></TR></TBODY></TABLE></TD></TR>
+                          <TR id=2044577_h1 style="DISPLAY: none">
+                            <TD width="100%">
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD><IMG height=1 
+                                src="Using Window Messages to Implement Global System Hooks in C# - The Code Project - System Programming_files/ind.gif" 
+                                width=18><IMG 
+                                src="Using Window Messages to Implement Global System Hooks in C# - The Code Project - System Programming_files/news_blank.gif" 
+                                align=absMiddle>&nbsp;</TD>
+                                <TD width="100%" bgColor=#d5eaff>
+                                <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+                                border=0>
+                                <TBODY>
+                                <TR>
+                                <TD>
+                                <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                                border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2><FONT class=messagecontent>The 
+                                problem is that the DLL isn't loaded just once 
+                                for the whole system, it's loaded once for each 
+                                process. And within each process, when you 
+                                attempt to allocate memory (such as when you 
+                                create the list), it's allocated only within the 
+                                memory space of that process. So in your code, 
+                                what actually happens is that each process 
+                                creates its own std::list. The only way around 
+                                this is to use shared memory, and create the 
+                                list of window handles in shared 
+                                memory.<BR><BR>Another potential problem with 
+                                your code: GetProp and SetProp can only be used 
+                                to store handles. What you're storing are 
+                                pointers -- I don't know enough about how they 
+                                work to know if this is also causing problems, 
+                                but it could be. But even if it is properly 
+                                storing the pointers, there's still the problem 
+                                that the address referenced by the pointer is in 
+                                the memory space of another process (and 
+                                therefore inaccessible). 
+                                <BR>&nbsp;</FONT></TD></TR>
+                                <TR vAlign=top>
+                                <TD class=messagetitle>[<A 
+                                title="Reply to this current thread" 
+                                href="http://www.codeproject.com/script/comments/user_reply.asp?main=/cs/system/WilsonSystemGlobalHooks.asp&amp;df=100&amp;forumid=414057&amp;select=2044577">Reply</A> 
+                                | <A 
+                                title="Email a reply to the author of this message" 
+                                href="http://www.codeproject.com/script/comments/user_mail.asp?main=/cs/system/WilsonSystemGlobalHooks.asp&amp;df=100&amp;forumid=414057&amp;select=2044577">Email</A> 
+                                | <A 
+                                title="View only messages within this thread" 
+                                href="http://www.codeproject.com/cs/system/WilsonSystemGlobalHooks.asp?df=100&amp;tid=2044403&amp;forumid=414057&amp;select=2044577#xx2044577xx">View 
+                                Thread</A> | <A 
+                                title="Get the URL for this message" 
+                                href="http://www.codeproject.com/cs/system/WilsonSystemGlobalHooks.asp?msg=2044577#xx2044577xx">PermaLink</A> 
+                                | <A title="Go to Thread Start" 
+                                href="http://www.codeproject.com/cs/system/WilsonSystemGlobalHooks.asp?msg=2044403#xx2044403xx">Go 
+                                to Thread Start</A>]</TD>
+                                <TD class=messagetitle align=right>
+                                <SCRIPT language=Javascript>MsgVoteForm(83302,2044577);</SCRIPT>
+                                </TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+                          <TR>
+                            <TD><IMG height=5 
+                              src="Using Window Messages to Implement Global System Hooks in C# - The Code Project - System Programming_files/t.gif" 
+                              width=1 border=0></TD></TR>
+                          <TR height=1>
+                            <TD bgColor=#ff9900><IMG height=1 
+                              src="Using Window Messages to Implement Global System Hooks in C# - The Code Project - System Programming_files/t.gif" 
+                              width=1></TD></TR>
+                          <TR id=2040295_h0 bgColor=#fef9e7>
+                            <TD width="100%">
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD bgColor=white><A name=xx2040295xx></A><IMG 
+                                src="Using Window Messages to Implement Global System Hooks in C# - The Code Project - System Programming_files/news_question.gif" 
+                                align=absMiddle>&nbsp;</TD>
+                                <TD class=messagetitle width="100%"><A 
+                                class=messagetitle id=DynMessLink 
+                                href="http://www.codeproject.com/cs/system/WilsonSystemGlobalHooks.asp?df=100&amp;forumid=414057&amp;select=2040295#xx2040295xx" 
+                                name=2040295><B>RAW INPUT</B></A></TD>
+                                <TD vAlign=bottom noWrap><A 
+                                href="http://www.codeproject.com/script/profile/whos_who.asp?id=4100201"><IMG 
+                                title="Click for User Profile" height=15 
+                                src="Using Window Messages to Implement Global System Hooks in C# - The Code Project - System Programming_files/userinfo.gif" 
+                                width=14 border=0></A>&nbsp;</TD>
+                                <TD noWrap width=140><FONT 
+                                class=messagetitle><B>Ramon.Talavera</B>&nbsp;</FONT></TD>
+                                <TD style="WIDTH: 9em" noWrap align=right 
+                                width=120><FONT class=messagetitle><B>15:42 16 
+                                May 
+                            '07</B>&nbsp;</FONT></TD></TR></TBODY></TABLE></TD></TR>
+                          <TR id=2040295_h1 style="DISPLAY: none">
+                            <TD width="100%">
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD><IMG 
+                                src="Using Window Messages to Implement Global System Hooks in C# - The Code Project - System Programming_files/news_blank.gif" 
+                                align=absMiddle>&nbsp;</TD>
+                                <TD width="100%" bgColor=#d5eaff>
+                                <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+                                border=0>
+                                <TBODY>
+                                <TR>
+                                <TD>
+                                <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                                border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2><FONT 
+                                class=messagecontent>Hello,<BR>What kind of 
+                                hooks are RAW_INPUT messages? <BR><BR>It is 
+                                getting hard for me to intercept raw input 
+                                messages in other windows. I need to distinguish 
+                                between 2 keyboards.<BR><BR>Thanks. 
+                                <BR>&nbsp;</FONT></TD></TR>
+                                <TR vAlign=top>
+                                <TD class=messagetitle>[<A 
+                                title="Reply to this current thread" 
+                                href="http://www.codeproject.com/script/comments/user_reply.asp?main=/cs/system/WilsonSystemGlobalHooks.asp&amp;df=100&amp;forumid=414057&amp;select=2040295">Reply</A> 
+                                | <A 
+                                title="Email a reply to the author of this message" 
+                                href="http://www.codeproject.com/script/comments/user_mail.asp?main=/cs/system/WilsonSystemGlobalHooks.asp&amp;df=100&amp;forumid=414057&amp;select=2040295">Email</A> 
+                                | <A 
+                                title="View only messages within this thread" 
+                                href="http://www.codeproject.com/cs/system/WilsonSystemGlobalHooks.asp?df=100&amp;tid=2040295&amp;forumid=414057&amp;select=2040295#xx2040295xx">View 
+                                Thread</A> | <A 
+                                title="Get the URL for this message" 
+                                href="http://www.codeproject.com/cs/system/WilsonSystemGlobalHooks.asp?msg=2040295#xx2040295xx">PermaLink</A> 
+                                | <A title="Go to Thread Start" 
+                                href="http://www.codeproject.com/cs/system/WilsonSystemGlobalHooks.asp?msg=2040295#xx2040295xx">Go 
+                                to Thread Start</A>]</TD>
+                                <TD class=messagetitle align=right>
+                                <SCRIPT language=Javascript>MsgVoteForm(4100201,2040295);</SCRIPT>
+                                </TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+                          <TR>
+                            <TD><IMG height=5 
+                              src="Using Window Messages to Implement Global System Hooks in C# - The Code Project - System Programming_files/t.gif" 
+                              width=1 border=0></TD></TR>
+                          <TR height=1>
+                            <TD bgColor=#ff9900><IMG height=1 
+                              src="Using Window Messages to Implement Global System Hooks in C# - The Code Project - System Programming_files/t.gif" 
+                              width=1></TD></TR>
+                          <TR id=2039934_h0 bgColor=#fef9e7>
+                            <TD width="100%">
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD bgColor=white><A name=xx2039934xx></A><IMG 
+                                src="Using Window Messages to Implement Global System Hooks in C# - The Code Project - System Programming_files/news_question.gif" 
+                                align=absMiddle>&nbsp;</TD>
+                                <TD class=messagetitle width="100%"><A 
+                                class=messagetitle id=DynMessLink 
+                                href="http://www.codeproject.com/cs/system/WilsonSystemGlobalHooks.asp?df=100&amp;forumid=414057&amp;select=2039934#xx2039934xx" 
+                                name=2039934><B>Remote Hooks</B></A></TD>
+                                <TD vAlign=bottom noWrap><A 
+                                href="http://www.codeproject.com/script/profile/whos_who.asp?id=3899084"><IMG 
+                                title="Click for User Profile" height=15 
+                                src="Using Window Messages to Implement Global System Hooks in C# - The Code Project - System Programming_files/userinfo.gif" 
+                                width=14 border=0></A>&nbsp;</TD>
+                                <TD noWrap width=140><FONT 
+                                class=messagetitle><B>Bourtree</B>&nbsp;</FONT></TD>
+                                <TD style="WIDTH: 9em" noWrap align=right 
+                                width=120><FONT class=messagetitle><B>12:37 16 
+                                May 
+                            '07</B>&nbsp;</FONT></TD></TR></TBODY></TABLE></TD></TR>
+                          <TR id=2039934_h1 style="DISPLAY: none">
+                            <TD width="100%">
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD><IMG 
+                                src="Using Window Messages to Implement Global System Hooks in C# - The Code Project - System Programming_files/news_blank.gif" 
+                                align=absMiddle>&nbsp;</TD>
+                                <TD width="100%" bgColor=#d5eaff>
+                                <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+                                border=0>
+                                <TBODY>
+                                <TR>
+                                <TD>
+                                <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                                border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2><FONT class=messagecontent>Great 
+                                stuff Chris.<BR><BR>I read your article with 
+                                great interest as I believe the approach you 
+                                have adopted ‘may’ provide me with a solution to 
+                                a design problem I have been toiling with for 
+                                weeks.<BR><BR>I want to create remote hooks for 
+                                a process and according to all the documentation 
+                                I have read, this can only be achieved using an 
+                                external DLL which presented a similar challenge 
+                                to yours, that is, how to get those events back 
+                                into the managed code. <BR><BR>The only big 
+                                caveat I am faced with is that my process is a 
+                                console application rather than a windows form 
+                                and subsequently I cannot use the window handle 
+                                and subsequent messaging (WndProc event). 
+                                Basically, all I have is the Process Id and 
+                                thread Id of the console application for 
+                                reference.<BR><BR>Do you have any ideas as to 
+                                how I can achieve a similar solution given the 
+                                constraints?<BR><BR>Thanks<BR><BR>&nbsp;</FONT></TD></TR>
+                                <TR vAlign=top>
+                                <TD class=messagetitle>[<A 
+                                title="Reply to this current thread" 
+                                href="http://www.codeproject.com/script/comments/user_reply.asp?main=/cs/system/WilsonSystemGlobalHooks.asp&amp;df=100&amp;forumid=414057&amp;select=2039934">Reply</A> 
+                                | <A 
+                                title="Email a reply to the author of this message" 
+                                href="http://www.codeproject.com/script/comments/user_mail.asp?main=/cs/system/WilsonSystemGlobalHooks.asp&amp;df=100&amp;forumid=414057&amp;select=2039934">Email</A> 
+                                | <A 
+                                title="View only messages within this thread" 
+                                href="http://www.codeproject.com/cs/system/WilsonSystemGlobalHooks.asp?df=100&amp;tid=2039934&amp;forumid=414057&amp;select=2039934#xx2039934xx">View 
+                                Thread</A> | <A 
+                                title="Get the URL for this message" 
+                                href="http://www.codeproject.com/cs/system/WilsonSystemGlobalHooks.asp?msg=2039934#xx2039934xx">PermaLink</A> 
+                                | <A title="Go to Thread Start" 
+                                href="http://www.codeproject.com/cs/system/WilsonSystemGlobalHooks.asp?msg=2039934#xx2039934xx">Go 
+                                to Thread Start</A>]</TD>
+                                <TD class=messagetitle align=right>
+                                <SCRIPT language=Javascript>MsgVoteForm(3899084,2039934);</SCRIPT>
+                                </TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+                          <TR>
+                            <TD><IMG height=6 
+                              src="Using Window Messages to Implement Global System Hooks in C# - The Code Project - System Programming_files/t.gif" 
+                              width=1 border=0></TD></TR>
+                          <TR id=2043723_h0 bgColor=#fef9e7>
+                            <TD width="100%">
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD bgColor=white><A name=xx2043723xx></A><IMG 
+                                height=1 
+                                src="Using Window Messages to Implement Global System Hooks in C# - The Code Project - System Programming_files/ind.gif" 
+                                width=18><IMG 
+                                src="Using Window Messages to Implement Global System Hooks in C# - The Code Project - System Programming_files/news_answer.gif" 
+                                align=absMiddle>&nbsp;</TD>
+                                <TD class=messagetitle width="100%"><A 
+                                class=messagetitle id=DynMessLink 
+                                href="http://www.codeproject.com/cs/system/WilsonSystemGlobalHooks.asp?df=100&amp;forumid=414057&amp;select=2043723#xx2043723xx" 
+                                name=2043723>Re: Remote Hooks</A></TD>
+                                <TD vAlign=bottom noWrap><A 
+                                href="http://www.codeproject.com/script/profile/whos_who.asp?id=83302"><IMG 
+                                title="Click for User Profile" height=15 
+                                src="Using Window Messages to Implement Global System Hooks in C# - The Code Project - System Programming_files/userinfo.gif" 
+                                width=14 border=0></A>&nbsp;</TD>
+                                <TD noWrap width=140><FONT 
+                                class=messagetitle>ChrisP1118&nbsp;</FONT></TD>
+                                <TD style="WIDTH: 9em" noWrap align=right 
+                                width=120><FONT class=messagetitle>11:21 18 May 
+                                '07&nbsp;</FONT></TD></TR></TBODY></TABLE></TD></TR>
+                          <TR id=2043723_h1 style="DISPLAY: none">
+                            <TD width="100%">
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD><IMG height=1 
+                                src="Using Window Messages to Implement Global System Hooks in C# - The Code Project - System Programming_files/ind.gif" 
+                                width=18><IMG 
+                                src="Using Window Messages to Implement Global System Hooks in C# - The Code Project - System Programming_files/news_blank.gif" 
+                                align=absMiddle>&nbsp;</TD>
+                                <TD width="100%" bgColor=#d5eaff>
+                                <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+                                border=0>
+                                <TBODY>
+                                <TR>
+                                <TD>
+                                <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                                border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2><FONT class=messagecontent>I don't 
+                                know if it's possible to process hooks like this 
+                                from a console application. I've never really 
+                                worked much with console applications -- could 
+                                you create a Windows Form to process the 
+                                messages, but just not display the 
+                                form?<BR><BR>If you're fairly comfortable with 
+                                Windows API programming, it's possible to create 
+                                a "message only" window. Essentially, it lets 
+                                you process Windows messages but without 
+                                physically creating a window. You'd only need to 
+                                use a few API calls, like CreateWindowEx, to get 
+                                it working -- there's more documentation on 
+                                message only windows on MSDN. 
+                                <BR>&nbsp;</FONT></TD></TR>
+                                <TR vAlign=top>
+                                <TD class=messagetitle>[<A 
+                                title="Reply to this current thread" 
+                                href="http://www.codeproject.com/script/comments/user_reply.asp?main=/cs/system/WilsonSystemGlobalHooks.asp&amp;df=100&amp;forumid=414057&amp;select=2043723">Reply</A> 
+                                | <A 
+                                title="Email a reply to the author of this message" 
+                                href="http://www.codeproject.com/script/comments/user_mail.asp?main=/cs/system/WilsonSystemGlobalHooks.asp&amp;df=100&amp;forumid=414057&amp;select=2043723">Email</A> 
+                                | <A 
+                                title="View only messages within this thread" 
+                                href="http://www.codeproject.com/cs/system/WilsonSystemGlobalHooks.asp?df=100&amp;tid=2039934&amp;forumid=414057&amp;select=2043723#xx2043723xx">View 
+                                Thread</A> | <A 
+                                title="Get the URL for this message" 
+                                href="http://www.codeproject.com/cs/system/WilsonSystemGlobalHooks.asp?msg=2043723#xx2043723xx">PermaLink</A> 
+                                | <A title="Go to Thread Start" 
+                                href="http://www.codeproject.com/cs/system/WilsonSystemGlobalHooks.asp?msg=2039934#xx2039934xx">Go 
+                                to Thread Start</A>]</TD>
+                                <TD class=messagetitle align=right>
+                                <SCRIPT language=Javascript>MsgVoteForm(83302,2043723);</SCRIPT>
+                                </TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+                          <TR>
+                            <TD><IMG height=5 
+                              src="Using Window Messages to Implement Global System Hooks in C# - The Code Project - System Programming_files/t.gif" 
+                              width=1 border=0></TD></TR>
+                          <TR height=1>
+                            <TD bgColor=#ff9900><IMG height=1 
+                              src="Using Window Messages to Implement Global System Hooks in C# - The Code Project - System Programming_files/t.gif" 
+                              width=1></TD></TR>
+                          <TR id=2034241_h0 bgColor=#fef9e7>
+                            <TD width="100%">
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD bgColor=white><A name=xx2034241xx></A><IMG 
+                                src="Using Window Messages to Implement Global System Hooks in C# - The Code Project - System Programming_files/news_general.gif" 
+                                align=absMiddle>&nbsp;</TD>
+                                <TD class=messagetitle width="100%"><A 
+                                class=messagetitle id=DynMessLink 
+                                href="http://www.codeproject.com/cs/system/WilsonSystemGlobalHooks.asp?df=100&amp;forumid=414057&amp;select=2034241#xx2034241xx" 
+                                name=2034241><B>Raw Input, Global 
+                                Hooks</B></A></TD>
+                                <TD vAlign=bottom noWrap><A 
+                                href="http://www.codeproject.com/script/profile/whos_who.asp?id=4100201"><IMG 
+                                title="Click for User Profile" height=15 
+                                src="Using Window Messages to Implement Global System Hooks in C# - The Code Project - System Programming_files/userinfo.gif" 
+                                width=14 border=0></A>&nbsp;</TD>
+                                <TD noWrap width=140><FONT 
+                                class=messagetitle><B>Ramon.Talavera</B>&nbsp;</FONT></TD>
+                                <TD style="WIDTH: 9em" noWrap align=right 
+                                width=120><FONT class=messagetitle><B>15:26 13 
+                                May 
+                            '07</B>&nbsp;</FONT></TD></TR></TBODY></TABLE></TD></TR>
+                          <TR id=2034241_h1 style="DISPLAY: none">
+                            <TD width="100%">
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD><IMG 
+                                src="Using Window Messages to Implement Global System Hooks in C# - The Code Project - System Programming_files/news_blank.gif" 
+                                align=absMiddle>&nbsp;</TD>
+                                <TD width="100%" bgColor=#d5eaff>
+                                <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+                                border=0>
+                                <TBODY>
+                                <TR>
+                                <TD>
+                                <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                                border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2><FONT 
+                                class=messagecontent>Hello,<BR><BR>I have read 
+                                your article about global hooks, it is very well 
+                                written, thank you very much indeed. I am trying 
+                                to listen to Raw Input messages but it is being 
+                                very difficult for me to support those kinds of 
+                                messages (seconday HIDS) with your Global Hooks 
+                                library. <BR><BR>My problem: All raw input 
+                                examples do track local secondary keyboard an 
+                                mouse events, but no example does track them 
+                                globally. No global hooks dll seems to support 
+                                raw input.<BR><BR>I am sending code to you that 
+                                allows to listen to local raw input messages, 
+                                could you help me adding support for this kind 
+                                of messages to your dll? it would really be a 
+                                valuable add on to it. It seems to me that it 
+                                should be easy for you to code it. if I am not 
+                                wrong, what it should do is remap raw input 
+                                messages to C#, as it does with mouse events, 
+                                but it is really getting hard for me to get it 
+                                :/. <BR><BR>I will really appreciate your help. 
+                                The local rawmouse code my be downloaded from 
+                                http://www.jstookey.com/arcade/rawmouse/ 
+                                .<BR><BR>Thanks in 
+                                advance.<BR><BR>&nbsp;</FONT></TD></TR>
+                                <TR vAlign=top>
+                                <TD class=messagetitle>[<A 
+                                title="Reply to this current thread" 
+                                href="http://www.codeproject.com/script/comments/user_reply.asp?main=/cs/system/WilsonSystemGlobalHooks.asp&amp;df=100&amp;forumid=414057&amp;select=2034241">Reply</A> 
+                                | <A 
+                                title="Email a reply to the author of this message" 
+                                href="http://www.codeproject.com/script/comments/user_mail.asp?main=/cs/system/WilsonSystemGlobalHooks.asp&amp;df=100&amp;forumid=414057&amp;select=2034241">Email</A> 
+                                | <A 
+                                title="View only messages within this thread" 
+                                href="http://www.codeproject.com/cs/system/WilsonSystemGlobalHooks.asp?df=100&amp;tid=2034241&amp;forumid=414057&amp;select=2034241#xx2034241xx">View 
+                                Thread</A> | <A 
+                                title="Get the URL for this message" 
+                                href="http://www.codeproject.com/cs/system/WilsonSystemGlobalHooks.asp?msg=2034241#xx2034241xx">PermaLink</A> 
+                                | <A title="Go to Thread Start" 
+                                href="http://www.codeproject.com/cs/system/WilsonSystemGlobalHooks.asp?msg=2034241#xx2034241xx">Go 
+                                to Thread Start</A>]</TD>
+                                <TD class=messagetitle align=right>
+                                <SCRIPT language=Javascript>MsgVoteForm(4100201,2034241);</SCRIPT>
+                                </TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+                          <TR>
+                            <TD><IMG height=5 
+                              src="Using Window Messages to Implement Global System Hooks in C# - The Code Project - System Programming_files/t.gif" 
+                              width=1 border=0></TD></TR>
+                          <TR height=1>
+                            <TD bgColor=#ff9900><IMG height=1 
+                              src="Using Window Messages to Implement Global System Hooks in C# - The Code Project - System Programming_files/t.gif" 
+                              width=1></TD></TR>
+                          <TR id=2025503_h0 bgColor=#fef9e7>
+                            <TD width="100%">
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD bgColor=white><A name=xx2025503xx></A><IMG 
+                                src="Using Window Messages to Implement Global System Hooks in C# - The Code Project - System Programming_files/news_general.gif" 
+                                align=absMiddle>&nbsp;</TD>
+                                <TD class=messagetitle width="100%"><A 
+                                class=messagetitle id=DynMessLink 
+                                href="http://www.codeproject.com/cs/system/WilsonSystemGlobalHooks.asp?df=100&amp;forumid=414057&amp;select=2025503#xx2025503xx" 
+                                name=2025503><B>Great, but I have a 
+                                problem</B></A></TD>
+                                <TD vAlign=bottom noWrap><A 
+                                href="http://www.codeproject.com/script/profile/whos_who.asp?id=3685609"><IMG 
+                                title="Click for User Profile" height=15 
+                                src="Using Window Messages to Implement Global System Hooks in C# - The Code Project - System Programming_files/userinfo.gif" 
+                                width=14 border=0></A>&nbsp;</TD>
+                                <TD noWrap width=140><FONT 
+                                class=messagetitle><B>xmagic123</B>&nbsp;</FONT></TD>
+                                <TD style="WIDTH: 9em" noWrap align=right 
+                                width=120><FONT class=messagetitle><B>6:40 8 May 
+                                '07</B>&nbsp;</FONT></TD></TR></TBODY></TABLE></TD></TR>
+                          <TR id=2025503_h1 style="DISPLAY: none">
+                            <TD width="100%">
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD><IMG 
+                                src="Using Window Messages to Implement Global System Hooks in C# - The Code Project - System Programming_files/news_blank.gif" 
+                                align=absMiddle>&nbsp;</TD>
+                                <TD width="100%" bgColor=#d5eaff>
+                                <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+                                border=0>
+                                <TBODY>
+                                <TR>
+                                <TD>
+                                <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                                border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2><FONT class=messagecontent>this 
+                                hook does exactly what I want, a shell hook, but 
+                                my application is written in vb.net, I am trying 
+                                to study the code so I can call the dll 
+                                functions in vb.net. I am not fluent in C#, is 
+                                there anyone can help me with a example of how 
+                                to call the dll in vb.net? 
+                                <BR>&nbsp;</FONT></TD></TR>
+                                <TR vAlign=top>
+                                <TD class=messagetitle>[<A 
+                                title="Reply to this current thread" 
+                                href="http://www.codeproject.com/script/comments/user_reply.asp?main=/cs/system/WilsonSystemGlobalHooks.asp&amp;df=100&amp;forumid=414057&amp;select=2025503">Reply</A> 
+                                | <A 
+                                title="Email a reply to the author of this message" 
+                                href="http://www.codeproject.com/script/comments/user_mail.asp?main=/cs/system/WilsonSystemGlobalHooks.asp&amp;df=100&amp;forumid=414057&amp;select=2025503">Email</A> 
+                                | <A 
+                                title="View only messages within this thread" 
+                                href="http://www.codeproject.com/cs/system/WilsonSystemGlobalHooks.asp?df=100&amp;tid=2025503&amp;forumid=414057&amp;select=2025503#xx2025503xx">View 
+                                Thread</A> | <A 
+                                title="Get the URL for this message" 
+                                href="http://www.codeproject.com/cs/system/WilsonSystemGlobalHooks.asp?msg=2025503#xx2025503xx">PermaLink</A> 
+                                | <A title="Go to Thread Start" 
+                                href="http://www.codeproject.com/cs/system/WilsonSystemGlobalHooks.asp?msg=2025503#xx2025503xx">Go 
+                                to Thread Start</A>]</TD>
+                                <TD class=messagetitle align=right>
+                                <SCRIPT language=Javascript>MsgVoteForm(3685609,2025503);</SCRIPT>
+                                </TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+                          <TR>
+                            <TD><IMG height=5 
+                              src="Using Window Messages to Implement Global System Hooks in C# - The Code Project - System Programming_files/t.gif" 
+                              width=1 border=0></TD></TR>
+                          <TR height=1>
+                            <TD bgColor=#ff9900><IMG height=1 
+                              src="Using Window Messages to Implement Global System Hooks in C# - The Code Project - System Programming_files/t.gif" 
+                              width=1></TD></TR>
+                          <TR id=2023385_h0 bgColor=#fef9e7>
+                            <TD width="100%">
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD bgColor=white><A name=xx2023385xx></A><IMG 
+                                src="Using Window Messages to Implement Global System Hooks in C# - The Code Project - System Programming_files/news_general.gif" 
+                                align=absMiddle>&nbsp;</TD>
+                                <TD class=messagetitle width="100%"><A 
+                                class=messagetitle id=DynMessLink 
+                                href="http://www.codeproject.com/cs/system/WilsonSystemGlobalHooks.asp?df=100&amp;forumid=414057&amp;select=2023385#xx2023385xx" 
+                                name=2023385><B>licence? and (solved previous 
+                                query)</B></A></TD>
+                                <TD vAlign=bottom noWrap><A 
+                                href="http://www.codeproject.com/script/profile/whos_who.asp?id=2992753"><IMG 
+                                title="Click for User Profile" height=15 
+                                src="Using Window Messages to Implement Global System Hooks in C# - The Code Project - System Programming_files/userinfo.gif" 
+                                width=14 border=0></A>&nbsp;</TD>
+                                <TD noWrap width=140><FONT 
+                                class=messagetitle><B>neo786</B>&nbsp;</FONT></TD>
+                                <TD style="WIDTH: 9em" noWrap align=right 
+                                width=120><FONT class=messagetitle><B>4:46 7 May 
+                                '07</B>&nbsp;</FONT></TD></TR></TBODY></TABLE></TD></TR>
+                          <TR id=2023385_h1 style="DISPLAY: none">
+                            <TD width="100%">
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD><IMG 
+                                src="Using Window Messages to Implement Global System Hooks in C# - The Code Project - System Programming_files/news_blank.gif" 
+                                align=absMiddle>&nbsp;</TD>
+                                <TD width="100%" bgColor=#d5eaff>
+                                <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+                                border=0>
+                                <TBODY>
+                                <TR>
+                                <TD>
+                                <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                                border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2><FONT class=messagecontent>What 
+                                licence ar are you releasing this under? and 
+                                thanks. It's a cool library. 
+                                <BR>&nbsp;</FONT></TD></TR>
+                                <TR vAlign=top>
+                                <TD class=messagetitle>[<A 
+                                title="Reply to this current thread" 
+                                href="http://www.codeproject.com/script/comments/user_reply.asp?main=/cs/system/WilsonSystemGlobalHooks.asp&amp;df=100&amp;forumid=414057&amp;select=2023385">Reply</A> 
+                                | <A 
+                                title="Email a reply to the author of this message" 
+                                href="http://www.codeproject.com/script/comments/user_mail.asp?main=/cs/system/WilsonSystemGlobalHooks.asp&amp;df=100&amp;forumid=414057&amp;select=2023385">Email</A> 
+                                | <A 
+                                title="View only messages within this thread" 
+                                href="http://www.codeproject.com/cs/system/WilsonSystemGlobalHooks.asp?df=100&amp;tid=2023385&amp;forumid=414057&amp;select=2023385#xx2023385xx">View 
+                                Thread</A> | <A 
+                                title="Get the URL for this message" 
+                                href="http://www.codeproject.com/cs/system/WilsonSystemGlobalHooks.asp?msg=2023385#xx2023385xx">PermaLink</A> 
+                                | <A title="Go to Thread Start" 
+                                href="http://www.codeproject.com/cs/system/WilsonSystemGlobalHooks.asp?msg=2023385#xx2023385xx">Go 
+                                to Thread Start</A>]</TD>
+                                <TD class=messagetitle align=right>
+                                <SCRIPT language=Javascript>MsgVoteForm(2992753,2023385);</SCRIPT>
+                                </TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+                          <TR>
+                            <TD><IMG height=6 
+                              src="Using Window Messages to Implement Global System Hooks in C# - The Code Project - System Programming_files/t.gif" 
+                              width=1 border=0></TD></TR>
+                          <TR id=2024303_h0 bgColor=#fef9e7>
+                            <TD width="100%">
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD bgColor=white><A name=xx2024303xx></A><IMG 
+                                height=1 
+                                src="Using Window Messages to Implement Global System Hooks in C# - The Code Project - System Programming_files/ind.gif" 
+                                width=18><IMG 
+                                src="Using Window Messages to Implement Global System Hooks in C# - The Code Project - System Programming_files/news_general.gif" 
+                                align=absMiddle>&nbsp;</TD>
+                                <TD class=messagetitle width="100%"><A 
+                                class=messagetitle id=DynMessLink 
+                                href="http://www.codeproject.com/cs/system/WilsonSystemGlobalHooks.asp?df=100&amp;forumid=414057&amp;select=2024303#xx2024303xx" 
+                                name=2024303>Re: licence? and (solved previous 
+                                query)</A></TD>
+                                <TD vAlign=bottom noWrap><A 
+                                href="http://www.codeproject.com/script/profile/whos_who.asp?id=83302"><IMG 
+                                title="Click for User Profile" height=15 
+                                src="Using Window Messages to Implement Global System Hooks in C# - The Code Project - System Programming_files/userinfo.gif" 
+                                width=14 border=0></A>&nbsp;</TD>
+                                <TD noWrap width=140><FONT 
+                                class=messagetitle>ChrisP1118&nbsp;</FONT></TD>
+                                <TD style="WIDTH: 9em" noWrap align=right 
+                                width=120><FONT class=messagetitle>12:50 7 May 
+                                '07&nbsp;</FONT></TD></TR></TBODY></TABLE></TD></TR>
+                          <TR id=2024303_h1 style="DISPLAY: none">
+                            <TD width="100%">
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD><IMG height=1 
+                                src="Using Window Messages to Implement Global System Hooks in C# - The Code Project - System Programming_files/ind.gif" 
+                                width=18><IMG 
+                                src="Using Window Messages to Implement Global System Hooks in C# - The Code Project - System Programming_files/news_blank.gif" 
+                                align=absMiddle>&nbsp;</TD>
+                                <TD width="100%" bgColor=#d5eaff>
+                                <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+                                border=0>
+                                <TBODY>
+                                <TR>
+                                <TD>
+                                <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                                border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2><FONT class=messagecontent>You're 
+                                completely free to use this library in your own 
+                                applications. I'd appreciate it if you gave me 
+                                credit, but it's not necessary. Also, please 
+                                rename the "WILSON_HOOK" constants when using 
+                                this in your own app. 
+<BR>&nbsp;</FONT></TD></TR>
+                                <TR vAlign=top>
+                                <TD class=messagetitle>[<A 
+                                title="Reply to this current thread" 
+                                href="http://www.codeproject.com/script/comments/user_reply.asp?main=/cs/system/WilsonSystemGlobalHooks.asp&amp;df=100&amp;forumid=414057&amp;select=2024303">Reply</A> 
+                                | <A 
+                                title="Email a reply to the author of this message" 
+                                href="http://www.codeproject.com/script/comments/user_mail.asp?main=/cs/system/WilsonSystemGlobalHooks.asp&amp;df=100&amp;forumid=414057&amp;select=2024303">Email</A> 
+                                | <A 
+                                title="View only messages within this thread" 
+                                href="http://www.codeproject.com/cs/system/WilsonSystemGlobalHooks.asp?df=100&amp;tid=2023385&amp;forumid=414057&amp;select=2024303#xx2024303xx">View 
+                                Thread</A> | <A 
+                                title="Get the URL for this message" 
+                                href="http://www.codeproject.com/cs/system/WilsonSystemGlobalHooks.asp?msg=2024303#xx2024303xx">PermaLink</A> 
+                                | <A title="Go to Thread Start" 
+                                href="http://www.codeproject.com/cs/system/WilsonSystemGlobalHooks.asp?msg=2023385#xx2023385xx">Go 
+                                to Thread Start</A>]</TD>
+                                <TD class=messagetitle align=right>
+                                <SCRIPT language=Javascript>MsgVoteForm(83302,2024303);</SCRIPT>
+                                </TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+                          <TR>
+                            <TD><IMG height=5 
+                              src="Using Window Messages to Implement Global System Hooks in C# - The Code Project - System Programming_files/t.gif" 
+                              width=1 border=0></TD></TR>
+                          <TR height=1>
+                            <TD bgColor=#ff9900><IMG height=1 
+                              src="Using Window Messages to Implement Global System Hooks in C# - The Code Project - System Programming_files/t.gif" 
+                              width=1></TD></TR>
+                          <TR id=2022852_h0 bgColor=#fef9e7>
+                            <TD width="100%">
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD bgColor=white><A name=xx2022852xx></A><IMG 
+                                src="Using Window Messages to Implement Global System Hooks in C# - The Code Project - System Programming_files/news_question.gif" 
+                                align=absMiddle>&nbsp;</TD>
+                                <TD class=messagetitle width="100%"><A 
+                                class=messagetitle id=DynMessLink 
+                                href="http://www.codeproject.com/cs/system/WilsonSystemGlobalHooks.asp?df=100&amp;forumid=414057&amp;select=2022852#xx2022852xx" 
+                                name=2022852><B>more hooks</B></A></TD>
+                                <TD vAlign=bottom noWrap><A 
+                                href="http://www.codeproject.com/script/profile/whos_who.asp?id=2992753"><IMG 
+                                title="Click for User Profile" height=15 
+                                src="Using Window Messages to Implement Global System Hooks in C# - The Code Project - System Programming_files/userinfo.gif" 
+                                width=14 border=0></A>&nbsp;</TD>
+                                <TD noWrap width=140><FONT 
+                                class=messagetitle><B>neo786</B>&nbsp;</FONT></TD>
+                                <TD style="WIDTH: 9em" noWrap align=right 
+                                width=120><FONT class=messagetitle><B>16:34 6 
+                                May 
+                            '07</B>&nbsp;</FONT></TD></TR></TBODY></TABLE></TD></TR>
+                          <TR id=2022852_h1 style="DISPLAY: none">
+                            <TD width="100%">
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD><IMG 
+                                src="Using Window Messages to Implement Global System Hooks in C# - The Code Project - System Programming_files/news_blank.gif" 
+                                align=absMiddle>&nbsp;</TD>
+                                <TD width="100%" bgColor=#d5eaff>
+                                <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+                                border=0>
+                                <TBODY>
+                                <TR>
+                                <TD>
+                                <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                                border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2><FONT class=messagecontent>Will 
+                                you be adding more hooks to your dll? <BR>and 
+                                I'd like to access the text displayed by certain 
+                                controls like buttons/textboxes in external 
+                                programs. What hook would I need to use to be 
+                                able to do that?<BR>Thanks, 
+                                <BR>&nbsp;</FONT></TD></TR>
+                                <TR vAlign=top>
+                                <TD class=messagetitle>[<A 
+                                title="Reply to this current thread" 
+                                href="http://www.codeproject.com/script/comments/user_reply.asp?main=/cs/system/WilsonSystemGlobalHooks.asp&amp;df=100&amp;forumid=414057&amp;select=2022852">Reply</A> 
+                                | <A 
+                                title="Email a reply to the author of this message" 
+                                href="http://www.codeproject.com/script/comments/user_mail.asp?main=/cs/system/WilsonSystemGlobalHooks.asp&amp;df=100&amp;forumid=414057&amp;select=2022852">Email</A> 
+                                | <A 
+                                title="View only messages within this thread" 
+                                href="http://www.codeproject.com/cs/system/WilsonSystemGlobalHooks.asp?df=100&amp;tid=2022852&amp;forumid=414057&amp;select=2022852#xx2022852xx">View 
+                                Thread</A> | <A 
+                                title="Get the URL for this message" 
+                                href="http://www.codeproject.com/cs/system/WilsonSystemGlobalHooks.asp?msg=2022852#xx2022852xx">PermaLink</A> 
+                                | <A title="Go to Thread Start" 
+                                href="http://www.codeproject.com/cs/system/WilsonSystemGlobalHooks.asp?msg=2022852#xx2022852xx">Go 
+                                to Thread Start</A>]</TD>
+                                <TD class=messagetitle align=right>
+                                <SCRIPT language=Javascript>MsgVoteForm(2992753,2022852);</SCRIPT>
+                                </TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+                          <TR>
+                            <TD><IMG height=6 
+                              src="Using Window Messages to Implement Global System Hooks in C# - The Code Project - System Programming_files/t.gif" 
+                              width=1 border=0></TD></TR>
+                          <TR id=2024287_h0 bgColor=#fef9e7>
+                            <TD width="100%">
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD bgColor=white><A name=xx2024287xx></A><IMG 
+                                height=1 
+                                src="Using Window Messages to Implement Global System Hooks in C# - The Code Project - System Programming_files/ind.gif" 
+                                width=18><IMG 
+                                src="Using Window Messages to Implement Global System Hooks in C# - The Code Project - System Programming_files/news_answer.gif" 
+                                align=absMiddle>&nbsp;</TD>
+                                <TD class=messagetitle width="100%"><A 
+                                class=messagetitle id=DynMessLink 
+                                href="http://www.codeproject.com/cs/system/WilsonSystemGlobalHooks.asp?df=100&amp;forumid=414057&amp;select=2024287#xx2024287xx" 
+                                name=2024287>Re: more hooks</A></TD>
+                                <TD vAlign=bottom noWrap><A 
+                                href="http://www.codeproject.com/script/profile/whos_who.asp?id=83302"><IMG 
+                                title="Click for User Profile" height=15 
+                                src="Using Window Messages to Implement Global System Hooks in C# - The Code Project - System Programming_files/userinfo.gif" 
+                                width=14 border=0></A>&nbsp;</TD>
+                                <TD noWrap width=140><FONT 
+                                class=messagetitle>ChrisP1118&nbsp;</FONT></TD>
+                                <TD style="WIDTH: 9em" noWrap align=right 
+                                width=120><FONT class=messagetitle>12:38 7 May 
+                                '07&nbsp;</FONT></TD></TR></TBODY></TABLE></TD></TR>
+                          <TR id=2024287_h1 style="DISPLAY: none">
+                            <TD width="100%">
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD><IMG height=1 
+                                src="Using Window Messages to Implement Global System Hooks in C# - The Code Project - System Programming_files/ind.gif" 
+                                width=18><IMG 
+                                src="Using Window Messages to Implement Global System Hooks in C# - The Code Project - System Programming_files/news_blank.gif" 
+                                align=absMiddle>&nbsp;</TD>
+                                <TD width="100%" bgColor=#d5eaff>
+                                <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+                                border=0>
+                                <TBODY>
+                                <TR>
+                                <TD>
+                                <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                                border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2><FONT class=messagecontent>You use 
+                                these same hooks to access things in any kind of 
+                                window. To hook only a specific window or 
+                                control, use that control or window's handle 
+                                when calling the InitializeHook procedures -- 
+                                when you specify 0 for the hWnd, it hooks all 
+                                windows. <BR>&nbsp;</FONT></TD></TR>
+                                <TR vAlign=top>
+                                <TD class=messagetitle>[<A 
+                                title="Reply to this current thread" 
+                                href="http://www.codeproject.com/script/comments/user_reply.asp?main=/cs/system/WilsonSystemGlobalHooks.asp&amp;df=100&amp;forumid=414057&amp;select=2024287">Reply</A> 
+                                | <A 
+                                title="Email a reply to the author of this message" 
+                                href="http://www.codeproject.com/script/comments/user_mail.asp?main=/cs/system/WilsonSystemGlobalHooks.asp&amp;df=100&amp;forumid=414057&amp;select=2024287">Email</A> 
+                                | <A 
+                                title="View only messages within this thread" 
+                                href="http://www.codeproject.com/cs/system/WilsonSystemGlobalHooks.asp?df=100&amp;tid=2022852&amp;forumid=414057&amp;select=2024287#xx2024287xx">View 
+                                Thread</A> | <A 
+                                title="Get the URL for this message" 
+                                href="http://www.codeproject.com/cs/system/WilsonSystemGlobalHooks.asp?msg=2024287#xx2024287xx">PermaLink</A> 
+                                | <A title="Go to Thread Start" 
+                                href="http://www.codeproject.com/cs/system/WilsonSystemGlobalHooks.asp?msg=2022852#xx2022852xx">Go 
+                                to Thread Start</A>]</TD>
+                                <TD class=messagetitle align=right>
+                                <SCRIPT language=Javascript>MsgVoteForm(83302,2024287);</SCRIPT>
+                                </TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+                          <TR>
+                            <TD><IMG height=5 
+                              src="Using Window Messages to Implement Global System Hooks in C# - The Code Project - System Programming_files/t.gif" 
+                              width=1 border=0></TD></TR>
+                          <TR height=1>
+                            <TD bgColor=#ff9900><IMG height=1 
+                              src="Using Window Messages to Implement Global System Hooks in C# - The Code Project - System Programming_files/t.gif" 
+                              width=1></TD></TR>
+                          <TR id=2019170_h0 bgColor=#fef9e7>
+                            <TD width="100%">
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD bgColor=white><A name=xx2019170xx></A><IMG 
+                                src="Using Window Messages to Implement Global System Hooks in C# - The Code Project - System Programming_files/news_general.gif" 
+                                align=absMiddle>&nbsp;</TD>
+                                <TD class=messagetitle width="100%"><A 
+                                class=messagetitle id=DynMessLink 
+                                href="http://www.codeproject.com/cs/system/WilsonSystemGlobalHooks.asp?df=100&amp;forumid=414057&amp;select=2019170#xx2019170xx" 
+                                name=2019170><B>Nicely Done</B></A></TD>
+                                <TD vAlign=bottom noWrap><A 
+                                href="http://www.codeproject.com/script/profile/whos_who.asp?id=727159"><IMG 
+                                title="Click for User Profile" height=15 
+                                src="Using Window Messages to Implement Global System Hooks in C# - The Code Project - System Programming_files/userinfo.gif" 
+                                width=14 border=0></A>&nbsp;</TD>
+                                <TD noWrap width=140><FONT 
+                                class=messagetitle><B>merlin981</B>&nbsp;</FONT></TD>
+                                <TD style="WIDTH: 9em" noWrap align=right 
+                                width=120><FONT class=messagetitle><B>15:20 3 
+                                May 
+                            '07</B>&nbsp;</FONT></TD></TR></TBODY></TABLE></TD></TR>
+                          <TR id=2019170_h1 style="DISPLAY: none">
+                            <TD width="100%">
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD><IMG 
+                                src="Using Window Messages to Implement Global System Hooks in C# - The Code Project - System Programming_files/news_blank.gif" 
+                                align=absMiddle>&nbsp;</TD>
+                                <TD width="100%" bgColor=#d5eaff>
+                                <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+                                border=0>
+                                <TBODY>
+                                <TR>
+                                <TD>
+                                <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                                border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2><FONT class=messagecontent>Very 
+                                nice work, 5 from me <BR><BR>
+                                <DIV 
+                                class=ForumSig><BR><BR>~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~<BR><A 
+                                href="http://www.merlinaisoft.com/">I get my 
+                                developer tools from Merlin A.I. 
+                                Soft</A><BR><BR><A 
+                                href="http://www.dailyroundup.net/">I get my 
+                                news and jokes from Daily 
+                                Roundup</A><BR><BR>~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~<BR></DIV><BR>&nbsp;</FONT></TD></TR>
+                                <TR vAlign=top>
+                                <TD class=messagetitle>[<A 
+                                title="Reply to this current thread" 
+                                href="http://www.codeproject.com/script/comments/user_reply.asp?main=/cs/system/WilsonSystemGlobalHooks.asp&amp;df=100&amp;forumid=414057&amp;select=2019170">Reply</A> 
+                                | <A 
+                                title="Email a reply to the author of this message" 
+                                href="http://www.codeproject.com/script/comments/user_mail.asp?main=/cs/system/WilsonSystemGlobalHooks.asp&amp;df=100&amp;forumid=414057&amp;select=2019170">Email</A> 
+                                | <A 
+                                title="View only messages within this thread" 
+                                href="http://www.codeproject.com/cs/system/WilsonSystemGlobalHooks.asp?df=100&amp;tid=2019170&amp;forumid=414057&amp;select=2019170#xx2019170xx">View 
+                                Thread</A> | <A 
+                                title="Get the URL for this message" 
+                                href="http://www.codeproject.com/cs/system/WilsonSystemGlobalHooks.asp?msg=2019170#xx2019170xx">PermaLink</A> 
+                                | <A title="Go to Thread Start" 
+                                href="http://www.codeproject.com/cs/system/WilsonSystemGlobalHooks.asp?msg=2019170#xx2019170xx">Go 
+                                to Thread Start</A>]</TD>
+                                <TD class=messagetitle align=right>
+                                <SCRIPT language=Javascript>MsgVoteForm(727159,2019170);</SCRIPT>
+                                </TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+                          <TR>
+                            <TD><IMG height=5 
+                              src="Using Window Messages to Implement Global System Hooks in C# - The Code Project - System Programming_files/t.gif" 
+                              width=1 border=0></TD></TR>
+                          <TR height=1>
+                            <TD bgColor=#ff9900><IMG height=1 
+                              src="Using Window Messages to Implement Global System Hooks in C# - The Code Project - System Programming_files/t.gif" 
+                              width=1></TD></TR>
+                          <TR id=2019162_h0 bgColor=#fef9e7>
+                            <TD width="100%">
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD bgColor=white><A name=xx2019162xx></A><IMG 
+                                src="Using Window Messages to Implement Global System Hooks in C# - The Code Project - System Programming_files/news_general.gif" 
+                                align=absMiddle>&nbsp;</TD>
+                                <TD class=messagetitle width="100%"><A 
+                                class=messagetitle id=DynMessLink 
+                                href="http://www.codeproject.com/cs/system/WilsonSystemGlobalHooks.asp?df=100&amp;forumid=414057&amp;select=2019162#xx2019162xx" 
+                                name=2019162><B>Great but</B></A></TD>
+                                <TD vAlign=bottom noWrap><A 
+                                href="http://www.codeproject.com/script/profile/whos_who.asp?id=3136296"><IMG 
+                                title="Click for User Profile" height=15 
+                                src="Using Window Messages to Implement Global System Hooks in C# - The Code Project - System Programming_files/userinfo.gif" 
+                                width=14 border=0></A>&nbsp;</TD>
+                                <TD noWrap width=140><FONT 
+                                class=messagetitle><B>Giorgi 
+                                Dalakishvili</B>&nbsp;</FONT></TD>
+                                <TD style="WIDTH: 9em" noWrap align=right 
+                                width=120><FONT class=messagetitle><B>15:16 3 
+                                May 
+                            '07</B>&nbsp;</FONT></TD></TR></TBODY></TABLE></TD></TR>
+                          <TR id=2019162_h1 style="DISPLAY: none">
+                            <TD width="100%">
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD><IMG 
+                                src="Using Window Messages to Implement Global System Hooks in C# - The Code Project - System Programming_files/news_blank.gif" 
+                                align=absMiddle>&nbsp;</TD>
+                                <TD width="100%" bgColor=#d5eaff>
+                                <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+                                border=0>
+                                <TBODY>
+                                <TR>
+                                <TD>
+                                <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                                border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2><FONT class=messagecontent>Thanks 
+                                very much for this great article but the source 
+                                code and project files are missing. Can you 
+                                please upload them? Thanks 
+                                <BR>&nbsp;</FONT></TD></TR>
+                                <TR vAlign=top>
+                                <TD class=messagetitle>[<A 
+                                title="Reply to this current thread" 
+                                href="http://www.codeproject.com/script/comments/user_reply.asp?main=/cs/system/WilsonSystemGlobalHooks.asp&amp;df=100&amp;forumid=414057&amp;select=2019162">Reply</A> 
+                                | <A 
+                                title="Email a reply to the author of this message" 
+                                href="http://www.codeproject.com/script/comments/user_mail.asp?main=/cs/system/WilsonSystemGlobalHooks.asp&amp;df=100&amp;forumid=414057&amp;select=2019162">Email</A> 
+                                | <A 
+                                title="View only messages within this thread" 
+                                href="http://www.codeproject.com/cs/system/WilsonSystemGlobalHooks.asp?df=100&amp;tid=2019162&amp;forumid=414057&amp;select=2019162#xx2019162xx">View 
+                                Thread</A> | <A 
+                                title="Get the URL for this message" 
+                                href="http://www.codeproject.com/cs/system/WilsonSystemGlobalHooks.asp?msg=2019162#xx2019162xx">PermaLink</A> 
+                                | <A title="Go to Thread Start" 
+                                href="http://www.codeproject.com/cs/system/WilsonSystemGlobalHooks.asp?msg=2019162#xx2019162xx">Go 
+                                to Thread Start</A>]</TD>
+                                <TD class=messagetitle align=right>Score: 2.0 (1 
+                                vote).
+                                <SCRIPT language=Javascript>MsgVoteForm(3136296,2019162);</SCRIPT>
+                                 
+                                </TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+                          <TR>
+                            <TD><IMG height=6 
+                              src="Using Window Messages to Implement Global System Hooks in C# - The Code Project - System Programming_files/t.gif" 
+                              width=1 border=0></TD></TR>
+                          <TR id=2020759_h0 bgColor=#fef9e7>
+                            <TD width="100%">
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD bgColor=white><A name=xx2020759xx></A><IMG 
+                                height=1 
+                                src="Using Window Messages to Implement Global System Hooks in C# - The Code Project - System Programming_files/ind.gif" 
+                                width=18><IMG 
+                                src="Using Window Messages to Implement Global System Hooks in C# - The Code Project - System Programming_files/news_general.gif" 
+                                align=absMiddle>&nbsp;</TD>
+                                <TD class=messagetitle width="100%"><A 
+                                class=messagetitle id=DynMessLink 
+                                href="http://www.codeproject.com/cs/system/WilsonSystemGlobalHooks.asp?df=100&amp;forumid=414057&amp;select=2020759#xx2020759xx" 
+                                name=2020759>Re: Great but</A></TD>
+                                <TD vAlign=bottom noWrap><A 
+                                href="http://www.codeproject.com/script/profile/whos_who.asp?id=83302"><IMG 
+                                title="Click for User Profile" height=15 
+                                src="Using Window Messages to Implement Global System Hooks in C# - The Code Project - System Programming_files/userinfo.gif" 
+                                width=14 border=0></A>&nbsp;</TD>
+                                <TD noWrap width=140><FONT 
+                                class=messagetitle>ChrisP1118&nbsp;</FONT></TD>
+                                <TD style="WIDTH: 9em" noWrap align=right 
+                                width=120><FONT class=messagetitle>11:59 4 May 
+                                '07&nbsp;</FONT></TD></TR></TBODY></TABLE></TD></TR>
+                          <TR id=2020759_h1 style="DISPLAY: none">
+                            <TD width="100%">
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD><IMG height=1 
+                                src="Using Window Messages to Implement Global System Hooks in C# - The Code Project - System Programming_files/ind.gif" 
+                                width=18><IMG 
+                                src="Using Window Messages to Implement Global System Hooks in C# - The Code Project - System Programming_files/news_blank.gif" 
+                                align=absMiddle>&nbsp;</TD>
+                                <TD width="100%" bgColor=#d5eaff>
+                                <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+                                border=0>
+                                <TBODY>
+                                <TR>
+                                <TD>
+                                <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                                border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2><FONT class=messagecontent>This is 
+                                my first time posting, so I might be missing 
+                                something, but... all the source files are 
+                                there. Just downloaded them again myself to 
+                                check, and everything built and ran 
+                                fine.<BR><BR>The only possible problem I see is 
+                                that, if you're building either of the two demo 
+                                apps in Release mode, you must copy 
+                                GlobalCbtHook.dll to the Release directories for 
+                                the demo apps. <BR>&nbsp;</FONT></TD></TR>
+                                <TR vAlign=top>
+                                <TD class=messagetitle>[<A 
+                                title="Reply to this current thread" 
+                                href="http://www.codeproject.com/script/comments/user_reply.asp?main=/cs/system/WilsonSystemGlobalHooks.asp&amp;df=100&amp;forumid=414057&amp;select=2020759">Reply</A> 
+                                | <A 
+                                title="Email a reply to the author of this message" 
+                                href="http://www.codeproject.com/script/comments/user_mail.asp?main=/cs/system/WilsonSystemGlobalHooks.asp&amp;df=100&amp;forumid=414057&amp;select=2020759">Email</A> 
+                                | <A 
+                                title="View only messages within this thread" 
+                                href="http://www.codeproject.com/cs/system/WilsonSystemGlobalHooks.asp?df=100&amp;tid=2019162&amp;forumid=414057&amp;select=2020759#xx2020759xx">View 
+                                Thread</A> | <A 
+                                title="Get the URL for this message" 
+                                href="http://www.codeproject.com/cs/system/WilsonSystemGlobalHooks.asp?msg=2020759#xx2020759xx">PermaLink</A> 
+                                | <A title="Go to Thread Start" 
+                                href="http://www.codeproject.com/cs/system/WilsonSystemGlobalHooks.asp?msg=2019162#xx2019162xx">Go 
+                                to Thread Start</A>]</TD>
+                                <TD class=messagetitle align=right>
+                                <SCRIPT language=Javascript>MsgVoteForm(83302,2020759);</SCRIPT>
+                                </TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+                          <TR>
+                            <TD><IMG height=6 
+                              src="Using Window Messages to Implement Global System Hooks in C# - The Code Project - System Programming_files/t.gif" 
+                              width=1 border=0></TD></TR>
+                          <TR id=2020954_h0 bgColor=#fef9e7>
+                            <TD width="100%">
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD bgColor=white><A name=xx2020954xx></A><IMG 
+                                height=1 
+                                src="Using Window Messages to Implement Global System Hooks in C# - The Code Project - System Programming_files/ind.gif" 
+                                width=36><IMG 
+                                src="Using Window Messages to Implement Global System Hooks in C# - The Code Project - System Programming_files/news_general.gif" 
+                                align=absMiddle>&nbsp;</TD>
+                                <TD class=messagetitle width="100%"><A 
+                                class=messagetitle id=DynMessLink 
+                                href="http://www.codeproject.com/cs/system/WilsonSystemGlobalHooks.asp?df=100&amp;forumid=414057&amp;select=2020954#xx2020954xx" 
+                                name=2020954>Re: Great but</A></TD>
+                                <TD vAlign=bottom noWrap><A 
+                                href="http://www.codeproject.com/script/profile/whos_who.asp?id=3136296"><IMG 
+                                title="Click for User Profile" height=15 
+                                src="Using Window Messages to Implement Global System Hooks in C# - The Code Project - System Programming_files/userinfo.gif" 
+                                width=14 border=0></A>&nbsp;</TD>
+                                <TD noWrap width=140><FONT 
+                                class=messagetitle>Giorgi 
+                                Dalakishvili&nbsp;</FONT></TD>
+                                <TD style="WIDTH: 9em" noWrap align=right 
+                                width=120><FONT class=messagetitle>13:54 4 May 
+                                '07&nbsp;</FONT></TD></TR></TBODY></TABLE></TD></TR>
+                          <TR id=2020954_h1 style="DISPLAY: none">
+                            <TD width="100%">
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD><IMG height=1 
+                                src="Using Window Messages to Implement Global System Hooks in C# - The Code Project - System Programming_files/ind.gif" 
+                                width=36><IMG 
+                                src="Using Window Messages to Implement Global System Hooks in C# - The Code Project - System Programming_files/news_blank.gif" 
+                                align=absMiddle>&nbsp;</TD>
+                                <TD width="100%" bgColor=#d5eaff>
+                                <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+                                border=0>
+                                <TBODY>
+                                <TR>
+                                <TD>
+                                <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                                border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2><FONT class=messagecontent>Yes, 
+                                now I am able to download the files since it was 
+                                moved from unedited to another category. (and I 
+                                have already downloaded) I built it and ran it 
+                                successfully, thanks again <IMG 
+                                src="Using Window Messages to Implement Global System Hooks in C# - The Code Project - System Programming_files/smiley_smile.gif" 
+                                align=absMiddle> <BR>&nbsp;</FONT></TD></TR>
+                                <TR vAlign=top>
+                                <TD class=messagetitle>[<A 
+                                title="Reply to this current thread" 
+                                href="http://www.codeproject.com/script/comments/user_reply.asp?main=/cs/system/WilsonSystemGlobalHooks.asp&amp;df=100&amp;forumid=414057&amp;select=2020954">Reply</A> 
+                                | <A 
+                                title="Email a reply to the author of this message" 
+                                href="http://www.codeproject.com/script/comments/user_mail.asp?main=/cs/system/WilsonSystemGlobalHooks.asp&amp;df=100&amp;forumid=414057&amp;select=2020954">Email</A> 
+                                | <A 
+                                title="View only messages within this thread" 
+                                href="http://www.codeproject.com/cs/system/WilsonSystemGlobalHooks.asp?df=100&amp;tid=2019162&amp;forumid=414057&amp;select=2020954#xx2020954xx">View 
+                                Thread</A> | <A 
+                                title="Get the URL for this message" 
+                                href="http://www.codeproject.com/cs/system/WilsonSystemGlobalHooks.asp?msg=2020954#xx2020954xx">PermaLink</A> 
+                                | <A title="Go to Thread Start" 
+                                href="http://www.codeproject.com/cs/system/WilsonSystemGlobalHooks.asp?msg=2019162#xx2019162xx">Go 
+                                to Thread Start</A>]</TD>
+                                <TD class=messagetitle align=right>
+                                <SCRIPT language=Javascript>MsgVoteForm(3136296,2020954);</SCRIPT>
+                                </TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+                          <TR>
+                            <TD><IMG height=5 
+                              src="Using Window Messages to Implement Global System Hooks in C# - The Code Project - System Programming_files/t.gif" 
+                              width=1 border=0></TD></TR>
+                          <TR height=1>
+                            <TD bgColor=#ff9900><IMG height=1 
+                              src="Using Window Messages to Implement Global System Hooks in C# - The Code Project - System Programming_files/t.gif" 
+                              width=1></TD></TR>
+                          <TR id=2019127_h0 bgColor=#fef9e7>
+                            <TD width="100%">
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD bgColor=white><A name=xx2019127xx></A><IMG 
+                                src="Using Window Messages to Implement Global System Hooks in C# - The Code Project - System Programming_files/news_general.gif" 
+                                align=absMiddle>&nbsp;</TD>
+                                <TD class=messagetitle width="100%"><A 
+                                class=messagetitle id=DynMessLink 
+                                href="http://www.codeproject.com/cs/system/WilsonSystemGlobalHooks.asp?df=100&amp;forumid=414057&amp;select=2019127#xx2019127xx" 
+                                name=2019127><B>Source code missing</B></A></TD>
+                                <TD vAlign=bottom noWrap><A 
+                                href="http://www.codeproject.com/script/profile/whos_who.asp?id=454488"><IMG 
+                                title="Click for User Profile" height=15 
+                                src="Using Window Messages to Implement Global System Hooks in C# - The Code Project - System Programming_files/userinfo.gif" 
+                                width=14 border=0></A>&nbsp;</TD>
+                                <TD noWrap width=140><FONT 
+                                class=messagetitle><B>Muhammed 
+                                Sahin</B>&nbsp;</FONT></TD>
+                                <TD style="WIDTH: 9em" noWrap align=right 
+                                width=120><FONT class=messagetitle><B>14:52 3 
+                                May 
+                            '07</B>&nbsp;</FONT></TD></TR></TBODY></TABLE></TD></TR>
+                          <TR id=2019127_h1 style="DISPLAY: none">
+                            <TD width="100%">
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD><IMG 
+                                src="Using Window Messages to Implement Global System Hooks in C# - The Code Project - System Programming_files/news_blank.gif" 
+                                align=absMiddle>&nbsp;</TD>
+                                <TD width="100%" bgColor=#d5eaff>
+                                <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+                                border=0>
+                                <TBODY>
+                                <TR>
+                                <TD>
+                                <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                                border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2><FONT class=messagecontent>Source 
+                                code missing <BR>&nbsp;</FONT></TD></TR>
+                                <TR vAlign=top>
+                                <TD class=messagetitle>[<A 
+                                title="Reply to this current thread" 
+                                href="http://www.codeproject.com/script/comments/user_reply.asp?main=/cs/system/WilsonSystemGlobalHooks.asp&amp;df=100&amp;forumid=414057&amp;select=2019127">Reply</A> 
+                                | <A 
+                                title="Email a reply to the author of this message" 
+                                href="http://www.codeproject.com/script/comments/user_mail.asp?main=/cs/system/WilsonSystemGlobalHooks.asp&amp;df=100&amp;forumid=414057&amp;select=2019127">Email</A> 
+                                | <A 
+                                title="View only messages within this thread" 
+                                href="http://www.codeproject.com/cs/system/WilsonSystemGlobalHooks.asp?df=100&amp;tid=2019127&amp;forumid=414057&amp;select=2019127#xx2019127xx">View 
+                                Thread</A> | <A 
+                                title="Get the URL for this message" 
+                                href="http://www.codeproject.com/cs/system/WilsonSystemGlobalHooks.asp?msg=2019127#xx2019127xx">PermaLink</A> 
+                                | <A title="Go to Thread Start" 
+                                href="http://www.codeproject.com/cs/system/WilsonSystemGlobalHooks.asp?msg=2019127#xx2019127xx">Go 
+                                to Thread Start</A>]</TD>
+                                <TD class=messagetitle align=right>
+                                <SCRIPT language=Javascript>MsgVoteForm(454488,2019127);</SCRIPT>
+                                </TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+                          <TR>
+                            <TD><IMG height=5 
+                              src="Using Window Messages to Implement Global System Hooks in C# - The Code Project - System Programming_files/t.gif" 
+                              width=1 border=0></TD></TR></TBODY></TABLE></TD></TR>
+                    <TR bgColor=#fbedbb>
+                      <TD>
+                        <TABLE cellPadding=2 width="100%">
+                          <TBODY>
+                          <TR>
+                            <TD class=messagetitle>Last Visit: 21:03 Tuesday 
+                              31st July, 2007</TD>
+                            <TD noWrap align=right><FONT 
+                              class=messagetitle><SPAN 
+                              class=HoverLink>First</SPAN> <SPAN 
+                              class=HoverLink>Prev</SPAN> <SPAN 
+                              class=HoverLink>Next</SPAN> <SPAN 
+                              class=HoverLink>&nbsp;&nbsp;&nbsp;&nbsp;</SPAN> 
+                              </FONT></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></DIV>
+            <P class=smallText><IMG 
+            src="Using Window Messages to Implement Global System Hooks in C# - The Code Project - System Programming_files/news_general.gif" 
+            align=absMiddle> General comment &nbsp;&nbsp; <IMG 
+            src="Using Window Messages to Implement Global System Hooks in C# - The Code Project - System Programming_files/news_info.gif" 
+            align=absMiddle> News / Info &nbsp;&nbsp; <IMG 
+            src="Using Window Messages to Implement Global System Hooks in C# - The Code Project - System Programming_files/news_question.gif" 
+            align=absMiddle> Question &nbsp;&nbsp; <IMG 
+            src="Using Window Messages to Implement Global System Hooks in C# - The Code Project - System Programming_files/news_answer.gif" 
+            align=absMiddle> Answer &nbsp;&nbsp; <IMG 
+            src="Using Window Messages to Implement Global System Hooks in C# - The Code Project - System Programming_files/news_game.gif" 
+            align=absMiddle> Joke / Game &nbsp;&nbsp; <IMG 
+            src="Using Window Messages to Implement Global System Hooks in C# - The Code Project - System Programming_files/news_sticky.gif" 
+            align=absMiddle> Admin message</P><BR>
+            <TABLE cellSpacing=5 width="100%">
+              <TBODY>
+              <TR vAlign=top>
+                <TD class=smallText>Updated: 3 May 2007 </TD>
+                <TD class=SmallText align=right>Article content copyright 
+                  ChrisP1118, 2007<BR>everything else Copyright © <A 
+                  href="mailto:webmaster@codeproject.com">CodeProject</A>, 
+                  1999-2007</A>. <BR>Web16 | <A 
+                  href="http://www.codeproject.com/info/MediaKit">Advertise on 
+                  The Code Project</A> | <A 
+                  href="http://www.codeproject.com/info/privacy.asp">Privacy</A> 
+                </TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE><BR>
+      <CENTER>
+      <TABLE cellSpacing=0 cellPadding=0 width="95%" border=0>
+        <TBODY>
+        <TR>
+          <TD bgColor=#ff9900 height=1><IMG height=1 
+            src="Using Window Messages to Implement Global System Hooks in C# - The Code Project - System Programming_files/space.gif"></TD></TR>
+        <TR>
+          <TD align=middle><FONT size=1><A 
+            href="http://www.theultimatetoolbox.com/">The Ultimate Toolbox</A> • 
+            <A href="http://www.aspalliance.com/">ASP Alliance</A> • <A 
+            href="http://www.developerfusion.co.uk/">Developer Fusion</A> • <A 
+            href="http://www.developersdex.com/">Developersdex</A> • <A 
+            href="http://www.devguru.com/">DevGuru</A> • <A 
+            href="http://www.programmersheaven.com/">Programmers Heaven</A> • <A 
+            href="http://www.planet-source-code.com/">Planet Source Code</A> • 
+            <A href="http://www.tek-tips.com/">Tek-Tips Forums</A> • 
+        </FONT></TD></TR></TBODY></TABLE></CENTER></TR></TBODY></TABLE></BODY></HTML>

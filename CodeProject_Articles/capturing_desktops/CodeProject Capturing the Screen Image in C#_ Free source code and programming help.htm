@@ -1,0 +1,3045 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!-- saved from url=(0060)http://www.codeproject.com/KB/graphics/cscapturescreen1.aspx -->
+<HTML><HEAD><TITLE>CodeProject: Capturing the Screen Image in C#. Free source code and programming help</TITLE>
+<META http-equiv=Content-Type content="text/html; charset=utf-8">
+<META 
+content="An article on capturing the Screen using Win32 APIs in C#; Author: Agha Ali Raza; Section: General Graphics; Chapter: Multimedia" 
+name=Description>
+<META 
+content=".NET 1.0, VS.NET2002, C#, Windows, Dev, Intermediate,General Graphics,Multimedia,Free source code, tutorials" 
+name=Keywords>
+<META content="The Code Project" name=Author>
+<META content=General name=Rating>
+<META content="index, follow" name=Robots>
+<META content="1 days" name=Revisit-After><LINK 
+title="CodeProject Lounge Postings" 
+href="http://www.codeproject.com/webservices/LoungeRSS.aspx" 
+type=application/rss+xml rel=alternate><LINK 
+title="CodeProject Latest articles - All topics" 
+href="http://www.codeproject.com/webservices/articlerss.aspx?cat=1" 
+type=application/rss+xml rel=alternate><LINK 
+title="CodeProject Latest articles - MFC / C++" 
+href="http://www.codeproject.com/webservices/articlerss.aspx?cat=2" 
+type=application/rss+xml rel=alternate><LINK 
+title="CodeProject Latest articles - C#" 
+href="http://www.codeproject.com/webservices/articlerss.aspx?cat=3" 
+type=application/rss+xml rel=alternate><LINK 
+title="CodeProject Latest articles - ASP.NET" 
+href="http://www.codeproject.com/webservices/articlerss.aspx?cat=4" 
+type=application/rss+xml rel=alternate><LINK 
+title="CodeProject Latest articles - .NET" 
+href="http://www.codeproject.com/webservices/articlerss.aspx?cat=5" 
+type=application/rss+xml rel=alternate><LINK 
+title="CodeProject Latest articles - VB.NET" 
+href="http://www.codeproject.com/webservices/articlerss.aspx?cat=6" 
+type=application/rss+xml rel=alternate><LINK title=CodeProject 
+href="http://www.codeproject.com/info/OpenSearch.xml" 
+type=application/opensearchdescription+xml rel=search><LINK 
+href="CodeProject Capturing the Screen Image in C#_ Free source code and programming help_files/CodeProject.css" 
+type=text/css rel=stylesheet><LINK 
+href="CodeProject Capturing the Screen Image in C#_ Free source code and programming help_files/ForumClassic.css" 
+type=text/css rel=stylesheet>
+<SCRIPT type=text/javascript>
+  var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+  document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</SCRIPT>
+
+<SCRIPT type=text/javascript>
+   var pageTracker = _gat._getTracker("UA-1735123-1");
+   pageTracker._setDomainName("codeproject.com");
+   pageTracker._setSessionTimeout("1200"); // 20 mins
+   pageTracker._initData();
+   pageTracker._trackPageview();
+</SCRIPT>
+
+<SCRIPT language=Javascript 
+src="CodeProject Capturing the Screen Image in C#_ Free source code and programming help_files/oncopy.js" 
+type=text/javascript></SCRIPT>
+
+<SCRIPT language=Javascript 
+src="CodeProject Capturing the Screen Image in C#_ Free source code and programming help_files/addto.js" 
+type=text/javascript></SCRIPT>
+
+<SCRIPT language=Javascript type=text/javascript><!--
+function ToggleMenu(itemName)
+{
+	var elm = document.getElementById(itemName);
+	var i,others = document.getElementById('SectionMenu');
+	for(i=0; i < others.childNodes.length; i++)
+	{
+		var other = others.childNodes[i];
+		if ((other.className == 'MenuSectionBlock') && (other != elm))
+			other.style.display='none';
+	}
+	if (elm.style.display == 'block') elm.style.display='none';
+	else elm.style.display='block';
+	return false;
+}
+
+--></SCRIPT>
+
+<SCRIPT language=Javascript type=text/javascript><!--
+function MsgVoteForm(MemberID, MsgID) {
+ document.write("Rate this message: ");
+ document.write(unescape("%3Ca href=\"#xx" + MsgID.toString() + "xx\" onclick=\"RateMsg(" + MemberID.toString() + ", " + MsgID.toString() + ",1)\"%3E"));
+ document.write(unescape("%3Cimg height=\"14\" width=\"14\" src=\"/script/Forums/Images/thumbs_down.gif\" alt=\"vote 1\" border=\"0\" align=\"absmiddle\" /%3E%3C/a%3E "));
+ for (var i=1; i<=5;i++)
+  document.write(unescape("%3Ca class=\"Frm_MHL\" href=\"#xx" + MsgID.toString() + "xx\" title=\"give this message a vote of " + i.toString() + "\" onclick=\"RateMsg(" + MemberID.toString() + ", " + MsgID.toString() + ", " + i.toString() + ")\"%3E%3Cb%3E" + i.toString() + "%3C/b%3E%3C/a%3E "));
+ document.write(unescape("%3Ca href=\"#xx" + MsgID.toString() + "xx\" onclick=\"RateMsg(" + MemberID.toString() + ", " + MsgID.toString() + ",5)\"%3E"));
+ document.write(unescape("%3Cimg height=\"14\" width=\"14\" src=\"/script/Forums/Images/thumbs_up.gif\" alt=\"vote 5\" border=\"0\" align=\"absmiddle\" /%3E%3C/a%3E "));
+}
+
+function ReportMsg(userid, msgid, score) {
+ if (confirm("Are you sure you want to report this message?") == true)
+  return RateMsg(userid, msgid, score);
+ else return false;
+}
+function RateMsg(memberid, msgid, score) {
+ var req = new ActiveXObject("MSXML2.XMLHTTP");
+ req.onreadystatechange = function() {
+  if (req.readyState == 4) {
+   if ( req.status == 200 ) {
+    var respText = req.responseText;
+    var re = new RegExp(unescape("\%3Cdiv\%3E([^\%3C]*)\%3C/div\%3E"), "g");
+    var match = re.exec(respText);
+    voteStatus.innerHTML = unescape("%3Cb%3E") + (match)?match[1]:"An error occured" + unescape("%3C/b%3E");
+   }
+   else
+   {
+    voteStatus.innerHTML = unescape("%3Cb style='color:red'%3EFailed!") + req.statusText + unescape("%3C/b%3E");
+   }
+  }
+ }
+ var voteStatus = document.getElementById("MVF" + msgid);
+ if (!voteStatus) return;
+ voteStatus.innerHTML = unescape("%3Cb style='color:green'%3EVoting...%3C/b%3E");
+ var strAction = "/script/Forums/Vote.aspx?js=1&fmid="+memberid.toString()+"&select="+msgid.toString()+"&score="+score.toString();
+ req.open("GET", strAction, true);
+ req.send(null);
+  return false;
+}
+--></SCRIPT>
+
+<SCRIPT language=Javascript type=text/javascript><!--
+var Selected = "-1";
+
+function SwitchMessage(e, msgId)
+{
+  if (!msgId) {
+    if(!e)e=window.event;
+    var target=e.target?e.target:e.srcElement;
+    while(target&&target.id!='DynMessLink')target=target.parentNode;
+    if(!target||target.id!='DynMessLink')return;
+    msgId=target.name;
+  }
+  if(Selected&&Selected!=""){
+    var body=eval("document.getElementById('" + Selected + "_h1')");
+    if(body) body.style.display = 'none';
+    var head=eval("document.getElementById('" + Selected + "_h0')");
+    if(head) head.className = head.className.replace("Sel", "UnSel");
+  }
+  if(Selected==msgId.toString())
+    Selected="";
+  else {
+    Selected=msgId.toString();
+    var body=eval("document.getElementById('" + Selected + "_h1')");
+    if(body){
+      if(body.style.display=='none') body.style.display='';
+      else body.style.display = 'none';
+    }
+    var head=eval("document.getElementById('" + Selected + "_h0')");
+    if (head) 
+      head.className = head.className.replace("UnSel", "Sel");
+    if(body&&head&&body.style.display!='none'){
+      document.body.scrollTop = getRealPos(head, "Top") - document.body.clientHeight/10;
+      EnsureMessageVisible(Selected, true);
+    }
+  }
+  if (e){if(e.preventDefault)e.preventDefault;else e.returnValue=false;}
+  return false;
+}
+
+--></SCRIPT>
+
+<SCRIPT language=Javascript 
+src="CodeProject Capturing the Screen Image in C#_ Free source code and programming help_files/ShortCuts.js" 
+type=text/javascript></SCRIPT>
+<LINK href="/favicon.ico" type=image/ico rel=icon><LINK href="/favicon.ico" 
+type=image/ico rel="shortcut icon">
+<SCRIPT type=text/javascript>
+	function SetAsAvailable() {
+	   var aid = document.getElementById("ArticleId");
+	   if(aid)
+		   window.location.href = "/script/Articles/UpdateArticleStatus.aspx?aid=" + articleId.value + "&rp=" + location.href;
+	}
+	</SCRIPT>
+
+<META content="MSHTML 6.00.2900.2180" name=GENERATOR></HEAD>
+<BODY>
+<TABLE id=ctl00_AT cellSpacing=0 cellPadding=0 border=0>
+  <TBODY>
+  <TR vAlign=top>
+    <TD colSpan=2>
+      <TABLE cellSpacing=0 cellPadding=0 border=0>
+        <TBODY>
+        <TR>
+          <TD class=HeaderLogo><A href="http://www.codeproject.com/"><IMG 
+            height=90 alt=Home src="/Images/Standard/codeproject225x90.gif" 
+            width=225 border=0></A></TD>
+          <TD class=HeaderBanner align=right width="100%">
+            <SCRIPT type=text/javascript>document.write("<a href=\"http://www.codeproject.com/Redir.aspx?adid=4929&way=ban\" target=\"_blank\" rel=\"nofollow\"><img src=\"http://www.codeproject.com/script/Ann/ServeImg.aspx?File=%2fscript%2fadmentor%2fimages%2fNatInstru_08_ban_mstudio_728x90.gif&C=False&id=4929\" alt=\"\" border=\"0\" width=\"728\" height=\"90\"></a>");</SCRIPT>
+          </TD></TR>
+        <TR>
+          <TD colSpan=2>
+            <TABLE class=MemberNavBar cellSpacing=0 cellPadding=5 
+              width="100%"><TBODY>
+              <TR>
+                <TD class=SmallText style="FONT-WEIGHT: bold">4,881,172 
+                  members and growing! (10,590 online)</TD>
+                <TD align=right>
+                  <DIV class=MemberNavBarText 
+                  id=ctl00_MemberMenu_LoggedOnOptions><A 
+                  id=ctl00_MemberMenu_MyProfile 
+                  href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=2959938">abdelrady2030</A> 
+                  | <A id=ctl00_MemberMenu_MySettings 
+                  href="http://www.codeproject.com/script/Membership/Modify.aspx"><IMG 
+                  height=16 src="/images/tools.gif" width=16 align=absMiddle 
+                  border=0> <B>My Settings</B></A> | <A 
+                  id=ctl00_MemberMenu_MyBookmarks 
+                  href="http://www.codeproject.com/script/Bookmarks/List.aspx?obtid=2"><IMG 
+                  height=16 src="/images/fave.gif" width=16 align=absMiddle 
+                  border=0> My Bookmarks</A> | <A id=ctl00_MemberMenu_MyArticles 
+                  href="http://www.codeproject.com/script/Articles/MemberArticles.aspx?amid=2959938">My 
+                  Articles</A> | <A id=ctl00_MemberMenu_Signout 
+                  href="http://www.codeproject.com/script/Membership/LogOff.aspx?rp=%2fKB%2fgraphics%2fcscapturescreen1.aspx">Sign 
+                  out</A> </DIV></TD></TR></TBODY></TABLE></TD></TR>
+        <TR>
+          <TD colSpan=2>
+            <TABLE class=SiteNavBar id=tblSiteToolbar cellSpacing=0 
+            cellPadding=0>
+              <TBODY>
+              <TR>
+                <TD><A href="http://www.codeproject.com/">Home</A></TD>
+                <TD class=SelCat noWrap><A 
+                  href="http://www.codeproject.com/?cat=1">All Topics</A></TD>
+                <TD noWrap><A 
+                  href="http://www.codeproject.com/?cat=2">MFC/C++</A></TD>
+                <TD noWrap><A 
+                href="http://www.codeproject.com/?cat=3">C#</A></TD>
+                <TD noWrap><A 
+                  href="http://www.codeproject.com/?cat=6">VB.NET</A></TD>
+                <TD noWrap><A 
+                  href="http://www.codeproject.com/?cat=4">ASP.NET</A></TD>
+                <TD noWrap><A 
+                href="http://www.codeproject.com/?cat=9">SQL</A></TD>
+                <TD noWrap><A 
+                  href="http://www.codeproject.com/?cat=8">Architect</A></TD>
+                <TD width="100%">&nbsp;</TD>
+                <TD id=ctl00_TopNavBar_RightMenus><!--380-->
+                  <DIV id=MenuPos 
+                  style="WIDTH: 305px; POSITION: relative; TOP: 1px; HEIGHT: 22px">
+                  <TABLE 
+                  style="BORDER-TOP-WIDTH: 0px; BORDER-LEFT-WIDTH: 0px; BORDER-BOTTOM-WIDTH: 0px; HEIGHT: 20px; BORDER-RIGHT-WIDTH: 0px" 
+                  cellSpacing=0 cellPadding=0 width=305>
+                    <TBODY>
+                    <TR vAlign=center>
+                      <TD 
+                      style="BORDER-TOP-WIDTH: 0px; BORDER-LEFT-WIDTH: 0px; BORDER-BOTTOM-WIDTH: 0px; BORDER-RIGHT-WIDTH: 0px" 
+                      noWrap><A 
+                        href="http://www.codeproject.com/info/FAQ.aspx">Help!</A></TD>
+                      <TD 
+                      style="BORDER-TOP-WIDTH: 0px; BORDER-LEFT-WIDTH: 0px; BORDER-BOTTOM-WIDTH: 0px; BORDER-RIGHT-WIDTH: 0px" 
+                      noWrap><A 
+                        href="http://www.codeproject.com/script/Articles/Latest.aspx">Articles</A></TD>
+                      <TD 
+                      style="BORDER-TOP-WIDTH: 0px; BORDER-LEFT-WIDTH: 0px; BORDER-BOTTOM-WIDTH: 0px; BORDER-RIGHT-WIDTH: 0px" 
+                      noWrap><A 
+                        href="http://www.codeproject.com/script/Forums/List.aspx">Message 
+                        Boards</A></TD>
+                      <TD 
+                      style="BORDER-TOP-WIDTH: 0px; BORDER-LEFT-WIDTH: 0px; BORDER-BOTTOM-WIDTH: 0px; BORDER-RIGHT-WIDTH: 0px" 
+                      noWrap><A 
+                        href="http://www.codeproject.com/Lounge.aspx">Lounge</A></TD></TR></TBODY></TABLE></DIV></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+  <TR>
+    <TD vAlign=top colSpan=2><A name=_top></A>
+      <TABLE class=ArticleHeader id=ctl00_ArticleTopHeader_HeaderTable 
+      cellSpacing=0 cellPadding=3 width="100%" border=0>
+        <TBODY>
+        <TR vAlign=top>
+          <TD class=SmallText><A id=ctl00_ArticleTopHeader_ChapterLink 
+            href="http://www.codeproject.com/script/Content/Chapter.aspx?chptId=3">Multimedia</A> 
+            » <A id=ctl00_ArticleTopHeader_SectionLink 
+            href="http://www.codeproject.com/KB/graphics/">General Graphics</A> 
+            » <A id=ctl00_ArticleTopHeader_SubsectionLink 
+            href="http://www.codeproject.com/KB/graphics/index.aspx?#General Graphics - Graphics">Graphics</A> 
+            <SPAN class=ArticleIntermediate 
+            id=ctl00_ArticleTopHeader_SkillLevel>&nbsp;&nbsp;&nbsp; 
+            Intermediate</SPAN> <SPAN 
+            id=ctl00_ArticleTopHeader_LicenceTerms></SPAN><BR><BR>
+            <H1><SPAN class=ArticleTopTitle 
+            id=ctl00_ArticleTopHeader_ArticleTitle>Capturing the Screen Image in 
+            C#</SPAN></H1><B>By <A 
+            href="http://www.codeproject.com/script/Articles/MemberArticles.aspx?amid=48859">Agha 
+            Ali Raza</A></B><BR><BR><SPAN class=ArticleTopDescr 
+            id=ctl00_ArticleTopHeader_ArticleDescr>An article on capturing the 
+            Screen using Win32 APIs in C#</SPAN> </TD>
+          <TD class=SmallText style="WIDTH: 210px"><SPAN 
+            id=ctl00_ArticleTopHeader_ArticleAttributes>C#, Windows, .NET, .NET 
+            1.0, VS, VS.NET2002, Dev</SPAN><BR><BR><SPAN 
+            style="PADDING-RIGHT: 2ex">Posted</SPAN>: <B>11 Oct 
+            2002</B><BR><SPAN style="PADDING-RIGHT: 0.5ex">Updated</SPAN>: <B>27 
+            Feb 2003</B> <BR><SPAN style="PADDING-RIGHT: 3.2ex">Views</SPAN>: 
+            <B>108,744</B><BR></TD></TR>
+        <TR>
+          <TD colSpan=2>
+            <TABLE width="100%">
+              <TBODY>
+              <TR>
+                <TD></TD>
+                <TD class=SmallText style="WHITE-SPACE: nowrap" 
+              align=right></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+  <TR vAlign=top>
+    <TD class=LHNavBar id=ctl00_LeftNavCell>
+      <DIV style="PADDING-TOP: 5px; TEXT-ALIGN: center">
+      <SCRIPT type=text/javascript>document.write("<a href=\"http://www.codeproject.com/Redir.aspx?adid=3487&way=ban\" target=\"_blank\" rel=\"nofollow\"><img src=\"http://www.codeproject.com/script/Ann/ServeImg.aspx?File=%2fscript%2fadmentor%2fimages%2fcp_daily_150x80.gif&C=False&id=3487\" alt=\"\" border=\"0\" width=\"150\" height=\"80\"></a>");</SCRIPT>
+      </DIV>
+      <DIV class=FeatureBlockHeader>Announcements</DIV>
+      <DIV class="FeatureBlockContent RHFeatureBar">
+      <DIV style="PADDING-TOP: 0px"><IMG 
+      style="PADDING-RIGHT: 14px; FLOAT: left; MARGIN-LEFT: 7px; MARGIN-RIGHT: 10px" 
+      height=20 alt=Comp src="/script/Awards/Images/prize_winner.gif" width=10> 
+      <A id=ctl00_Announcements_CompLink 
+      href="http://www.codeproject.com/Feature/ArticleCompetition/">Monthly 
+      Competition</A><BR clear=all>
+      <DIV style="PADDING-BOTTOM: 5px; PADDING-TOP: 3px"><IMG 
+      style="PADDING-RIGHT: 10px; FLOAT: left; MARGIN-LEFT: 7px; MARGIN-RIGHT: 8px" 
+      height=16 alt=Staff src="/script/membership/images/staff_sm.gif" width=12> 
+      <A href="http://www.codeproject.com/info/jobs/">We're Hiring!</A></DIV>
+      <DIV style="PADDING-BOTTOM: 5px; PADDING-TOP: 3px"><IMG 
+      style="PADDING-RIGHT: 0px; MARGIN-TOP: 3px; FLOAT: left; MARGIN-LEFT: 0px; MARGIN-RIGHT: 0px" 
+      height=20 alt=Silverlight src="/images/silverlight_20.jpg" width=27> <A 
+      href="http://www.codeproject.com/script/News/View.aspx?nwid=6024">Add 
+      Silverlight to your articles</A></DIV></DIV></DIV>
+      <DIV class=MenuCat>Services</DIV>
+      <DIV class=MenuChapter><A 
+      href="http://www.codeproject.com/Services/coffee.aspx">Code Project 
+      Coffee</A></DIV>
+      <DIV class=MenuChapter><A 
+      href="http://www.codeproject.com/Services/TradePub.aspx">Free 
+      Magazines</A></DIV>
+      <DIV></DIV><BR>
+      <DIV id=SectionMenu>
+      <DIV class=MenuCat>Chapters</DIV>
+      <DIV class=MenuChapter><A onclick="return ToggleMenu('Chapter1');" 
+      href="http://www.codeproject.com/script/Content/Chapter.aspx?chptId=1">Desktop 
+      Development</A></DIV>
+      <DIV class=MenuSectionBlock id=Chapter1 style="DISPLAY: none">
+      <DIV class=MI id=Section1><A 
+      href="http://www.codeproject.com/KB/buttons/">Button Controls</A></DIV>
+      <DIV class=MI id=Section15><A 
+      href="http://www.codeproject.com/KB/clipboard/">Clipboard</A></DIV>
+      <DIV class=MI id=Section2><A 
+      href="http://www.codeproject.com/KB/combobox/">Combo &amp; List 
+      Boxes</A></DIV>
+      <DIV class=MI id=Section67><A 
+      href="http://www.codeproject.com/KB/dialog/">Dialogs and Windows</A></DIV>
+      <DIV class=MI id=Section107><A 
+      href="http://www.codeproject.com/KB/gadgets/">Desktop Gadgets</A></DIV>
+      <DIV class=MI id=Section16><A 
+      href="http://www.codeproject.com/KB/docview/">Document / View</A></DIV>
+      <DIV class=MI id=Section4><A 
+      href="http://www.codeproject.com/KB/edit/">Edit Controls</A></DIV>
+      <DIV class=MI id=Section17><A 
+      href="http://www.codeproject.com/KB/files/">Files and Folders</A></DIV>
+      <DIV class=MI id=Section3><A 
+      href="http://www.codeproject.com/KB/grid/">Grid &amp; Data 
+      Controls</A></DIV>
+      <DIV class=MI id=Section48><A 
+      href="http://www.codeproject.com/KB/system/">Hardware &amp; 
+      System</A></DIV>
+      <DIV class=MI id=Section5><A 
+      href="http://www.codeproject.com/KB/list/">List Controls</A></DIV>
+      <DIV class=MI id=Section6><A 
+      href="http://www.codeproject.com/KB/menus/">Menus</A></DIV>
+      <DIV class=MI id=Section14><A 
+      href="http://www.codeproject.com/KB/miscctrl/">Miscellaneous</A></DIV>
+      <DIV class=MI id=Section18><A 
+      href="http://www.codeproject.com/KB/printing/">Printing</A></DIV>
+      <DIV class=MI id=Section95><A 
+      href="http://www.codeproject.com/KB/progress/">Progress Controls</A></DIV>
+      <DIV class=MI id=Section11><A 
+      href="http://www.codeproject.com/KB/selection/">Selection 
+      Controls</A></DIV>
+      <DIV class=MI id=Section19><A 
+      href="http://www.codeproject.com/KB/shell/">Shell and IE 
+      programming</A></DIV>
+      <DIV class=MI id=Section68><A 
+      href="http://www.codeproject.com/KB/smart/">Smart Client</A></DIV>
+      <DIV class=MI id=Section8><A 
+      href="http://www.codeproject.com/KB/splitter/">Splitter Windows</A></DIV>
+      <DIV class=MI id=Section9><A 
+      href="http://www.codeproject.com/KB/static/">Static &amp; Panel 
+      Controls</A></DIV>
+      <DIV class=MI id=Section10><A 
+      href="http://www.codeproject.com/KB/statusbar/">Status Bar</A></DIV>
+      <DIV class=MI id=Section7><A 
+      href="http://www.codeproject.com/KB/tabs/">Tabs &amp; Property 
+      Pages</A></DIV>
+      <DIV class=MI id=Section12><A 
+      href="http://www.codeproject.com/KB/toolbars/">Toolbars &amp; Docking 
+      windows</A></DIV>
+      <DIV class=MI id=Section13><A 
+      href="http://www.codeproject.com/KB/tree/">Tree Controls</A></DIV></DIV>
+      <DIV class=MenuChapter><A onclick="return ToggleMenu('Chapter2');" 
+      href="http://www.codeproject.com/script/Content/Chapter.aspx?chptId=2">Web 
+      Development</A></DIV>
+      <DIV class=MenuSectionBlock id=Chapter2 style="DISPLAY: none">
+      <DIV class=MI id=Section70><A 
+      href="http://www.codeproject.com/KB/ajax/">AJAX and Atlas</A></DIV>
+      <DIV class=MI id=Section27><A 
+      href="http://www.codeproject.com/KB/applications/">Applications &amp; 
+      Tools</A></DIV>
+      <DIV class=MI id=Section85><A 
+      href="http://www.codeproject.com/KB/asp/">ASP</A></DIV>
+      <DIV class=MI id=Section89><A 
+      href="http://www.codeproject.com/KB/aspnet/">ASP.NET</A></DIV>
+      <DIV class=MI id=Section28><A 
+      href="http://www.codeproject.com/KB/webforms/">ASP.NET Controls</A></DIV>
+      <DIV class=MI id=Section38><A 
+      href="http://www.codeproject.com/KB/ATL-Server/">ATL Server</A></DIV>
+      <DIV class=MI id=Section29><A 
+      href="http://www.codeproject.com/KB/web-cache/">Caching</A></DIV>
+      <DIV class=MI id=Section91><A 
+      href="http://www.codeproject.com/KB/web-image/">Charts, Graphs and 
+      Images</A></DIV>
+      <DIV class=MI id=Section25><A 
+      href="http://www.codeproject.com/KB/scripting/">Client side 
+      scripting</A></DIV>
+      <DIV class=MI id=Section30><A 
+      href="http://www.codeproject.com/KB/custom-controls/">Custom 
+      Controls</A></DIV>
+      <DIV class=MI id=Section23><A 
+      href="http://www.codeproject.com/KB/HTML/">HTML / CSS</A></DIV>
+      <DIV class=MI id=Section22><A 
+      href="http://www.codeproject.com/KB/IP/">Internet / Network</A></DIV>
+      <DIV class=MI id=Section24><A 
+      href="http://www.codeproject.com/KB/ISAPI/">ISAPI</A></DIV>
+      <DIV class=MI id=Section33><A 
+      href="http://www.codeproject.com/KB/server-management/">Site &amp; Server 
+      Management</A></DIV>
+      <DIV class=MI id=Section34><A 
+      href="http://www.codeproject.com/KB/session/">Session State</A></DIV>
+      <DIV class=MI id=Section113><A 
+      href="http://www.codeproject.com/KB/silverlight/">Silverlight</A></DIV>
+      <DIV class=MI id=Section36><A 
+      href="http://www.codeproject.com/KB/trace/">Trace and Logs</A></DIV>
+      <DIV class=MI id=Section31><A 
+      href="http://www.codeproject.com/KB/user-controls/">User 
+Controls</A></DIV>
+      <DIV class=MI id=Section37><A 
+      href="http://www.codeproject.com/KB/validation/">Validation</A></DIV>
+      <DIV class=MI id=Section35><A 
+      href="http://www.codeproject.com/KB/viewstate/">View State</A></DIV>
+      <DIV class=MI id=Section26><A 
+      href="http://www.codeproject.com/KB/WAP/">WAP / WML</A></DIV>
+      <DIV class=MI id=Section32><A 
+      href="http://www.codeproject.com/KB/web-security/">Web Security</A></DIV>
+      <DIV class=MI id=Section20><A 
+      href="http://www.codeproject.com/KB/webservices/">Web 
+      Services</A></DIV></DIV>
+      <DIV class=MenuChapter><A onclick="return ToggleMenu('Chapter9');" 
+      href="http://www.codeproject.com/script/Content/Chapter.aspx?chptId=9">Enterprise 
+      Systems</A></DIV>
+      <DIV class=MenuSectionBlock id=Chapter9 style="DISPLAY: none">
+      <DIV class=MI id=Section98><A 
+      href="http://www.codeproject.com/KB/MCMS/">Content Management 
+      Server</A></DIV>
+      <DIV class=MI id=Section99><A 
+      href="http://www.codeproject.com/KB/biztalk/">Microsoft BizTalk 
+      Server</A></DIV>
+      <DIV class=MI id=Section102><A 
+      href="http://www.codeproject.com/KB/exchange/">Microsoft 
+Exchange</A></DIV>
+      <DIV class=MI id=Section90><A 
+      href="http://www.codeproject.com/KB/office/">Office Development</A></DIV>
+      <DIV class=MI id=Section101><A 
+      href="http://www.codeproject.com/KB/sharepoint/">SharePoint 
+      Server</A></DIV></DIV>
+      <DIV class=MenuChapter><A onclick="return ToggleMenu('Chapter3');" 
+      href="http://www.codeproject.com/script/Content/Chapter.aspx?chptId=3">Multimedia</A></DIV>
+      <DIV class=MenuSectionBlock id=Chapter3>
+      <DIV class=MI id=Section42><A 
+      href="http://www.codeproject.com/KB/audio-video/">Audio and 
+Video</A></DIV>
+      <DIV class=MI id=Section44><A 
+      href="http://www.codeproject.com/KB/directx/">DirectX</A></DIV>
+      <DIV class=MI id=Section46><A 
+      href="http://www.codeproject.com/KB/GDI/">GDI</A></DIV>
+      <DIV class=MI id=Section47><A 
+      href="http://www.codeproject.com/KB/GDI-plus/">GDI+</A></DIV>
+      <DIV class=MIS id=Section43><A 
+      href="http://www.codeproject.com/KB/graphics/">General Graphics</A></DIV>
+      <DIV class=MI id=Section45><A 
+      href="http://www.codeproject.com/KB/openGL/">OpenGL</A></DIV></DIV>
+      <DIV class=MenuChapter><A onclick="return ToggleMenu('Chapter4');" 
+      href="http://www.codeproject.com/script/Content/Chapter.aspx?chptId=4">Database</A></DIV>
+      <DIV class=MenuSectionBlock id=Chapter4 style="DISPLAY: none">
+      <DIV class=MI id=Section66><A 
+      href="http://www.codeproject.com/KB/database/">Database</A></DIV>
+      <DIV class=MI id=Section100><A 
+      href="http://www.codeproject.com/KB/reporting-services/">SQL Reporting 
+      Services</A></DIV></DIV>
+      <DIV class=MenuChapter><A onclick="return ToggleMenu('Chapter8');" 
+      href="http://www.codeproject.com/script/Content/Chapter.aspx?chptId=8">Platforms, 
+      Frameworks &amp; Libraries</A></DIV>
+      <DIV class=MenuSectionBlock id=Chapter8 style="DISPLAY: none">
+      <DIV class=MI id=Section83><A 
+      href="http://www.codeproject.com/KB/atl/">ATL</A></DIV>
+      <DIV class=MI id=Section117><A 
+      href="http://www.codeproject.com/KB/MFC/">MFC</A></DIV>
+      <DIV class=MI id=Section88><A 
+      href="http://www.codeproject.com/KB/stl/">STL</A></DIV>
+      <DIV class=MI id=Section84><A 
+      href="http://www.codeproject.com/KB/wtl/">WTL</A></DIV>
+      <DIV class=MI id=Section49><A 
+      href="http://www.codeproject.com/KB/COM/">COM / COM+</A></DIV>
+      <DIV class=MI id=Section76><A 
+      href="http://www.codeproject.com/KB/dotnet/">.NET Framework</A></DIV>
+      <DIV class=MI id=Section92><A 
+      href="http://www.codeproject.com/KB/winsdk/">Win32/64 SDK &amp; 
+      OS</A></DIV>
+      <DIV class=MI id=Section108><A 
+      href="http://www.codeproject.com/KB/vista/">Vista API</A></DIV>
+      <DIV class=MI id=Section110><A 
+      href="http://www.codeproject.com/KB/vista-security/">Vista 
+      Security</A></DIV>
+      <DIV class=MI id=Section82><A 
+      href="http://www.codeproject.com/KB/cross-platform/">Cross 
+      Platform</A></DIV>
+      <DIV class=MI id=Section69><A 
+      href="http://www.codeproject.com/KB/game/">Game Development</A></DIV>
+      <DIV class=MI id=Section73><A 
+      href="http://www.codeproject.com/KB/mobile/">Mobile Development</A></DIV>
+      <DIV class=MI id=Section106><A 
+      href="http://www.codeproject.com/KB/WC/">Windows CardSpace</A></DIV>
+      <DIV class=MI id=Section103><A 
+      href="http://www.codeproject.com/KB/WCF/">Windows Communication 
+      Foundation</A></DIV>
+      <DIV class=MI id=Section104><A 
+      href="http://www.codeproject.com/KB/WPF/">Windows Presentation 
+      Foundation</A></DIV>
+      <DIV class=MI id=Section105><A 
+      href="http://www.codeproject.com/KB/WF/">Windows Workflow 
+      Foundation</A></DIV>
+      <DIV class=MI id=Section119><A 
+      href="http://www.codeproject.com/KB/library/">Libraries</A></DIV>
+      <DIV class=MI id=Section122><A 
+      href="http://www.codeproject.com/KB/powershell/">Windows 
+      Powershell</A></DIV>
+      <DIV class=MI id=Section123><A 
+      href="http://www.codeproject.com/KB/linq/">LINQ</A></DIV></DIV>
+      <DIV class=MenuChapter><A onclick="return ToggleMenu('Chapter5');" 
+      href="http://www.codeproject.com/script/Content/Chapter.aspx?chptId=5">Languages</A></DIV>
+      <DIV class=MenuSectionBlock id=Chapter5 style="DISPLAY: none">
+      <DIV class=MI id=Section71><A href="http://www.codeproject.com/KB/cpp/">C 
+      / C++ Language</A></DIV>
+      <DIV class=MI id=Section72><A 
+      href="http://www.codeproject.com/KB/mcpp/">C++ / CLI</A></DIV>
+      <DIV class=MI id=Section93><A 
+      href="http://www.codeproject.com/KB/cs/">C#</A></DIV>
+      <DIV class=MI id=Section78><A 
+      href="http://www.codeproject.com/KB/msil/">MSIL</A></DIV>
+      <DIV class=MI id=Section86><A 
+      href="http://www.codeproject.com/KB/vbscript/">VBScript</A></DIV>
+      <DIV class=MI id=Section87><A 
+      href="http://www.codeproject.com/KB/vb/">VB.NET</A></DIV>
+      <DIV class=MI id=Section115><A 
+      href="http://www.codeproject.com/KB/vb-interop/">VB6 Interop</A></DIV>
+      <DIV class=MI id=Section77><A 
+      href="http://www.codeproject.com/KB/net-languages/">Other .NET 
+      Languages</A></DIV>
+      <DIV class=MI id=Section21><A 
+      href="http://www.codeproject.com/KB/XML/">XML</A></DIV>
+      <DIV class=MI id=Section96><A 
+      href="http://www.codeproject.com/KB/java/">Java</A></DIV></DIV>
+      <DIV class=MenuChapter><A onclick="return ToggleMenu('Chapter6');" 
+      href="http://www.codeproject.com/script/Content/Chapter.aspx?chptId=6">General 
+      Programming</A></DIV>
+      <DIV class=MenuSectionBlock id=Chapter6 style="DISPLAY: none">
+      <DIV class=MI id=Section57><A 
+      href="http://www.codeproject.com/KB/recipes/">Algorithms &amp; 
+      Recipes</A></DIV>
+      <DIV class=MI id=Section64><A 
+      href="http://www.codeproject.com/KB/bugs/">Bugs &amp; 
+Workarounds</A></DIV>
+      <DIV class=MI id=Section79><A 
+      href="http://www.codeproject.com/KB/collections/">Collections</A></DIV>
+      <DIV class=MI id=Section56><A 
+      href="http://www.codeproject.com/KB/security/">Cryptography &amp; 
+      Security</A></DIV>
+      <DIV class=MI id=Section50><A 
+      href="http://www.codeproject.com/KB/datetime/">Date and Time</A></DIV>
+      <DIV class=MI id=Section52><A 
+      href="http://www.codeproject.com/KB/DLL/">DLLs &amp; Assemblies</A></DIV>
+      <DIV class=MI id=Section80><A 
+      href="http://www.codeproject.com/KB/exception/">Exception 
+      Handling</A></DIV>
+      <DIV class=MI id=Section81><A 
+      href="http://www.codeproject.com/KB/locale/">Localisation</A></DIV>
+      <DIV class=MI id=Section53><A 
+      href="http://www.codeproject.com/KB/macros/">Macros and Add-ins</A></DIV>
+      <DIV class=MI id=Section54><A 
+      href="http://www.codeproject.com/KB/tips/">Programming Tips</A></DIV>
+      <DIV class=MI id=Section55><A 
+      href="http://www.codeproject.com/KB/string/">String handling</A></DIV>
+      <DIV class=MI id=Section58><A 
+      href="http://www.codeproject.com/KB/threads/">Threads, Processes &amp; 
+      IPC</A></DIV>
+      <DIV class=MI id=Section59><A 
+      href="http://www.codeproject.com/KB/winhelp/">WinHelp / 
+      HTMLHelp</A></DIV></DIV>
+      <DIV class=MenuChapter><A onclick="return ToggleMenu('Chapter10');" 
+      href="http://www.codeproject.com/script/Content/Chapter.aspx?chptId=10">Graphics 
+      / Design</A></DIV>
+      <DIV class=MenuSectionBlock id=Chapter10 style="DISPLAY: none">
+      <DIV class=MI id=Section40><A 
+      href="http://www.codeproject.com/KB/expression/">Expression</A></DIV>
+      <DIV class=MI id=Section114><A 
+      href="http://www.codeproject.com/KB/usability/">Usability</A></DIV></DIV>
+      <DIV class=MenuChapter><A onclick="return ToggleMenu('Chapter11');" 
+      href="http://www.codeproject.com/script/Content/Chapter.aspx?chptId=11">Development 
+      Lifecycle</A></DIV>
+      <DIV class=MenuSectionBlock id=Chapter11 style="DISPLAY: none">
+      <DIV class=MI id=Section51><A 
+      href="http://www.codeproject.com/KB/debug/">Debug Tips</A></DIV>
+      <DIV class=MI id=Section39><A 
+      href="http://www.codeproject.com/KB/architecture/">Design and 
+      Architecture</A></DIV>
+      <DIV class=MI id=Section112><A 
+      href="http://www.codeproject.com/KB/install/">Installation</A></DIV>
+      <DIV class=MI id=Section41><A 
+      href="http://www.codeproject.com/KB/work/">Work Issues</A></DIV></DIV>
+      <DIV class=MenuChapter><A onclick="return ToggleMenu('Chapter7');" 
+      href="http://www.codeproject.com/script/Content/Chapter.aspx?chptId=7">General 
+      Reading</A></DIV>
+      <DIV class=MenuSectionBlock id=Chapter7 style="DISPLAY: none">
+      <DIV class=MI id=Section60><A 
+      href="http://www.codeproject.com/KB/books/">Book Chapters</A></DIV>
+      <DIV class=MI id=Section61><A 
+      href="http://www.codeproject.com/KB/book-reviews/">Book Reviews</A></DIV>
+      <DIV class=MI id=Section109><A 
+      href="http://www.codeproject.com/KB/hardware-review/">Hardware 
+      Reviews</A></DIV>
+      <DIV class=MI id=Section63><A 
+      href="http://www.codeproject.com/KB/interviews/">Interviews</A></DIV>
+      <DIV class=MI id=Section65><A 
+      href="http://www.codeproject.com/KB/showcase/">Product Showcase</A></DIV>
+      <DIV class=MI id=Section62><A 
+      href="http://www.codeproject.com/KB/scrapbook/">Scrapbook</A></DIV></DIV></DIV><BR>
+      <DIV class=MenuCat>Feature Zones</DIV>
+      <DIV class=MenuChapter><A 
+      href="http://www.codeproject.com/kb/showcase/">Product Showcase</A></DIV>
+      <DIV class=MenuChapter><A 
+      href="http://www.codeproject.com/Zones/Install">Installshield 
+      2008</A></DIV>
+      <DIV class=MenuChapter><A href="http://www.codeproject.com/Zones/IBM">IBM 
+      DeveloperWorks</A></DIV><BR>
+      <SCRIPT type=text/javascript>document.write("<a href=\"http://www.codeproject.com/Redir.aspx?adid=3483&way=ban\" target=\"_blank\" rel=\"nofollow\"><img src=\"http://www.codeproject.com/script/Ann/ServeImg.aspx?File=%2fscript%2fadmentor%2fimages%2fcp_daily_160x600.gif&C=False&id=3483\" alt=\"\" border=\"0\" width=\"160\" height=\"600\"></a>");</SCRIPT>
+      <IMG height=1 alt="" src="/script/Common/Images/t.gif" width=160> </TD>
+    <TD class=ArticlePane vAlign=top>
+      <TABLE class=SearchHeaderBar cellSpacing=0 width="100%">
+        <TBODY>
+        <TR>
+          <TD style="WIDTH: 60%; WHITE-SPACE: nowrap" vAlign=center 
+            align=right><FORM style="MARGIN: 0px" name=Search 
+            action=/info/search.aspx method=get><B>Search &nbsp;</B> <INPUT 
+            class=SmallText style="WIDTH: 200px" name=artkw> <SELECT 
+            class=SmallText style="FONT-WEIGHT: bold" name=sbo> <OPTION 
+              value=kw selected>Articles</OPTION> <OPTION 
+              value=fm>Messages</OPTION></SELECT> <INPUT class=SmallText style="FONT-WEIGHT: bold" type=submit value=" Go! "> 
+            &nbsp; </FORM></TD>
+          <TD class=TinyText style="WHITE-SPACE: nowrap"><A 
+            href="http://www.codeproject.com/info/search.aspx">Advanced 
+            Search</A><BR><A 
+            href="http://www.codeproject.com/script/Content/SiteMap.aspx">Sitemap</A> 
+            | <A id=ctl00_SearchBarCtrl_AddToIESearchLnk 
+            title="Add The Code Project to your IE search Providers" 
+            onclick="window.external.AddSearchProvider('http://www.codeproject.com/info/OpenSearch.xml');return false;" 
+            href="http://www.codeproject.com/">Add to IE Search</A> 
+        </TD></TR></TBODY></TABLE><SPAN id=ctl00_ResultMessage></SPAN>
+      <DIV id=ctl00_ArtDiv>
+      <TABLE cellSpacing=0 cellPadding=0 width="100%" border=0>
+        <TBODY>
+        <TR vAlign=top>
+          <TD vAlign=top>
+            <TABLE>
+              <TBODY></TBODY></TABLE>
+            <TABLE cellSpacing=1 cellPadding=3 width=1 border=0>
+              <TBODY>
+              <TR class=smalltext vAlign=center>
+                <TD style="WHITE-SPACE: nowrap"><IMG 
+                  style="BORDER-RIGHT: 0px; BORDER-TOP: 0px; VERTICAL-ALIGN: middle; BORDER-LEFT: 0px; BORDER-BOTTOM: 0px" 
+                  height=16 alt=print src="/script/Articles/Images/print.gif" 
+                  width=16> <A id=ctl00_ArticleHeaderLinks_PrintLnk 
+                  href="http://www.codeproject.com/KB/graphics/cscapturescreen1.aspx?display=Print">Print</A> 
+                </TD>
+                <TD style="WHITE-SPACE: nowrap"><IMG 
+                  style="BORDER-RIGHT: 0px; BORDER-TOP: 0px; VERTICAL-ALIGN: middle; BORDER-LEFT: 0px; BORDER-BOTTOM: 0px" 
+                  height=16 alt="Broken Article?" 
+                  src="/script/Articles/Images/broken.gif" width=16> <A 
+                  id=ctl00_ArticleHeaderLinks_BrokenLnk 
+                  href="http://www.codeproject.com/script/Articles/Report.aspx?aid=3024">Broken 
+                  Article?</A> </TD>
+                <TD style="WHITE-SPACE: nowrap"><IMG 
+                  id=ctl00_ArticleHeaderLinks_ArticleBmk_BookmarkImg 
+                  title="Add to bookmarks" 
+                  style="BORDER-RIGHT: 0px; BORDER-TOP: 0px; VERTICAL-ALIGN: middle; BORDER-LEFT: 0px; WIDTH: 16px; BORDER-BOTTOM: 0px; HEIGHT: 16px" 
+                  src="/script/Bookmarks/Images/link.png"> <A 
+                  id=ctl00_ArticleHeaderLinks_ArticleBmk_BookmarkLnk 
+                  href="http://www.codeproject.com/script/Bookmarks/Add.aspx?&amp;obid=3024&amp;obtid=2">Add 
+                  Bookmark</A> <SPAN 
+                  id=ctl00_ArticleHeaderLinks_ArticleBmk_Message></SPAN></TD>
+                <TD style="WHITE-SPACE: nowrap"><IMG 
+                  style="BORDER-RIGHT: 0px; BORDER-TOP: 0px; VERTICAL-ALIGN: middle; BORDER-LEFT: 0px; BORDER-BOTTOM: 0px" 
+                  height=16 alt=Discuss src="/script/Content/Images/discuss.gif" 
+                  width=15> <A 
+                  href="http://www.codeproject.com/KB/graphics/cscapturescreen1.aspx#_comments">Discuss</A> 
+                </TD>
+                <TD style="WHITE-SPACE: nowrap"><IMG 
+                  style="BORDER-RIGHT: 0px; BORDER-TOP: 0px; VERTICAL-ALIGN: middle; BORDER-LEFT: 0px; BORDER-BOTTOM: 0px" 
+                  height=16 alt="Recommend Article" 
+                  src="/script/Content/Images/mail.gif" width=16> <A 
+                  id=ctl00_ArticleHeaderLinks_Recommend 
+                  href="http://www.codeproject.com/script/common/TellFriend.aspx?obtid=2&amp;obid=3024">Send 
+                  to a friend</A> </TD></TR></TBODY></TABLE></TD>
+          <TD align=right>
+            <TABLE>
+              <TBODY>
+              <TR>
+                <TD class=SmallText style="WHITE-SPACE: nowrap" 
+                  align=right><SPAN id=ctl00_ArticleRating_VoteLabel>27 votes 
+                  for this Article.</SPAN> </TD>
+                <TD>
+                  <TABLE cellSpacing=0 cellPadding=0 border=1>
+                    <TBODY>
+                    <TR>
+                      <TD width=20 bgColor=white height=5><IMG height=5 
+                        src="/script/Ratings/Images/red.gif" width=20 
+                      border=0></TD>
+                      <TD width=20 bgColor=white height=5><IMG height=5 
+                        src="/script/Ratings/Images/red.gif" width=20 
+                      border=0></TD>
+                      <TD width=20 bgColor=white height=5><IMG height=5 
+                        src="/script/Ratings/Images/red.gif" width=20 
+                      border=0></TD>
+                      <TD noWrap width=20 bgColor=white height=5><IMG height=5 
+                        src="/script/Ratings/Images/red.gif" width=18 
+                      border=0></TD>
+                      <TD width=20 bgColor=white height=5><IMG height=5 
+                        src="/script/Ratings/Images/white.gif" width=20 
+                      border=0></TD></TR></TBODY></TABLE></TD></TR>
+              <TR id=ctl00_ArticleRating_PopularityRow>
+                <TD class=SmallText align=right colSpan=2><A 
+                  id=ctl00_ArticleRating_PopularityLnk 
+                  title="Calculated as rating x Log10(# votes)" 
+                  href="http://www.codeproject.com/script/Articles/TopArticles.aspx?ta_so=1">Popularity: 
+                  5.60</A><SPAN id=ctl00_ArticleRating_PopularityLbl></SPAN> 
+                  Rating: <B>3.91</B> out of 5 
+      </TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE>
+      <UL class=Callout id=ctl00_confirmError style="MARGIN-RIGHT: 20px">
+        <LI class=SmallText 
+        style="LIST-STYLE-IMAGE: url(/images/warning.gif)">You are signed up for 
+        one or more <A id=ctl00_SubscribeLink2 
+        href="http://www.codeproject.com/script/Membership/Subscribe.aspx?rp=%2fKB%2fgraphics%2fcscapturescreen1.aspx">newsletters</A> 
+        but your email address is either unconfirmed, or has not been 
+        reconfirmed in a long time. Please click <A id=ctl00_RequestConfirmLink2 
+        href="http://www.codeproject.com/script/Membership/SendConfirmRequest.aspx?rp=%2fKB%2fgraphics%2fcscapturescreen1.aspx">here</A> 
+        to have an email sent that will allow us to confirm your email address 
+        and start sending you newsletters again.</LI></UL><SPAN id=intelliTXT>
+      <DIV id=contentdiv><!-- Main Page Contents Start --><!-- Article Starts -->
+      <UL class=download>
+        <LI><A 
+        href="http://www.codeproject.com/KB/graphics/csCaptureScreen1/CaptureScreenDemo.zip">Download 
+        demo project - 9.49 Kb </A>
+        <LI><A 
+        href="http://www.codeproject.com/KB/graphics/csCaptureScreen1/CaptureScreenSource.zip">Download 
+        source - 2.31 Kb</A> </LI></UL>
+      <P><IMG height=362 src="csCaptureScreen1/CapturesScreen.jpg" width=423 
+      border=0></P>
+      <H2>Introduction</H2>
+      <P>I am working on a desktop sharing type application in C#. First problem 
+      that I encountered was that there was not much in C# to capture the 
+      desktop image. After a bit of research I came to know that I shall have to 
+      use the Win32 APIs to provide this functionality to my application. I made 
+      following three classes to perform this job.</P>
+      <OL>
+        <LI><CODE>PlatformInvokeGDI32:</CODE> All the <I>GDI32.dll</I> APIs 
+        being used in this application are placed in this class. 
+        <LI><CODE>PlatformInvokeUSER32: </CODE>All the <I>User32.dll </I>APIs 
+        have been placed in this class. 
+        <LI><CODE>CaptureScreen:</CODE> In this class I have provided a simple 
+        static function <CODE>GetDesktopImage</CODE> that captures the screen 
+        image using the APIs&nbsp; given in <CODE>PlatformInvokeGDI32</CODE> and 
+        <CODE>PlatformInvokeUSER32</CODE> and returns it as a bitmap. </LI></OL>
+      <P>You can very easily place these classes in your C# application. Just 
+      copy and paste following code in your C# project without changing any 
+      thing at all. If you want to use accompanying source files, you can&nbsp; 
+      add the <CODE>CaptureScreen</CODE> namespace in your project or just 
+      change the <CODE>CaptureScreen</CODE> namespace in these classes with your 
+      project namespace and that's all.</P>
+      <H2>The beautiful source code</H2><PRE lang=cs><SPAN class=code-SummaryComment>///</SPAN><SPAN class=code-comment> <SPAN class=code-SummaryComment>&lt;</SPAN><SPAN class=code-SummaryComment>summary</SPAN><SPAN class=code-SummaryComment>&gt;</SPAN>
+</SPAN><SPAN class=code-SummaryComment>///</SPAN><SPAN class=code-comment> This class shall keep the GDI32 APIs used in our program.
+</SPAN><SPAN class=code-SummaryComment>///</SPAN><SPAN class=code-comment> <SPAN class=code-SummaryComment>&lt;</SPAN><SPAN class=code-SummaryComment>/</SPAN><SPAN class=code-SummaryComment>summary</SPAN><SPAN class=code-SummaryComment>&gt;</SPAN>
+</SPAN><SPAN class=code-keyword>public</SPAN> <SPAN class=code-keyword>class</SPAN> PlatformInvokeGDI32
+{
+<SPAN class=code-preprocessor>#region</SPAN> Class Variables
+    <SPAN class=code-keyword>public</SPAN> <SPAN class=code-keyword>const</SPAN> <SPAN class=code-keyword>int</SPAN> SRCCOPY = <SPAN class=code-digit>13369376</SPAN>;
+<SPAN class=code-preprocessor>#endregion</SPAN>
+<SPAN class=code-preprocessor>#region</SPAN> Class Functions&lt;br&gt;
+    [DllImport(<SPAN class=code-string>"</SPAN><SPAN class=code-string>gdi32.dll"</SPAN>,EntryPoint=<SPAN class=code-string>"</SPAN><SPAN class=code-string>DeleteDC"</SPAN>)]
+    <SPAN class=code-keyword>public</SPAN> <SPAN class=code-keyword>static</SPAN> <SPAN class=code-keyword>extern</SPAN> <SPAN class=code-SDKkeyword>IntPtr</SPAN> DeleteDC(<SPAN class=code-SDKkeyword>IntPtr</SPAN> hDc);
+
+    [DllImport(<SPAN class=code-string>"</SPAN><SPAN class=code-string>gdi32.dll"</SPAN>,EntryPoint=<SPAN class=code-string>"</SPAN><SPAN class=code-string>DeleteObject"</SPAN>)]
+    <SPAN class=code-keyword>public</SPAN> <SPAN class=code-keyword>static</SPAN> <SPAN class=code-keyword>extern</SPAN> <SPAN class=code-SDKkeyword>IntPtr</SPAN> DeleteObject(<SPAN class=code-SDKkeyword>IntPtr</SPAN> hDc);
+
+    [DllImport(<SPAN class=code-string>"</SPAN><SPAN class=code-string>gdi32.dll"</SPAN>,EntryPoint=<SPAN class=code-string>"</SPAN><SPAN class=code-string>BitBlt"</SPAN>)]
+    <SPAN class=code-keyword>public</SPAN> <SPAN class=code-keyword>static</SPAN> <SPAN class=code-keyword>extern</SPAN> <SPAN class=code-keyword>bool</SPAN> BitBlt(<SPAN class=code-SDKkeyword>IntPtr</SPAN> hdcDest,<SPAN class=code-keyword>int</SPAN> xDest,
+        <SPAN class=code-keyword>int</SPAN> yDest,<SPAN class=code-keyword>int</SPAN> wDest,<SPAN class=code-keyword>int</SPAN> hDest,<SPAN class=code-SDKkeyword>IntPtr</SPAN> hdcSource,
+        <SPAN class=code-keyword>int</SPAN> xSrc,<SPAN class=code-keyword>int</SPAN> ySrc,<SPAN class=code-keyword>int</SPAN> RasterOp);
+
+    [DllImport (<SPAN class=code-string>"</SPAN><SPAN class=code-string>gdi32.dll"</SPAN>,EntryPoint=<SPAN class=code-string>"</SPAN><SPAN class=code-string>CreateCompatibleBitmap"</SPAN>)]
+    <SPAN class=code-keyword>public</SPAN> <SPAN class=code-keyword>static</SPAN> <SPAN class=code-keyword>extern</SPAN> <SPAN class=code-SDKkeyword>IntPtr</SPAN> CreateCompatibleBitmap(<SPAN class=code-SDKkeyword>IntPtr</SPAN> hdc,
+        <SPAN class=code-keyword>int</SPAN> nWidth, <SPAN class=code-keyword>int</SPAN> nHeight);
+
+    [DllImport (<SPAN class=code-string>"</SPAN><SPAN class=code-string>gdi32.dll"</SPAN>,EntryPoint=<SPAN class=code-string>"</SPAN><SPAN class=code-string>CreateCompatibleDC"</SPAN>)]
+    <SPAN class=code-keyword>public</SPAN> <SPAN class=code-keyword>static</SPAN> <SPAN class=code-keyword>extern</SPAN> <SPAN class=code-SDKkeyword>IntPtr</SPAN> CreateCompatibleDC(<SPAN class=code-SDKkeyword>IntPtr</SPAN> hdc);
+
+    [DllImport (<SPAN class=code-string>"</SPAN><SPAN class=code-string>gdi32.dll"</SPAN>,EntryPoint=<SPAN class=code-string>"</SPAN><SPAN class=code-string>SelectObject"</SPAN>)]
+    <SPAN class=code-keyword>public</SPAN> <SPAN class=code-keyword>static</SPAN> <SPAN class=code-keyword>extern</SPAN> <SPAN class=code-SDKkeyword>IntPtr</SPAN> SelectObject(<SPAN class=code-SDKkeyword>IntPtr</SPAN> hdc,<SPAN class=code-SDKkeyword>IntPtr</SPAN> bmp);
+<SPAN class=code-preprocessor>#endregion</SPAN>
+
+<SPAN class=code-preprocessor>#region</SPAN> Public Constructor
+}
+
+<SPAN class=code-SummaryComment>///</SPAN><SPAN class=code-comment> <SPAN class=code-SummaryComment>&lt;</SPAN><SPAN class=code-SummaryComment>summary</SPAN><SPAN class=code-SummaryComment>&gt;</SPAN>
+</SPAN><SPAN class=code-SummaryComment>///</SPAN><SPAN class=code-comment> This class shall keep the User32 APIs used in our program.
+</SPAN><SPAN class=code-SummaryComment>///</SPAN><SPAN class=code-comment> <SPAN class=code-SummaryComment>&lt;</SPAN><SPAN class=code-SummaryComment>/</SPAN><SPAN class=code-SummaryComment>summary</SPAN><SPAN class=code-SummaryComment>&gt;</SPAN>
+</SPAN><SPAN class=code-keyword>public</SPAN> <SPAN class=code-keyword>class</SPAN> PlatformInvokeUSER32
+{
+<SPAN class=code-preprocessor>#region</SPAN> Class Variables
+    <SPAN class=code-keyword>public</SPAN> <SPAN class=code-keyword>const</SPAN> <SPAN class=code-keyword>int</SPAN> SM_CXSCREEN=0;
+    <SPAN class=code-keyword>public</SPAN> <SPAN class=code-keyword>const</SPAN> <SPAN class=code-keyword>int</SPAN> SM_CYSCREEN=1;
+<SPAN class=code-preprocessor>#endregion</SPAN> 
+
+<SPAN class=code-preprocessor>#region</SPAN> Class Functions
+    [DllImport(<SPAN class=code-string>"</SPAN><SPAN class=code-string>user32.dll"</SPAN>, EntryPoint=<SPAN class=code-string>"</SPAN><SPAN class=code-string>GetDesktopWindow"</SPAN>)]
+    <SPAN class=code-keyword>public</SPAN> <SPAN class=code-keyword>static</SPAN> <SPAN class=code-keyword>extern</SPAN> <SPAN class=code-SDKkeyword>IntPtr</SPAN> GetDesktopWindow();
+
+    [DllImport(<SPAN class=code-string>"</SPAN><SPAN class=code-string>user32.dll"</SPAN>,EntryPoint=<SPAN class=code-string>"</SPAN><SPAN class=code-string>GetDC"</SPAN>)]
+    <SPAN class=code-keyword>public</SPAN> <SPAN class=code-keyword>static</SPAN> <SPAN class=code-keyword>extern</SPAN> <SPAN class=code-SDKkeyword>IntPtr</SPAN> GetDC(<SPAN class=code-SDKkeyword>IntPtr</SPAN> ptr);
+
+    [DllImport(<SPAN class=code-string>"</SPAN><SPAN class=code-string>user32.dll"</SPAN>,EntryPoint=<SPAN class=code-string>"</SPAN><SPAN class=code-string>GetSystemMetrics"</SPAN>)]
+    <SPAN class=code-keyword>public</SPAN> <SPAN class=code-keyword>static</SPAN> <SPAN class=code-keyword>extern</SPAN> <SPAN class=code-keyword>int</SPAN> GetSystemMetrics(<SPAN class=code-keyword>int</SPAN> abc);
+
+    [DllImport(<SPAN class=code-string>"</SPAN><SPAN class=code-string>user32.dll"</SPAN>,EntryPoint=<SPAN class=code-string>"</SPAN><SPAN class=code-string>GetWindowDC"</SPAN>)]
+    <SPAN class=code-keyword>public</SPAN> <SPAN class=code-keyword>static</SPAN> <SPAN class=code-keyword>extern</SPAN> <SPAN class=code-SDKkeyword>IntPtr</SPAN> GetWindowDC(<SPAN class=code-SDKkeyword>Int32</SPAN> ptr);
+
+    [DllImport(<SPAN class=code-string>"</SPAN><SPAN class=code-string>user32.dll"</SPAN>,EntryPoint=<SPAN class=code-string>"</SPAN><SPAN class=code-string>ReleaseDC"</SPAN>)]
+    <SPAN class=code-keyword>public</SPAN> <SPAN class=code-keyword>static</SPAN> <SPAN class=code-keyword>extern</SPAN> <SPAN class=code-SDKkeyword>IntPtr</SPAN> ReleaseDC(<SPAN class=code-SDKkeyword>IntPtr</SPAN> hWnd,<SPAN class=code-SDKkeyword>IntPtr</SPAN> hDc);
+
+<SPAN class=code-preprocessor>#endregion</SPAN>
+}
+
+<SPAN class=code-SummaryComment>///</SPAN><SPAN class=code-comment> <SPAN class=code-SummaryComment>&lt;</SPAN><SPAN class=code-SummaryComment>summary</SPAN><SPAN class=code-SummaryComment>&gt;</SPAN>
+</SPAN><SPAN class=code-SummaryComment>///</SPAN><SPAN class=code-comment> This class shall keep all the functionality 
+</SPAN><SPAN class=code-SummaryComment>///</SPAN><SPAN class=code-comment> for capturing the desktop.
+</SPAN><SPAN class=code-SummaryComment>///</SPAN><SPAN class=code-comment> <SPAN class=code-SummaryComment>&lt;</SPAN><SPAN class=code-SummaryComment>/</SPAN><SPAN class=code-SummaryComment>summary</SPAN><SPAN class=code-SummaryComment>&gt;</SPAN>
+</SPAN><SPAN class=code-keyword>public</SPAN> <SPAN class=code-keyword>class</SPAN> CaptureScreen
+{
+<SPAN class=code-preprocessor>#region</SPAN> Class Variable Declaration
+    <SPAN class=code-keyword>protected</SPAN> <SPAN class=code-keyword>static</SPAN> <SPAN class=code-SDKkeyword>IntPtr</SPAN> m_HBitmap;
+<SPAN class=code-preprocessor>#endregion</SPAN>
+
+<SPAN class=code-SummaryComment>///</SPAN><SPAN class=code-comment>
+</SPAN><SPAN class=code-SummaryComment>///</SPAN><SPAN class=code-comment> This class shall keep all the functionality for capturing
+</SPAN><SPAN class=code-SummaryComment>///</SPAN><SPAN class=code-comment> the desktop.
+</SPAN><SPAN class=code-SummaryComment>///</SPAN><SPAN class=code-comment>
+</SPAN><SPAN class=code-keyword>public</SPAN> <SPAN class=code-keyword>class</SPAN> CaptureScreen
+{
+  <SPAN class=code-preprocessor>#region</SPAN> Public Class Functions
+  <SPAN class=code-keyword>public</SPAN> <SPAN class=code-keyword>static</SPAN> Bitmap GetDesktopImage()
+  {
+    <SPAN class=code-comment>//</SPAN><SPAN class=code-comment>In size variable we shall keep the size of the screen.
+</SPAN>    SIZE size;
+
+    <SPAN class=code-comment>//</SPAN><SPAN class=code-comment>Variable to keep the handle to bitmap.
+</SPAN>    <SPAN class=code-SDKkeyword>IntPtr</SPAN> hBitmap;
+
+    <SPAN class=code-comment>//</SPAN><SPAN class=code-comment>Here we get the handle to the desktop device context.
+</SPAN>    <SPAN class=code-SDKkeyword>IntPtr</SPAN>  hDC = PlatformInvokeUSER32.GetDC
+                  (PlatformInvokeUSER32.GetDesktopWindow());
+
+    <SPAN class=code-comment>//</SPAN><SPAN class=code-comment>Here we make a compatible device context in memory for screen
+</SPAN>    <SPAN class=code-comment>//</SPAN><SPAN class=code-comment>device context.
+</SPAN>    <SPAN class=code-SDKkeyword>IntPtr</SPAN> hMemDC = PlatformInvokeGDI32.CreateCompatibleDC(hDC);
+
+    <SPAN class=code-comment>//</SPAN><SPAN class=code-comment>We pass SM_CXSCREEN constant to GetSystemMetrics to get the
+</SPAN>    <SPAN class=code-comment>//</SPAN><SPAN class=code-comment>X coordinates of the screen.
+</SPAN>    size.cx = PlatformInvokeUSER32.GetSystemMetrics
+              (PlatformInvokeUSER32.SM_CXSCREEN);
+
+    <SPAN class=code-comment>//</SPAN><SPAN class=code-comment>We pass SM_CYSCREEN constant to GetSystemMetrics to get the
+</SPAN>    <SPAN class=code-comment>//</SPAN><SPAN class=code-comment>Y coordinates of the screen.
+</SPAN>    size.cy = PlatformInvokeUSER32.GetSystemMetrics
+              (PlatformInvokeUSER32.SM_CYSCREEN);
+
+    <SPAN class=code-comment>//</SPAN><SPAN class=code-comment>We create a compatible bitmap of the screen size and using
+</SPAN>    <SPAN class=code-comment>//</SPAN><SPAN class=code-comment>the screen device context.
+</SPAN>    hBitmap = PlatformInvokeGDI32.CreateCompatibleBitmap
+                (hDC, size.cx, size.cy);
+
+    <SPAN class=code-comment>//</SPAN><SPAN class=code-comment>As hBitmap is IntPtr, we cannot check it against null.
+</SPAN>    <SPAN class=code-comment>//</SPAN><SPAN class=code-comment>For this purpose, IntPtr.Zero is used.
+</SPAN>    <SPAN class=code-keyword>if</SPAN> (hBitmap!=IntPtr.Zero)
+    {
+      <SPAN class=code-comment>//</SPAN><SPAN class=code-comment>Here we select the compatible bitmap in the memeory device
+</SPAN>      <SPAN class=code-comment>//</SPAN><SPAN class=code-comment>context and keep the refrence to the old bitmap.
+</SPAN>      <SPAN class=code-SDKkeyword>IntPtr</SPAN> hOld = (<SPAN class=code-SDKkeyword>IntPtr</SPAN>) PlatformInvokeGDI32.SelectObject
+                             (hMemDC, hBitmap);
+      <SPAN class=code-comment>//</SPAN><SPAN class=code-comment>We copy the Bitmap to the memory device context.
+</SPAN>      PlatformInvokeGDI32.BitBlt(hMemDC, <SPAN class=code-digit>0</SPAN>, <SPAN class=code-digit>0</SPAN>,size.cx,size.cy, hDC,
+                                 <SPAN class=code-digit>0</SPAN>, <SPAN class=code-digit>0</SPAN>,PlatformInvokeGDI32.SRCCOPY);
+      <SPAN class=code-comment>//</SPAN><SPAN class=code-comment>We select the old bitmap back to the memory device context.
+</SPAN>      PlatformInvokeGDI32.SelectObject(hMemDC, hOld);
+      <SPAN class=code-comment>//</SPAN><SPAN class=code-comment>We delete the memory device context.
+</SPAN>      PlatformInvokeGDI32.DeleteDC(hMemDC);
+      <SPAN class=code-comment>//</SPAN><SPAN class=code-comment>We release the screen device context.
+</SPAN>      PlatformInvokeUSER32.ReleaseDC(PlatformInvokeUSER32.
+                                     GetDesktopWindow(), hDC);
+      <SPAN class=code-comment>//</SPAN><SPAN class=code-comment>Image is created by Image bitmap handle and stored in
+</SPAN>      <SPAN class=code-comment>//</SPAN><SPAN class=code-comment>local variable.
+</SPAN>      Bitmap bmp = System.Drawing.Image.FromHbitmap(hBitmap); 
+      <SPAN class=code-comment>//</SPAN><SPAN class=code-comment>Release the memory to avoid memory leaks.
+</SPAN>      PlatformInvokeGDI32.DeleteObject(hBitmap);
+      <SPAN class=code-comment>//</SPAN><SPAN class=code-comment>This statement runs the garbage collector manually.
+</SPAN>      GC.Collect();
+      <SPAN class=code-comment>//</SPAN><SPAN class=code-comment>Return the bitmap 
+</SPAN>      <SPAN class=code-keyword>return</SPAN> bmp;
+    }
+    <SPAN class=code-comment>//</SPAN><SPAN class=code-comment>If hBitmap is null, retun null.
+</SPAN>    <SPAN class=code-keyword>return</SPAN> <SPAN class=code-keyword>null</SPAN>;
+  }
+  <SPAN class=code-preprocessor>#endregion</SPAN>
+}
+
+<SPAN class=code-comment>//</SPAN><SPAN class=code-comment>This structure shall be used to keep the size of the screen.
+</SPAN><SPAN class=code-keyword>public</SPAN> <SPAN class=code-keyword>struct</SPAN> SIZE
+{
+    <SPAN class=code-keyword>public</SPAN> <SPAN class=code-keyword>int</SPAN> cx;
+    <SPAN class=code-keyword>public</SPAN> <SPAN class=code-keyword>int</SPAN> cy;
+}</PRE>
+      <H2>Conclusion</H2>
+      <P>The demo application with this code shows the use of these classes. Its 
+      a very simple windows application in which there is a simple form having a 
+      menu and a picture box control. Capture Screen menu item of menu is used 
+      to capture the screen and assign to the image property of picture box 
+      control. I hope you like this code. I have commented each line of this 
+      code to make it self explanatory. If there is still something confusing 
+      for you, please let me know. Good Luck!</P><!-- Article Ends --><!-- Main Page Contents End --></DIV></SPAN>
+      <H2>License</H2>
+      <P>This article has no explicit license attached to it but may contain 
+      usage terms in the article text or the download files themselves. If in 
+      doubt please contact the author via the discussion board below.</P>
+      <P>A list of licenses authors might use can be found <A 
+      href="http://www.codeproject.com/info/Licenses.aspx">here</A></P>
+      <H2>About the Author</H2>
+      <TABLE cellSpacing=5 cellPadding=0 width="100%" border=0>
+        <TBODY>
+        <TR vAlign=top>
+          <TD id=ctl00_AboutAuthorRptr_ctl00_AboutAuthor_memberPhotoTable 
+          style="WIDTH: 155px" vAlign=top><B><A 
+            id=ctl00_AboutAuthorRptr_ctl00_AboutAuthor_memberProfileLink 
+            href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=48859">Agha 
+            Ali Raza</A></B><BR><BR>
+            <CENTER></CENTER><BR><SPAN class=SmallText 
+            id=ctl00_AboutAuthorRptr_ctl00_AboutAuthor_memberType></SPAN></TD>
+          <TD><BR>
+            <TABLE>
+              <TBODY>
+              <TR id=ctl00_AboutAuthorRptr_ctl00_AboutAuthor_jobTitleRow>
+                <TD class=SmallText noWrap>Occupation: </TD>
+                <TD width="100%"><SPAN class=SmallText 
+                  id=ctl00_AboutAuthorRptr_ctl00_AboutAuthor_memberJobTitle>Web 
+                  Developer</SPAN></TD></TR>
+              <TR id=ctl00_AboutAuthorRptr_ctl00_AboutAuthor_locationRow>
+                <TD class=SmallText>Location: </TD>
+                <TD width="100%"><SPAN class=SmallText 
+                  id=ctl00_AboutAuthorRptr_ctl00_AboutAuthor_memberLocation><IMG 
+                  height=11 alt=Pakistan src="/script/Geo/Images/PK.gif" 
+                  width=16> 
+      Pakistan</SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE><BR>
+      <TABLE id=ctl00_PopularArticlesRow cellSpacing=0 cellPadding=0 
+      width="100%" border=0>
+        <TBODY>
+        <TR vAlign=top>
+          <TD style="WIDTH: 100%">
+            <H2>Other popular General Graphics articles:</H2>
+            <UL>
+              <LI><A 
+              href="http://www.codeproject.com/KB/graphics/zedgraph.aspx">A 
+              flexible charting library for .NET</A>
+              <DIV class=SmallText>Looking for a way to draw 2D line graphs with 
+              C#? Here's yet another charting class library with a high degree 
+              of configurability, that is also easy to use.</DIV>
+              <LI><A 
+              href="http://www.codeproject.com/KB/graphics/cximage.aspx">CxImage</A>
+              <DIV class=SmallText>CxImage is a C++ class to load, save, 
+              display, transform BMP, JPEG, GIF, PNG, TIFF, MNG, ICO, PCX, TGA, 
+              WMF, WBMP, JBG, J2K images.</DIV>
+              <LI><A 
+              href="http://www.codeproject.com/KB/graphics/julijanpiechart.aspx">3D 
+              Pie Chart</A>
+              <DIV class=SmallText>A class library for drawing 3D pie 
+              charts.</DIV>
+              <LI><A 
+              href="http://www.codeproject.com/KB/graphics/specialfx.aspx">Really 
+              cool visual FX</A>
+              <DIV class=SmallText>A set of classes for doing stunning visual 
+              effects, including water, plasma and fire.</DIV>
+              <LI><A 
+              href="http://www.codeproject.com/KB/graphics/ImageStone.aspx">ImageStone</A>
+              <DIV class=SmallText>An article on a library for image 
+              manipulation.</DIV></LI></UL>
+            <H2></H2></TD>
+          <TD><IFRAME 
+            src="CodeProject Capturing the Screen Image in C#_ Free source code and programming help_files/ServeHTML.htm" 
+            frameBorder=0 width=300 scrolling=no 
+        height=250></IFRAME></TD></TR></TBODY></TABLE>
+      <DIV id=ctl00_AddTo style="MARGIN: 10px">
+      <SCRIPT language=JavaScript type=text/javascript>
+			var addtoMethod=1;
+			var AddURL = document.location.href;
+			var AddTitle = escape(document.title);
+			DrawLinks(100, 0, "SmallText Bold", "AddTo") 
+			</SCRIPT>
+      </DIV>
+      <TABLE class=RatingBar id=ctl00_RateArticleRow cellSpacing=0 cellPadding=0 
+      width="100%" border=0>
+        <TBODY>
+        <TR>
+          <TD><A 
+            href="http://www.codeproject.com/KB/graphics/cscapturescreen1.aspx#_top">Article 
+            Top</A></TD>
+          <TD align=right>
+            <FORM id=aspnetForm 
+            style="PADDING-RIGHT: 0px; PADDING-LEFT: 0px; PADDING-BOTTOM: 0px; MARGIN: 0px; PADDING-TOP: 0px" 
+            name=aspnetForm action=cscapturescreen1.aspx method=post>
+            <DIV><INPUT id=__VIEWSTATE type=hidden 
+            value=/wEPDwULLTEwMDUyNjYzMjhkZL3yXs9h0jXyI+PMQLGJYdxGhycH 
+            name=__VIEWSTATE> </DIV>
+            <TABLE cellSpacing=0 cellPadding=0 width="100%">
+              <TBODY>
+              <TR>
+                <TD class=SmallText style="WHITE-SPACE: nowrap" align=right>
+                  <TABLE>
+                    <TBODY>
+                    <TR>
+                      <TD id=ctl00_RateArticle_RateText 
+                      style="PADDING-RIGHT: 5px"><I><B>Rate this Article for 
+                        us!</B></I></TD>
+                      <TD id=ctl00_RateArticle_StartForm 
+                        align=right><I>&nbsp;&nbsp;Poor</I></TD>
+                      <TD id=ctl00_RateArticle_VoteFormDiv 
+                      style="WHITE-SPACE: nowrap" align=left>
+                        <TABLE id=ctl00_RateArticle_VoteRBL border=0>
+                          <TBODY>
+                          <TR>
+                            <TD><INPUT id=ctl00_RateArticle_VoteRBL_0 
+                              type=radio value=1 
+                            name=ctl00$RateArticle$VoteRBL></TD>
+                            <TD><INPUT id=ctl00_RateArticle_VoteRBL_1 
+                              type=radio value=2 
+                            name=ctl00$RateArticle$VoteRBL></TD>
+                            <TD><INPUT id=ctl00_RateArticle_VoteRBL_2 
+                              type=radio value=3 
+                            name=ctl00$RateArticle$VoteRBL></TD>
+                            <TD><INPUT id=ctl00_RateArticle_VoteRBL_3 
+                              type=radio value=4 
+                            name=ctl00$RateArticle$VoteRBL></TD>
+                            <TD><INPUT id=ctl00_RateArticle_VoteRBL_4 
+                              type=radio value=5 
+                            name=ctl00$RateArticle$VoteRBL></TD></TR></TBODY></TABLE></TD>
+                      <TD id=ctl00_RateArticle_EndForm 
+                        align=left><I>Excellent</I> <INPUT class=FormButton id=ctl00_RateArticle_SubmitRateBtn type=submit value=Vote name=ctl00$RateArticle$SubmitRateBtn> 
+                      </TD>
+                      <TD><SPAN 
+                    id=ctl00_RateArticle_ErrorMessage></SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE>
+            <DIV><INPUT id=__EVENTVALIDATION type=hidden 
+            value=/wEWCAKj2JP3CALAlMXDBwLBlMXDBwLClMXDBwLDlMXDBwLElMXDBwLP+++tCwK5upDkC6+4hPdvTT5MyMefK3M84dsEvKfv 
+            name=__EVENTVALIDATION> </DIV></FORM></TD></TR></TBODY></TABLE>
+      <DIV 
+      style="PADDING-RIGHT: 10px; PADDING-LEFT: 10px; PADDING-BOTTOM: 10px; OVERFLOW: hidden; PADDING-TOP: 10px; WHITE-SPACE: nowrap; TEXT-ALIGN: center">
+      <SCRIPT type=text/javascript>document.write("<a href=\"http://www.codeproject.com/Redir.aspx?adid=5003&way=ban\" target=\"_blank\" rel=\"nofollow\"><img src=\"http://www.codeproject.com/script/Ann/ServeImg.aspx?File=%2fscript%2fadmentor%2fimages%2fFarpoint_Spread25_468x60.jpg&C=False&id=5003\" alt=\"\" border=\"0\" width=\"468\" height=\"60\"></a>");</SCRIPT>
+      <IFRAME 
+      src="C:\Documents and Settings\admin\Desktop\qwe\CodeProject Capturing the Screen Image in C#_ Free source code and programming help_files\ServeHTML(1).htm" 
+      frameBorder=0 width=300 scrolling=no height=60></IFRAME></DIV><A 
+      name=_comments></A><!-- Forum Start -->
+      <DIV id=_MessageBoard onclick="return SwitchMessage(event, null)">
+      <TABLE class=Frm_MainTable id=ForumTable cellSpacing=0 cellPadding=0>
+        <FORM 
+        action=/script/Forums/SetOptions.aspx?floc=%2fKB%2fgraphics%2fcscapturescreen1.aspx&amp;fid=12172 
+        method=get>
+        <TBODY>
+        <TR>
+          <TD><INPUT type=hidden value=12172 name=fid><INPUT type=hidden 
+            value=?floc=%2fKB%2fgraphics%2fcscapturescreen1.aspx&amp;fid=12172 
+            name=currentQS><INPUT type=hidden 
+            value=/KB/graphics/cscapturescreen1.aspx name=floc>
+            <TABLE cellSpacing=0 cellPadding=3 width="100%" border=0>
+              <TBODY>
+              <TR class=Frm_HeaderRow1>
+                <TD style="WHITE-SPACE: nowrap"><IMG height=16 
+                  src="/script/Forums/Images/forum_faq.gif" width=16 
+                  align=absMiddle border=0>&nbsp;<A 
+                  href="http://www.codeproject.com/script/Forums/FAQ.aspx"><B>FAQ</B></A>&nbsp;</TD>
+                <TD style="WHITE-SPACE: nowrap; TEXT-ALIGN: right">Noise 
+                  Tolerance<SELECT class=Frm_DropDown size=1 name=noise> 
+                    <OPTION value=1>Very High</OPTION><OPTION 
+                    value=2>High</OPTION><OPTION value=3 
+                    selected>Medium</OPTION><OPTION value=4>Low</OPTION><OPTION 
+                    value=5>Very Low</OPTION></SELECT></TD>
+                <TD style="WHITE-SPACE: nowrap; TEXT-ALIGN: right" 
+                  colSpan=2><IMG height=15 
+                  src="/script/Forums/Images/forum_search.gif" width=16 
+                  align=absMiddle border=0>&nbsp;<A 
+                  href="http://www.codeproject.com/script/Forums/Search.aspx?fid=12172">Search 
+                  comments</A>&nbsp;</TD>
+                <TD style="TEXT-ALIGN: right"><INPUT class=Frm_Button type=submit value="Set Options" name=submit></TD></TR>
+              <TR class=Frm_HeaderRow2>
+                <TD style="WIDTH: 100%">&nbsp;</TD>
+                <TD 
+                  style="WHITE-SPACE: nowrap; TEXT-ALIGN: right">Layout<SELECT 
+                  class=Frm_DropDown size=1 name=view> <OPTION value=Quick 
+                    selected>Normal</OPTION><OPTION value=Topic>Expand Root 
+                    Messages</OPTION><OPTION value=Expanded>Expand All 
+                    Messages</OPTION><OPTION value=Thread>Thread 
+                    View</OPTION><OPTION value=Normal>No Javascript 
+                    (slow)</OPTION><OPTION value=Preview>No Javascript 
+                    Preview</OPTION></SELECT>&nbsp;&nbsp;</TD>
+                <TD style="WHITE-SPACE: nowrap">Per page<SELECT 
+                  class=Frm_DropDown size=1 name=mpp> <OPTION 
+                    value=10>10</OPTION><OPTION value=25 
+                    selected>25</OPTION><OPTION 
+                  value=50>50</OPTION></SELECT>&nbsp;&nbsp;</TD>
+                <TD colSpan=2>&nbsp;</TD></TR></TBODY></TABLE></TD></TR></FORM>
+        <TR>
+          <TD><A name=xx0xx></A>
+            <TABLE cellSpacing=0 cellPadding=2 width="100%" border=0>
+              <TBODY>
+              <TR class=Frm_NavigationBar>
+                <TD><IMG height=16 
+                  src="/script/Forums/Images/forum_newmsg.gif" width=16 
+                  align=top border=0><A class=Frm_HL 
+                  title="Create a new message thread" 
+                  href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=12172&amp;floc=/KB/graphics/cscapturescreen1.aspx" 
+                  target=_top name=Frm_HoverNL><B>New Message</B></A></TD>
+                <TD>Msgs 1 to 25 of 32 (Total in Forum: 32) (<A 
+                  href="http://www.codeproject.com/KB/graphics/cscapturescreen1.aspx?fid=12172">Refresh</A>)</TD>
+                <TD style="WHITE-SPACE: nowrap; TEXT-ALIGN: right"><SPAN 
+                  class=Frm_HL>First</SPAN><SPAN class=Frm_HL>Prev</SPAN><A 
+                  class=Frm_HL 
+                  href="http://www.codeproject.com/KB/graphics/cscapturescreen1.aspx?fid=12172&amp;fr=26#xx0xx" 
+                  name=Frm_HoverNL>Next</A></TD></TR></TBODY></TABLE></TD></TR>
+        <TR>
+          <TD><!-- Column Headers -->
+            <TABLE class=Frm_MsgTable cellSpacing=0 cellPadding=0 width="100%" 
+            border=0>
+              <TBODY>
+              <TR class=Frm_ColumnHeaders>
+                <TD style="WIDTH: 100%">
+                  <TABLE cellSpacing=0 cellPadding=2 width="100%" border=0>
+                    <TBODY>
+                    <TR>
+                      <TD>Subject&nbsp;</TD>
+                      <TD class=Frm_MsgAuthor>&nbsp;Author&nbsp;</TD>
+                      <TD 
+              class=Frm_MsgDate>Date&nbsp;</TD></TR></TBODY></TABLE></TD></TR>
+              <TR>
+                <TD><IMG height=5 src="/script/Forums/Images/t.gif" width=1 
+                  border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd Rt HdUnSel " id=2310663_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=16><A 
+                        name=xx2310663xx></A><IMG height=16 
+                        src="/script/Forums/Images/msg_general.gif" width=16 
+                        valign="absmiddle"></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/graphics/cscapturescreen1.aspx?fid=12172&amp;select=2310663#xx2310663xx" 
+                        name=2310663>memory leak</A></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        title=member height=16 
+                        src="/script/Membership/Images/member_sm.gif" 
+                      border=0></TD>
+                      <TD class=Frm_MsgAuthor><A 
+                        href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=4588039">rattle5jonq</A></TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">10:48 8 
+                        Nov '07 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=2310663_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 16px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2>I think that before returning 
+                                image in function GetDesktopImage() you should 
+                                delete m_HBitmap<BR><BR>Image image = 
+                                System.Drawing.Image.FromHbitmap(m_HBitmap);<BR>PlatformInvokeGDI32.DeleteObject(m_HBitmap);<BR><BR>return 
+                                (Bitmap)image;<BR><BR><BR><BR><BR><BR></TD></TR>
+                                <TR style="VERTICAL-ALIGN: top">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL title=Reply 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=12172&amp;select=2310663&amp;floc=/KB/graphics/cscapturescreen1.aspx&amp;fa=r">Reply</A>·<A 
+                                class=Frm_MHL title=Email 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=12172&amp;select=2310663&amp;floc=/KB/graphics/cscapturescreen1.aspx&amp;fa=e">Email</A>·<A 
+                                class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/graphics/cscapturescreen1.aspx?fid=12172&amp;tid=2310663">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=12172&amp;msg=2310663">PermaLink</A>·<A 
+                                class=Frm_MHL title="Bookmark this post" 
+                                href="http://www.codeproject.com/script/Bookmarks/Add.aspx?&amp;obid=2310663&amp;obtid=3">Bookmark</A></TD>
+                                <TD class=Frm_MsgFt 
+                                style="TEXT-ALIGN: right"><SPAN id=MVF2310663 
+                                style="WHITE-SPACE: nowrap">
+                                <SCRIPT language=Javascript 
+type=text/javascript>
+												MsgVoteForm(4588039,2310663);
+											</SCRIPT>
+                                </SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR class=Quick>
+                <TD class=Frm_MsgRtDivide><IMG height=1 
+                  src="/script/Forums/Images/t.gif" width=1 border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd Rt HdUnSel " id=1783836_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=16><A 
+                        name=xx1783836xx></A><IMG height=16 
+                        src="/script/Forums/Images/msg_general.gif" width=16 
+                        valign="absmiddle"></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/graphics/cscapturescreen1.aspx?fid=12172&amp;select=1783836#xx1783836xx" 
+                        name=1783836>Doing it with C# itself is much 
+                        simpler...</A></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        title=member height=16 
+                        src="/script/Membership/Images/member_sm.gif" 
+                      border=0></TD>
+                      <TD class=Frm_MsgAuthor><A 
+                        href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=2514557">dalek9</A></TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">11:06 
+                        30 Nov '06 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=1783836_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 16px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2><CODE>public Bitmap 
+                                GetDesktopImage(Rectangle rect)<BR>{<BR>Graphics 
+                                graphics;<BR>Bitmap bitmap;<BR><BR>bitmap = new 
+                                Bitmap(rect.Width, rect.Height);<BR>graphics = 
+                                Graphics.FromImage(bitmap);<BR>graphics.CopyFromScreen(0, 
+                                0, rect.Left, rect.Top, new Size(rect.Width, 
+                                rect.Height));<BR>return 
+                                bitmap;<BR>}</CODE><BR><BR>and that's it... 
+                                <BR></TD></TR>
+                                <TR style="VERTICAL-ALIGN: top">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL title=Reply 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=12172&amp;select=1783836&amp;floc=/KB/graphics/cscapturescreen1.aspx&amp;fa=r">Reply</A>·<A 
+                                class=Frm_MHL title=Email 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=12172&amp;select=1783836&amp;floc=/KB/graphics/cscapturescreen1.aspx&amp;fa=e">Email</A>·<A 
+                                class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/graphics/cscapturescreen1.aspx?fid=12172&amp;tid=1783836">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=12172&amp;msg=1783836">PermaLink</A>·<A 
+                                class=Frm_MHL title="Bookmark this post" 
+                                href="http://www.codeproject.com/script/Bookmarks/Add.aspx?&amp;obid=1783836&amp;obtid=3">Bookmark</A></TD>
+                                <TD class=Frm_MsgFt 
+                                style="TEXT-ALIGN: right"><SPAN id=MVF1783836 
+                                style="WHITE-SPACE: nowrap">4.18/5 (6 votes)
+                                <SCRIPT language=Javascript 
+type=text/javascript>
+												MsgVoteForm(2514557,1783836);
+											</SCRIPT>
+                                 
+                        </SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR class=Quick>
+                <TD class=Frm_MsgRtDivide><IMG height=1 
+                  src="/script/Forums/Images/t.gif" width=1 border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd LoVote Rt HdUnSel " id=1745866_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=16><A 
+                        name=xx1745866xx></A><IMG height=16 
+                        src="/script/Forums/Images/msg_question.gif" width=16 
+                        valign="absmiddle"></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/graphics/cscapturescreen1.aspx?fid=12172&amp;select=1745866#xx1745866xx" 
+                        name=1745866>Video</A></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        title=member height=16 
+                        src="/script/Membership/Images/member_sm.gif" 
+                      border=0></TD>
+                      <TD class=Frm_MsgAuthor><A 
+                        href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=3450477">RichardUci</A></TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">8:12 7 
+                        Nov '06 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=1745866_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 16px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2>Hello, I'm traying to make an 
+                                aplication that capture the screen and make a 
+                                video with thats images that I capture from the 
+                                screen, but I have a serious problem with the 
+                                memory, it up rapidly when I start running the 
+                                aplication and only down when I close it. I need 
+                                somebody that gide me to develop it, any 
+                                sugestion is gratefull. My e-mail is 
+                                sergio_ricardo03@yahoo.es<BR><BR>Thanks to 
+                                everybody. <BR></TD></TR>
+                                <TR style="VERTICAL-ALIGN: top">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL title=Reply 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=12172&amp;select=1745866&amp;floc=/KB/graphics/cscapturescreen1.aspx&amp;fa=r">Reply</A>·<A 
+                                class=Frm_MHL title=Email 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=12172&amp;select=1745866&amp;floc=/KB/graphics/cscapturescreen1.aspx&amp;fa=e">Email</A>·<A 
+                                class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/graphics/cscapturescreen1.aspx?fid=12172&amp;tid=1745866">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=12172&amp;msg=1745866">PermaLink</A>·<A 
+                                class=Frm_MHL title="Bookmark this post" 
+                                href="http://www.codeproject.com/script/Bookmarks/Add.aspx?&amp;obid=1745866&amp;obtid=3">Bookmark</A></TD>
+                                <TD class=Frm_MsgFt 
+                                style="TEXT-ALIGN: right"><SPAN id=MVF1745866 
+                                style="WHITE-SPACE: nowrap">1.50/5 (2 votes)
+                                <SCRIPT language=Javascript 
+type=text/javascript>
+												MsgVoteForm(3450477,1745866);
+											</SCRIPT>
+                                 
+                        </SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR class=Quick>
+                <TD class=Frm_MsgRtDivide><IMG height=1 
+                  src="/script/Forums/Images/t.gif" width=1 border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd Rt HdUnSel " id=1189787_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=16><A 
+                        name=xx1189787xx></A><IMG height=16 
+                        src="/script/Forums/Images/msg_general.gif" width=16 
+                        valign="absmiddle"></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/graphics/cscapturescreen1.aspx?fid=12172&amp;select=1189787#xx1189787xx" 
+                        name=1189787>Doesn't capture Layered (trasnparent, alpha 
+                        blended) windows</A></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        title=member height=16 
+                        src="/script/Membership/Images/member_sm.gif" 
+                      border=0></TD>
+                      <TD class=Frm_MsgAuthor><A 
+                        href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=47417">Jaykul</A></TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">11:14 9 
+                        Aug '05 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=1189787_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 16px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2>OK, first of all, someone has done 
+                                it with a nice screen overlay: 
+                                http://blogs.geekdojo.net/brian/articles/Cropper.aspx<BR><BR>But 
+                                the real thing I came in here to post is that 
+                                neither your app (nor hhis) can capture any 
+                                window (such as the one from Cropper<IMG 
+                                src="/script/Forums/Images/smiley_tongue.gif" 
+                                align=absMiddle>) that is alpha blended (that 
+                                is: partially transparent). The solution is 
+                                extremely simple:<BR><BR>In your 
+                                PlatformInvokeGDI32, define:<BR>public const int 
+                                CAPTUREBLT = 1073741824;<BR><BR>And then 
+                                change:<BR>PlatformInvokeGDI32.BitBlt(hMemDC, 0, 
+                                0, size.cx, size.cy, hDC, 0, 0, 
+                                PlatformInvokeGDI32.SRCCOPY 
+                                );<BR><BR>to:<BR>PlatformInvokeGDI32.BitBlt(hMemDC, 
+                                0, 0,size.cx,size.cy, hDC, 0, 0, 
+                                PlatformInvokeGDI32.SRCCOPY | 
+                                PlatformInvokeGDI32.CAPTUREBLT);<BR><BR><IMG 
+                                src="/script/Forums/Images/smiley_biggrin.gif" 
+                                align=absMiddle> <BR><BR>--<BR>::Jaykul 
+                                &lt;&gt;&lt;<BR>Lynch's Law: When the going gets 
+                                tough, everyone leaves.<BR><BR></TD></TR>
+                                <TR style="VERTICAL-ALIGN: top">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL title=Reply 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=12172&amp;select=1189787&amp;floc=/KB/graphics/cscapturescreen1.aspx&amp;fa=r">Reply</A>·<A 
+                                class=Frm_MHL title=Email 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=12172&amp;select=1189787&amp;floc=/KB/graphics/cscapturescreen1.aspx&amp;fa=e">Email</A>·<A 
+                                class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/graphics/cscapturescreen1.aspx?fid=12172&amp;tid=1189787">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=12172&amp;msg=1189787">PermaLink</A>·<A 
+                                class=Frm_MHL title="Bookmark this post" 
+                                href="http://www.codeproject.com/script/Bookmarks/Add.aspx?&amp;obid=1189787&amp;obtid=3">Bookmark</A></TD>
+                                <TD class=Frm_MsgFt 
+                                style="TEXT-ALIGN: right"><SPAN id=MVF1189787 
+                                style="WHITE-SPACE: nowrap">
+                                <SCRIPT language=Javascript 
+type=text/javascript>
+												MsgVoteForm(47417,1189787);
+											</SCRIPT>
+                                </SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR class=Quick>
+                <TD class=Frm_MsgDivide><IMG height=1 
+                  src="/script/Forums/Images/t.gif" width=1 border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd HdUnSel " id=1902425_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=34><A 
+                        name=xx1902425xx></A><IMG height=16 
+                        src="/script/Forums/Images/msg_general.gif" width=16 
+                        valign="absmiddle"></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/graphics/cscapturescreen1.aspx?fid=12172&amp;select=1902425#xx1902425xx" 
+                        name=1902425>Re: Doesn't capture Layered (trasnparent, 
+                        alpha blended) windows</A></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        title=member height=16 
+                        src="/script/Membership/Images/member_sm.gif" 
+                      border=0></TD>
+                      <TD class=Frm_MsgAuthor><A 
+                        href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=1548869">JonFrost</A></TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">23:09 
+                        19 Feb '07 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=1902425_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 34px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2>Adding this will allow you to 
+                                capture selection rectangles and the resize 
+                                rectangle of a form. <BR></TD></TR>
+                                <TR style="VERTICAL-ALIGN: top">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL title=Reply 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=12172&amp;select=1902425&amp;floc=/KB/graphics/cscapturescreen1.aspx&amp;fa=r">Reply</A>·<A 
+                                class=Frm_MHL title=Email 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=12172&amp;select=1902425&amp;floc=/KB/graphics/cscapturescreen1.aspx&amp;fa=e">Email</A>·<A 
+                                class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/graphics/cscapturescreen1.aspx?fid=12172&amp;tid=1189787">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=12172&amp;msg=1902425">PermaLink</A>·<A 
+                                class=Frm_MHL title="Bookmark this post" 
+                                href="http://www.codeproject.com/script/Bookmarks/Add.aspx?&amp;obid=1902425&amp;obtid=3">Bookmark</A></TD>
+                                <TD class=Frm_MsgFt 
+                                style="TEXT-ALIGN: right"><SPAN id=MVF1902425 
+                                style="WHITE-SPACE: nowrap">
+                                <SCRIPT language=Javascript 
+type=text/javascript>
+												MsgVoteForm(1548869,1902425);
+											</SCRIPT>
+                                </SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR class=Quick>
+                <TD class=Frm_MsgRtDivide><IMG height=1 
+                  src="/script/Forums/Images/t.gif" width=1 border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd Rt HdUnSel " id=1144177_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=16><A 
+                        name=xx1144177xx></A><IMG height=16 
+                        src="/script/Forums/Images/msg_general.gif" width=16 
+                        valign="absmiddle"></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/graphics/cscapturescreen1.aspx?fid=12172&amp;select=1144177#xx1144177xx" 
+                        name=1144177>NULL retured if I call the function 42 
+                        times</A></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        title=member height=16 
+                        src="/script/Membership/Images/member_sm.gif" 
+                      border=0></TD>
+                      <TD class=Frm_MsgAuthor><A 
+                        href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=33312">raed</A></TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">6:10 23 
+                        Jun '05 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=1144177_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 16px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2>I make a thread that will call 
+                                GetDesktopImage each 2 seconds to get the 
+                                changes made on screen, but the problem i have 
+                                that after 42 calls the function returned 
+                                null... i did not find a logical reason for 
+                                this.<BR>any advice? <BR></TD></TR>
+                                <TR style="VERTICAL-ALIGN: top">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL title=Reply 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=12172&amp;select=1144177&amp;floc=/KB/graphics/cscapturescreen1.aspx&amp;fa=r">Reply</A>·<A 
+                                class=Frm_MHL title=Email 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=12172&amp;select=1144177&amp;floc=/KB/graphics/cscapturescreen1.aspx&amp;fa=e">Email</A>·<A 
+                                class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/graphics/cscapturescreen1.aspx?fid=12172&amp;tid=1144177">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=12172&amp;msg=1144177">PermaLink</A>·<A 
+                                class=Frm_MHL title="Bookmark this post" 
+                                href="http://www.codeproject.com/script/Bookmarks/Add.aspx?&amp;obid=1144177&amp;obtid=3">Bookmark</A></TD>
+                                <TD class=Frm_MsgFt 
+                                style="TEXT-ALIGN: right"><SPAN id=MVF1144177 
+                                style="WHITE-SPACE: nowrap">
+                                <SCRIPT language=Javascript 
+type=text/javascript>
+												MsgVoteForm(33312,1144177);
+											</SCRIPT>
+                                </SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR class=Quick>
+                <TD class=Frm_MsgDivide><IMG height=1 
+                  src="/script/Forums/Images/t.gif" width=1 border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd HdUnSel " id=1189814_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=34><A 
+                        name=xx1189814xx></A><IMG height=16 
+                        src="/script/Forums/Images/msg_general.gif" width=16 
+                        valign="absmiddle"></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/graphics/cscapturescreen1.aspx?fid=12172&amp;select=1189814#xx1189814xx" 
+                        name=1189814>Re: NULL retured if I call the function 42 
+                        times</A></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        title=member height=16 
+                        src="/script/Membership/Images/member_sm.gif" 
+                      border=0></TD>
+                      <TD class=Frm_MsgAuthor><A 
+                        href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=47417">Jaykul</A></TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">11:36 9 
+                        Aug '05 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=1189814_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 34px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2>Well, I don't know why it would do 
+                                it on 42 exactly (how many times did you test 
+                                it?), but I will say that if you were going to 
+                                call this repeatedly, you need to optimize the 
+                                code so you're not getting the desktop window 
+                                and resolution every time (hook the 
+                                systemmetrics change message if you're worried 
+                                someone would actually change resolutions while 
+                                recording).<BR><BR>Honestly, you probably 
+                                wouldn't even want to create/destroy the hBitmap 
+                                every time, you could simply reuse it, and 
+                                destroy it when your form was closing... 
+                                <BR><BR>--<BR>::Jaykul &lt;&gt;&lt;<BR>Lynch's 
+                                Law: When the going gets tough, everyone 
+                                leaves.<BR><BR></TD></TR>
+                                <TR style="VERTICAL-ALIGN: top">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL title=Reply 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=12172&amp;select=1189814&amp;floc=/KB/graphics/cscapturescreen1.aspx&amp;fa=r">Reply</A>·<A 
+                                class=Frm_MHL title=Email 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=12172&amp;select=1189814&amp;floc=/KB/graphics/cscapturescreen1.aspx&amp;fa=e">Email</A>·<A 
+                                class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/graphics/cscapturescreen1.aspx?fid=12172&amp;tid=1144177">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=12172&amp;msg=1189814">PermaLink</A>·<A 
+                                class=Frm_MHL title="Bookmark this post" 
+                                href="http://www.codeproject.com/script/Bookmarks/Add.aspx?&amp;obid=1189814&amp;obtid=3">Bookmark</A></TD>
+                                <TD class=Frm_MsgFt 
+                                style="TEXT-ALIGN: right"><SPAN id=MVF1189814 
+                                style="WHITE-SPACE: nowrap">
+                                <SCRIPT language=Javascript 
+type=text/javascript>
+												MsgVoteForm(47417,1189814);
+											</SCRIPT>
+                                </SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR class=Quick>
+                <TD class=Frm_MsgRtDivide><IMG height=1 
+                  src="/script/Forums/Images/t.gif" width=1 border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd Rt HdUnSel " id=1101284_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=16><A 
+                        name=xx1101284xx></A><IMG height=16 
+                        src="/script/Forums/Images/msg_general.gif" width=16 
+                        valign="absmiddle"></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/graphics/cscapturescreen1.aspx?fid=12172&amp;select=1101284#xx1101284xx" 
+                        name=1101284>Major Memory Leak</A></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        title=member height=16 
+                        src="/script/Membership/Images/member_sm.gif" 
+                      border=0></TD>
+                      <TD class=Frm_MsgAuthor><A 
+                        href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=293932">Falazar</A></TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">12:58 6 
+                        May '05 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=1101284_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 16px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2>Hello,<BR>I am having problems 
+                                with the little app,<BR>I am getting it to work 
+                                very well except for one thing, the 
+                                memory.<BR><BR>It appears to never release any 
+                                memory resources.<BR>I can run it in a loop 20 
+                                times and watch the memory just skyrocket up, 
+                                and never go down until the program 
+                                closes.<BR><BR>I really need this utility to be 
+                                able to run every few seconds or so over a large 
+                                period of time.<BR>Other than this its a great 
+                                simple solution.<BR><BR>If anyone can please 
+                                find a soution it would be greatly 
+                                appreciated.<BR><BR>James 
+                                Ratcliff<BR>falazar@yahoo.com <BR></TD></TR>
+                                <TR style="VERTICAL-ALIGN: top">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL title=Reply 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=12172&amp;select=1101284&amp;floc=/KB/graphics/cscapturescreen1.aspx&amp;fa=r">Reply</A>·<A 
+                                class=Frm_MHL title=Email 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=12172&amp;select=1101284&amp;floc=/KB/graphics/cscapturescreen1.aspx&amp;fa=e">Email</A>·<A 
+                                class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/graphics/cscapturescreen1.aspx?fid=12172&amp;tid=1101284">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=12172&amp;msg=1101284">PermaLink</A>·<A 
+                                class=Frm_MHL title="Bookmark this post" 
+                                href="http://www.codeproject.com/script/Bookmarks/Add.aspx?&amp;obid=1101284&amp;obtid=3">Bookmark</A></TD>
+                                <TD class=Frm_MsgFt 
+                                style="TEXT-ALIGN: right"><SPAN id=MVF1101284 
+                                style="WHITE-SPACE: nowrap">
+                                <SCRIPT language=Javascript 
+type=text/javascript>
+												MsgVoteForm(293932,1101284);
+											</SCRIPT>
+                                </SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR class=Quick>
+                <TD class=Frm_MsgDivide><IMG height=1 
+                  src="/script/Forums/Images/t.gif" width=1 border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd HdUnSel " id=1279506_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=34><A 
+                        name=xx1279506xx></A><IMG height=16 
+                        src="/script/Forums/Images/msg_general.gif" width=16 
+                        valign="absmiddle"></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/graphics/cscapturescreen1.aspx?fid=12172&amp;select=1279506#xx1279506xx" 
+                        name=1279506>Re: Major Memory Leak</A></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        title=member height=16 
+                        src="/script/Membership/Images/member_sm.gif" 
+                      border=0></TD>
+                      <TD class=Frm_MsgAuthor><A 
+                        href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=1647582">Jisu74</A></TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">15:51 
+                        11 Nov '05 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=1279506_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 34px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2>Yea this is happening a lot to be 
+                                also...<BR><BR>Any way to fix this? 
+                                <BR></TD></TR>
+                                <TR style="VERTICAL-ALIGN: top">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL title=Reply 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=12172&amp;select=1279506&amp;floc=/KB/graphics/cscapturescreen1.aspx&amp;fa=r">Reply</A>·<A 
+                                class=Frm_MHL title=Email 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=12172&amp;select=1279506&amp;floc=/KB/graphics/cscapturescreen1.aspx&amp;fa=e">Email</A>·<A 
+                                class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/graphics/cscapturescreen1.aspx?fid=12172&amp;tid=1101284">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=12172&amp;msg=1279506">PermaLink</A>·<A 
+                                class=Frm_MHL title="Bookmark this post" 
+                                href="http://www.codeproject.com/script/Bookmarks/Add.aspx?&amp;obid=1279506&amp;obtid=3">Bookmark</A></TD>
+                                <TD class=Frm_MsgFt 
+                                style="TEXT-ALIGN: right"><SPAN id=MVF1279506 
+                                style="WHITE-SPACE: nowrap">
+                                <SCRIPT language=Javascript 
+type=text/javascript>
+												MsgVoteForm(1647582,1279506);
+											</SCRIPT>
+                                </SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR class=Quick>
+                <TD class=Frm_MsgRtDivide><IMG height=1 
+                  src="/script/Forums/Images/t.gif" width=1 border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd Rt HdUnSel " id=1051150_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=16><A 
+                        name=xx1051150xx></A><IMG height=16 
+                        src="/script/Forums/Images/msg_general.gif" width=16 
+                        valign="absmiddle"></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/graphics/cscapturescreen1.aspx?fid=12172&amp;select=1051150#xx1051150xx" 
+                        name=1051150>the Dll functions</A></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        title=member height=16 
+                        src="/script/Membership/Images/member_sm.gif" 
+                      border=0></TD>
+                      <TD class=Frm_MsgAuthor><A 
+                        href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=650788">tokyo_bme</A></TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">10:36 2 
+                        Mar '05 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=1051150_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 16px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2>hi, <BR>i'm not a proffisional in 
+                                c# . so i wonder, how can u view the functions 
+                                in this dll (gdi32 or usr32)????, although i 
+                                tried to open them from the .NET but an error 
+                                message appeared saying that i don't have the 
+                                permission to do that .. <BR></TD></TR>
+                                <TR style="VERTICAL-ALIGN: top">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL title=Reply 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=12172&amp;select=1051150&amp;floc=/KB/graphics/cscapturescreen1.aspx&amp;fa=r">Reply</A>·<A 
+                                class=Frm_MHL title=Email 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=12172&amp;select=1051150&amp;floc=/KB/graphics/cscapturescreen1.aspx&amp;fa=e">Email</A>·<A 
+                                class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/graphics/cscapturescreen1.aspx?fid=12172&amp;tid=1051150">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=12172&amp;msg=1051150">PermaLink</A>·<A 
+                                class=Frm_MHL title="Bookmark this post" 
+                                href="http://www.codeproject.com/script/Bookmarks/Add.aspx?&amp;obid=1051150&amp;obtid=3">Bookmark</A></TD>
+                                <TD class=Frm_MsgFt 
+                                style="TEXT-ALIGN: right"><SPAN id=MVF1051150 
+                                style="WHITE-SPACE: nowrap">
+                                <SCRIPT language=Javascript 
+type=text/javascript>
+												MsgVoteForm(650788,1051150);
+											</SCRIPT>
+                                </SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR class=Quick>
+                <TD class=Frm_MsgDivide><IMG height=1 
+                  src="/script/Forums/Images/t.gif" width=1 border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd HdUnSel " id=1051179_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=34><A 
+                        name=xx1051179xx></A><IMG height=16 
+                        src="/script/Forums/Images/msg_general.gif" width=16 
+                        valign="absmiddle"></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/graphics/cscapturescreen1.aspx?fid=12172&amp;select=1051179#xx1051179xx" 
+                        name=1051179>Re: the Dll functions</A></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        title=member height=16 
+                        src="/script/Membership/Images/member_sm.gif" 
+                      border=0></TD>
+                      <TD class=Frm_MsgAuthor><A 
+                        href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=2247">jjreilly</A></TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">11:18 2 
+                        Mar '05 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=1051179_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 34px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2>Of course, the simplest way is to 
+                                open a command prompt and run "dumpbin/exports 
+                                gdi32.dll". You'll get a list of hundreds, so 
+                                send it to a file. You could also peruse the C++ 
+                                header files, starting with windows.h. The best 
+                                way is to know **what** you are looking for, and 
+                                look in the MSDN help. <BR><BR>It has 
+                                **nothing** to do with C#, by the 
+                                way.<BR><BR>reilly.<BR><BR></TD></TR>
+                                <TR style="VERTICAL-ALIGN: top">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL title=Reply 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=12172&amp;select=1051179&amp;floc=/KB/graphics/cscapturescreen1.aspx&amp;fa=r">Reply</A>·<A 
+                                class=Frm_MHL title=Email 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=12172&amp;select=1051179&amp;floc=/KB/graphics/cscapturescreen1.aspx&amp;fa=e">Email</A>·<A 
+                                class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/graphics/cscapturescreen1.aspx?fid=12172&amp;tid=1051150">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=12172&amp;msg=1051179">PermaLink</A>·<A 
+                                class=Frm_MHL title="Bookmark this post" 
+                                href="http://www.codeproject.com/script/Bookmarks/Add.aspx?&amp;obid=1051179&amp;obtid=3">Bookmark</A></TD>
+                                <TD class=Frm_MsgFt 
+                                style="TEXT-ALIGN: right"><SPAN id=MVF1051179 
+                                style="WHITE-SPACE: nowrap">
+                                <SCRIPT language=Javascript 
+type=text/javascript>
+												MsgVoteForm(2247,1051179);
+											</SCRIPT>
+                                </SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR class=Quick>
+                <TD class=Frm_MsgDivide><IMG height=1 
+                  src="/script/Forums/Images/t.gif" width=1 border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd HdUnSel " id=1053236_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=52><A 
+                        name=xx1053236xx></A><IMG height=16 
+                        src="/script/Forums/Images/msg_general.gif" width=16 
+                        valign="absmiddle"></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/graphics/cscapturescreen1.aspx?fid=12172&amp;select=1053236#xx1053236xx" 
+                        name=1053236>Re: the Dll functions</A></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        title=member height=16 
+                        src="/script/Membership/Images/member_sm.gif" 
+                      border=0></TD>
+                      <TD class=Frm_MsgAuthor><A 
+                        href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=650788">tokyo_bme</A></TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">23:30 4 
+                        Mar '05 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=1053236_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 52px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2>hi, <BR>i really tried this 
+                                command in the comand prompt window but it 
+                                didn't work.... alternativly, i found a program 
+                                " API guide" that lists all the api functions in 
+                                the windows, it's easy-to-use program and u can 
+                                view the functions also by their libraries.... 
+                                thank you for your help, <IMG 
+                                src="/script/Forums/Images/smiley_smile.gif" 
+                                align=absMiddle> and i wish u find this program 
+                                helpful .. <BR></TD></TR>
+                                <TR style="VERTICAL-ALIGN: top">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL title=Reply 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=12172&amp;select=1053236&amp;floc=/KB/graphics/cscapturescreen1.aspx&amp;fa=r">Reply</A>·<A 
+                                class=Frm_MHL title=Email 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=12172&amp;select=1053236&amp;floc=/KB/graphics/cscapturescreen1.aspx&amp;fa=e">Email</A>·<A 
+                                class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/graphics/cscapturescreen1.aspx?fid=12172&amp;tid=1051150">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=12172&amp;msg=1053236">PermaLink</A>·<A 
+                                class=Frm_MHL title="Bookmark this post" 
+                                href="http://www.codeproject.com/script/Bookmarks/Add.aspx?&amp;obid=1053236&amp;obtid=3">Bookmark</A></TD>
+                                <TD class=Frm_MsgFt 
+                                style="TEXT-ALIGN: right"><SPAN id=MVF1053236 
+                                style="WHITE-SPACE: nowrap">
+                                <SCRIPT language=Javascript 
+type=text/javascript>
+												MsgVoteForm(650788,1053236);
+											</SCRIPT>
+                                </SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR class=Quick>
+                <TD class=Frm_MsgRtDivide><IMG height=1 
+                  src="/script/Forums/Images/t.gif" width=1 border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd LoVote Rt HdUnSel " id=1041248_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=16><A 
+                        name=xx1041248xx></A><IMG height=16 
+                        src="/script/Forums/Images/msg_general.gif" width=16 
+                        valign="absmiddle"></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/graphics/cscapturescreen1.aspx?fid=12172&amp;select=1041248#xx1041248xx" 
+                        name=1041248>screen capture in web app</A></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        title=member height=16 
+                        src="/script/Membership/Images/member_sm.gif" 
+                      border=0></TD>
+                      <TD class=Frm_MsgAuthor><A 
+                        href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=1737255">eheuer</A></TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">5:34 17 
+                        Feb '05 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=1041248_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 16px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2>I'm having a problem with 
+                                capturing an open window (or even full screen) 
+                                via code in a web app. In a nutshell, I've built 
+                                the web app, which is used for html page 
+                                development, based on a portal. There is 
+                                currently a feature that allows each record in a 
+                                particular table in the SQL database to be 
+                                opened for previewing as a popup HTML page. 
+                                <BR><BR>There is now the need to generate a 
+                                report containing a copy of any media element 
+                                present on each given page alongside any 
+                                instructions the instructional designer may have 
+                                placed in the record for that page. In the case 
+                                of a still image, this can be done rather 
+                                simply. However, since many of the media 
+                                elements are either Flash or Anark, it would be 
+                                necessary to launch an html page containing the 
+                                appropriate player in order to view/capture the 
+                                first frame of those media elements for this 
+                                report. <BR><BR>I've found and tried some code 
+                                that works well for doing screen or window 
+                                captures in a stand alone application using 
+                                windows forms, but only a solid black image 
+                                results if I try to implement this in the code 
+                                behind of an asp.net web page (or from a script 
+                                directly on the page, for that matter). It 
+                                doesn't matter what image format I choose, 
+                                either. It also doesn't matter whether I run 
+                                this directly on the server or from a remote 
+                                machine...still the same black .jpeg, .gif, 
+                                .bmp, or whatever. <BR><BR>From what I've seen 
+                                in searching other locations on the net, this 
+                                seems to be a common problem. Has anyone found 
+                                or developed a good workaround/solution for 
+                                this?<BR><BR></TD></TR>
+                                <TR style="VERTICAL-ALIGN: top">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL title=Reply 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=12172&amp;select=1041248&amp;floc=/KB/graphics/cscapturescreen1.aspx&amp;fa=r">Reply</A>·<A 
+                                class=Frm_MHL title=Email 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=12172&amp;select=1041248&amp;floc=/KB/graphics/cscapturescreen1.aspx&amp;fa=e">Email</A>·<A 
+                                class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/graphics/cscapturescreen1.aspx?fid=12172&amp;tid=1041248">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=12172&amp;msg=1041248">PermaLink</A>·<A 
+                                class=Frm_MHL title="Bookmark this post" 
+                                href="http://www.codeproject.com/script/Bookmarks/Add.aspx?&amp;obid=1041248&amp;obtid=3">Bookmark</A></TD>
+                                <TD class=Frm_MsgFt 
+                                style="TEXT-ALIGN: right"><SPAN id=MVF1041248 
+                                style="WHITE-SPACE: nowrap">1.00/5 (1 vote)
+                                <SCRIPT language=Javascript 
+type=text/javascript>
+												MsgVoteForm(1737255,1041248);
+											</SCRIPT>
+                                 
+                        </SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR class=Quick>
+                <TD class=Frm_MsgDivide><IMG height=1 
+                  src="/script/Forums/Images/t.gif" width=1 border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd HdUnSel " id=1054832_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=34><A 
+                        name=xx1054832xx></A><IMG height=16 
+                        src="/script/Forums/Images/msg_general.gif" width=16 
+                        valign="absmiddle"></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/graphics/cscapturescreen1.aspx?fid=12172&amp;select=1054832#xx1054832xx" 
+                        name=1054832>Re: screen capture in web app</A></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        title=member height=16 
+                        src="/script/Membership/Images/member_sm.gif" 
+                      border=0></TD>
+                      <TD class=Frm_MsgAuthor><A 
+                        href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=1785775">Timmy23</A></TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">0:25 8 
+                        Mar '05 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=1054832_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 34px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2>I'm having the exact same 
+                                problem,<BR>however, I found out what the cause 
+                                is.<BR><BR>If you execute a shell command from 
+                                your .NET webapp,<BR>the shell is executed 
+                                within the account ASPNET,<BR>and if you look 
+                                under your running processes you see 
+                                the<BR>shell is executed but as a "NETWORK 
+                                SERVICE". <IMG 
+                                src="/script/Forums/Images/smiley_squeamish.gif" 
+                                align=absMiddle> <BR><BR>I'm looking for 
+                                something to execute a shell<BR>under the 
+                                user-account and not as an 
+                                ASPNET-service.<BR><BR>The shell I'm referring 
+                                to could be a screencapture-application<BR>which 
+                                saves a screenshot to your 
+                                webroot.<BR><BR>Anyway, anybody has some more 
+                                experience?? <BR></TD></TR>
+                                <TR style="VERTICAL-ALIGN: top">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL title=Reply 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=12172&amp;select=1054832&amp;floc=/KB/graphics/cscapturescreen1.aspx&amp;fa=r">Reply</A>·<A 
+                                class=Frm_MHL title=Email 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=12172&amp;select=1054832&amp;floc=/KB/graphics/cscapturescreen1.aspx&amp;fa=e">Email</A>·<A 
+                                class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/graphics/cscapturescreen1.aspx?fid=12172&amp;tid=1041248">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=12172&amp;msg=1054832">PermaLink</A>·<A 
+                                class=Frm_MHL title="Bookmark this post" 
+                                href="http://www.codeproject.com/script/Bookmarks/Add.aspx?&amp;obid=1054832&amp;obtid=3">Bookmark</A></TD>
+                                <TD class=Frm_MsgFt 
+                                style="TEXT-ALIGN: right"><SPAN id=MVF1054832 
+                                style="WHITE-SPACE: nowrap">
+                                <SCRIPT language=Javascript 
+type=text/javascript>
+												MsgVoteForm(1785775,1054832);
+											</SCRIPT>
+                                </SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR class=Quick>
+                <TD class=Frm_MsgRtDivide><IMG height=1 
+                  src="/script/Forums/Images/t.gif" width=1 border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd Rt HdUnSel " id=932471_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=16><A 
+                        name=xx932471xx></A><IMG height=16 
+                        src="/script/Forums/Images/msg_general.gif" width=16 
+                        valign="absmiddle"></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/graphics/cscapturescreen1.aspx?fid=12172&amp;select=932471#xx932471xx" 
+                        name=932471>Bug with multiple monitors</A></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        height=15 src="/script/Forums/Images/usersuss.gif" 
+                        width=14></TD>
+                      <TD class=Frm_MsgAuthor>Sherrod Segraves</TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">8:52 24 
+                        Sep '04 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=932471_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 16px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2>Systems with multiple monitors 
+                                (not uncommon these days) may have non-zero 
+                                coordinates for the upper-left of the 
+                                desktop.<BR><BR>In Agha's BitBlt call, the 
+                                hardcoded 0,0 parameters near the end of the 
+                                parameter list should be the actual upper-left 
+                                coordinates of the desktop. <BR><BR>Sherrod 
+                                Segraves<BR></TD></TR>
+                                <TR style="VERTICAL-ALIGN: top">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL title=Reply 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=12172&amp;select=932471&amp;floc=/KB/graphics/cscapturescreen1.aspx&amp;fa=r">Reply</A>·<A 
+                                class=Frm_MHL title=Email 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=12172&amp;select=932471&amp;floc=/KB/graphics/cscapturescreen1.aspx&amp;fa=e">Email</A>·<A 
+                                class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/graphics/cscapturescreen1.aspx?fid=12172&amp;tid=932471">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=12172&amp;msg=932471">PermaLink</A>·<A 
+                                class=Frm_MHL title="Bookmark this post" 
+                                href="http://www.codeproject.com/script/Bookmarks/Add.aspx?&amp;obid=932471&amp;obtid=3">Bookmark</A></TD>
+                                <TD class=Frm_MsgFt style="TEXT-ALIGN: right"><A 
+                                class=Frm_MHL 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=12172&amp;select=932471&amp;floc=/KB/graphics/cscapturescreen1.aspx&amp;fa=m">Edit</A>·<A 
+                                class=Frm_MHL 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=12172&amp;select=932471&amp;floc=/KB/graphics/cscapturescreen1.aspx&amp;fa=d">Delete</A><BR><SPAN 
+                                id=MVF932471 style="WHITE-SPACE: nowrap">
+                                <SCRIPT language=Javascript 
+type=text/javascript>
+												MsgVoteForm(0,932471);
+											</SCRIPT>
+                                </SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR class=Quick>
+                <TD class=Frm_MsgRtDivide><IMG height=1 
+                  src="/script/Forums/Images/t.gif" width=1 border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd LoVote Rt HdUnSel " id=917057_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=16><A 
+                        name=xx917057xx></A><IMG height=16 
+                        src="/script/Forums/Images/msg_general.gif" width=16 
+                        valign="absmiddle"></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/graphics/cscapturescreen1.aspx?fid=12172&amp;select=917057#xx917057xx" 
+                        name=917057>Black screen???Help!!!!!!!</A></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        title=member height=16 
+                        src="/script/Membership/Images/member_sm.gif" 
+                      border=0></TD>
+                      <TD class=Frm_MsgAuthor><A 
+                        href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=502970">WalkWorld</A></TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">22:05 5 
+                        Sep '04 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=917057_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 16px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2>Thanks for the good 
+                                project!<BR>But when I make the 
+                                "getDesktopImage" be a WebMethod in a Web 
+                                service, it can't work.The screen I got is 
+                                black!<BR>Can someone tell me Why? 
+<BR></TD></TR>
+                                <TR style="VERTICAL-ALIGN: top">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL title=Reply 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=12172&amp;select=917057&amp;floc=/KB/graphics/cscapturescreen1.aspx&amp;fa=r">Reply</A>·<A 
+                                class=Frm_MHL title=Email 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=12172&amp;select=917057&amp;floc=/KB/graphics/cscapturescreen1.aspx&amp;fa=e">Email</A>·<A 
+                                class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/graphics/cscapturescreen1.aspx?fid=12172&amp;tid=917057">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=12172&amp;msg=917057">PermaLink</A>·<A 
+                                class=Frm_MHL title="Bookmark this post" 
+                                href="http://www.codeproject.com/script/Bookmarks/Add.aspx?&amp;obid=917057&amp;obtid=3">Bookmark</A></TD>
+                                <TD class=Frm_MsgFt 
+                                style="TEXT-ALIGN: right"><SPAN id=MVF917057 
+                                style="WHITE-SPACE: nowrap">1.00/5 (1 vote)
+                                <SCRIPT language=Javascript 
+type=text/javascript>
+												MsgVoteForm(502970,917057);
+											</SCRIPT>
+                                 
+                        </SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR class=Quick>
+                <TD class=Frm_MsgRtDivide><IMG height=1 
+                  src="/script/Forums/Images/t.gif" width=1 border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd Rt HdUnSel " id=560043_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=16><A 
+                        name=xx560043xx></A><IMG height=16 
+                        src="/script/Forums/Images/msg_general.gif" width=16 
+                        valign="absmiddle"></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/graphics/cscapturescreen1.aspx?fid=12172&amp;select=560043#xx560043xx" 
+                        name=560043>Overlay?</A></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        title=member height=16 
+                        src="/script/Membership/Images/member_sm.gif" 
+                      border=0></TD>
+                      <TD class=Frm_MsgAuthor><A 
+                        href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=231186">Jakub 
+                        Florczyk</A></TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">1:59 23 
+                        Jul '03 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=560043_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 16px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2>Maybe somebody will do it 
+                                capturing the screen with overlay? 
+<BR></TD></TR>
+                                <TR style="VERTICAL-ALIGN: top">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL title=Reply 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=12172&amp;select=560043&amp;floc=/KB/graphics/cscapturescreen1.aspx&amp;fa=r">Reply</A>·<A 
+                                class=Frm_MHL title=Email 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=12172&amp;select=560043&amp;floc=/KB/graphics/cscapturescreen1.aspx&amp;fa=e">Email</A>·<A 
+                                class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/graphics/cscapturescreen1.aspx?fid=12172&amp;tid=560043">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=12172&amp;msg=560043">PermaLink</A>·<A 
+                                class=Frm_MHL title="Bookmark this post" 
+                                href="http://www.codeproject.com/script/Bookmarks/Add.aspx?&amp;obid=560043&amp;obtid=3">Bookmark</A></TD>
+                                <TD class=Frm_MsgFt 
+                                style="TEXT-ALIGN: right"><SPAN id=MVF560043 
+                                style="WHITE-SPACE: nowrap">
+                                <SCRIPT language=Javascript 
+type=text/javascript>
+												MsgVoteForm(231186,560043);
+											</SCRIPT>
+                                </SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR class=Quick>
+                <TD class=Frm_MsgRtDivide><IMG height=1 
+                  src="/script/Forums/Images/t.gif" width=1 border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd Rt HdUnSel " id=549270_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=16><A 
+                        name=xx549270xx></A><IMG height=16 
+                        src="/script/Forums/Images/msg_general.gif" width=16 
+                        valign="absmiddle"></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/graphics/cscapturescreen1.aspx?fid=12172&amp;select=549270#xx549270xx" 
+                        name=549270>Help with the remoting aspect</A></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        title=member height=16 
+                        src="/script/Membership/Images/member_sm.gif" 
+                      border=0></TD>
+                      <TD class=Frm_MsgAuthor><A 
+                        href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=468536">UTAMav</A></TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">9:26 11 
+                        Jul '03 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=549270_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 16px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2>I am curious as to how you(David 
+                                Talbot) sent the screen image that you captured 
+                                from the remote desktop, back to the client side 
+                                of your application?<BR><BR>When I tried sending 
+                                the Bitmap back I get and error. <BR>If I just 
+                                send the IntPtr hBitmap back to the client I get 
+                                another error, when I try to convert the IntPtr 
+                                hBitmap to a Bitmap, using<BR>Bitmap bmp = 
+                                System.Drawing.Image.FromHbitmap(hBitmap);<BR><BR>Please 
+                                anyone help, Im really stumped here 
+                                <BR></TD></TR>
+                                <TR style="VERTICAL-ALIGN: top">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL title=Reply 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=12172&amp;select=549270&amp;floc=/KB/graphics/cscapturescreen1.aspx&amp;fa=r">Reply</A>·<A 
+                                class=Frm_MHL title=Email 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=12172&amp;select=549270&amp;floc=/KB/graphics/cscapturescreen1.aspx&amp;fa=e">Email</A>·<A 
+                                class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/graphics/cscapturescreen1.aspx?fid=12172&amp;tid=549270">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=12172&amp;msg=549270">PermaLink</A>·<A 
+                                class=Frm_MHL title="Bookmark this post" 
+                                href="http://www.codeproject.com/script/Bookmarks/Add.aspx?&amp;obid=549270&amp;obtid=3">Bookmark</A></TD>
+                                <TD class=Frm_MsgFt 
+                                style="TEXT-ALIGN: right"><SPAN id=MVF549270 
+                                style="WHITE-SPACE: nowrap">
+                                <SCRIPT language=Javascript 
+type=text/javascript>
+												MsgVoteForm(468536,549270);
+											</SCRIPT>
+                                </SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR class=Quick>
+                <TD class=Frm_MsgDivide><IMG height=1 
+                  src="/script/Forums/Images/t.gif" width=1 border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd HdUnSel " id=564126_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=34><A 
+                        name=xx564126xx></A><IMG height=16 
+                        src="/script/Forums/Images/msg_general.gif" width=16 
+                        valign="absmiddle"></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/graphics/cscapturescreen1.aspx?fid=12172&amp;select=564126#xx564126xx" 
+                        name=564126>Re: Help with the remoting aspect</A></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        title=member height=16 
+                        src="/script/Membership/Images/member_sm.gif" 
+                      border=0></TD>
+                      <TD class=Frm_MsgAuthor><A 
+                        href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=48859">Agha 
+                        Ali Raza</A></TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">16:12 
+                        26 Jul '03 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=564126_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 34px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2>I converted the bitmap in to jpeg 
+                                gif and then converted the gif into bytes and 
+                                then sent those bytes to the remote client by 
+                                using sockets. <BR></TD></TR>
+                                <TR style="VERTICAL-ALIGN: top">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL title=Reply 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=12172&amp;select=564126&amp;floc=/KB/graphics/cscapturescreen1.aspx&amp;fa=r">Reply</A>·<A 
+                                class=Frm_MHL title=Email 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=12172&amp;select=564126&amp;floc=/KB/graphics/cscapturescreen1.aspx&amp;fa=e">Email</A>·<A 
+                                class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/graphics/cscapturescreen1.aspx?fid=12172&amp;tid=549270">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=12172&amp;msg=564126">PermaLink</A>·<A 
+                                class=Frm_MHL title="Bookmark this post" 
+                                href="http://www.codeproject.com/script/Bookmarks/Add.aspx?&amp;obid=564126&amp;obtid=3">Bookmark</A></TD>
+                                <TD class=Frm_MsgFt 
+                                style="TEXT-ALIGN: right"><SPAN id=MVF564126 
+                                style="WHITE-SPACE: nowrap">
+                                <SCRIPT language=Javascript 
+type=text/javascript>
+												MsgVoteForm(48859,564126);
+											</SCRIPT>
+                                </SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR class=Quick>
+                <TD class=Frm_MsgRtDivide><IMG height=1 
+                  src="/script/Forums/Images/t.gif" width=1 border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd HiVote Rt HdUnSel " id=435733_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=16><A 
+                        name=xx435733xx></A><IMG height=16 
+                        src="/script/Forums/Images/msg_general.gif" width=16 
+                        valign="absmiddle"></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/graphics/cscapturescreen1.aspx?fid=12172&amp;select=435733#xx435733xx" 
+                        name=435733>Form to bitmap (before it ever hits the 
+                        screen)</A></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        title=member height=16 
+                        src="/script/Membership/Images/member_sm.gif" 
+                      border=0></TD>
+                      <TD class=Frm_MsgAuthor><A 
+                        href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=43669">stantheman</A></TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">13:54 4 
+                        Mar '03 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=435733_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 16px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2><BR>Greetings all,<BR><BR>I dig 
+                                Agha Ali Raza’s article (Capturing the Screen 
+                                Image in C#), but what I want to do is capture 
+                                the image before it hits the screen.<BR><BR>How 
+                                would I do this?<BR><BR>In essence, I would like 
+                                to take a screen-shot (bitmap) of a Form 
+                                *before* it ever gets to the screen.<BR><BR>If 
+                                you’re interested, - what I want to do is 
+                                perform a little “graphics-magic” on the image 
+                                using GDI+ - I want to “dance” the image of the 
+                                Form around the screen before I present the 
+                                actual Form. And I don’t know how to do this. 
+                                I’ve tried overloading the Form.OnPaint method, 
+                                but I just don’t seem to be getting it 
+                                right.<BR><BR>Anyone? <BR><BR>Thanks 
+                                all,<BR><BR>- Stan Shankman<BR></TD></TR>
+                                <TR style="VERTICAL-ALIGN: top">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL title=Reply 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=12172&amp;select=435733&amp;floc=/KB/graphics/cscapturescreen1.aspx&amp;fa=r">Reply</A>·<A 
+                                class=Frm_MHL title=Email 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=12172&amp;select=435733&amp;floc=/KB/graphics/cscapturescreen1.aspx&amp;fa=e">Email</A>·<A 
+                                class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/graphics/cscapturescreen1.aspx?fid=12172&amp;tid=435733">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=12172&amp;msg=435733">PermaLink</A>·<A 
+                                class=Frm_MHL title="Bookmark this post" 
+                                href="http://www.codeproject.com/script/Bookmarks/Add.aspx?&amp;obid=435733&amp;obtid=3">Bookmark</A></TD>
+                                <TD class=Frm_MsgFt 
+                                style="TEXT-ALIGN: right"><SPAN id=MVF435733 
+                                style="WHITE-SPACE: nowrap">5.00/5 (1 vote)
+                                <SCRIPT language=Javascript 
+type=text/javascript>
+												MsgVoteForm(43669,435733);
+											</SCRIPT>
+                                 
+                        </SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR class=Quick>
+                <TD class=Frm_MsgRtDivide><IMG height=1 
+                  src="/script/Forums/Images/t.gif" width=1 border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd Rt HdUnSel " id=435628_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=16><A 
+                        name=xx435628xx></A><IMG height=16 
+                        src="/script/Forums/Images/msg_general.gif" width=16 
+                        valign="absmiddle"></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/graphics/cscapturescreen1.aspx?fid=12172&amp;select=435628#xx435628xx" 
+                        name=435628>An alternative method</A></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        title=member height=16 
+                        src="/script/Membership/Images/member_sm.gif" 
+                      border=0></TD>
+                      <TD class=Frm_MsgAuthor><A 
+                        href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=173549">Øyvind 
+                        Rustan</A></TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">12:04 4 
+                        Mar '03 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=435628_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 16px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2>See PrintForm example (in VB.Net) 
+                                at <A 
+                                href="http://www.compositae.no/source.htm">www.compositae.no/source.htm</A>. 
+                                It can easily be modified to capture the screen. 
+                                <BR></TD></TR>
+                                <TR style="VERTICAL-ALIGN: top">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL title=Reply 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=12172&amp;select=435628&amp;floc=/KB/graphics/cscapturescreen1.aspx&amp;fa=r">Reply</A>·<A 
+                                class=Frm_MHL title=Email 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=12172&amp;select=435628&amp;floc=/KB/graphics/cscapturescreen1.aspx&amp;fa=e">Email</A>·<A 
+                                class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/graphics/cscapturescreen1.aspx?fid=12172&amp;tid=435628">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=12172&amp;msg=435628">PermaLink</A>·<A 
+                                class=Frm_MHL title="Bookmark this post" 
+                                href="http://www.codeproject.com/script/Bookmarks/Add.aspx?&amp;obid=435628&amp;obtid=3">Bookmark</A></TD>
+                                <TD class=Frm_MsgFt 
+                                style="TEXT-ALIGN: right"><SPAN id=MVF435628 
+                                style="WHITE-SPACE: nowrap">
+                                <SCRIPT language=Javascript 
+type=text/javascript>
+												MsgVoteForm(173549,435628);
+											</SCRIPT>
+                                </SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR class=Quick>
+                <TD class=Frm_MsgRtDivide><IMG height=1 
+                  src="/script/Forums/Images/t.gif" width=1 border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd Rt HdUnSel " id=435620_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=16><A 
+                        name=xx435620xx></A><IMG height=16 
+                        src="/script/Forums/Images/msg_general.gif" width=16 
+                        valign="absmiddle"></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/graphics/cscapturescreen1.aspx?fid=12172&amp;select=435620#xx435620xx" 
+                        name=435620>How much fun is it too...</A></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        title=member height=16 
+                        src="/script/Membership/Images/member_sm.gif" 
+                      border=0></TD>
+                      <TD class=Frm_MsgAuthor><A 
+                        href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=37899">Cromwell</A></TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">11:53 4 
+                        Mar '03 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=435620_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 16px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2>Just keep pushing capture 
+                                screen<IMG 
+                                src="/script/Forums/Images/smiley_tongue.gif" 
+                                align=absMiddle><BR></TD></TR>
+                                <TR style="VERTICAL-ALIGN: top">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL title=Reply 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=12172&amp;select=435620&amp;floc=/KB/graphics/cscapturescreen1.aspx&amp;fa=r">Reply</A>·<A 
+                                class=Frm_MHL title=Email 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=12172&amp;select=435620&amp;floc=/KB/graphics/cscapturescreen1.aspx&amp;fa=e">Email</A>·<A 
+                                class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/graphics/cscapturescreen1.aspx?fid=12172&amp;tid=435620">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=12172&amp;msg=435620">PermaLink</A>·<A 
+                                class=Frm_MHL title="Bookmark this post" 
+                                href="http://www.codeproject.com/script/Bookmarks/Add.aspx?&amp;obid=435620&amp;obtid=3">Bookmark</A></TD>
+                                <TD class=Frm_MsgFt 
+                                style="TEXT-ALIGN: right"><SPAN id=MVF435620 
+                                style="WHITE-SPACE: nowrap">
+                                <SCRIPT language=Javascript 
+type=text/javascript>
+												MsgVoteForm(37899,435620);
+											</SCRIPT>
+                                </SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR class=Quick>
+                <TD class=Frm_MsgRtDivide><IMG height=1 
+                  src="/script/Forums/Images/t.gif" width=1 border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd Rt HdUnSel " id=433348_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=16><A 
+                        name=xx433348xx></A><IMG height=16 
+                        src="/script/Forums/Images/msg_general.gif" width=16 
+                        valign="absmiddle"></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/graphics/cscapturescreen1.aspx?fid=12172&amp;select=433348#xx433348xx" 
+                        name=433348>Not too shabby</A></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        title=member height=16 
+                        src="/script/Membership/Images/member_sm.gif" 
+                      border=0></TD>
+                      <TD class=Frm_MsgAuthor><A 
+                        href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=170181">Richard 
+                        A. Johnn</A></TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">22:01 1 
+                        Mar '03 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=433348_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 16px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2>Hey Agha, creative way of going 
+                                about what you needed to get done. This is an 
+                                example of how to incorporate the win32api with 
+                                c#. Perhaps others would prefer you post a class 
+                                of higher math functions, but this serves its 
+                                purpose well.<BR><BR>I like it. Keep up the 
+                                creative thinking.<BR><BR><BR>- 
+RAJ<BR></TD></TR>
+                                <TR style="VERTICAL-ALIGN: top">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL title=Reply 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=12172&amp;select=433348&amp;floc=/KB/graphics/cscapturescreen1.aspx&amp;fa=r">Reply</A>·<A 
+                                class=Frm_MHL title=Email 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=12172&amp;select=433348&amp;floc=/KB/graphics/cscapturescreen1.aspx&amp;fa=e">Email</A>·<A 
+                                class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/graphics/cscapturescreen1.aspx?fid=12172&amp;tid=433348">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=12172&amp;msg=433348">PermaLink</A>·<A 
+                                class=Frm_MHL title="Bookmark this post" 
+                                href="http://www.codeproject.com/script/Bookmarks/Add.aspx?&amp;obid=433348&amp;obtid=3">Bookmark</A></TD>
+                                <TD class=Frm_MsgFt 
+                                style="TEXT-ALIGN: right"><SPAN id=MVF433348 
+                                style="WHITE-SPACE: nowrap">
+                                <SCRIPT language=Javascript 
+type=text/javascript>
+												MsgVoteForm(170181,433348);
+											</SCRIPT>
+                                </SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR class=Quick>
+                <TD class=Frm_MsgRtDivide><IMG height=1 
+                  src="/script/Forums/Images/t.gif" width=1 border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd LoVote Rt HdUnSel " id=432455_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=16><A 
+                        name=xx432455xx></A><IMG height=16 
+                        src="/script/Forums/Images/msg_general.gif" width=16 
+                        valign="absmiddle"></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/graphics/cscapturescreen1.aspx?fid=12172&amp;select=432455#xx432455xx" 
+                        name=432455>1000th Version of "Hello World"</A></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        height=15 src="/script/Forums/Images/usersuss.gif" 
+                        width=14></TD>
+                      <TD class=Frm_MsgAuthor>ProgrammerABCDEFG</TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">12:30 
+                        28 Feb '03 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=432455_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 16px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2>and that's it! Would u please 
+                                provide something creative later when u get more 
+                                experience. <BR></TD></TR>
+                                <TR style="VERTICAL-ALIGN: top">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL title=Reply 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=12172&amp;select=432455&amp;floc=/KB/graphics/cscapturescreen1.aspx&amp;fa=r">Reply</A>·<A 
+                                class=Frm_MHL title=Email 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=12172&amp;select=432455&amp;floc=/KB/graphics/cscapturescreen1.aspx&amp;fa=e">Email</A>·<A 
+                                class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/graphics/cscapturescreen1.aspx?fid=12172&amp;tid=432455">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=12172&amp;msg=432455">PermaLink</A>·<A 
+                                class=Frm_MHL title="Bookmark this post" 
+                                href="http://www.codeproject.com/script/Bookmarks/Add.aspx?&amp;obid=432455&amp;obtid=3">Bookmark</A></TD>
+                                <TD class=Frm_MsgFt style="TEXT-ALIGN: right"><A 
+                                class=Frm_MHL 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=12172&amp;select=432455&amp;floc=/KB/graphics/cscapturescreen1.aspx&amp;fa=m">Edit</A>·<A 
+                                class=Frm_MHL 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=12172&amp;select=432455&amp;floc=/KB/graphics/cscapturescreen1.aspx&amp;fa=d">Delete</A><BR><SPAN 
+                                id=MVF432455 style="WHITE-SPACE: nowrap">1.35/5 
+                                (10 votes)
+                                <SCRIPT language=Javascript 
+type=text/javascript>
+												MsgVoteForm(0,432455);
+											</SCRIPT>
+                                 
+                        </SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR class=Quick>
+                <TD class=Frm_MsgDivide><IMG height=1 
+                  src="/script/Forums/Images/t.gif" width=1 border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd HdUnSel " id=432546_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=34><A 
+                        name=xx432546xx></A><IMG height=16 
+                        src="/script/Forums/Images/msg_general.gif" width=16 
+                        valign="absmiddle"></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/graphics/cscapturescreen1.aspx?fid=12172&amp;select=432546#xx432546xx" 
+                        name=432546>Re: 1000th Version of "Hello World"</A></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        title=member height=16 
+                        src="/script/Membership/Images/member_sm.gif" 
+                      border=0></TD>
+                      <TD class=Frm_MsgAuthor><A 
+                        href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=34580">Tomáš 
+                        Petříček</A></TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">14:32 
+                        28 Feb '03 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=432546_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 34px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2>I think, this is nice 
+                                program.<BR>It shows how to work with windows 
+                                functions (WinApi) in C#. <BR><BR><SPAN 
+                                style="FONT-SIZE: 10pt; COLOR: #000090; FONT-FAMILY: courier new,serif; FONT-VARIANT: small-caps">i'm 
+                                only pointer to myself</SPAN><BR></TD></TR>
+                                <TR style="VERTICAL-ALIGN: top">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL title=Reply 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=12172&amp;select=432546&amp;floc=/KB/graphics/cscapturescreen1.aspx&amp;fa=r">Reply</A>·<A 
+                                class=Frm_MHL title=Email 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=12172&amp;select=432546&amp;floc=/KB/graphics/cscapturescreen1.aspx&amp;fa=e">Email</A>·<A 
+                                class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/graphics/cscapturescreen1.aspx?fid=12172&amp;tid=432455">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=12172&amp;msg=432546">PermaLink</A>·<A 
+                                class=Frm_MHL title="Bookmark this post" 
+                                href="http://www.codeproject.com/script/Bookmarks/Add.aspx?&amp;obid=432546&amp;obtid=3">Bookmark</A></TD>
+                                <TD class=Frm_MsgFt 
+                                style="TEXT-ALIGN: right"><SPAN id=MVF432546 
+                                style="WHITE-SPACE: nowrap">
+                                <SCRIPT language=Javascript 
+type=text/javascript>
+												MsgVoteForm(34580,432546);
+											</SCRIPT>
+                                </SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR>
+                <TD><IMG height=5 src="/script/Forums/Images/t.gif" width=1 
+                  border=0></TD></TR></TBODY></TABLE></TD></TR>
+        <TR>
+          <TD>
+            <TABLE cellSpacing=0 cellPadding=2 width="100%">
+              <TBODY>
+              <TR class=Frm_Footer>
+                <TD>Last Visit: Sunday, March 2, 2008 2:02 AM &nbsp; &nbsp; 
+                  Last Update:Sunday, March 2, 2008 2:07 AM</TD>
+                <TD style="WHITE-SPACE: nowrap; TEXT-ALIGN: right"><B>1</B> <A 
+                  class=Frm_HL 
+                  href="http://www.codeproject.com/KB/graphics/cscapturescreen1.aspx?fid=12172&amp;fr=26#xx0xx" 
+                  name=Frm_HoverNL>Next 
+      »</A></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></DIV>
+      <P class=SmallText><IMG height=16 
+      src="/script/Forums/Images/msg_general.gif" width=16 align=absMiddle> 
+      General &nbsp;&nbsp; <IMG height=16 
+      src="/script/Forums/Images/msg_news.gif" width=16 align=absMiddle> News 
+      &nbsp;&nbsp; <IMG height=16 src="/script/Forums/Images/msg_question.gif" 
+      width=16 align=absMiddle> Question &nbsp;&nbsp; <IMG height=16 
+      src="/script/Forums/Images/msg_answer.gif" width=16 align=absMiddle> 
+      Answer &nbsp;&nbsp; <IMG height=16 
+      src="/script/Forums/Images/msg_joke.gif" width=16 align=absMiddle> Joke 
+      &nbsp;&nbsp; <IMG height=16 src="/script/Forums/Images/msg_admin.gif" 
+      width=16 align=absMiddle> Admin &nbsp;&nbsp; </P><!-- Forum End --></DIV>
+      <TABLE width="100%">
+        <TBODY>
+        <TR vAlign=top>
+          <TD class=TinyText align=left><A id=ctl00_PermaLink 
+            href="http://www.codeproject.com/script/Articles/Article.aspx?aid=3024">PermaLink</A> 
+            | <A id=ctl00_PrivacyLink 
+            href="http://www.codeproject.com/info/privacy.aspx">Privacy </A>| <A 
+            id=ctl00_TermsOfUseLink 
+            href="http://www.codeproject.com/info/TermsOfUse.aspx">Terms of 
+            Use</A> <BR>Last Updated: 27 Feb 2003<BR>Editor: <A 
+            id=ctl00_ArticleEditor 
+            href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=1">Chris 
+            Maunder</A><BR></TD>
+          <TD class=TinyText vAlign=top align=right>Copyright 2002 by Agha Ali 
+            Raza<BR>Everything else Copyright © <A 
+            href="mailto:webmaster@codeproject.com">CodeProject</A>, 
+            1999-2008<BR>Web15 | <A id=ctl00_AdvertiseLink 
+            href="http://www.codeproject.com/info/MediaKit.aspx">Advertise on 
+            the Code Project </A></TD></TR></TBODY></TABLE></TD></TR>
+  <TR>
+    <TD align=middle colSpan=2></TD></TR></TBODY></TABLE>
+<SCRIPT language=Javascript 
+src="CodeProject Capturing the Screen Image in C#_ Free source code and programming help_files/front.asp" 
+type=text/javascript></SCRIPT>
+
+<SCRIPT language=Javascript type=text/javascript><!--
+if (document.all) try {window.attachEvent("oncopy",copyCode);}catch(e){};
+--></SCRIPT>
+
+<SCRIPT language=Javascript 
+src="CodeProject Capturing the Screen Image in C#_ Free source code and programming help_files/TogglePre.js" 
+type=text/javascript></SCRIPT>
+
+<SCRIPT language=Javascript 
+src="CodeProject Capturing the Screen Image in C#_ Free source code and programming help_files/menu132_com.js" 
+type=text/javascript></SCRIPT>
+
+<SCRIPT language=Javascript 
+src="CodeProject Capturing the Screen Image in C#_ Free source code and programming help_files/TopNavBar.js" 
+type=text/javascript></SCRIPT>
+
+<SCRIPT language=Javascript type=text/javascript><!--
+new HVMenu(new menu_NavbarConfig());
+--></SCRIPT>
+</BODY></HTML>

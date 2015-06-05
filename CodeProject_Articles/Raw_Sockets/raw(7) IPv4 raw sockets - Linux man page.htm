@@ -1,0 +1,241 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!-- saved from url=(0030)http://linux.die.net/man/7/raw -->
+<HTML lang=en><HEAD><TITLE>raw(7): IPv4 raw sockets - Linux man page</TITLE>
+<META http-equiv=Content-Type content="text/html; charset=windows-1256"><LINK 
+href="raw(7) IPv4 raw sockets - Linux man page_files/white.css" type=text/css 
+rel=stylesheet><LINK href="/favicon.ico" type=image/x-icon rel="shortcut icon">
+<META 
+content="Raw sockets allow new IPv4 protocols to be implemented in user space. A raw socket receives or sends the raw datagram not including link level headers." 
+name=description>
+<META content="MSHTML 6.00.2900.2180" name=GENERATOR></HEAD>
+<BODY text=#333333 vLink=#660000 aLink=#000000 link=#660000 bgColor=#ffffff>
+<DIV id=bg>
+<DIV id=content><!-- google_ad_section_start -->
+<H1>raw(7) - Linux man page</H1>
+<H2>Name</H2>raw, SOCK_RAW - Linux IPv4 raw sockets 
+<H2>Synopsis</H2><B>#include &lt;<A 
+href="http://linux.die.net/include/sys/socket.h" 
+rel=nofollow>sys/socket.h</A>&gt;</B><BR><B>#include &lt;<A 
+href="http://linux.die.net/include/netinet/in.h" 
+rel=nofollow>netinet/in.h</A>&gt;</B><BR><B>raw_socket = socket(PF_INET, 
+SOCK_RAW, int</B> <I>protocol</I><B>);</B> 
+<H2>Description</H2>
+<DIV id=adright>
+<SCRIPT type=text/javascript><!--
+google_ad_client = "pub-5823754184406795";
+google_ad_slot = "5992934909";
+google_ad_width = 300;
+google_ad_height = 250;
+//-->
+</SCRIPT>
+
+<SCRIPT src="raw(7) IPv4 raw sockets - Linux man page_files/show_ads.js" 
+type=text/javascript>
+</SCRIPT>
+</DIV>Raw sockets allow new IPv4 protocols to be implemented in user space. A 
+raw socket receives or sends the raw datagram not including link level headers. 
+<P>The IPv4 layer generates an IP header when sending a packet unless the 
+<B>IP_HDRINCL</B> socket option is enabled on the socket. When it is enabled, 
+the packet must contain an IP header. For receiving the IP header is always 
+included in the packet. 
+<P>Only processes with an effective user ID of 0 or the <B>CAP_NET_RAW</B> 
+capability are allowed to open raw sockets. 
+<P>All packets or errors matching the <I>protocol</I> number specified for the 
+raw socket are passed to this socket. For a list of the allowed protocols see 
+RFC 1700 assigned numbers and <I><B><A 
+href="http://linux.die.net/man/3/getprotobyname">getprotobyname</A></B>(3)</I>. 
+<P>A protocol of <B>IPPROTO_RAW</B> implies enabled <B>IP_HDRINCL</B> and is 
+able to send any IP protocol that is specified in the passed header. Receiving 
+of all IP protocols via <B>IPPROTO_RAW</B> is not possible using raw sockets. 
+<TABLE border=0>
+  <TBODY>
+  <TR>
+    <TD align="center colspan=2">IP Header fields modified on sending by 
+      IP_HDRINCL 
+  <TR>
+    <TD align=left>IP Checksum 
+    <TD align=left>Always filled in. 
+  <TR>
+    <TD align=left>Source Address 
+    <TD align=left>Filled in when zero. 
+  <TR>
+    <TD align=left>Packet Id 
+    <TD align=left>Filled in when zero. 
+  <TR>
+    <TD align=left>Total Length 
+    <TD align=left>Always filled in.</TR></TBODY></TABLE>
+<P>If <B>IP_HDRINCL</B> is specified and the IP header has a non-zero 
+destination address then the destination address of the socket is used to route 
+the packet. When <B>MSG_DONTROUTE</B> is specified the destination address 
+should refer to a local interface, otherwise a routing table lookup is done 
+anyway but gatewayed routes are ignored. 
+<P>If <B>IP_HDRINCL</B> isn't set then IP header options can be set on raw 
+sockets with <I><B><A 
+href="http://linux.die.net/man/2/setsockopt">setsockopt</A></B>(2)</I>; see 
+<I><B><A href="http://linux.die.net/man/7/ip">ip</A></B>(7)</I> for more 
+information. 
+<P>In Linux 2.2 all IP header fields and options can be set using IP socket 
+options. This means raw sockets are usually only needed for new protocols or 
+protocols with no user interface (like ICMP). 
+<P>When a packet is received, it is passed to any raw sockets which have been 
+bound to its protocol before it is passed to other protocol handlers (e.g. 
+kernel protocol modules). 
+<H2>Address Format</H2>
+<P>Raw sockets use the standard <I>sockaddr_in</I> address structure defined in 
+<I><B><A href="http://linux.die.net/man/7/ip" rel=nofollow>ip</A></B>(7)</I>. 
+The <I>sin_port</I> field could be used to specify the IP protocol number, but 
+it is ignored for sending in Linux 2.2 and should be always set to 0 (see BUGS) 
+For incoming packets <I>sin_port</I> is set to the protocol of the packet. See 
+the <I>&lt;<A href="http://linux.die.net/include/netinet/in.h" 
+rel=nofollow>netinet/in.h</A>&gt;</I> include file for valid IP protocols. 
+<H2>Socket Options</H2>Raw socket options can be set with <I><B><A 
+href="http://linux.die.net/man/2/setsockopt" 
+rel=nofollow>setsockopt</A></B>(2)</I> and read with <I><B><A 
+href="http://linux.die.net/man/2/getsockopt">getsockopt</A></B>(2)</I> by 
+passing the <B>IPPROTO_RAW</B> family flag. 
+<DL compact>
+  <DT><B>ICMP_FILTER</B> 
+  <DD>Enable a special filter for raw sockets bound to the <B>IPPROTO_ICMP</B> 
+  protocol. The value has a bit set for each ICMP message type which should be 
+  filtered out. The default is to filter no ICMP messages.</DD></DL>
+<P>In addition all <I><B><A href="http://linux.die.net/man/7/ip" 
+rel=nofollow>ip</A></B>(7)</I> <B>IPPROTO_IP</B> socket options valid for 
+datagram sockets are supported. 
+<H2>Notes</H2>Raw sockets fragment a packet when its total length exceeds the 
+interface MTU (but see BUGS). A more network friendly and faster alternative is 
+to implement path MTU discovery as described in the <B>IP_MTU_DISCOVER</B> 
+section of <I><B><A href="http://linux.die.net/man/7/ip" 
+rel=nofollow>ip</A></B>(7)</I>. 
+<P>A raw socket can be bound to a specific local address using the <I><B><A 
+href="http://linux.die.net/man/2/bind">bind</A></B>(2)</I> call. If it isn't 
+bound all packets with the specified IP protocol are received. In addition a RAW 
+socket can be bound to a specific network device using <B>SO_BINDTODEVICE</B>; 
+see <I><B><A href="http://linux.die.net/man/7/socket">socket</A></B>(7)</I>. 
+<P>An <B>IPPROTO_RAW</B> socket is send only. If you really want to receive all 
+IP packets use a <I><B><A 
+href="http://linux.die.net/man/7/packet">packet</A></B>(7)</I> socket with the 
+<B>ETH_P_IP</B> protocol. Note that packet sockets don't reassemble IP 
+fragments, unlike raw sockets. 
+<P>If you want to receive all ICMP packets for a datagram socket it is often 
+better to use <B>IP_RECVERR</B> on that particular socket; see <I><B><A 
+href="http://linux.die.net/man/7/ip" rel=nofollow>ip</A></B>(7)</I>. 
+<P>Raw sockets may tap all IP protocols in Linux, even protocols like ICMP or 
+TCP which have a protocol module in the kernel. In this case the packets are 
+passed to both the kernel module and the raw <B>socket</B>(s). This should not 
+be relied upon in portable programs, many other BSD socket implementation have 
+limitations here. 
+<P>Linux never changes headers passed from the user (except for filling in some 
+zeroed fields as described for <B>IP_HDRINCL</B>). This differs from many other 
+implementations of raw sockets. 
+<P>RAW sockets are generally rather unportable and should be avoided in programs 
+intended to be portable. 
+<P>Sending on raw sockets should take the IP protocol from <I>sin_port</I>; this 
+ability was lost in Linux 2.2. The workaround is to use <B>IP_HDRINCL</B>. 
+<H2>Error Handling</H2>Errors originating from the network are only passed to 
+the user when the socket is connected or the <B>IP_RECVERR</B> flag is enabled. 
+For connected sockets only <B>EMSGSIZE</B> and <B>EPROTO</B> are passed for 
+compatibility. With <B>IP_RECVERR</B> all network errors are saved in the error 
+queue. 
+<H2>Errors</H2>
+<DL compact>
+  <DT><B>EMSGSIZE</B> 
+  <DD>Packet too big. Either Path MTU Discovery is enabled (the 
+  <B>IP_MTU_DISCOVER</B> socket flag) or the packet size exceeds the maximum 
+  allowed IPv4 packet size of 64KB. 
+  <DT><B>EACCES</B> 
+  <DD>User tried to send to a broadcast address without having the broadcast 
+  flag set on the socket. 
+  <DT><B>EPROTO</B> 
+  <DD>An ICMP error has arrived reporting a parameter problem. 
+  <DT><B>EFAULT</B> 
+  <DD>An invalid memory address was supplied. 
+  <DT><B>EOPNOTSUPP</B> 
+  <DD>Invalid flag has been passed to a socket call (like <B>MSG_OOB</B>). 
+  <DT><B>EINVAL</B> 
+  <DD>Invalid argument. 
+  <DT><B>EPERM</B> 
+  <DD>The user doesn't have permission to open raw sockets. Only processes with 
+  a effective user ID of 0 or the <B>CAP_NET_RAW</B> attribute may do 
+that.</DD></DL>
+<H2>Versions</H2><B>IP_RECVERR</B> and <B>ICMP_FILTER</B> are new in Linux 2.2. 
+They are Linux extensions and should not be used in portable programs. 
+<P>Linux 2.0 enabled some bug-to-bug compatibility with BSD in the raw socket 
+code when the SO_BSDCOMPAT socket option was set -- since Linux 2.2, this option 
+no longer has that effect. 
+<H2>Bugs</H2>Transparent proxy extensions are not described. 
+<P>When the <B>IP_HDRINCL</B> option is set datagrams will not be fragmented and 
+are limited to the interface MTU. 
+<P>Setting the IP protocol for sending in <I>sin_port</I> got lost in Linux 2.2. 
+The protocol that the socket was bound to or that was specified in the initial 
+<I><B><A href="http://linux.die.net/man/2/socket">socket</A></B>(2)</I> call is 
+always used. 
+<H2>Authors</H2>This man page was written by Andi Kleen. 
+<H2>See Also</H2><I><B><A 
+href="http://linux.die.net/man/2/recvmsg">recvmsg</A></B>(2)</I>, <I><B><A 
+href="http://linux.die.net/man/2/sendmsg">sendmsg</A></B>(2)</I>, <I><B><A 
+href="http://linux.die.net/man/7/capabilities">capabilities</A></B>(7)</I>, 
+<I><B><A href="http://linux.die.net/man/7/ip" rel=nofollow>ip</A></B>(7)</I>, 
+<I><B><A href="http://linux.die.net/man/7/socket" 
+rel=nofollow>socket</A></B>(7)</I> 
+<P><B>RFC 1191</B> for path MTU discovery. 
+<P><B>RFC 791</B> and the <I>&lt;<A 
+href="http://linux.die.net/include/linux/ip.h" 
+rel=nofollow>linux/ip.h</A>&gt;</I> include file for the IP protocol. <!-- google_ad_section_end -->
+<H2>Referenced By</H2><B><A href="http://linux.die.net/man/7/icmp" 
+rel=nofollow>icmp</A></B>(7), <B><A href="http://linux.die.net/man/7/udp" 
+rel=nofollow>udp</A></B>(7) 
+<DIV id=adbottom>
+<SCRIPT type=text/javascript><!--
+google_ad_client = "pub-5823754184406795";
+google_ad_slot = "8789940313";
+google_ad_width = 336;
+google_ad_height = 280;
+//-->
+</SCRIPT>
+
+<SCRIPT src="raw(7) IPv4 raw sockets - Linux man page_files/show_ads.js" 
+type=text/javascript>
+</SCRIPT>
+</DIV></DIV>
+<DIV id=menu><A href="http://www.die.net/"><IMG height=121 alt=die.net 
+src="raw(7) IPv4 raw sockets - Linux man page_files/logo.gif" width=119 
+border=0></A> 
+<DL>
+  <DD>
+  <FORM id=cse-search-box-menu action=http://www.google.com/cse><LABEL><A 
+  href="http://www.die.net/search/" rel=nofollow>site search</A></LABEL> <INPUT 
+  size=10 name=q> <SPAN 
+  style="FONT-SIZE: 75%; FONT-FAMILY: Arial, Helvetica, sans-serif">Google 
+  Custom Search</SPAN> <INPUT type=hidden value=Search name=sa> <INPUT 
+  type=hidden value=ISO-8859-1 name=ie> <INPUT type=hidden 
+  value=partner-pub-5823754184406795:54htp1rtx5u name=cx> <INPUT type=hidden 
+  value=FORID:9 name=cof> </FORM>
+  <SCRIPT type=text/javascript>
+<!--
+document.forms["cse-search-box-menu"].action = "http://www.die.net/search/";
+// -->
+</SCRIPT>
+  </DD></DL>
+<DL>
+  <DT>Library 
+  <DD><A href="http://dictionary.die.net/" rel=nofollow>online dictionary</A> 
+  <DD><A href="http://linux.die.net/" rel=nofollow>linux docs</A> 
+  <DD><A href="http://linux.die.net/man/" rel=nofollow>linux man pages</A> 
+  <DD><A href="http://www.die.net/musings/page_load_time/" rel=nofollow>page 
+  load time</A> </DD></DL>
+<DL>
+  <DT>Toys 
+  <DD><A href="http://www.die.net/earth/" rel=nofollow>world sunlight</A> 
+  <DD><A href="http://www.die.net/moon/" rel=nofollow>moon phase</A> 
+  <DD><A href="http://trace.die.net/" rel=nofollow>trace explorer</A> </DD></DL>
+<DL>
+  <DT><A href="http://linux.die.net/man/7/"><IMG height=22 alt=Back 
+  src="raw(7) IPv4 raw sockets - Linux man page_files/back.gif" width=20 
+  border=0></A> </DT></DL></DIV></DIV>
+<SCRIPT type=text/javascript>
+<!--
+if (top.location != self.location) top.location = self.location;
+if (document.referrer.match(/(search|google\.|yahoo\.|live\.|msn\.|ask\.).*[?&][pq]=[^&]+/)) document.write('<scr'+'ipt src="http://static.die.net/style/highlight.js"><\/scr'+'ipt>');
+// -->
+</SCRIPT>
+</BODY></HTML>

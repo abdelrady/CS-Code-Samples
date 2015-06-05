@@ -1,0 +1,478 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3c.org/TR/1999/REC-html401-19991224/loose.dtd">
+<!-- saved from url=(0073)http://mobilesociety.typepad.com/mobile_life/2007/01/wifi_network_tr.html -->
+<HTML id=sixapart-standard xmlns="http://www.w3.org/1999/xhtml"><HEAD><TITLE>WirelessMoves: Wifi Network Tracing Part 1: Windows, Wireshark, a Linksys WRT54, OpenWRT and Kismet</TITLE>
+<META http-equiv=Content-Type content="text/html; charset=utf-8">
+<META content="MSHTML 6.00.2900.2180" name=GENERATOR>
+<META 
+content="Taking traces in a Wireless LAN can be quite a tricky thing if you are using Windows. Except for a few expensive programs which can do the job, other free tools like Wireshark can only trace what the network driver forwards to the operating system. Unfortunately, Windows network drivers only forward pseudo Ethernet frames to the OS and hide all the nitty gritty Wireless LAN details. An alternative to tracing a Wireless LAN with your PC is to let an..." 
+name=description><LINK media=screen 
+href="WirelessMoves Wifi Network Tracing Part 1 Windows, Wireshark, a Linksys WRT54, OpenWRT and Kismet_files/styles.css" 
+type=text/css rel=stylesheet><LINK media=print 
+href="WirelessMoves Wifi Network Tracing Part 1 Windows, Wireshark, a Linksys WRT54, OpenWRT and Kismet_files/print.css" 
+type=text/css rel=stylesheet><LINK title="Posts on 'WirelessMoves' (Atom)" 
+href="http://mobilesociety.typepad.com/mobile_life/atom.xml" 
+type=application/atom+xml rel=alternate><LINK 
+title="Posts on 'WirelessMoves' (RSS 1.0)" 
+href="http://mobilesociety.typepad.com/mobile_life/index.rdf" 
+type=application/rss+xml rel=alternate><LINK 
+title="Posts on 'WirelessMoves' (RSS 2.0)" 
+href="http://mobilesociety.typepad.com/mobile_life/rss.xml" 
+type=application/rss+xml rel=alternate><LINK title=Home 
+href="http://mobilesociety.typepad.com/mobile_life/" rel=start><LINK 
+title="Broadening the Scope" 
+href="http://mobilesociety.typepad.com/mobile_life/2007/01/broadening_the_.html?no_prefetch=1" 
+rel=prev><LINK 
+title="The Move Of The Year: Free Data Roaming With 3: A Dream Come True!" 
+href="http://mobilesociety.typepad.com/mobile_life/2007/01/free_data_roami.html?no_prefetch=1" 
+rel=next><!--
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+         xmlns:trackback="http://madskills.com/public/xml/rss/module/trackback/"
+         xmlns:dc="http://purl.org/dc/elements/1.1/">
+<rdf:Description
+    rdf:about="http://mobilesociety.typepad.com/mobile_life/2007/01/wifi_network_tr.html"
+    trackback:ping="http://www.typepad.com/t/trackback/667229/7423072"
+    dc:title="Wifi Network Tracing Part 1: Windows, Wireshark, a Linksys WRT54, OpenWRT and Kismet"
+    dc:identifier="http://mobilesociety.typepad.com/mobile_life/2007/01/wifi_network_tr.html"
+    dc:description="Taking traces in a Wireless LAN can be quite a tricky thing if you are using Windows. Except for a few expensive programs which can do the job, other free tools like Wireshark can only trace what the network driver forwards to the operating system. Unfortunately, Windows network drivers only forward pseudo Ethernet frames to the OS and hide all the nitty gritty Wireless LAN details. An alternative to tracing a Wireless LAN with your PC is to let an..."
+    dc:creator="mobilesociety"
+    dc:date="2007-01-15T22:09:08+01:00" />
+</rdf:RDF>
+--></HEAD>
+<BODY class=layout-two-column-right>
+<DIV id=container>
+<DIV class=pkg id=container-inner><!-- banner -->
+<DIV id=banner>
+<DIV class=pkg id=banner-inner>
+<H1 id=banner-header><A accessKey=1 
+href="http://mobilesociety.typepad.com/mobile_life/">WirelessMoves</A></H1>
+<H2 id=banner-description>Thoughts on the evolution of wireless networks and the 
+mobile web 2.0.</H2></DIV></DIV>
+<DIV id=pagebody>
+<DIV class=pkg id=pagebody-inner>
+<DIV id=alpha>
+<DIV class=pkg id=alpha-inner><!-- content nav -->
+<P class=content-nav><A 
+href="http://mobilesociety.typepad.com/mobile_life/2007/01/broadening_the_.html">« 
+Broadening the Scope</A> | <A 
+href="http://mobilesociety.typepad.com/mobile_life/">Main</A> | <A 
+href="http://mobilesociety.typepad.com/mobile_life/2007/01/free_data_roami.html">The 
+Move Of The Year: Free Data Roaming With 3: A Dream Come True! »</A> </P><!-- entry -->
+<DIV class=entry id=entry-15074668>
+<H3 class=entry-header>Wifi Network Tracing Part 1: Windows, Wireshark, a 
+Linksys WRT54, OpenWRT and Kismet</H3>
+<DIV class=entry-content>
+<DIV class=entry-body>
+<P><STRONG><A 
+onclick="window.open(this.href, '_blank', 'width=800,height=798,scrollbars=no,resizable=no,toolbar=no,directories=no,location=no,menubar=no,status=no,left=0,top=0'); return false" 
+href="http://mobilesociety.typepad.com/.shared/image.html?/photos/uncategorized/linksys.jpg"><IMG 
+title=Linksys style="FLOAT: left; MARGIN: 0px 5px 5px 0px" height=99 alt=Linksys 
+src="WirelessMoves Wifi Network Tracing Part 1 Windows, Wireshark, a Linksys WRT54, OpenWRT and Kismet_files/linksys.jpg" 
+width=100 border=0></A> Taking traces in a Wireless LAN can be quite a tricky 
+thing if you are using Windows. Except for a few expensive programs which can do 
+the job, other free tools like Wireshark can only trace what the network driver 
+forwards to the operating system. Unfortunately, Windows network drivers only 
+forward pseudo Ethernet frames to the OS and hide all the nitty gritty Wireless 
+LAN details. An alternative to tracing a Wireless LAN with your PC is to let an 
+off the shelf Wireless LAN access point record all packets and save them to a 
+file which can then be analyzed on the PC. Cost of the solution: 60 euros and a 
+bit of time to set it up.</STRONG></P>
+<P>In this and the next couple of blog entries I'll give an overview of how to 
+collect packets in a Wireless LAN and how to analyze them on a Windows PC with 
+such a setup. If you don't know much yet about the basic technology behind Wifi, 
+<A 
+href="http://www.amazon.com/dp/0470026766?tag=martinsmobile-20&amp;camp=14573&amp;creative=327641&amp;linkCode=as1&amp;creativeASIN=0470026766&amp;adid=0APFMYBXDZA6XQZ2Z8NH&amp;">I 
+can warmly recommend chapter 4 of my book</A>.</P>
+<P>The Wifi tracing environment consists of the following components:</P>
+<UL>
+  <LI><STRONG>A PC or notebook</STRONG> running Windows with an Ethernet port. 
+  <LI><STRONG>A Linksys WRT54G or WRT54GL wifi router</STRONG> (picture above, 
+  for details see below). The WRT54G sells for around 50-60 euros on eBay. 
+  Several hardware versions exist, not all of them are suitable. For details, 
+  see the next blog entry. 
+  <LI><STRONG>OpenWRT,</STRONG> a free Linux operating system for the wifi 
+  router (open source) 
+  <LI><STRONG>X-WRT,</STRONG> a better web interface for OpenWRT (open source) 
+  <LI><STRONG>Kismet</STRONG> for OpenWRT (open source) 
+  <LI><STRONG>CIFS driver</STRONG> for OpenWRT to be able to mount a directory 
+  of your windows computer on the router for file export (open source) 
+  <LI><STRONG>Wireshark</STRONG> for Windows (open source) 
+  <LI><STRONG>Putty for Windows</STRONG>, a free telnet/ssh shell for 
+  Windows</LI></UL>
+<P><A 
+onclick="window.open(this.href, '_blank', 'width=800,height=697,scrollbars=no,resizable=no,toolbar=no,directories=no,location=no,menubar=no,status=no,left=0,top=0'); return false" 
+href="http://mobilesociety.typepad.com/.shared/image.html?/photos/uncategorized/wireshark.gif"><IMG 
+title=Wireshark style="FLOAT: left; MARGIN: 0px 5px 5px 0px" height=87 
+alt=Wireshark 
+src="WirelessMoves Wifi Network Tracing Part 1 Windows, Wireshark, a Linksys WRT54, OpenWRT and Kismet_files/wireshark.gif" 
+width=100 border=0></A> With this setup, tracing a Wirless LAN can be done as 
+follows: In a first step, the native software of the wifi router has to be 
+replaced with OpenWRT, X-WRT, Kismet and a CIFS driver. Once the setup is 
+running, Kismet is used on the router to collect all 802.11 wifi packets the 
+router receives and to save them to a file. As there is not a lot of room on the 
+router for the file it needs to be stored elsewhere. This is done connecting the 
+router and a Windows PC with an Ethernet cable and by mounting a Windows 
+directory on the router. No extra software is required on the Windows PC. On the 
+wifi router the CIFS driver is used to mount the directory. The file Kismet 
+creates in the shared directory can then be analyzed using Wireshark for 
+Windows. The picture on the left shows how Wireshark decodes an 802.11 beacon 
+frame recorded by Kismet.</P>
+<P><A 
+href="http://mobilesociety.typepad.com/mobile_life/2007/01/wifi_network_tr_1.html">Part 
+2 of this series</A> will pick up at this point and explain how to get started, 
+which wifi routers are suitable for this project, how the software is installed, 
+how the Windows directory is mounted on the router and how to get started with 
+the router.</P><BR></DIV></DIV>
+<DIV class=entry-footer>
+<P class=entry-footer-info><SPAN class=post-footers>January 15, 2007 
+</SPAN><SPAN class=separator>|</SPAN> <A class=permalink 
+href="http://mobilesociety.typepad.com/mobile_life/2007/01/wifi_network_tr.html">Permalink</A> 
+</P><!-- technorati tags --><!-- post footer links --></DIV></DIV>
+<DIV class=trackbacks><A id=trackback></A>
+<H3 class=trackbacks-header>TrackBack</H3>
+<DIV class=trackbacks-info>
+<P>TrackBack URL for this entry:<BR><SPAN 
+class=trackbacks-link>http://www.typepad.com/t/trackback/667229/7423072</SPAN></P>
+<P>Listed below are links to weblogs that reference <A 
+href="http://mobilesociety.typepad.com/mobile_life/2007/01/wifi_network_tr.html">Wifi 
+Network Tracing Part 1: Windows, Wireshark, a Linksys WRT54, OpenWRT and 
+Kismet</A>:</P></DIV>
+<DIV class=trackbacks-content></DIV></DIV><A id=comments></A>
+<DIV class=comments id=all-comments>
+<H3 class=comments-header>Comments</H3>
+<DIV class=comments-content id=comments-content><!-- comment list --><A 
+id=c28048262></A>
+<DIV class="comment comment-odd" id=comment-28048262>
+<DIV class=comment-content id=comment-28048262-content><SPAN 
+id=comment-28048262-content>
+<P>Thanks to the new native WiFi (NWF) driver model in Windows Vista, tracing 
+has become *much* more capable. Anyone can write a sniffer, without the need for 
+a custom miniport driver, by leveraging the public NWF APIs. Take a look on 
+MSDN: <A href="http://msdn2.microsoft.com/en-gb/library/ms706556.aspx." 
+rel=nofollow>http://msdn2.microsoft.com/en-gb/library/ms706556.aspx.</A></P></SPAN></DIV>
+<P class=comment-footer>Posted by: <A title=http://blogs.msdn.com/wndp 
+href="http://www.typepad.com/t/comments?__mode=red&amp;user_id=667229&amp;id=28048262" 
+target=_blank rel=nofollow>Gabe Frost</A> | <A 
+href="http://mobilesociety.typepad.com/mobile_life/2007/01/wifi_network_tr.html#comment-28048262">January 
+22, 2007 at 01:54 AM</A> </P></DIV></DIV></DIV><!-- comment form -->
+<P class=comments-closed>The comments to this entry are closed. </P></DIV></DIV>
+<DIV id=beta>
+<DIV class=pkg id=beta-inner><!-- sidebar --><!-- about page link -->
+<DIV class="module-about module">
+<H2 class=module-header><A 
+href="http://mobilesociety.typepad.com/about.html">About</A></H2></DIV><!-- user photo -->
+<DIV class="module-photo module">
+<DIV class=module-content><IMG alt="My Photo" 
+src="WirelessMoves Wifi Network Tracing Part 1 Windows, Wireshark, a Linksys WRT54, OpenWRT and Kismet_files/6a00d83451c34f69e200e55005af3f8834-150wi.jpg"></DIV></DIV>
+<DIV class="module-typelist module">
+<H2 class=module-header>The Book to this Blog</H2>
+<DIV class="typelist-plain module-content">
+<UL class=module-list>
+  <LI class=module-list-item>
+  <DIV class=typelist-note>
+  <P align=center><IFRAME style="WIDTH: 120px; HEIGHT: 240px" marginWidth=0 
+  marginHeight=0 src="about:blank" frameBorder=0 scrolling=no 
+  ;align="middle"></IFRAME></P></DIV></LI></UL></DIV></DIV>
+<DIV class="module-typelist module">
+<H2 class=module-header>The 3G Traveler Wiki</H2>
+<DIV class=module-content>
+<UL class=module-list>
+  <LI class=module-list-item><A title="" 
+  href="http://prepaid-wireless-internet-access.wetpaint.com/">International 
+  Prepaid Wireless Internet Access</A> </LI></UL></DIV></DIV>
+<DIV class="module-typelist module">
+<H2 class=module-header>Latest Notes...</H2>
+<DIV class="typelist-plain module-content">
+<UL class=module-list>
+  <LI class=module-list-item>
+  <DIV class=typelist-note>
+  <OBJECT height=330 width=180><PARAM NAME="movie" VALUE="http://static.jaiku.com/images/badge.swf?feedURL=http://Mobilesociety.jaiku.com/feed/badge"><PARAM NAME="wmode" VALUE="transparent">
+  <embed 
+  src="http://static.jaiku.com/images/badge.swf?feedURL=http://Mobilesociety.jaiku.com/feed/badge" 
+  type="application/x-shockwave-flash" wmode="transparent" width="180" 
+  height="330"></embed></OBJECT></DIV></LI></UL></DIV></DIV>
+<DIV class="module-typelist module">
+<H2 class=module-header>My Pictures on Flickr</H2>
+<DIV class="typelist-plain module-content">
+<UL class=module-list>
+  <LI class=module-list-item>
+  <DIV class=typelist-note>
+  <P align=center><!-- Start of Flickr Badge -->
+  <STYLE type=text/css>#flickr_badge_source_txt {
+	PADDING-RIGHT: 0px; PADDING-LEFT: 0px; PADDING-BOTTOM: 0px; FONT: 11px Arial, Helvetica, Sans serif; COLOR: #666666; PADDING-TOP: 0px
+}
+#flickr_badge_icon {
+	BORDER-RIGHT: rgb(0,0,0) 1px solid; BORDER-TOP: rgb(0,0,0) 1px solid; DISPLAY: block! important; MARGIN: 0px; BORDER-LEFT: rgb(0,0,0) 1px solid; BORDER-BOTTOM: rgb(0,0,0) 1px solid
+}
+#flickr_icon_td {
+	PADDING-RIGHT: 5px! important; PADDING-LEFT: 0px! important; PADDING-BOTTOM: 0px! important; PADDING-TOP: 0px! important
+}
+.flickr_badge_image {
+	TEXT-ALIGN: center! important
+}
+.flickr_badge_image IMG {
+	BORDER-RIGHT: black 1px solid; BORDER-TOP: black 1px solid; BORDER-LEFT: black 1px solid; BORDER-BOTTOM: black 1px solid
+}
+#flickr_badge_uber_wrapper {
+	WIDTH: 150px
+}
+#flickr_www {
+	PADDING-RIGHT: 10px! important; DISPLAY: block; PADDING-LEFT: 10px! important; PADDING-BOTTOM: 0px! important; FONT: 11px Arial, Helvetica, Sans serif; COLOR: #3993ff! important; PADDING-TOP: 0px! important; TEXT-ALIGN: center
+}
+#flickr_badge_uber_wrapper A:hover {
+	COLOR: #3993ff; TEXT-DECORATION: none! important
+}
+#flickr_badge_uber_wrapper A:link {
+	COLOR: #3993ff; TEXT-DECORATION: none! important
+}
+#flickr_badge_uber_wrapper A:active {
+	COLOR: #3993ff; TEXT-DECORATION: none! important
+}
+#flickr_badge_uber_wrapper A:visited {
+	COLOR: #3993ff; TEXT-DECORATION: none! important
+}
+#flickr_badge_wrapper {
+	BORDER-RIGHT: #000000 1px solid; BORDER-TOP: #000000 1px solid; BORDER-LEFT: #000000 1px solid; BORDER-BOTTOM: #000000 1px solid; BACKGROUND-COLOR: #ffffff
+}
+#flickr_badge_source {
+	PADDING-RIGHT: 0px! important; PADDING-LEFT: 0px! important; PADDING-BOTTOM: 0px! important; FONT: 11px Arial, Helvetica, Sans serif; COLOR: #666666! important; PADDING-TOP: 0px! important
+}
+</STYLE>
+
+  <TABLE id=flickr_badge_uber_wrapper cellSpacing=10 cellPadding=0 border=0>
+    <TBODY>
+    <TR>
+      <TD><A id=flickr_www href="http://www.flickr.com/">www.<STRONG 
+        style="COLOR: #3993ff">flick<SPAN 
+        style="COLOR: #ff1c92">r</SPAN></STRONG>.com</A>
+        <TABLE id=flickr_badge_wrapper cellSpacing=10 cellPadding=0 border=0>
+          <SCRIPT src="" type=text/javascript></SCRIPT>
+
+          <TBODY>
+          <TR>
+            <TD id=flickr_badge_source vAlign=center align=middle>
+              <TABLE cellSpacing=0 cellPadding=0 border=0>
+                <TBODY>
+                <TR>
+                  <TD id=flickr_icon_td width=10><A 
+                    href="http://www.flickr.com/photos/martinsauter/"><IMG 
+                    id=flickr_badge_icon height=48 alt="martin.sauter's photos" 
+                    src="WirelessMoves Wifi Network Tracing Part 1 Windows, Wireshark, a Linksys WRT54, OpenWRT and Kismet_files/17743205@N00.jpg" 
+                    width=48 align=left></A></TD>
+                  <TD id=flickr_badge_source_txt><NOBR>More of</NOBR> <A 
+                    href="http://www.flickr.com/photos/martinsauter/">martin.sauter's 
+                    photos</A></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE><!-- End of Flickr Badge --></P></DIV></LI></UL></DIV></DIV>
+<DIV class="module-typelist module">
+<H2 class=module-header>Learning Section Answers</H2>
+<DIV class="typelist-plain module-content">
+<UL class=module-list>
+  <LI class=module-list-item>
+  <DIV class=typelist-note>
+  <P align=center><A 
+  href="http://mobilesociety.typepad.com/mobile_life/2006/05/answers_for_cha.html">Answers 
+  Chapter 1</A> <BR><A 
+  href="http://mobilesociety.typepad.com/mobile_life/2006/05/answers_for_cha_1.html">Answers 
+  Chapter 2</A> <BR><A 
+  href="http://mobilesociety.typepad.com/mobile_life/2006/05/answers_for_cha_2.html">Answers 
+  Chapter 3</A> <BR><A 
+  href="http://mobilesociety.typepad.com/mobile_life/2006/05/answers_for_cha_3.html">Answers 
+  Chapter 4</A> <BR><A 
+  href="http://mobilesociety.typepad.com/mobile_life/2006/05/answers_for_cha_4.html">Answers 
+  Chapter 5</A> <BR><A 
+  href="http://mobilesociety.typepad.com/mobile_life/2006/05/answers_for_cha_5.html">Answers 
+  Chapter 6</A> <BR></P></DIV></LI></UL></DIV></DIV>
+<DIV class="module-typelist module">
+<H2 class=module-header>This Blog On Your Mobile</H2>
+<DIV class="typelist-plain module-content">
+<UL class=module-list>
+  <LI class=module-list-item>
+  <DIV class=typelist-note>
+  <P align=center><A href="http://winksite.com/msauter/wireless/"><IMG height=31 
+  alt=WINKsite 
+  src="WirelessMoves Wifi Network Tracing Part 1 Windows, Wireshark, a Linksys WRT54, OpenWRT and Kismet_files/wink_link.gif" 
+  width=88 vspace=5 border=0></A><BR></P></DIV>
+  <LI class=module-list-item>
+  <DIV class=typelist-note>
+  <P align=center><IMG style="WIDTH: 120px; HEIGHT: 120px" alt="2D Bar Code" 
+  src="WirelessMoves Wifi Network Tracing Part 1 Windows, Wireshark, a Linksys WRT54, OpenWRT and Kismet_files/qr_img.png"></P></DIV></LI></UL></DIV></DIV>
+<DIV class="module-archives module">
+<H2 class=module-header>Recent Posts</H2>
+<DIV class=module-content>
+<UL class=module-list>
+  <LI class=module-list-item><A 
+  href="http://mobilesociety.typepad.com/mobile_life/2008/10/telstra-to-upgrate-to-hspa.html">Telstra 
+  to Upgrate to HSPA+</A> 
+  <LI class=module-list-item><A 
+  href="http://mobilesociety.typepad.com/mobile_life/2008/10/dlna---nokia-n95-streaming-multimedia-content-over-wifi.html">DLNA 
+  - Nokia N95 Streaming Multimedia Content over Wifi</A> 
+  <LI class=module-list-item><A 
+  href="http://mobilesociety.typepad.com/mobile_life/2008/10/first-one-tunnel-network-cited-in-the-wild.html">First 
+  'One Tunnel' Network Sighted in the Wild</A> 
+  <LI class=module-list-item><A 
+  href="http://mobilesociety.typepad.com/mobile_life/2008/10/hsdpa-alongside-a-cs-voice-call.html">HSDPA 
+  Alongside A CS Voice Call</A> 
+  <LI class=module-list-item><A 
+  href="http://mobilesociety.typepad.com/mobile_life/2008/10/smartphones-units-revenue-profits.html">Smartphones: 
+  Units, Revenue, Profits</A> 
+  <LI class=module-list-item><A 
+  href="http://mobilesociety.typepad.com/mobile_life/2008/10/femtocells-and-connected-home-services.html">Femtocells 
+  and Connected Home Services</A> 
+  <LI class=module-list-item><A 
+  href="http://mobilesociety.typepad.com/mobile_life/2008/10/dpi-and-email-blocking.html">DPI 
+  and eMail blocking</A> 
+  <LI class=module-list-item><A 
+  href="http://mobilesociety.typepad.com/mobile_life/2008/10/18-of-voice-calls-handled-in-swedish-3g-networks-now.html">18% 
+  of Voice Calls Handled in Swedish 3G Networks Now</A> 
+  <LI class=module-list-item><A 
+  href="http://mobilesociety.typepad.com/mobile_life/2008/10/my-sip-calls-are-proxied---and-i-dont-like-it.html">My 
+  SIP Calls Are Proxied - And I Don't Like it</A> 
+  <LI class=module-list-item><A 
+  href="http://mobilesociety.typepad.com/mobile_life/2008/10/i-can-now-detect-over-25-wifi-networks-in-my-flat.html">I 
+  Can Now Detect over 25 Wifi Networks At My Flat!</A> </LI></UL></DIV></DIV>
+<DIV class="module-typelist module">
+<H2 class=module-header>Blogroll</H2>
+<DIV class=module-content>
+<UL class=module-list>
+  <LI class=module-list-item><A href="http://3g4g.blogspot.com/">3G and 4G 
+  Wireless Blog</A><BR>
+  <LI class=module-list-item><A 
+  href="http://communities-dominate.blogs.com/brands/">Communities Dominate 
+  Brands</A><BR>
+  <LI class=module-list-item><A 
+  href="http://disruptivewireless.blogspot.com/">Disruptive Wireless</A><BR>
+  <LI class=module-list-item><A href="http://www.dw2-0.com/">dw2-0</A><BR>
+  <LI class=module-list-item><A href="http://johnforsyth.blogspot.com/">John 
+  Forsyth's weblog</A><BR>
+  <LI class=module-list-item><A href="http://www.andrewgrill.com/blog">London 
+  Calling » the mobile advertising blog</A><BR>
+  <LI class=module-list-item><A href="http://ltewatch.blogspot.com/">LTE 
+  watch</A><BR>
+  <LI class=module-list-item><A 
+  href="http://www.m-trends.org/">m-trends.org</A><BR>
+  <LI class=module-list-item><A 
+  href="http://mobileopportunity.blogspot.com/">Mobile Opportunity</A><BR>
+  <LI class=module-list-item><A href="http://blogs.s60.com/mws/">Mobile Web 
+  Server Blog</A><BR>
+  <LI class=module-list-item><A href="http://www.heike-scholz.de/">Mobile 
+  Zeitgeist</A><BR>
+  <LI class=module-list-item><A href="http://betalabs.nokia.com/blog/">Nokia 
+  Beta Labs blog</A><BR>
+  <LI class=module-list-item><A 
+  href="http://opengardensblog.futuretext.com/">Open Gardens</A><BR>
+  <LI class=module-list-item><A href="http://blogs.s60.com/mws">S60 Mobile Web 
+  Server</A><BR>
+  <LI class=module-list-item><A href="http://blogs.s60.com/s60multimedia/">S60 
+  Multimedia Blog</A><BR>
+  <LI class=module-list-item><A href="http://blogs.s60.com/seeintos60/">See into 
+  S60</A><BR>
+  <LI class=module-list-item><A href="http://blogs.s60.com/voiceofs60/">Voice of 
+  S60</A><BR>
+  <LI class=module-list-item><A href="http://wimaxnetnews.com/">WiMax Networking 
+  News</A><BR></LI></UL></DIV></DIV>
+<DIV class="module-archives module">
+<H2 class=module-header><A 
+href="http://mobilesociety.typepad.com/mobile_life/archives.html">Archives</A></H2>
+<DIV class=module-content>
+<UL class=module-list>
+  <LI class=module-list-item><A 
+  href="http://mobilesociety.typepad.com/mobile_life/2008/10/index.html">October 
+  2008</A> 
+  <LI class=module-list-item><A 
+  href="http://mobilesociety.typepad.com/mobile_life/2008/09/index.html">September 
+  2008</A> 
+  <LI class=module-list-item><A 
+  href="http://mobilesociety.typepad.com/mobile_life/2008/08/index.html">August 
+  2008</A> 
+  <LI class=module-list-item><A 
+  href="http://mobilesociety.typepad.com/mobile_life/2008/07/index.html">July 
+  2008</A> 
+  <LI class=module-list-item><A 
+  href="http://mobilesociety.typepad.com/mobile_life/2008/06/index.html">June 
+  2008</A> 
+  <LI class=module-list-item><A 
+  href="http://mobilesociety.typepad.com/mobile_life/2008/05/index.html">May 
+  2008</A> 
+  <LI class=module-list-item><A 
+  href="http://mobilesociety.typepad.com/mobile_life/2008/04/index.html">April 
+  2008</A> 
+  <LI class=module-list-item><A 
+  href="http://mobilesociety.typepad.com/mobile_life/2008/03/index.html">March 
+  2008</A> 
+  <LI class=module-list-item><A 
+  href="http://mobilesociety.typepad.com/mobile_life/2008/02/index.html">February 
+  2008</A> 
+  <LI class=module-list-item><A 
+  href="http://mobilesociety.typepad.com/mobile_life/2008/01/index.html">January 
+  2008</A> </LI></UL>
+<P class=module-more><A 
+href="http://mobilesociety.typepad.com/mobile_life/archives.html">More...</A></P></DIV></DIV>
+<DIV class="module-syndicate module">
+<DIV class=module-content><A 
+href="http://mobilesociety.typepad.com/mobile_life/atom.xml">Subscribe to this 
+blog's feed</A> </DIV></DIV>
+<DIV class="module-typelist module">
+<H2 class=module-header>Misc</H2>
+<DIV class="typelist-plain module-content">
+<UL class=module-list>
+  <LI class=module-list-item>
+  <DIV class=typelist-note-label>Clicky</DIV>
+  <DIV class=typelist-note><A title="Clicky Web Analytics" 
+  href="http://getclicky.com/40226"><IMG alt="Clicky Web Analytics" 
+  src="WirelessMoves Wifi Network Tracing Part 1 Windows, Wireshark, a Linksys WRT54, OpenWRT and Kismet_files/badge.gif" 
+  border=0></A>
+  <SCRIPT 
+  src="WirelessMoves Wifi Network Tracing Part 1 Windows, Wireshark, a Linksys WRT54, OpenWRT and Kismet_files/40226.js" 
+  type=text/javascript></SCRIPT>
+   <NOSCRIPT>
+  <P><IMG alt=Clicky src=""></P></NOSCRIPT></DIV>
+  <LI class=module-list-item>
+  <DIV class=typelist-note-label>Sitemeter</DIV>
+  <DIV class=typelist-note><!-- Site Meter -->
+  <SCRIPT 
+  src="WirelessMoves Wifi Network Tracing Part 1 Windows, Wireshark, a Linksys WRT54, OpenWRT and Kismet_files/counter.js" 
+  type=text/javascript>
+</SCRIPT>
+  <NOSCRIPT><A href="http://s38.sitemeter.com/stats.asp?site=s38martinmtp" 
+  target=_top><IMG alt="Site Meter" src="" border=0></A> </NOSCRIPT><!-- Copyright (c)2006 Site Meter --></DIV>
+  <LI class=module-list-item>
+  <DIV class=typelist-note-label>Mapstats</DIV>
+  <DIV class=typelist-note>
+  <SCRIPT language=JavaScript 
+  src="WirelessMoves Wifi Network Tracing Part 1 Windows, Wireshark, a Linksys WRT54, OpenWRT and Kismet_files/button.js.htm" 
+  type=text/javascript></SCRIPT>
+  <NOSCRIPT><A href="http://mapstats.blogflux.com/12299.html"><IMG 
+  alt="Blog Flux MapStats: Stats and Counter for Martin's Mobile Technology Page" 
+  src="" border=0></A></NOSCRIPT> </DIV></LI></UL></DIV></DIV><!-- powered by -->
+<DIV class="module-powered module">
+<DIV class=module-content><A title=Blog href="http://www.typepad.com/">Blog</A> 
+powered by <A title=TypePad href="http://www.typepad.com/">TypePad</A><BR>Member 
+since 01/2006 </DIV></DIV>
+<DIV class="module-widget module" id=widget-Snap_Preview_Anywhere_spa>
+<DIV class=module-content>
+<SCRIPT id=snap_preview_anywhere 
+src="WirelessMoves Wifi Network Tracing Part 1 Windows, Wireshark, a Linksys WRT54, OpenWRT and Kismet_files/snap_preview_anywhere.htm" 
+defer type=text/javascript></SCRIPT>
+</DIV></DIV>
+<DIV class="module-typelist module">
+<H2 class=module-header>Copyright</H2>
+<DIV class="typelist-plain module-content">
+<UL class=module-list>
+  <LI class=module-list-item>
+  <DIV class=typelist-note-label>(c) 2005-2008 Martin Sauter - All rights 
+  reserved</DIV>
+  <DIV 
+class=typelist-note></DIV></LI></UL></DIV></DIV></DIV></DIV></DIV></DIV></DIV></DIV>
+<SCRIPT type=text/javascript>
+<!--
+var extra_happy = Math.floor(1000000000 * Math.random());
+document.write('<img src="http://www.typepad.com/t/stats?blog_id=278013&amp;user_id=667229&amp;page=' + escape(location.href) + '&amp;referrer=' + escape(document.referrer) + '&amp;i=' + extra_happy + '" width="1" height="1" alt="" style="position: absolute; top: 0; left: 0;" />');
+// -->
+</SCRIPT>
+<!-- Start Quantcast tag -->
+<SCRIPT 
+src="WirelessMoves Wifi Network Tracing Part 1 Windows, Wireshark, a Linksys WRT54, OpenWRT and Kismet_files/quant.js" 
+type=text/javascript></SCRIPT>
+
+<SCRIPT type=text/javascript>_qoptions = { tags:"typepad.core" }; _qacct="p-fcYWUmj5YbYKM"; quantserve();</SCRIPT>
+<NOSCRIPT><A href="http://www.quantcast.com/p-fcYWUmj5YbYKM" target=_blank><IMG 
+style="DISPLAY: none" height=1 alt=Quantcast src="" width=1 border=0></A> 
+</NOSCRIPT><!-- End Quantcast tag --><!-- ph=1 --><!-- nhm:from_kauri --></BODY></HTML>
