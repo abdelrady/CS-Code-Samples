@@ -1,0 +1,109 @@
+Customizing Search URLs
+Search URLs are a convenient way to use different Internet search engines. For example, you
+might have a search URL called news that searches Google Groups. Type news Jerry Honeycutt
+in the address bar to automatically search Google Groups for all UseNet articles that contain the
+words Jerry and Honeycutt.
+HKCU\Software\Microsoft\Internet Explorer\SearchURL is where you create search URLs. If you
+don't see this subkey, create it. Then add a subkey for each search prefix you want to use. To use
+the example I just gave, create the subkey news. Set the default value of the prefix's subkey to the
+URL of the search engine. Use %s as a placeholder for the search string. Internet Explorer replaces
+99
+the %s with any text you type to the right of the prefix. Continue the example, and set it to
+http://groups.google.com/groups?q=%s&hl=en.
+Add the REG_SZ values shown in Table 4?6 to the prefix key you created. The purpose of these
+values is to describe what to substitute for special characters in your search string, including a
+space, percent sign (%), ampersand (&), and plus sign (+). These characters have special meaning
+when submitting forms to Web sites, so you must substitute a plus sign for a space, for example, or
+%26 for an ampersand. Thus, the browser translates the string Ben & Jerry to Ben+%26+Jerry.
+Table 4?6: Values in Search URLs
+Name Data
+<space> +
+% %25
+& %26
++ %2B
+Deriving the URL that you must use is easy. Open the search engine that you want to add to
+Internet Explorer's search URLs, and then search for something. When the browser displays the
+results, copy the URL from the address bar, replacing your search word with a %s. For example,
+a f t e r s e a r c h i n g G o o g l e G r o u p s f o r s a m p l e , t h e r e s u l t i n g U R L i s
+http://groups.google.com/groups?q=sample&hl=en. Replace the word sample with %s to get
+http://groups.google.com/groups?q=%s&hl=en.
+This hack is so useful that I have a script that automatically creates search URLs for the search
+engines I use most often. Copy the following listing to the file Search.inf, right?click it, and then click
+Install. You can remove this script and all its settings using Add Or Remove Programs. This script
+creates search URLs for the five search engines that I use most often. The search URL news
+searches Google Groups; msn searches MSN; ms searches Microsoft's Web site; msdn searches
+MSDN; and technet searches TechNet.
+Listing 4?7: Search.inf
+[Version]
+Signature=$CHICAGO$
+[DefaultInstall]
+AddReg=Reg.Settings
+AddReg=Reg.Uninstall
+CopyFiles=Inf.Copy
+[DefaultUninstall]
+DelReg=Reg.Settings
+DelReg=Reg.Uninstall
+DelFiles=Inf.Copy
+[Reg.Settings]
+HKCU,Software\Microsoft\Internet Explorer\SearchURL
+HKCU,Software\Microsoft\Internet Explorer\SearchURL\news,,0,"%GOOGLE%"
+HKCU,Software\Microsoft\Internet Explorer\SearchURL\news," ",0,"+"
+HKCU,Software\Microsoft\Internet Explorer\SearchURL\news,"%",0,"%25"
+HKCU,Software\Microsoft\Internet Explorer\SearchURL\news,"&",0,"%26"
+HKCU,Software\Microsoft\Internet Explorer\SearchURL\news,"+",0,"%2B"
+100
+HKCU,Software\Microsoft\Internet Explorer\SearchURL\msn,,0,"%MSN%"
+HKCU,Software\Microsoft\Internet Explorer\SearchURL\msn," ",0,"+"
+HKCU,Software\Microsoft\Internet Explorer\SearchURL\msn,"%",0,"%25"
+HKCU,Software\Microsoft\Internet Explorer\SearchURL\msn,"&",0,"%26"
+HKCU,Software\Microsoft\Internet Explorer\SearchURL\msn,"+",0,"%2B"
+HKCU,Software\Microsoft\Internet Explorer\SearchURL\ms,,0,"%MICROSOFT%"
+HKCU,Software\Microsoft\Internet Explorer\SearchURL\ms," ",0,"+"
+HKCU,Software\Microsoft\Internet Explorer\SearchURL\ms,"%",0,"%25"
+HKCU,Software\Microsoft\Internet Explorer\SearchURL\ms,"&",0,"%26"
+HKCU,Software\Microsoft\Internet Explorer\SearchURL\ms,"+",0,"%2B"
+HKCU,Software\Microsoft\Internet Explorer\SearchURL\msdn,,0,"%MSDN%"
+HKCU,Software\Microsoft\Internet Explorer\SearchURL\msdn," ",0,"+"
+HKCU,Software\Microsoft\Internet Explorer\SearchURL\msdn,"%",0,"%25"
+HKCU,Software\Microsoft\Internet Explorer\SearchURL\msdn,"&",0,"%26"
+HKCU,Software\Microsoft\Internet Explorer\SearchURL\msdn,"+",0,"%2B"
+HKCU,Software\Microsoft\Internet Explorer\SearchURL\technet,,0,"%TECHNET%"
+HKCU,Software\Microsoft\Internet Explorer\SearchURL\technet," ",0,"+"
+HKCU,Software\Microsoft\Internet Explorer\SearchURL\technet,"%",0,"%25"
+HKCU,Software\Microsoft\Internet Explorer\SearchURL\technet,"&",0,"%26"
+HKCU,Software\Microsoft\Internet Explorer\SearchURL\technet,"+",0,"%2B"
+[Reg.Uninstall]
+HKCU,Software\Microsoft\Windows\CurrentVersion\Uninstall\%NAME%
+HKCU,Software\Microsoft\Windows\CurrentVersion\Uninstall\%NAME%,DisplayName\
+,,"%NAME%"
+HKCU,Software\Microsoft\Windows\CurrentVersion\Uninstall\%NAME%,UninstallString\
+,,"Rundll32.exe setupapi.dll,InstallHinfSection DefaultUninstall 132"\
+"%53%\Application Data\Custom\Search.inf"
+[Inf.Copy]
+Search.inf
+[DestinationDirs]
+Inf.Copy=53,Application Data\Custom
+[SourceDisksNames]
+55=%DISKNAME%
+[SourceDisksFiles]
+Search.inf=55
+[Strings]
+NAME = "Jerry's IE Search URLs"
+DISKNAME = "Setup Files"
+; Search URLs
+GOOGLE = "http://groups.google.com/groups?q=%s&hl=en"
+MSN = "http://search.msn.com/results.asp?RS=CHECKED&FORM=MSNH&v=1&q=%s"
+MICROSOFT = "http://search.microsoft.com/default.asp?so=RECCNT&siteid=us&p=1&"\
+"nq=NEW&qu=%s&IntlSearch=&boolean=ALL&ig=1&ig=3&ig=5&ig=7&ig=9&ig=2&ig=4&ig=6&"\
+"ig=8&ig=10&i=00&i=02&i=04&i=06&i=08&i=01&i=03&i=05&i=07&i=09"
+MSDN = "http://search.microsoft.com/default.asp?qu=%s&boolean=ALL&nq=NEW&"\
+"so=RECCNT&p=1&ig=01&i=00&i=01&i=02&i=03&i=04&i=05&i=06&i=07&i=08&i=09&i=10&"\
+"i=11&i=12&i=13&i=14&i=15&i=16&i=17&i=18&i=19&i=20&i=21&i=22&i=23&i=24&i=25&"\
+"i=26&i=27&i=28&i=29&i=30&i=31&i=32&i=33&i=34&i=35&i=36&i=37&i=38&i=39&i=40&"\
+"i=41&i=42&i=43&i=44&i=45&i=46&i=47&i=48&i=49&i=50&i=51&siteid=us/dev"
+TECHNET = "http://search.microsoft.com/default.asp?qu=%s&boolean=ALL&nq=NEW&"\
+"so=RECCNT&p=1&ig=01&ig=02&ig=03&ig=04&i=00&i=01&i=02&i=03&i=04&i=05&i=06&i=07&"\
+"i=08&i=09&i=10&i=11&i=12&i=13&i=14&i=15&i=16&i=17&i=18&i=19&i=20&i=21&i=22&"\
+101
+"i=23&i=24&i=25&i=26&i=27&i=28&i=29&i=30&i=31&i=32&i=33&i=34&i=35&i=36&i=37&"\
+"i=38&i=39&siteid=us/itresources"

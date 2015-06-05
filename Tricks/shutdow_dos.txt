@@ -1,0 +1,53 @@
+
+To restart or shut down remotely and document the reason
+Using the Windows interface
+
+Open Command Prompt. 
+Type: 
+shutdown /i to display the Remote Shutdown dialog box (Shutdown.exe).
+
+Under Computers, click Add to enter computer names, or click Browse to open the Find Computers dialog box. 
+Under What do you want these computers to do, click Restart or Shut down. 
+If you did not anticipate restarting or shutting down the target computers at this time, clear the Planned check box. 
+Select the appropriate reason from the list. 
+If a comment is required, the OK button will not function until you type at least one character one in the text box. 
+ Notes
+
+To open a command prompt, click Start, point to All Programs, point to Accessories, and then click Command Prompt. 
+To perform this procedure, you must have the user rights to force a shutdown from a remote system. For a list of security groups that have this permission by default on computers running Windows Server 2003 family operating systems, see "Privileges" under Related Topics. 
+The Remote Shutdown dialog box can be displayed only by typing shutdown /i at the command prompt. 
+If the remote computer is functioning properly, but Shutdown.exe fails to restart it or shut it down, wait for two minutes before making a second attempt: Either the log on dialog box or the unexpected shutdown dialog box is open on the remote computer, causing an error. 
+Shutdown Event Tracker records data only for the Restart and Shutdown options. 
+If the System State Data feature is enabled and you specify an unplanned reason for the restart or shutdown, a file containing relevant system data will be created in the %windir%\system32\LogFiles\Shutdown\ directory. The System State Data feature is enabled by default on all Windows Server 2003 family operating systems. 
+For information on defining custom reasons, see "Best practices" under Related Topics. 
+The Warn users of the action check box is selected by default.
+Using a command line
+
+Open Command Prompt. 
+Type: 
+shutdown /s /m \\ComputerName /d 1:1 to initiate an unplanned shutdown after a default wait period of 30 seconds, with the major reason, Hardware, and the minor reason, Maintenance.
+
+Or,
+
+Type: 
+shutdown /r /m \\ComputerName /t 60 /d p:4:2 to initiate a planned startup after waiting for one minute, with the major reason, Application, and the minor reason, Installation.
+
+Value Description 
+/s Shuts down the computer. 
+/r Restarts the computer after shutdown. 
+/m //ComputerName Specifies the target computer. 
+/t nnn Sets the wait period before a restart or shutdown to xxx seconds, causing a warning to display on the local console. You can specify from 0 through 600 seconds. If you omit /t, the wait period defaults to 30 seconds. 
+/d[p:]xx:yy Lists the reason for the system restart, shutdown, or power off. The following rows describe the parameter values. 
+p: Indicates that the restart or shutdown is planned. If you do not use the p: option, Shutdown Event Tracker assumes that the restart or shutdown is unplanned. 
+xx Specifies the major reason number (from 0 through 255). 
+yy Specifies the minor reason number (from 0 through 65535). 
+
+ Notes
+
+To open a command prompt, click Start, point to All Programs, point to Accessories, and then click Command Prompt. 
+To perform this procedure, you must have the user rights to force a shutdown from a remote system. For a list of security groups that have this permission by default on computers running Windows Server 2003 family operating systems, see "Privileges" under Related Topics. 
+For the complete command line syntax, see "Shutdown" under Related Topics, below. 
+If the remote computer is functioning properly, but Shutdown.exe fails to restart it or shut it down, wait for 2 minutes before making a second attempt: Either the log on dialog box or the unexpected shutdown dialog box is open on the remote computer, causing an error. 
+If the System State Data feature is enabled and you specify an unplanned reason for the restart or shutdown, a file containing relevant system data will be created in the %windir%\system32\LogFiles\Shutdown\ directory. The System State Data feature is enabled by default on all Windows Server 2003 family operating systems. 
+For information on defining custom reasons, see "Best practices" under Related Topics.
+Related Topics

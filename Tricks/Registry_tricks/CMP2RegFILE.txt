@@ -1,0 +1,53 @@
+Comparing REG Files
+Comparing two REG files is often the easiest way to discover where in the registry Windows XP
+stores a setting. Create these REG files before and after changing a setting that is in the user
+interface and that you know is somewhere in the registry. This is how I found the location of the
+settings that Tweak UI includes and that I documented in Chapter 5, "Mapping Tweak UI." First I
+exported HKCU to a REG file. I changed a setting in Tweak UI and exported the same branch to a
+second REG file. Then I compared the two files to figure out which value changed when I changed
+the setting in Tweak UI. You can use this method to trace just about any setting that has a user
+interface to its location in the registry.
+The only disadvantage to comparing two registry files is that the process requires a file?comparison
+tool. Windows XP comes with such a tool, though, which I'll tell you about later in this section. The
+advantages of this method are many. First it's quick and easy. Second its results are dead?on
+accurate. If you don't let a lot of time pass between each snapshot, the differences between the two
+should include only those settings you changed. Also, REG files are easy to read, so you won't have
+any problems deciphering the results.
+Now for some details. Recall that Registry Editor (Regedit) can export all or part of the registry to
+text files that have the .reg extension (REG files). A REG file looks similar to an INI file. It contains
+one or more sections; the name of each section is the path of a registry key. Each section contains
+the key's values. The format of each value is name = value. If the value is a string containing
+spaces, value must be quoted. Each key's default value looks like @= value. Chapter 9, "Scripting
+Registry Changes," describes REG files in all their glory, including how to interpret the different
+types of values in them. To export the registry to a REG file, click the key that you want to export.
+Then on the File menu, click Export. In the Export Registry File dialog box, click Win9x/NT4
+Registration Files (*.reg) to export to a version 4 ANSI REG file. Remember from Chapter 2, "Using
+the Registry Editor," that Regedit supports REG files in two different file formats: ANSI and Unicode.
+Many file?comparison tools work only with the first, thus you must create version 4 ANSI REG files
+for them. The tools I talk about in this chapter support Unicode text files, though. If you're not
+familiar with ANSI and Unicode character encoding, see Chapter 1, "Learning the Basics."
+182
+The sections following this one describe tools you can use to compare two REG files. My personal
+favorite is WinDiff, which comes with Windows XP. I like this tool so much because of its simple
+user interface and, more importantly, the speed at which it compares very large text files. Another
+choice is probably already installed on your computer: Microsoft Word 2002. It's slower than
+WinDiff, but you're probably already familiar with how to use this word processor. In any case, the
+overall process is the same:
+Export the registry to a REG file. Name the file something like Before.reg. If you have a
+general idea where the setting is in the registry, export that branch; otherwise, export the
+entire registry, including HKCU and HKLM.
+1.
+Change a setting in the user interface or perform some other action that you're trying to trace
+to the registry. For example, if you want to see where a program stores its settings during
+installation, install the program.
+2.
+Export the registry to a second REG file. Name it After.reg. Make sure you export the same
+branch using the same file format as you did in step 1. If you don't duplicate the process
+exactly, the files won't match, and finding the difference will be difficult.
+3.
+Compare Before.reg and After.reg using your favorite file?comparison utility. The differences
+between the two files are your changes. The file?comparison tool points out only the values
+that changed, because only the values under each section heading change, but if you look a
+little higher in the file, you'll see the key that contains the values.
+4.
+All?in?One Solutions

@@ -1,0 +1,163 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!-- saved from url=(0086)http://www.planetsourcecode.com/vb/scripts/ShowCodeAsText.asp?txtCodeId=5013&lngWId=10 -->
+<HTML><HEAD>
+<META http-equiv=Content-Type content="text/html; charset=windows-1256">
+<META content="MSHTML 6.00.5730.11" name=GENERATOR></HEAD>
+<BODY><XMP>    //**************************************
+    // Name: Delete files older than a given number of days
+    // Description:A console app that deletes files older than a given number of days. Uses creation date of the file. Written in visual studio 2005 .NET V2
+    // By: David Rabjohns
+    //
+    //
+    // Inputs:Switches 
+    /D:[Directory name] optional parameter that specifies the directory to delete from. If ommited uses the current directory
+    /N:[Number of days] number of days old. Files older than this will be selected for deletion
+    /R optional switch to recurse into subdirectories from the given root.
+    //
+    // Returns:None
+    //
+    //Assumes:None
+    //
+    //Side Effects:Deletes files !!
+    //This code is copyrighted and has limited warranties.
+    //Please see http://www.Planet-Source-Code.com/xq/ASP/txtCodeId.5013/lngWId.10/qx/vb/scripts/ShowCode.htm
+    //for details.
+    //**************************************
+    
+    Imports System
+    Imports System.IO
+    Module deletefiles
+    'Quick and dirty tool for delting files 
+    //     older than N days
+    //     'Author: D.Rabjohns
+    'Flags /D:[Direcotry Name] - If left bla
+    //     nk the current directory will be used
+    ' /N:[Number of days] - Number of days o
+    //     ld allowed before files are deleted
+    ' /R - Recurse, if the /R flag is includ
+    //     ed all files in the directory tree will 
+    //     be used
+    Sub Main()
+    Dim i As Byte
+    Dim Recurse As Boolean
+    Dim ErrFlag As Boolean
+    Dim DaysOld As Integer
+    Dim ArgumentCount As Integer
+    Dim DirName As String = ""
+    Dim Switch As String = ""
+    Dim FileCount As Long
+    Dim Argument As System.Collections.ObjectModel.ReadOnlyCollection(Of String)
+    Argument = My.Application.CommandLineArgs
+    ArgumentCount = Argument.Count
+    Console.WriteLine()
+    //     'Do we have any command line arguments
+    If ArgumentCount = 0 Then
+    Console.WriteLine("Not enough arguments [try /?]")
+    End
+    End If
+    'Do we have too many command line argume
+    //     nts
+    If ArgumentCount > 3 Then
+    Console.WriteLine("Too many arguments")
+    End
+    End If
+    //     '
+    If (ArgumentCount > 0 AndAlso Argument(0) = "/?") Then
+    Console.WriteLine("{0} V:{1}", My.Application.Info.AssemblyName, My.Application.Info.Version)
+    Console.WriteLine("Usage: deletefiles /D:[Directory] /N:[Number of days old] /R{recurse subdirs}")
+    End
+    End If
+    
+    For i = 0 To (ArgumentCount - 1)
+    //     'Check the arguments look ok..
+    If Argument(i).Length >= 2 Then
+    'Extract the first 2 chars this should b
+    //     e our switch
+    Switch = Argument(i).Substring(0, 2).ToUpper
+    //     'Is the switch recognised
+    Select Case Switch
+    Case "/D"
+    'Does this look like a proper dir name ?
+    //     
+    If Argument(i).Length > 3 Then
+    DirName = Argument(i).ToUpper.Substring(3)
+    Else
+    DirName = ""
+    End If
+    Case "/N"
+    //     'Is this a proper number ?
+    Try
+    DaysOld = Convert.ToInt16(Argument(i).ToUpper.Substring(3))
+    Catch e As Exception
+    DaysOld = 0
+    Finally
+    End Try
+    Case "/R"
+    Recurse = True
+    Case Else
+    //     'Can't recognise the argument
+    Console.WriteLine("argument {0} not recognised: {1}", i + 1, Argument(i))
+    End
+    End Select
+    Else
+    //     'Can't recognise the argument
+    Console.WriteLine("argument {0} not recognised: {1}", i + 1, Argument(i))
+    End
+    End If
+    Next
+    'Use the current directory if one is not
+    //     supplied
+    If DirName = "" Then
+    DirName = My.Computer.FileSystem.CurrentDirectory
+    End If
+    //     'Calculate the date for file deletion
+    Dim DeleteTime As DateTime = Today.AddDays(DaysOld * -1)
+    //     'Enumerate the dir
+    Dim Dir As New DirectoryInfo(DirName)
+    //     'Does it exist ?
+    If Dir.Exists Then
+    Dim f As FileInfo
+    Console.WriteLine()
+    Console.WriteLine("Deleting files from {0} that are older than {1} days [{2}] recurse = {3}", DirName, DaysOld, DeleteTime, Recurse.ToString)
+    Console.WriteLine()
+    'Loop though the files with or without r
+    //     ecursion from /R switch
+    For Each f In Dir.GetFiles("*.*", IIf(Recurse = True, SearchOption.AllDirectories, SearchOption.TopDirectoryOnly))
+    Dim Name As [String] = f.Name
+    Dim NameTmp As String
+    Dim Size As Long = f.Length
+    Dim CreationTime As DateTime = f.CreationTime
+    'Format the file name to keep the screen
+    //     tidy
+    If Name.Length > 28 Then
+    NameTmp = Name.Substring(28)
+    Else
+    NameTmp = Name
+    End If
+    //     'Do we have a deletion candidate
+    If CreationTime < DeleteTime Then
+    ErrFlag = False
+    //     'see if we can delete it
+    Try
+    f.Delete()
+    Catch e As Exception
+    ErrFlag = True
+    Console.WriteLine("Failed : {0,-50} ", e.Message)
+    Finally
+    If ErrFlag = False Then
+    //     'Looks like it was delete OK.
+    Console.WriteLine("Deleted: {0,-30} {1,-12:g} {2,16:N0}", NameTmp, CreationTime, Size)
+    FileCount = FileCount + 1
+    End If
+    End Try
+    End If
+    Next f
+    Console.WriteLine()
+    Console.WriteLine("{0} files deleted", FileCount)
+    Else
+    Console.WriteLine("No such directory {0}", DirName)
+    End If
+    End Sub
+    End Module
+
+		</XMP></BODY></HTML>
