@@ -1,0 +1,1 @@
+start simpledetector c:\testShared2\

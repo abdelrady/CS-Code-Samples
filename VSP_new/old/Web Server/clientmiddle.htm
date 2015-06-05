@@ -1,0 +1,227 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!-- saved from url=(0085)http://www.cs.unc.edu/Courses/jbs/lessons/java/java_client_server1/client_second.html -->
+<HTML><HEAD><TITLE>client middle</TITLE>
+<META http-equiv=Content-Type content="text/html; charset=iso-8859-1">
+<META content="MSHTML 6.00.2900.2180" name=GENERATOR></HEAD>
+<BODY vLink=#a020aa link=#00669a bgColor=#ffffff>
+<P><BR><BR></P>
+<H2><FONT color=#aa0000>Mid-Size Client </FONT></H2>
+<BLOCKQUOTE>
+  <P>This mid-size client program is very similar to the mid-size server 
+  program. The most important distinction lies in the subtle differences in the 
+  method where the connection and I/O are handled. </P><PRE>import java.net.*;
+import java.io.*;
+import java.util.*;
+import java.awt.*;
+import java.awt.event.*;
+
+public class Client_Second extends Frame implements ActionListener, WindowListener{
+
+//****************   single-threaded client, with UI
+//****************   looks for server at hawk-cs.cs.unc.edu:8901
+
+Socket connection;
+
+InputStream inStream;
+DataInputStream inDataStream;
+OutputStream outStream;
+DataOutputStream outDataStream;
+
+public static final String DEFAULT_HOST = "hawk-cs.cs.unc.edu";
+public static final int DEFAULT_PORT = 8901;
+String host;
+int port;
+
+String message;
+
+TextField hostDisplay, portDisplay;
+TextArea logDisplay, msgDisplay;
+Panel topPanel;
+Panel middlePanel;
+Panel buttonPanel;
+Button sendButton, quitButton;
+
+  public Client_Second ()  {
+
+    super ( "Client_Second" );
+    buildUI ();
+
+  }  // end Client_Second constructor
+
+
+// **************  Primary Listen &amp; Respond Method
+
+
+  public void connectClient ( )  {
+
+  try {
+    InetAddress here = InetAddress.getLocalHost ();
+    logDisplay.appendText ( "here =  "+here+"\n" );
+    host = here.getHostName ();
+    logDisplay.appendText ( "host =  "+host+"\n" );
+  }
+  catch (UnknownHostException e) { ;}
+
+    host = hostDisplay.getText ();
+    if ( host.equals ("" ) ) host = DEFAULT_HOST;
+    if ( ! ( portDisplay.getText () ).equals ( "" ) ) port = Integer.parseInt ( portDisplay.getText () );
+    else port = DEFAULT_PORT;
+
+    try  {
+      connection = new Socket ( InetAddress.getByName ( host ), port );
+
+      outStream = connection.getOutputStream ();
+      outDataStream = new DataOutputStream ( outStream );
+      inStream = connection.getInputStream ();
+      inDataStream = new DataInputStream ( inStream );
+
+      logDisplay.setText ( "Socket created:  connecting to server\n" );
+
+      message = msgDisplay.getText ();
+      outDataStream.writeUTF ( message );
+      logDisplay.appendText ( "Message, below, sent to Server\n" );
+
+      try {
+        msgDisplay.setText ( "" );
+        msgDisplay.setForeground ( Color.red );
+        while ( true ) {
+            message = inDataStream.readUTF ();
+            msgDisplay.appendText ( message );
+            logDisplay.appendText ( "Message, below, received from server\n" );
+        }  // end while
+        }  // end try for input
+      catch ( EOFException except ) {
+            connection.close ();
+            logDisplay.appendText ( "Connection closed\n" );
+        }  // end catch
+      catch ( IOException except ) {
+        System.out.println ( "IO Exception");
+        except.printStackTrace ();
+        }  // end catch
+
+    }  // end try
+
+    catch ( IOException except)  {
+      except.printStackTrace ();
+    }  // end catch
+
+  }  // end connectClient
+
+// **************
+
+  public static void main ( String [ ] args )  {
+
+    Client_Second client = new Client_Second ();
+    client.addWindowListener ( client );
+
+  }  // end main
+
+
+  //***********  Utility Methods   ***********
+
+
+// **************
+
+  public void buildUI ()  {
+
+  try {
+    InetAddress here = InetAddress.getLocalHost ();
+    host = here.getHostName ();
+  }
+  catch (UnknownHostException e) { ;}
+
+  hostDisplay = new TextField ( host, 30 );
+  portDisplay = new TextField ( Integer.toString ( DEFAULT_PORT ), 4 );
+  topPanel = new Panel ();
+  topPanel.setLayout ( new GridLayout ( 2, 1 ) );
+  topPanel.add ( hostDisplay );
+  topPanel.add ( portDisplay );
+
+  logDisplay = new TextArea ( 40, 10 );
+  msgDisplay = new TextArea ( 40, 10 );
+  msgDisplay.setText ( "Default Message." );
+  middlePanel = new Panel ();
+  middlePanel.setLayout ( new GridLayout ( 2, 1 ) );
+  middlePanel.add ( logDisplay );
+  middlePanel.add ( msgDisplay );
+
+  sendButton = new Button ( "Send" );
+  quitButton = new Button ( "Quit" );
+  sendButton.addActionListener ( this );
+  quitButton.addActionListener ( this );
+  buttonPanel = new Panel ( );
+  buttonPanel.add ( sendButton );
+  buttonPanel.add ( quitButton );
+
+  add ( "North", topPanel );
+  add ( "Center", middlePanel );
+  add ( "South", buttonPanel );
+
+  resize ( 400, 450 );
+  show ();
+
+  }  // end buildUI
+
+
+  //***********  Interface Methods   ***********
+
+
+  //****  ActionListener method
+
+  //****  ActionListener methods
+
+  public void actionPerformed ( ActionEvent e )  {
+
+    Object s = e.getSource();
+
+    // *** process Button actions
+
+    if ( s instanceof Button )  {
+
+        if ( s == sendButton )  {
+            connectClient ();
+        }  // end sendButton
+
+        if ( s == quitButton )  {
+            this.hide ();
+            this.dispose ();
+            System.exit ( 0 );
+        }  // end quitButton
+
+    }  // end process Button actions
+
+  }  // end actionPerformed
+
+
+  //****  WindowListener methods
+
+  public void windowActivated ( WindowEvent e )  {
+  }
+
+  public void windowDeactivated ( WindowEvent e )  {
+  }
+
+  public void windowOpened ( WindowEvent e )  {
+  }
+
+   public void windowClosed ( WindowEvent e )  {
+  }
+
+  public void windowClosing ( WindowEvent e )  {
+    hide ();
+    dispose ();
+    System.exit(0);
+  }
+
+  public void windowIconified ( WindowEvent e )  {
+  }
+
+  public void windowDeiconified ( WindowEvent e )  {
+  }
+
+
+}  // end Client_Second
+
+</PRE></BLOCKQUOTE>
+<HR height="4">
+</BODY></HTML>
