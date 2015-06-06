@@ -1,0 +1,222 @@
+VERSION 5.00
+Begin VB.PropertyPage ppAnchors 
+   Caption         =   "Anchors"
+   ClientHeight    =   2940
+   ClientLeft      =   0
+   ClientTop       =   0
+   ClientWidth     =   5445
+   PaletteMode     =   0  'Halftone
+   ScaleHeight     =   2940
+   ScaleWidth      =   5445
+   Begin VB.PictureBox picFrame 
+      Height          =   2205
+      Left            =   2670
+      ScaleHeight     =   2145
+      ScaleWidth      =   2625
+      TabIndex        =   1
+      Top             =   540
+      Width           =   2685
+      Begin VB.CommandButton cmdObject 
+         Enabled         =   0   'False
+         Height          =   735
+         Left            =   900
+         TabIndex        =   2
+         Top             =   720
+         Width           =   795
+      End
+      Begin VB.Label lblSides 
+         BackColor       =   &H00FFFFFF&
+         BorderStyle     =   1  'Fixed Single
+         Height          =   585
+         Index           =   3
+         Left            =   1170
+         TabIndex        =   6
+         Top             =   1500
+         Width           =   285
+      End
+      Begin VB.Label lblSides 
+         BackColor       =   &H00FFFFFF&
+         BorderStyle     =   1  'Fixed Single
+         Height          =   285
+         Index           =   2
+         Left            =   1740
+         TabIndex        =   5
+         Top             =   1020
+         Width           =   765
+      End
+      Begin VB.Label lblSides 
+         BackColor       =   &H00FFFFFF&
+         BorderStyle     =   1  'Fixed Single
+         Height          =   585
+         Index           =   1
+         Left            =   1170
+         TabIndex        =   4
+         Top             =   90
+         Width           =   285
+      End
+      Begin VB.Label lblSides 
+         BackColor       =   &H00FFFFFF&
+         BorderStyle     =   1  'Fixed Single
+         Height          =   285
+         Index           =   0
+         Left            =   90
+         TabIndex        =   3
+         Top             =   990
+         Width           =   735
+      End
+   End
+   Begin VB.ListBox lstCtrls 
+      Height          =   2205
+      Left            =   120
+      Sorted          =   -1  'True
+      TabIndex        =   0
+      Top             =   540
+      Width           =   2385
+   End
+   Begin VB.Label lblTitle 
+      Caption         =   "Select an object, set anchors and then click Apply"
+      Height          =   255
+      Left            =   120
+      TabIndex        =   7
+      Top             =   180
+      Width           =   5235
+   End
+End
+Attribute VB_Name = "ppAnchors"
+Attribute VB_GlobalNameSpace = False
+Attribute VB_Creatable = False
+Attribute VB_PredeclaredId = False
+Attribute VB_Exposed = False
+Option Explicit
+
+Private Sub lblSides_Click(Index As Integer)
+    On Error GoTo hErr
+   Changed = True
+   'Switch  Colors between Black and White
+   If lblSides(Index).BackColor = vbWhite Then
+      lblSides(Index).BackColor = vbBlack
+   Else
+      lblSides(Index).BackColor = vbWhite
+   End If
+' CSErrorHandler begin - please do not modify or remove this line
+Exit Sub
+hErr:
+Select Case MsgBox(Err.Description, vbAbortRetryIgnore + _
+       vbCritical, "An Error Occured")
+        Case vbAbort
+            Screen.MousePointer = vbDefault
+            Exit Sub
+        Case vbRetry
+            Resume
+        Case vbIgnore
+            Resume Next
+    End Select
+End Sub
+
+Private Sub lstCtrls_Click()
+    On Error GoTo hErr
+    Dim i As Integer
+    Dim t As Integer
+    
+'FIXIT: 'Controls.Count' is not a property of the generic 'Form' object in Visual Basic .NET. To access 'Controls.Count' declare 'CtrlParent' using its actual type instead of 'Form'     FixIT90210ae-R1460-RCFE85
+  For i = 0 To CtrlParent.Controls.Count - 1
+'FIXIT: 'Controls(i' is not a property of the generic 'Form' object in Visual Basic .NET. To access 'Controls(i' declare 'CtrlParent' using its actual type instead of 'Form'     FixIT90210ae-R1460-RCFE85
+      If CtrlParent.Controls(i).Name = lstCtrls.Text Then
+         'Convert Tag informations to Black & White!!!
+         For t = 0 To 3
+'FIXIT: 'Controls(i).Tag' is not a property of the generic 'Form' object in Visual Basic .NET. To access 'Controls(i).Tag' declare 'CtrlParent' using its actual type instead of 'Form'     FixIT90210ae-R1460-RCFE85
+            If Mid$(CtrlParent.Controls(i).Tag, t + 1, 1) = "T" Then
+               lblSides(t).BackColor = vbBlack
+            Else
+               lblSides(t).BackColor = vbWhite
+            End If
+         Next t
+      End If
+   Next i
+   
+' CSErrorHandler begin - please do not modify or remove this line
+Exit Sub
+hErr:
+Select Case MsgBox(Err.Description, vbAbortRetryIgnore + _
+       vbCritical, "An Error Occured")
+        Case vbAbort
+            Screen.MousePointer = vbDefault
+            Exit Sub
+        Case vbRetry
+            Resume
+        Case vbIgnore
+            Resume Next
+    End Select
+End Sub
+
+Private Sub PropertyPage_ApplyChanges()
+    On Error GoTo hErr
+   Dim Tg As String
+   Dim i As Integer
+   Dim t As Integer
+   
+'FIXIT: 'Controls.Count' is not a property of the generic 'Form' object in Visual Basic .NET. To access 'Controls.Count' declare 'CtrlParent' using its actual type instead of 'Form'     FixIT90210ae-R1460-RCFE85
+   For i = 0 To CtrlParent.Controls.Count - 1
+'FIXIT: 'Controls(i' is not a property of the generic 'Form' object in Visual Basic .NET. To access 'Controls(i' declare 'CtrlParent' using its actual type instead of 'Form'     FixIT90210ae-R1460-RCFE85
+      If CtrlParent.Controls(i).Name = lstCtrls.Text Then
+'FIXIT: 'Controls(i' is not a property of the generic 'Form' object in Visual Basic .NET. To access 'Controls(i' declare 'CtrlParent' using its actual type instead of 'Form'     FixIT90210ae-R1460-RCFE85
+         Tg = CtrlParent.Controls(i).Tag
+'FIXIT: 'Controls(i' is not a property of the generic 'Form' object in Visual Basic .NET. To access 'Controls(i' declare 'CtrlParent' using its actual type instead of 'Form'     FixIT90210ae-R1460-RCFE85
+         CtrlParent.Controls(i).Tag = Right$(Tg, Len(Tg) - 4)
+         'Change the Tag proprty of object in desired way
+         'also save the pervious value of tag.
+         For t = 3 To 0 Step -1
+'FIXIT: 'Controls(i' is not a property of the generic 'Form' object in Visual Basic .NET. To access 'Controls(i' declare 'CtrlParent' using its actual type instead of 'Form'     FixIT90210ae-R1460-RCFE85
+'FIXIT: 'Controls(i' is not a property of the generic 'Form' object in Visual Basic .NET. To access 'Controls(i' declare 'CtrlParent' using its actual type instead of 'Form'     FixIT90210ae-R1460-RCFE85
+            CtrlParent.Controls(i).Tag = _
+               Left$(Not CBool(lblSides(t).BackColor), 1) _
+               & CtrlParent.Controls(i).Tag
+         Next t
+      End If
+   Next i
+   
+' CSErrorHandler begin - please do not modify or remove this line
+Exit Sub
+hErr:
+Select Case MsgBox(Err.Description, vbAbortRetryIgnore + _
+       vbCritical, "An Error Occured")
+        Case vbAbort
+            Screen.MousePointer = vbDefault
+            Exit Sub
+        Case vbRetry
+            Resume
+        Case vbIgnore
+            Resume Next
+    End Select
+End Sub
+
+Private Sub PropertyPage_Initialize()
+    On Error GoTo hErr
+    Dim i As Integer
+    
+'FIXIT: 'Controls.Count' is not a property of the generic 'Form' object in Visual Basic .NET. To access 'Controls.Count' declare 'CtrlParent' using its actual type instead of 'Form'     FixIT90210ae-R1460-RCFE85
+   For i = 0 To CtrlParent.Controls.Count - 1
+'FIXIT: 'Controls(i' is not a property of the generic 'Form' object in Visual Basic .NET. To access 'Controls(i' declare 'CtrlParent' using its actual type instead of 'Form'     FixIT90210ae-R1460-RCFE85
+      lstCtrls.AddItem CtrlParent.Controls(i).Name
+      ' Set anchor informations for all objects
+'FIXIT: 'Controls(i).Tag' is not a property of the generic 'Form' object in Visual Basic .NET. To access 'Controls(i).Tag' declare 'CtrlParent' using its actual type instead of 'Form'     FixIT90210ae-R1460-RCFE85
+'FIXIT: 'Controls(i' is not a property of the generic 'Form' object in Visual Basic .NET. To access 'Controls(i' declare 'CtrlParent' using its actual type instead of 'Form'     FixIT90210ae-R1460-RCFE85
+'FIXIT: 'Controls(i' is not a property of the generic 'Form' object in Visual Basic .NET. To access 'Controls(i' declare 'CtrlParent' using its actual type instead of 'Form'     FixIT90210ae-R1460-RCFE85
+      If InStr(1, CtrlParent.Controls(i).Tag, "*/") = 0 Then _
+         CtrlParent.Controls(i).Tag = "TTFF*/" & CtrlParent.Controls(i).Tag
+   Next i
+   lstCtrls.ListIndex = 0
+' CSErrorHandler begin - please do not modify or remove this line
+Exit Sub
+hErr:
+Select Case MsgBox(Err.Description, vbAbortRetryIgnore + _
+       vbCritical, "An Error Occured")
+        Case vbAbort
+            Screen.MousePointer = vbDefault
+            Exit Sub
+        Case vbRetry
+            Resume
+        Case vbIgnore
+            Resume Next
+    End Select
+End Sub

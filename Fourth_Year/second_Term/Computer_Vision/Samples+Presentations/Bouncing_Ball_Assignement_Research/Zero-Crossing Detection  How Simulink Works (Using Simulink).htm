@@ -1,0 +1,257 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!-- saved from url=(0091)https://www-users.cscs.ch/sw-docs/matlab/help/toolbox/simulink/ug/how_simulink_works16.html -->
+<HTML><HEAD><TITLE>Zero-Crossing Detection :: How Simulink Works (Using Simulink)</TITLE>
+<META http-equiv=Content-Type content="text/html; charset=windows-1256"><!-- $Revision: 1.14 $  $Date: 2003/08/20 19:32:11 $ --><!-- DOCNAME: Using Simulink --><!-- CHUNKNAME: Zero-Crossing Detection --><!-- CHAPNAME: How Simulink Works --><!-- HEADSTUFF --><LINK 
+href="Zero-Crossing Detection  How Simulink Works (Using Simulink)_files/docstyle1.css" 
+type=text/css rel=stylesheet>
+<META content="MSHTML 6.00.2900.2180" name=GENERATOR></HEAD>
+<BODY bgColor=#ffffff><!-- NAVBARTOP -->
+<TABLE cellSpacing=0 cellPadding=0 width="100%" border=0>
+  <TBODY>
+  <TR>
+    <TD vAlign=baseline bgColor=#ffe4b0><B>Using Simulink</B></TD>
+    <TD vAlign=baseline align=right bgColor=#ffe4b0><A 
+      href="https://www-users.cscs.ch/sw-docs/matlab/help/toolbox/simulink/ug/how_simulink_works15.html"><IMG 
+      alt="Previous page" 
+      src="Zero-Crossing Detection  How Simulink Works (Using Simulink)_files/b_prev.gif" 
+      border=0></A>&nbsp;&nbsp;&nbsp;<A 
+      href="https://www-users.cscs.ch/sw-docs/matlab/help/toolbox/simulink/ug/how_simulink_works17.html"><IMG 
+      alt="Next Page" 
+      src="Zero-Crossing Detection  How Simulink Works (Using Simulink)_files/b_next.gif" 
+      border=0></A></TD></TR></TBODY></TABLE><A name=zero-crossing_detection></A><!-- H2 --><A name=9506></A>
+<P><FONT color=#990000 size=+1><B><A 
+name=zero_crossing_detection></A>Zero-Crossing Detection</B></FONT><BR>
+<P><A name=10045></A>When simulating a dynamic system, Simulink checks for 
+discontinuities in the system's state variables at each time step, using a 
+technique known as zero-crossing detection. If Simulink detects a discontinuity 
+within the current time step, it determines the precise time at which the 
+discontinuity occurs and takes additional time steps before and after the 
+discontinuity. This section explains why zero-crossing detection is important 
+and how it works.</P>
+<P><A name=10063></A>Discontinuities in state variables often coincide with 
+significant events in the evolution of a dynamic system. For example, the 
+instant when a bouncing ball hits the floor coincides with a discontinuity in 
+its position. Because discontinuities often indicate a significant change in a 
+dynamic system, it is important to simulate points of discontinuity precisely. 
+Otherwise, a simulation could lead to false conclusions about the behavior of 
+the system under investigation. Consider, for example, a simulation of a 
+bouncing ball. If the point at which the ball hits the floor occurs between 
+simulation steps, the simulated ball appears to reverse position in midair. This 
+might lead an investigator to false conclusions about the physics of the 
+bouncing ball.</P>
+<P><A name=10046></A>To avoid such misleading conclusions, it is important that 
+simulation steps occur at points of discontinuity. A simulator that relies 
+purely on solvers to determine simulation times cannot efficiently meet this 
+requirement. Consider, for example, a fixed-step solver. A fixed-step solver 
+computes the values of state variables at integral multiples of a fixed step 
+size. However, there is no guarantee that a point of discontinuity will occur at 
+an integral multiple of the step size. You could reduce the step size to 
+increase the probability of hitting a discontinuity, but this would greatly 
+increase the execution time.</P>
+<P><A name=10047></A>A variable-step solver appears to offer a solution. A 
+variable-step solver adjusts the step size dynamically, increasing the step size 
+when a variable is changing slowly and decreasing the step size when the 
+variable changes rapidly. Around a discontinuity, a variable changes extremely 
+rapidly. Thus, in theory, a variable-step solver should be able to hit a 
+discontinuity precisely. The problem is that to locate a discontinuity 
+accurately, a variable-step solver must again take many small steps, greatly 
+slowing down the simulation.</P><A name=how_zero-crossing_detection_works></A><!-- H3 --><A name=10048></A>
+<P><FONT color=#990000><B>How Zero-Crossing Detection Works</B></FONT><BR>
+<P><A name=10049></A>Simulink uses a technique known as zero-crossing detection 
+to address this problem. With this technique, a block can register a set of 
+zero-crossing variables with Simulink, each of which is a function of a state 
+variable that can have a discontinuity. The zero-crossing function passes 
+through zero from a positive or negative value when the corresponding 
+discontinuity occurs. At the end of each simulation step, Simulink asks each 
+block that has registered zero-crossing variables to update the variables. 
+Simulink then checks whether any variable has changed sign since the last step. 
+Such a change indicates that a discontinuity occurred in the current time step. 
+</P>
+<P><A name=10050></A>If any zero crossings are detected, Simulink interpolates 
+between the previous and current values of each variable that changed sign to 
+estimate the times of the zero crossings (e.g., discontinuities). Simulink then 
+steps up to and over each zero crossing in turn. In this way, Simulink avoids 
+simulating exactly at the discontinuity, where the value of the state variable 
+might be undefined. </P>
+<P><A name=10051></A>Zero-crossing detection enables Simulink to simulate 
+discontinuities accurately without resorting to excessively small step sizes. 
+Many Simulink blocks support zero-crossing detection. The result is fast and 
+accurate simulation of all systems, including systems with 
+discontinuities.</P><A name=implementation_details></A><!-- H3 --><A 
+name=9518></A>
+<P><FONT color=#990000><B>Implementation Details</B></FONT><BR>
+<P><A name=9520></A>An example of a Simulink block that uses zero crossings is 
+the Saturation block. Zero crossings detect these state events in the Saturation 
+block:</P>
+<UL>
+  <LI><A name=9521></A>The input signal reaches the upper limit. 
+  <LI><A name=9522></A>The input signal leaves the upper limit. 
+  <LI><A name=9523></A>The input signal reaches the lower limit. 
+  <LI><A name=9524></A>The input signal leaves the lower limit. </LI></UL>
+<P><A name=9525></A>Simulink blocks that define their own state events are 
+considered to have <EM>intrinsic zero crossings</EM>. If you need explicit 
+notification of a zero-crossing event, use the Hit Crossing block. See <A 
+href="https://www-users.cscs.ch/sw-docs/matlab/help/toolbox/simulink/ug/how_simulink_works16.html#19684">Blocks 
+with Zero Crossings</A> for a list of blocks that incorporate zero 
+crossings.</P>
+<P><A name=9530></A>The detection of a state event depends on the construction 
+of an internal zero-crossing signal. This signal is not accessible by the block 
+diagram. For the Saturation block, the signal that is used to detect zero 
+crossings for the upper limit is <CODE>zcSignal = UpperLimit </CODE>-<CODE> 
+u</CODE>, where <CODE>u</CODE> is the input signal.</P>
+<P><A name=9531></A>Zero-crossing signals have a direction attribute, which can 
+have these values:</P>
+<UL>
+  <LI><A name=9532></A><EM>rising</EM> - A zero crossing occurs when a signal 
+  rises to or through zero, or when a signal leaves zero and becomes positive. 
+  <LI><A name=9533></A><EM>falling</EM> - A zero crossing occurs when a signal 
+  falls to or through zero, or when a signal leaves zero and becomes negative. 
+  <LI><A name=9534></A><EM>either</EM> - A zero crossing occurs if either a 
+  rising or falling condition occurs. </LI></UL>
+<P><A name=9535></A>For the Saturation block's upper limit, the direction of the 
+zero crossing is <EM>either</EM>. This enables the entering and leaving 
+saturation events to be detected using the same zero-crossing signal.</P>
+<P><A name=9536></A>If the error tolerances are too large, it is possible for 
+Simulink to fail to detect a zero crossing. For example, if a zero crossing 
+occurs within a time step, but the values at the beginning and end of the step 
+do not indicate a sign change, the solver steps over the crossing without 
+detecting it.</P>
+<P><A name=9537></A>This figure shows a signal that crosses zero. In the first 
+instance, the integrator steps over the event. In the second, the solver detects 
+the event.</P>
+<P><A name=12986></A><IMG alt="" 
+src="Zero-Crossing Detection  How Simulink Works (Using Simulink)_files/how_simulink_works3a.gif" 
+align=bottom></P>
+<P><A name=9552></A>If you suspect this is happening, tighten the error 
+tolerances to ensure that the solver takes small enough steps. For more 
+information, see <A 
+href="https://www-users.cscs.ch/sw-docs/matlab/help/toolbox/simulink/ug/simulation5.html#11427">Error 
+Tolerances</A>.</P>
+<P>
+<UL>
+  <TABLE cellSpacing=0 cellPadding=5 border=1>
+    <TBODY>
+    <TR width="90%">
+      <TD bgColor=#ffe4b0><A name=11031></A><B>Note </B>&nbsp;&nbsp; Using the 
+        <CODE>Refine output</CODE> option (see <A 
+        href="https://www-users.cscs.ch/sw-docs/matlab/help/toolbox/simulink/ug/simulation5.html#11464">Refine 
+        output</A>) does not help locate the missed zero crossings. You should 
+        alter the maximum step size or output times. </TD></TR></TBODY></TABLE></UL>
+<P></P><A name=caveat></A><!-- H3 --><A name=9556></A>
+<P><FONT color=#990000><B>Caveat</B></FONT><BR>
+<P><A name=9557></A>It is possible to create models that exhibit high-frequency 
+fluctuations about a discontinuity (chattering). Such systems typically are not 
+physically realizable; a massless spring, for example. Because chattering causes 
+repeated detection of zero crossings, the step sizes of the simulation become 
+very small, essentially halting the simulation.</P>
+<P><A name=19606></A>If you suspect that this behavior applies to your model, 
+you can disable zero-crossing detection by selecting the <STRONG>Disable zero 
+crossing detection</STRONG> option on the <STRONG>Advanced</STRONG> pane of the 
+<STRONG>Simulation Parameters</STRONG> dialog box (see <A 
+href="https://www-users.cscs.ch/sw-docs/matlab/help/toolbox/simulink/ug/simulation8.html#25163">Zero-crossing 
+detection</A>). Although disabling zero-crossing detection can alleviate the 
+symptoms of this problem, you no longer benefit from the increased accuracy that 
+zero-crossing detection provides. A better solution is to try to identify the 
+source of the underlying problem in the model.</P><A 
+name=blocks_with_zero_crossings></A><!-- H3 --><A name=19684></A>
+<P><FONT color=#990000><B>Blocks with Zero Crossings</B></FONT><BR>
+<P><A name=19691></A>The following table lists blocks that use zero crossings 
+and explains how the blocks use the zero crossings:<BR><BR>
+<TABLE cellSpacing=0 cellPadding=4 border=2>
+  <CAPTION></CAPTION>
+  <TBODY>
+  <TR vAlign=top>
+    <TD><A name=19613></A><B>Block</B><BR></TD>
+    <TD><A name=19618></A><B>Description of Zero Crossing &nbsp;</B><BR></TD>
+  <TR vAlign=top>
+    <TD><A name=19621></A><A 
+      href="https://www-users.cscs.ch/sw-docs/matlab/help/toolbox/simulink/slref/abs.html">Abs</A><BR></TD>
+    <TD><A name=19623></A>One: to detect when the input signal crosses zero in 
+      either the rising or falling direction.<BR></TD>
+  <TR vAlign=top>
+    <TD><A name=19626></A><A 
+      href="https://www-users.cscs.ch/sw-docs/matlab/help/toolbox/simulink/slref/backlash.html">Backlash</A><BR></TD>
+    <TD><A name=19628></A>Two: one to detect when the upper threshold is 
+      engaged, and one to detect when the lower threshold is engaged.<BR></TD>
+  <TR vAlign=top>
+    <TD><A name=19631></A><A 
+      href="https://www-users.cscs.ch/sw-docs/matlab/help/toolbox/simulink/slref/deadzone.html">Dead 
+      Zone</A><BR></TD>
+    <TD><A name=19633></A>Two: one to detect when the dead zone is entered 
+      (the input signal minus the lower limit), and one to detect when the dead 
+      zone is exited (the input signal minus the upper limit).<BR></TD>
+  <TR vAlign=top>
+    <TD><A name=19636></A><A 
+      href="https://www-users.cscs.ch/sw-docs/matlab/help/toolbox/simulink/slref/hitcrossing.html">Hit 
+      Crossing</A><BR></TD>
+    <TD><A name=19638></A>One: to detect when the input crosses the 
+      threshold.<BR></TD>
+  <TR vAlign=top>
+    <TD><A name=19641></A><A 
+      href="https://www-users.cscs.ch/sw-docs/matlab/help/toolbox/simulink/slref/integrator.html">Integrator</A><BR></TD>
+    <TD><A name=19643></A>If the reset port is present, to detect when a reset 
+      occurs. If the output is limited, there are three zero crossings: one to 
+      detect when the upper saturation limit is reached, one to detect when the 
+      lower saturation limit is reached, and one to detect when saturation is 
+      left.<BR></TD>
+  <TR vAlign=top>
+    <TD><A name=19646></A><A 
+      href="https://www-users.cscs.ch/sw-docs/matlab/help/toolbox/simulink/slref/minmax.html">MinMax</A><BR></TD>
+    <TD><A name=19648></A>One: for each element of the output vector, to 
+      detect when an input signal is the new minimum or maximum.<BR></TD>
+  <TR vAlign=top>
+    <TD><A name=19651></A><A 
+      href="https://www-users.cscs.ch/sw-docs/matlab/help/toolbox/simulink/slref/relay.html">Relay</A> 
+      <BR></TD>
+    <TD><A name=19653></A>One: if the relay is off, to detect the switch on 
+      point. If the relay is on, to detect the switch off point.<BR></TD>
+  <TR vAlign=top>
+    <TD><A name=19656></A><A 
+      href="https://www-users.cscs.ch/sw-docs/matlab/help/toolbox/simulink/slref/relationaloperator.html">Relational 
+      Operator</A><BR></TD>
+    <TD><A name=19658></A>One: to detect when the output changes.<BR></TD>
+  <TR vAlign=top>
+    <TD><A name=19661></A><A 
+      href="https://www-users.cscs.ch/sw-docs/matlab/help/toolbox/simulink/slref/saturation.html">Saturation</A><BR></TD>
+    <TD><A name=19663></A>Two: one to detect when the upper limit is reached 
+      or left, and one to detect when the lower limit is reached or left.<BR></TD>
+  <TR vAlign=top>
+    <TD><A name=19666></A><A 
+      href="https://www-users.cscs.ch/sw-docs/matlab/help/toolbox/simulink/slref/sign.html">Sign</A><BR></TD>
+    <TD><A name=19668></A>One: to detect when the input crosses through 
+      zero.<BR></TD>
+  <TR vAlign=top>
+    <TD><A name=19671></A><A 
+      href="https://www-users.cscs.ch/sw-docs/matlab/help/toolbox/simulink/slref/step.html">Step</A><BR></TD>
+    <TD><A name=19673></A>One: to detect the step time.<BR></TD>
+  <TR vAlign=top>
+    <TD><A name=19676></A><A 
+      href="https://www-users.cscs.ch/sw-docs/matlab/help/toolbox/simulink/slref/subsystem.html">Subsystem</A><BR></TD>
+    <TD><A name=19678></A>For conditionally executed subsystems: one for the 
+      enable port if present, and one for the trigger port, if present.<BR></TD>
+  <TR vAlign=top>
+    <TD><A name=19681></A><A 
+      href="https://www-users.cscs.ch/sw-docs/matlab/help/toolbox/simulink/slref/switch.html">Switch</A><BR></TD>
+    <TD><A name=19683></A>One: to detect when the switch condition 
+    occurs.<BR></TD></TR></TBODY></TABLE>
+<TABLE>
+  <TBODY>
+  <TR vAlign=top>
+    <TD></TR></TBODY></TABLE></P><BR>
+<P>
+<TABLE cellSpacing=0 cellPadding=0 width="100%" bgColor=#ffe4b0 border=0>
+  <TBODY>
+  <TR vAlign=top>
+    <TD align=left width=20><A 
+      href="https://www-users.cscs.ch/sw-docs/matlab/help/toolbox/simulink/ug/how_simulink_works15.html"><IMG 
+      alt="Previous page" 
+      src="Zero-Crossing Detection  How Simulink Works (Using Simulink)_files/b_prev.gif" 
+      align=bottom border=0></A>&nbsp;</TD>
+    <TD align=left>&nbsp;Solvers</TD>
+    <TD>&nbsp;</TD>
+    <TD align=right>Algebraic Loops&nbsp;</TD>
+    <TD align=right width=20><A 
+      href="https://www-users.cscs.ch/sw-docs/matlab/help/toolbox/simulink/ug/how_simulink_works17.html"><IMG 
+      alt="Next page" 
+      src="Zero-Crossing Detection  How Simulink Works (Using Simulink)_files/b_next.gif" 
+      align=bottom border=0></A></TD></TR></TBODY></TABLE><BR><!-- Copyright (c) 2003 by The MathWorks, Inc. --><!-- Last updated: Tue Aug 19 20:55:45 2003 --></P></BODY></HTML>

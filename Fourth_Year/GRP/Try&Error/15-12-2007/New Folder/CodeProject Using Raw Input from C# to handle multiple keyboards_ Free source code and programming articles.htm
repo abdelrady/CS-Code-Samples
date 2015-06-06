@@ -1,0 +1,1976 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!-- saved from url=(0050)http://www.codeproject.com/KB/system/rawinput.aspx -->
+<HTML xmlns="http://www.w3.org/1999/xhtml"><HEAD id=ctl00_Header><TITLE>CodeProject: Using Raw Input from C# to handle multiple keyboards. Free source code and programming articles</TITLE>
+<META http-equiv=Content-Type content="text/html; charset=utf-8">
+<META 
+content="Free source code and tutorials for Software developers and Architects." 
+name=Description>
+<META content="C++, C#, VB.NET, ASP.NET, .NET, AJAX, Web 2.0" name=Keywords>
+<META content="The Code Project" name=Author>
+<META content=General name=Rating>
+<META content="index, follow" name=Robots>
+<META content="7 days" name=Revisit-After><LINK 
+title="CodeProject Lounge Postings" 
+href="http://www.codeproject.com/webservices/LoungeRSS.aspx" 
+type=application/rss+xml rel=alternate><LINK 
+title="CodeProject Latest articles - All topics" 
+href="http://www.codeproject.com/webservices/articlerss.aspx?cat=1" 
+type=application/rss+xml rel=alternate><LINK 
+title="CodeProject Latest articles - MFC / C++" 
+href="http://www.codeproject.com/webservices/articlerss.aspx?cat=2" 
+type=application/rss+xml rel=alternate><LINK 
+title="CodeProject Latest articles - C#" 
+href="http://www.codeproject.com/webservices/articlerss.aspx?cat=3" 
+type=application/rss+xml rel=alternate><LINK 
+title="CodeProject Latest articles - ASP.NET" 
+href="http://www.codeproject.com/webservices/articlerss.aspx?cat=4" 
+type=application/rss+xml rel=alternate><LINK 
+title="CodeProject Latest articles - .NET" 
+href="http://www.codeproject.com/webservices/articlerss.aspx?cat=5" 
+type=application/rss+xml rel=alternate><LINK 
+title="CodeProject Latest articles - VB.NET" 
+href="http://www.codeproject.com/webservices/articlerss.aspx?cat=6" 
+type=application/rss+xml rel=alternate><LINK title=CodeProject 
+href="http://www.codeproject.com/info/OpenSearch.xml" 
+type=application/opensearchdescription+xml rel=search><LINK 
+href="CodeProject Using Raw Input from C# to handle multiple keyboards_ Free source code and programming articles_files/CodeProject.css" 
+type=text/css rel=stylesheet><LINK 
+href="CodeProject Using Raw Input from C# to handle multiple keyboards_ Free source code and programming articles_files/ForumClassic.css" 
+type=text/css rel=stylesheet>
+<SCRIPT language=javascript type=text/javascript>
+	if(top!=self)top.location.href=location.href;
+	if(typeof(DemoUrl)!="undefined")document.write('<meta http-equiv="refresh" content="1;url='+DemoUrl+'" />');
+	
+	function SetAsAvailable()
+	{
+	   var articleId = document.getElementById("ArticleId");
+	   if(articleId)
+	   {
+		   var url = '/script/Articles/UpdateArticleStatus.aspx'
+		   window.location.href = url + "?aid=" + articleId.value + "&rp=" + location.href;
+	   }
+	}
+	</SCRIPT>
+
+<SCRIPT 
+src="CodeProject Using Raw Input from C# to handle multiple keyboards_ Free source code and programming articles_files/urchin.js" 
+type=text/javascript></SCRIPT>
+
+<SCRIPT type=text/javascript>
+_uacct = "UA-1735123-1";
+urchinTracker();
+</SCRIPT>
+
+<SCRIPT language=Javascript 
+src="CodeProject Using Raw Input from C# to handle multiple keyboards_ Free source code and programming articles_files/oncopy.js" 
+type=text/javascript></SCRIPT>
+
+<SCRIPT language=Javascript 
+src="CodeProject Using Raw Input from C# to handle multiple keyboards_ Free source code and programming articles_files/addto.js" 
+type=text/javascript></SCRIPT>
+
+<SCRIPT language=Javascript type=text/javascript><!--
+function ToggleMenu(itemName)
+{
+	var elm = document.getElementById(itemName);
+	var i,others = document.getElementById('SectionMenu');
+	for(i=0; i < others.childNodes.length; i++)
+	{
+		var other = others.childNodes[i];
+		if ((other.className == 'MenuSectionBlock') && (other != elm))
+			other.style.display='none';
+	}
+	if (elm.style.display == 'block') elm.style.display='none';
+	else elm.style.display='block';
+	return false;
+}
+
+--></SCRIPT>
+
+<SCRIPT language=Javascript type=text/javascript><!--
+function MsgVoteForm(MemberID, MsgID) {
+ document.write("Rate this message: ");
+ document.write("<a href=\"#xx" + MsgID.toString() + "xx\" onclick=\"RateMsg(" + MemberID.toString() + ", " + MsgID.toString() + ",1)\">"); document.write("<img height=\"14\" width=\"14\" src=\"/script/Forums/Images/thumbs_down.gif\" border=\"0\" align=\"absmiddle\" /></a> "); for (var i=1; i<=5;i++)
+  document.write("<a class=\"Frm_MHL\" href=\"#xx" + MsgID.toString() + "xx\" title=\"give this message a vote of " + i.toString() + "\" onclick=\"RateMsg(" + MemberID.toString() + ", " + MsgID.toString() + ", " + i.toString() + ")\"><b>" + i.toString() + "</b></a> ");
+ document.write("<a href=\"#xx" + MsgID.toString() + "xx\" onclick=\"RateMsg(" + MemberID.toString() + ", " + MsgID.toString() + ",5)\">"); document.write("<img height=\"14\" width=\"14\" src=\"/script/Forums/Images/thumbs_up.gif\" border=\"0\" align=\"absmiddle\" /></a> "); document.write("<br />Report as <a href='#xx" + MsgID.toString() + "xx' title='Mark as Spam' onclick='return ReportMsg(" + MemberID.toString());
+ document.writeln(", " + MsgID.toString() + ",-1)'>Spam</a> or <a href='#xx" + MsgID.toString() + "xx' title='Mark as Abuse' onclick='return ReportMsg(" + MemberID.toString());
+ document.writeln(", " + MsgID.toString() + ",-2)'>Abuse</a>");
+}
+
+function ReportMsg(userid, msgid, score) {
+ if (confirm("Are you sure you want to report this message?") == true)
+  return RateMsg(userid, msgid, score);
+ else return false;
+}
+function RateMsg(memberid, msgid, score) {
+ var req = new ActiveXObject("MSXML2.XMLHTTP");
+ req.onreadystatechange = function() {
+  if (req.readyState == 4) {
+   if ( req.status == 200 ) {
+    var respText = req.responseText;
+    var re = new RegExp("\<div\>([^\<]*)\</div\>", "g");
+    var match = re.exec(respText);
+    voteStatus.innerHTML = "<b>" + (match)?match[1]:"An error occured" + "</b>";
+   }
+   else
+   {
+    voteStatus.innerHTML = "<b style='color:red'>Failed!" + req.statusText + "</b>";
+   }
+  }
+ }
+ var voteStatus = document.getElementById("MVF" + msgid);
+ if (!voteStatus) return;
+ voteStatus.innerHTML = "<b style='color:green'>Voting...</b>";
+ var strAction = "/script/Forums/Vote.aspx?js=1&fmid="+memberid.toString()+"&select="+msgid.toString()+"&score="+score.toString();
+ req.open("GET", strAction, true);
+ req.send(null);
+  return false;
+}
+--></SCRIPT>
+
+<SCRIPT language=Javascript event=onclick for=DynMessLink type=text/javascript><!--
+return SwitchMessage(null,this.name);
+//--></SCRIPT>
+
+<SCRIPT language=Javascript type=text/javascript><!--
+var Selected = "-1";
+
+function SwitchMessage(e, msgId)
+{
+  var elmref;
+  if(Selected!=""){
+    elmref=eval("document.getElementById('" + Selected + "_h1')");
+    if(elmref) elmref.style.display = 'none';
+    elmref=eval("document.getElementById('" + Selected + "_h0')");
+    if(elmref) elmref.className = elmref.className.replace("Sel", "UnSel");
+  }
+  if(Selected!=msgId.toString()){
+    Selected=msgId.toString();
+    elmref=eval("document.getElementById('" + Selected + "_h1')");
+    if(elmref){
+      if(elmref.style.display=='none') elmref.style.display='';
+      else elmref.style.display = 'none';
+    }
+    elmref=eval("document.getElementById('" + Selected + "_h0')");
+    if (elmref) 
+      elmref.className = elmref.className.replace("UnSel", "Sel");
+  }
+  else
+    Selected="";
+  if (!e&&window.event)e=window.event;
+  if(Selected!=""&&e&&document.getElementById(Selected + "_h1").style.display!="none"){
+    elmref=document.getElementById(Selected + "_h0");
+    var adj=(getRealPos(elmref,"Top")+elmref.offsetHeight/2)-(document.body.scrollTop+40/*e.clientY*/);
+    document.body.scrollTop += adj;
+    EnsureMessageVisible(Selected, true);
+  }
+  return false;
+}
+
+--></SCRIPT>
+
+<SCRIPT language=Javascript 
+src="CodeProject Using Raw Input from C# to handle multiple keyboards_ Free source code and programming articles_files/ShortCuts.js" 
+type=text/javascript></SCRIPT>
+<LINK href="/favicon.ico" type=image/ico rel=icon><LINK href="/favicon.ico" 
+type=image/ico rel="shortcut icon">
+<META content="MSHTML 6.00.2900.2838" name=GENERATOR></HEAD>
+<BODY>
+<TABLE id=ctl00_AT cellSpacing=0 cellPadding=0 border=0>
+  <TBODY>
+  <TR vAlign=top>
+    <TD colSpan=2>
+      <TABLE cellSpacing=0 cellPadding=0 border=0>
+        <TBODY>
+        <TR>
+          <TD class=HeaderLogo><A href="http://www.codeproject.com/"><IMG 
+            height=90 alt=Home 
+            src="CodeProject Using Raw Input from C# to handle multiple keyboards_ Free source code and programming articles_files/codeproject225x90.gif" 
+            width=225 border=0></A></TD>
+          <TD class=HeaderBanner align=right width="100%"><IFRAME border=0 
+            src="CodeProject Using Raw Input from C# to handle multiple keyboards_ Free source code and programming articles_files/ServeHTML.htm" 
+            frameBorder=0 width=728 scrolling=no height=90></IFRAME></TD></TR>
+        <TR>
+          <TD colSpan=2>
+            <TABLE class=MemberNavBar cellSpacing=0 cellPadding=5 
+              width="100%"><TBODY>
+              <TR>
+                <TD class=SmallText style="FONT-WEIGHT: bold">Millions of 
+                  members and growing! (10,481 online);</TD>
+                <TD align=right>
+                  <DIV class=MemberNavBarText 
+                  id=ctl00_MemberMenu_LoggedOnOptions><A 
+                  id=ctl00_MemberMenu_MyProfile 
+                  href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=2959938">abdelrady2030</A> 
+                  | <A id=ctl00_MemberMenu_MySettings 
+                  href="http://www.codeproject.com/script/Membership/Modify.aspx"><IMG 
+                  height=16 
+                  src="CodeProject Using Raw Input from C# to handle multiple keyboards_ Free source code and programming articles_files/tools.gif" 
+                  width=16 align=absMiddle border=0> <B>My Settings</B></A> | <A 
+                  id=ctl00_MemberMenu_MyBookmarks 
+                  href="http://www.codeproject.com/script/Bookmarks/List.aspx?obtid=2"><IMG 
+                  height=16 
+                  src="CodeProject Using Raw Input from C# to handle multiple keyboards_ Free source code and programming articles_files/fave.gif" 
+                  width=16 align=absMiddle border=0> My Bookmarks</A> | <A 
+                  id=ctl00_MemberMenu_MyArticles 
+                  href="http://www.codeproject.com/script/Articles/MemberArticles.aspx?amid=2959938">My 
+                  Articles</A> | <A id=ctl00_MemberMenu_Signout 
+                  href="http://www.codeproject.com/script/Membership/LogOff.aspx?rp=%2fKB%2fsystem%2frawinput.aspx">Sign 
+                  out</A> </DIV></TD></TR></TBODY></TABLE></TD></TR>
+        <TR>
+          <TD colSpan=2>
+            <TABLE class=SiteNavBar id=tblSiteToolbar cellSpacing=0 
+            cellPadding=0>
+              <TBODY>
+              <TR>
+                <TD><A href="http://www.codeproject.com/">Home</A></TD>
+                <TD class=SelCat noWrap><A 
+                  href="http://www.codeproject.com/?cat=1">All Topics</A></TD>
+                <TD noWrap><A 
+                  href="http://www.codeproject.com/?cat=2">MFC/C++</A></TD>
+                <TD noWrap><A 
+                href="http://www.codeproject.com/?cat=3">C#</A></TD>
+                <TD noWrap><A 
+                  href="http://www.codeproject.com/?cat=6">VB.NET</A></TD>
+                <TD noWrap><A 
+                  href="http://www.codeproject.com/?cat=4">ASP.NET</A></TD>
+                <TD noWrap><A 
+                href="http://www.codeproject.com/?cat=9">SQL</A></TD>
+                <TD noWrap><A 
+                  href="http://www.codeproject.com/?cat=8">Architect</A></TD>
+                <TD width="100%">&nbsp;</TD>
+                <TD id=ctl00_TopNavBar_RightMenus><!--380-->
+                  <DIV id=MenuPos 
+                  style="WIDTH: 305px; POSITION: relative; TOP: 1px; HEIGHT: 22px">
+                  <TABLE 
+                  style="BORDER-TOP-WIDTH: 0px; BORDER-LEFT-WIDTH: 0px; BORDER-BOTTOM-WIDTH: 0px; HEIGHT: 20px; BORDER-RIGHT-WIDTH: 0px" 
+                  cellSpacing=0 cellPadding=0 width=305>
+                    <TBODY>
+                    <TR vAlign=center>
+                      <TD 
+                      style="BORDER-TOP-WIDTH: 0px; BORDER-LEFT-WIDTH: 0px; BORDER-BOTTOM-WIDTH: 0px; BORDER-RIGHT-WIDTH: 0px" 
+                      noWrap><A 
+                        href="http://www.codeproject.com/info/FAQ.aspx">Help!</A></TD>
+                      <TD 
+                      style="BORDER-TOP-WIDTH: 0px; BORDER-LEFT-WIDTH: 0px; BORDER-BOTTOM-WIDTH: 0px; BORDER-RIGHT-WIDTH: 0px" 
+                      noWrap><A 
+                        href="http://www.codeproject.com/script/Articles/Latest.aspx">Articles</A></TD>
+                      <TD 
+                      style="BORDER-TOP-WIDTH: 0px; BORDER-LEFT-WIDTH: 0px; BORDER-BOTTOM-WIDTH: 0px; BORDER-RIGHT-WIDTH: 0px" 
+                      noWrap><A 
+                        href="http://www.codeproject.com/script/Forums/List.aspx">Message 
+                        Boards</A></TD>
+                      <TD 
+                      style="BORDER-TOP-WIDTH: 0px; BORDER-LEFT-WIDTH: 0px; BORDER-BOTTOM-WIDTH: 0px; BORDER-RIGHT-WIDTH: 0px" 
+                      noWrap><A 
+                        href="http://www.codeproject.com/Lounge.aspx">Lounge</A></TD></TR></TBODY></TABLE></DIV></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+  <TR>
+    <TD vAlign=top colSpan=2><A name=_top></A>
+      <TABLE class=ArticleHeader id=ctl00_ArticleTopHeader_HeaderTable 
+      cellSpacing=0 cellPadding=3 width="100%" border=0>
+        <TBODY>
+        <TR vAlign=top>
+          <TD class=SmallText><A id=ctl00_ArticleTopHeader_ChapterLink 
+            href="http://www.codeproject.com/script/Content/Chapter.aspx?chapterId=1">Desktop 
+            Development</A> » <A id=ctl00_ArticleTopHeader_SectionLink 
+            href="http://www.codeproject.com/KB/system/">Hardware &amp; 
+            System</A> » <A id=ctl00_ArticleTopHeader_SubsectionLink 
+            href="http://www.codeproject.com/KB/system/index.aspx?#Hardware &amp; System - Hardware">Hardware</A> 
+            <SPAN class=ArticleBeginner 
+            id=ctl00_ArticleTopHeader_SkillLevel>&nbsp;&nbsp;&nbsp; 
+            Beginner</SPAN> <BR><BR>
+            <H1><SPAN class=ArticleTopTitle 
+            id=ctl00_ArticleTopHeader_ArticleTitle>Using Raw Input from C# to 
+            handle multiple keyboards</SPAN></H1><B>By <A 
+            href="http://www.codeproject.com/script/Articles/MemberArticles.aspx?amid=145753">smesser</A>, 
+            <A 
+            href="http://www.codeproject.com/script/Articles/MemberArticles.aspx?amid=761050">Emma 
+            Burrows</A></B><BR><BR><SPAN class=ArticleTopDescr 
+            id=ctl00_ArticleTopHeader_ArticleDescr>Windows XP supports multiple 
+            keyboards, but by default, the .Net Framework will treat them all as 
+            one. This article explains how to use the Windows API Raw Input 
+            methods to support multiple keyboards from a C# application.</SPAN> 
+          </TD>
+          <TD class=SmallText style="WIDTH: 210px"><SPAN 
+            id=ctl00_ArticleTopHeader_ArticleAttributes>C# 2.0WinXP, Win2003, 
+            Vista, .NET 2.0, WinForms, VS2005, Dev</SPAN><BR><BR><SPAN 
+            style="PADDING-RIGHT: 2ex">Posted</SPAN>: <B>13 Jan 
+            2007</B><BR><SPAN style="PADDING-RIGHT: 0.5ex">Updated</SPAN>: <B>20 
+            Mar 2007</B> <BR><SPAN style="PADDING-RIGHT: 3.2ex">Views</SPAN>: 
+            <B>35,047</B><BR></TD></TR>
+        <TR>
+          <TD colSpan=2>
+            <TABLE width="100%">
+              <TBODY>
+              <TR>
+                <TD></TD>
+                <TD class=SmallText style="WHITE-SPACE: nowrap" 
+              align=right></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+  <TR vAlign=top>
+    <TD class=LHNavBar id=ctl00_LeftNavCell>
+      <DIV style="PADDING-TOP: 5px; TEXT-ALIGN: center"><IFRAME border=0 
+      src="C:\Documents and Settings\fci_2007\Desktop\New Folder\CodeProject Using Raw Input from C# to handle multiple keyboards_ Free source code and programming articles_files\ServeHTML(1).htm" 
+      frameBorder=0 width=150 scrolling=no height=80></IFRAME></DIV>
+      <DIV class=FeatureBlockHeader>Announcements</DIV>
+      <DIV class="FeatureBlockContent RHFeatureBar">
+      <DIV style="PADDING-TOP: 5px"><IMG 
+      style="PADDING-RIGHT: 10px; FLOAT: left; MARGIN: 12px 3px 12px 0px" 
+      height=12 alt="VS 2008" 
+      src="CodeProject Using Raw Input from C# to handle multiple keyboards_ Free source code and programming articles_files/VS2008_sm.gif" 
+      width=20> <A href="http://www.codeproject.com/Feature/VS2008/">Visual 
+      Studio 2008<BR>competition.<BR>$25,000 in prizes</A></DIV>
+      <DIV style="PADDING-TOP: 5px"><IMG 
+      style="PADDING-RIGHT: 10px; FLOAT: left; MARGIN: 12px 3px 12px 0px" 
+      height=19 alt="Office 2007" 
+      src="CodeProject Using Raw Input from C# to handle multiple keyboards_ Free source code and programming articles_files/office_2k7_20.png" 
+      width=20> <A href="http://www.codeproject.com/Feature/Office2007/">Office 
+      2007 comp. Win free travel and passes</A></DIV><BR clear=all>
+      <DIV style="PADDING-TOP: 5px"><IMG 
+      style="PADDING-RIGHT: 10px; FLOAT: left; MARGIN-LEFT: 5px; MARGIN-RIGHT: 10px" 
+      height=20 alt=Comp 
+      src="CodeProject Using Raw Input from C# to handle multiple keyboards_ Free source code and programming articles_files/prize_winner.gif" 
+      width=10> <A id=ctl00_Announcements_CompLink 
+      href="http://www.codeproject.com/Feature/ArticleCompetition/">Monthly 
+      Competition</A> </DIV></DIV>
+      <DIV id=SectionMenu>
+      <DIV class=MenuCat>Chapters</DIV>
+      <DIV class=MenuChapter><A onclick="return ToggleMenu('Chapter1');" 
+      href="http://www.codeproject.com/script/Content/Chapter.aspx?chapterId=1">Desktop 
+      Development</A></DIV>
+      <DIV class=MenuSectionBlock id=Chapter1>
+      <DIV class=MI id=Section1><A 
+      href="http://www.codeproject.com/KB/buttons/">Button Controls</A></DIV>
+      <DIV class=MI id=Section15><A 
+      href="http://www.codeproject.com/KB/clipboard/">Clipboard</A></DIV>
+      <DIV class=MI id=Section2><A 
+      href="http://www.codeproject.com/KB/combobox/">Combo &amp; List 
+      Boxes</A></DIV>
+      <DIV class=MI id=Section67><A 
+      href="http://www.codeproject.com/KB/dialog/">Dialogs and Windows</A></DIV>
+      <DIV class=MI id=Section107><A 
+      href="http://www.codeproject.com/KB/gadgets/">Desktop Gadgets</A></DIV>
+      <DIV class=MI id=Section16><A 
+      href="http://www.codeproject.com/KB/docview/">Document / View</A></DIV>
+      <DIV class=MI id=Section4><A 
+      href="http://www.codeproject.com/KB/edit/">Edit Controls</A></DIV>
+      <DIV class=MI id=Section17><A 
+      href="http://www.codeproject.com/KB/files/">Files and Folders</A></DIV>
+      <DIV class=MI id=Section3><A 
+      href="http://www.codeproject.com/KB/grid/">Grid &amp; Data 
+      Controls</A></DIV>
+      <DIV class=MIS id=Section48><A 
+      href="http://www.codeproject.com/KB/system/">Hardware &amp; 
+      System</A></DIV>
+      <DIV class=MI id=Section5><A 
+      href="http://www.codeproject.com/KB/list/">List Controls</A></DIV>
+      <DIV class=MI id=Section6><A 
+      href="http://www.codeproject.com/KB/menus/">Menus</A></DIV>
+      <DIV class=MI id=Section14><A 
+      href="http://www.codeproject.com/KB/miscctrl/">Miscellaneous</A></DIV>
+      <DIV class=MI id=Section18><A 
+      href="http://www.codeproject.com/KB/printing/">Printing</A></DIV>
+      <DIV class=MI id=Section95><A 
+      href="http://www.codeproject.com/KB/progress/">Progress Controls</A></DIV>
+      <DIV class=MI id=Section11><A 
+      href="http://www.codeproject.com/KB/selection/">Selection 
+      Controls</A></DIV>
+      <DIV class=MI id=Section19><A 
+      href="http://www.codeproject.com/KB/shell/">Shell and IE 
+      programming</A></DIV>
+      <DIV class=MI id=Section68><A 
+      href="http://www.codeproject.com/KB/smart/">Smart Client</A></DIV>
+      <DIV class=MI id=Section8><A 
+      href="http://www.codeproject.com/KB/splitter/">Splitter Windows</A></DIV>
+      <DIV class=MI id=Section9><A 
+      href="http://www.codeproject.com/KB/static/">Static &amp; Panel 
+      Controls</A></DIV>
+      <DIV class=MI id=Section10><A 
+      href="http://www.codeproject.com/KB/statusbar/">Status Bar</A></DIV>
+      <DIV class=MI id=Section7><A 
+      href="http://www.codeproject.com/KB/tabs/">Tabs &amp; Property 
+      Pages</A></DIV>
+      <DIV class=MI id=Section12><A 
+      href="http://www.codeproject.com/KB/toolbars/">Toolbars &amp; Docking 
+      windows</A></DIV>
+      <DIV class=MI id=Section13><A 
+      href="http://www.codeproject.com/KB/tree/">Tree Controls</A></DIV></DIV>
+      <DIV class=MenuChapter><A onclick="return ToggleMenu('Chapter2');" 
+      href="http://www.codeproject.com/script/Content/Chapter.aspx?chapterId=2">Web 
+      Development</A></DIV>
+      <DIV class=MenuSectionBlock id=Chapter2 style="DISPLAY: none">
+      <DIV class=MI id=Section70><A 
+      href="http://www.codeproject.com/KB/ajax/">AJAX and Atlas</A></DIV>
+      <DIV class=MI id=Section27><A 
+      href="http://www.codeproject.com/KB/applications/">Applications &amp; 
+      Tools</A></DIV>
+      <DIV class=MI id=Section85><A 
+      href="http://www.codeproject.com/KB/asp/">ASP</A></DIV>
+      <DIV class=MI id=Section89><A 
+      href="http://www.codeproject.com/KB/aspnet/">ASP.NET</A></DIV>
+      <DIV class=MI id=Section28><A 
+      href="http://www.codeproject.com/KB/webforms/">ASP.NET Controls</A></DIV>
+      <DIV class=MI id=Section38><A 
+      href="http://www.codeproject.com/KB/ATL-Server/">ATL Server</A></DIV>
+      <DIV class=MI id=Section29><A 
+      href="http://www.codeproject.com/KB/web-cache/">Caching</A></DIV>
+      <DIV class=MI id=Section91><A 
+      href="http://www.codeproject.com/KB/web-image/">Charts, Graphs and 
+      Images</A></DIV>
+      <DIV class=MI id=Section25><A 
+      href="http://www.codeproject.com/KB/scripting/">Client side 
+      scripting</A></DIV>
+      <DIV class=MI id=Section30><A 
+      href="http://www.codeproject.com/KB/custom-controls/">Custom 
+      Controls</A></DIV>
+      <DIV class=MI id=Section23><A 
+      href="http://www.codeproject.com/KB/HTML/">HTML / CSS</A></DIV>
+      <DIV class=MI id=Section22><A 
+      href="http://www.codeproject.com/KB/IP/">Internet / Network</A></DIV>
+      <DIV class=MI id=Section24><A 
+      href="http://www.codeproject.com/KB/ISAPI/">ISAPI</A></DIV>
+      <DIV class=MI id=Section33><A 
+      href="http://www.codeproject.com/KB/server-management/">Server 
+      Management</A></DIV>
+      <DIV class=MI id=Section34><A 
+      href="http://www.codeproject.com/KB/session/">Session State</A></DIV>
+      <DIV class=MI id=Section113><A 
+      href="http://www.codeproject.com/KB/silverlight/">Silverlight</A></DIV>
+      <DIV class=MI id=Section36><A 
+      href="http://www.codeproject.com/KB/trace/">Trace and Logs</A></DIV>
+      <DIV class=MI id=Section31><A 
+      href="http://www.codeproject.com/KB/user-controls/">User 
+Controls</A></DIV>
+      <DIV class=MI id=Section37><A 
+      href="http://www.codeproject.com/KB/validation/">Validation</A></DIV>
+      <DIV class=MI id=Section35><A 
+      href="http://www.codeproject.com/KB/viewstate/">View State</A></DIV>
+      <DIV class=MI id=Section26><A 
+      href="http://www.codeproject.com/KB/WAP/">WAP / WML</A></DIV>
+      <DIV class=MI id=Section32><A 
+      href="http://www.codeproject.com/KB/web-security/">Web Security</A></DIV>
+      <DIV class=MI id=Section20><A 
+      href="http://www.codeproject.com/KB/webservices/">Web 
+      Services</A></DIV></DIV>
+      <DIV class=MenuChapter><A onclick="return ToggleMenu('Chapter9');" 
+      href="http://www.codeproject.com/script/Content/Chapter.aspx?chapterId=9">Enterprise 
+      Systems</A></DIV>
+      <DIV class=MenuSectionBlock id=Chapter9 style="DISPLAY: none">
+      <DIV class=MI id=Section98><A 
+      href="http://www.codeproject.com/KB/MCMS/">Content Management 
+      Server</A></DIV>
+      <DIV class=MI id=Section99><A 
+      href="http://www.codeproject.com/KB/biztalk/">Microsoft BizTalk 
+      Server</A></DIV>
+      <DIV class=MI id=Section102><A 
+      href="http://www.codeproject.com/KB/exchange/">Microsoft 
+Exchange</A></DIV>
+      <DIV class=MI id=Section90><A 
+      href="http://www.codeproject.com/KB/office/">Office Development</A></DIV>
+      <DIV class=MI id=Section101><A 
+      href="http://www.codeproject.com/KB/sharepoint/">SharePoint 
+      Server</A></DIV></DIV>
+      <DIV class=MenuChapter><A onclick="return ToggleMenu('Chapter3');" 
+      href="http://www.codeproject.com/script/Content/Chapter.aspx?chapterId=3">Multimedia</A></DIV>
+      <DIV class=MenuSectionBlock id=Chapter3 style="DISPLAY: none">
+      <DIV class=MI id=Section42><A 
+      href="http://www.codeproject.com/KB/audio-video/">Audio and 
+Video</A></DIV>
+      <DIV class=MI id=Section44><A 
+      href="http://www.codeproject.com/KB/directx/">DirectX</A></DIV>
+      <DIV class=MI id=Section46><A 
+      href="http://www.codeproject.com/KB/GDI/">GDI</A></DIV>
+      <DIV class=MI id=Section47><A 
+      href="http://www.codeproject.com/KB/GDI-plus/">GDI+</A></DIV>
+      <DIV class=MI id=Section43><A 
+      href="http://www.codeproject.com/KB/graphics/">General Graphics</A></DIV>
+      <DIV class=MI id=Section45><A 
+      href="http://www.codeproject.com/KB/openGL/">OpenGL</A></DIV></DIV>
+      <DIV class=MenuChapter><A onclick="return ToggleMenu('Chapter4');" 
+      href="http://www.codeproject.com/script/Content/Chapter.aspx?chapterId=4">Database</A></DIV>
+      <DIV class=MenuSectionBlock id=Chapter4 style="DISPLAY: none">
+      <DIV class=MI id=Section66><A 
+      href="http://www.codeproject.com/KB/database/">Database</A></DIV>
+      <DIV class=MI id=Section100><A 
+      href="http://www.codeproject.com/KB/reporting-services/">SQL Reporting 
+      Services</A></DIV></DIV>
+      <DIV class=MenuChapter><A onclick="return ToggleMenu('Chapter8');" 
+      href="http://www.codeproject.com/script/Content/Chapter.aspx?chapterId=8">Platforms, 
+      Frameworks &amp; Libraries</A></DIV>
+      <DIV class=MenuSectionBlock id=Chapter8 style="DISPLAY: none">
+      <DIV class=MI id=Section83><A 
+      href="http://www.codeproject.com/KB/atl/">ATL</A></DIV>
+      <DIV class=MI id=Section117><A 
+      href="http://www.codeproject.com/KB/MFC/">MFC</A></DIV>
+      <DIV class=MI id=Section88><A 
+      href="http://www.codeproject.com/KB/stl/">STL</A></DIV>
+      <DIV class=MI id=Section84><A 
+      href="http://www.codeproject.com/KB/wtl/">WTL</A></DIV>
+      <DIV class=MI id=Section49><A 
+      href="http://www.codeproject.com/KB/COM/">COM / COM+</A></DIV>
+      <DIV class=MI id=Section76><A 
+      href="http://www.codeproject.com/KB/dotnet/">.NET Framework</A></DIV>
+      <DIV class=MI id=Section92><A 
+      href="http://www.codeproject.com/KB/winsdk/">Win32/64 SDK &amp; 
+      OS</A></DIV>
+      <DIV class=MI id=Section108><A 
+      href="http://www.codeproject.com/KB/vista/">Vista API</A></DIV>
+      <DIV class=MI id=Section110><A 
+      href="http://www.codeproject.com/KB/vista-security/">Vista 
+      Security</A></DIV>
+      <DIV class=MI id=Section82><A 
+      href="http://www.codeproject.com/KB/cross-platform/">Cross 
+      Platform</A></DIV>
+      <DIV class=MI id=Section69><A 
+      href="http://www.codeproject.com/KB/game/">Game Development</A></DIV>
+      <DIV class=MI id=Section73><A 
+      href="http://www.codeproject.com/KB/mobile/">Mobile Development</A></DIV>
+      <DIV class=MI id=Section106><A 
+      href="http://www.codeproject.com/KB/WC/">Windows CardSpace</A></DIV>
+      <DIV class=MI id=Section103><A 
+      href="http://www.codeproject.com/KB/WCF/">Windows Communication 
+      Foundation</A></DIV>
+      <DIV class=MI id=Section104><A 
+      href="http://www.codeproject.com/KB/WPF/">Windows Presentation 
+      Foundation</A></DIV>
+      <DIV class=MI id=Section105><A 
+      href="http://www.codeproject.com/KB/WF/">Windows Workflow 
+      Foundation</A></DIV>
+      <DIV class=MI id=Section119><A 
+      href="http://www.codeproject.com/KB/library/">Libraries</A></DIV></DIV>
+      <DIV class=MenuChapter><A onclick="return ToggleMenu('Chapter5');" 
+      href="http://www.codeproject.com/script/Content/Chapter.aspx?chapterId=5">Languages</A></DIV>
+      <DIV class=MenuSectionBlock id=Chapter5 style="DISPLAY: none">
+      <DIV class=MI id=Section71><A href="http://www.codeproject.com/KB/cpp/">C 
+      / C++ Language</A></DIV>
+      <DIV class=MI id=Section72><A 
+      href="http://www.codeproject.com/KB/mcpp/">C++ / CLI</A></DIV>
+      <DIV class=MI id=Section93><A 
+      href="http://www.codeproject.com/KB/cs/">C#</A></DIV>
+      <DIV class=MI id=Section78><A 
+      href="http://www.codeproject.com/KB/msil/">MSIL</A></DIV>
+      <DIV class=MI id=Section86><A 
+      href="http://www.codeproject.com/KB/vbscript/">VBScript</A></DIV>
+      <DIV class=MI id=Section87><A 
+      href="http://www.codeproject.com/KB/vb/">VB.NET</A></DIV>
+      <DIV class=MI id=Section115><A 
+      href="http://www.codeproject.com/KB/vb-interop/">VB6 Interop</A></DIV>
+      <DIV class=MI id=Section77><A 
+      href="http://www.codeproject.com/KB/net-languages/">Other .NET 
+      Languages</A></DIV>
+      <DIV class=MI id=Section21><A 
+      href="http://www.codeproject.com/KB/XML/">XML</A></DIV></DIV>
+      <DIV class=MenuChapter><A onclick="return ToggleMenu('Chapter6');" 
+      href="http://www.codeproject.com/script/Content/Chapter.aspx?chapterId=6">General 
+      Programming</A></DIV>
+      <DIV class=MenuSectionBlock id=Chapter6 style="DISPLAY: none">
+      <DIV class=MI id=Section57><A 
+      href="http://www.codeproject.com/KB/recipes/">Algorithms &amp; 
+      Recipes</A></DIV>
+      <DIV class=MI id=Section64><A 
+      href="http://www.codeproject.com/KB/bugs/">Bugs &amp; 
+Workarounds</A></DIV>
+      <DIV class=MI id=Section79><A 
+      href="http://www.codeproject.com/KB/collections/">Collections</A></DIV>
+      <DIV class=MI id=Section56><A 
+      href="http://www.codeproject.com/KB/security/">Cryptography &amp; 
+      Security</A></DIV>
+      <DIV class=MI id=Section50><A 
+      href="http://www.codeproject.com/KB/datetime/">Date and Time</A></DIV>
+      <DIV class=MI id=Section52><A 
+      href="http://www.codeproject.com/KB/DLL/">DLLs &amp; Assemblies</A></DIV>
+      <DIV class=MI id=Section80><A 
+      href="http://www.codeproject.com/KB/exception/">Exception 
+      Handling</A></DIV>
+      <DIV class=MI id=Section81><A 
+      href="http://www.codeproject.com/KB/locale/">Localisation</A></DIV>
+      <DIV class=MI id=Section53><A 
+      href="http://www.codeproject.com/KB/macros/">Macros and Add-ins</A></DIV>
+      <DIV class=MI id=Section54><A 
+      href="http://www.codeproject.com/KB/tips/">Programming Tips</A></DIV>
+      <DIV class=MI id=Section55><A 
+      href="http://www.codeproject.com/KB/string/">String handling</A></DIV>
+      <DIV class=MI id=Section58><A 
+      href="http://www.codeproject.com/KB/threads/">Threads, Processes &amp; 
+      IPC</A></DIV>
+      <DIV class=MI id=Section59><A 
+      href="http://www.codeproject.com/KB/winhelp/">WinHelp / 
+      HTMLHelp</A></DIV></DIV>
+      <DIV class=MenuChapter><A onclick="return ToggleMenu('Chapter10');" 
+      href="http://www.codeproject.com/script/Content/Chapter.aspx?chapterId=10">Graphics 
+      / Design</A></DIV>
+      <DIV class=MenuSectionBlock id=Chapter10 style="DISPLAY: none">
+      <DIV class=MI id=Section40><A 
+      href="http://www.codeproject.com/KB/expression/">Expression</A></DIV>
+      <DIV class=MI id=Section114><A 
+      href="http://www.codeproject.com/KB/usability/">Usability</A></DIV></DIV>
+      <DIV class=MenuChapter><A onclick="return ToggleMenu('Chapter11');" 
+      href="http://www.codeproject.com/script/Content/Chapter.aspx?chapterId=11">Development 
+      Lifecycle</A></DIV>
+      <DIV class=MenuSectionBlock id=Chapter11 style="DISPLAY: none">
+      <DIV class=MI id=Section51><A 
+      href="http://www.codeproject.com/KB/debug/">Debug Tips</A></DIV>
+      <DIV class=MI id=Section39><A 
+      href="http://www.codeproject.com/KB/architecture/">Design and 
+      Architecture</A></DIV>
+      <DIV class=MI id=Section112><A 
+      href="http://www.codeproject.com/KB/install/">Installation</A></DIV>
+      <DIV class=MI id=Section41><A 
+      href="http://www.codeproject.com/KB/work/">Work Issues</A></DIV></DIV>
+      <DIV class=MenuChapter><A onclick="return ToggleMenu('Chapter7');" 
+      href="http://www.codeproject.com/script/Content/Chapter.aspx?chapterId=7">General 
+      Reading</A></DIV>
+      <DIV class=MenuSectionBlock id=Chapter7 style="DISPLAY: none">
+      <DIV class=MI id=Section60><A 
+      href="http://www.codeproject.com/KB/books/">Book Chapters</A></DIV>
+      <DIV class=MI id=Section61><A 
+      href="http://www.codeproject.com/KB/book-reviews/">Book Reviews</A></DIV>
+      <DIV class=MI id=Section109><A 
+      href="http://www.codeproject.com/KB/hardware-review/">Hardware 
+      Reviews</A></DIV>
+      <DIV class=MI id=Section63><A 
+      href="http://www.codeproject.com/KB/interviews/">Interviews</A></DIV>
+      <DIV class=MI id=Section65><A 
+      href="http://www.codeproject.com/KB/showcase/">Product Showcase</A></DIV>
+      <DIV class=MI id=Section62><A 
+      href="http://www.codeproject.com/KB/scrapbook/">Scrapbook</A></DIV></DIV></DIV><BR>
+      <DIV class=MenuCat>Feature Zones</DIV>
+      <DIV class=MenuChapter><A 
+      href="http://www.codeproject.com/kb/showcase/">Product Showcase</A></DIV>
+      <DIV class=MenuChapter><A 
+      href="http://www.codeproject.com/Zones/Install">Install</A></DIV><BR>
+      <SCRIPT language=javascript>document.write("<a href=\"http://www.codeproject.com/Redir.aspx?adid=4764&way=ban\" target=\"_blank\"><img src=\"http://www.codeproject.com/script/Ann/ServeImg.aspx?File=%2fscript%2fadmentor%2fimages%2fDynamsoft_bug_160x600_2.gif&C=False&id=4764\" alt=\"\" border=\"0\" width=\"160\" height=\"600\"></a>");</SCRIPT>
+      <IMG height=1 alt="" 
+      src="CodeProject Using Raw Input from C# to handle multiple keyboards_ Free source code and programming articles_files/t.gif" 
+      width=160> </TD>
+    <TD class=ArticlePane vAlign=top>
+      <TABLE class=SearchHeaderBar cellSpacing=0 width="100%">
+        <TBODY>
+        <TR>
+          <TD style="WIDTH: 60%; WHITE-SPACE: nowrap" vAlign=center 
+            align=right><FORM style="MARGIN: 0px" name=Search 
+            action=/info/search.aspx method=get><B>Search &nbsp;</B> <INPUT 
+            class=SmallText style="WIDTH: 200px" name=artkw> <SELECT 
+            class=SmallText style="FONT-WEIGHT: bold" name=sbo> <OPTION 
+              value=kw selected>Articles</OPTION> <OPTION 
+              value=fm>Messages</OPTION></SELECT> <INPUT class=SmallText style="FONT-WEIGHT: bold" type=submit value=" Go! "> 
+            &nbsp; </FORM></TD>
+          <TD class=TinyText style="WHITE-SPACE: nowrap"><A 
+            href="http://www.codeproject.com/info/search.aspx">Advanced 
+            Search</A><BR><A 
+            href="http://www.codeproject.com/script/Content/SiteMap.aspx">Sitemap</A> 
+            | <A id=ctl00_SearchBarCtrl_AddToIESearchLnk 
+            title="Add The Code Project to your IE search Providers" 
+            onclick="window.external.AddSearchProvider('http://www.codeproject.com/info/OpenSearch.xml');return false;" 
+            href="http://www.codeproject.com/">Add to IE Search</A> 
+        </TD></TR></TBODY></TABLE><SPAN id=ctl00_ResultMessage></SPAN>
+      <DIV id=ctl00_ArtDiv>
+      <TABLE cellSpacing=0 cellPadding=0 width="100%" border=0>
+        <TBODY>
+        <TR vAlign=top>
+          <TD vAlign=top>
+            <TABLE cellSpacing=1 cellPadding=3 width=1 border=0>
+              <TBODY>
+              <TR class=smalltext vAlign=center>
+                <TD style="WHITE-SPACE: nowrap"><IMG 
+                  style="BORDER-RIGHT: 0px; BORDER-TOP: 0px; VERTICAL-ALIGN: middle; BORDER-LEFT: 0px; BORDER-BOTTOM: 0px" 
+                  height=16 alt=print 
+                  src="CodeProject Using Raw Input from C# to handle multiple keyboards_ Free source code and programming articles_files/print.gif" 
+                  width=16> <A id=ctl00_ArticleHeaderLinks_PrintLnk 
+                  href="http://www.codeproject.com/KB/system/rawinput.aspx?display=Print">Print</A> 
+                </TD>
+                <TD style="WHITE-SPACE: nowrap"><IMG 
+                  style="BORDER-RIGHT: 0px; BORDER-TOP: 0px; VERTICAL-ALIGN: middle; BORDER-LEFT: 0px; BORDER-BOTTOM: 0px" 
+                  height=16 alt="Broken Article?" 
+                  src="CodeProject Using Raw Input from C# to handle multiple keyboards_ Free source code and programming articles_files/broken.gif" 
+                  width=16> <A id=ctl00_ArticleHeaderLinks_BrokenLnk 
+                  href="http://www.codeproject.com/script/Articles/Report.aspx?aid=17123">Broken 
+                  Article?</A> </TD>
+                <TD style="WHITE-SPACE: nowrap"><IMG 
+                  id=ctl00_ArticleHeaderLinks_ArticleBmk_BookmarkImg 
+                  style="BORDER-RIGHT: 0px; BORDER-TOP: 0px; VERTICAL-ALIGN: middle; BORDER-LEFT: 0px; WIDTH: 16px; BORDER-BOTTOM: 0px; HEIGHT: 16px" 
+                  src="CodeProject Using Raw Input from C# to handle multiple keyboards_ Free source code and programming articles_files/link.png"> 
+                  <A id=ctl00_ArticleHeaderLinks_ArticleBmk_BookmarkLnk 
+                  href="http://www.codeproject.com/script/Bookmarks/Add.aspx?&amp;obid=17123&amp;obtid=2">Add 
+                  Bookmark</A> <SPAN 
+                  id=ctl00_ArticleHeaderLinks_ArticleBmk_Message></SPAN></TD>
+                <TD style="WHITE-SPACE: nowrap"><IMG 
+                  style="BORDER-RIGHT: 0px; BORDER-TOP: 0px; VERTICAL-ALIGN: middle; BORDER-LEFT: 0px; BORDER-BOTTOM: 0px" 
+                  height=16 alt=Discuss 
+                  src="CodeProject Using Raw Input from C# to handle multiple keyboards_ Free source code and programming articles_files/discuss.gif" 
+                  width=15> <A 
+                  href="http://www.codeproject.com/KB/system/rawinput.aspx#_comments">Discuss</A> 
+                </TD>
+                <TD style="WHITE-SPACE: nowrap"><IMG 
+                  style="BORDER-RIGHT: 0px; BORDER-TOP: 0px; VERTICAL-ALIGN: middle; BORDER-LEFT: 0px; BORDER-BOTTOM: 0px" 
+                  height=16 alt="Recommend Article" 
+                  src="CodeProject Using Raw Input from C# to handle multiple keyboards_ Free source code and programming articles_files/mail.gif" 
+                  width=16> <A id=ctl00_ArticleHeaderLinks_Recommend 
+                  href="http://www.codeproject.com/script/common/TellFriend.aspx?obtid=2&amp;obid=17123">Send 
+                  to a friend</A> </TD></TR></TBODY></TABLE></TD>
+          <TD align=right>
+            <TABLE>
+              <TBODY>
+              <TR>
+                <TD class=SmallText style="WHITE-SPACE: nowrap" 
+                  align=right><SPAN id=ctl00_ArticleRating_VoteLabel>18 votes 
+                  for this Article.</SPAN> </TD>
+                <TD>
+                  <TABLE cellSpacing=0 cellPadding=0 border=1>
+                    <TBODY>
+                    <TR>
+                      <TD width=20 bgColor=white height=5><IMG height=5 
+                        src="CodeProject Using Raw Input from C# to handle multiple keyboards_ Free source code and programming articles_files/red.gif" 
+                        width=20 border=0></TD>
+                      <TD width=20 bgColor=white height=5><IMG height=5 
+                        src="CodeProject Using Raw Input from C# to handle multiple keyboards_ Free source code and programming articles_files/red.gif" 
+                        width=20 border=0></TD>
+                      <TD width=20 bgColor=white height=5><IMG height=5 
+                        src="CodeProject Using Raw Input from C# to handle multiple keyboards_ Free source code and programming articles_files/red.gif" 
+                        width=20 border=0></TD>
+                      <TD width=20 bgColor=white height=5><IMG height=5 
+                        src="CodeProject Using Raw Input from C# to handle multiple keyboards_ Free source code and programming articles_files/red.gif" 
+                        width=20 border=0></TD>
+                      <TD noWrap width=20 bgColor=white height=5><IMG height=5 
+                        src="CodeProject Using Raw Input from C# to handle multiple keyboards_ Free source code and programming articles_files/red.gif" 
+                        width=16 border=0></TD></TR></TBODY></TABLE></TD></TR>
+              <TR id=ctl00_ArticleRating_PopularityRow>
+                <TD class=SmallText align=right colSpan=2><A 
+                  id=ctl00_ArticleRating_PopularityLnk 
+                  title="Calculated as rating x Log10(# votes)" 
+                  href="http://www.codeproject.com/script/Articles/TopArticles.aspx?ta_so=1">Popularity: 
+                  6.01</A><SPAN id=ctl00_ArticleRating_PopularityLbl></SPAN> 
+                  Rating: <B>4.79</B> out of 5 
+      </TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE><SPAN id=intelliTXT>
+      <DIV id=contentdiv><!-- Main Page Contents Start --><!-- Article Starts -->
+      <UL class=download>
+        <LI><A 
+        href="http://www.codeproject.com/KB/system/rawinput/rawinput_src.zip">Download 
+        source files - 15.9 Kb</A> 
+        <LI><A 
+        href="http://www.codeproject.com/KB/system/rawinput/rawinput_wpf.zip">Download 
+        WPF sample - 30 Kb</A> </LI></UL>
+      <P><IMG height=222 alt="Sample Image - rawinput.jpg" 
+      src="CodeProject Using Raw Input from C# to handle multiple keyboards_ Free source code and programming articles_files/rawinput.jpg" 
+      width=486></P>
+      <P><A 
+      href="http://www.codeproject.com/KB/system/rawinput.aspx#_Toc156395971">Introduction</A><BR><A 
+      href="http://www.codeproject.com/KB/system/rawinput.aspx#_Toc156395972">Background</A><BR><A 
+      href="http://www.codeproject.com/KB/system/rawinput.aspx#_Toc156395973">Support 
+      for different devices</A><BR><A 
+      href="http://www.codeproject.com/KB/system/rawinput.aspx#_Toc156395974">Using 
+      the code</A><BR><A 
+      href="http://www.codeproject.com/KB/system/rawinput.aspx#_Toc156395975">Implementing 
+      a Windows API Raw Input handler</A> </P>
+      <UL><A 
+        href="http://www.codeproject.com/KB/system/rawinput.aspx#_Toc156395976">Registering 
+        raw input devices</A><BR><A 
+        href="http://www.codeproject.com/KB/system/rawinput.aspx#_Toc156395977">Retrieving 
+        and processing raw input</A><BR><A 
+        href="http://www.codeproject.com/KB/system/rawinput.aspx#_Toc156395978">Retrieving 
+        the list of input devices</A><BR><A 
+        href="http://www.codeproject.com/KB/system/rawinput.aspx#_Toc156395979">Getting 
+        information on specific devices</A><BR><A 
+        href="http://www.codeproject.com/KB/system/rawinput.aspx#_Toc156395980">Reading 
+        device information from the Registry</A></UL><A 
+      href="http://www.codeproject.com/KB/system/rawinput.aspx#_Toc156395981">Conclusion</A><BR><A 
+      href="http://www.codeproject.com/KB/system/rawinput.aspx#_Toc156395982">Sources</A> 
+
+      <H2><A name=_Toc156395971></A>Introduction </H2>
+      <P>There was a time when you were lucky if a PC had so much as a mouse, 
+      but today, it is common to have a wide variety of Human Interface Devices 
+      (HIDs) ranging from game controllers to touch screens. In particular, 
+      users can connect more than one keyboard to their PCs. However, the usual 
+      keyboard programming methods in the .NET Framework offer no way to 
+      differentiate the input from different keyboards. Any application handling 
+      <CODE>KeyPress</CODE> events will receive the input from all connected 
+      keyboards as if they were a single device.</P>
+      <P>Windows XP and above now support a "raw input" API which allows 
+      programs to handle the input from any connected human interface devices 
+      directly. Intercepting this information and filtering it for keyboards 
+      enables an application to identify which device triggered the message. For 
+      example, this could allow two different windows to respond to input from 
+      different keyboards.</P>
+      <P>This article and the enclosed code demonstrate how to handle raw input 
+      in order to process keystrokes and identify which device they come from. 
+      The <EM>InputDevice.cs</EM> file in the attached zip contains the raw 
+      input API wrapper; copy this file to your own project and follow the 
+      instructions in "Using the code" if you want to use the class without 
+      running the sample application.</P><A name=_Toc156395972></A>
+      <H2>Background</H2>
+      <P>I recently published an article on implementing a <A 
+      href="http://www.codeproject.com/script/Submit/CSLLKeyboard.asp">low-level 
+      keyboard hook in C#</A><A 
+      href="http://www.codeproject.com/script/Submit/CSLLKeyboard.asp" 
+      target=_blank>[^]</A> using the <CODE>SetWindowsHookEx</CODE> and related 
+      methods from <EM>user32.dll</EM>. While looking for a solution to handle 
+      multiple keyboards, <A 
+      href="http://www.codeproject.com/script/profile/whos_who.asp?id=145753">Steve 
+      Messer</A><A 
+      href="http://www.codeproject.com/script/profile/whos_who.asp?id=145753" 
+      target=_blank>[^]</A> came across my article and we discussed whether my 
+      code could be adapted to his needs. In fact, it turned out that it 
+      couldn't, and that the Raw Input API was the solution. </P>
+      <P>Unfortunately, there are very few keyboard-related Raw Input samples 
+      online, so when Steve had finished a working sample of his code, I offered 
+      to write this article so that future .NET developers faced with this 
+      problem wouldn't have to look far to find the solution. While I have made 
+      minor adjustments to the code, it is primarily Steve's work and I thank 
+      him for sharing it. <EM>Note: as of March 2007, you can also download 
+      Steve's WPF sample illustrating the use of WndProc in Windows Vista. 
+      However, this article only describes the Windows XP source code.</EM></P>
+      <P>Please note that this will only work on Windows XP or later in a 
+      non-Terminal Server environment, and the attached sample projects are for 
+      Visual Studio 2005. </P><A name=_Toc156395973></A>
+      <H2>Support for different devices</H2>
+      <P>The attached code is a generic solution that mostly mirrors the sample 
+      code given on MSDN. Different devices will work in different ways, and you 
+      may need to amend the code to suit the keyboards you are using. 
+      Unfortunately, we won't always be able to help with device-specific 
+      queries, as we won't have the same devices you have. Steve Messer has 
+      tested the code with different keyboards, however, and is confident that 
+      it will work with most devices provided they are correctly 
+      installed.</P><A name=_Toc156395974></A>
+      <H2>Using the code</H2>
+      <P>All the code related to raw input handling is encapsulated in the 
+      <CODE>InputDevice</CODE> class, and using it is a matter of implementing 
+      three simple steps:</P>
+      <P><STRONG>1. </STRONG><STRONG>Instantiate an 
+      </STRONG><CODE><STRONG>InputDevice</STRONG></CODE><STRONG> 
+      object</STRONG></P>
+      <P>The <CODE>InputDevice</CODE> class's constructor takes one argument, 
+      which is the handle to the current window.</P><PRE lang=cs>InputDevice id = <SPAN class=code-keyword>new</SPAN> InputDevice( Handle );
+</PRE>
+      <P>The handle is required to ensure that the window will continue to 
+      listen for events even when it doesn't have the focus.</P>
+      <P><STRONG>2. </STRONG><STRONG>Handle the 
+      </STRONG><CODE>KeyPressed</CODE><STRONG> event</STRONG></P>
+      <P>When a key is pressed, the <CODE>InputDevice</CODE> class raises a 
+      custom <CODE>KeyPressed</CODE> event containing some 
+      <CODE>KeyControlEventArgs</CODE>. This needs to be handled by a method of 
+      the type <CODE>DeviceEventHandler</CODE>, which can be set up as 
+      follows:</P><PRE lang=cs>id.KeyPressed += <SPAN class=code-keyword>new</SPAN> InputDevice.DeviceEventHandler( m_KeyPressed );
+</PRE>
+      <P>The method that handles the event can then perform whatever actions are 
+      required based on the contents of the <CODE>KeyControlEventArgs</CODE> 
+      argument. The sample application attached to this article simply uses the 
+      values to populate a dialog box. </P>
+      <P><STRONG>3. </STRONG><STRONG>Override the </STRONG><CODE>WndProc</CODE> 
+      <STRONG>method</STRONG></P>
+      <P>In its present form, the <CODE>InputDevice</CODE> class works by 
+      intercepting messages to the window in order to process the 
+      <CODE>WM_INPUT</CODE> messages containing raw input data. The window 
+      listening for raw input will therefore need to override its own Windows 
+      procedure and pass all its messages to the instantiated 
+      <CODE>InputDevice</CODE> object.</P><PRE lang=cs><SPAN class=code-keyword>protected</SPAN> <SPAN class=code-keyword>override</SPAN> <SPAN class=code-keyword>void</SPAN> WndProc( <SPAN class=code-keyword>ref</SPAN> Message message )
+{
+  <SPAN class=code-keyword>if</SPAN>( id != <SPAN class=code-keyword>null</SPAN> )
+  {
+    id.ProcessMessage( message );
+  }
+  <SPAN class=code-keyword>base</SPAN>.WndProc( <SPAN class=code-keyword>ref</SPAN> message );
+}
+</PRE>
+      <P>After writing the code used in this article, Steve decided that the 
+      <CODE>InputDevice</CODE> class could be truly independent from the 
+      application using it by inheriting from <A 
+      href="http://msdn2.microsoft.com/en-us/library/system.windows.forms.nativewindow.aspx">NativeWindow</A><A 
+      href="http://msdn2.microsoft.com/en-us/library/system.windows.forms.nativewindow.aspx" 
+      target=_blank>[^]</A>. However, as the purpose of this article is 
+      primarily to illustrate the use of the Raw Input API, we decided to keep 
+      the code in its original form.</P>
+      <P>The rest of this article describes how to handle "raw input" from a C# 
+      application, as illustrated by the <CODE>InputDevice</CODE> class in the 
+      sample application.</P><A name=_Toc156395975></A>
+      <H2>Implementing a Windows API Raw Input handler</H2>
+      <P><A 
+      href="http://msdn.microsoft.com/library/default.asp?url=/library/en-us/winui/winui/windowsuserinterface/userinput/rawinput/aboutrawinput.asp">MSDN 
+      identifies "raw input"</A> <A 
+      href="http://msdn.microsoft.com/library/default.asp?url=/library/en-us/winui/winui/windowsuserinterface/userinput/rawinput/aboutrawinput.asp" 
+      target=_blank>[^]</A> as being the raw data supplied by an interface 
+      device. In the case of a keyboard, this data is normally intercepted by 
+      Windows and translated into the information provided by <CODE>Key</CODE> 
+      events in the .NET Framework. For example, the Windows manager translates 
+      the device-specific data about keystrokes into virtual keys. </P>
+      <P>However, the normal Windows manager doesn't provide any information 
+      about which device received the keystroke; it just bundles events from all 
+      keyboards into one category and behaves as if there were just one 
+      keyboard.</P>
+      <P>This is where the Raw Input API is useful. It allows an application to 
+      receive data directly from the device, with minimal intervention from 
+      Windows. Part of the information it provides is the identity of the device 
+      that triggered the event.</P>
+      <P>The <EM>user32.dll</EM> in Windows XP and Vista contains the following 
+      methods for handling raw input:</P>
+      <UL>
+        <LI><CODE>RegisterRawInputDevices</CODE> allows the application to 
+        register the input devices it wants to monitor. 
+        <LI><CODE>GetRawInputData</CODE> retrieves the data from the input 
+        device. 
+        <LI><CODE>GetRawInputDeviceList</CODE> retrieves the list of input 
+        devices attached to the system. 
+        <LI><CODE>GetRawInputDeviceInfo</CODE> retrieves information on a 
+        device. </LI></UL>
+      <P>The following sections give an overview of how these four methods are 
+      used to process raw data from keyboards. </P><A name=_Toc156395976></A>
+      <H3>Registering raw input devices</H3>
+      <P>By default, no application receives raw input. The first step is 
+      therefore to register the input devices that will be providing the desired 
+      raw data, and associate them with the window that will be handling this 
+      data. </P>
+      <P>To do this, the <CODE>RegisterRawInputDevices</CODE> method is imported 
+      from <EM>user32.dll</EM>:</P><PRE lang=cs>[DllImport(<SPAN class=code-string>"</SPAN><SPAN class=code-string>User32.dll"</SPAN>)]
+<SPAN class=code-keyword>extern</SPAN> <SPAN class=code-keyword>static</SPAN> <SPAN class=code-keyword>bool</SPAN> RegisterRawInputDevices(
+    RAWINPUTDEVICE[] pRawInputDevice, 
+          <SPAN class=code-keyword>uint</SPAN> uiNumDevices, <SPAN class=code-keyword>uint</SPAN> cbSize);
+</PRE>
+      <P>To determine which devices should be registered, the method accepts an 
+      array of <CODE>RAWINPUTDEVICE</CODE> structures. The other two arguments 
+      are the number of items in the array, and the number of bytes in a 
+      <CODE>RAWINPUTDEVICE</CODE> structure.</P>
+      <P>The<CODE> RAWINPUTDEVICE</CODE> structure is defined in 
+      <EM>Windows.h</EM> for C++ projects, but as this file isn't used in C#, 
+      the structure has been redefined as a member of the 
+      <CODE>InputDevice</CODE> class.</P><PRE lang=cs>[StructLayout(LayoutKind.Sequential)]
+<SPAN class=code-keyword>internal</SPAN> <SPAN class=code-keyword>struct</SPAN> RAWINPUTDEVICE
+{
+  [MarshalAs(UnmanagedType.U2)]
+  <SPAN class=code-keyword>public</SPAN> <SPAN class=code-keyword>ushort</SPAN> usUsagePage;
+  [MarshalAs(UnmanagedType.U2)]
+  <SPAN class=code-keyword>public</SPAN> <SPAN class=code-keyword>ushort</SPAN> usUsage;
+  [MarshalAs(UnmanagedType.U4)]
+  <SPAN class=code-keyword>public</SPAN> <SPAN class=code-keyword>int</SPAN> dwFlags;
+  <SPAN class=code-keyword>public</SPAN> <SPAN class=code-SDKkeyword>IntPtr</SPAN> hwndTarget;
+}
+</PRE>
+      <P>Each <CODE>RAWINPUTDEVICE</CODE> structure added to the array contains 
+      information on a type of device which interests the application. For 
+      example, it is possible to register keyboards <EM>and</EM> telephony 
+      devices. The structure uses the following information:</P>
+      <UL>
+        <LI><STRONG>Usage Page:</STRONG> The top level HID "usage page". For 
+        most HIDs, including the keyboard, this is 0x01. 
+        <LI><STRONG>Usage ID:</STRONG> A number indicating which precise type of 
+        device should be monitored. For the keyboard, this is 0x06. (A list of 
+        Usage Page and Usage ID values can be found in <A 
+        href="http://www.microsoft.com/whdc/device/input/HID_HWID.mspx">this 
+        MSDN article on HIDs</A><A 
+        href="http://www.microsoft.com/whdc/device/input/HID_HWID.mspx" 
+        target=_blank>[^]</A>) 
+        <LI><STRONG>Flags:</STRONG> These determine how the data should be 
+        handled, and whether some types should be ignored. <A 
+        href="http://msdn.microsoft.com/library/default.asp?url=/library/en-us/winui/winui/windowsuserinterface/userinput/rawinput/rawinputreference/rawinputstructures/rawinputdevice.asp">A 
+        list of possible values is given in the MSDN article</A><A 
+        href="http://msdn.microsoft.com/library/default.asp?url=/library/en-us/winui/winui/windowsuserinterface/userinput/rawinput/rawinputreference/rawinputstructures/rawinputdevice.asp" 
+        target=_blank>[^]</A>, and the constants they represent are defined in 
+        <EM>Windows.h</EM> (<A 
+        href="http://www.cs.umbc.edu/~squire/download/WinUser.h">there's a copy 
+        of it here</A><A 
+        href="http://www.cs.umbc.edu/~squire/download/WinUser.h" 
+        target=_blank>[^]</A> if you don't already have one). 
+        <LI><STRONG>Target Handle:</STRONG> The handle of the window which will 
+        be monitoring data from this particular type of device. </LI></UL>
+      <P>In this case, we are only interested in keyboards, so the array only 
+      has one member and is set up as follows:</P><PRE lang=cs>RAWINPUTDEVICE[] rid = <SPAN class=code-keyword>new</SPAN> RAWINPUTDEVICE[<SPAN class=code-digit>1</SPAN>];
+
+rid[<SPAN class=code-digit>0</SPAN>].usUsagePage  = 0x01;
+rid[<SPAN class=code-digit>0</SPAN>].usUsage      = 0x06;
+rid[<SPAN class=code-digit>0</SPAN>].dwFlags      = RIDEV_INPUTSINK; 
+rid[<SPAN class=code-digit>0</SPAN>].hwndTarget   = hwnd;
+</PRE>
+      <P>Here, the code only defines the <CODE>RIDEV_INPUTSINK</CODE> flag, 
+      which means that the window will always receive the input messages, even 
+      if it is no longer has the focus. This will enable two windows to respond 
+      to events from different keyboards, even though at least one of them won't 
+      be active.</P>
+      <P>With the array ready to be used, the method can be called to register 
+      the window's interest in any devices which identify themselves as 
+      keyboards:</P><PRE lang=cs>RegisterRawInputDevices(rid, (<SPAN class=code-keyword>uint</SPAN>)rid.Length, 
+    (<SPAN class=code-keyword>uint</SPAN>)Marshal.SizeOf(rid[<SPAN class=code-digit>0</SPAN>]))
+</PRE>
+      <P>Once the type of device has been registered this way, the application 
+      can begin to process the data using the <CODE>GetRawInputData</CODE> 
+      method described in the next section.</P><A name=_Toc156395977></A>
+      <H3>Retrieving and processing raw input</H3>
+      <P>When the type of device is registered, the application begins to 
+      receive raw input. Whenever a registered device is used, Windows generates 
+      a <CODE>WM_INPUT</CODE> message containing the unprocessed data from the 
+      device. </P>
+      <P>Each window whose handle is associated with a registered device as 
+      described in the previous section must therefore check the messages it 
+      receives and take appropriate action when a <CODE>WM_INPUT</CODE> one is 
+      detected. In the sample application, the <CODE>InputDevice</CODE> class 
+      takes care of checking for <CODE>WM_INPUT</CODE> messages, so all the main 
+      window does is override its base <CODE>WndProc</CODE> method to get access 
+      to the messages, and pass any valid ones to the <CODE>InputDevice</CODE> 
+      object:</P><PRE lang=cs><SPAN class=code-keyword>protected</SPAN> <SPAN class=code-keyword>override</SPAN> <SPAN class=code-keyword>void</SPAN> WndProc( <SPAN class=code-keyword>ref</SPAN> Message message ) {
+  <SPAN class=code-keyword>if</SPAN>( id != <SPAN class=code-keyword>null</SPAN> ) {
+    id.ProcessMessage( message );
+  }
+  <SPAN class=code-keyword>base</SPAN>.WndProc( <SPAN class=code-keyword>ref</SPAN> message );
+}
+</PRE>
+      <P>The <CODE>ProcessMessage</CODE> method in <CODE>InputDevice</CODE> 
+      filters the messages, calling <CODE>ProcessInputCommand</CODE> whenever a 
+      <CODE>WM_INPUT</CODE> is received. Any other type of message will fall 
+      through to the call to the base <CODE>WndProc</CODE>, so the application 
+      will respond to other events normally. </P><PRE lang=cs><SPAN class=code-keyword>public</SPAN> <SPAN class=code-keyword>void</SPAN> ProcessMessage( Message message ) {
+  <SPAN class=code-keyword>switch</SPAN>( message.Msg ) {
+    <SPAN class=code-keyword>case</SPAN> WM_INPUT: {
+      ProcessInputCommand( message );
+    }
+    <SPAN class=code-keyword>break</SPAN>;
+  }
+}
+</PRE>
+      <P><CODE>ProcessInputCommand</CODE> then uses the 
+      <CODE>GetRawInputData</CODE> method to retrieve the contents of the 
+      message and translate it into meaningful information.</P>
+      <H4>Retrieving the information from the message</H4>
+      <P>In order to process the data in <CODE>WM_INPUT</CODE> messages, the 
+      <CODE>GetRawInputData</CODE> method is imported from 
+      <EM>user32.dll</EM>:</P><PRE lang=cs>[DllImport(<SPAN class=code-string>"</SPAN><SPAN class=code-string>User32.dll"</SPAN>)]
+<SPAN class=code-keyword>extern</SPAN> <SPAN class=code-keyword>static</SPAN> <SPAN class=code-keyword>uint</SPAN> GetRawInputData(<SPAN class=code-SDKkeyword>IntPtr</SPAN> hRawInput, <SPAN class=code-keyword>uint</SPAN> uiCommand, 
+        <SPAN class=code-SDKkeyword>IntPtr</SPAN> pData, <SPAN class=code-keyword>ref</SPAN> <SPAN class=code-keyword>uint</SPAN> pcbSize, <SPAN class=code-keyword>uint</SPAN> cbSizeHeader);
+</PRE>
+      <P>The method uses the following parameters:</P>
+      <UL>
+        <LI><STRONG>hRawInput</STRONG><BR>The handle to the 
+        <CODE>RAWINPUT</CODE> structure containing the data, as provided by the 
+        <CODE>lParam</CODE> in a <CODE>WM_INPUT</CODE> message. 
+        <LI><STRONG>uiCommand</STRONG><BR>A flag which sets whether to retrieve 
+        the input data or the header information from the <CODE>RAWINPUT</CODE> 
+        structure. Possible values are <CODE>RID_INPUT</CODE> (0x10000003) or 
+        <CODE>RID_HEADER</CODE> (0x10000005) respectively. 
+        <LI><STRONG>pData</STRONG>:<STRONG> </STRONG><BR>Depending on the 
+        desired result, this can be one of two things: 
+        <UL>
+          <LI>If <CODE>pData</CODE> is set to <CODE>IntrPtr.Zero</CODE>, the 
+          size of the buffer required to contain the data is returned in the 
+          <CODE>pcbSize</CODE> variable. 
+          <LI>Otherwise, <CODE>pData</CODE> must be a pointer to allocated 
+          memory that can hold the <CODE>RAWINPUT</CODE> structure provided by 
+          the <CODE>WM_INPUT</CODE> message. When the method call returns, the 
+          contents of the allocated memory will be either the message's header 
+          information or input data, depending on the value of 
+          <CODE>uiCommand</CODE>. </LI></UL>
+        <LI><STRONG>pcbSize</STRONG><BR>A variable that returns or specifies the 
+        size of the data pointed to by <CODE>pData</CODE>. 
+        <LI><STRONG>cbSizeHeader</STRONG><BR>The size of a 
+        <CODE>RAWINPUTHEADER</CODE> structure. </LI></UL>
+      <P>In order to ensure that enough memory is allocated to store the desired 
+      information, the <CODE>GetRawInputData</CODE> method should first be 
+      called with <CODE>pData</CODE> set to <CODE><SPAN 
+      class=code-SDKkeyword>IntPtr</SPAN>.Zero</CODE>.</P><PRE lang=cs><SPAN class=code-keyword>uint</SPAN> dwSize = <SPAN class=code-digit>0</SPAN>;
+
+GetRawInputData( message.LParam, RID_INPUT, 
+                 <SPAN class=code-SDKkeyword>IntPtr</SPAN>.Zero, <SPAN class=code-keyword>ref</SPAN> dwSize, 
+                 (<SPAN class=code-keyword>uint</SPAN>)Marshal.SizeOf( <SPAN class=code-keyword>typeof</SPAN>( RAWINPUTHEADER )));
+</PRE>
+      <P>Following this call, the value of <CODE>dwSize</CODE> will correspond 
+      to the number of bytes needed to store the raw input data (as indicated by 
+      the use of the <CODE>RID_INPUT</CODE> flag). </P>
+      <P>It is then possible to allocate the right amount of memory; in this 
+      case, the pointer is stored in a variable called <CODE>buffer</CODE>.</P><PRE lang=cs><SPAN class=code-SDKkeyword>IntPtr</SPAN> buffer = Marshal.AllocHGlobal( (<SPAN class=code-keyword>int</SPAN>)dwSize );
+</PRE>
+      <P>Now that <CODE>buffer</CODE> points to a suitable location, 
+      <CODE>GetRawInputData</CODE> can be called again to populate the allocated 
+      memory with the <CODE>RAWINPUT</CODE> structure from the current message. 
+      If it succeeds, the method returns the size of the data it retrieved, so 
+      it is worth checking that this matches the result of the previous call 
+      before continuing.</P><PRE lang=cs><SPAN class=code-keyword>if</SPAN>( GetRawInputData( message.LParam, RID_INPUT, 
+     buffer, <SPAN class=code-keyword>ref</SPAN> dwSize, (<SPAN class=code-keyword>uint</SPAN>)Marshal.SizeOf( <SPAN class=code-keyword>typeof</SPAN>( RAWINPUTHEADER )))
+         == dwSize )
+<EM><SPAN class=code-comment>//</SPAN><SPAN class=code-comment>do something with the data</EM>
+</SPAN></PRE>
+      <P>Once this has been done, the contents pointed to by <CODE>buffer</CODE> 
+      can be marshaled into a <CODE>RAWINPUT</CODE> structure, which gives easy 
+      access to the data's various members, as illustrated in the following 
+      section.</P><PRE lang=cs>RAWINPUT raw = (RAWINPUT)Marshal.PtrToStructure( 
+        buffer, <SPAN class=code-keyword>typeof</SPAN>( RAWINPUT ));
+</PRE>
+      <H4></H4>
+      <H4>Processing the data</H4>
+      <P>As mentioned above, the <CODE>WM_INPUT</CODE> message contains raw data 
+      encapsulated in a <CODE>RAWINPUT</CODE> structure. As with the 
+      <CODE>RAWINPUTDEVICE</CODE> structure described in the previous section, 
+      this structure is redefined in the <CODE>InputDevice</CODE> class as 
+      follows.</P><PRE lang=cs>[StructLayout(LayoutKind.Explicit)]
+<SPAN class=code-keyword>internal</SPAN> <SPAN class=code-keyword>struct</SPAN> RAWINPUT
+{
+  [FieldOffset(<SPAN class=code-digit>0</SPAN>)]
+  <SPAN class=code-keyword>public</SPAN> RAWINPUTHEADER header;
+  [FieldOffset(<SPAN class=code-digit>16</SPAN>)]
+  <SPAN class=code-keyword>public</SPAN> RAWMOUSE mouse;
+  [FieldOffset(<SPAN class=code-digit>16</SPAN>)]
+  <SPAN class=code-keyword>public</SPAN> RAWKEYBOARD keyboard;
+  [FieldOffset(<SPAN class=code-digit>16</SPAN>)]
+  <SPAN class=code-keyword>public</SPAN> RAWHID hid;
+}
+</PRE>
+      <P>Following the second call to <CODE>GetRawInputData</CODE> (see previous 
+      section), the <CODE>raw</CODE> structure will contain the following 
+      information:</P>
+      <P>A <CODE>RAWINPUTHEADER</CODE> structure called <CODE>header</CODE>, 
+      which contains information on the message and the device that triggered 
+      it. </P>
+      <P>A second structure of type <CODE>RAWKEYBOARD</CODE> called 
+      <CODE>keyboard.</CODE> This could also be a <CODE>RAWMOUSE</CODE> or 
+      <CODE>RAWHID</CODE> structure called <CODE>mouse</CODE> or 
+      <CODE>hid</CODE>, depending on the type of device.</P>
+      <P>The <CODE>RAWINPUTHEADER</CODE> structure is laid out as follows:</P><PRE lang=cs>[StructLayout(LayoutKind.Sequential)]
+<SPAN class=code-keyword>internal</SPAN> <SPAN class=code-keyword>struct</SPAN> RAWINPUTHEADER
+{
+  [MarshalAs(UnmanagedType.U4)]
+  <SPAN class=code-keyword>public</SPAN> <SPAN class=code-keyword>int</SPAN> dwType;
+  [MarshalAs(UnmanagedType.U4)]
+  <SPAN class=code-keyword>public</SPAN> <SPAN class=code-keyword>int</SPAN> dwSize;
+  <SPAN class=code-keyword>public</SPAN> <SPAN class=code-SDKkeyword>IntPtr</SPAN> hDevice;
+  [MarshalAs(UnmanagedType.U4)]
+  <SPAN class=code-keyword>public</SPAN> <SPAN class=code-keyword>int</SPAN> wParam;
+}
+</PRE>
+      <P>Its members return the following information:</P>
+      <UL>
+        <LI><STRONG>dwType</STRONG><BR>The type of raw input the message 
+        represents. The values can be <CODE>RIM_TYPEHID</CODE> (2), 
+        <CODE>RIM_TYPEKEYBOARD</CODE> (1), or <CODE>RIM_TYPEMOUSE</CODE> (0). 
+        <LI><STRONG>dwSize</STRONG><BR>The size of all the information in the 
+        message (header and input data included). 
+        <LI><STRONG>hDevice</STRONG><BR>The handle of the device which triggered 
+        the message. 
+        <LI><STRONG>wParam</STRONG><BR>The <CODE>wParam</CODE> data from the 
+        <CODE>WM_INPUT</CODE> message. </LI></UL>
+      <P>The second structure will be a <CODE>RAWMOUSE</CODE>, a 
+      <CODE>RAWKEYBOARD</CODE>, or a <CODE>RAWHID</CODE> type. For the sake of 
+      completeness, the <CODE>InputDevice</CODE> class does contain definitions 
+      for <CODE>RAWMOUSE</CODE> and <CODE>RAWHID</CODE>, though it is only 
+      designed to process keyboard information.</P>
+      <P>The keyboard information is provided by a <CODE>RAWKEYBOARD</CODE> 
+      structure, laid out as follows.</P><PRE lang=cs>[StructLayout(LayoutKind.Sequential)]
+<SPAN class=code-keyword>internal</SPAN> <SPAN class=code-keyword>struct</SPAN> RAWKEYBOARD
+{
+  [MarshalAs(UnmanagedType.U2)]
+  <SPAN class=code-keyword>public</SPAN> <SPAN class=code-keyword>ushort</SPAN> MakeCode;
+  [MarshalAs(UnmanagedType.U2)]
+  <SPAN class=code-keyword>public</SPAN> <SPAN class=code-keyword>ushort</SPAN> Flags;
+  [MarshalAs(UnmanagedType.U2)]
+  <SPAN class=code-keyword>public</SPAN> <SPAN class=code-keyword>ushort</SPAN> Reserved;
+  [MarshalAs(UnmanagedType.U2)]
+  <SPAN class=code-keyword>public</SPAN> <SPAN class=code-keyword>ushort</SPAN> VKey;
+  [MarshalAs(UnmanagedType.U4)]
+  <SPAN class=code-keyword>public</SPAN> <SPAN class=code-keyword>uint</SPAN> Message;
+  [MarshalAs(UnmanagedType.U4)]
+  <SPAN class=code-keyword>public</SPAN> <SPAN class=code-keyword>uint</SPAN> ExtraInformation;
+}
+</PRE>
+      <P>Since the <CODE>InputDevice</CODE> class is only interested in keyboard 
+      input, the <CODE>ProcessInputCommand</CODE> method starts by checking the 
+      header to make sure this is a keyboard message before proceeding:</P><PRE lang=cs><SPAN class=code-keyword>if</SPAN>( raw.header.dwType == RIM_TYPEKEYBOARD )
+</PRE>
+      <P>The next step is to filter the message to see if it is a key down 
+      event. This could just as easily be a check for a key up event; the point 
+      here is to filter the messages so that the same keystroke isn't processed 
+      for both key down and key up events. </P><PRE lang=cs><SPAN class=code-keyword>private</SPAN> <SPAN class=code-keyword>const</SPAN> <SPAN class=code-keyword>int</SPAN> WM_KEYDOWN     = 0x0100;
+<SPAN class=code-keyword>private</SPAN> <SPAN class=code-keyword>const</SPAN> <SPAN class=code-keyword>int</SPAN> WM_SYSKEYDOWN  = 0x0104;
+...
+<SPAN class=code-keyword>if</SPAN> (raw.keyboard.Message == WM_KEYDOWN || 
+    raw.keyboard.Message == WM_SYSKEYDOWN)
+{
+  <SPAN class=code-comment>//</SPAN><SPAN class=code-comment>Do something like...
+</SPAN>  <SPAN class=code-keyword>int</SPAN> vkey = raw.keyboard.vkey;
+  MessageBox.Show(vkey.ToString());
+}
+</PRE>
+      <P>At this point, the <CODE>InputDevice</CODE> class retrieves further 
+      information about the message and the device that triggered it, and raises 
+      its custom <CODE>KeyPressed</CODE> event. The following sections describe 
+      how to get information on the devices.</P><A name=_Toc156395978></A>
+      <H3>Retrieving the list of input devices</H3>
+      <P>Although this step isn't required to handle raw input, the list of 
+      input devices can be useful. The sample application retrieves a list of 
+      devices, filters it for keyboards, and then returns the number of 
+      keyboards. This is part of the information returned by the 
+      <CODE>KeyControlEventArgs</CODE> in the <CODE>InputDevice</CODE> class's 
+      <CODE>KeyPressed</CODE> event.</P>
+      <P>The first step is to import the necessary method from 
+      <STRONG>user32.dll</STRONG>:</P><PRE lang=cs>[DllImport(<SPAN class=code-string>"</SPAN><SPAN class=code-string>User32.dll"</SPAN>)]
+<SPAN class=code-keyword>extern</SPAN> <SPAN class=code-keyword>static</SPAN> <SPAN class=code-keyword>uint</SPAN> GetRawInputDeviceList(<SPAN class=code-SDKkeyword>IntPtr</SPAN> pRawInputDeviceList, 
+    <SPAN class=code-keyword>ref</SPAN> <SPAN class=code-keyword>uint</SPAN> uiNumDevices, <SPAN class=code-keyword>uint</SPAN> cbSize);
+</PRE>
+      <P>The method's arguments are as follows:</P>
+      <UL>
+        <LI><STRONG>pRawInputDeviceList</STRONG>:<STRONG> </STRONG>Depending on 
+        the desired result, this can be one of two things: 
+        <UL>
+          <LI><CODE><SPAN class=code-SDKkeyword>IntPtr</SPAN>.Zero</CODE> if the 
+          purpose is only to retrieve the <EM>number</EM> of devices. 
+          <LI>A pointer to an array of <CODE>RAWINPUTDEVICELIST</CODE> 
+          structures if the purpose of the method call is to retrieve the 
+          complete <EM>list</EM> of devices. </LI></UL>
+        <LI><STRONG>uiNumDevices</STRONG>:<STRONG> </STRONG>A reference to an 
+        unsigned integer to store the number of devices. 
+        <UL>
+          <LI>If the <CODE>pRawInputDeviceList</CODE> argument is <CODE><SPAN 
+          class=code-SDKkeyword>IntPtr</SPAN>.Zero</CODE>, then this variable 
+          will return the number of devices. 
+          <LI>If the <CODE>pRawInputDeviceList</CODE> argument is a pointer to 
+          an array, then this variable must contain the size of the array. This 
+          allows the method to allocate memory appropriately. If 
+          <CODE>uiNumDevices</CODE> is less than the size of the array in this 
+          case, the method will return the size of the array, but an 
+          "insufficient buffer" error will occur and the method will fail. 
+        </LI></UL>
+        <LI><STRONG>cbSize</STRONG>:<STRONG> </STRONG>The size of a 
+        <CODE>RAWINPUTDEVICELIST</CODE> structure. </LI></UL>
+      <P>In order to ensure that the first and second arguments are correctly 
+      configured when the list of devices is required, the method should be set 
+      up in three stages.</P>
+      <P>First, it should be called with <CODE>pRawInputDeviceList</CODE> set to 
+      <CODE><SPAN class=code-SDKkeyword>IntPtr</SPAN>.Zero</CODE>. This will 
+      ensure that the variable in the second argument (<CODE>deviceCount</CODE> 
+      here) is filled with the correct number of devices. The result of this 
+      call should be checked, as an error means that the code can proceed no 
+      further.</P><PRE lang=cs><SPAN class=code-keyword>uint</SPAN> deviceCount = <SPAN class=code-digit>0</SPAN>;
+<SPAN class=code-keyword>int</SPAN> dwSize = (Marshal.SizeOf( <SPAN class=code-keyword>typeof</SPAN>( RAWINPUTDEVICELIST )));
+
+<SPAN class=code-keyword>if</SPAN>( GetRawInputDeviceList( <SPAN class=code-SDKkeyword>IntPtr</SPAN>.Zero, <SPAN class=code-keyword>ref</SPAN> deviceCount, (<SPAN class=code-keyword>uint</SPAN>)dwSize ) 
+    == <SPAN class=code-digit>0</SPAN> )
+{
+  <SPAN class=code-comment>//</SPAN><SPAN class=code-comment>continue retrieving the information (see below)
+</SPAN>}
+<SPAN class=code-keyword>else</SPAN>
+{
+  <SPAN class=code-comment>//</SPAN><SPAN class=code-comment>handle the error or throw an exception
+</SPAN>}
+</PRE>
+      <P>Once the <CODE>deviceCount</CODE> variable contains the right value, 
+      the correct amount of memory can be allocated and associated with a 
+      pointer:</P><PRE lang=cs><SPAN class=code-SDKkeyword>IntPtr</SPAN> pRawInputDeviceList = 
+              Marshal.AllocHGlobal((<SPAN class=code-keyword>int</SPAN>)(dwSize * deviceCount ));
+</PRE>
+      <P>And the method can be called again, this time to fill the allocated 
+      memory with an array of <CODE>RAWINPUTDEVICELIST</CODE> structures:</P><PRE lang=cs>GetRawInputDeviceList( pRawInputDeviceList, <SPAN class=code-keyword>ref</SPAN> deviceCount, (<SPAN class=code-keyword>uint</SPAN>)dwSize );
+</PRE>
+      <P>The <CODE>pRawInputDeviceList</CODE> data can then be converted into 
+      individual <CODE>RAWINPUTDEVICELIST</CODE> structures. In the example 
+      below, a <CODE><SPAN class=code-keyword>for</SPAN></CODE> loop has been 
+      used to iterate through the devices, so <CODE>i</CODE> represents the 
+      position of the current device in the array.</P><PRE lang=cs><SPAN class=code-keyword>for</SPAN>( <SPAN class=code-keyword>int</SPAN> i = <SPAN class=code-digit>0</SPAN>; i &lt; deviceCount; i++ )
+{
+  RAWINPUTDEVICELIST rid = (RAWINPUTDEVICELIST)Marshal.PtrToStructure(
+         <SPAN class=code-keyword>new</SPAN> <SPAN class=code-SDKkeyword>IntPtr</SPAN>(( pRawInputDeviceList.ToInt32() + ( dwSize * i ))), 
+         <SPAN class=code-keyword>typeof</SPAN>( RAWINPUTDEVICELIST ));
+<SPAN class=code-comment>//</SPAN><SPAN class=code-comment>do something with the information (see section on GetRawInputDeviceInfo)
+</SPAN>}
+</PRE>
+      <P>When any subsequent processing is completed, the memory should be 
+      deallocated.</P><PRE lang=cs>Marshal.FreeHGlobal( pRawInputDeviceList );
+</PRE><A name=_Toc156395979></A>
+      <H3>Getting information on specific devices</H3>
+      <P>Once <CODE>GetRawInputDeviceList</CODE> has been used to retrieve an 
+      array of <CODE>RAWINPUTDEVICELIST</CODE> structures as well as the number 
+      of items in the array, it is possible to use 
+      <CODE>GetRawInputDeviceInfo</CODE> to retrieve specific information on 
+      each device.</P>
+      <P>First, the method is imported from user32.dll:</P><PRE lang=cs>[DllImport(<SPAN class=code-string>"</SPAN><SPAN class=code-string>User32.dll"</SPAN>)]
+<SPAN class=code-keyword>extern</SPAN> <SPAN class=code-keyword>static</SPAN> <SPAN class=code-keyword>uint</SPAN> GetRawInputDeviceInfo(<SPAN class=code-SDKkeyword>IntPtr</SPAN> hDevice, 
+    <SPAN class=code-keyword>uint</SPAN> uiCommand, <SPAN class=code-SDKkeyword>IntPtr</SPAN> pData, <SPAN class=code-keyword>ref</SPAN> <SPAN class=code-keyword>uint</SPAN> pcbSize);
+</PRE>
+      <P>Its arguments are as follows:</P>
+      <UL>
+        <LI><STRONG>hDevice</STRONG><BR>The device handle returned in the 
+        corresponding <CODE>RAWINPUTDEVICELIST</CODE> structure. 
+        <LI><STRONG>uiCommand</STRONG><STRONG></STRONG>A flag to set what type 
+        of data will be returned in <CODE>pData</CODE>. Possible values are 
+        <CODE>RIDI_PREPARSEDDATA</CODE> (0x20000005 - returns previously parsed 
+        data), <CODE>RIDI_DEVICENAME</CODE> (0x20000007 - a string containing 
+        the device name), or <CODE>RIDI_DEVICEINFO</CODE> (0x2000000b - an 
+        <CODE>RIDI_DEVICE_INFO</CODE> structure) 
+        <LI><STRONG>pData</STRONG>:<STRONG> </STRONG>Depending on the desired 
+        result, this can be one of two things: 
+        <UL>
+          <LI>If <CODE>pData</CODE> is set to <CODE>IntrPtr.Zero</CODE>, the 
+          size of the buffer required to contain the data is returned in the 
+          <CODE>pcbSize</CODE> variable. 
+          <LI>Otherwise, <CODE>pData</CODE> must be a pointer to allocated 
+          memory that can hold the type of data specified by 
+          <CODE>uiCommand</CODE>. <BR>(Note: if <CODE>uiCommand</CODE> is set to 
+          <CODE>RIDI_DEVICEINFO</CODE>, then the <CODE>cbSize</CODE> member of 
+          the <CODE>RIDI_DEVICE_INFO</CODE> structure must be set to the size of 
+          the structure) </LI></UL>
+        <LI><STRONG>pcbSize</STRONG><BR>A variable that returns or specifies the 
+        size of the data pointed to by <CODE>pData</CODE>. If 
+        <CODE>uiCommand</CODE> is <CODE>RIDI_DEVICENAME</CODE>, 
+        <CODE>pcbSize</CODE> will indicate the number of <EM>characters</EM> in 
+        the string. Otherwise, it indicates the number of <EM>bytes</EM> in the 
+        data. </LI></UL>
+      <P>The example code uses a <CODE><SPAN 
+      class=code-keyword>for</SPAN></CODE> loop to iterate through the available 
+      devices as indicated by the <CODE>deviceCount</CODE> variable. At the 
+      start of each loop, a <CODE>RAWINPUTDEVICELIST</CODE> structure called 
+      <CODE>rid</CODE> is filled with the information on the current device (see 
+      <CODE>GetRawInputDeviceList</CODE> section above).</P>
+      <P>In order to ensure that enough memory is allocated to store the desired 
+      information, the <CODE>GetRawInputDeviceInfo</CODE> method should first be 
+      called with <CODE>pData</CODE> set to <CODE><SPAN 
+      class=code-SDKkeyword>IntPtr</SPAN>.Zero</CODE>. The handle in the 
+      <CODE>hDevice</CODE> parameter is provided by the <CODE>rid</CODE> 
+      structure containing information on the current device in the loop.</P><PRE lang=cs><SPAN class=code-keyword>uint</SPAN> pcbSize = <SPAN class=code-digit>0</SPAN>;
+
+GetRawInputDeviceInfo( rid.hDevice, RIDI_DEVICENAME, <SPAN class=code-SDKkeyword>IntPtr</SPAN>.Zero, 
+            <SPAN class=code-keyword>ref</SPAN> pcbSize );
+</PRE>
+      <P>In this example, the purpose is to find out the device name, which will 
+      be used to look up information on the device in the Registry.</P>
+      <P>Following this call, the value of <CODE>pcbSize</CODE> will correspond 
+      to the number of characters needed to store the device name. Once the code 
+      has checked that <CODE>pcbSize</CODE> is greater than 0, the appropriate 
+      amount of memory can be allocated.</P><PRE lang=cs><SPAN class=code-SDKkeyword>IntPtr</SPAN> pData = Marshal.AllocHGlobal( (<SPAN class=code-keyword>int</SPAN>)pcbSize );
+</PRE>
+      <P>And the method can be called again, this time to fill the allocated 
+      memory with the device name. The data can then be converted into a C# 
+      <CODE><SPAN class=code-SDKkeyword>string</SPAN></CODE> for ease of 
+use.</P><PRE lang=cs><SPAN class=code-keyword>string</SPAN> deviceName; 
+
+GetRawInputDeviceInfo( rid.hDevice, RIDI_DEVICENAME, pData, <SPAN class=code-keyword>ref</SPAN> pcbSize );
+deviceName = (<SPAN class=code-keyword>string</SPAN>)Marshal.PtrToStringAnsi( pData );
+</PRE>
+      <P>The list will also include "root" keyboard and mouse devices that are 
+      used for Terminal Services or Remote Desktop connections. As these don't 
+      interest us here, the following code will skip those when they are 
+      encountered in the loop.</P><PRE lang=cs><SPAN class=code-keyword>if</SPAN> (deviceName.ToUpper().Contains(<SPAN class=code-string>"</SPAN><SPAN class=code-string>ROOT"</SPAN>))
+{
+  <SPAN class=code-keyword>continue</SPAN>;  <SPAN class=code-comment>//</SPAN><SPAN class=code-comment>Drop into next iteration of the loop
+</SPAN>}
+</PRE>
+      <P>The next stage is to identify whether the enumerated device is a 
+      keyboard.</P><PRE lang=cs><SPAN class=code-keyword>if</SPAN>( deviceType.Equals( <SPAN class=code-string>"</SPAN><SPAN class=code-string>KEYBOARD"</SPAN> ) || deviceType.Equals( <SPAN class=code-string>"</SPAN><SPAN class=code-string>HID"</SPAN> ))
+{
+  <SPAN class=code-comment>//</SPAN><SPAN class=code-comment>It's a keyboard – or a USB device that could be a keyboard
+</SPAN>  <SPAN class=code-comment>//</SPAN><SPAN class=code-comment>Do something
+</SPAN>}
+</PRE>
+      <P>The rest of the code then retrieves information about the device and 
+      checks the Registry to see whether the device is really a keyboard.</P><A 
+      name=_Toc156395980></A>
+      <H3>Reading device information from the Registry</H3>
+      <P>Following the above code, <CODE>deviceName</CODE> will have a value 
+      similar to the following:</P><PRE lang=text>\\??\\ACPI#PNP0303#3&amp;13c0b0c5&amp;0#{884b96c3-56ef-11d1-bc8c-00a0c91405dd}</PRE>
+      <P>This string mirrors the device's entry in the Registry; parsing it 
+      therefore allows us to find the relevant Registry key, which contains 
+      further information on the device. So the first step is to break down the 
+      relevant part of the string:</P><PRE lang=cs><SPAN class=code-comment>//</SPAN><SPAN class=code-comment> remove the \??\
+</SPAN>item = item.Substring( <SPAN class=code-digit>4</SPAN> ); 
+
+<SPAN class=code-keyword>string</SPAN>[] split = item.Split( <SPAN class=code-string>'</SPAN><SPAN class=code-string>#'</SPAN> );
+
+<SPAN class=code-keyword>string</SPAN> id_01 = split[<SPAN class=code-digit>0</SPAN>];    <SPAN class=code-comment>//</SPAN><SPAN class=code-comment> ACPI (Class code)
+</SPAN><SPAN class=code-keyword>string</SPAN> id_02 = split[<SPAN class=code-digit>1</SPAN>];    <SPAN class=code-comment>//</SPAN><SPAN class=code-comment> PNP0303 (SubClass code)
+</SPAN><SPAN class=code-keyword>string</SPAN> id_03 = split[<SPAN class=code-digit>2</SPAN>];    <SPAN class=code-comment>//</SPAN><SPAN class=code-comment> 3&amp;13c0b0c5&amp;0 (Protocol code)
+</SPAN><SPAN class=code-comment>//</SPAN><SPAN class=code-comment> The final part is the class GUID and is not needed here
+</SPAN></PRE>
+      <P>The Class code, SubClass code and Protocol retrieved this way 
+      correspond to the device's path under 
+      <CODE>HKEY_LOCAL_MACHINE\SYSTEM\</CODE><CODE>CurrentControlSet</CODE>, so 
+      the next stage is to open that key:</P><PRE lang=cs>RegistryKey OurKey = Registry.LocalMachine;
+
+<SPAN class=code-keyword>string</SPAN> findme = <SPAN class=code-keyword>string</SPAN>.Format( 
+    <SPAN class=code-string>@"</SPAN><SPAN class=code-string>System\CurrentControlSet\Enum\{0}\{1}\{2}"</SPAN>, 
+    id_01, id_02, id_03 );
+</PRE>
+      <P>The information we are interested in is the device's friendly 
+      description, and its class, as this latter will tell us if it's a 
+      keyboard:</P><PRE lang=cs><SPAN class=code-keyword>string</SPAN> deviceDesc  = (<SPAN class=code-keyword>string</SPAN>)OurKey.GetValue( <SPAN class=code-string>"</SPAN><SPAN class=code-string>DeviceDesc"</SPAN> );
+<SPAN class=code-keyword>string</SPAN> deviceClass = (<SPAN class=code-keyword>string</SPAN>)OurKey.GetValue( <SPAN class=code-string>"</SPAN><SPAN class=code-string>Class"</SPAN> );
+<SPAN class=code-keyword>if</SPAN>( deviceClass.ToUpper().Equals( <SPAN class=code-string>"</SPAN><SPAN class=code-string>KEYBOARD"</SPAN> )){
+  isKeyboard = <SPAN class=code-keyword>true</SPAN>;
+}
+<SPAN class=code-keyword>else</SPAN>{
+  isKeyboard = <SPAN class=code-keyword>false</SPAN>;
+}
+</PRE>
+      <P>All that is left then is to deallocate any allocated memory and do 
+      something with the data that has been retrieved.</P><A 
+      name=_Toc156395981></A>
+      <H2>Conclusion</H2>
+      <P>Although the .NET Framework offers methods for most common purposes, 
+      the Raw Input API offers a more flexible approach to device data. The 
+      enclosed code and the explanations in this article will hopefully prove a 
+      useful starting point for anyone looking to handle multiple keyboards in 
+      an XP or Vista based application.</P><A name=_Toc156395982></A>
+      <H2>Sources</H2>
+      <P>This article gives an overview of the different steps required to 
+      implement the Raw Input API. For further information on handling raw 
+      input:</P>
+      <UL>
+        <LI><A 
+        href="http://msdn.microsoft.com/library/default.asp?url=/library/en-us/winui/winui/windowsuserinterface/userinput/rawinput/rawinputreference/rawinputstructures/rawinput.asp">MSDN's 
+        information on Raw Input</A><A 
+        href="http://msdn.microsoft.com/library/default.asp?url=/library/en-us/winui/winui/windowsuserinterface/userinput/rawinput/rawinputreference/rawinputstructures/rawinput.asp" 
+        target=_blank>[^]</A>. 
+        <LI>If you are interested in monitoring other HIDs, the <A 
+        href="http://msdn.microsoft.com/library/default.asp?url=/library/en-us/winui/winui/windowsuserinterface/userinput/rawinput/rawinputreference/rawinputstructures/rawinputdevice.asp">MSDN 
+        article Hardware IDs on HIDs</A><A 
+        href="http://msdn.microsoft.com/library/default.asp?url=/library/en-us/winui/winui/windowsuserinterface/userinput/rawinput/rawinputreference/rawinputstructures/rawinputdevice.asp" 
+        target=_blank>[^]</A> explains more about Usage Pages. </LI></UL>
+      <H2>History</H2>
+      <UL>
+        <LI>March 2007 - Added WPF sample in response to user request 
+        <LI>January 2007 - Original version </LI></UL><!-- Article Ends --><!-- Main Page Contents End --></DIV></SPAN>
+      <H2>About the Authors</H2>
+      <TABLE cellSpacing=5 cellPadding=0 width="100%" border=0>
+        <TBODY>
+        <TR vAlign=top>
+          <TD id=ctl00_AboutAuthorRptr_ctl00_AboutAuthor_memberPhotoTable 
+          style="WIDTH: 155px" vAlign=top><B><A 
+            id=ctl00_AboutAuthorRptr_ctl00_AboutAuthor_memberProfileLink 
+            href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=145753">smesser</A></B><BR><BR>
+            <CENTER></CENTER><BR><SPAN class=SmallText 
+            id=ctl00_AboutAuthorRptr_ctl00_AboutAuthor_memberType></SPAN></TD>
+          <TD><BR>
+            <TABLE>
+              <TBODY>
+              <TR id=ctl00_AboutAuthorRptr_ctl00_AboutAuthor_jobTitleRow>
+                <TD class=SmallText noWrap>Occupation: </TD>
+                <TD width="100%"><SPAN class=SmallText 
+                  id=ctl00_AboutAuthorRptr_ctl00_AboutAuthor_memberJobTitle>Web 
+                  Developer</SPAN></TD></TR>
+              <TR id=ctl00_AboutAuthorRptr_ctl00_AboutAuthor_locationRow>
+                <TD class=SmallText>Location: </TD>
+                <TD width="100%"><SPAN class=SmallText 
+                  id=ctl00_AboutAuthorRptr_ctl00_AboutAuthor_memberLocation><IMG 
+                  height=11 alt="United States" 
+                  src="CodeProject Using Raw Input from C# to handle multiple keyboards_ Free source code and programming articles_files/US.gif" 
+                  width=16> United 
+        States</SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE><BR>
+      <TABLE cellSpacing=5 cellPadding=0 width="100%" border=0>
+        <TBODY>
+        <TR vAlign=top>
+          <TD id=ctl00_AboutAuthorRptr_ctl01_AboutAuthor_memberPhotoTable 
+          style="WIDTH: 155px" vAlign=top><B><A 
+            id=ctl00_AboutAuthorRptr_ctl01_AboutAuthor_memberProfileLink 
+            href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=761050">Emma 
+            Burrows</A></B><BR><BR>
+            <CENTER><IMG id=ctl00_AboutAuthorRptr_ctl01_AboutAuthor_memberPhoto 
+            style="BORDER-TOP-WIDTH: 0px; BORDER-LEFT-WIDTH: 0px; BORDER-BOTTOM-WIDTH: 0px; BORDER-RIGHT-WIDTH: 0px" 
+            src="CodeProject Using Raw Input from C# to handle multiple keyboards_ Free source code and programming articles_files/{164BFCF5-0F2C-4B49-82B6-C6B877EAE057}.jpg"></CENTER><BR><SPAN 
+            class=SmallText 
+            id=ctl00_AboutAuthorRptr_ctl01_AboutAuthor_memberType></SPAN></TD>
+          <TD>Emma's first steps in programming took place at primary school 
+            over twenty years ago, thanks to a TI-99/4A and the LOGO language. 
+            Following a Master's degree in English Studies (obtained, strangely 
+            enough, with a paper on the birth of the microcomputer), Emma 
+            started her career in IT. <BR><BR>Over the last ten years, she has 
+            worked as a localiser, technical writer, editor, web designer, 
+            systems administrator, team leader and support engineer for 
+            companies ranging from Microsoft to the more modest British software 
+            company Equisys. <BR><BR>Emma is currently expecting another baby 
+            after taking a break to have a first baby. Some day, perhaps when 
+            both babies have gone to university, she hopes to improve her C# and 
+            web development skills and, of course, write more articles for Code 
+            Project.<BR>
+            <TABLE>
+              <TBODY>
+              <TR id=ctl00_AboutAuthorRptr_ctl01_AboutAuthor_jobTitleRow>
+                <TD class=SmallText noWrap>Occupation: </TD>
+                <TD width="100%"><SPAN class=SmallText 
+                  id=ctl00_AboutAuthorRptr_ctl01_AboutAuthor_memberJobTitle>Web 
+                  Developer</SPAN></TD></TR>
+              <TR id=ctl00_AboutAuthorRptr_ctl01_AboutAuthor_locationRow>
+                <TD class=SmallText>Location: </TD>
+                <TD width="100%"><SPAN class=SmallText 
+                  id=ctl00_AboutAuthorRptr_ctl01_AboutAuthor_memberLocation><IMG 
+                  height=11 alt="United Kingdom" 
+                  src="CodeProject Using Raw Input from C# to handle multiple keyboards_ Free source code and programming articles_files/UK.gif" 
+                  width=16> United 
+        Kingdom</SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE><BR>
+      <TABLE id=ctl00_PopularArticlesRow cellSpacing=0 cellPadding=0 
+      width="100%" border=0>
+        <TBODY>
+        <TR vAlign=top>
+          <TD style="WIDTH: 100%">
+            <H2>Other popular Hardware &amp; System articles:</H2>
+            <UL>
+              <LI><A 
+              href="http://www.codeproject.com/KB/system/xyntservice.aspx">Start 
+              Your Windows Programs From An NT Service</A>
+              <DIV class=SmallText>Make your MFC, VB and other Windows programs 
+              behave like NT services.</DIV>
+              <LI><A 
+              href="http://www.codeproject.com/KB/system/serial.aspx">Serial 
+              library for C++</A>
+              <DIV class=SmallText>A high-performance, complete and compact 
+              serial library for C++</DIV>
+              <LI><A 
+              href="http://www.codeproject.com/KB/system/hooksys.aspx">API 
+              hooking revealed</A>
+              <DIV class=SmallText>The article demonstrates how to build a user 
+              mode Win32 API spying system</DIV>
+              <LI><A 
+              href="http://www.codeproject.com/KB/system/driverdev.aspx">Driver 
+              Development Part 1: Introduction to Drivers</A>
+              <DIV class=SmallText>This article will go into the basics of 
+              creating a simple driver.</DIV>
+              <LI><A 
+              href="http://www.codeproject.com/KB/system/NoDeleteDelay.aspx">Eliminating 
+              Explorer's delay when deleting an in-use file</A>
+              <DIV class=SmallText>How to track down and patch an annoyance in 
+              Windows Explorer's code.</DIV></LI></UL>
+            <H2></H2></TD>
+          <TD><IFRAME border=0 
+            src="C:\Documents and Settings\fci_2007\Desktop\New Folder\CodeProject Using Raw Input from C# to handle multiple keyboards_ Free source code and programming articles_files\ServeHTML(2).htm" 
+            frameBorder=0 width=300 scrolling=no 
+        height=250></IFRAME></TD></TR></TBODY></TABLE>
+      <DIV id=ctl00_AddTo style="MARGIN: 10px">
+      <SCRIPT language=JavaScript type=text/javascript>
+			var addtoMethod=1;
+			var AddURL = document.location.href;
+			var AddTitle = escape(document.title);
+			DrawLinks(100, 0, "SmallText Bold", "AddTo") 
+			</SCRIPT>
+      </DIV>
+      <TABLE class=RatingBar id=ctl00_RateArticleRow cellSpacing=0 cellPadding=0 
+      width="100%" border=0>
+        <TBODY>
+        <TR>
+          <TD><A 
+            href="http://www.codeproject.com/KB/system/rawinput.aspx#_top">Article 
+            Top</A></TD>
+          <TD align=right>
+            <FORM id=aspnetForm 
+            style="PADDING-RIGHT: 0px; PADDING-LEFT: 0px; PADDING-BOTTOM: 0px; MARGIN: 0px; PADDING-TOP: 0px" 
+            name=aspnetForm action=rawinput.aspx method=post>
+            <DIV><INPUT id=__VIEWSTATE type=hidden 
+            value=/wEPDwULLTEwMDUyNjYzMjhkZHKePzTpFfTYXgCDWnU8fdR38Gu8 
+            name=__VIEWSTATE> </DIV>
+            <TABLE cellSpacing=0 cellPadding=0 width="100%">
+              <TBODY>
+              <TR>
+                <TD class=SmallText style="WHITE-SPACE: nowrap" align=right>
+                  <TABLE>
+                    <TBODY>
+                    <TR>
+                      <TD id=ctl00_RateArticle_RateText 
+                      style="PADDING-RIGHT: 5px"><I><B>Rate this Article for 
+                        us!</B></I></TD>
+                      <TD id=ctl00_RateArticle_StartForm 
+                        align=right><I>&nbsp;&nbsp;Poor</I></TD>
+                      <TD id=ctl00_RateArticle_VoteFormDiv 
+                      style="WHITE-SPACE: nowrap" align=left>
+                        <TABLE id=ctl00_RateArticle_VoteRBL border=0>
+                          <TBODY>
+                          <TR>
+                            <TD><INPUT id=ctl00_RateArticle_VoteRBL_0 
+                              type=radio value=1 
+                            name=ctl00$RateArticle$VoteRBL></TD>
+                            <TD><INPUT id=ctl00_RateArticle_VoteRBL_1 
+                              type=radio value=2 
+                            name=ctl00$RateArticle$VoteRBL></TD>
+                            <TD><INPUT id=ctl00_RateArticle_VoteRBL_2 
+                              type=radio value=3 
+                            name=ctl00$RateArticle$VoteRBL></TD>
+                            <TD><INPUT id=ctl00_RateArticle_VoteRBL_3 
+                              type=radio value=4 
+                            name=ctl00$RateArticle$VoteRBL></TD>
+                            <TD><INPUT id=ctl00_RateArticle_VoteRBL_4 
+                              type=radio value=5 
+                            name=ctl00$RateArticle$VoteRBL></TD></TR></TBODY></TABLE></TD>
+                      <TD id=ctl00_RateArticle_EndForm 
+                        align=left><I>Excellent</I> <INPUT class=FormButton id=ctl00_RateArticle_SubmitRateBtn type=submit value=Vote name=ctl00$RateArticle$SubmitRateBtn> 
+                      </TD>
+                      <TD><SPAN 
+                    id=ctl00_RateArticle_ErrorMessage></SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE>
+            <DIV><INPUT id=__EVENTVALIDATION type=hidden 
+            value=/wEWCAKkhrTECQLAlMXDBwLBlMXDBwLClMXDBwLDlMXDBwLElMXDBwLP+++tCwK5upDkCyfC0J2v1khCByGXrYgh9xudvSi1 
+            name=__EVENTVALIDATION> </DIV></FORM></TD></TR></TBODY></TABLE>
+      <DIV 
+      style="PADDING-RIGHT: 10px; PADDING-LEFT: 10px; PADDING-BOTTOM: 10px; PADDING-TOP: 10px; TEXT-ALIGN: center"><IFRAME 
+      border=0 
+      src="C:\Documents and Settings\fci_2007\Desktop\New Folder\CodeProject Using Raw Input from C# to handle multiple keyboards_ Free source code and programming articles_files\ServeHTML(3).htm" 
+      frameBorder=0 width=468 scrolling=no height=60></IFRAME></DIV><A 
+      name=_comments></A><!-- Forum Start -->
+      <TABLE class=Frm_MainTable id=ForumTable cellSpacing=0 cellPadding=0>
+        <FORM 
+        action=/script/Forums/SetOptions.aspx?floc=%2fKB%2fsystem%2frawinput.aspx&amp;fid=375378&amp;noise=3&amp;df=90&amp;mpp=25&amp;sort=Position&amp;view=Quick 
+        method=get>
+        <TBODY>
+        <TR>
+          <TD><INPUT type=hidden value=375378 name=fid><INPUT type=hidden 
+            value=?floc=%2fKB%2fsystem%2frawinput.aspx&amp;amp;fid=375378&amp;amp;noise=3&amp;amp;df=90&amp;amp;mpp=25&amp;amp;sort=Position&amp;amp;view=Quick 
+            name=currentQS><INPUT type=hidden value=/KB/system/rawinput.aspx 
+            name=floc>
+            <TABLE cellSpacing=0 cellPadding=3 width="100%" border=0>
+              <TBODY>
+              <TR class=Frm_HeaderRow1>
+                <TD style="WHITE-SPACE: nowrap"><IMG height=16 
+                  src="CodeProject Using Raw Input from C# to handle multiple keyboards_ Free source code and programming articles_files/forum_faq.gif" 
+                  width=16 align=absMiddle border=0>&nbsp;<A 
+                  href="http://www.codeproject.com/script/Forums/FAQ.aspx"><B>FAQ</B></A>&nbsp;</TD>
+                <TD style="WHITE-SPACE: nowrap; TEXT-ALIGN: right">Noise 
+                  Tolerance<SELECT class=Frm_DropDown size=1 name=noise> 
+                    <OPTION value=1>Very High</OPTION><OPTION 
+                    value=2>High</OPTION><OPTION value=3 
+                    selected>Medium</OPTION><OPTION value=4>Low</OPTION><OPTION 
+                    value=5>Very Low</OPTION></SELECT></TD>
+                <TD style="WHITE-SPACE: nowrap; TEXT-ALIGN: right" 
+                  colSpan=2><IMG height=15 src="" width=16 align=absMiddle 
+                  border=0>&nbsp;<A 
+                  href="http://www.codeproject.com/script/Forums/Search.aspx?fid=375378">Search 
+                  comments</A>&nbsp;</TD>
+                <TD style="TEXT-ALIGN: right"><INPUT class=Frm_Button type=submit value="Set Options" name=submit></TD></TR>
+              <TR class=Frm_HeaderRow2>
+                <TD style="WIDTH: 100%">&nbsp;</TD>
+                <TD 
+                  style="WHITE-SPACE: nowrap; TEXT-ALIGN: right">Layout<SELECT 
+                  class=Frm_DropDown size=1 name=view> <OPTION value=Quick 
+                    selected>Normal</OPTION><OPTION value=Topic>Expand Root 
+                    Messages</OPTION><OPTION value=Expanded>Expand All 
+                    Messages</OPTION><OPTION value=Thread>Thread 
+                    View</OPTION><OPTION value=Normal>No Javascript 
+                    (slow)</OPTION><OPTION value=Preview>No Javascript 
+                    Preview</OPTION></SELECT>&nbsp;&nbsp;</TD>
+                <TD style="WHITE-SPACE: nowrap">Per page<SELECT 
+                  class=Frm_DropDown size=1 name=mpp> <OPTION 
+                    value=10>10</OPTION><OPTION value=25 
+                    selected>25</OPTION><OPTION 
+                  value=50>50</OPTION></SELECT>&nbsp;&nbsp;</TD>
+                <TD style="WHITE-SPACE: nowrap; TEXT-ALIGN: right">&nbsp;</TD>
+                <TD 
+        style="WHITE-SPACE: nowrap">&nbsp;</TD></TR></TBODY></TABLE></TD></TR></FORM>
+        <TR>
+          <TD><A name=xx0xx></A>
+            <TABLE cellSpacing=0 cellPadding=2 width="100%" border=0>
+              <TBODY>
+              <TR class=Frm_NavigationBar>
+                <TD><IMG height=16 
+                  src="CodeProject Using Raw Input from C# to handle multiple keyboards_ Free source code and programming articles_files/forum_newmsg.gif" 
+                  width=16 align=top border=0><A class=Frm_HL 
+                  title="Create a new message thread" 
+                  href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=375378&amp;floc=/KB/system/rawinput.aspx" 
+                  target=_top name=Frm_HoverNL><B>New Message</B></A></TD>
+                <TD>Msgs 1 to 3 of 3 (Total in Forum: 78) (<A 
+                  href="http://www.codeproject.com/KB/system/rawinput.aspx?fid=375378&amp;noise=3&amp;df=90&amp;mpp=25&amp;sort=Position&amp;view=Quick">Refresh</A>)</TD>
+                <TD style="WHITE-SPACE: nowrap; TEXT-ALIGN: right"><SPAN 
+                  class=Frm_HL>First</SPAN><SPAN class=Frm_HL>Prev</SPAN><SPAN 
+                  class=Frm_HL>Next</SPAN></TD></TR></TBODY></TABLE></TD></TR>
+        <TR>
+          <TD><!-- Column Headers -->
+            <TABLE class=Frm_MsgTable cellSpacing=0 cellPadding=0 width="100%" 
+            border=0>
+              <TBODY>
+              <TR class=Frm_ColumnHeaders>
+                <TD style="WIDTH: 100%">
+                  <TABLE cellSpacing=0 cellPadding=2 width="100%" border=0>
+                    <TBODY>
+                    <TR>
+                      <TD>Subject&nbsp;</TD>
+                      <TD class=Frm_MsgAuthor>&nbsp;Author&nbsp;</TD>
+                      <TD 
+              class=Frm_MsgDate>Date&nbsp;</TD></TR></TBODY></TABLE></TD></TR>
+              <TR>
+                <TD><IMG height=5 src="" width=1 border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd Rt HdUnSel " id=2308464_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=16><A 
+                        name=xx2308464xx></A><IMG height=16 
+                        src="CodeProject Using Raw Input from C# to handle multiple keyboards_ Free source code and programming articles_files/msg_question.gif" 
+                        width=16 valign="absmiddle"></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/system/rawinput.aspx?fid=375378&amp;noise=3&amp;df=90&amp;mpp=25&amp;sort=Position&amp;view=Quick&amp;select=2308464#xx2308464xx" 
+                        name=2308464>RIDEV_INPUTSINK is really 
+                        RIDEV_INPUT_COPY!!!</A><IMG height=12 
+                        src="CodeProject Using Raw Input from C# to handle multiple keyboards_ Free source code and programming articles_files/New.gif" 
+                        width=31></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        title=member height=16 
+                        src="CodeProject Using Raw Input from C# to handle multiple keyboards_ Free source code and programming articles_files/member_sm.gif" 
+                        border=0></TD>
+                      <TD class=Frm_MsgAuthor><A 
+                        href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=4173965">nonameseemstowork</A></TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">22:01 7 
+                        Nov '07 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=2308464_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 16px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2>Ok, it's nice to receive (a copy 
+                                of the) input even when in the background using 
+                                RIDEV_INPUTSINK. But what about really sinking 
+                                input, such that for a specific device, only 
+                                application X receives the input, even when not 
+                                the foreground process. <BR><BR>Specifically, if 
+                                application X sets up to sink keyboard 2, then 
+                                application Y does not ever receive any input 
+                                from keyboard 2.<BR><BR>I gather from the way 
+                                raw input registration works (not for a specific 
+                                device), this may need the ability for 
+                                application X to "re-inject" input that is not 
+                                from keyboard 2.<BR><BR>Any help on this would 
+                                be great! <BR><BR><BR>Jeremy<BR></TD></TR>
+                                <TR style="VERTICAL-ALIGN: top">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL title=Reply 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=375378&amp;select=2308464&amp;floc=/KB/system/rawinput.aspx&amp;fa=r">Reply</A>·<A 
+                                class=Frm_MHL title=Email 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=375378&amp;select=2308464&amp;floc=/KB/system/rawinput.aspx&amp;fa=e">Email</A>·<A 
+                                class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/system/rawinput.aspx?fid=375378&amp;df=90&amp;mpp=25&amp;sort=Position&amp;tid=2308464">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=375378&amp;msg=2308464">PermaLink</A>·<A 
+                                class=Frm_MHL title="Bookmark this post" 
+                                href="http://www.codeproject.com/script/Bookmarks/Add.aspx?&amp;obid=2308464&amp;obtid=3">Bookmark</A></TD>
+                                <TD class=Frm_MsgFt 
+                                style="TEXT-ALIGN: right"><SPAN id=MVF2308464 
+                                style="WHITE-SPACE: nowrap">
+                                <SCRIPT language=Javascript 
+type=text/javascript>
+											MsgVoteForm(4173965,2308464);
+										</SCRIPT>
+                                </SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR class=Quick>
+                <TD class=Frm_MsgRtDivide><IMG height=1 src="" width=1 
+                  border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd Rt HdUnSel " id=2274866_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=16><A 
+                        name=xx2274866xx></A><IMG height=16 
+                        src="CodeProject Using Raw Input from C# to handle multiple keyboards_ Free source code and programming articles_files/msg_question.gif" 
+                        width=16 valign="absmiddle"></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/system/rawinput.aspx?fid=375378&amp;noise=3&amp;df=90&amp;mpp=25&amp;sort=Position&amp;view=Quick&amp;select=2274866#xx2274866xx" 
+                        name=2274866>Getting invalid keys when using multiple 
+                        barcode readers</A></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        title=member height=16 
+                        src="CodeProject Using Raw Input from C# to handle multiple keyboards_ Free source code and programming articles_files/member_sm.gif" 
+                        border=0></TD>
+                      <TD class=Frm_MsgAuthor><A 
+                        href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=4180494">pascaljr</A></TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">4:10 17 
+                        Oct '07 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=2274866_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 16px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2>Hello,<BR>I build a very nice 
+                                application using this sample, and it was very 
+                                useful. However, I'm having a huge problem. I'm 
+                                using two barcode readers on my Windows XP SP2, 
+                                and when I use both of them at the same time, 
+                                even on notepad, I get different letters from 
+                                the barcode. If I read one, then the other, 
+                                everything goes fine. But when I read both of 
+                                them together, I get some invalid keys. Any idea 
+                                why? Is there a way to solve this? I used this 
+                                code so I could identify from which barcode 
+                                reader each keystroke came from, and sort them 
+                                out, and everything works fine, except for the 
+                                invalid keys.<BR>Thank you very much 
+                                <BR><BR>Pascal<BR></TD></TR>
+                                <TR style="VERTICAL-ALIGN: top">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL title=Reply 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=375378&amp;select=2274866&amp;floc=/KB/system/rawinput.aspx&amp;fa=r">Reply</A>·<A 
+                                class=Frm_MHL title=Email 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=375378&amp;select=2274866&amp;floc=/KB/system/rawinput.aspx&amp;fa=e">Email</A>·<A 
+                                class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/system/rawinput.aspx?fid=375378&amp;df=90&amp;mpp=25&amp;sort=Position&amp;tid=2274866">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=375378&amp;msg=2274866">PermaLink</A>·<A 
+                                class=Frm_MHL title="Bookmark this post" 
+                                href="http://www.codeproject.com/script/Bookmarks/Add.aspx?&amp;obid=2274866&amp;obtid=3">Bookmark</A></TD>
+                                <TD class=Frm_MsgFt 
+                                style="TEXT-ALIGN: right"><SPAN id=MVF2274866 
+                                style="WHITE-SPACE: nowrap">
+                                <SCRIPT language=Javascript 
+type=text/javascript>
+											MsgVoteForm(4180494,2274866);
+										</SCRIPT>
+                                </SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR class=Quick>
+                <TD class=Frm_MsgRtDivide><IMG height=1 src="" width=1 
+                  border=0></TD></TR><!-- Start Message head -->
+              <TR class="MsgHd Rt HdUnSel " id=2233832_h0>
+                <TD width="100%">
+                  <TABLE class=QuickHd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent width=16><A 
+                        name=xx2233832xx></A><IMG height=16 
+                        src="CodeProject Using Raw Input from C# to handle multiple keyboards_ Free source code and programming articles_files/msg_general.gif" 
+                        width=16 valign="absmiddle"></TD>
+                      <TD class=Frm_MsgSubject><A id=DynMessLink 
+                        href="http://www.codeproject.com/KB/system/rawinput.aspx?fid=375378&amp;noise=3&amp;df=90&amp;mpp=25&amp;sort=Position&amp;view=Quick&amp;select=2233832#xx2233832xx" 
+                        name=2233832>Capturing BACK key of smart phone 
+                      5.0.</A></TD>
+                      <TD style="WIDTH: 20px; WHITE-SPACE: nowrap"><IMG 
+                        title=member height=16 
+                        src="CodeProject Using Raw Input from C# to handle multiple keyboards_ Free source code and programming articles_files/member_sm.gif" 
+                        border=0></TD>
+                      <TD class=Frm_MsgAuthor><A 
+                        href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=3131116">Solanki 
+                        Rajat</A></TD>
+                      <TD class=Frm_MsgDate 
+                      style="VERTICAL-ALIGN: top; WHITE-SPACE: nowrap">14:46 
+                        19 Sep '07 &nbsp;</TD></TR></TBODY></TABLE></TD></TR><!-- End Message head -->
+              <TR id=2233832_h1 style="DISPLAY: none">
+                <TD style="WIDTH: 100%">
+                  <TABLE class=QuickBd cellSpacing=0 cellPadding=0 width="100%" 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD class=Frm_MsgIndent style="WIDTH: 16px"></TD>
+                      <TD class="MsgBd BdSel ">
+                        <TABLE cellSpacing=5 cellPadding=0 width="100%" 
+border=0>
+                          <TBODY>
+                          <TR>
+                            <TD>
+                              <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                              border=0>
+                                <TBODY>
+                                <TR>
+                                <TD colSpan=2>Hello,<BR>I am working with vb.net 
+                                windows cf 2.0.<BR>I want to control back key of 
+                                device, when user presses the key I want to fire 
+                                some special task of my application, but I could 
+                                not able to handle it.<BR>I discribe in short 
+                                about my form.<BR>My form has some editable 
+                                textbox, menu items aslo.<BR>any one who has 
+                                some idea than guide me.<BR>I will thankful 
+                                him/her.<BR>bye<BR>regards Rajat. 
+                                (rajat.solanki@isol.co.in) <BR></TD></TR>
+                                <TR style="VERTICAL-ALIGN: top">
+                                <TD class=Frm_MsgFt><A class=Frm_MHL title=Reply 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=375378&amp;select=2233832&amp;floc=/KB/system/rawinput.aspx&amp;fa=r">Reply</A>·<A 
+                                class=Frm_MHL title=Email 
+                                href="http://www.codeproject.com/script/Forums/Edit.aspx?fid=375378&amp;select=2233832&amp;floc=/KB/system/rawinput.aspx&amp;fa=e">Email</A>·<A 
+                                class=Frm_MHL title="View Thread" 
+                                href="http://www.codeproject.com/KB/system/rawinput.aspx?fid=375378&amp;df=90&amp;mpp=25&amp;sort=Position&amp;tid=2233832">View 
+                                Thread</A>·<A class=Frm_MHL 
+                                title="Get permanent link" 
+                                href="http://www.codeproject.com/script/Forums/View.aspx?fid=375378&amp;msg=2233832">PermaLink</A>·<A 
+                                class=Frm_MHL title="Bookmark this post" 
+                                href="http://www.codeproject.com/script/Bookmarks/Add.aspx?&amp;obid=2233832&amp;obtid=3">Bookmark</A></TD>
+                                <TD class=Frm_MsgFt 
+                                style="TEXT-ALIGN: right"><SPAN id=MVF2233832 
+                                style="WHITE-SPACE: nowrap">
+                                <SCRIPT language=Javascript 
+type=text/javascript>
+											MsgVoteForm(3131116,2233832);
+										</SCRIPT>
+                                </SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+              <TR>
+                <TD><IMG height=5 src="" width=1 
+          border=0></TD></TR></TBODY></TABLE></TD></TR>
+        <TR>
+          <TD>
+            <TABLE cellSpacing=0 cellPadding=2 width="100%">
+              <TBODY>
+              <TR class=Frm_Footer>
+                <TD>Last Visit: Wednesday, November 07, 2007 2:25:00 PM</TD>
+                <TD 
+              style="WHITE-SPACE: nowrap; TEXT-ALIGN: right"></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE>
+      <P class=SmallText><IMG height=16 
+      src="CodeProject Using Raw Input from C# to handle multiple keyboards_ Free source code and programming articles_files/news_general.gif" 
+      width=16 align=absMiddle> General comment &nbsp;&nbsp; <IMG height=16 
+      src="CodeProject Using Raw Input from C# to handle multiple keyboards_ Free source code and programming articles_files/news_info.gif" 
+      width=16 align=absMiddle> News / Info &nbsp;&nbsp; <IMG height=16 
+      src="CodeProject Using Raw Input from C# to handle multiple keyboards_ Free source code and programming articles_files/news_question.gif" 
+      width=16 align=absMiddle> Question &nbsp;&nbsp; <IMG 
+      src="CodeProject Using Raw Input from C# to handle multiple keyboards_ Free source code and programming articles_files/news_answer.gif" 
+      align=absMiddle> Answer &nbsp;&nbsp; <IMG height=16 
+      src="CodeProject Using Raw Input from C# to handle multiple keyboards_ Free source code and programming articles_files/news_game.gif" 
+      width=16 align=absMiddle> Joke / Game &nbsp;&nbsp; <IMG height=16 
+      src="CodeProject Using Raw Input from C# to handle multiple keyboards_ Free source code and programming articles_files/news_admin.gif" 
+      width=16 align=absMiddle> Admin message</P><!-- Forum End --></DIV>
+      <TABLE width="100%">
+        <TBODY>
+        <TR vAlign=top>
+          <TD class=TinyText align=left><A id=ctl00_PermaLink 
+            href="http://www.codeproject.com/script/Articles/Article.aspx?aid=17123">PermaLink</A> 
+            | <A id=ctl00_PrivacyLink 
+            href="http://www.codeproject.com/info/privacy.aspx">Privacy </A>| <A 
+            id=ctl00_TermsOfUseLink 
+            href="http://www.codeproject.com/info/TermsOfUse.aspx">Terms of 
+            Use</A> <BR>Last Updated: 20 Mar 2007<BR>Editor: <A 
+            id=ctl00_ArticleEditor 
+            href="http://www.codeproject.com/script/Membership/Profiles.aspx?mid=1">Chris 
+            Maunder</A><BR></TD>
+          <TD class=TinyText vAlign=top align=right>Copyright 2007 by smesser, 
+            Emma Burrows<BR>Everything else Copyright © <A 
+            href="mailto:webmaster@codeproject.com">CodeProject</A>, 
+            1999-2007<BR>Web11 | <A id=ctl00_AdvertiseLink 
+            href="http://www.codeproject.com/info/MediaKit.aspx">Advertise on 
+            the Code Project </A></TD></TR></TBODY></TABLE></TD></TR>
+  <TR>
+    <TD align=middle colSpan=2><SPAN class=TinyText><A 
+      href="http://www.aspalliance.com/">ASP Alliance</A> • <A 
+      href="http://www.developerfusion.co.uk/">Developer Fusion</A> • <A 
+      href="http://www.developersdex.com/">Developersdex</A> • <A 
+      href="http://www.devguru.com/">DevGuru</A> • <A 
+      href="http://www.programmersheaven.com/">Programmers Heaven</A> • <A 
+      href="http://www.planet-source-code.com/">Planet Source Code</A> • <A 
+      href="http://www.tek-tips.com/">Tek-Tips Forums</A> 
+</SPAN></TD></TR></TBODY></TABLE>
+<SCRIPT language=Javascript 
+src="CodeProject Using Raw Input from C# to handle multiple keyboards_ Free source code and programming articles_files/front.asp" 
+type=text/javascript></SCRIPT>
+
+<SCRIPT language=Javascript type=text/javascript><!--
+if (document.all) try {window.attachEvent("oncopy",copyCode);}catch(e){};
+--></SCRIPT>
+
+<SCRIPT language=Javascript 
+src="CodeProject Using Raw Input from C# to handle multiple keyboards_ Free source code and programming articles_files/TogglePre.js" 
+type=text/javascript></SCRIPT>
+
+<SCRIPT language=Javascript 
+src="CodeProject Using Raw Input from C# to handle multiple keyboards_ Free source code and programming articles_files/menu132_com.js" 
+type=text/javascript></SCRIPT>
+
+<SCRIPT language=Javascript 
+src="CodeProject Using Raw Input from C# to handle multiple keyboards_ Free source code and programming articles_files/TopNavBar.js" 
+type=text/javascript></SCRIPT>
+
+<SCRIPT language=Javascript type=text/javascript><!--
+new HVMenu(new menu_NavbarConfig());
+--></SCRIPT>
+</BODY></HTML>

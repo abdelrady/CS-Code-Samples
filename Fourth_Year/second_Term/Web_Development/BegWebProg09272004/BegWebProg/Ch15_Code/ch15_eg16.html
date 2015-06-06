@@ -1,0 +1,120 @@
+<?xml version="1.0" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<title>E-mail form</title>
+
+<script type="text/JavaScript">
+function add(objInput, objList){
+
+var strGroup = objList.options[objList.selectedIndex].value;
+
+  if (objInput.value == "") 
+  {
+    objInput.value = strGroup
+  }
+  else
+  {
+    objInput.value += ('; ' + strGroup)
+  }
+}
+
+
+function validate(form) {
+
+  var returnValue = true;
+  var sendTo = form.txtTo.value;
+  var cc = form.txtCC.value;
+  var subject = form.txtSubject.value;
+  var message = form.txtMessage.value;
+
+  if (sendTo == "")
+  {
+    returnValue = false;
+    alert("There are no email addresses in the To field");
+    form.txtTo.focus();
+  }
+
+  if (subject == "")
+  {
+    returnValue = false;
+    alert("There is no subject line for this e-mail");
+    form.txtSubject.focus();
+  }
+
+  if (message=="")
+  {
+    returnValue = false;
+    alert("There is no message to this e-mail");
+    form.txtMessage.focus();
+  }
+
+
+  var arrTo = sendTo.split("; ");  
+  var rxEmail=/^\w(\.?[\w-])*@\w(\.?[\w-])*\.[a-z]{2,6}(\.[a-z]{2})?$/i;
+
+  for (var i=0; i<(arrTo.length); i++) {
+    if (!rxEmail.test(arrTo[i]))
+    {
+      returnValue = false;
+      alert("The e-mail address "+ arrTo[i] +" does not appear to be valid");
+    }
+  }  
+
+  var arrCC = cc.split("; ");  
+  for (var i=0; i<(arrCC.length); i++) {
+    if (!rxEmail.test(arrCC[i]))
+    {
+      returnValue = false;
+      alert("The e-mail address "+ arrCC[i] +" does not appear to be valid");
+    }
+  }  
+
+return returnValue;
+}
+
+</script>
+
+</head>
+
+<body>
+
+<form name="frmEmail" onsubmit="return validate(this)" action="sendMail.asp" method ="post">
+
+  <table><tr><td>
+
+    <table><tr valign="top">
+       <td>Send to:</td><td><input type="text" size="70" name="txtTo" /></td>
+       </tr><tr>
+       <td>CC: </td><td><input type="text" size="70" name="txtCC" /></td>
+       </tr><tr>
+       <td>Subject:</td><td><input type="text" size="70" name="txtSubject" />
+       </td>
+    </tr></table>
+
+    </td>
+    <td>
+    Quick address book:<br />
+    <select size="4" name="selectList1" style="width:150px">
+      <option value="sales@example.org">Sales</option>
+      <option value="marketing@example.org">Marketing</option>
+      <option value="research@example.org">Research</option>
+      <option value="support@example.org">Customer Support</option>
+      <option value="it@example.org">IT</option>
+    </select><br />
+
+   <input type="button" onclick="add(txtTo, document.frmEmail.selectList1);"
+          value="Send to" />
+   <input type="button" onclick="add(txtCC, document.frmEmail.selectList1);"
+          value="CC" />
+    </td>
+  </tr></table>
+  Message:<br />
+  <textarea name="txtMessage" rows="20" cols="90"></textarea><br />
+  <input type="submit" value="Send E-mail" />
+
+</form>
+
+</body>
+</html>

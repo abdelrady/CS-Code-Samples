@@ -1,0 +1,198 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!-- saved from url=(0045)http://www.wam.umd.edu/~zben/Java/bounce.java -->
+<HTML><HEAD>
+<META http-equiv=Content-Type content="text/html; charset=windows-1256">
+<META content="MSHTML 6.00.2900.2180" name=GENERATOR></HEAD>
+<BODY><PRE>// NB: uses Java 1.1 event model...
+
+import java.applet.*;
+import java.awt.*;
+import java.awt.event.*;
+import java.util.Vector;
+
+public class bounce extends Applet 
+	implements ActionListener, ItemListener, Runnable  {
+
+	Vector	  colors = new Vector(0,13);
+	Checkbox  gravity;
+	Choice	  color;
+	ball	  bouncer;
+
+	public class ball extends Canvas {
+		Rectangle position;
+		Point	  speed;
+		boolean	  xfast;
+
+		private int abs(int x) {
+			return (0&gt;x)?-x:x;
+		}
+
+		private int sgn(int x) {
+			return (0&gt;x)?-1:(0&lt;x)?1:0;
+		}
+
+		ball() {
+			position = new Rectangle(30,20,12,12);
+			speed = new Point(2,3);
+			xfast = ( abs(speed.x) &gt; abs(speed.y) );
+		}
+
+		private boolean canmove(Rectangle bounds, int dx, int dy) {
+			Rectangle newrect = position.getBounds();
+			newrect.translate(dx,dy);
+			return( newrect.equals(newrect.intersection(bounds)) );
+		}
+
+		public int animate() {
+			int dx;
+			int dy;
+			Dimension cd = getSize();
+			Rectangle bounds =
+				new Rectangle(0,0,cd.width,cd.height);
+			if (xfast) {
+				dx = sgn(speed.x);
+				dy = 0;
+			} else {
+				dx = 0;
+				dy = sgn(speed.y);
+			}
+			if ( !canmove(bounds,dx,dy) ) {
+				if ( canmove(bounds,-dx,dy) ) {
+					speed.x = -speed.x;
+					dx = -dx;
+				} else if ( canmove(bounds,dx,-dy) ) {
+					speed.y = -speed.y;
+					dy = -dy;
+				} else {
+					speed.x = -speed.x;
+					dx = -dx;
+					speed.y = -speed.y;
+					dy = -dy;
+				}
+			}				
+			position.translate(dx,dy);
+			repaint();
+			if (xfast) {
+				if (0 != speed.x)
+					return(100/abs(speed.x));
+			} else {
+				if (0 != speed.y)
+					return(100/abs(speed.y));
+			}
+			return(1000);
+		}
+
+		public void gravitate() {
+			speed.y += 1;
+			xfast = ( abs(speed.x) &gt; abs(speed.y) );
+		}
+
+		public void damp() {
+			speed.x = 0;
+			speed.y = 0;
+		}
+
+		public void kick() {
+			int oldx = speed.x;
+			int oldy = speed.y;
+			do {
+				speed.x = (int) ( 20.0 * (Math.random()-0.5) );
+				speed.y = (int) ( 20.0 * (Math.random()-0.5) );
+			} while ( (oldx==speed.x) &amp;&amp; (oldy==speed.y) );
+			xfast = ( abs(speed.x) &gt; abs(speed.y) );			
+		}
+
+		public void paint(Graphics g) {
+			g.fillOval(position.x,position.y,
+				   position.width,position.height);
+		}
+	}
+
+	public void run() {
+		while (true) {
+			int delay = bouncer.animate();
+			try {
+				Thread.sleep(delay);
+			} catch (Exception e) {
+				System.out.println("Who disturbs my sleep?");
+			}
+			if ( gravity.getState() )
+				bouncer.gravitate();
+		}
+	}
+
+// This method handles the buttons.
+
+	public void actionPerformed(ActionEvent e) {
+		switch(e.getActionCommand().charAt(0)) {
+		case 'd':
+			bouncer.damp();
+			break;
+		case 'k':
+			bouncer.kick();
+			break;
+		}			
+	}
+
+// Color choice
+// Took out repaint because it's going to get done soon anyway...
+
+	public void itemStateChanged(ItemEvent e) {
+		bouncer.setForeground(
+		    (Color) colors.elementAt(color.getSelectedIndex()));
+	}
+
+// Add color choice to menu
+
+	private void acc(String name, Color tint) {
+		color.add(name);
+		colors.addElement(tint);
+	}
+
+// Startup the applet
+
+	public void init() {
+		setLayout( new BorderLayout() );
+		Panel panel = new Panel();
+		panel.setLayout( new GridLayout(4,1) );
+
+		color = new Choice();
+		acc("black",    Color.black);
+		acc("blue",     Color.blue);
+		acc("cyan",     Color.cyan);
+		acc("darkGrey", Color.darkGray);
+		acc("grey",     Color.gray);
+		acc("green",    Color.green);
+		acc("lightGrey",Color.lightGray);
+		acc("magenta",  Color.magenta);
+		acc("orange",   Color.orange);
+		acc("pink",     Color.pink);
+		acc("red",      Color.red);
+		acc("yellow",   Color.yellow);
+		color.addItemListener(this);
+		panel.add(color);
+
+		gravity = new Checkbox("Gravity");
+		panel.add(gravity);
+
+		Button damp = new Button("arrete");
+		damp.addActionListener(this);
+		damp.setActionCommand("d");
+		panel.add(damp);
+
+		Button kick = new Button("coup");
+		kick.addActionListener(this);
+		kick.setActionCommand("k");
+		panel.add(kick);
+
+		bouncer = new ball();
+		bouncer.setBackground(Color.white);
+		bouncer.setForeground(Color.black);
+
+		add(bouncer,"Center");
+		add(panel,"East");
+
+		new Thread(this).start();
+	}
+}
+</PRE></BODY></HTML>

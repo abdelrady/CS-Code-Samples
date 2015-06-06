@@ -1,0 +1,1 @@
+document.write('<applet id="ProjectApplet" style="display:block" code="ScratchApplet" codebase="/static/misc/" archive="ScratchApplet.jar" height="387" width="482"><param name="project" value="'+embed_project+'"><h3>Your browser needs java to view projects. Click <a href="http://java.com/getjava/index.jsp">here</a> to install Java.</h3></applet>');

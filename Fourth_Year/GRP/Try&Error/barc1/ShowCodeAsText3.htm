@@ -1,0 +1,318 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!-- saved from url=(0086)http://www.planetsourcecode.com/vb/scripts/ShowCodeAsText.asp?txtCodeId=33826&lngWId=1 -->
+<HTML><HEAD>
+<META http-equiv=Content-Type content="text/html; charset=windows-1256">
+<META content="MSHTML 6.00.2900.2180" name=GENERATOR></HEAD>
+<BODY><XMP>'**************************************
+' Name: Bar Code string encoder
+' Description:Time to give back some cod
+'     e!
+This string function will return a formatted string, for use with a barcode font on a report for use with a scanner. 
+Example: ConvertToBarCode("WIDGET") 
+Returns: “{WIDGETj~”
+This was used with this product: 'Bar Code 128' by 'Elfring Software Fonts'.
+' By: The Dude
+'
+'
+' Inputs:one string paramater, ie "WIDGE
+'     T"
+'
+' Returns:a formatted string, ie “{WIDGE
+'     Tj~”
+'
+'Assumes:barcodes, barcode fonts, scanne
+'     rs.
+'
+'Side Effects:None
+'This code is copyrighted and has limite
+'     d warranties.
+'Please see http://www.Planet-Source-Cod
+'     e.com/xq/ASP/txtCodeId.33826/lngWId.1/qx
+'     /vb/scripts/ShowCode.htm
+'for details.
+'**************************************
+
+' This module code is used with this pro
+'     duct: 'Bar Code 128' by 'Elfring Softwar
+'     e Fonts'
+' I have used this function to print bar
+'     codes onto access reports.
+' Font used on Access Report: Code128ABH
+'     R
+' Example: 
+'	example: ConvertToBarCode("WIDGET") 
+'	Returns: “{WIDGETj~”
+Option Compare Database
+
+
+Public Function ConvertToBarCode(stLine As String) As String
+    Dim StartA As Integer, StartB As Integer, check_digit As String
+    Dim bar_str As String, bar_val As Integer, checksum As Long
+    Dim I As Integer
+    Dim LineSrc As String
+    Dim bcChar As String
+    Dim Myresult As Integer
+    LineSrc = UCase(Trim(stLine))
+    StartA = 103
+    StartB = 104
+    check_digit = 0
+    bar_str = "{"
+    bar_val = 0
+    checksum = StartA
+
+
+    For I = 1 To Len(LineSrc)
+        bcChar = Mid(LineSrc, I, 1)
+
+
+        If bcChar = " " Then
+            bar_str = bar_str + Chr(174)
+            checksum = checksum + (0 * I)
+        Else
+            bar_str = bar_str + bcChar
+            bar_val = GetBarCodeID(bcChar)
+            checksum = checksum + (bar_val * I)
+        End If
+    Next I
+    Myresult = checksum Mod StartA
+    check_digit = GetBarCodeStr(Myresult)
+    ConvertToBarCode = bar_str + check_digit + "~"
+End Function
+
+
+Public Function GetBarCodeStr(myid As Integer) As String
+    ' These values are not ASCII values, you
+    '     cannot use the chr() function.
+    ' These are unique to the Barcode system
+    '     
+    Dim mystr As String
+
+
+    Select Case myid
+        Case 0: mystr = "®"
+        Case 1: mystr = "!"
+        Case 2: mystr = """"
+        Case 3: mystr = "#"
+        Case 4: mystr = "$"
+        Case 5: mystr = "%"
+        Case 6: mystr = "&"
+        Case 7: mystr = "'"
+        Case 8: mystr = "("
+        Case 9: mystr = ")"
+        Case 10: mystr = "*"
+        Case 11: mystr = "+"
+        Case 12: mystr = ","
+        Case 13: mystr = "-"
+        Case 14: mystr = "."
+        Case 15: mystr = "/"
+        Case 16: mystr = "0"
+        Case 17: mystr = "1"
+        Case 18: mystr = "2"
+        Case 19: mystr = "3"
+        Case 20: mystr = "4"
+        Case 21: mystr = "5"
+        Case 22: mystr = "6"
+        Case 23: mystr = "7"
+        Case 24: mystr = "8"
+        Case 25: mystr = "9"
+        Case 26: mystr = ":"
+        Case 27: mystr = ";"
+        Case 28: mystr = "<"
+        Case 29: mystr = "="
+        Case 30: mystr = ">"
+        Case 31: mystr = "?"
+        Case 32: mystr = "@"
+        Case 33: mystr = "A"
+        Case 34: mystr = "B"
+        Case 35: mystr = "C"
+        Case 36: mystr = "D"
+        Case 37: mystr = "E"
+        Case 38: mystr = "F"
+        Case 39: mystr = "G"
+        Case 40: mystr = "H"
+        Case 41: mystr = "I"
+        Case 42: mystr = "J"
+        Case 43: mystr = "K"
+        Case 44: mystr = "L"
+        Case 45: mystr = "M"
+        Case 46: mystr = "N"
+        Case 47: mystr = "O"
+        Case 48: mystr = "P"
+        Case 49: mystr = "Q"
+        Case 50: mystr = "R"
+        Case 51: mystr = "S"
+        Case 52: mystr = "T"
+        Case 53: mystr = "U"
+        Case 54: mystr = "V"
+        Case 55: mystr = "W"
+        Case 56: mystr = "X"
+        Case 57: mystr = "Y"
+        Case 58: mystr = "Z"
+        Case 59: mystr = "["
+        Case 60: mystr = "\"
+        Case 61: mystr = "]"
+        Case 62: mystr = "^"
+        Case 63: mystr = "_"
+        Case 64: mystr = "`"
+        Case 65: mystr = "a"
+        Case 66: mystr = "b"
+        Case 67: mystr = "c"
+        Case 68: mystr = "d"
+        Case 69: mystr = "e"
+        Case 70: mystr = "f"
+        Case 71: mystr = "g"
+        Case 72: mystr = "h"
+        Case 73: mystr = "i"
+        Case 74: mystr = "j"
+        Case 75: mystr = "k"
+        Case 76: mystr = "l"
+        Case 77: mystr = "m"
+        Case 78: mystr = "n"
+        Case 79: mystr = "o"
+        Case 80: mystr = "p"
+        Case 81: mystr = "q"
+        Case 82: mystr = "r"
+        Case 83: mystr = "s"
+        Case 84: mystr = "t"
+        Case 85: mystr = "u"
+        Case 86: mystr = "v"
+        Case 87: mystr = "w"
+        Case 88: mystr = "x"
+        Case 89: mystr = "y"
+        Case 90: mystr = "z"
+        Case 91: mystr = "،"
+        Case 92: mystr = "¢"
+        Case 93: mystr = "£"
+        Case 94: mystr = "¤"
+        Case 95: mystr = "¥"
+        Case 96: mystr = "¦"
+        Case 97: mystr = "§"
+        Case 98: mystr = "¨"
+        Case 99: mystr = "©"
+        Case 100: mystr = "ھ"
+        Case 101: mystr = "«"
+        Case 102: mystr = "¬"
+        Case 103: mystr = "{"
+        Case 104: mystr = "|"
+        Case 105: mystr = "}"
+    End Select
+GetBarCodeStr = mystr
+End Function
+
+
+Public Function GetBarCodeID(mystr As String) As Integer
+    Dim myid As Integer
+
+
+    Select Case mystr
+        Case "®": myid = 0
+        Case "!": myid = 1
+        Case """: myid = 2"
+        Case "#": myid = 3
+        Case "$": myid = 4
+        Case "%": myid = 5
+        Case "&": myid = 6
+        Case "'": myid = 7
+        Case "(": myid = 8
+        Case ")": myid = 9
+        Case "*": myid = 10
+        Case "+": myid = 11
+        Case ",": myid = 12
+        Case "-": myid = 13
+        Case ".": myid = 14
+        Case "/": myid = 15
+        Case "0": myid = 16
+        Case "1": myid = 17
+        Case "2": myid = 18
+        Case "3": myid = 19
+        Case "4": myid = 20
+        Case "5": myid = 21
+        Case "6": myid = 22
+        Case "7": myid = 23
+        Case "8": myid = 24
+        Case "9": myid = 25
+        Case ":": myid = 26
+        Case ";": myid = 27
+        Case "<": myid = 28
+        Case "=": myid = 29
+        Case ">": myid = 30
+        Case "?": myid = 31
+        Case "@": myid = 32
+        Case "A": myid = 33
+        Case "B": myid = 34
+        Case "C": myid = 35
+        Case "D": myid = 36
+        Case "E": myid = 37
+        Case "F": myid = 38
+        Case "G": myid = 39
+        Case "H": myid = 40
+        Case "I": myid = 41
+        Case "J": myid = 42
+        Case "K": myid = 43
+        Case "L": myid = 44
+        Case "M": myid = 45
+        Case "N": myid = 46
+        Case "O": myid = 47
+        Case "P": myid = 48
+        Case "Q": myid = 49
+        Case "R": myid = 50
+        Case "S": myid = 51
+        Case "T": myid = 52
+        Case "U": myid = 53
+        Case "V": myid = 54
+        Case "W": myid = 55
+        Case "X": myid = 56
+        Case "Y": myid = 57
+        Case "Z": myid = 58
+        Case "[": myid = 59
+        Case "\": myid = 60
+        Case "]": myid = 61
+        Case "^": myid = 62
+        Case "_": myid = 63
+        Case "`": myid = 64
+        Case "a": myid = 65
+        Case "b": myid = 66
+        Case "c": myid = 67
+        Case "d": myid = 68
+        Case "e": myid = 69
+        Case "f": myid = 70
+        Case "g": myid = 71
+        Case "h": myid = 72
+        Case "i": myid = 73
+        Case "j": myid = 74
+        Case "k": myid = 75
+        Case "l": myid = 76
+        Case "m": myid = 77
+        Case "n": myid = 78
+        Case "o": myid = 79
+        Case "p": myid = 80
+        Case "q": myid = 81
+        Case "r": myid = 82
+        Case "s": myid = 83
+        Case "t": myid = 84
+        Case "u": myid = 85
+        Case "v": myid = 86
+        Case "w": myid = 87
+        Case "x": myid = 88
+        Case "y": myid = 89
+        Case "z": myid = 90
+        Case "،": myid = 91
+        Case "¢": myid = 92
+        Case "£": myid = 93
+        Case "¤": myid = 94
+        Case "¥": myid = 95
+        Case "¦": myid = 96
+        Case "§": myid = 97
+        Case "¨": myid = 98
+        Case "©": myid = 99
+        Case "ھ": myid = 100
+        Case "«": myid = 101
+        Case "¬": myid = 102
+        Case "{": myid = 103
+        Case "|": myid = 104
+        Case "}": myid = 105
+    End Select
+GetBarCodeID = myid
+End Function
+
+		</XMP></BODY></HTML>

@@ -1,0 +1,146 @@
+From: <Saved by Microsoft Internet Explorer 5>
+Subject: 
+Date: Wed, 12 Mar 2008 18:37:42 +0200
+MIME-Version: 1.0
+Content-Type: text/html;
+	charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+Content-Location: http://www.apmaths.uwo.ca/~djeffrey/am561/event_dem2.m
+X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2900.2180
+
+=EF=BB=BF<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD>
+<META http-equiv=3DContent-Type content=3D"text/html; charset=3Dutf-8">
+<META content=3D"MSHTML 6.00.2900.2180" name=3DGENERATOR></HEAD>
+<BODY><PRE>% This file demonstrates event handling in Matlab 2007, =
+release 7.5
+% The syntax changed with this release, therefore earlier versions of =
+this
+% demonstration file will now produce errors if run under Matlab 7.5
+
+% This file consists of a main function that controls the demo,
+% and several subfunctions that assist with the solution
+% The subfunctions are visible only to the main function
+
+function event_dem2
+%  Run a demo of events option using a bouncing ball. =20
+%   This is an example of repeated event location, where the initial
+%   conditions are changed after each terminal event.  This demo =
+computes=20
+%   ball bounces with calls to ODE23. =20
+%   The speed of the ball is attenuated by 0.9
+%   after each bounce.   =20
+
+%   Modified from original by Mark W. Reichelt and Lawrence F. Shampine,
+
+% We start by putting global limits on the time of the integration.
+% This gives several bounces, which is enough.
+tstart =3D 0;
+tfinal =3D 10;
+
+% In the original demo, the ball starts at height=3D0 with velocity=3D20
+% Here I start the ball below the table at height=3D-5, to demonstrate =
+the
+% one-direction ability of the Matlab code
+yinit =3D [-5; 20];
+
+% Usually only ode45 needs refine=3D4, but here we use it for ode23.
+% Why not experiment with other values?
+
+refine =3D 4;
+
+% This is the change from earlier versions of Matlab. In earlier =
+versions,
+% one simply set 'Events' to the keyword 'on'. Now you set it to a =
+function
+% handle
+
+opts_bounce =3D odeset('Events',@wall_hit_event,'Refine',refine);
+
+% Each time there is an event, the integration will stop. Therefore
+% we must collect pieces of solution and then patch them together.
+% The total solution will be kept in the variables below,=20
+% which we initialize with the initial conditions
+tout =3D tstart;
+yout =3D yinit.';    % Notice that the initial conditions to the ode =
+solver
+                % are given as a column vector, but the output is given
+                % not as a column for each time step, but a row.
+                % So we have transposed y0
+
+% We can also record lists of the events that took place. We put these
+% into the arrays below, which are initially empty
+
+teout =3D [];
+yeout =3D [];
+ieout =3D [];
+
+% Now we set the integration running. We put 2 limits on the run:
+% namely the number of bounces and the maximum time (tfinal abovw)
+bounce=3D0;
+
+while bounce&lt;10 &amp; tstart&lt; tfinal=20
+  % Start integration and run till event happens or tfinal
+  [t,y,te,ye,ie] =3D ode23(@free_fall,[tstart =
+tfinal],yinit,opts_bounce);
+
+  % Accumulate output.
+  nt =3D length(t);
+  tout =3D [tout; t(2:nt)];
+  yout =3D [yout; y(2:nt,:)];
+  teout =3D [teout; te];          % Events at tstart are never reported. =
+
+  yeout =3D [yeout; ye];
+  ieout =3D [ieout; ie];
+ =20
+  % Now the ball has hit a wall and the consequences of that must be set
+  % The velocity of the ball will reverse and we can include some
+  % attenuation.
+  % Another possibility here would be to reset yinit(1) to known =
+position
+  % of wall
+  yinit(1) =3D y(nt,1);
+  yinit(2) =3D -.9*y(nt,2);
+  % We reset the initial time and increment bounce
+  tstart =3D t(nt);
+  bounce=3Dbounce+1;
+ =20
+  % This next part is not required, but it shows some more uses of
+  % odeset and slightly improves efficiency.
+  % A good guess of a valid first timestep is the length of the last =
+valid
+  % timestep, so use it for faster computation.  'refine' is still =3D 4 =
+
+  % because we are updating the variable opts_bounce.
+  opts_bounce =3D =
+odeset(opts_bounce,'InitialStep',t(nt)-t(nt-refine),...
+                           'MaxStep',t(nt)-t(1));
+end  % of while bounce&lt;10 loop
+
+% Now we plot the output of the integration and the events as well.
+plot(tout,yout,teout,yeout(:,1),'ro')
+xlabel('time');
+ylabel('height');
+title('Ball trajectory and the events');
+
+% =
+-------------------------------------------------------------------------=
+-
+
+function dydt =3D free_fall(t,y)
+% This says that y''=3D-9.8, i.e. free fall in metric
+
+dydt =3D [y(2); -9.8];
+
+% =
+-------------------------------------------------------------------------=
+-
+
+function [value,isterminal,direction] =3D wall_hit_event(t,y)
+% Locate the time when height passes through zero in a decreasing =
+direction
+% and stop integration. =20
+value =3D [y(1),y(1)-10];     % detect height =3D 0
+isterminal =3D [1,1];   % stop the integration
+direction =3D [-1,1];   % direction towards wall from inside. =20
+</PRE></BODY></HTML>

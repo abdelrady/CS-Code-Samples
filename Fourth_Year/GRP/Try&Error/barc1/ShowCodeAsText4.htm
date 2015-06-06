@@ -1,0 +1,67 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!-- saved from url=(0086)http://www.planetsourcecode.com/vb/scripts/ShowCodeAsText.asp?txtCodeId=30818&lngWId=1 -->
+<HTML><HEAD>
+<META http-equiv=Content-Type content="text/html; charset=windows-1256">
+<META content="MSHTML 6.00.2900.2180" name=GENERATOR></HEAD>
+<BODY><XMP>'**************************************
+' Name: calculate the EAN ( barcode) che
+'     ck digit
+' Description:ever made a program capabl
+'     e of showing barcodes ? 
+if you did than you`ve been there ,,, at the oficial EAN standards site,, than you would have seen how to calculate the check digit.
+they hold the standard they publish that standard also on their website ,,, 
+http://www.ean-int.org/index800.html
+i never found code in VB that calculates the check digit ,, so my conclusion is that it was hold for comercial reassons ( there are lots of controls out there for a lot of monney :-) 
+so i donate this M. Posseth code to the public and make it public domain ,,, 
+uhmmm votes would be apreciated :-) 
+' By: Michel Posseth
+'
+'
+' Inputs:13 digit EAN code ( manufactere
+'     r number , parts number )
+'
+' Returns:14 digit EAN code ( calculates
+'     the check digit )
+'
+'Assumes:None
+'
+'Side Effects:None
+'This code is copyrighted and has limite
+'     d warranties.
+'Please see http://www.Planet-Source-Cod
+'     e.com/xq/ASP/txtCodeId.30818/lngWId.1/qx
+'     /vb/scripts/ShowCode.htm
+'for details.
+'**************************************
+
+
+
+Private Function CalcEanMetcontrole(ByVal EAN13Digit As String) As String
+    Dim Explodestring As String
+    Dim DigArray
+    Dim Digit As Variant
+    Dim factor As Integer
+    Dim Standin As Integer
+    Dim som As Integer
+    Dim CG As Integer
+    Explodestring = Left$(Replace(StrConv(EAN13Digit, vbUnicode), vbNullChar, _
+    ","), Len(EAN13Digit) * 2 - 1)
+    DigArray = Split(Explodestring, ",", -1, 1)
+    factor = 3
+
+
+    For Each Digit In DigArray
+        Standin = CInt(Digit)
+        som = som + (Standin * factor)
+        factor = 4 - factor
+    Next
+
+
+    If Right$(CStr(som), 1) = 0 Then
+        CG = 0
+    Else
+        CG = 10 - Right$(som, 1)
+    End If
+    CalcEanMetcontrole = Trim$(EAN13Digit & CStr(CG))
+End Function
+		</XMP></BODY></HTML>

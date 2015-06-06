@@ -1,0 +1,181 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!-- saved from url=(0059)http://me-www.colorado.edu/matlab/dynamics/bouncy_ball.html -->
+<HTML><HEAD><TITLE>University of Colorado ::: Mechanical Engineering :: Matlab Tutorials</TITLE>
+<META http-equiv=Content-Type content="text/html; charset=iso-8859-1"><LINK 
+href="University of Colorado  Mechanical Engineering  Matlab Tutorials_files/main.css" 
+type=text/css rel=stylesheet>
+<SCRIPT>
+function clientSideInclude(id, url) {
+  var req = false;
+  // For Safari, Firefox, and other non-MS browsers
+  if (window.XMLHttpRequest) {
+    try {
+      req = new XMLHttpRequest();
+    } catch (e) {
+      req = false;
+    }
+  } else if (window.ActiveXObject) {
+    // For Internet Explorer on Windows
+    try {
+      req = new ActiveXObject("Msxml2.XMLHTTP");
+    } catch (e) {
+      try {
+        req = new ActiveXObject("Microsoft.XMLHTTP");
+      } catch (e) {
+        req = false;
+      }
+    }
+  }
+ var element = document.getElementById(id);
+ if (!element) {
+  alert("Bad id " + id +
+   "passed to clientSideInclude." +
+   "You need a div or span element " +
+   "with this id in your page.");
+  return;
+ }
+  if (req) {
+    // Synchronous request, wait till we have it all
+    req.open('GET', url, false);
+    req.send(null);
+    element.innerHTML = req.responseText;
+  } else {
+    element.innerHTML =
+   "Sorry, your browser does not support " +
+      "XMLHTTPRequest objects. This page requires " +
+      "Internet Explorer 5 or better for Windows, " +
+      "or Firefox for any system, or Safari. Other " +
+      "compatible browsers may also exist.";
+  }
+}
+</SCRIPT>
+
+<STYLE type=text/css>.style1 {
+	COLOR: #993300
+}
+</STYLE>
+
+<META content="MSHTML 6.00.2900.2180" name=GENERATOR></HEAD>
+<BODY 
+onload="clientSideInclude('tutorialnav', '../tutorialnav.html'); clientSideInclude('date', '../date.html');"><SPAN 
+id=tutorialnav></SPAN>
+<DIV id=body>
+<TABLE cellPadding=10 width=600 border=0>
+  <TBODY>
+  <TR>
+    <TD width=450>
+      <H2><STRONG>CU Mechanical Engineering</STRONG></H2>
+      <P><STRONG>Dynamics Matlab tutorials</STRONG><BR><SPAN 
+      id=date></SPAN><BR></P></TD>
+    <TD>
+      <DIV align=right>
+      <P><IMG height=108 
+      src="University of Colorado  Mechanical Engineering  Matlab Tutorials_files/matlab.jpg" 
+      width=144><BR><FONT face="Verdana, Arial, Helvetica, sans-serif" 
+      size=1></FONT></P></DIV></TD></TR></TBODY></TABLE><BR>
+<HR width="75%" color=#999999 SIZE=1>
+
+<P><FONT size=3><STRONG>Writing Matlab Functions: <SPAN class=style1>bouncing 
+ball problem</SPAN></STRONG></FONT></P>
+<P>In this example, we will write a function that maps the motion of a ball 
+bouncing on a sinusoidally oscillating floor.</P>
+<P>The motion of a bouncing ball, on successive bounces, when the floor 
+oscillates sinusoidally can be described by the Chirikov map:</P>
+<P><IMG 
+src="University of Colorado  Mechanical Engineering  Matlab Tutorials_files/bouncy_equation.png"></P>
+<P>We want Matlab to create two-dimensional maps for different values of K and 
+the stated values of p and q. To do this, we need to define two functions: one 
+that includes the above equations, and another to keep it in the boundaries also 
+defined above. To begin, all functions within matlab must begin by declaring 
+that m-file is a function. This is accomplished by having the first line of the 
+m-file having the word 'function' followed by the name of the variable that will 
+be returned. This is consequently set equal to the name of the name of the file 
+with the quantities that are passed to the function in parenthesis. For the 
+purpose of this exercise, the name of the function will be 'bouncy' and the 
+first line of the function is as follows:</P><PRE>function bouncy
+
+p(1) = 1;
+q(1) = 1;
+K = 0.8;
+for i = 2:5000
+    p(i) = p(i-1)-K*sin(q(i-1));
+    q(i) = q(i-1)+p(i);
+    p(i) = periodic(p(i));
+    q(i) = periodic(q(i));
+end
+</PRE>
+<P>After defining 'bouncy' as a function, we say that the iterating equations 
+will start with p=q=1, and our initial K value is 0.8. The 'for' loop begins by 
+stating that we will be looking at the first five-thousand iteraions. The next 
+two lines define the two iterative equations we are given for the problem. The 
+following two lines let us keep this function periodic, so long as we define the 
+periodic function. This we will do now.</P><PRE>function res = periodic(in)
+
+if in &gt; pi
+    res = in - 2*pi;
+elseif in &lt; -pi
+    res = in + 2*pi;
+else
+    res = in;
+end
+</PRE>
+<P>This is the entirety of the periodic function. The condiitional 'if' 
+statements insure that when any function increases beyond pi, 2pi is subtracted 
+from the function; also, if it decreases beyond negative pi, 2pi is added to the 
+function. In all other cases, the function keeps its original value.</P>
+<P>To plot the results in a two-dimensional plot, we add a 'plot' command after 
+the first function. Since the plot is a function of p and q, it cannot follow 
+the second function but must follow the first, like so:</P><PRE>function bouncy
+
+p(1) = 1;
+q(1) = 1;
+K = 0.8;
+for i = 2:5000
+    p(i) = p(i-1)-K*sin(q(i-1));
+    q(i) = q(i-1)+p(i);
+    p(i) = periodic(p(i));
+    q(i) = periodic(q(i));
+end
+
+plot (p,q)
+</PRE>
+<P>The function can now be evaluated for various values of K; we will look at 
+the plots for K = 0.8, 3.2 and 6.4, in that order. Be sure to save the .m file 
+each time you chance the value of K.</P>
+<P>The m-file can now be saved. The following are several sample outputs from 
+the code illustrating the ways to call the function with different types of 
+return arguments.</P><PRE>&gt;&gt; bouncy
+<IMG src="University of Colorado  Mechanical Engineering  Matlab Tutorials_files/K1.png">
+<IMG src="University of Colorado  Mechanical Engineering  Matlab Tutorials_files/K2.png">
+<IMG src="University of Colorado  Mechanical Engineering  Matlab Tutorials_files/K3.png">
+</PRE>
+<P>The entire matlab script can be seen below or <A 
+href="http://me-www.colorado.edu/matlab/dynamics/bouncy.m">downloaded here</A> 
+(right-click to save):</P><PRE>function bouncy
+
+p(1) = 1;
+q(1) = 1;
+K = 6.4;
+for i = 2:5000
+    p(i) = p(i-1)-K*sin(q(i-1));
+    q(i) = q(i-1)+p(i);
+    p(i) = periodic(p(i));
+    q(i) = periodic(q(i));
+end
+
+plot (p,q)
+
+function res = periodic(in)
+
+if in &gt; pi
+    res = in - 2*pi;
+elseif in &lt; -pi
+    res = in + 2*pi;
+else
+    res = in;
+end
+</PRE>
+<HR style="MARGIN-TOP: 50px" width="75%" color=#999999 SIZE=1>
+
+<P>Click <A href="http://me-www.colorado.edu/matlab/index.html">here</A> to go 
+back to the tutorials home page. </P></DIV></BODY></HTML>

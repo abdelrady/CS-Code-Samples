@@ -1,0 +1,55 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!-- saved from url=(0086)http://www.planetsourcecode.com/vb/scripts/ShowCodeAsText.asp?txtCodeId=43144&lngWId=1 -->
+<HTML><HEAD>
+<META http-equiv=Content-Type content="text/html; charset=windows-1256">
+<META content="MSHTML 6.00.2900.2180" name=GENERATOR></HEAD>
+<BODY><XMP>'**************************************
+' Name: _EAN13 CheckDigit calculate
+' Description:Build the 13th CheckDigit 
+'     number of EAN13 barcode
+' By: StarNiell
+'
+'
+' Inputs:The barcode string format ie: "
+'     123456789012". The lenght of barcode str
+'     ing must be minimum 12 characters
+'
+' Returns:The CheckDigit number of barco
+'     de string for the 13th position of code,
+'     or -1 if the lenght of input parameter i
+'     s minor of 12
+'
+'Assumes:The last number, at 13th positi
+'     on of EAN13 barcode, is a check on the e
+'     ntire code...
+'
+'Side Effects:None
+'This code is copyrighted and has limite
+'     d warranties.
+'Please see http://www.Planet-Source-Cod
+'     e.com/xq/ASP/txtCodeId.43144/lngWId.1/qx
+'     /vb/scripts/ShowCode.htm
+'for details.
+'**************************************
+
+
+
+Public Function getEAN13ChekDigit(ByRef sCodice As String) As Integer
+    Dim i As Integer
+    Dim iVettore(11) As Integer
+    Dim iTmp As Integer
+
+
+    If Len(sCodice) >= 12 Then
+
+
+        For i = 0 To 11
+            iVettore(i) = Val(Mid(sCodice, i + 1, 1)) * (1 + ((i And 1) * 2))
+            iTmp = iTmp + iVettore(i)
+        Next i
+        getEAN13ChekDigit = 10 - (iTmp Mod 10)
+    Else
+        getEAN13ChekDigit = -1
+    End If
+End Function
+		</XMP></BODY></HTML>

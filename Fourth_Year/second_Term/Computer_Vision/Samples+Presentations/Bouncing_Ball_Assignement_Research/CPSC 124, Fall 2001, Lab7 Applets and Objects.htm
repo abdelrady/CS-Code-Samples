@@ -1,0 +1,246 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!-- saved from url=(0049)http://math.hws.edu/eck/cs124/f01/lab7/index.html -->
+<HTML><HEAD><TITLE>CPSC 124, Fall 2001, Lab7: Applets and Objects</TITLE>
+<META http-equiv=Content-Type content="text/html; charset=utf-8">
+<META content="MSHTML 6.00.2900.2180" name=GENERATOR></HEAD>
+<BODY bgColor=#ffffdd>
+<BLOCKQUOTE>
+  <H2><FONT color=#990000>CPSC 124, Fall 2001<BR>Lab 7: Applets and 
+  Objects</FONT></H2>
+  <P>In this lab, you will be creating and using objects to create a "bouncing 
+  ball" applet like the one shown here. You'll also be working a bit more on 
+  understanding applets and on your Web portfolio.</P>
+  <P align=center><APPLET height=300 width=400 code=Balls2.class></APPLET> </P>
+  <P>The files for this lab can be found in the directory 
+  <TT>/home/cs124/lab7</TT>. Begin by copying this directory into your own 
+  account, and <B>cd</B> into your copy of the directory.</P>
+  <P><B>This lab is due next Wednesday, October 17. I will grade Exercise 3 from 
+  the <A href="http://math.hws.edu/eck/cs124/f01/lab6/index.html">previous 
+  lab</A> along with this lab, so you don't have to complete that exercise until 
+  next Wednesday.</B></P><BR>
+  <H3><FONT color=#990000>Simple Objects</FONT></H3>
+  <P><APPLET height=150 hspace=10 width=150 align=right 
+  code=Balls.class></APPLET> The file <A 
+  href="http://math.hws.edu/eck/cs124/f01/lab7/Balls.java">Balls.java</A> in 
+  your lab7 directory defines the applet shown at the right. This file will be a 
+  starting point for your work on a more complex bouncing ball applet. You can 
+  view the applet at larger size with the command <B>appletviewer 
+  Balls.html</B>. Like some other applets that you have seen in this class, 
+  Balls.java is based on SimpleAnimationApplet. It has an <TT>init()</TT> method 
+  that initializes the applet and a <TT>drawFrame()</TT> applet that is called 
+  over and over again to draw successive frames of the animation. The bouncing 
+  ball in this animation is represented by an object. This MovingBall object is 
+  created in the <TT>init()</TT> method. Each time <TT>drawFrame()</TT> is 
+  called, the ball is moved and is drawn in a new location.</P>
+  <P>Balls.java makes use of objects in several ways. Consider this command in 
+  the <TT>drawFrame()</TT> method:</P><PRE>         g.setColor( new Color(180,180,255) );
+</PRE>
+  <P>This sets a drawing color for the Graphics object <TT>g</TT>, but in this 
+  case, the color is defined as "<TT>new Color(180,180,255)</TT>". This is an 
+  expression that represents a newly created Color object. The <TT>new</TT> 
+  operator is used to create objects. The syntax for this operator is</P><PRE>        new <B>class_name</B> ( <B>parameter_list</B> )
+</PRE>
+  <P>The object that is created belongs to the class named <B>class_name</B>. 
+  The actual parameters in the <B>parameter_list</B> are used to customize the 
+  object that is created. (In some cases, the parameter list can be empty.) In 
+  the expression "<TT>new Color(r,g,b)</TT>", the parameters <TT>r</TT>, 
+  <TT>g</TT>, and <TT>b</TT> specify the red, green, and blue components of the 
+  color. They must be integers in the range from 0 to 255 inclusive. Another 
+  example of constructing an object is found in the <TT>init()</TT> method where 
+  the bouncing ball object is created:</P><PRE>    ball = new MovingBall( 0, getSize().width, 0, getSize().height );
+</PRE>
+  <P>The <TT>new</TT> operator here creates a new MovingBall object, which is 
+  assigned to the variable named ball.</P>
+  <P>There are two ways to get objects in Java. One is to use the <TT>new</TT> 
+  operator to construct a new object. The other is to call a function that 
+  returns an object as its return value. This is what's done in the above 
+  statement for the parameters <TT>getSize().width</TT> and 
+  <TT>getSize().height</TT>. Here, <TT>getSize()</TT> is a function that is 
+  defined in every applet, which can be used to determine the actual size of the 
+  applet. It returns a value which is an object of class Dimension. Every 
+  Dimension object contains two <TT>int</TT> member variables, <TT>width</TT> 
+  and <TT>height</TT>. So, <TT>getSize()</TT> is a an object, and 
+  <TT>getSize().width</TT> is a variable in that object. By using 
+  <TT>getSize().width</TT> and <TT>getSize().height</TT> instead of actual 
+  numbers, you can write an applet that will work well for an applet of any 
+  size. Of course, doing so requires extra calculations.</P><BR clear=all>
+  <H3><FONT color=#990000>Exercise 1: Bouncing Balls</FONT></H3>
+  <P>The bouncing balls in the above applet are represented by objects belonging 
+  to the class <TT>MovingBall</TT>. An object in this class can be constructed 
+  with</TT> <PRE>        new MovingBall(xmin,xmax,ymin,ymax)
+</PRE>
+  <P>where the parameters specify a rectangular region. The ball will move 
+  around in this region, bouncing off the sides so that it stays inside the 
+  rectangle. More specifically, the the rectangle extends from xmin on the left 
+  to xmax on the right in the horizontal direction and from ymin on the top to 
+  ymax on the bottom in the vertical direction. The values of xmin, xmax, ymin, 
+  and ymax are given in pixels.</P>
+  <P>When a <TT>MovingBall</TT> ball is first created, it is positioned at the 
+  center of its rectangular enclosure. It has a radius of 5 pixels. Its color is 
+  set to red. And it has a randomly assigned speed and direction. These 
+  properties can be changed by calling subroutines in the object. If 
+  <TT>mBall</TT> refers to any object of type <TT>MovingBall</TT> then</P>
+  <UL>
+    <LI><FONT color=#990000><TT>mBall.setRadius(r)</TT></FONT> will set the 
+    radius of the ball to be <TT>r</TT> pixels. 
+    <LI><FONT color=#990000><TT>mBall.setColor(c)</TT></FONT> will set the color 
+    of the ball to be c, where c is one of the color constants such as 
+    <TT>Color.blue</TT> or some other object of type Color such as <TT>new 
+    Color(150,130,30)</TT>. 
+    <LI><FONT color=#990000><TT>mBall.setVelocity(dx,dy)</TT></FONT> will set 
+    the velocity of the ball so that it moves <TT>dx</TT> pixels in the 
+    horizontal direction and <TT>dy</TT> pixels in the vertical direction in 
+    each frame. 
+    <LI><FONT color=#990000><TT>mBall.setLimits(xmin,xmax,ymin,ymax)</TT></FONT> 
+    will change the limits of the rectangular area in which the ball moves. 
+  </LI></UL>
+  <P>A <TT>MovingBall</TT> does not actually move by itself, and it doesn't get 
+  drawn automatically. The <TT>MovingBall</TT> class is meant to be used with 
+  <TT>SimpleAnimationApplet</TT>. A <TT>MovingBall</TT> object, <TT>mBall</TT> 
+  should be moved and drawn in the <TT>drawFrame()</TT> method by calling these 
+  subroutines:</P>
+  <UL>
+    <LI><FONT color=#990000><TT>mBall.travel()</TT></FONT> moves the ball by an 
+    amount given by its current velocity. 
+    <LI><FONT color=#990000><TT>mBall.draw(g)</TT></FONT> draw the ball in the 
+    graphics context defined by the Graphics object g. </LI></UL>
+  <P>This is illustrated in <A 
+  href="http://math.hws.edu/eck/cs124/f01/lab7/Balls.java">Balls.java</A>. There 
+  are other subroutines in the <TT>MovingBall</TT> class. You can read about 
+  them in the source code, <A 
+  href="http://math.hws.edu/eck/cs124/f01/lab7/MovingBall.java">MovingBall.java</A>.</P>
+  <HR width="33%">
+
+  <P>For the exercise, you should edit <TT>Balls.java</TT> so that the applet 
+  shows a number of balls that move in at least two different rectangular areas. 
+  Each rectangular area should either be filled in with color or outlined in 
+  color. You should have a minimum of five balls, and they should display a 
+  variety of sizes and colors.</P>
+  <P>You will have to declare a variable to represent each moving ball, as is 
+  already done for the variable named <TT>ball</TT> in the original version. 
+  (These variables are <B>not</B> <TT>static</TT>. This is because applets are 
+  objects rather than classes -- a fine distinction that you should come to 
+  appreciate soon.) In the <TT>init()</TT> method, you must create each ball and 
+  set its size and color. In the <TT>drawFrame()</TT> method, you must draw the 
+  rectangular areas and you must move and draw each ball. You can assume that 
+  the applet is 400 pixels wide and 300 pixels high.</P>
+  <P>One thing to be careful of: The parameters for setting the limits on a ball 
+  are different from the parameters for drawing a rectangle. For the ball, you 
+  specify a rectangular area by specifying xmin, xmax, ymin, and ymax. When you 
+  draw a rectangle, you specify the x and y coordinates of the upper left corner 
+  and the width and height of the rectangle.</P>
+  <P>(If you want to make your applet more interesting, you might consider 
+  trying to make balls that change size. You could do this by making the size of 
+  the ball depend on the frame number. As you saw in <A 
+  href="http://math.hws.edu/eck/cs124/f01/lab5/index.html">Lab&nbsp;5</A>, the 
+  frame number can be obtained in <TT>drawFrame()</TT> by calling the 
+  <TT>getFrameNumber()</TT> function. For something even more ambitious, you 
+  could have a rectangle that moves or changes shape. This is more complicated 
+  since in addition to changing the rectangle, you have to change the limits on 
+  the MovingBalls that it encloses.)</P>
+  <P><B>You should turn in a printout of your source code and post your applet 
+  on your Web site in a place where I will easily find it.</B></P><BR>
+  <H3><FONT color=#990000>Colors and Images on Web Pages</FONT></H3>
+  <P>As in Java, colors for Web pages can be specified either by using a common 
+  color name (like "red" or "white") or by specifying the red, green, and blue 
+  components of the color numerically. Unlike in Java, colors are specified 
+  numerically using <I>hexadecimal</I> numbers rather than ordinary, base-10 
+  integers. Hexadecimal, or base-16, numbers use the digits 0, 1, 2, 3, 4, 5, 6, 
+  7, 8, 9, A, B, C, D, E, F for the numbers that are represented in base-10 by 
+  0, 1, ..., 15. The format for a hexadecimal color specification is "#RRGGBB" 
+  where RR, GG, and BB stand for two-digit hexadecimal numbers that give the 
+  red, green, and blue components of the color. For example, the background of 
+  this page has color "#FFFFDD" and the headlines have color "#990000". 
+  Fortunately, you don't actually have to learn hexadecimal numbers to use them 
+  for colors. Just click on this <A 
+  href="http://math.hws.edu/eck/cs124/f01/lab7/colors.php">color&nbsp;table&nbsp;link</A> 
+  for a table of 216 different colors and their hexadecimal codes.</P>
+  <P>You can use hexadecimal color codes in the &lt;body&gt; tag of an HTML page 
+  to specify the background color of the page and the default colors for text 
+  and links on the page. For example:</P><PRE>     &lt;body bgcolor="#CCFFCC" text="#009900" 
+                        link="#0000CC" vlink="#999999" alink="#990000"&gt;
+</PRE>
+  <P>This gives a light green background with dark green text. Links are shown 
+  in blue, while links that have already been visited are gray. Links that are 
+  active (i.e., the user has pressed the mouse on the link) are dark red.</P>
+  <P>To show <FONT color=#00cccc>colored text</FONT> on your page, use the 
+  &lt;font&gt; tag to enclose the text like this:</P><PRE>         &lt;font color="#00CCCC"&gt;colored text&lt;/font&gt; 
+</PRE>
+  <P>You can do this in headlines as well as in paragraphs.</P>
+  <HR width="33%">
+
+  <P><IMG height=64 hspace=10 
+  src="CPSC 124, Fall 2001, Lab7 Applets and Objects_files/cake.gif" width=74 
+  align=left vspace=8> Another way to add interest to a Web page is to use 
+  images. Typically, you will use image files with names ending in gif, png, 
+  jpg, or jepg. Gif files can contain animated images, like the one on the left. 
+  This image comes from <A 
+  href="http://www.iconbazaar.com/">http://www.iconbazaar.com/</A>. You should 
+  try to avoid using files that are very large. You can include an image onto a 
+  Web page with the &lt;img&gt; tag. The tag for the image shown at left is:</P><PRE>     &lt;img src="cake.gif" align=left 
+                             width=74 height=64 hspace=10 vspace=8&gt;
+</PRE>
+  <P>Only the <TT>src</TT> is required. It specifies the URL of the image. 
+  Usually, this is just a file name, and the image file is stored in the same 
+  directory with the Web page. The modifier "align=left" means that the image 
+  will displayed at the left margin and text will wrap around the image. You can 
+  use "align=right" to put the image on the right margin of the page. The width 
+  and height modifiers specify the size of the image, and hspace and vspace 
+  leave space between the image and the surrounding text. If you want an image 
+  that is centered on the page with no text on either side, the easiest way to 
+  do it is to put the image in a centered paragraph with no other text. For 
+  example:</P><PRE>     &lt;p align=center&gt;
+     &lt;img src="back-to-school.gif" align=left 
+                  width=76 height=76 hspace=10 vspace=8&gt;
+     &lt;/p&gt;
+</PRE>
+  <P>It's also possible to use an image as the background for your page. The 
+  image will be repeated to fill the entire page. This is done by adding 
+  <TT>background="<B>file-name</B>"</TT> to your page's &lt;body&gt; tag. A 
+  large number of images that are suitable to be used in this way can be found 
+  at <A 
+  href="http://www.grsites.com/textures/">http://www.grsites.com/textures/</A>. 
+  (But please keep in mind that no one wants to struggle to read the text on 
+  your page. Use a background image that makes the text readable.)</A> </P><BR>
+  <H3><FONT color=#990000>Applets on Web Pages</FONT></H3>
+  <P>Applets are similar to images. An applet is placed on a Web page using an 
+  &lt;applet&gt; tag. Instead of <TT>src</TT>, the &lt;applet&gt; tag uses 
+  <TT>code</TT> to specify the .class file for the applet. For an applet, the 
+  width and height are <B>not</B> optional. The width and height specification 
+  in the applet tag is the only thing that determines the size of the applet. 
+  There is no way to specify this is the Java source code. You can use 
+  <TT>align=left</TT> or <TT>align=right</TT> to position an applet at the 
+  margin of a page, with text wrapped around it. You can use hspace and vspace 
+  to leave space around the applet. One difference between the &lt;img&gt; tag 
+  and the &lt;applet&gt; tag is that &lt;applet&gt; requires a matching closing 
+  tag, &lt;/applet&gt;. (Later, we will see that you can add "applet parameters" 
+  between the &lt;applet&gt; and the &lt;/applet&gt; to customize the behavior 
+  of the applet.) On this page, the applet at the top of the page is specified 
+  with the tag:</P><PRE>     &lt;p align=center&gt;
+     &lt;applet code="Balls2.class" width=400 height=300&gt;
+     &lt;/applet&gt;
+     &lt;p&gt;
+</PRE>
+  <P>while the smaller applet that shows just a single ball uses <PRE>     &lt;applet code="Balls.class" width=150 height=150 align=right hspace=10&gt;
+     &lt;/applet&gt;
+</PRE><BR>
+  <H3><FONT color=#990000>Exercise 2: More Work on Your Web Site</FONT></H3>
+  <P>For the second exercise of this lab, you should continue to work on your 
+  Web portfolio for this course. Add some colors to your pages. Add at least one 
+  image, and possibly a background image, to one of your pages. Add the applet 
+  that you created for Exercise 1 to your portfolio. (Note that this applet 
+  requires three .class files: Balls.class, MovingBall.class, and 
+  SimpleAnimationApplet.class.) Your portfolio should also contain the drawing 
+  applet and the animation applet that you wrote for previous labs. Consider 
+  adding your source code for the first programming assignment. You should have 
+  a plan about how this portfolio will grow as the course progresses.</P>
+  <P><B>To grade this Exercise and Exercise 3 from <A 
+  href="http://math.hws.edu/eck/cs124/f01/lab6/">Lab&nbsp;6</A>, I will visit 
+  the index.html page on your site. I should be able to reach your CS 124 
+  portfolio through that page, either directly or through an intermediate page 
+  such as cs124.html. I will look at your portfolio sometime on or after 
+  Wednesday, October 17.</B></P>
+  <HR>
+
+  <DIV align=right><SMALL><A href="http://math.hws.edu/eck/index.html">David 
+  Eck</A>, 11 October 2001 </SMALL></DIV></BLOCKQUOTE></BODY></HTML>

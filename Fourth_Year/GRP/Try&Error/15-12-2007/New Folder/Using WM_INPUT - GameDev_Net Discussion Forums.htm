@@ -1,0 +1,1151 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!-- saved from url=(0065)http://www.gamedev.net/community/forums/topic.asp?topic_id=308083 -->
+<HTML><HEAD><TITLE>Using WM_INPUT - GameDev.Net Discussion Forums</TITLE>
+<SCRIPT language=JavaScript>
+<!-- hide from JavaScript-challenged browsers
+
+function openWindow(url) {
+  popupWin = window.open(url, 'new_page', 'width=500,height=400')
+}
+
+function textCounter(field, maxlimit) {
+if (field.value.length > maxlimit) // if too long...trim it!
+field.value = field.value.substring(0, maxlimit);
+// otherwise, update 'characters left' counter
+}
+
+// done hiding -->
+</SCRIPT>
+
+<STYLE>.jc {
+	FONT-WEIGHT: bold; POSITION: relative
+}
+</STYLE>
+
+<SCRIPT language=JavaScript1.2>
+<!--
+//Trembling message script- © Dynamic Drive (www.dynamicdrive.com)
+//For full source code, 100's more DHTML scripts, and TOS,
+//visit http://www.dynamicdrive.com
+
+var ns6 = document.getElementById&&!document.all
+var ie=document.all
+
+var customcollect=new Array()
+var i = 0;
+var p = 0;
+
+function jiggleit(num)
+{
+	customcollect[num].style.fontSize=15;
+	customcollect[num].style.left=Math.sin(p) * 10;
+	p++;
+}
+
+function init_jiggle()
+{
+i = 0;
+if (ie){
+	while ( eval("document.all.jiggle"+i) != null)
+	{
+		customcollect[i]= eval("document.all.jiggle"+i)
+		i++
+	}
+}
+else if (ns6){
+	while (document.getElementById("jiggle"+i)!=null)
+	{
+		customcollect[i]= document.getElementById("jiggle"+i)
+		i++
+	}
+}
+
+if (customcollect.length==1)
+	setInterval("jiggleit(0)",80)
+else if (customcollect.length>1)
+for (y=0;y<customcollect.length;y++){
+	var tempvariable='setInterval("jiggleit('+y+')",'+'100)'
+	eval(tempvariable)
+}
+}
+
+-->
+
+</SCRIPT>
+
+<META 
+content="game development, game programming, game jobs, video game jobs, games jobs, graphics programming, OpenGL, DirectX, Direct3D, AI, artificial intelligence, game design, game, gamedev, development, programming, c++, games, program, create, design, gouraud, shading, tutorial, art, gdnet" 
+name=Keywords>
+<META 
+content="Gamedev.net is the leading resource for game developers, featuring daily news updates, over 1500 featured articles and tutorials, and the most active game development forums anywhere!" 
+name=Description>
+<META http-equiv=Content-Type content="text/html; charset=iso-8859-1"><LINK 
+href="Using WM_INPUT - GameDev_Net Discussion Forums_files/theme.css" 
+type=text/css rel=stylesheet><LINK 
+href="Using WM_INPUT - GameDev_Net Discussion Forums_files/source.css" 
+type=text/css rel=stylesheet><!--RJF 20070106 - fix for source boxes under IE, as it seems to be lacking support for the max-height CSS2 property --><!--[if IE]>
+<STYLE>.source {
+	BORDER-RIGHT: 2px solid; PADDING-RIGHT: 3px; BORDER-TOP: 2px solid; PADDING-LEFT: 3px; FONT-SIZE: 9pt; BACKGROUND: #ffffff; PADDING-BOTTOM: 3px; OVERFLOW: auto; BORDER-LEFT: 2px solid; WIDTH: 95%; COLOR: black; PADDING-TOP: 3px; BORDER-BOTTOM: 2px solid; FONT-FAMILY: Courier New; HEIGHT: 250px
+}
+</STYLE>
+<![endif]-->
+<SCRIPT src="Using WM_INPUT - GameDev_Net Discussion Forums_files/menu.js" 
+type=text/javascript></SCRIPT>
+
+<META content="MSHTML 6.00.2900.2838" name=GENERATOR></HEAD>
+<BODY>
+<DIV id=header><!-- style="width: 800px">--><!--<div class="hdrtoplinks">
+<a href="">advertise</a> | <a href="">write</a> | <a href="">about us</a>&nbsp;&nbsp;</span>
+</div>-->
+<TABLE style="TABLE-LAYOUT: fixed" cellSpacing=0 cellPadding=0 width="100%" 
+border=0>
+  <TBODY>
+  <TR vAlign=top>
+    <TD id=CM_Logo rowSpan=4><A href="http://www.gamedev.net/"><IMG 
+      height="100%" alt="" 
+      src="Using WM_INPUT - GameDev_Net Discussion Forums_files/clear.gif" 
+      width="100%" border=0></A></TD>
+    <TD id=CM_AdSpace>
+      <DIV id=CM_AdContainer><!-- Begin -  Site: GameDev.net Zone: GameDev.net Main 468x60 -->
+      <SCRIPT language=javascript type=text/javascript>
+<!--
+var browName = navigator.appName;
+var SiteID = 1;
+var browDateTime = (new Date()).getTime();
+if (browName=='Netscape')
+{
+document.write('<s'+'cript lang' + 'uage="jav' + 'ascript" src="http://www.gamedev.net/banman/a.aspx?ZoneID=2&amp;Task=Get&amp;IFR=False&amp;Browser=NETSCAPE4&amp;PageID=15898&amp;SiteID=' + SiteID + '&amp;Random=' + browDateTime + '">'); document.write('</'+'scr'+'ipt>');
+}
+if (browName!='Netscape')
+{
+document.write('<s'+'cript lang' + 'uage="jav' + 'ascript" src="http://www.gamedev.net/banman/a.aspx?ZoneID=2&amp;Task=Get&amp;IFR=False&amp;PageID=15898&amp;SiteID=' + SiteID + '&amp;Random=' + browDateTime + '">'); document.write('</'+'scr'+'ipt>');
+}
+// --> 
+</SCRIPT>
+      <NOSCRIPT><A 
+      href="http://www.gamedev.net/banman/a.aspx?ZoneID=2&amp;Task=Click&amp;Mode=HTML&amp;SiteID=1&amp;PageID=8621" 
+      target=_blank><IMG height=60 alt="" 
+      src="Using WM_INPUT - GameDev_Net Discussion Forums_files/MSBonline468x60.jpg" 
+      width=468 border=0></A> </NOSCRIPT><!-- End -  Site: GameDev.net Zone: GameDev.net Main 468x60 --></DIV></TD>
+    <TD id=CM_AdSpaceTrailer><IMG height="100%" alt="" 
+      src="Using WM_INPUT - GameDev_Net Discussion Forums_files/clear.gif" 
+      width="100%"></TD></TR>
+  <TR>
+    <TD id=CM_MidSpace><IMG height="100%" alt="" 
+      src="Using WM_INPUT - GameDev_Net Discussion Forums_files/clear.gif" 
+      width="100%"></TD>
+    <TD id=CM_MidSpaceTrailer><IMG height="100%" alt="" 
+      src="Using WM_INPUT - GameDev_Net Discussion Forums_files/clear.gif" 
+      width="100%"></TD></TR>
+  <TR>
+    <TD id=CM_NavSpace>
+      <UL id=lw_menu>
+        <LI style="WIDTH: 0px"> </LI>
+        <LI id=l1f>Features 
+        <UL>
+          <LI id=l2fa><IMG 
+          src="Using WM_INPUT - GameDev_Net Discussion Forums_files/jobs.gif" 
+          align=middle> <A href="http://www.gamedev.net/gamejobs/">Game Jobs</A> 
+          </LI>
+          <LI id=l2fb><IMG 
+          src="Using WM_INPUT - GameDev_Net Discussion Forums_files/prodreview.gif" 
+          align=middle> <A 
+          href="http://www.gamedev.net/features/reviews/">Product Reviews</A> 
+          </LI>
+          <LI id=l2fc><IMG 
+          src="Using WM_INPUT - GameDev_Net Discussion Forums_files/users.gif" 
+          align=middle> <A 
+          href="http://www.gamedev.net/community/contest/">Contests</A> </LI>
+          <LI id=l2fd><IMG 
+          src="Using WM_INPUT - GameDev_Net Discussion Forums_files/gds.gif" 
+          align=middle> <A href="http://www.gamedev.net/community/gds/">GD 
+          Showcase</A> </LI>
+          <LI id=l2fe><IMG 
+          src="Using WM_INPUT - GameDev_Net Discussion Forums_files/newsletter.gif" 
+          align=middle> <A 
+          href="http://www.gamedev.net/info/newsletter.asp">Newsletter</A> 
+        </LI></UL></LI>
+        <LI id=l1r>Resources 
+        <UL>
+          <LI id=l2ra><IMG 
+          src="Using WM_INPUT - GameDev_Net Discussion Forums_files/articles.gif" 
+          align=middle> <A href="http://www.gamedev.net/reference/">Articles 
+          &amp; Resources</A> </LI>
+          <LI id=l2rb><IMG 
+          src="Using WM_INPUT - GameDev_Net Discussion Forums_files/columns.gif" 
+          align=middle> <A href="http://www.gamedev.net/columns/">Columns</A> 
+          </LI>
+          <LI id=l2rc><IMG 
+          src="Using WM_INPUT - GameDev_Net Discussion Forums_files/books.gif" 
+          align=middle> <A 
+          href="http://www.gamedev.net/columns/books/">Books</A> </LI>
+          <LI id=l2rd><IMG 
+          src="Using WM_INPUT - GameDev_Net Discussion Forums_files/beginners.gif" 
+          align=middle> <A 
+          href="http://www.gamedev.net/reference/start_here/">For Beginners</A> 
+          </LI>
+          <LI id=l2re><IMG 
+          src="Using WM_INPUT - GameDev_Net Discussion Forums_files/gamedict.gif" 
+          align=middle> <A href="http://www.gamedev.net/dict/">Game 
+          Dictionary</A> </LI></UL></LI>
+        <LI id=l1c>Community 
+        <UL>
+          <LI id=l2ca><IMG 
+          src="Using WM_INPUT - GameDev_Net Discussion Forums_files/chat.gif" 
+          align=middle> <A 
+          href="http://www.gamedev.net/community/forums/">Forums</A> </LI>
+          <LI id=l2cb><IMG 
+          src="Using WM_INPUT - GameDev_Net Discussion Forums_files/users.gif" 
+          align=middle> <A href="http://www.gamedev.net/community/gathering/">GD 
+          Gathering</A> </LI>
+          <LI id=l2cc><IMG 
+          src="Using WM_INPUT - GameDev_Net Discussion Forums_files/ircchat.gif" 
+          align=middle> <A href="http://www.gamedev.net/community/chat/">Online 
+          Chat</A> </LI>
+          <LI id=l2cd><IMG 
+          src="Using WM_INPUT - GameDev_Net Discussion Forums_files/books.gif" 
+          align=middle><A 
+          href="http://www.gamedev.net/community/forums/?cid=17,11&amp;nofavs=t">Workshops</A> 
+          </LI></UL></LI>
+        <LI id=l1m>Members 
+        <UL>
+          <LI id=l2ma><IMG 
+          src="Using WM_INPUT - GameDev_Net Discussion Forums_files/controlpanel.gif" 
+          align=middle> <A 
+          href="http://www.gamedev.net/community/forums/cpanel.asp">Control 
+          Panel</A> </LI>
+          <LI id=l2mb><IMG 
+          src="Using WM_INPUT - GameDev_Net Discussion Forums_files/new1-08.gif" 
+          align=middle> <A href="http://www.gamedev.net/subscribe/">GDNet+ 
+          Signups</A> </LI>
+          <LI id=l2mc><IMG 
+          src="Using WM_INPUT - GameDev_Net Discussion Forums_files/journals.gif" 
+          align=middle> <A 
+          href="http://www.gamedev.net/community/journals/">Developer 
+          Journals</A> </LI>
+          <LI id=l2md><IMG 
+          src="Using WM_INPUT - GameDev_Net Discussion Forums_files/membersearch.gif" 
+          align=middle> <A href="http://www.gamedev.net/profile/">Member 
+          Search</A> </LI></UL></LI></UL></TD>
+    <TD id=CM_NavSpaceTrailer><IMG height="100%" alt="" 
+      src="Using WM_INPUT - GameDev_Net Discussion Forums_files/clear.gif" 
+      width="100%"></TD></TR>
+  <TR>
+    <TD id=CM_ExOptA><IMG height="100%" alt="" 
+      src="Using WM_INPUT - GameDev_Net Discussion Forums_files/clear.gif" 
+      width="100%"></TD>
+    <TD id=CM_ExOptB><IMG height="100%" alt="" 
+      src="Using WM_INPUT - GameDev_Net Discussion Forums_files/clear.gif" 
+      width="100%"></TD></TR></TBODY></TABLE></DIV>
+<SCRIPT language=Javascript>
+	startList();
+</SCRIPT>
+
+<TABLE class=contextNav width="95%" align=center border=0>
+  <TBODY>
+  <TR>
+    <TD vAlign=bottom width="90%">
+      <DIV class=hdrbreadcrumbs><STRONG><A 
+      href="http://www.gamedev.net/">Home</A> » <A 
+      href="http://www.gamedev.net/community">Community</A> » <A 
+      href="http://www.gamedev.net/community/forums/">Forums</A> » <A 
+      href="http://www.gamedev.net/community/forums/forum.asp?forum_id=21">General 
+      Programming</A> » <STRONG>Using WM_INPUT</STRONG></STRONG> </DIV></TD>
+    <TD class=hdrSearchBox vAlign=center noWrap width="10%">
+      <FORM 
+      style="PADDING-RIGHT: 0px; PADDING-LEFT: 0px; PADDING-BOTTOM: 0px; MARGIN: 0px; PADDING-TOP: 0px" 
+      action=/community/forums/search.asp>&nbsp;&nbsp;<STRONG>search:</STRONG>&nbsp;<INPUT 
+      class=searchinput name=terms>&nbsp;&nbsp;<INPUT class=searchbutton 
+      type=image 
+      src="Using WM_INPUT - GameDev_Net Discussion Forums_files/hdr3srchbtn.gif"><SPAN 
+      class=mediumfont><INPUT type=hidden value=site 
+  name=area></FORM></SPAN></TD></TR></TBODY></TABLE>
+<TABLE class=contextNav width="95%" align=center border=0>
+  <TBODY>
+  <TR>
+    <TD vAlign=bottom align=middle>
+      <SCRIPT language=javascript type=text/javascript>
+<!--
+var browName = navigator.appName;
+var SiteID = 1;
+var ZoneID = 19;
+var browDateTime = (new Date()).getTime();
+if (browName=='Netscape')
+{
+document.write('<s'+'cript lang' + 'uage="jav' + 'ascript" src="http://www.gamedev.net/banman/a.aspx?ZoneID=' + ZoneID + '&amp;Task=Get&amp;IFR=False&amp;Browser=NETSCAPE4&amp;PageID=79488&amp;SiteID=' + SiteID + '&amp;Random=' + browDateTime + '">'); document.write('</'+'scr'+'ipt>');
+}
+if (browName!='Netscape')
+{
+document.write('<s'+'cript lang' + 'uage="jav' + 'ascript" src="http://www.gamedev.net/banman/a.aspx?ZoneID=' + ZoneID + '&amp;Task=Get&amp;IFR=False&amp;PageID=79488&amp;SiteID=' + SiteID + '&amp;Random=' + browDateTime + '">'); document.write('</'+'scr'+'ipt>');
+}
+// --> 
+</SCRIPT>
+      <NOSCRIPT><A 
+      href="http://www.gamedev.net/banman/a.aspx?ZoneID=19&amp;Task=Click&amp;Mode=HTML&amp;SiteID=1&amp;PageID=79488" 
+      target=_blank><IMG height=0 alt="" 
+      src="Using WM_INPUT - GameDev_Net Discussion Forums_files/blank.gif" 
+      width=0 border=0></A> </NOSCRIPT></TD></TR></TBODY></TABLE>
+<DIV align=center>
+<TABLE cellSpacing=0 cellPadding=2 width="95%" border=0>
+  <TBODY>
+  <TR vAlign=top>
+    <TD width=120><!-- Begin -  Site: GameDev.net Zone: GameDev.net Forums 120x60 -->
+      <SCRIPT language=javascript type=text/javascript>
+<!--
+var browName = navigator.appName;
+var SiteID = 1;
+var ZoneID = 23;
+var browDateTime = (new Date()).getTime();
+if (browName=='Netscape')
+{
+document.write('<s'+'cript lang' + 'uage="jav' + 'ascript" src="http://www.gamedev.net/banman/a.aspx?ZoneID=' + ZoneID + '&amp;Task=Get&amp;IFR=False&amp;Browser=NETSCAPE4&amp;PageID=51013&amp;SiteID=' + SiteID + '&amp;Random=' + browDateTime + '">'); document.write('</'+'scr'+'ipt>');
+}
+if (browName!='Netscape')
+{
+document.write('<s'+'cript lang' + 'uage="jav' + 'ascript" src="http://www.gamedev.net/banman/a.aspx?ZoneID=' + ZoneID + '&amp;Task=Get&amp;IFR=False&amp;PageID=51013&amp;SiteID=' + SiteID + '&amp;Random=' + browDateTime + '">'); document.write('</'+'scr'+'ipt>');
+}
+// --> 
+</SCRIPT>
+      <NOSCRIPT><A 
+      href="http://www.gamedev.net/banman/a.aspx?ZoneID=23&amp;Task=Click&amp;Mode=HTML&amp;SiteID=1&amp;PageID=51013" 
+      target=_blank><IMG height=60 alt="" 
+      src="Using WM_INPUT - GameDev_Net Discussion Forums_files/moglgpmini.jpg" 
+      width=120 border=0></A> </NOSCRIPT></TD>
+    <TD align=right>
+      <TABLE cellSpacing=0 cellPadding=0 border=0>
+        <TBODY>
+        <TR>
+          <TD style="FONT-SIZE: 5px" noWrap><A 
+            href="http://www.gamedev.net/community/forums/logincheck.asp"><IMG 
+            class=img_login alt=[Login] 
+            src="Using WM_INPUT - GameDev_Net Discussion Forums_files/clear.gif" 
+            border=0></A> <A 
+            href="http://www.gamedev.net/community/forums/cpanel.asp"><IMG 
+            class=img_panel title="View your control panel." 
+            alt="[Control Panel]" 
+            src="Using WM_INPUT - GameDev_Net Discussion Forums_files/clear.gif" 
+            border=0></A> <A 
+            href="http://www.gamedev.net/community/forums/register.asp"><IMG 
+            class=img_register title="Registration is free!" alt=[Register] 
+            src="Using WM_INPUT - GameDev_Net Discussion Forums_files/clear.gif" 
+            border=0></A> <A 
+            href="http://www.gamedev.net/community/forums/track.asp"><IMG 
+            class=img_bookmarks title="View bookmarks." alt=[Bookmarks] 
+            src="Using WM_INPUT - GameDev_Net Discussion Forums_files/clear.gif" 
+            border=0></A> <A 
+            href="http://www.gamedev.net/community/forums/activeusers.asp"><IMG 
+            class=img_whosonline title="View who is currently online" 
+            alt="[Who's Online]" 
+            src="Using WM_INPUT - GameDev_Net Discussion Forums_files/clear.gif" 
+            border=0></A> <A 
+            href="http://www.gamedev.net/community/forums/activetopics.asp"><IMG 
+            class=img_activetopics title="View the most recently active topics" 
+            alt="[Active Topics]" 
+            src="Using WM_INPUT - GameDev_Net Discussion Forums_files/clear.gif" 
+            border=0></A> <A 
+            href="http://www.gamedev.net/community/forums/activestats.asp"><IMG 
+            class=img_stats title="View our forum stats" alt=[Stats] 
+            src="Using WM_INPUT - GameDev_Net Discussion Forums_files/clear.gif" 
+            border=0></A> <A 
+            href="http://www.gamedev.net/community/forums/faq.asp"><IMG 
+            class=img_faq title="Frequently Asked Questions" alt=[FAQ] 
+            src="Using WM_INPUT - GameDev_Net Discussion Forums_files/clear.gif" 
+            border=0></A> <A 
+            href="http://www.gamedev.net/community/forums/search.asp"><IMG 
+            class=img_search title="Perform a search by keyword, date, or name." 
+            alt=[Search] 
+            src="Using WM_INPUT - GameDev_Net Discussion Forums_files/clear.gif" 
+            border=0></A> </TD></TR>
+        <TR>
+          <TD class=smallfont align=right>
+            <SCRIPT language=Javascript>init_jiggle();</SCRIPT>
+          </TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE>
+<TABLE width="95%" border=0 xmlns:xtend="http://www.gamedev.net/" 
+xmlns:xasp="urn:asp-objects" xmlns:msxsl="urn:schemas-microsoft-com:xslt">
+  <TBODY>
+  <TR vAlign=bottom>
+    <TD noWrap align=left width="99%"><SPAN class=smallfont><BR><B><A 
+      title="Add Forum to Favorites" 
+      href="http://www.gamedev.net/community/forums/favorites.asp?mode=addforum&amp;forum_id=21&amp;gforum_id=0">Add 
+      Forum to Favorites</A></B>&nbsp;|&nbsp; <A 
+      href="http://www.gamedev.net/community/forums/post_page.asp?page=http://www.gamedev.net/community/forums/topic.asp?topic%5Fid%3D308083"><B>Send 
+      Topic To a Friend</B></A>&nbsp;|&nbsp;<A 
+      href="http://www.gamedev.net/community/forums/showfaq.asp?forum_id=21"><B>View 
+      Forum FAQ</B></A> | <A 
+      href="http://www.gamedev.net/community/forums/track.asp?topic_id=308083"><B>Track 
+      this topic</B></A></SPAN><BR><SPAN class=smallfont></SPAN></TD>
+    <TD noWrap align=middle width="1%"><SPAN class=smallfont><BR><A 
+      href="http://www.gamedev.net/community/forums/goto.asp?topic_id=308083&amp;forum_id=21&amp;gforum_id=0&amp;move=prev"><IMG 
+      class=img_post_prevarrow 
+      src="Using WM_INPUT - GameDev_Net Discussion Forums_files/clear.gif" 
+      border=0>&nbsp;<U>Last Thread</U></A>&nbsp;<A 
+      href="http://www.gamedev.net/community/forums/goto.asp?topic_id=308083&amp;forum_id=21&amp;gforum_id=0&amp;move=next"><U>Next 
+      Thread</U>&nbsp;<IMG class=img_post_nextarrow 
+      src="Using WM_INPUT - GameDev_Net Discussion Forums_files/clear.gif" 
+      border=0></A></SPAN></TD></TR></TBODY></TABLE>
+<TABLE cellSpacing=0 cellPadding=2 width="95%" border=0 
+xmlns:xtend="http://www.gamedev.net/" xmlns:xasp="urn:asp-objects" 
+xmlns:msxsl="urn:schemas-microsoft-com:xslt">
+  <TBODY>
+  <TR vAlign=center>
+    <TD class=head width="96%">&nbsp;<SPAN class=regularfont><B>Using 
+      WM_INPUT</B></SPAN><BR></TD>
+    <TD class=head>
+      <TABLE cellSpacing=0 cellPadding=0 width="100%" border=0>
+        <TBODY>
+        <TR>
+          <TD><A 
+            href="http://www.gamedev.net/community/forums/post.asp?forum_id=21&amp;gforum_id=0&amp;method=post"><IMG 
+            class=img_post_newthread alt="Post New Topic" 
+            src="Using WM_INPUT - GameDev_Net Discussion Forums_files/clear.gif" 
+            border=0></A>&nbsp;</TD>
+          <TD><A 
+            href="http://www.gamedev.net/community/forums/post.asp?forum_id=21&amp;method=reply&amp;topic_id=308083"><IMG 
+            class=img_post_postreply alt="Post Reply" 
+            src="Using WM_INPUT - GameDev_Net Discussion Forums_files/clear.gif" 
+            border=0></A>&nbsp;</TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE><A 
+name=-1 xmlns:xtend="http://www.gamedev.net/" xmlns:xasp="urn:asp-objects" 
+xmlns:msxsl="urn:schemas-microsoft-com:xslt"></A>
+<TABLE cellSpacing=0 cellPadding=2 width="95%" border=0 
+xmlns:xtend="http://www.gamedev.net/" xmlns:xasp="urn:asp-objects" 
+xmlns:msxsl="urn:schemas-microsoft-com:xslt">
+  <TBODY>
+  <TR vAlign=center>
+    <TD class=post_dateline noWrap align=middle width=54 height=50 
+      rowSpan=2><IMG 
+      src="Using WM_INPUT - GameDev_Net Discussion Forums_files/16850.jpg" 
+      border=0></TD>
+    <TD class=post_author vAlign=center width="100%"><A 
+      href="http://www.gamedev.net/community/forums/post.asp?method=reply&amp;topic_id=308083&amp;Quote=2"><IMG 
+      class=img_post_quote alt="Reply Quoting This Message" 
+      src="Using WM_INPUT - GameDev_Net Discussion Forums_files/clear.gif" 
+      align=right border=0></A><A 
+      href="http://www.gamedev.net/community/forums/post.asp?method=editTopic&amp;topic_id=308083"><IMG 
+      class=img_post_edit alt="Edit Message" 
+      src="Using WM_INPUT - GameDev_Net Discussion Forums_files/clear.gif" 
+      align=right border=0></A><A 
+      href="http://www.gamedev.net/community/forums/profile.asp?mode=display&amp;id=16850" 
+      target=_new><SPAN class=regularfont>&nbsp;<B>Oluseyi</B></SPAN>&nbsp;<SPAN 
+      class=staff>&nbsp;<B>GDNet Business Lead</B></SPAN></A><SPAN 
+      class=smallfont>&nbsp;&nbsp;<B>Member 
+      since:</B>&nbsp;5/14/2001&nbsp;&nbsp;<B>From:</B>&nbsp;New York, NY, 
+      United States</SPAN></TD></TR>
+  <TR>
+    <TD class=post_dateline width="100%">
+      <TABLE cellSpacing=0 cellPadding=0 align=right border=0>
+        <TBODY>
+        <TR>
+          <TD><SPAN class=smallfont></SPAN></TD></TR></TBODY></TABLE><IMG alt="" 
+      src="Using WM_INPUT - GameDev_Net Discussion Forums_files/icon418.gif" 
+      align=left border=0>&nbsp;Posted - 3/20/2005 3:48:05 AM</TD></TR>
+  <TR>
+    <TD class=post_body colSpan=2>I'm trying to implement a unified HID-based 
+      input mechanism for my application (primarily as a fallback for 
+      DirectInput, but I might just go ahead and use it all the time). The 
+      problem, having managed to register the devices, is that my entire 
+      application becomes unresponsive to input. I'm not processing the data as 
+      yet, but Windows should continue to handle things like clicking on the 
+      minimize box...<BR><BR><!--STARTSCRIPT--><!--source lang="cpp"-->
+      <DIV class=source><PRE><SPAN class=cpp-comment>// Specify WinXP functionality</SPAN>
+<SPAN class=cpp-comment>//</SPAN>
+<SPAN class=cpp-directive>#ifdef</SPAN> _WIN32_WINNT
+#undef _WIN32_WINNT
+<SPAN class=cpp-directive>#endif</SPAN>
+
+<SPAN class=cpp-directive>#define</SPAN> _WIN32_WINNT 0x0501
+
+<SPAN class=cpp-directive>#ifdef</SPAN> WINVER
+#undef WINVER
+<SPAN class=cpp-directive>#endif</SPAN>
+
+<SPAN class=cpp-directive>#define</SPAN> WINVER 0x0501
+
+<SPAN class=cpp-directive>#include</SPAN> &lt;windows.h&gt;
+
+...
+
+<SPAN class=cpp-comment>// Register HID devices</SPAN>
+<SPAN class=cpp-comment>//</SPAN>
+RAWINPUTDEVICE Rid[<SPAN class=cpp-number>4</SPAN>];
+
+Rid[<SPAN class=cpp-number>0</SPAN>].usUsagePage = 0x01;
+Rid[<SPAN class=cpp-number>0</SPAN>].usUsage = 0x02;            <SPAN class=cpp-comment>// HID mouse</SPAN>
+Rid[<SPAN class=cpp-number>0</SPAN>].dwFlags = RIDEV_NOLEGACY;  <SPAN class=cpp-comment>// ignore legacy mouse messages</SPAN>
+Rid[<SPAN class=cpp-number>0</SPAN>].hwndTarget = NULL;
+
+Rid[<SPAN class=cpp-number>1</SPAN>].usUsagePage = 0x01;
+Rid[<SPAN class=cpp-number>1</SPAN>].usUsage = 0x04;            <SPAN class=cpp-comment>// HID joystick</SPAN>
+Rid[<SPAN class=cpp-number>1</SPAN>].dwFlags = <SPAN class=cpp-number>0</SPAN>;
+Rid[<SPAN class=cpp-number>1</SPAN>].hwndTarget = w;
+
+Rid[<SPAN class=cpp-number>2</SPAN>].usUsagePage = 0x01;
+Rid[<SPAN class=cpp-number>2</SPAN>].usUsage = 0x05;            <SPAN class=cpp-comment>// HID game pad</SPAN>
+Rid[<SPAN class=cpp-number>2</SPAN>].dwFlags = <SPAN class=cpp-number>0</SPAN>;
+Rid[<SPAN class=cpp-number>2</SPAN>].hwndTarget = w;
+
+Rid[<SPAN class=cpp-number>3</SPAN>].usUsagePage = 0x01;
+Rid[<SPAN class=cpp-number>3</SPAN>].usUsage = 0x06;            <SPAN class=cpp-comment>// HID keyboard</SPAN>
+Rid[<SPAN class=cpp-number>3</SPAN>].dwFlags = RIDEV_NOLEGACY;  <SPAN class=cpp-comment>// ignore legacy keyboard messages</SPAN>
+Rid[<SPAN class=cpp-number>3</SPAN>].hwndTarget = NULL;
+
+<SPAN class=cpp-keyword>if</SPAN>(<SPAN class=cpp-keyword>FALSE</SPAN> == RegisterRawInputDevices(Rid, <SPAN class=cpp-number>4</SPAN>, <SPAN class=cpp-keyword>sizeof</SPAN>(Rid[<SPAN class=cpp-number>0</SPAN>])))
+{
+	<SPAN class=cpp-comment>// ERROR!</SPAN>
+	<SPAN class=cpp-comment>//</SPAN>
+}
+
+...
+
+LRESULT WndProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
+{
+	<SPAN class=cpp-comment>// WM_INPUT data</SPAN>
+	<SPAN class=cpp-comment>//</SPAN>
+	<SPAN class=cpp-keyword>static</SPAN> RAWINPUT buffer[<SPAN class=cpp-number>32</SPAN>];
+	<SPAN class=cpp-keyword>static</SPAN> RAWINPUT ** pBuffer = <SPAN class=cpp-keyword>new</SPAN> RAWINPUT *[<SPAN class=cpp-number>32</SPAN>];
+	<SPAN class=cpp-keyword>static</SPAN> <SPAN class=cpp-keyword>unsigned</SPAN> <SPAN class=cpp-keyword>int</SPAN> HEADERSIZE = <SPAN class=cpp-keyword>sizeof</SPAN>(RAWINPUTHEADER);
+
+	<SPAN class=cpp-keyword>switch</SPAN>(msg)
+	{
+
+	...
+
+	<SPAN class=cpp-comment>// input handling: use raw input</SPAN>
+	<SPAN class=cpp-comment>//</SPAN>
+	<SPAN class=cpp-keyword>case</SPAN> WM_INPUT:
+		{
+			<SPAN class=cpp-keyword>unsigned</SPAN> <SPAN class=cpp-keyword>int</SPAN> dataRead = <SPAN class=cpp-number>32</SPAN>;
+			GetRawInputBuffer(buffer, &amp;dataRead, HEADERSIZE);
+			<SPAN class=cpp-keyword>if</SPAN>(!dataRead)
+			{
+				<SPAN class=cpp-comment>// error</SPAN>
+				<SPAN class=cpp-comment>//</SPAN>
+			}
+
+			RAWINPUT * pri = buffer;
+			<SPAN class=cpp-keyword>for</SPAN>(<SPAN class=cpp-keyword>unsigned</SPAN> <SPAN class=cpp-keyword>int</SPAN> i = <SPAN class=cpp-number>0</SPAN>; i &lt; dataRead; ++i)
+			{
+				pBuffer[i] = pri;
+				pri = NEXTRAWINPUTBLOCK(pri);
+			}
+			DefRawInputProc(pBuffer, dataRead, HEADERSIZE);
+		}
+		<SPAN class=cpp-keyword>return</SPAN> <SPAN class=cpp-number>0</SPAN>;
+
+	...
+
+	}
+	<SPAN class=cpp-keyword>return</SPAN> DefWindowProc(hwnd, msg, wparam, lparam);
+}
+
+</PRE></DIV><!--ENDSCRIPT--><BR><BR>Registration works fine, but I never 
+      seem to receive the <TT>WM_INPUT</TT> message. I set a breakpoint on the 
+      first line of the case but execution is never interrupted.<BR><BR>Any 
+      nuggest of wisdom?<BR><BR><X x=""></X><X x=""></X></TD></TR>
+  <TR>
+    <TD class=post_trailer width="100%" colSpan=2>
+      <TABLE cellSpacing=0 cellPadding=0 width="100%" border=0>
+        <TBODY>
+        <TR vAlign=center>
+          <TD noWrap>&nbsp;<SPAN class=smallfont>User Rating: 
+            <STRONG>2005</STRONG>&nbsp;&nbsp; | &nbsp;<A 
+            href="http://www.gamedev.net/community/forums/moderateuser.asp?userid=16850">Rate 
+            This User</A></SPAN>&nbsp;</TD>
+          <TD align=left width="90%"><A 
+            href="http://www.gamedev.net/community/forums/pmcompose.asp?sendto=16850"><IMG 
+            class=img_post_pm alt="Send Private Message" 
+            src="Using WM_INPUT - GameDev_Net Discussion Forums_files/clear.gif" 
+            border=0></A><A 
+            href="http://www.gamedev.net/community/forums/profile.asp?mode=display&amp;id=16850"><IMG 
+            class=img_post_profile alt="View Profile" 
+            src="Using WM_INPUT - GameDev_Net Discussion Forums_files/clear.gif" 
+            border=0></A><A 
+            href="http://www.gamedev.net/community/forums/mod/journal/journal.asp?userid=16850"><IMG 
+            class=img_post_journal alt="View Journal" 
+            src="Using WM_INPUT - GameDev_Net Discussion Forums_files/clear.gif" 
+            border=0></A></TD>
+          <TD noWrap align=right><SPAN class=smallfont><A 
+            href="http://www.gamedev.net/community/forums/flagpost.asp?topic_id=308083">Report 
+            this Post to a Moderator</A>&nbsp;| <A 
+            href="http://www.gamedev.net/community/forums/topic.asp?topic_id=308083">Link</A></SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE>
+<DIV class=post_separator xmlns:xtend="http://www.gamedev.net/" 
+xmlns:xasp="urn:asp-objects" 
+xmlns:msxsl="urn:schemas-microsoft-com:xslt"><BR></DIV><A name=1964176 
+xmlns:xtend="http://www.gamedev.net/" xmlns:xasp="urn:asp-objects" 
+xmlns:msxsl="urn:schemas-microsoft-com:xslt"></A>
+<TABLE cellSpacing=0 cellPadding=2 width="95%" border=0 
+xmlns:xtend="http://www.gamedev.net/" xmlns:xasp="urn:asp-objects" 
+xmlns:msxsl="urn:schemas-microsoft-com:xslt">
+  <TBODY>
+  <TR vAlign=center>
+    <TD class=post_dateline noWrap align=middle width=54 height=50 
+      rowSpan=2><IMG 
+      src="Using WM_INPUT - GameDev_Net Discussion Forums_files/default.png" 
+      border=0></TD>
+    <TD class=post_author vAlign=center width="100%"><A 
+      href="http://www.gamedev.net/community/forums/post.asp?method=reply&amp;topic_id=308083&amp;Quote=1&amp;reply_id=1964176"><IMG 
+      class=img_post_quote alt="Reply Quoting This Message" 
+      src="Using WM_INPUT - GameDev_Net Discussion Forums_files/clear.gif" 
+      align=right border=0></A><A 
+      href="http://www.gamedev.net/community/forums/post.asp?method=editreply&amp;reply_id=1964176&amp;topic_id=308083"><IMG 
+      class=img_post_edit alt="Edit Message" 
+      src="Using WM_INPUT - GameDev_Net Discussion Forums_files/clear.gif" 
+      align=right border=0></A><A 
+      href="http://www.gamedev.net/community/forums/profile.asp?mode=display&amp;id=53859" 
+      target=_new><SPAN class=regularfont>&nbsp;<B>doynax</B></SPAN>&nbsp;<SPAN 
+      class=regularfont>&nbsp;<B></B></SPAN></A><SPAN 
+      class=smallfont>&nbsp;&nbsp;<B>Member 
+      since:</B>&nbsp;1/8/2004&nbsp;&nbsp;<B>From:</B>&nbsp;Sweden</SPAN></TD></TR>
+  <TR>
+    <TD class=post_dateline width="100%">
+      <TABLE cellSpacing=0 cellPadding=0 align=right border=0>
+        <TBODY>
+        <TR>
+          <TD><SPAN class=smallfont></SPAN></TD></TR></TBODY></TABLE><IMG alt="" 
+      src="Using WM_INPUT - GameDev_Net Discussion Forums_files/icon1.gif" 
+      align=left border=0>&nbsp;Posted - 3/20/2005 5:21:33 AM</TD></TR>
+  <TR>
+    <TD class=post_body colSpan=2><!--QUOTE-->
+      <BLOCKQUOTE><SPAN class=smallfont>Quote:</SPAN>
+        <TABLE cellSpacing=0 cellPadding=4 width="95%" border=0>
+          <TBODY>
+          <TR>
+            <TD class=quote><!--/QUOTE--><!--STARTQUOTE--><I><A 
+              href="http://msdn.microsoft.com/library/default.asp?url=/library/en-us/winui/winui/windowsuserinterface/userinput/rawinput/rawinputreference/rawinputstructures/rawinputdevice.asp">MSDN</A></I><BR><B>RIDEV_NOLEGACY</B><BR>If 
+              set, this prevents any devices specified by usUsagePage or usUsage 
+              from generating legacy messages. This is only for the mouse and 
+              keyboard.<BR>For example, if the mouse TLC is set with 
+              RIDEV_NOLEGACY, WM_LBUTTONDOWN and related legacy mouse messages 
+              are not generated. Likewise, if the keyboard TLC is set with 
+              RIDEV_NOLEGACY, WM_KEYDOWN and related legacy keyboard messages 
+              are not generated.<!--QUOTE--></TD></TR></TBODY></TABLE></BLOCKQUOTE><!--/QUOTE--><!--ENDQUOTE--><!--QUOTE-->
+      <BLOCKQUOTE><SPAN class=smallfont>Quote:</SPAN>
+        <TABLE cellSpacing=0 cellPadding=4 width="95%" border=0>
+          <TBODY>
+          <TR>
+            <TD class=quote><!--/QUOTE--><!--STARTQUOTE--><I><A 
+              href="http://msdn.microsoft.com/library/default.asp?url=/library/en-us/winui/winui/windowsuserinterface/userinput/rawinput/rawinputreference/rawinputstructures/rawinputdevice.asp">MSDN</A></I><BR><B>hwndTarget</B><BR>Handle 
+              to the target device. If NULL, it follows the keyboard focus.<!--QUOTE--></TD></TR></TBODY></TABLE></BLOCKQUOTE><!--/QUOTE--><!--ENDQUOTE--><BR>So 
+      specifying NOLEGACY and a null hwndTarget should disable all normal input 
+      generation for the entire application.<BR>I wonder how you were able to 
+      control the window at all..<BR><BR><X x=""></X><X x=""></X></TD></TR>
+  <TR>
+    <TD class=post_trailer width="100%" colSpan=2>
+      <TABLE cellSpacing=0 cellPadding=0 width="100%" border=0>
+        <TBODY>
+        <TR vAlign=center>
+          <TD noWrap>&nbsp;<SPAN class=smallfont>User Rating: 
+            <STRONG>1486</STRONG>&nbsp;&nbsp; | &nbsp;<A 
+            href="http://www.gamedev.net/community/forums/moderateuser.asp?userid=53859">Rate 
+            This User</A></SPAN>&nbsp;</TD>
+          <TD align=left width="90%"><A 
+            href="http://www.gamedev.net/community/forums/pmcompose.asp?sendto=53859"><IMG 
+            class=img_post_pm alt="Send Private Message" 
+            src="Using WM_INPUT - GameDev_Net Discussion Forums_files/clear.gif" 
+            border=0></A><A 
+            href="http://www.gamedev.net/community/forums/profile.asp?mode=display&amp;id=53859"><IMG 
+            class=img_post_profile alt="View Profile" 
+            src="Using WM_INPUT - GameDev_Net Discussion Forums_files/clear.gif" 
+            border=0></A></TD>
+          <TD noWrap align=right><SPAN class=smallfont><A 
+            href="http://www.gamedev.net/community/forums/flagpost.asp?reply_id=1964176">Report 
+            this Post to a Moderator</A>&nbsp;| <A 
+            href="http://www.gamedev.net/community/forums/viewreply.asp?ID=1964176">Link</A></SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE>
+<DIV class=post_separator xmlns:xtend="http://www.gamedev.net/" 
+xmlns:xasp="urn:asp-objects" 
+xmlns:msxsl="urn:schemas-microsoft-com:xslt"><BR></DIV><A name=1964189 
+xmlns:xtend="http://www.gamedev.net/" xmlns:xasp="urn:asp-objects" 
+xmlns:msxsl="urn:schemas-microsoft-com:xslt"></A>
+<TABLE cellSpacing=0 cellPadding=2 width="95%" border=0 
+xmlns:xtend="http://www.gamedev.net/" xmlns:xasp="urn:asp-objects" 
+xmlns:msxsl="urn:schemas-microsoft-com:xslt">
+  <TBODY>
+  <TR vAlign=center>
+    <TD class=post_dateline noWrap align=middle width=54 height=50 
+      rowSpan=2><IMG 
+      src="Using WM_INPUT - GameDev_Net Discussion Forums_files/16850.jpg" 
+      border=0></TD>
+    <TD class=post_author vAlign=center width="100%"><A 
+      href="http://www.gamedev.net/community/forums/post.asp?method=reply&amp;topic_id=308083&amp;Quote=1&amp;reply_id=1964189"><IMG 
+      class=img_post_quote alt="Reply Quoting This Message" 
+      src="Using WM_INPUT - GameDev_Net Discussion Forums_files/clear.gif" 
+      align=right border=0></A><A 
+      href="http://www.gamedev.net/community/forums/post.asp?method=editreply&amp;reply_id=1964189&amp;topic_id=308083"><IMG 
+      class=img_post_edit alt="Edit Message" 
+      src="Using WM_INPUT - GameDev_Net Discussion Forums_files/clear.gif" 
+      align=right border=0></A><A 
+      href="http://www.gamedev.net/community/forums/profile.asp?mode=display&amp;id=16850" 
+      target=_new><SPAN class=regularfont>&nbsp;<B>Oluseyi</B></SPAN>&nbsp;<SPAN 
+      class=staff>&nbsp;<B>GDNet Business Lead</B></SPAN></A><SPAN 
+      class=smallfont>&nbsp;&nbsp;<B>Member 
+      since:</B>&nbsp;5/14/2001&nbsp;&nbsp;<B>From:</B>&nbsp;New York, NY, 
+      United States</SPAN></TD></TR>
+  <TR>
+    <TD class=post_dateline width="100%">
+      <TABLE cellSpacing=0 cellPadding=0 align=right border=0>
+        <TBODY>
+        <TR>
+          <TD><SPAN class=smallfont></SPAN></TD></TR></TBODY></TABLE><IMG alt="" 
+      src="Using WM_INPUT - GameDev_Net Discussion Forums_files/icon418.gif" 
+      align=left border=0>&nbsp;Posted - 3/20/2005 5:36:48 AM</TD></TR>
+  <TR>
+    <TD class=post_body colSpan=2><!--QUOTE-->
+      <BLOCKQUOTE><SPAN class=smallfont>Quote:</SPAN>
+        <TABLE cellSpacing=0 cellPadding=4 width="95%" border=0>
+          <TBODY>
+          <TR>
+            <TD class=quote><!--/QUOTE--><!--STARTQUOTE--><I>Original post by 
+              doynax</I><BR>So specifying NOLEGACY and a null hwndTarget should 
+              disable all normal input generation for the entire 
+              application.<BR>I wonder how you were able to control the window 
+              at all..<!--QUOTE--></TD></TR></TBODY></TABLE></BLOCKQUOTE><!--/QUOTE--><!--ENDQUOTE-->Interesting. 
+      I had tried it specifying the window handle as <TT>hwndTarget</TT> 
+      earlier, but that made no difference, so it's clearly a 
+      <TT>RIDEV_NOLEGACY</TT> issue. What's the point of 
+      <TT>DefRawInputProc</TT> though? I thought that would allow the system to 
+      respond to input, so I only needed <TT>WM_INPUT</TT> and could eliminate 
+      legacy messages. I mean, they're called <I>legacy</I> afterall, which 
+      means I should be able to do without them.<BR><BR>Thanks, 
+      doynax.<BR><BR><X x=""></X><X x=""></X></TD></TR>
+  <TR>
+    <TD class=post_trailer width="100%" colSpan=2>
+      <TABLE cellSpacing=0 cellPadding=0 width="100%" border=0>
+        <TBODY>
+        <TR vAlign=center>
+          <TD noWrap>&nbsp;<SPAN class=smallfont>User Rating: 
+            <STRONG>2005</STRONG>&nbsp;&nbsp; | &nbsp;<A 
+            href="http://www.gamedev.net/community/forums/moderateuser.asp?userid=16850">Rate 
+            This User</A></SPAN>&nbsp;</TD>
+          <TD align=left width="90%"><A 
+            href="http://www.gamedev.net/community/forums/pmcompose.asp?sendto=16850"><IMG 
+            class=img_post_pm alt="Send Private Message" 
+            src="Using WM_INPUT - GameDev_Net Discussion Forums_files/clear.gif" 
+            border=0></A><A 
+            href="http://www.gamedev.net/community/forums/profile.asp?mode=display&amp;id=16850"><IMG 
+            class=img_post_profile alt="View Profile" 
+            src="Using WM_INPUT - GameDev_Net Discussion Forums_files/clear.gif" 
+            border=0></A><A 
+            href="http://www.gamedev.net/community/forums/mod/journal/journal.asp?userid=16850"><IMG 
+            class=img_post_journal alt="View Journal" 
+            src="Using WM_INPUT - GameDev_Net Discussion Forums_files/clear.gif" 
+            border=0></A></TD>
+          <TD noWrap align=right><SPAN class=smallfont><A 
+            href="http://www.gamedev.net/community/forums/flagpost.asp?reply_id=1964189">Report 
+            this Post to a Moderator</A>&nbsp;| <A 
+            href="http://www.gamedev.net/community/forums/viewreply.asp?ID=1964189">Link</A></SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE>
+<DIV class=post_separator xmlns:xtend="http://www.gamedev.net/" 
+xmlns:xasp="urn:asp-objects" 
+xmlns:msxsl="urn:schemas-microsoft-com:xslt"><BR></DIV><A name=1964202 
+xmlns:xtend="http://www.gamedev.net/" xmlns:xasp="urn:asp-objects" 
+xmlns:msxsl="urn:schemas-microsoft-com:xslt"></A>
+<TABLE cellSpacing=0 cellPadding=2 width="95%" border=0 
+xmlns:xtend="http://www.gamedev.net/" xmlns:xasp="urn:asp-objects" 
+xmlns:msxsl="urn:schemas-microsoft-com:xslt">
+  <TBODY>
+  <TR vAlign=center>
+    <TD class=post_dateline noWrap align=middle width=54 height=50 
+      rowSpan=2><IMG 
+      src="Using WM_INPUT - GameDev_Net Discussion Forums_files/default.png" 
+      border=0></TD>
+    <TD class=post_author vAlign=center width="100%"><A 
+      href="http://www.gamedev.net/community/forums/post.asp?method=reply&amp;topic_id=308083&amp;Quote=1&amp;reply_id=1964202"><IMG 
+      class=img_post_quote alt="Reply Quoting This Message" 
+      src="Using WM_INPUT - GameDev_Net Discussion Forums_files/clear.gif" 
+      align=right border=0></A><A 
+      href="http://www.gamedev.net/community/forums/post.asp?method=editreply&amp;reply_id=1964202&amp;topic_id=308083"><IMG 
+      class=img_post_edit alt="Edit Message" 
+      src="Using WM_INPUT - GameDev_Net Discussion Forums_files/clear.gif" 
+      align=right border=0></A><A 
+      href="http://www.gamedev.net/community/forums/profile.asp?mode=display&amp;id=53859" 
+      target=_new><SPAN class=regularfont>&nbsp;<B>doynax</B></SPAN>&nbsp;<SPAN 
+      class=regularfont>&nbsp;<B></B></SPAN></A><SPAN 
+      class=smallfont>&nbsp;&nbsp;<B>Member 
+      since:</B>&nbsp;1/8/2004&nbsp;&nbsp;<B>From:</B>&nbsp;Sweden</SPAN></TD></TR>
+  <TR>
+    <TD class=post_dateline width="100%">
+      <TABLE cellSpacing=0 cellPadding=0 align=right border=0>
+        <TBODY>
+        <TR>
+          <TD><SPAN class=smallfont></SPAN></TD></TR></TBODY></TABLE><IMG alt="" 
+      src="Using WM_INPUT - GameDev_Net Discussion Forums_files/icon1.gif" 
+      align=left border=0>&nbsp;Posted - 3/20/2005 5:57:44 AM</TD></TR>
+  <TR>
+    <TD class=post_body colSpan=2><!--QUOTE-->
+      <BLOCKQUOTE><SPAN class=smallfont>Quote:</SPAN>
+        <TABLE cellSpacing=0 cellPadding=4 width="95%" border=0>
+          <TBODY>
+          <TR>
+            <TD class=quote><!--/QUOTE--><!--STARTQUOTE--><I>Original post by 
+              Oluseyi</I><BR>What's the point of <TT>DefRawInputProc</TT> 
+              though? I thought that would allow the system to respond to input, 
+              so I only needed <TT>WM_INPUT</TT> and could eliminate legacy 
+              messages. I mean, they're called <I>legacy</I> afterall, which 
+              means I should be able to do without 
+          them.<!--QUOTE--></TD></TR></TBODY></TABLE></BLOCKQUOTE><!--/QUOTE--><!--ENDQUOTE-->Well, 
+      according to MSDN you should call DefWindowProc in your WM_INPUT handler. 
+      Are you sure that the window gets input focus?<BR>I have never used 
+      WM_INPUT but not generating the standard (legacy) mouse/keyboard messages 
+      seems dangerous to me. Or has the non-client area switched to using pure 
+      WM_INPUT instead?<BR><BR><X x=""></X><X x=""></X></TD></TR>
+  <TR>
+    <TD class=post_trailer width="100%" colSpan=2>
+      <TABLE cellSpacing=0 cellPadding=0 width="100%" border=0>
+        <TBODY>
+        <TR vAlign=center>
+          <TD noWrap>&nbsp;<SPAN class=smallfont>User Rating: 
+            <STRONG>1486</STRONG>&nbsp;&nbsp; | &nbsp;<A 
+            href="http://www.gamedev.net/community/forums/moderateuser.asp?userid=53859">Rate 
+            This User</A></SPAN>&nbsp;</TD>
+          <TD align=left width="90%"><A 
+            href="http://www.gamedev.net/community/forums/pmcompose.asp?sendto=53859"><IMG 
+            class=img_post_pm alt="Send Private Message" 
+            src="Using WM_INPUT - GameDev_Net Discussion Forums_files/clear.gif" 
+            border=0></A><A 
+            href="http://www.gamedev.net/community/forums/profile.asp?mode=display&amp;id=53859"><IMG 
+            class=img_post_profile alt="View Profile" 
+            src="Using WM_INPUT - GameDev_Net Discussion Forums_files/clear.gif" 
+            border=0></A></TD>
+          <TD noWrap align=right><SPAN class=smallfont><A 
+            href="http://www.gamedev.net/community/forums/flagpost.asp?reply_id=1964202">Report 
+            this Post to a Moderator</A>&nbsp;| <A 
+            href="http://www.gamedev.net/community/forums/viewreply.asp?ID=1964202">Link</A></SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE>
+<DIV class=post_separator xmlns:xtend="http://www.gamedev.net/" 
+xmlns:xasp="urn:asp-objects" 
+xmlns:msxsl="urn:schemas-microsoft-com:xslt"><BR></DIV><A name=1964209 
+xmlns:xtend="http://www.gamedev.net/" xmlns:xasp="urn:asp-objects" 
+xmlns:msxsl="urn:schemas-microsoft-com:xslt"></A>
+<TABLE cellSpacing=0 cellPadding=2 width="95%" border=0 
+xmlns:xtend="http://www.gamedev.net/" xmlns:xasp="urn:asp-objects" 
+xmlns:msxsl="urn:schemas-microsoft-com:xslt">
+  <TBODY>
+  <TR vAlign=center>
+    <TD class=post_dateline noWrap align=middle width=54 height=50 
+      rowSpan=2><IMG 
+      src="Using WM_INPUT - GameDev_Net Discussion Forums_files/16850.jpg" 
+      border=0></TD>
+    <TD class=post_author vAlign=center width="100%"><A 
+      href="http://www.gamedev.net/community/forums/post.asp?method=reply&amp;topic_id=308083&amp;Quote=1&amp;reply_id=1964209"><IMG 
+      class=img_post_quote alt="Reply Quoting This Message" 
+      src="Using WM_INPUT - GameDev_Net Discussion Forums_files/clear.gif" 
+      align=right border=0></A><A 
+      href="http://www.gamedev.net/community/forums/post.asp?method=editreply&amp;reply_id=1964209&amp;topic_id=308083"><IMG 
+      class=img_post_edit alt="Edit Message" 
+      src="Using WM_INPUT - GameDev_Net Discussion Forums_files/clear.gif" 
+      align=right border=0></A><A 
+      href="http://www.gamedev.net/community/forums/profile.asp?mode=display&amp;id=16850" 
+      target=_new><SPAN class=regularfont>&nbsp;<B>Oluseyi</B></SPAN>&nbsp;<SPAN 
+      class=staff>&nbsp;<B>GDNet Business Lead</B></SPAN></A><SPAN 
+      class=smallfont>&nbsp;&nbsp;<B>Member 
+      since:</B>&nbsp;5/14/2001&nbsp;&nbsp;<B>From:</B>&nbsp;New York, NY, 
+      United States</SPAN></TD></TR>
+  <TR>
+    <TD class=post_dateline width="100%">
+      <TABLE cellSpacing=0 cellPadding=0 align=right border=0>
+        <TBODY>
+        <TR>
+          <TD><SPAN class=smallfont></SPAN></TD></TR></TBODY></TABLE><IMG alt="" 
+      src="Using WM_INPUT - GameDev_Net Discussion Forums_files/icon418.gif" 
+      align=left border=0>&nbsp;Posted - 3/20/2005 6:16:37 AM</TD></TR>
+  <TR>
+    <TD class=post_body colSpan=2>Yes, I had read about calling 
+      <TT>DefWindowProc</TT>, but I got confused by the need to call 
+      <TT>DefRawInputProc</TT> when performing buffered reads. Restoring the 
+      call to <TT>DefWindowProc</TT> makes no significant difference, even if 
+      that's all I do in response to <TT>WM_INPUT</TT>.<BR><BR><!--QUOTE-->
+      <BLOCKQUOTE><SPAN class=smallfont>Quote:</SPAN>
+        <TABLE cellSpacing=0 cellPadding=4 width="95%" border=0>
+          <TBODY>
+          <TR>
+            <TD class=quote><!--/QUOTE--><!--STARTQUOTE--><I><A 
+              href="http://msdn.microsoft.com/library/default.asp?url=/library/en-us/winui/winui/windowsuserinterface/userinput/rawinput/rawinputreference/rawinputstructures/rawinputdevice.asp">MSDN</A></I><BR>If 
+              RIDEV_NOLEGACY is set for a mouse or a keyboard, the system does 
+              not generate any legacy message for that device <B>for the 
+              application</B>.<!--QUOTE--></TD></TR></TBODY></TABLE></BLOCKQUOTE><!--/QUOTE--><!--ENDQUOTE-->I 
+      had originally interpreted that as meaning it wouldn't send it to the 
+      application's message queue, but the system would continue to behave 
+      normally. I guess I was wrong.<BR><BR>By the way, the reason I wasn't 
+      receiving <TT>WM_INPUT</TT> was unrelated. I had inadvertently introduced 
+      a bug elsewhere in the codebase.<BR><BR><X x=""></X><X x=""></X></TD></TR>
+  <TR>
+    <TD class=post_trailer width="100%" colSpan=2>
+      <TABLE cellSpacing=0 cellPadding=0 width="100%" border=0>
+        <TBODY>
+        <TR vAlign=center>
+          <TD noWrap>&nbsp;<SPAN class=smallfont>User Rating: 
+            <STRONG>2005</STRONG>&nbsp;&nbsp; | &nbsp;<A 
+            href="http://www.gamedev.net/community/forums/moderateuser.asp?userid=16850">Rate 
+            This User</A></SPAN>&nbsp;</TD>
+          <TD align=left width="90%"><A 
+            href="http://www.gamedev.net/community/forums/pmcompose.asp?sendto=16850"><IMG 
+            class=img_post_pm alt="Send Private Message" 
+            src="Using WM_INPUT - GameDev_Net Discussion Forums_files/clear.gif" 
+            border=0></A><A 
+            href="http://www.gamedev.net/community/forums/profile.asp?mode=display&amp;id=16850"><IMG 
+            class=img_post_profile alt="View Profile" 
+            src="Using WM_INPUT - GameDev_Net Discussion Forums_files/clear.gif" 
+            border=0></A><A 
+            href="http://www.gamedev.net/community/forums/mod/journal/journal.asp?userid=16850"><IMG 
+            class=img_post_journal alt="View Journal" 
+            src="Using WM_INPUT - GameDev_Net Discussion Forums_files/clear.gif" 
+            border=0></A></TD>
+          <TD noWrap align=right><SPAN class=smallfont><A 
+            href="http://www.gamedev.net/community/forums/flagpost.asp?reply_id=1964209">Report 
+            this Post to a Moderator</A>&nbsp;| <A 
+            href="http://www.gamedev.net/community/forums/viewreply.asp?ID=1964209">Link</A></SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE>
+<DIV class=post_separator xmlns:xtend="http://www.gamedev.net/" 
+xmlns:xasp="urn:asp-objects" 
+xmlns:msxsl="urn:schemas-microsoft-com:xslt"><BR></DIV><A name=1964212 
+xmlns:xtend="http://www.gamedev.net/" xmlns:xasp="urn:asp-objects" 
+xmlns:msxsl="urn:schemas-microsoft-com:xslt"></A>
+<TABLE cellSpacing=0 cellPadding=2 width="95%" border=0 
+xmlns:xtend="http://www.gamedev.net/" xmlns:xasp="urn:asp-objects" 
+xmlns:msxsl="urn:schemas-microsoft-com:xslt">
+  <TBODY>
+  <TR vAlign=center>
+    <TD class=post_dateline noWrap align=middle width=54 height=50 
+      rowSpan=2><IMG 
+      src="Using WM_INPUT - GameDev_Net Discussion Forums_files/default.png" 
+      border=0></TD>
+    <TD class=post_author vAlign=center width="100%"><A 
+      href="http://www.gamedev.net/community/forums/post.asp?method=reply&amp;topic_id=308083&amp;Quote=1&amp;reply_id=1964212"><IMG 
+      class=img_post_quote alt="Reply Quoting This Message" 
+      src="Using WM_INPUT - GameDev_Net Discussion Forums_files/clear.gif" 
+      align=right border=0></A><A 
+      href="http://www.gamedev.net/community/forums/post.asp?method=editreply&amp;reply_id=1964212&amp;topic_id=308083"><IMG 
+      class=img_post_edit alt="Edit Message" 
+      src="Using WM_INPUT - GameDev_Net Discussion Forums_files/clear.gif" 
+      align=right border=0></A><A 
+      href="http://www.gamedev.net/community/forums/profile.asp?mode=display&amp;id=53859" 
+      target=_new><SPAN class=regularfont>&nbsp;<B>doynax</B></SPAN>&nbsp;<SPAN 
+      class=regularfont>&nbsp;<B></B></SPAN></A><SPAN 
+      class=smallfont>&nbsp;&nbsp;<B>Member 
+      since:</B>&nbsp;1/8/2004&nbsp;&nbsp;<B>From:</B>&nbsp;Sweden</SPAN></TD></TR>
+  <TR>
+    <TD class=post_dateline width="100%">
+      <TABLE cellSpacing=0 cellPadding=0 align=right border=0>
+        <TBODY>
+        <TR>
+          <TD><SPAN class=smallfont></SPAN></TD></TR></TBODY></TABLE><IMG alt="" 
+      src="Using WM_INPUT - GameDev_Net Discussion Forums_files/icon1.gif" 
+      align=left border=0>&nbsp;Posted - 3/20/2005 6:23:45 AM</TD></TR>
+  <TR>
+    <TD class=post_body colSpan=2>I tried to analyze the first raw mouse 
+      example I could find (<A 
+      href="http://link.mywwwserver.com/~jstookey/arcade/rawmouse/">clicky</A>).<BR><BR>This 
+      is all it seemed to be doing:<PRE>void registerMouse() {
+ RAWINPUTDEVICE rid;
+
+ rid.usUsagePage = 0x01;
+ rid.usUsage = 0x02;
+ rid.dwFlags = 0;
+ rid.hwndTarget = NULL;
+ RegisterRawInputDevices(&amp;rid, 1, sizeof(rid));
+}
+
+LRESULT CALLBACK WindowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
+ if(msg == WM_INPUT) {
+   /* no extra processing here except for reading the input */
+   return 0;
+ }
+ return DefWindowProc(hwnd, msg, wParam, lParam);
+}</PRE>This could be useful since I someday plan to write a multiplayer 
+      lemmings clone =)<BR><BR><X x=""></X><X x=""></X></TD></TR>
+  <TR>
+    <TD class=post_trailer width="100%" colSpan=2>
+      <TABLE cellSpacing=0 cellPadding=0 width="100%" border=0>
+        <TBODY>
+        <TR vAlign=center>
+          <TD noWrap>&nbsp;<SPAN class=smallfont>User Rating: 
+            <STRONG>1486</STRONG>&nbsp;&nbsp; | &nbsp;<A 
+            href="http://www.gamedev.net/community/forums/moderateuser.asp?userid=53859">Rate 
+            This User</A></SPAN>&nbsp;</TD>
+          <TD align=left width="90%"><A 
+            href="http://www.gamedev.net/community/forums/pmcompose.asp?sendto=53859"><IMG 
+            class=img_post_pm alt="Send Private Message" 
+            src="Using WM_INPUT - GameDev_Net Discussion Forums_files/clear.gif" 
+            border=0></A><A 
+            href="http://www.gamedev.net/community/forums/profile.asp?mode=display&amp;id=53859"><IMG 
+            class=img_post_profile alt="View Profile" 
+            src="Using WM_INPUT - GameDev_Net Discussion Forums_files/clear.gif" 
+            border=0></A></TD>
+          <TD noWrap align=right><SPAN class=smallfont><A 
+            href="http://www.gamedev.net/community/forums/flagpost.asp?reply_id=1964212">Report 
+            this Post to a Moderator</A>&nbsp;| <A 
+            href="http://www.gamedev.net/community/forums/viewreply.asp?ID=1964212">Link</A></SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE>
+<DIV class=post_separator xmlns:xtend="http://www.gamedev.net/" 
+xmlns:xasp="urn:asp-objects" 
+xmlns:msxsl="urn:schemas-microsoft-com:xslt"><BR></DIV>
+<TABLE width="95%" border=0 xmlns:xtend="http://www.gamedev.net/" 
+xmlns:xasp="urn:asp-objects" xmlns:msxsl="urn:schemas-microsoft-com:xslt">
+  <TBODY>
+  <TR vAlign=top>
+    <TD vAlign=top align=left width="50%"><SPAN class=smallfont>All times are 
+      ET (US)</SPAN><BR><BR><A 
+      href="http://www.gamedev.net/community/forums/post.asp?method=reply&amp;topic_id=308083"><IMG 
+      class=img_post_postreply alt="Post Reply" 
+      src="Using WM_INPUT - GameDev_Net Discussion Forums_files/clear.gif" 
+      border=0></A></TD>
+    <TD vAlign=top noWrap align=right width="60%"><SPAN class=smallfont><A 
+      href="http://www.gamedev.net/community/forums/goto.asp?topic_id=308083&amp;forum_id=21&amp;gforum_id=0&amp;move=prev"><IMG 
+      class=img_post_prevarrow 
+      src="Using WM_INPUT - GameDev_Net Discussion Forums_files/clear.gif" 
+      border=0>&nbsp;<U>Last Thread</U></A>&nbsp;<A 
+      href="http://www.gamedev.net/community/forums/goto.asp?topic_id=308083&amp;forum_id=21&amp;gforum_id=0&amp;move=next"><U>Next 
+      Thread</U>&nbsp;<IMG class=img_post_nextarrow 
+      src="Using WM_INPUT - GameDev_Net Discussion Forums_files/clear.gif" 
+      border=0></A></SPAN><BR></TD></TR></TBODY></TABLE>
+<CENTER>
+<TABLE width="95%" border=0>
+  <TBODY>
+  <TR vAlign=top>
+    <TD class=smallfont vAlign=top align=left width="50%">
+      <TABLE cellSpacing=0 cellPadding=4 border=0>
+        <TBODY>
+        <TR>
+          <TD><SPAN class=smallfont><B>Forum Rules:</B> </SPAN></TD></TR>
+        <TR>
+          <TD class=forumrules>You <B>may not</B> post new threads<BR>You 
+            <B>may</B> post replies<BR>You <B>may not</B> edit your posts<BR>You 
+            <B>may not</B> use HTML in your posts<BR></TD></TR></TBODY></TABLE></TD>
+    <TD vAlign=top noWrap align=right width="60%">
+      <FORM action=goto.asp method=get>
+      <TABLE border=0>
+        <TBODY>
+        <TR>
+          <TD><FONT face="" size=2><B>Jump To:</B> <SELECT size=1 name=redir> 
+              <OPTION value=default.asp selected>Specific Forum</OPTION> <OPTION 
+              value=default.asp></OPTION> <OPTION value=default.asp>Active 
+              Workshops</OPTION> <OPTION 
+              value=default.asp>--------------------------</OPTION> <OPTION 
+              value=goto.asp?redir=forum%2Easp%3Fforum%5Fid%3D83>C# Workshop 
+              (old forum)</OPTION> <OPTION value=default.asp></OPTION> <OPTION 
+              value=default.asp></OPTION> <OPTION value=default.asp>The 
+              Technical Side</OPTION> <OPTION 
+              value=default.asp>--------------------------</OPTION> <OPTION 
+              value=goto.asp?redir=forum%2Easp%3Fforum%5Fid%3D31>For 
+              Beginners</OPTION> <OPTION 
+              value=goto.asp?redir=forum%2Easp%3Fforum%5Fid%3D34>Software 
+              Engineering</OPTION> <OPTION 
+              value=goto.asp?redir=forum%2Easp%3Fforum%5Fid%3D39>Consoles, PDAs, 
+              and Cell Phones</OPTION> <OPTION 
+              value=goto.asp?redir=forum%2Easp%3Fforum%5Fid%3D41>Scripting 
+              Languages and Game Mods</OPTION> <OPTION 
+              value=goto.asp?redir=forum%2Easp%3Fforum%5Fid%3D61>Alternative 
+              Game Libraries</OPTION> <OPTION 
+              value=goto.asp?redir=forum%2Easp%3Fforum%5Fid%3D9>Artificial 
+              Intelligence</OPTION> <OPTION 
+              value=goto.asp?redir=forum%2Easp%3Fforum%5Fid%3D10>DirectX</OPTION> 
+              <OPTION value=goto.asp?redir=forum%2Easp%3Fforum%5Fid%3D11>Game 
+              Programming</OPTION> <OPTION 
+              value=goto.asp?redir=forum%2Easp%3Fforum%5Fid%3D12>Graphics 
+              Programming and Theory</OPTION> <OPTION 
+              value=goto.asp?redir=forum%2Easp%3Fforum%5Fid%3D13>Isometric 
+              Land</OPTION> <OPTION 
+              value=goto.asp?redir=forum%2Easp%3Fforum%5Fid%3D15>Multiplayer and 
+              Network Programming</OPTION> <OPTION 
+              value=goto.asp?redir=forum%2Easp%3Fforum%5Fid%3D20>Math and 
+              Physics</OPTION> <OPTION 
+              value=goto.asp?redir=forum%2Easp%3Fforum%5Fid%3D21>General 
+              Programming</OPTION> <OPTION 
+              value=goto.asp?redir=forum%2Easp%3Fforum%5Fid%3D25>OpenGL</OPTION> 
+              <OPTION value=default.asp></OPTION> <OPTION 
+              value=default.asp>Community Interaction</OPTION> <OPTION 
+              value=default.asp>--------------------------</OPTION> <OPTION 
+              value=goto.asp?redir=forum%2Easp%3Fforum%5Fid%3D2>Article 
+              Proposals and Requests</OPTION> <OPTION 
+              value=goto.asp?redir=forum%2Easp%3Fforum%5Fid%3D3>GDNet 
+              Lounge</OPTION> <OPTION 
+              value=goto.asp?redir=forum%2Easp%3Fforum%5Fid%3D4>GDNet Comments, 
+              Suggestions and Ideas</OPTION> <OPTION 
+              value=goto.asp?redir=forum%2Easp%3Fforum%5Fid%3D5>The Business of 
+              Game Development</OPTION> <OPTION 
+              value=goto.asp?redir=forum%2Easp%3Fforum%5Fid%3D6>Your 
+              Announcements</OPTION> <OPTION 
+              value=goto.asp?redir=forum%2Easp%3Fforum%5Fid%3D8>Help 
+              Wanted</OPTION> <OPTION 
+              value=goto.asp?redir=forum%2Easp%3Fforum%5Fid%3D70>GD Gathering 
+              Forums</OPTION> <OPTION value=default.asp></OPTION> <OPTION 
+              value=default.asp>The Creative Side</OPTION> <OPTION 
+              value=default.asp>--------------------------</OPTION> <OPTION 
+              value=goto.asp?redir=forum%2Easp%3Fforum%5Fid%3D17>Game 
+              Design</OPTION> <OPTION 
+              value=goto.asp?redir=forum%2Easp%3Fforum%5Fid%3D18>Visual 
+              Arts</OPTION> <OPTION 
+              value=goto.asp?redir=forum%2Easp%3Fforum%5Fid%3D19>Music and 
+              Sound</OPTION> <OPTION 
+              value=goto.asp?redir=forum%2Easp%3Fforum%5Fid%3D32>Writing for 
+              Games</OPTION> <OPTION value=default.asp></OPTION> <OPTION 
+              value=default.asp>Special Interest</OPTION> <OPTION 
+              value=default.asp>--------------------------</OPTION> <OPTION 
+              value=goto.asp?redir=forum%2Easp%3Fforum%5Fid%3D14>Everything 
+              Unix</OPTION> <OPTION 
+              value=goto.asp?redir=forum%2Easp%3Fforum%5Fid%3D24>Java 
+              Development</OPTION> <OPTION 
+              value=goto.asp?redir=forum%2Easp%3Fforum%5Fid%3D58>.NET</OPTION> 
+              <OPTION value=goto.asp?redir=forum%2Easp%3Fforum%5Fid%3D59>Web 
+              Development</OPTION> <OPTION 
+              value=goto.asp?redir=forum%2Easp%3Fforum%5Fid%3D82>Hardware 
+              Discussion</OPTION> <OPTION 
+              value=goto.asp?redir=forum%2Easp%3Fforum%5Fid%3D68>Eating fondue 
+              while sipping Gato Negro and listening to Vaya Con Dios</OPTION> 
+              <OPTION value=default.asp></OPTION> <OPTION 
+              value=default.asp>Affiliates</OPTION> <OPTION 
+              value=default.asp>--------------------------</OPTION> <OPTION 
+              value=goto.asp?redir=forum%2Easp%3Fforum%5Fid%3D16>Power Render 
+              API</OPTION> <OPTION 
+              value=goto.asp?redir=forum%2Easp%3Fforum%5Fid%3D27>NeHe 
+              Productions</OPTION> <OPTION 
+              value=goto.asp?redir=forum%2Easp%3Fforum%5Fid%3D30>turbo</OPTION> 
+              <OPTION value=goto.asp?redir=forum%2Easp%3Fforum%5Fid%3D36>Real 
+              Soon Now</OPTION> <OPTION 
+              value=goto.asp?redir=forum%2Easp%3Fforum%5Fid%3D40>NeXe</OPTION> 
+              <OPTION 
+              value=goto.asp?redir=forum%2Easp%3Fforum%5Fid%3D43>Cone3D</OPTION> 
+              <OPTION 
+              value=goto.asp?redir=forum%2Easp%3Fforum%5Fid%3D49>AngelCode</OPTION> 
+              <OPTION 
+              value=goto.asp?redir=forum%2Easp%3Fforum%5Fid%3D67>Gamedev: The 
+              comic / Gamedev: Humour Portal</OPTION> <OPTION 
+              value=default.asp></OPTION> <OPTION value=default.asp>Interactive 
+              Discussion</OPTION> <OPTION 
+              value=default.asp>--------------------------</OPTION> <OPTION 
+              value=goto.asp?redir=forum%2Easp%3Fforum%5Fid%3D62>Image of the 
+              Day</OPTION> <OPTION 
+              value=goto.asp?redir=forum%2Easp%3Fforum%5Fid%3D71>GDNet 
+              Contests</OPTION> <OPTION 
+              value=goto.asp?redir=forum%2Easp%3Fforum%5Fid%3D74>Nehe 
+              News</OPTION> <OPTION 
+              value=goto.asp?redir=forum%2Easp%3Fforum%5Fid%3D35>Article 
+              Feedback</OPTION> <OPTION 
+              value=goto.asp?redir=forum%2Easp%3Fforum%5Fid%3D53>Developer 
+              Journals</OPTION> <OPTION 
+              value=goto.asp?redir=forum%2Easp%3Fforum%5Fid%3D52>GDS</OPTION> 
+              <OPTION value=goto.asp?redir=forum%2Easp%3Fforum%5Fid%3D55>News 
+              Discussion</OPTION> <OPTION 
+              value=goto.asp?redir=forum%2Easp%3Fforum%5Fid%3D56>GDS 
+              News</OPTION> <OPTION 
+              value=goto.asp?redir=forum%2Easp%3Fforum%5Fid%3D57>Book 
+              Discussion</OPTION> <OPTION 
+              value=goto.asp?redir=forum%2Easp%3Fforum%5Fid%3D80>4E5 
+              Entries</OPTION> <OPTION value=default.asp></OPTION> <OPTION 
+              value=default.asp>Completed Workshops</OPTION> <OPTION 
+              value=default.asp>--------------------------</OPTION> <OPTION 
+              value=goto.asp?redir=forum%2Easp%3Fforum%5Fid%3D76>CPP 
+              Workshop</OPTION> <OPTION 
+              value=goto.asp?redir=forum%2Easp%3Fforum%5Fid%3D84>C# 
+              Workshop</OPTION> <OPTION 
+              value=goto.asp?redir=forum%2Easp%3Fforum%5Fid%3D78>Freehand 
+              Drawing Workshop</OPTION> <OPTION 
+              value=goto.asp?redir=forum%2Easp%3Fforum%5Fid%3D33>Hands-On 
+              Interactive Game Development</OPTION> <OPTION 
+              value=goto.asp?redir=forum%2Easp%3Fforum%5Fid%3D79>SICP 
+              Workshop</OPTION> <OPTION value=default.asp></OPTION></SELECT> <INPUT type=submit value=Go> </FONT></TD></TR></TBODY></TABLE></FORM>
+      <FORM name=modpost action=modpost.asp method=get><SPAN 
+      class=smallfont><B>Administrative Options:</B><BR><INPUT type=hidden 
+      value=308083 name=topic_id> <SELECT class=smallfont 
+      onchange=document.modpost.submit(); name=method> <OPTION value=showintro 
+        selected>--- Topic Options ---<OPTION value=closetopic>Open / Close 
+        Topic<OPTION value=movetopic>Move Topic<OPTION value=deletetopic>Delete 
+        Topic<OPTION value=stick>Stick / Unstick Topic</OPTION></SELECT> 
+    </SPAN></TD></FORM></TR></TBODY></TABLE></CENTER></DIV>
+<P>
+<P class=smallfont align=center></P></BODY></HTML>

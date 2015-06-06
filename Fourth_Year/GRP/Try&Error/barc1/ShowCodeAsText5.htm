@@ -1,0 +1,173 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!-- saved from url=(0085)http://www.planetsourcecode.com/vb/scripts/ShowCodeAsText.asp?txtCodeId=4109&lngWId=1 -->
+<HTML><HEAD>
+<META http-equiv=Content-Type content="text/html; charset=windows-1256">
+<META content="MSHTML 6.00.2900.2180" name=GENERATOR></HEAD>
+<BODY><XMP>'**************************************
+' Name: Code93 Barcode Generator
+' Description:Converts text into Code93 
+'     barcodes, with control characters and de
+'     limiters.
+' By: Will Trosky
+'
+'
+' Inputs:string
+'
+' Returns:string
+'
+'Assumes:None
+'
+'Side Effects:None
+'This code is copyrighted and has limite
+'     d warranties.
+'Please see http://www.Planet-Source-Cod
+'     e.com/xq/ASP/txtCodeId.4109/lngWId.1/qx/
+'     vb/scripts/ShowCode.htm
+'for details.
+'**************************************
+
+Option Explicit
+' Code 93 requires two check characters 
+'     after the text. These characters, C and 
+'     K are
+' calculated by taking the value of each
+'     letter in the (Switch) below and multipl
+'     ying
+' it by its place in the string, backwar
+'     ds. It is probably best to explain with 
+'     an
+' example.
+'
+' To convert the text "Will" follow thes
+'     e steps:
+'Find the values of W i l and l in the S
+'     witch below
+'These are32 18 21 21
+'W is in the FIRST position, and there a
+'     re 4 characters in the string, so...
+'multiply W (32) I (18)L (21) and L (21)
+'     
+' by 4by 3 by 2by 1
+' = 128= 54 = 42= 21
+'Now what we need is the remainder of th
+'     is total divided by 47 thus...
+'128+54+42+21= 254 / 47 = 5 with a remai
+'     nder of 10
+'The value of 10 in the second (Switch) 
+'     below is "A". Thus, the C character is "
+'     A"
+'So now we have "WILLA" as our code. Do 
+'     it all again.
+'Find the values of W I L L and A in the
+'     Switch below
+'These are32 18 21 21 10
+'W is in the FIRST position, and there a
+'     re 5 characters in the string, so...
+'multiply W (32) I (18)L (21) L (21) and
+'     A (10)
+' by 5by 4 by 3by 2by 1
+' = 160= 72 = 63= 42= 10
+'Now what we need is the remainder of th
+'     is total divided by 47 thus...
+'160+72+63+42+10=347 / 47 = 7 with a rem
+'     ainder of 18
+'The value of 18 in the second (Switch) 
+'     below is "I". Thus, the K character is "
+'     I"
+'So now we have "WILLAI" as our code.
+'
+'Finally, we must wrap the code in start
+'     /stop characters. This is discussed in
+'"The Julie Factor" below.
+'
+'
+' "The Julie Factor"
+'
+'When demonstrating this to my friend Ju
+'     lie I tried her name and it crashed.
+'The Code 93 for Julie is "JULIE)6". The
+'     re are four "circle codes" which are
+'dependant upon the font you are using f
+'     or output. In the font that I have,
+'these codes interpret to "-", "'", "(" 
+'     and ")".
+'It may take a little investigation and 
+'     trial and error to find what they are
+'for your font. What I did, was to look 
+'     at Windows Character Map and find valid
+'symbols which were not accounted for ot
+'     herwise. This limited my list of valid
+'options considerably. I tried each code
+'     and finally found the right ones.
+'
+'To print the barcode properly, you need
+'     start and stop characters. These are
+'also determined by your font. In my cas
+'     e, they are "[" and "]". The final
+'printable code for WILL is [WILLAI] and
+
+
+'     for Julie is [JULIE)6].
+    '
+    ' 14 character limit
+    'I have not been able to print and scan 
+    '     codes longer and 14 characters. That is,
+    '     
+    '14 input characters and 18 output chara
+    '     cters. this seems to be a limit no matte
+    '     r
+    'what size font I use.
+    '
+    ' Font Size
+    'If you are using a CCD scanner, please 
+    '     be sure to make the font large enough
+    'to read. With my font, 28 is the minimu
+    '     m, 36 is more reliable.
+    '
+
+
+Function code93Convert()
+    ' This function calls the one that does 
+    '     all of the work. Replace "JULIE"
+    ' with whatever you want to convert.
+    Dim s As String, s1 As String, s2 As String
+    s = "Will"
+    ' s="Julie"
+    s = UCase(s)
+    s1 = calculateCK(s)
+    s2 = calculateCK(s & s1)
+    MsgBox s & s1 & s2
+End Function
+
+
+Function calculateCK(strIn As String) As String
+    Dim iLen As Integer, iVal As Integer, iMlti As Integer, iAccum As Integer, CK As Integer
+    Dim l As String
+    strIn = UCase(strIn)
+
+
+    For iLen = 1 To Len(strIn)
+        l = Mid(strIn, iLen, 1)
+        iVal = Switch(l = "0", 0, l = "1", 1, l = "2", 2, l = "3", 3, l = "4", 4, l = "5", 5, _
+        l = "6", 6, l = "7", 7, l = "8", 8, l = "9", 9, l = "A", 10, l = "B", 11, l = "C", 12, _
+        l = "D", 13, l = "E", 14, l = "F", 15, l = "G", 16, l = "H", 17, l = "I", 18, _
+        l = "J", 19, l = "K", 20, l = "L", 21, l = "M", 22, l = "N", 23, l = "O", 24, _
+        l = "P", 25, l = "Q", 26, l = "R", 27, l = "S", 28, l = "T", 29, l = "U", 30, _
+        l = "V", 31, l = "W", 32, l = "X", 33, l = "Y", 34, l = "Z", 35, l = "-", 36, _
+        l = ".", 37, l = " ", 38, l = "$", 39, l = "/", 40, l = "+", 41, l = "%", 42, _
+        l = "-", 43, l = "'", 44, l = "(", 45, l = ")", 46)
+        iMlti = Len(strIn) + 1 - iLen
+        iAccum = iAccum + (iMlti * iVal)
+    Next iLen
+    CK = (iAccum Mod 47)
+    calculateCK = Switch(CK = 0, 0, CK = 1, 1, CK = 2, 2, CK = 3, 3, CK = 4, 4, CK = 5, 5, CK = 6, 6, _
+    CK = 7, 7, CK = 8, 8, CK = 9, 9, CK = 10, "A", CK = 11, "B", CK = 12, "CK", CK = 13, "D", _
+    CK = 14, "E", CK = 15, "F", CK = 16, "G", CK = 17, "H", CK = 18, "I", CK = 19, "J", _
+    CK = 20, "K", CK = 21, "L", CK = 22, "M", CK = 23, "N", CK = 24, "O", CK = 25, "P", _
+    CK = 26, "Q", CK = 27, "R", CK = 28, "S", CK = 29, "T", CK = 30, "U", CK = 31, "V", _
+    CK = 32, "W", CK = 33, "X", CK = 34, "Y", CK = 35, "Z", CK = 36, "-", CK = 37, ".", _
+    CK = 38, " ", CK = 39, "$", CK = 40, "/", CK = 41, "+", CK = 42, "%", CK = 43, "-", _
+    CK = 44, "'", CK = 45, "(", CK = 46, ")")
+End Function
+
+		</XMP></BODY></HTML>

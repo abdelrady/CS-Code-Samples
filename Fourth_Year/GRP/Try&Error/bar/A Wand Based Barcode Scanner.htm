@@ -1,0 +1,597 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!-- saved from url=(0097)http://instruct1.cit.cornell.edu/courses/ee476/FinalProjects/s2004/mtf23/BarcodeScanner/index.htm -->
+<HTML><HEAD><TITLE>A Wand Based Barcode Scanner</TITLE>
+<META http-equiv=Content-Language content=en-us>
+<META http-equiv=Content-Type content="text/html; charset=windows-1252">
+<META content="MSHTML 6.00.2900.2180" name=GENERATOR>
+<META content=FrontPage.Editor.Document name=ProgId></HEAD>
+<BODY>
+<P align=center><IMG height=360 
+src="A Wand Based Barcode Scanner_files/closeup1.jpg" width=480 border=0></P>
+<P align=center><FONT size=5>A Wand Based Barcode Scanner</FONT></P>
+<P align=center>An ECE476 Final Project from:<BR><FONT size=3>Wyatt Schweizer 
+(wws6)<BR>Mike Fenn (mtf23)</FONT></P>
+<P style="LINE-HEIGHT: 100%" align=center><FONT size=3><A 
+href="http://instruct1.cit.cornell.edu/courses/ee476/FinalProjects/s2004/mtf23/BarcodeScanner/index.htm#Introduction:">Introduction</A>&nbsp;&nbsp; 
+<A 
+href="http://instruct1.cit.cornell.edu/courses/ee476/FinalProjects/s2004/mtf23/BarcodeScanner/index.htm#High Level Design:">High 
+Level Design</A>&nbsp;&nbsp; <A 
+href="http://instruct1.cit.cornell.edu/courses/ee476/FinalProjects/s2004/mtf23/BarcodeScanner/index.htm#Program/Hardware Design:">Program/Hardware 
+Design</A>&nbsp;&nbsp; <A 
+href="http://instruct1.cit.cornell.edu/courses/ee476/FinalProjects/s2004/mtf23/BarcodeScanner/index.htm#Results:">Result</A>&nbsp;&nbsp; 
+<A 
+href="http://instruct1.cit.cornell.edu/courses/ee476/FinalProjects/s2004/mtf23/BarcodeScanner/index.htm#Ethics:">Ethics</A>&nbsp;&nbsp; 
+<A 
+href="http://instruct1.cit.cornell.edu/courses/ee476/FinalProjects/s2004/mtf23/BarcodeScanner/index.htm#Conclusions:">Conclusions</A>&nbsp;&nbsp; 
+<A 
+href="http://instruct1.cit.cornell.edu/courses/ee476/FinalProjects/s2004/mtf23/BarcodeScanner/index.htm#Appendix" 
+target=_top>Appendix</A></FONT></P>
+<P><FONT size=4><B><A name=Introduction:>Introduction:</A> </B>Our project is a 
+UPC-A Barcode Scanner complete with a pricing/description database 
+interface.</FONT></P>
+<P class=MsoNormal>Our original goal for this project was to build a standard 
+barcode scanner from scratch, but as the project evolved so had to our 
+specification of the project.<SPAN style="mso-spacerun: yes">&nbsp; </SPAN>We 
+initially sought to build a charge-coupled device (CCD) scanner, which scans the 
+entire barcode at once.<SPAN style="mso-spacerun: yes">&nbsp; </SPAN>This, 
+however, required parts beyond our budget, namely a high-resolution CCD array, 
+as well as knowledge of optics well beyond our own.<SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN>We then shifted our focus to a pen or 
+wand style scanner, where the user drags the tip of a pen evenly across the 
+barcode to read it.<SPAN style="mso-spacerun: yes">&nbsp; </SPAN>This, however 
+still required substantial optical work.<SPAN style="mso-spacerun: yes">&nbsp; 
+</SPAN>We discovered that we could purchase a “dumb” scanner wand on E-bay for 
+around $10, thus our ultimate implementation.<SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN>The so-called “dumb” wand simply gives 
+the user a TTL output stating whether it is reading from a black or a white 
+surface.<SPAN style="mso-spacerun: yes">&nbsp; </SPAN>This essentially shifted 
+most of the design challenge from optics to software, especially error 
+correction, which we felt was more appropriate considering the nature of this 
+course.<O:P> </O:P></P>
+<P class=MsoNormal>The major design challenge we encountered surrounded dealing 
+with the inaccuracy of the initial readings.<SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN>Because of the small size of most 
+barcode features, only a few samples could be taken over some of the smaller 
+ones during a pass with the wand.<SPAN style="mso-spacerun: yes">&nbsp; 
+</SPAN>This necessitated substantial error correction to attain reasonable 
+accuracy for a given scan.<SPAN style="mso-spacerun: yes">&nbsp; </SPAN>The 
+nature of the wand scanner, as even detailed by commercial producers, requires a 
+steady and well-trained hand to scan.<O:P> </O:P></P><SPAN 
+style="FONT-SIZE: 12pt; FONT-FAMILY: 'Times New Roman'; mso-fareast-font-family: 'Times New Roman'; mso-ansi-language: EN-US; mso-fareast-language: EN-US; mso-bidi-language: AR-SA">Since 
+simply reading a barcode and returning its value is not useful on its own, we 
+also added a serial communication interface that would allow the MCU to get 
+information from a database or other software for the particular barcode, which 
+we emulate with the terminal.</SPAN>
+<P><FONT size=4><B><A name="High Level Design:">High Level 
+Design:</A></B></FONT></P>
+<P class=MsoNormal 
+style="MARGIN-LEFT: 0in; TEXT-INDENT: 0in; mso-list: l1 level1 lfo1"><B>1.<SPAN 
+style="FONT: 7pt 'Times New Roman'">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>Idea and motivation</B><BR>There was no real spark for the idea to build 
+a barcode scanner, it just seemed like an interesting and challenging concept 
+for a project.<O:P> </O:P></P>
+<P class=MsoNormal><B>2.<SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>Design Overview</B><BR>We approached our design process by working 
+separately on two distinct fronts and merged them once each was complete and 
+functioning in isolation:<SPAN style="mso-spacerun: yes">&nbsp; </SPAN>reading 
+the barcode and decoding it.<O:P> </O:P></P>
+<P class=MsoNormal>Reading the barcode:<SPAN style="mso-spacerun: yes">&nbsp; 
+</SPAN>This task centered around first learning the capabilities of our wand 
+scanner.<SPAN style="mso-spacerun: yes">&nbsp; </SPAN>Its interface is simply an 
+open-collector TTL output which reads at 5V if the scanner is over a black bar 
+and 0V if it is over a white space.<SPAN style="mso-spacerun: yes">&nbsp; 
+</SPAN>The scanner itself features a red-light phototransistor and a red LED 
+focused through a lens.<SPAN style="mso-spacerun: yes">&nbsp; </SPAN>The 
+phototransistor will detect if the light is reflected off the surface below, 
+thus reading a white space in the barcode.<SPAN style="mso-spacerun: yes">&nbsp; 
+</SPAN>The trick to reading one of these barcodes is tracking the number of 
+white/black transitions.<SPAN style="mso-spacerun: yes">&nbsp; </SPAN>As 
+detailed earlier, each section of the barcode is guaranteed to have a certain 
+number of these transitions, effectively clocking the scan.<SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN>We used a state machine to track the 
+transitions and detect where the wand is in the barcode.<SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN>The relative widths of each segment (bar 
+or space) in each digit section gave us the 7-bit encoding for each digit, which 
+can then be decoded.<O:P> </O:P></P>
+<P class=MsoNormal>We approached this part of the design by first tackling the 
+parts over which we would have complete control before introducing the 
+uncertainty of the scanner.<SPAN style="mso-spacerun: yes">&nbsp; </SPAN>I began 
+working with a standard C compiler to test code to handle the transformation of 
+the relative widths of the bars and spaces into the 7-bit encoding by using some 
+simulated reads.<SPAN style="mso-spacerun: yes">&nbsp; </SPAN>I later found out 
+that due to code speed I would not be getting so many samples, which introduced 
+the need for error correction.<O:P> </O:P></P><SPAN 
+style="FONT-SIZE: 12pt; FONT-FAMILY: 'Times New Roman'; mso-fareast-font-family: 'Times New Roman'; mso-ansi-language: EN-US; mso-fareast-language: EN-US; mso-bidi-language: AR-SA">Decoding 
+the barcode:<SPAN style="mso-spacerun: yes"> </SPAN>This task centered around 
+understanding how the barcode was encoded in the first place. Once we understood 
+how the barcode was encoded, it was simple to design decoding software. The 
+decoder is written for an EAN-13 barcode. The decoding software takes in an 
+array of unsigned characters from the scanning software and determines what 
+digits each character represents. The decoding software then calculates the 
+checksum and compares it to that from the decoded barcode in order to guarantee 
+a valid scan.</SPAN> 
+<P class=MsoNormal 
+style="MARGIN-LEFT: 0in; TEXT-INDENT: 0in; mso-list: l0 level1 lfo2"><B>3.<SPAN 
+style="FONT: 7pt 'Times New Roman'">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>Hardware/Software tradeoffs</B><BR>We shifted most of our design 
+challenge from hardware into software, mainly because those particular hardware 
+challenges would have been primarily optical in nature and likely require 
+precision equipment to which we did not have access.<SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN>Had we been able to scan the entire 
+barcode with a CCD array in one shot, we would not have had the error variable 
+of the user dragging the wand.<SPAN style="mso-spacerun: yes">&nbsp; </SPAN>Had 
+we been able to build such a scanner, our accuracy would have greatly 
+improved.<SPAN style="mso-spacerun: yes">&nbsp; </SPAN>But again, after much 
+evaluation we deemed it an unreasonable goal.<SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN>To compensate for this, we had to 
+develop a multi-stage error correction algorithm, which greatly improved the 
+scanning success rate.<O:P> </O:P></P>
+<P class=MsoNormal 
+style="MARGIN-LEFT: 0in; TEXT-INDENT: 0in; mso-list: l0 level1 lfo2"><B>4.<SPAN 
+style="FONT: 7pt 'Times New Roman'">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>Standards</B></P>
+<P class=MsoNormal><I style="mso-bidi-font-style: normal">EAN-13 Barcode:<O:P> 
+</O:P></I><O:P></O:P></P><SPAN 
+style="FONT-SIZE: 12pt; FONT-FAMILY: 'Times New Roman'; mso-fareast-font-family: 'Times New Roman'; mso-ansi-language: EN-US; mso-fareast-language: EN-US; mso-bidi-language: AR-SA">The 
+barcode standard for our project is EAN-13. This is an international standard 
+and a superset of UPC-A (The US &amp; Canada standard). By choosing this 
+standard for our device we make it marketable worldwide. ISBN, ISSN and ISMN are 
+all encoded using the EAN-13 standard so our device will work on a variety of 
+products.<SPAN style="mso-spacerun: yes">&nbsp; </SPAN>Also, beginning in 2005 
+all decoding and database systems will be required to handle EAN-13 codes, to 
+universalize barcodes, making this standard far and away the appropriate primary 
+choice</SPAN> 
+<P class=MsoNormal>The EAN-13 encoding is split up into four groups:<O:P> 
+</O:P></P>
+<OL style="MARGIN-TOP: 0in" type=1>
+  <LI class=MsoNormal style="mso-list: l0 level1 lfo1; tab-stops: list .5in">The 
+  Number System – consists of the first two-to-three digits and specifies what 
+  country or economic region assigned the manufacturer code. 
+  <LI class=MsoNormal 
+  style="mso-list: l0 level1 lfo1; tab-stops: list .5in">Manufacturer Code – 
+  This is a variable length unique code that is assigned to each manufacturer. 
+  <LI class=MsoNormal 
+  style="mso-list: l0 level1 lfo1; tab-stops: list .5in">Product Code – This is 
+  a unique code assigned by the manufacturer to each of its products. 
+  <LI class=MsoNormal 
+  style="mso-list: l0 level1 lfo1; tab-stops: list .5in">Checksum digit. – An 
+  addition digit used to verify correct scanning of the barcode. </LI></OL>
+<P class=MsoNormal style="TEXT-ALIGN: center" align=center>&nbsp;<O:P> <IMG 
+height=172 src="A Wand Based Barcode Scanner_files/ean13-3.gif" width=406 
+border=0> </P>
+<P class=MsoNormal style="TEXT-ALIGN: center" align=center>Fig 1: A EAN-13 
+Barcode with each character shown in alternating colors</P>
+<P class=MsoNormal style="TEXT-ALIGN: center" align=center>Picture from: <A 
+href="http://www.barcodeisland.com/ean13.phtml">http://www.barcodeisland.com/ean13.phtml</A>&nbsp;<O:P> 
+</O:P></P>
+<P class=MsoNormal>After scanning the barcode, it must be verified as valid. 
+This will be accomplished by calculating the checksum on the first twelve digits 
+and comparing the output to the checksum digit. This will be extremely valuable 
+in our testing process. We have decided that if the checksum fails then we will 
+rescan twice before sending an error to the user. This scheme is meant to 
+increase the accuracy of the Barcode scanner making life simpler for the human 
+operating it. </P>
+<P class=MsoNormal>NOTE: Due to error correction considerations, our barcode 
+scanner will only read UPC-A Barcodes, which are a subset of EAN-13 Barcodes. 
+This simplifies one dimension of the encoding allowing for more accurate error 
+correction.</O:P> </P>
+<P class=MsoNormal><I style="mso-bidi-font-style: normal">RS-232 asynchronous 
+serial communication: </I></P>
+<P class=MsoNormal>We used the RS-232 standard for our serial communication with 
+the PC just as in earlier labs in the class, by hiding the the output interface 
+through the use of the standard input/output</O:P> library in C.&nbsp; We then 
+implemented the input interface with a non-blocking receive interrupt mechanism, 
+as done in in Lab 3.&nbsp; This serial interface served as the link for our 
+emulated database.</P>
+<P class=MsoNormal 
+style="MARGIN-LEFT: 0in; TEXT-INDENT: 0in; mso-list: l0 level1 lfo2"><B>5.<SPAN 
+style="FONT: 7pt 'Times New Roman'">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>Intellectual Property considerations</B></P><SPAN 
+style="FONT-SIZE: 12pt; FONT-FAMILY: 'Times New Roman'; mso-fareast-font-family: 'Times New Roman'; mso-ansi-language: EN-US; mso-fareast-language: EN-US; mso-bidi-language: AR-SA">The 
+only intellectual property consideration surrounds our use of another company’s 
+wand scanner, so our product could be marketed as a decoder for it.<SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN>Otherwise all of our ideas and methods 
+were original.<SPAN style="mso-spacerun: yes">&nbsp; </SPAN>The only code that 
+was not completely original dealt with receiving characters from the USART from 
+the Security System lab.</SPAN> 
+<P>&nbsp;</P>
+<P><FONT size=4><B><A name="Program/Hardware Design:">Program/Hardware 
+Design:</A></B></FONT></P>
+<P align=center><FONT size=4><B><IMG height=480 
+src="A Wand Based Barcode Scanner_files/project1.jpg" width=640 
+border=0></B></FONT></P>
+<P class=MsoNormal><B>Program Details:<O:P> </B></O:P></P>
+<P class=MsoNormal>For the sake of versatility there are two compile-time 
+options, implemented through the frequent use of the #ifdef directive, built 
+into the program: a debugging mode and a terminal interface mode, each of which 
+makes use of the serial connection to a PC.<SPAN 
+style="mso-spacerun: yes">&nbsp;</SPAN><O:P> </O:P></P>
+<P class=MsoNormal>Debug mode:<SPAN style="mso-spacerun: yes">&nbsp; 
+</SPAN>Displays a plethora of important information regarding the scan on the PC 
+terminal.<SPAN style="mso-spacerun: yes">&nbsp; </SPAN>This was incredibly 
+useful when evaluating scanning accuracy and developing error correction.<SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN>By watching for trends in the errors we 
+were able to discern patterns that directly influenced the error correction 
+schemes, especially the favoritism toward correction to a width of four, as 
+described earlier.<O:P> </O:P></P>
+<P class=MsoNormal>Terminal mode:<SPAN style="mso-spacerun: yes">&nbsp; 
+</SPAN>This mode adds the serial interface to the terminal used to emulate a 
+database system for the scanner.<SPAN style="mso-spacerun: yes">&nbsp; </SPAN>If 
+this mode is off, the LCD simply displays the UPC number and the country of 
+origin.<SPAN style="mso-spacerun: yes">&nbsp; </SPAN>When this mode is 
+activated, the MCU sends the UPC to the terminal, which could then be used by a 
+database to return the relevant product information.<SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN>For our emulation, a user can type in 
+the information for which it is prompted, including price and a product name, 
+which are sent to the MCU and subsequently displayed on the screen.<O:P> 
+</O:P></P>
+<P class=MsoNormal>The guts of the program is split into two major segments, one 
+handling the reading of the barcode and the other decoding that data into the 
+actual barcode and displaying the information, including that received from the 
+terminal.<SPAN style="mso-spacerun: yes">&nbsp;</SPAN><O:P> </O:P></P>
+<P class=MsoNormal><I>Barcode read:</I></P>
+<P class=MsoNormal>We immediately recognized that we would need an organized 
+program to read in the barcode digits piece by piece and to do so quickly to get 
+enough data samples. This immediately suggested the necessity of a state machine 
+driven by a compare match interrupt on Timer1 running as fast as possible, 
+effectively running as software polling.<SPAN style="mso-spacerun: yes">&nbsp; 
+</SPAN>To get optimal performance, we deactivated the register save on both the 
+ISR and the state machine update and designed them such that they used only 
+global variables.<SPAN style="mso-spacerun: yes">&nbsp; </SPAN>Therefore we 
+needed only to save and restore the status register on each call, saving 
+approximately 60 cycles per call.<SPAN style="mso-spacerun: yes">&nbsp; 
+</SPAN>The ISR read from the scanner on PORTB tracked both the current and 
+previous read to watch for transitions.<SPAN style="mso-spacerun: yes">&nbsp; 
+</SPAN>Upon reading the first three transitions, the scanner has finished the 
+left guard and has moved on to the left-side digits.<SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN>These digits each contain four 
+bars/spaces, whose widths are recorded by the ISR which counts the time between 
+each subsequent transition.<SPAN style="mso-spacerun: yes">&nbsp; </SPAN>Upon 
+finishing the sixth digit, the state machine watches for the five transitions of 
+the center guard before reading the right digits in the same manner as the 
+left.<SPAN style="mso-spacerun: yes">&nbsp; </SPAN>The barcode then finishes 
+with a three-transition right guard bar.<SPAN style="mso-spacerun: yes">&nbsp; 
+</SPAN>Because a user can abort a scan at any time by lifting the pen or 
+stopping it, the state machine required a timeout mechanism to reset it and be 
+ready for the next read.<SPAN style="mso-spacerun: yes">&nbsp; </SPAN>Because 
+transitions are expected, the timeout check simply check to see if there has 
+been a specified length of time since the last transition.<O:P> </O:P></P>
+<P class=MsoNormal>Once the widths have all been recorded, they must be reduced 
+to their 7-bit encoding, so effectively the widths must be scaled down to a 
+total width of seven.<SPAN style="mso-spacerun: yes">&nbsp; </SPAN>Because so 
+few samples are taken, there is an interesting problem created by integer math; 
+often the numbers will not work out perfectly and adjustments will need to be 
+made.<SPAN style="mso-spacerun: yes">&nbsp; </SPAN>First, any width that 
+evaluates to zero is automatically increased to one and likewise any width over 
+four is reduced to four, since otherwise the scan would be invalid.<SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN>Second, and also a consequence of 
+integer math, if the scaled width is still less than seven, then the closest bar 
+or space which is the next closest to the next step up is incremented; this is 
+achieved by checking the size of remainders.<SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN>This step is carried out until that 
+total width of seven is reached.<O:P> </O:P></P>
+<P class=MsoNormal><I>Error Correction:</I></P>
+<P class=MsoNormal>These relative widths are then easily converted into a string 
+of seven bits for that digit.<SPAN style="mso-spacerun: yes">&nbsp; </SPAN>The 
+most difficult part of this process follows: error correction.<SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN>Because of the crudity of a wand 
+scanner, a clever method of error correction is necessary, using the one 
+guarantee: parity.<SPAN style="mso-spacerun: yes">&nbsp; </SPAN>First, for the 
+UPC-A standard, every digit on the left hand side of the barcode must be encoded 
+in “odd parity,” and every digit on the right in “right parity.”<SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN>These parities define the set of bit 
+strings for each number to which a digit might evaluate.<SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN>If a particular scanned digit does not 
+meet the parity requirement, it must be error corrected.<SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN>Our error correction method is based on 
+the reasoning that most errors are likely to be single bit errors, in that no 
+width will be off by more than one.<SPAN style="mso-spacerun: yes">&nbsp; 
+</SPAN>So, the software iterates through all possible combinations of single-bit 
+adjustments until it finds the first parity match, which is then tried by the 
+decoder.<SPAN style="mso-spacerun: yes">&nbsp; </SPAN>However, these results 
+were not satisfactory.<SPAN style="mso-spacerun: yes">&nbsp; </SPAN>For each 
+misread, there are several single-bit corrections that will yield the correct 
+parity – and only one will be correct.<SPAN style="mso-spacerun: yes">&nbsp; 
+</SPAN>This suggested the possibility of examining every combination until one 
+passes its checksum.<SPAN style="mso-spacerun: yes">&nbsp; </SPAN>However, we 
+decided that there was too great a risk of returning a valid barcode that is 
+still incorrect.<SPAN style="mso-spacerun: yes">&nbsp; </SPAN>We felt it safer 
+to have the error in that case.<SPAN style="mso-spacerun: yes">&nbsp; </SPAN>So, 
+we opted to examine patterns in the errors and found one major one.<SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN>The scanner had a tendency even out the 
+relative widths of the bars and spaces, that is in many cases where two segments 
+should have been read as widths of four and one, they are instead seen as a 
+three and a two.<SPAN style="mso-spacerun: yes">&nbsp;&nbsp; </SPAN>So, before 
+searching for the first single-bit adjustment, the code automatically looks for 
+this condition and tests that adjustment for parity.<SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN>This addition to the error correction 
+scheme fixed more than half of the errors.<SPAN style="mso-spacerun: yes">&nbsp; 
+</SPAN>Note in the example figure below, output from the debug mode terminal, 
+the transformation of the digit widths and where they are “reformed” to match 
+parity, which yielded the actual valid barcode.</P><FONT size=2>
+<BLOCKQUOTE>
+  <BLOCKQUOTE>
+    <BLOCKQUOTE>
+      <BLOCKQUOTE>
+        <BLOCKQUOTE>
+          <BLOCKQUOTE>
+            <BLOCKQUOTE>
+              <P align=left><FONT 
+              face="Courier New">--------------------<BR>Fake Barcode 
+              Database!<BR>---------------------<BR>-DEBUG MODE-!<BR>4,12,4,8, 
+              =&gt; 1,3,1,2,<BR>3,15,4,3, =&gt; 1,4,1,1,<BR>3,14,3,4, =&gt; 
+              1,4,1,1,<BR>8,3,3,5, =&gt; 3,1,1,2,<BR>6,6,5,3, =&gt; 
+              2,2,2,1,<BR>2,11,3,2, =&gt; 1,4,1,1,<BR>8,6,3,3, =&gt; 
+              3,2,1,1,<BR>8,5,2,3, =&gt; 3,2,1,1,<BR>2,9,3,2, =&gt; 
+              1,3,2,1,<BR>reforming... 1,4,1,1,<BR>9,3,2,5, =&gt; 
+              3,1,1,2,<BR>3,9,3,3, =&gt; 2,3,1,1,<BR>reforming... 
+              1,4,1,1,<BR>3,5,7,3, =&gt; 1,2,3,1,<BR><BR>UPC = 0733913003935 
+              (USA &amp; Canada)<BR>Enter price: 29.98<BR>Enter Name(MAX 8 
+              char):Scanner</FONT></P></BLOCKQUOTE></BLOCKQUOTE></BLOCKQUOTE></BLOCKQUOTE></BLOCKQUOTE></FONT>
+    <P align=left><FONT size=3>Figure: Example of Terminal Output on 
+    HyperTerminal when both Debug and Terminal mode are 
+on.</FONT></P></BLOCKQUOTE></BLOCKQUOTE>
+<P class=MsoNormal><I>Barcode decode:<O:P> </O:P>&nbsp;</I></P>
+<P class=MsoNormal>A barcode is organized into two equal halves seperated by a 
+center guard. This center guard consists of five lines of the form 01010, where 
+0 represents a white line and 1 a black line. For the EAN-13 format, everything 
+to the right of the center guard is encoded using a Right-Hand Encoding and 
+everything to the left of the center guard is encoded using a Left-Hand Encoding 
+. The Left-Hand Ecoding can be either Odd or Even parity.&nbsp;<BR><BR>Note: In 
+UPC-A Barcodes the Left-Hand Encoding can only have Odd parity. There does not 
+exist an Even parity Left-Hand Encoding for UPC-A.<BR><BR>A EAN-13 Barcode 
+consists of 13 digits, but only twelve are directly encoded. The first digit is 
+encoded in a special way. The first digit decides the pattern of Odd and Even 
+parity in the first 6 encoded digits. This mean that the first digit can only be 
+decoded after the the next six digits are already decoded. In order to find the 
+first digit, we had to keep track of the pattern of Odd and Even parity 
+encodings. The Right-Hand Encoding doesn't distinguish between even and odd 
+parity.</P>
+<P class=MsoNormal>The Barcode decoding is done by keeping arrays of all the 
+different possible digit encodings in memory. When we try to decode something to 
+the left of the center guard, we look at all Left-Hand Encoding and find one 
+that matches what we have. This tells us both what the digit is supposed to be 
+and the parity used to encode it. By keeping track of the Odd/Even parity of 
+each digit we can identify the pattern and thus the first digit. When we decode 
+something to the right of the center guard, we always check the Right Hand 
+Encoding, which is also in memory. After we have decoded all the digits, we 
+caclulate the checksum and compare it to the the decoded version. If they match 
+we return a properly decoded barcode. If at any point, the decoder cannot match 
+an encoding or if we fail the CRC check, then we print an error to the LCD so 
+the user knows to try again.</P>
+<P class=MsoNormal>The checksum is calculated by taking all the decoded digits, 
+multplying every other digit by 3, and adding everything together. The checksum 
+value is the digit that makes this result evenly divisible by 10.</P>
+<P class=MsoNormal><B>Hardware details:<O:P> </B></O:P></P><SPAN 
+style="FONT-SIZE: 12pt; FONT-FAMILY: 'Times New Roman'; mso-fareast-font-family: 'Times New Roman'; mso-ansi-language: EN-US; mso-fareast-language: EN-US; mso-bidi-language: AR-SA">The 
+hardware was relatively straightforward for the most part.<SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN>We only needed to interface with the 
+RJ-11 interface of the wand scanner, which used three pins for ground, power, 
+and the open collector TTL output, which we pulled up internally in the 
+MCU.<SPAN style="mso-spacerun: yes">&nbsp; </SPAN>We had an RJ-11 
+socket-to-socked connector laying around so we split it into two and used one 
+end to connect the scanner to the board.<SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp; </SPAN>We used the standard LCD from the 
+early labs because the larger display we had ordered did not work.<SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN>We initially did all of the design on a 
+white board, before making a standalone on a white board and ultimately 
+assembled the circuit on a solder board, which also featured a programmer port 
+and a direct connection to the serial interface on the STK500.</SPAN> 
+<P>&nbsp;</P>
+<P><FONT size=4><B><A name=Results:>Results:</A></B></FONT></P>
+<P class=MsoNormal><B>Accuracy:</B><BR><BR>The major fault in the accuracy arose 
+from the lack of samples on each bar or space segment in the barcode 
+digits.<SPAN style="mso-spacerun: yes">&nbsp; </SPAN>However, we were able to 
+adjust for this error reasonably well.<SPAN style="mso-spacerun: yes">&nbsp; 
+</SPAN>Once a user has been trained and practiced at scanning with a wand, they 
+can expect accuracy of 80% or more.<SPAN style="mso-spacerun: yes">&nbsp;&nbsp; 
+</SPAN>Very seldom will the scanner read a barcode and return a valid barcode 
+that is different from what it should have read.<O:P> </O:P></P>
+<P class=MsoNormal><B>Safety:</B><BR><BR>The only real safety considerations 
+with such a device would be of a financial nature.<SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN>Imagine, for example, if one goes to buy 
+a TV and pays on the price of a pack of gum.<SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN>We feel that we enforce safety well by 
+not error checking too aggressively, which could lead to exactly this 
+circumstance.<SPAN style="mso-spacerun: yes">&nbsp; </SPAN>For the entire set of 
+single-bit corrections on each digit, it is expected that some will have a valid 
+checksum!<SPAN style="mso-spacerun: yes">&nbsp; </SPAN>By being somewhat 
+conservative with our error correction, we make this highly unlikely.<SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN>Otherwise there are no real dangers with 
+out device.</P>
+<P class=MsoNormal><B>Usability:</B><BR><BR>At this stage, our scanner is not 
+accurate or rapid enough to compete with the other available types of scanners; 
+these include the CCD scanner discussed earlier, as well as the laser-based 
+scanners.<SPAN style="mso-spacerun: yes">&nbsp; </SPAN>Our scanner compares 
+reasonably well to other wand scanners, thought its accuracy is likely somewhat 
+lacking.<SPAN style="mso-spacerun: yes">&nbsp; </SPAN>It is, however, still 
+functional even if it requires an extra scan here or there.</P>
+<P><B><FONT size=4><A name=Ethics:>Ethics:</A></FONT></B></P>
+<P align=left><FONT face="verdana, arial" size=2>A.<B><I> to be honest and 
+realistic in stating claims or estimates based on available 
+data;</I></B></FONT></P>
+<P align=left>We have taken great care to guarantee that our project has been 
+honest about both its successes and its failures.<BR>&nbsp;&nbsp;&nbsp; 1. We 
+can accurately read a UPC-A barcode most of the time.<BR>&nbsp;&nbsp;&nbsp; 2. 
+We fail to accurately read a EAN-13 barcode that is not UPC-A most of the 
+time.</P>
+<P align=left><FONT face="verdana, arial" size=2>B. <I><B>to avoid real or 
+perceived conflicts of interest whenever possible, and to disclose them to 
+affected parties when they do exist;</B></I></FONT></P>
+<P align=left><FONT face="verdana, arial" size=2>The UCC Council has announced 
+that as of Jabuary 1, 2005 all barcode scanners must be able to read EAN-13 
+Barcodes. This was done to make it easier for foreign products to be sold in the 
+US. If we were to try to market our product, it would be unfair to the consumers 
+if we did not disclose this fact.<BR><BR></FONT>C. <FONT face="verdana, arial" 
+size=2><B><I>to seek, accept, and offer honest criticism of technical work, to 
+acknowledge and correct errors, and to credit properly the contributions of 
+others;<BR>&nbsp;&nbsp;<BR></I></B>Throughout the project development we 
+continually discussed our project between ourselves, with our TA, and with our 
+professor. We have added references at the bottom of this report for any 
+websites that we used for our project and discuss intellectual property 
+considerations. We have also acknowledged that our barcode scanner does not 
+always scan the barcodes properly.</FONT></P>
+<P align=left><FONT face="verdana, arial" size=2>D. <B><I>to assist colleagues 
+and co-workers in their professional development and to support them in 
+following this code of ethics.</I></B></FONT></P>
+<P align=left><FONT face="verdana, arial" size=2>Whenever we were in lab, we 
+often spoke with other groups about there projects. This included what if any 
+problems they were having. We gave suggestions as to things they might try, most 
+of which had already been tried. But in general, we were civil, supportive, and 
+helpful.</FONT></P>
+<P align=left><FONT face="verdana, arial" size=2>E. <B><I>to reject bribery in 
+all its forms;</I></B></FONT></P>
+<P align=left><FONT face="verdana, arial" size=2>We saw through Professor Land's 
+cunning attempt at bribing us with free points for finishing early. We have 
+prepared our demo for the day it is due, not early and not late. We will not 
+accept any free points.</FONT></P>
+<P><FONT size=4><B><A name=Conclusions:>Conclusions:</A></B></FONT></P>
+<P class=MsoNormal><B>Results vs. Expectations:</B></P>
+<P class=MsoNormal>Our results met our expectations reasonably well.<SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN>We maybe expected a little more 
+consistency with our accuracy, but we did not foresee the limitation on our 
+ability to sample quickly over such small physical features while moving the 
+wand at a steady but quick pace.<SPAN style="mso-spacerun: yes">&nbsp; 
+</SPAN>After realizing we would need to switch to the wand-based scanner, our 
+expectations were lowered.<SPAN style="mso-spacerun: yes">&nbsp; </SPAN>We 
+rebounded well with our error correction schemes and were able to easily meet 
+our adjusted expectations from that point.<SPAN style="mso-spacerun: yes">&nbsp; 
+</SPAN>If we were to approach this problem again we may consider writing in 
+assembly all of the code must be executed on each read.<SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN>We might first analyze the situation 
+again to be certain that code speed is indeed the problem, considering that 
+there is not too much code that executes on each interrupt.<SPAN 
+style="mso-spacerun: yes">&nbsp;</SPAN></P>
+<P class=MsoNormal><B>Conformity to standards:</B></P>
+<P class=MsoNormal>We had no difficulty in conforming to the RS232 standard, as 
+it is very straightforward.<SPAN style="mso-spacerun: yes">&nbsp; </SPAN>We were 
+also able to successfully implement our UPC-A standard barcode scanner.<SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN>Our efforts to internationalize the 
+design for the EAN-13 standard, a superset of UPC-A greatly hindered our 
+accuracy.<SPAN style="mso-spacerun: yes">&nbsp; </SPAN>EAN-13 does not guarantee 
+uniform parity of the left-hand digits, which greatly tied the hands of our 
+error correction algorithm by doubling the set of valid bit strings.<O:P> 
+</O:P></P>
+<P class=MsoNormal><B>Intellectual property considerations:</B></P><SPAN 
+style="FONT-SIZE: 12pt; FONT-FAMILY: 'Times New Roman'; mso-fareast-font-family: 'Times New Roman'; mso-ansi-language: EN-US; mso-fareast-language: EN-US; mso-bidi-language: AR-SA">All 
+of our ideas and algorithms for reading the barcode were completely original and 
+we reused minimal code from the security system lab dealing with the USART.<SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN>Since all of our algorithms for 
+approaching the barcode scanning process were original there would be 
+opportunities for both design patent and copyright protection for some of the 
+software.<SPAN style="mso-spacerun: yes">&nbsp; </SPAN>However, we do not feel 
+that our results were outstanding enough to merit such pursuits.</SPAN> 
+<P><FONT size=4><B><A name=Appendix>Appendix</A>:</B></FONT></P>
+<P><FONT size=4><B>Appendix A: Program Listing</B></FONT></P>
+<P><A 
+href="http://instruct1.cit.cornell.edu/courses/ee476/FinalProjects/s2004/mtf23/BarcodeScanner/barcode.h">barcode.h</A><BR><A 
+href="http://instruct1.cit.cornell.edu/courses/ee476/FinalProjects/s2004/mtf23/BarcodeScanner/barcode_decode.c">barcode_decode.c</A><BR><A 
+href="http://instruct1.cit.cornell.edu/courses/ee476/FinalProjects/s2004/mtf23/BarcodeScanner/barcode_read.c">barcode_read.c</A></P>
+<P><FONT size=4><B><A 
+href="http://instruct1.cit.cornell.edu/courses/ee476/FinalProjects/s2004/mtf23/BarcodeScanner/schematic.html">Appendix 
+B: Schematic</A></B></FONT></P>
+<P><FONT size=4><B>Appendix C: Cost</B></FONT></P>
+<DIV align=left>
+<TABLE height=7 width=308 border=1>
+  <TBODY>
+  <TR>
+    <TD width=608 height=12><B>Parts List:</B></TD>
+    <TD width=127 height=12><B>Cost:</B></TD></TR>
+  <TR>
+    <TD width=608 height=12>MSH-119 Wand scanner (E-bay)</TD>
+    <TD width=127 height=12>
+      <P align=right>$10.00</P></TD></TR>
+  <TR>
+    <TD width=608 height=12>Atmel MEGA32 MCU</TD>
+    <TD width=127 height=12>
+      <P align=right>$8.00</P></TD></TR>
+  <TR>
+    <TD width=608 height=12>LCD-64 display</TD>
+    <TD width=127 height=12>
+      <P align=right>$5.00</P></TD></TR>
+  <TR>
+    <TD width=608 height=7>Large solder board</TD>
+    <TD width=127 height=7>
+      <P align=right>$2.50</P></TD></TR>
+  <TR>
+    <TD width=608 height=12>LM340 regulator</TD>
+    <TD width=127 height=12>
+      <P align=right>$1.00</P></TD></TR>
+  <TR>
+    <TD width=608 height=12>RJ-11 double socket (found)</TD>
+    <TD width=127 height=12>
+      <P align=right>Free</P></TD></TR>
+  <TR>
+    <TD width=608 height=12>6 x 0.1uF capacitor</TD>
+    <TD width=127 height=12>
+      <P align=right>Free</P></TD></TR>
+  <TR>
+    <TD width=608 height=12>2 x 22 pF capacitor</TD>
+    <TD width=127 height=12>
+      <P align=right>Free</P></TD></TR>
+  <TR>
+    <TD width=608 height=12>Trimpot potentiometer</TD>
+    <TD width=127 height=12>
+      <P align=right>Free</P></TD></TR>
+  <TR>
+    <TD width=608 height=12>16 MHz crystal</TD>
+    <TD width=127 height=12>
+      <P align=right>Free</P></TD></TR>
+  <TR>
+    <TD width=608 height=12>Headers and jumpers</TD>
+    <TD width=127 height=12>
+      <P align=right>Free</P></TD></TR>
+  <TR>
+    <TD width=608 height=12>
+      <P align=right><B>Total:</B></P></TD>
+    <TD width=127 height=12>
+      <P align=right>$26.50</P></TD></TR></TBODY></TABLE></DIV>
+<P><FONT size=4><B>Appendix D: Tasks</B></FONT></P>
+<P class=MsoNormal>Mike:<SPAN 
+style="mso-spacerun: yes">&nbsp;</SPAN><BR>&nbsp;&nbsp;&nbsp; -<SPAN 
+style="FONT: 7pt 'Times New Roman'">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>Identified the particular barcode scanner wand as the basis for the 
+project.<BR>&nbsp;&nbsp;&nbsp; -<SPAN 
+style="FONT: 7pt 'Times New Roman'">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>Developed all of the code for reading from the barcode, including the 
+transition-based state machine and the relative width 
+transformation<BR>&nbsp;&nbsp;&nbsp; -<SPAN 
+style="FONT: 7pt 'Times New Roman'">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>Developed the error correction scheme and found patterns in the chaos of 
+the errors themselves.<BR>&nbsp;&nbsp;&nbsp; -<SPAN 
+style="FONT: 7pt 'Times New Roman'">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>Added the serial interface for the database 
+emulation.<BR>&nbsp;&nbsp;&nbsp; -<SPAN 
+style="FONT: 7pt 'Times New Roman'">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>Built standalone solder board.<BR>&nbsp;&nbsp;&nbsp; -<SPAN 
+style="FONT: 7pt 'Times New Roman'"> </SPAN><SPAN 
+style="FONT: 7pt 'Times New Roman'">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>Wrote the relevant sections for this report.<SPAN 
+style="FONT-SIZE: 12pt; FONT-FAMILY: 'Times New Roman'; mso-fareast-font-family: 'Times New Roman'; mso-ansi-language: EN-US; mso-fareast-language: EN-US; mso-bidi-language: AR-SA"><BR><BR>Wyatt:</SPAN><SPAN 
+style="FONT-SIZE: 12pt; FONT-FAMILY: Times New Roman; mso-fareast-font-family: Times New Roman; mso-ansi-language: EN-US; mso-fareast-language: EN-US; mso-bidi-language: AR-SA"><BR>&nbsp;&nbsp;&nbsp; 
+-&nbsp;&nbsp;&nbsp; Developed all the code for decoding an encoded EAN-13 
+barcode.<BR>&nbsp;&nbsp;&nbsp; -&nbsp;&nbsp;&nbsp; Added the LCD as a display 
+for the user.<BR>&nbsp;&nbsp;&nbsp; -&nbsp;&nbsp;&nbsp; Created the Webpage 
+layout.<BR></SPAN>&nbsp;&nbsp;&nbsp; -<SPAN 
+style="FONT-SIZE: 12pt; FONT-FAMILY: Times New Roman; mso-fareast-font-family: Times New Roman; mso-ansi-language: EN-US; mso-fareast-language: EN-US; mso-bidi-language: AR-SA">&nbsp;&nbsp; 
+</SPAN>Tested LCD output, barcode decoding, and webpage links to guarantee 
+proper outcomes.<SPAN 
+style="FONT-SIZE: 12pt; FONT-FAMILY: Times New Roman; mso-fareast-font-family: Times New Roman; mso-ansi-language: EN-US; mso-fareast-language: EN-US; mso-bidi-language: AR-SA"><BR>&nbsp;&nbsp;&nbsp; 
+-&nbsp;&nbsp;&nbsp; Wrote relevant sections for this report.</SPAN></P>
+<P><FONT size=4><B>Appendix E: References</B></FONT></P>
+<P><SPAN 
+style="FONT-SIZE: 12pt; FONT-FAMILY: Times New Roman; mso-fareast-font-family: Times New Roman; mso-ansi-language: EN-US; mso-fareast-language: EN-US; mso-bidi-language: AR-SA"><A 
+href="http://www.barcodeisland.com/">Barcode Island</A> - This site describes 
+almost all the different Barcode Standards in existence and was a valuable tool 
+during our project.</SPAN></P>
+<P><SPAN 
+style="FONT-SIZE: 12pt; FONT-FAMILY: 'Times New Roman'; mso-fareast-font-family: 'Times New Roman'; mso-ansi-language: EN-US; mso-fareast-language: EN-US; mso-bidi-language: AR-SA"><A 
+href="http://instruct1.cit.cornell.edu/courses/ee476/labs/s2002/LCD-64.pdf">Datasheet 
+for LCD</A> - This is a .pdf of the datasheet for the LCD we used in our 
+project. This link can also be found on the ECE476 website.</SPAN></P>
+<P><SPAN 
+style="FONT-SIZE: 12pt; FONT-FAMILY: 'Times New Roman'; mso-fareast-font-family: 'Times New Roman'; mso-ansi-language: EN-US; mso-fareast-language: EN-US; mso-bidi-language: AR-SA"><A 
+href="http://www.opticonusa.com/datasheet/new/LA119.pdf">Datasheet for Opticon 
+MSH-119 scanner wand</A> - This is a datasheet for the wand scanner we used for 
+our project.</SPAN></P></BODY></HTML>

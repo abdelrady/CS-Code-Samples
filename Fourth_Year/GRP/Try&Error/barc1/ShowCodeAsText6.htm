@@ -1,0 +1,62 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!-- saved from url=(0086)http://www.planetsourcecode.com/vb/scripts/ShowCodeAsText.asp?txtCodeId=43547&lngWId=1 -->
+<HTML><HEAD>
+<META http-equiv=Content-Type content="text/html; charset=windows-1256">
+<META content="MSHTML 6.00.2900.2180" name=GENERATOR></HEAD>
+<BODY><XMP>'**************************************
+' Name: EAN128/Ean13/Ean8 Check digit ca
+'     lculator
+' Description:Calculates the check digit
+'     required on all articles for retails sal
+'     e, these include Ean128 for outer carton
+'     s, Ean13 and Ean8 for articles and will 
+'     work with Upc barcodes.
+' By: Glenn Sharp
+'
+'
+' Inputs:You only need to supply a valid
+'     number eg. Ean13 has to be 12 digits and
+'     Ean8, 7 digits the check digit is return
+'     ed for you.
+'
+' Returns:None
+'
+'Assumes:The code makes any string of di
+'     gits the same length and then calculates
+'     the check digit as all the previously me
+'     ntioned barcodes are based on the same c
+'     alculation it is easier to add the one p
+'     iece of code to do all.
+'
+'Side Effects:None
+'This code is copyrighted and has limite
+'     d warranties.
+'Please see http://www.Planet-Source-Cod
+'     e.com/xq/ASP/txtCodeId.43547/lngWId.1/qx
+'     /vb/scripts/ShowCode.htm
+'for details.
+'**************************************
+
+
+
+Private Function CalculateCheckDigit(BarcodeNumber As String)
+    Dim Barvalue As Integer
+    Dim BarCheck As String
+    BarCheck = BarcodeNumber
+    BarCheck = Right$("00000000000000000" & Mid$(BarCheck, 1, Len(BarCheck) - 1), 17)
+    Barvalue = 0
+
+
+    For Counter = 1 To 17
+
+
+        If Counter Mod 2 = 1 Then
+            Barvalue = Barvalue + (Val(Mid$(BarCheck, Counter, 1)) * 3)
+        Else
+            Barvalue = Barvalue + Val(Mid$(BarCheck, Counter, 1))
+        End If
+    Next
+    CalculateCheckDigit = 10 - Barvalue Mod 10
+End Function
+
+		</XMP></BODY></HTML>

@@ -1,0 +1,138 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!-- saved from url=(0136)http://ocw.mit.edu/NR/rdonlyres/Earth--Atmospheric--and-Planetary-Sciences/12-010Fall-2005/C1313CF6-38CC-4E67-B0D9-6224BCDEE460/0/Ball.h -->
+<HTML><HEAD>
+<META http-equiv=Content-Type content="text/html; charset=windows-1256">
+<META content="MSHTML 6.00.2900.2180" name=GENERATOR></HEAD>
+<BODY><PRE>/* interfaces */
+class Ball {
+ public:
+  Ball();                        /* Constructor                    */
+  ~Ball();                       /* Destructor                     */
+  void init(float, float, float);/* Initialise                     */
+  void integrate();              /* Integrate trajectory equation  */
+  void print();                  /* Write out trajectory           */
+ protected:
+  /* Array values */
+  double *wVel;                  /* Velocity vector (1d)  */
+  double *pos;                   /* Position (1d)         */
+  double *peVal;                 /* PE                    */
+  double *keVal;                 /* KE                    */
+  /* Scalar values */
+  double mass;                   /* Mass                  */
+  int    nsteps;                 /* Number of time steps  */
+  double mydt;
+};
+
+/* ===== Class Methods =====   */
+/* Constructor                 */
+Ball::Ball(){
+ wVel=NULL; pos=NULL; peVal=NULL; keVal=NULL;
+}
+
+/* Destructor                  */
+Ball::~Ball(){
+ delete wVel; delete pos; delete peVal; delete keVal;
+}
+
+/* Initial conditions */
+void Ball::init( float tend, float dt, float w0 ) {
+ nsteps = ( int ) (tend/dt); 
+ wVel   = new double[nsteps+1];
+ pos    = new double[nsteps+1];
+ peVal  = new double[nsteps+1];
+ keVal  = new double[nsteps+1];
+ if ( wVel  == NULL ) { 
+  printf("allocation of wVel [%d] failed\n",nsteps);
+  exit(-1); 
+ }
+ if ( pos   == NULL ) { 
+  printf("allocation of pos  [%d] failed\n",nsteps);
+  exit(-1); 
+ }
+ if ( peVal == NULL ) { 
+  printf("allocation of peVal[%d] failed\n",nsteps);
+  exit(-1); 
+ }
+ if ( keVal == NULL ) { 
+  printf("allocation of keVal[%d] failed\n",nsteps);
+  exit(-1); 
+ }
+ wVel[0]=w0;
+ wVel[1]=w0;
+ mass   =0.1;
+ mydt   = dt;
+}
+
+/* Integrator */
+void Ball::integrate() {
+
+ int i;                             /* Loop counter                       */
+
+ double a,b,c;                      /* Intermediate terms used in solving */
+ double term1, term2, term3, term4; /* quadratic equation.                */
+
+ double mydt1;                      /* Intermediate terms used in finding */
+ double mydt2;                      /* wall impact time.                  */
+
+ double smallstep;                  /* Intermediate term used in finding  */
+ double wVelImpact;                 /* velocity when ball bounces.        */
+
+ /* Integrate trajectory */
+ for (i=1;i&lt;nsteps;++i) {
+  /* Simple step when trajectory does not hit object just involves */
+  /* these two eqautions.                                          */
+  wVel[i+1] = wVel[i]+mydt*g;
+  pos[i+1]  = pos[i]+ 0.5*(wVel[i+1]+wVel[i])*mydt;
+
+  /* To handle a rebound from a surface we need to modify trajectory */
+  /* Handle 100% elastic rebound     */
+  /* Velocity reverses sign at floor */
+  if ( pos[i+1] &lt; 0 ) {
+   /* On this step the trajectory extends beyond the floor     */
+   /* Figure out how far through step ball ball will hit floor */
+   /* as follows:                                              */
+   /* When ball hits, pos == 0. 
+   /* From above this gives quadratic relation                 */
+   /* for time to impact:                                      */
+   /* 0.5*g*mydt**2 + wVel[i]*mydt + pos[i] = 0.               */
+   /* we can solve this analytically for time to impact        */
+   a=0.5*g; b=wVel[i]; c = pos[i];
+   term1 = b*b-4.*a*c;
+   term2 = 2.*a;
+   term3 = sqrt(term1);
+   term4 = -1.*b/term2;
+   mydt1=term4 + term3/term2;
+   mydt2=term4 - term3/term2;
+   if ( mydt1 &lt; 0 ) smallstep = mydt2;
+   if ( mydt2 &lt; 0 ) smallstep = mydt1;
+   /* Caculate velocity at moment ball hit floor       */
+   wVelImpact = wVel[i]+smallstep*g;
+   /* Reflect the ball                                 */
+   wVelImpact = -wVelImpact;
+   /* Caculate upward velocity at end of step and pos  */
+   /* Start from pos = 0 and wVel = wVelImpact         */
+   smallstep=mydt-smallstep;
+   wVel[i+1]=wVelImpact+smallstep*g;
+   pos[i+1] = 0 + 0.5*(wVel[i+1]+wVelImpact)*smallstep;
+  }
+  /* Calculate and store energy statistics */
+  keVal[i+1] = 0.5*mass*wVel[i+1]*wVel[i+1];
+  peVal[i+1] = -g*mass*pos[i+1];
+ }
+}
+
+/* Print trajectory */
+void Ball::print() {
+ int i;
+
+ for (i=0;i&lt;nsteps;++i) {
+  fprintf(outf,"%f %f %f %f %f %f\n",
+   mydt*(float) i,
+   pos[i],
+   wVel[i],
+   keVal[i],
+   peVal[i],
+   keVal[i]+peVal[i]);
+ }
+}
+</PRE></BODY></HTML>

@@ -1,0 +1,397 @@
+From: <Saved by Microsoft Internet Explorer 5>
+Subject: 
+Date: Wed, 12 Mar 2008 18:34:19 +0200
+MIME-Version: 1.0
+Content-Type: text/html;
+	charset="windows-1256"
+Content-Transfer-Encoding: quoted-printable
+Content-Location: http://www.mathworks.com/matlabcentral/files/15534/BouncyBallClock.m
+X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2900.2180
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD>
+<META http-equiv=3DContent-Type content=3D"text/html; =
+charset=3Dwindows-1256">
+<META content=3D"MSHTML 6.00.2900.2180" name=3DGENERATOR></HEAD>
+<BODY><PRE>function BouncyBallClock
+% BouncyBallClock
+%
+% A clock featuring four chambers of bouncing balls.  There is one =
+chamber
+% each for seconds, minutes, hours, and AM/PM.  The number of balls in =
+each
+% chamber represents the time count for that chamber.  For instance, if
+% there are five balls in the hours chamber, then it is sometime during =
+the
+% 5:00 hour.
+
+% NOTE: The bouncy ball clock makes a set of assumptions in order to
+% improve perf:
+% - Each ball can only make one collision with another ball per round
+% - The one collision will happen with the first ball with which it
+%   collides in data order
+% - Balls will not be collision tested against the wall: they will =
+simply
+%   be prohibited from advancing past it
+
+% Set up figure
+hFigure =3D figure;
+hAxes   =3D axes('xlim', [-0.1 2.1], 'ylim', [-0.1 2.1], =
+'dataaspectratio', [1 1 1], 'visible', 'off');
+rectangle('position', [0 0 2 2], 'edgecolor', 'k', 'facecolor', 'w', =
+'linewidth', 2);
+line([0 2], [1 1], 'color', 'k', 'linewidth', 2);
+line([1 1], [0 2], 'color', 'k', 'linewidth', 2);
+
+% Set up ball data
+global data
+data =3D struct;
+data.axes =3D hAxes;
+data.nChambers =3D 4;
+
+% Seconds chamber
+data.chambers(1).radius =3D .01;
+data.chambers(1).nBalls =3D 0;
+data.chambers(1).maxBalls =3D 60;
+data.chambers(1).speed =3D .01;
+data.chambers(1).currentTick =3D 0;
+data.chambers(1).clearTick =3D 0;
+data.chambers(1).cleared =3D 0;
+data.chambers(1).color =3D [.01666 0 0];
+data.chambers(1).location =3D hgtransform('parent', hAxes);
+
+% Minutes chamber
+data.chambers(2).radius =3D .02;
+data.chambers(2).nBalls =3D 0;
+data.chambers(2).maxBalls =3D 60;
+data.chambers(2).speed =3D .01;
+data.chambers(2).currentTick =3D 0;
+data.chambers(2).clearTick =3D 0;
+data.chambers(2).cleared =3D 0;
+data.chambers(2).color =3D [0 .01666 0];
+data.chambers(2).location =3D hgtransform('parent', hAxes);
+
+% Hours chamber
+data.chambers(3).radius =3D .03;
+data.chambers(3).nBalls =3D 0;
+data.chambers(3).maxBalls =3D 12;
+data.chambers(3).speed =3D .01;
+data.chambers(3).currentTick =3D 0;
+data.chambers(3).clearTick =3D 1;
+data.chambers(3).cleared =3D 0;
+data.chambers(3).color =3D [0 0 .08333];
+data.chambers(3).location =3D hgtransform('parent', hAxes);
+
+% AM/PM chamber
+data.chambers(4).radius =3D .04;
+data.chambers(4).nBalls =3D 0;
+data.chambers(4).maxBalls =3D 2;
+data.chambers(4).speed =3D .01;
+data.chambers(4).currentTick =3D 0;
+data.chambers(4).clearTick =3D 1;
+data.chambers(4).cleared =3D 0;
+data.chambers(4).color =3D [0 0 0];
+data.chambers(4).location =3D hgtransform('parent', hAxes);
+
+% Translate the minutes, hours, and AM/PM balls to their chambers
+location =3D makehgtform('translate', [1 1 0]);
+set(data.chambers(2).location, 'matrix', location);
+location =3D makehgtform('translate', [0 1 0]);
+set(data.chambers(3).location, 'matrix', location);
+location =3D makehgtform('translate', [1 0 0]);
+set(data.chambers(4).location, 'matrix', location);
+
+% Create the individual balls for each chamber
+for k =3D 1:data.nChambers
+    for i =3D 1:data.chambers(k).maxBalls
+        data.chambers(k).balls(i).position =3D [rand rand];
+        velocity =3D [rand rand];
+        velocity =3D data.chambers(k).speed * (velocity / =
+norm(velocity));
+        data.chambers(k).balls(i).velocity =3D velocity;
+        diameter =3D 2 * data.chambers(k).radius;
+        color =3D i * data.chambers(k).color;
+        data.chambers(k).balls(i).circle =3D rectangle('position', [0 0 =
+diameter diameter], 'curvature', [1,1], 'facecolor', color, 'edgecolor', =
+color);
+        data.chambers(k).balls(i).transform =3D hgtransform('parent', =
+data.chambers(k).location);
+        data.chambers(k).balls(i).moved =3D 0;
+        set(data.chambers(k).balls(i).circle, 'parent', =
+data.chambers(k).balls(i).transform);=20
+        set(data.chambers(k).balls(i).transform, 'visible', 'off');
+    end
+end
+Initialize;
+
+set(hFigure,'Renderer','opengl')
+%drawnow
+
+% Set up and run timer
+hTimer =3D timer('TimerFcn', @ClockCallback, 'Period', .25, =
+'ExecutionMode', 'fixedRate');
+start(hTimer);
+set(hFigure, 'DeleteFcn', {@CirclesDeleteFcn, hTimer});
+set(hFigure, 'Name', 'Bouncy Ball Clock by Brian Cody');
+set(hFigure, 'MenuBar', 'none');
+
+% Pause to keep profiler attached
+%pause(120);
+
+%------------------------------------------------------------------------=
+--
+% ClockCallback
+function ClockCallback(obj, event)
+
+global data
+hClock   =3D clock;
+ticks(1) =3D round(hClock(6));    % Seconds
+ticks(2) =3D hClock(5);           % Minutes
+ticks(3) =3D mod(hClock(4), 12);  % Hours (12-hour form)
+if (ticks(3) =3D=3D 0)
+    ticks(3) =3D 12;
+end
+ticks(4) =3D 1;                   % AM/PM
+if (hClock(4) &gt; 11)
+    ticks(4) =3D 2;
+end
+
+for k =3D 1:data.nChambers
+    % Clear out chamber when necessary / Add new balls
+    if (ticks(k) =3D=3D data.chambers(k).clearTick &amp;&amp; =
+data.chambers(k).cleared =3D=3D 0)
+        % Clear out the chamber
+        ClearBalls(k);
+       =20
+        % Make sure the chamber has the correct number of balls after =
+clear
+        for i =3D 1:ticks(k)
+            AddBall(k);
+        end
+        data.chambers(k).currentTick =3D ticks(k);       =20
+    end
+    if (ticks(k) &gt; data.chambers(k).currentTick)
+        % Add a new ball to the chamber
+        data.chambers(k).currentTick =3D ticks(k);
+        data.chambers(k).cleared =3D 0;
+        AddBall(k);
+    end
+   =20
+    % Move balls and check for collisions
+    for i =3D 1:data.chambers(k).nBalls
+        if (data.chambers(k).balls(i).moved =3D=3D 0)
+            collisionTime =3D -1;
+            for j =3D i+1:data.chambers(k).nBalls
+                collisionTime =3D GetCollisionTime(k, i,j);
+                if (collisionTime &gt;=3D 0)
+                    Collide(k, i, j, collisionTime);
+                    break   % Assume only one collision per round for =
+perf: take the first one found
+                end
+            end
+            if (collisionTime =3D=3D -1)
+                data.chambers(k).balls(i).position =3D =
+data.chambers(k).balls(i).position + data.chambers(k).balls(i).velocity; =
+        =20
+                move =3D makehgtform('translate', =
+[data.chambers(k).balls(i).position(1) =
+data.chambers(k).balls(i).position(2) 0]);
+                set(data.chambers(k).balls(i).transform, 'matrix', =
+move);
+            end
+        else
+            % This ball has already moved this round, do nothing more
+            % (for perf reasons, algorithm assumes only one collision =
+per
+            % ball per round)
+            data.chambers(k).balls(i).moved =3D 0;
+        end
+       =20
+        % Handle boundary conditions in a very simplistic way:
+        % Don't do collision testing against the wall, simply make sure
+        % that the balls stay within bounds and that the velocity =
+changes
+        % when balls approach the walls.
+        if (data.chambers(k).balls(i).position(1) &lt;=3D 0)
+            data.chambers(k).balls(i).position(1) =3D 0;
+            data.chambers(k).balls(i).velocity(1) =3D =
+abs(data.chambers(k).balls(i).velocity(1));
+        end
+        if (data.chambers(k).balls(i).position(1) &gt;=3D 1 - =
+2*data.chambers(k).radius)
+            data.chambers(k).balls(i).position(1) =3D 1 - =
+2*data.chambers(k).radius;
+            data.chambers(k).balls(i).velocity(1) =3D -1 * =
+abs(data.chambers(k).balls(i).velocity(1));
+        end
+        if (data.chambers(k).balls(i).position(2) &lt;=3D 0)
+            data.chambers(k).balls(i).position(2) =3D 0;
+            data.chambers(k).balls(i).velocity(2) =3D =
+abs(data.chambers(k).balls(i).velocity(2));
+        end
+        if (data.chambers(k).balls(i).position(2) &gt;=3D 1 - =
+2*data.chambers(k).radius)
+            data.chambers(k).balls(i).position(2) =3D 1 - =
+2*data.chambers(k).radius;
+            data.chambers(k).balls(i).velocity(2) =3D -1 * =
+abs(data.chambers(k).balls(i).velocity(2));
+        end
+    end
+end
+
+%------------------------------------------------------------------------=
+--
+% Initialize
+% When the clock is first run, this function ensures that each chamber =
+has
+% the appropriate number of balls for the user to be able to tell time
+function Initialize
+global data
+hClock   =3D clock;
+ticks(1) =3D round(hClock(6));    % Seconds
+ticks(2) =3D hClock(5);           % Minutes
+ticks(3) =3D mod(hClock(4), 12);  % Hours (12-hour form)
+if (ticks(3) =3D=3D 0)
+    ticks(3) =3D 12;
+end
+ticks(4) =3D 1;                   % AM/PM
+if (hClock(4) &gt; 11)
+    ticks(4) =3D 2;
+end
+
+% Add any balls that should be visible and place them at a random =
+location
+for k =3D 1:data.nChambers
+    for i =3D 1:ticks(k)
+        AddBall(k);
+        data.chambers(k).balls(i).position =3D [rand rand];
+    end
+    data.chambers(k).currentTick =3D ticks(k);
+end
+
+%------------------------------------------------------------------------=
+--
+% AddBall
+% Add the next ball to chamber k
+function AddBall(k)
+global data
+
+% Reset data for this ball, return it to the starting position, and make =
+it
+% visible
+nBalls =3D data.chambers(k).nBalls + 1;
+data.chambers(k).nBalls =3D nBalls;
+data.chambers(k).balls(nBalls).moved =3D 0;
+data.chambers(k).balls(nBalls).position =3D [.025 .025];
+move =3D makehgtform('translate', =
+[data.chambers(k).balls(nBalls).position(1) =
+data.chambers(k).balls(nBalls).position(2) 0]);
+set(data.chambers(k).balls(nBalls).transform, 'matrix', move);
+set(data.chambers(k).balls(nBalls).transform, 'visible', 'on');
+
+%------------------------------------------------------------------------=
+--
+% ClearBalls
+% Remove all the balls from chamber k
+function ClearBalls(k)
+global data
+
+% Reset data for this chamber and make all balls in it invisible
+data.chambers(k).nBalls =3D 0;
+data.chambers(k).cleared =3D 1;
+for i =3D 1:data.chambers(k).maxBalls
+    set(data.chambers(k).balls(i).transform, 'visible', 'off');
+end
+
+%------------------------------------------------------------------------=
+--
+% GetCollisionTime
+% If balls i and j in chamber k collide during this round, return the =
+time
+% into the round at which the collision happens, otherwise, return -1
+function t =3D GetCollisionTime(k, i, j)
+global data
+
+% Cache data
+pi =3D data.chambers(k).balls(i).position;
+pj =3D data.chambers(k).balls(j).position;
+
+% Collision detection algorithm taken and modified from =
+www.gamasutra.com
+v =3D data.chambers(k).balls(i).velocity - =
+data.chambers(k).balls(j).velocity;
+normV =3D norm(v);
+dist =3D norm(pi - pj);
+sumRadii =3D 2 * data.chambers(k).radius;
+dist =3D dist - sumRadii;
+t =3D -1;
+if (normV &gt;=3D dist)
+    N =3D v / normV;
+    C =3D pj - pi;
+    D =3D dot(N,C);
+    if (D &gt; 0)
+        lengthC =3D norm(C);
+        F =3D lengthC^2 - D^2;
+        sumRadiiSquared =3D sumRadii^2;
+        if (F &lt; sumRadiiSquared)
+            T =3D sumRadiiSquared - F;
+            if (T &gt;=3D 0)
+                distance =3D D - sqrt(T);
+                mag =3D normV;
+                if (mag &gt;=3D distance)
+                    moveV =3D N * distance;
+                    t =3D norm(moveV)/normV;
+                end
+            end
+        end
+    end
+end
+
+%------------------------------------------------------------------------=
+--
+% Collide
+% Apply the collision of balls i and j in chamber k at time t
+function Collide(k, i, j, t)
+global data
+
+% Cache data
+pi =3D data.chambers(k).balls(i).position;
+pj =3D data.chambers(k).balls(j).position;
+vi =3D data.chambers(k).balls(i).velocity;
+vj =3D data.chambers(k).balls(j).velocity;
+
+% Move positions to collision point
+pi =3D pi + t*vi;
+pj =3D pj + t*vj;
+
+% Make the collision is viewable in the window
+move =3D makehgtform('translate', [pi(1) pi(2) 0]);
+set(data.chambers(k).balls(i).transform, 'matrix', move);
+move =3D makehgtform('translate', [pj(1) pj(2) 0]);
+set(data.chambers(k).balls(j).transform, 'matrix', move);
+
+% Calculate new velocities
+% Algorithm taken and modified from www.gamasutra.com
+ni =3D (pi - pj)/norm(pi-pj);
+mi =3D dot(vi, ni);
+mj =3D dot(vj, ni);
+
+vi =3D vi - (mi-mj)*ni;
+vj =3D vj + (mi-mj)*ni;
+
+% Set new positions and velocities
+data.chambers(k).balls(i).position =3D pi + (1-t)*vi;
+data.chambers(k).balls(j).position =3D pj + (1-t)*vj;
+data.chambers(k).balls(i).velocity =3D vi;
+data.chambers(k).balls(j).velocity =3D vj;
+
+data.chambers(k).balls(j).moved =3D 1;
+
+%------------------------------------------------------------------------=
+--
+% Delete function
+function CirclesDeleteFcn(obj, event, hTimer)
+% Stop and delete the timer
+stop(hTimer);
+delete(hTimer);
+</PRE></BODY></HTML>

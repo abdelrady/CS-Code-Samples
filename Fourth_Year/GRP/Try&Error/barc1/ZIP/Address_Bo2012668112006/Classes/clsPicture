@@ -1,0 +1,455 @@
+VERSION 1.0 CLASS
+BEGIN
+  MultiUse = -1  'True
+  Persistable = 0  'NotPersistable
+  DataBindingBehavior = 0  'vbNone
+  DataSourceBehavior  = 0  'vbNone
+  MTSTransactionMode  = 0  'NotAnMTSObject
+END
+Attribute VB_Name = "clsPicture"
+Attribute VB_GlobalNameSpace = False
+Attribute VB_Creatable = True
+Attribute VB_PredeclaredId = False
+Attribute VB_Exposed = False
+Option Explicit
+
+Private LastPos As POINTAPI
+
+Private Declare Function GetPixel Lib "gdi32" (ByVal hDC As Long, ByVal x As Long, ByVal y As Long) As Long
+Private Declare Function SetPixel Lib "gdi32" (ByVal hDC As Long, ByVal x As Long, ByVal y As Long, ByVal crColor As Long) As Long
+
+Private FreeSelection   As Boolean
+Private larrCol()       As Long
+Private r               As Long
+Private g               As Long
+Private b               As Long
+Private CurrProg        As Long
+Private MaxProg         As Long
+
+Public Event OnProgress(ByVal CurrentValue As Long, ByVal MaxProg As Long)
+Public Event OnComplete(ByVal CurrentValue As Long)
+
+Private Sub PrepareImg(src As PictureBox)
+Dim i       As Integer
+Dim j       As Integer
+Dim tmpCol  As Long
+
+    ReDim larrCol(2, src.ScaleWidth, src.ScaleHeight)
+    For i = 0 To src.ScaleWidth - 1
+        For j = 0 To src.ScaleHeight - 1
+            tmpCol = GetPixel(src.hDC, i, j)
+            r = tmpCol Mod 256&
+            g = ((tmpCol And &HFF00) / 256&) Mod 256&
+            b = (tmpCol And &HFF0000) / 65536
+            larrCol(0, i, j) = r
+            larrCol(1, i, j) = g
+            larrCol(2, i, j) = b
+        Next j
+    If i > 0 Then
+        CurrProg = i
+        RaiseEvent OnProgress(CurrProg, MaxProg)
+    End If
+    Next i
+End Sub
+
+Public Sub MySharpen(src As PictureBox, intValue As Integer)
+Dim i As Integer, j As Integer
+Dim FS As Long
+
+MaxProg = (src.ScaleWidth - 1) * 2
+PrepareImg src
+For i = 1 To src.ScaleWidth - 1
+    For j = 1 To src.ScaleHeight - 1
+        r = larrCol(0, i, j) + 0.5 * intValue * (larrCol(0, i, j) - larrCol(0, i - 1, j - 1))
+        g = larrCol(1, i, j) + 0.5 * intValue * (larrCol(1, i, j) - larrCol(1, i - 1, j - 1))
+        b = larrCol(2, i, j) + 0.5 * intValue * (larrCol(2, i, j) - larrCol(2, i - 1, j - 1))
+        If r > 200 Then r = 240
+        If r < 0 Then r = 0
+        If g > 200 Then g = 240
+        If g < 0 Then g = 0
+        If b > 200 Then b = 240
+        If b < 0 Then b = 0
+        If FreeSelection = True Then
+            FS = GetPixel(src.hDC, i, j)
+            If FS <> 8950944 Then SetPixel src.hDC, i, j, RGB(r, g, b)
+        Else
+            SetPixel src.hDC, i, j, RGB(r, g, b)
+        End If
+    Next j
+    If i > 0 Then
+        CurrProg = (src.ScaleWidth - 1) + i
+        RaiseEvent OnProgress(CurrProg, MaxProg)
+    End If
+Next i
+RaiseEvent OnComplete(CurrProg)
+End Sub
+Public Sub MyBlur(src As PictureBox, intValue As Integer)
+Dim i               As Integer
+Dim j               As Integer
+Dim tmpCol          As Long
+Dim FS              As Long
+Dim TempintValue    As Integer
+
+MaxProg = src.ScaleWidth - 1 + src.ScaleWidth - intValue
+PrepareImg src
+TempintValue = intValue
+For i = 1 To src.ScaleWidth - intValue
+    For j = 1 To src.ScaleHeight - intValue
+        If intValue > i Then intValue = i
+        If intValue > j Then intValue = j
+        r = Abs(larrCol(0, i - intValue, j - intValue) + larrCol(0, i, j - intValue) + larrCol(0, i + intValue, j - intValue) + larrCol(0, i - intValue, j) + larrCol(0, i, j) + larrCol(0, i + intValue, j) + larrCol(0, i - intValue, j + intValue) + larrCol(0, i, j + intValue) + larrCol(0, i + intValue, j + intValue))
+        g = Abs(larrCol(1, i - intValue, j - intValue) + larrCol(1, i, j - intValue) + larrCol(1, i + intValue, j - intValue) + larrCol(1, i - intValue, j) + larrCol(1, i, j) + larrCol(1, i + intValue, j) + larrCol(1, i - intValue, j + intValue) + larrCol(1, i, j + intValue) + larrCol(1, i + intValue, j + intValue))
+        b = Abs(larrCol(2, i - intValue, j - intValue) + larrCol(2, i, j - intValue) + larrCol(2, i + intValue, j - intValue) + larrCol(2, i - intValue, j) + larrCol(2, i, j) + larrCol(2, i + intValue, j) + larrCol(2, i - intValue, j + intValue) + larrCol(2, i, j + intValue) + larrCol(2, i + intValue, j + intValue))
+        If FreeSelection = True Then
+            FS = GetPixel(src.hDC, i, j)
+            If FS <> 8950944 Then SetPixel src.hDC, i, j, RGB(r / 10, g / 10, b / 10)
+        Else
+            SetPixel src.hDC, i, j, RGB(r / 10, g / 10, b / 10)
+        End If
+        intValue = TempintValue
+    Next j
+    If i > 0 Then
+        CurrProg = (src.ScaleWidth - 1) + i
+        RaiseEvent OnProgress(CurrProg, MaxProg)
+    End If
+Next i
+RaiseEvent OnComplete(CurrProg)
+End Sub
+Public Sub MyInvert(src As PictureBox)
+    src.PaintPicture src.Picture, 0, 0, src.ScaleWidth, src.ScaleHeight, 0, 0, src.ScaleWidth, src.ScaleHeight, vbNotSrcCopy
+    RaiseEvent OnComplete(CurrProg)
+End Sub
+
+Public Sub NegativePicture(src As PictureBox, IntType As Integer)
+Dim i       As Integer
+Dim j       As Integer
+Dim tmpCol  As Long
+
+MaxProg = (src.ScaleWidth - 1) * 2
+PrepareImg src
+    For i = 0 To src.ScaleWidth - 1
+        For j = 0 To src.ScaleHeight - 1
+            If IntType = 0 Then 'only negative red
+                SetPixel src.hDC, i, j, RGB(larrCol(0, i, j) Xor 255, larrCol(1, i, j), larrCol(2, i, j))
+            ElseIf IntType = 1 Then 'only negative green
+                SetPixel src.hDC, i, j, RGB(larrCol(0, i, j), larrCol(1, i, j) Xor 255, larrCol(2, i, j))
+            ElseIf IntType = 2 Then 'only negative blue
+                SetPixel src.hDC, i, j, RGB(larrCol(0, i, j), larrCol(1, i, j), larrCol(2, i, j) Xor 255)
+            ElseIf IntType = 3 Then 'negative red and green and blue (photo-negative)
+                SetPixel src.hDC, i, j, RGB(larrCol(0, i, j) Xor 255, larrCol(1, i, j) Xor 255, larrCol(2, i, j) Xor 255)
+            End If
+        Next j
+        If i > 0 Then
+            CurrProg = (src.ScaleWidth - 1) + i
+            RaiseEvent OnProgress(CurrProg, MaxProg)
+        End If
+    Next i
+    RaiseEvent OnComplete(CurrProg)
+End Sub
+
+Public Sub MyDiffuse(src As PictureBox, intValue As Integer)
+Dim i       As Integer
+Dim j       As Integer
+Dim tmpCol  As Long
+Dim FS      As Long
+Dim pixvalue, hex_pixval, red_val, green_val, blue_val, newred_val, newgreen_val, newblue_val, pixval
+
+MaxProg = src.ScaleHeight - 3
+For i = 1 To src.ScaleHeight - 3
+    For j = 1 To src.ScaleWidth - 3
+        pixval = src.Point(j + CInt(Rnd * intValue), i + CInt(Rnd * intValue))
+        red_val = "&h" & Mid$(CStr(Hex(pixval)), 5, 2)
+        green_val = "&h" & Mid$(CStr(Hex(pixval)), 3, 2)
+        blue_val = "&h" & Mid$(CStr(Hex(pixval)), 1, 2)
+        If red_val = "&h" Then red_val = "&h0"
+        If green_val = "&h" Then green_val = "&h0"
+        If blue_val = "&h" Then blue_val = "&h0"
+        newred_val = 0
+        newgreen_val = 0
+        newblue_val = 0
+        If red_val > 240 Then newred_val = 200
+        If green_val > 240 Then newgreen_val = 200
+        If blue_val > 240 Then newblue_val = 200
+        If newred_val > 0 Then red_val = newred_val
+        If newred_val > 0 Then green_val = newgreen_val
+        If newred_val > 0 Then blue_val = newblue_val
+        If FreeSelection = True Then
+            FS = GetPixel(src.hDC, i, j)
+            If FS <> 8950944 Then src.PSet (j, i), RGB(red_val, green_val, blue_val)
+        Else
+            src.PSet (j, i), RGB(red_val, green_val, blue_val)
+        End If
+    Next
+    If i > 0 Then
+        CurrProg = i
+        RaiseEvent OnProgress(CurrProg, MaxProg)
+    End If
+Next
+RaiseEvent OnComplete(CurrProg)
+End Sub
+Public Sub MyGreyscale(src As PictureBox)
+Dim i       As Integer
+Dim j       As Integer
+Dim tmpCol  As Long
+Dim FS      As Long
+Dim C       As Long
+
+MaxProg = (src.ScaleWidth - 1) * 2
+PrepareImg src
+For i = 0 To src.ScaleWidth - 1
+    For j = 0 To src.ScaleHeight - 1
+        C = larrCol(0, i, j) * 0.3 + larrCol(1, i, j) * 0.59 + larrCol(2, i, j) * 0.11
+        If larrCol(0, i, j) > 240 And larrCol(1, i, j) > 240 Then C = 255
+        If larrCol(2, i, j) > 240 And larrCol(1, i, j) > 240 Then C = 255
+        If larrCol(0, i, j) > 240 And larrCol(2, i, j) > 240 Then C = 255
+        If FreeSelection = True Then
+            FS = GetPixel(src.hDC, i, j)
+            If FS <> 8950944 Then SetPixel src.hDC, i, j, RGB(C, C, C)
+        Else
+            SetPixel src.hDC, i, j, RGB(C, C, C)
+        End If
+    Next j
+    If i > 0 Then
+        CurrProg = (src.ScaleWidth - 1) + i
+        RaiseEvent OnProgress(CurrProg, MaxProg)
+    End If
+Next i
+RaiseEvent OnComplete(CurrProg)
+End Sub
+
+Public Sub ContrastPicture(src As PictureBox, intValue As Double) 'contrast
+Dim i As Integer
+Dim j As Integer
+On Error Resume Next
+
+MaxProg = (src.ScaleWidth - 1) * 2
+PrepareImg src
+For i = 0 To src.ScaleWidth - 1
+    For j = 0 To src.ScaleHeight - 1
+        If larrCol(0, i, j) < 128 Then r = larrCol(0, i, j) - Int(larrCol(0, i, j) / intValue)
+        If larrCol(0, i, j) < 0 Then r = 0
+        If larrCol(1, i, j) < 128 Then g = larrCol(1, i, j) - Int(larrCol(1, i, j) / intValue)
+        If larrCol(1, i, j) < 0 Then g = 0
+        If larrCol(2, i, j) < 128 Then b = larrCol(2, i, j) - Int(larrCol(2, i, j) / intValue)
+        If larrCol(2, i, j) < 0 Then b = 0
+        If larrCol(0, i, j) >= 128 Then r = larrCol(0, i, j) + Int(larrCol(0, i, j) / intValue)
+        If larrCol(0, i, j) > 255 Then r = 255
+        If larrCol(1, i, j) >= 128 Then g = larrCol(1, i, j) + Int(larrCol(1, i, j) / intValue)
+        If larrCol(1, i, j) > 255 Then g = 255
+        If larrCol(2, i, j) >= 128 Then b = larrCol(2, i, j) + Int(larrCol(2, i, j) / intValue)
+        If larrCol(2, i, j) > 255 Then b = 255
+        SetPixel src.hDC, i, j, RGB(r, g, b)
+    Next j
+    If i > 0 Then
+        CurrProg = (src.ScaleWidth - 1) + i
+        RaiseEvent OnProgress(CurrProg, MaxProg)
+    End If
+Next i
+
+RaiseEvent OnComplete(CurrProg)
+End Sub
+
+Public Sub MyBrightness(src As PictureBox, mylevel As Integer)
+Dim i       As Integer
+Dim j       As Integer
+Dim tmpCol  As Long
+Dim FS      As Long
+
+MaxProg = (src.ScaleWidth - 1) * 2
+PrepareImg src
+For i = 0 To src.ScaleWidth - 1
+    For j = 0 To src.ScaleHeight - 1
+        r = Abs(larrCol(0, i, j) + mylevel)
+        g = Abs(larrCol(1, i, j) + mylevel)
+        b = Abs(larrCol(2, i, j) + mylevel)
+        If larrCol(0, i, j) > 240 And larrCol(1, i, j) > 240 Then r = 255: g = 255: b = 255
+        If larrCol(2, i, j) > 240 And larrCol(1, i, j) > 240 Then r = 255: g = 255: b = 255
+        If larrCol(0, i, j) > 240 And larrCol(2, i, j) > 240 Then r = 255: g = 255: b = 255
+        If r > 240 And b > 240 Then g = 255
+        If g > 240 And b > 240 Then r = 255
+        If r > 240 And g > 240 Then b = 255
+        If FreeSelection = True Then
+            FS = GetPixel(src.hDC, i, j)
+            If FS <> 8950944 Then SetPixel src.hDC, i, j, RGB(r, g, b)
+        Else
+            SetPixel src.hDC, i, j, RGB(r, g, b)
+        End If
+    Next j
+    If i > 0 Then
+        CurrProg = (src.ScaleWidth - 1) + i
+        RaiseEvent OnProgress(CurrProg, MaxProg)
+    End If
+Next i
+RaiseEvent OnComplete(CurrProg)
+End Sub
+
+Public Sub MyOutline(src As PictureBox, dest As PictureBox, intValue As Integer)
+Dim col     As Long
+Dim i       As Integer
+Dim j       As Integer
+Dim tmpCol  As Long
+Dim FS      As Long
+
+MaxProg = src.ScaleWidth - 1
+src.Picture = LoadPicture()
+For i = 1 To dest.ScaleWidth - 1
+    For j = 1 To dest.ScaleHeight - 1
+    If FreeSelection = True Then
+        FS = GetPixel(src.hDC, i, j)
+        If FS = 8950944 Then GoTo freddy
+    Else
+     col = Abs(GetPixel(dest.hDC, i, j) - GetPixel(dest.hDC, i, j - 1))
+     If col > intValue ^ 3 Then col = 0 Else col = vbWhite
+     If col = 0 Then SetPixel src.hDC, i, j, col
+     col = Abs(GetPixel(dest.hDC, i, j) - GetPixel(dest.hDC, i - 1, j))
+     If col > intValue ^ 3 Then col = 0 Else col = vbWhite
+     If col = 0 Then SetPixel src.hDC, i, j, col
+    End If
+freddy:
+    Next j
+    If i > 0 Then
+        CurrProg = i
+        RaiseEvent OnProgress(CurrProg, MaxProg)
+    End If
+Next i
+RaiseEvent OnComplete(CurrProg)
+End Sub
+Public Sub MyEmboss(src As PictureBox, intValue As Integer)
+Dim i       As Integer
+Dim j       As Integer
+Dim tmpCol  As Long
+Dim FS      As Long
+
+MaxProg = (src.ScaleWidth - 1) * 2
+PrepareImg src
+For i = 0 To src.ScaleWidth - 1
+    For j = 0 To src.ScaleHeight - 1
+                r = Abs(larrCol(0, i, j) - larrCol(0, i + 1, j + 1) + intValue)
+                g = Abs(larrCol(1, i, j) - larrCol(1, i + 1, j + 1) + intValue)
+                b = Abs(larrCol(2, i, j) - larrCol(2, i + 1, j + 1) + intValue)
+                If r > 220 Then r = 220
+                If g > 220 Then g = 220
+                If b > 220 Then b = 220
+                If FreeSelection = True Then
+                    FS = GetPixel(src.hDC, i, j)
+                    If FS <> 8950944 Then SetPixel src.hDC, i, j, RGB(r, g, b)
+                Else
+                    SetPixel src.hDC, i, j, RGB(r, g, b)
+                End If
+            Next j
+    If i > 0 Then
+        CurrProg = (src.ScaleWidth - 1) + i
+        RaiseEvent OnProgress(CurrProg, MaxProg)
+    End If
+Next i
+RaiseEvent OnComplete(CurrProg)
+End Sub
+Public Sub MyPixelate(src As PictureBox, intValue As Integer)
+Dim i       As Integer
+Dim j       As Integer
+Dim tmpCol  As Long
+Dim simon   As Integer
+Dim tempval
+
+simon = intValue
+MaxProg = src.ScaleWidth + intValue
+For i = 0 To src.ScaleWidth Step intValue
+    For j = 0 To src.ScaleHeight Step intValue
+        If j + 1 > src.ScaleHeight Then j = src.ScaleHeight - 1
+        If i + 1 > src.ScaleWidth Then i = src.ScaleWidth - 1
+        tempval = src.Point(i + 1, j + 1)
+        src.Line (i, j)-(i + intValue, j + intValue), tempval, BF
+        intValue = simon
+    Next j
+    If i > 0 Then
+        CurrProg = i
+        RaiseEvent OnProgress(CurrProg, MaxProg)
+    End If
+Next i
+RaiseEvent OnComplete(CurrProg)
+End Sub
+
+Public Sub Colorfilter(src As PictureBox, color As Long, BoolAdd As Boolean)
+On Error Resume Next
+Dim i       As Integer
+Dim j       As Integer
+
+MaxProg = (src.ScaleWidth - 1) * 2
+PrepareImg src
+r = color And 255
+g = (color \ 256) And 255
+b = (color \ 65536) And 255
+For i = 0 To src.ScaleHeight
+    For j = 0 To src.ScaleWidth
+        If BoolAdd = True Then 'add colors
+            larrCol(0, i, j) = larrCol(0, i, j) + r
+            larrCol(1, i, j) = larrCol(1, i, j) + g
+            larrCol(2, i, j) = larrCol(2, i, j) + b
+        Else ' substract colors
+            larrCol(0, i, j) = larrCol(0, i, j) - r
+            larrCol(1, i, j) = larrCol(1, i, j) - g
+            larrCol(2, i, j) = larrCol(2, i, j) - b
+        End If
+        If larrCol(0, i, j) > 255 Then larrCol(0, i, j) = 255
+        If larrCol(0, i, j) < 0 Then larrCol(0, i, j) = 0
+        If larrCol(1, i, j) > 255 Then larrCol(1, i, j) = 255
+        If larrCol(1, i, j) < 0 Then larrCol(1, i, j) = 0
+        If larrCol(2, i, j) > 255 Then larrCol(2, i, j) = 255
+        If larrCol(2, i, j) < 0 Then larrCol(2, i, j) = 0
+        SetPixel src.hDC, i, j, RGB(larrCol(0, i, j), larrCol(1, i, j), larrCol(2, i, j))
+    Next j
+    If i > 0 Then
+        CurrProg = (src.ScaleWidth - 1) + i
+        RaiseEvent OnProgress(CurrProg, MaxProg)
+    End If
+Next i
+
+RaiseEvent OnComplete(CurrProg)
+End Sub
+
+Public Sub Rotate(dest As PictureBox, src As PictureBox, Rfactor As Double)
+Dim c1x As Integer, c1y As Integer
+Dim c2x As Integer, c2y As Integer
+Dim a As Double
+Dim p1x As Integer, p1y As Integer
+Dim p2x As Integer, p2y As Integer
+Dim n As Integer, r As Integer
+Dim c0 As Long, c1 As Long, c2 As Long, c3 As Long
+Dim SrchDc As Long, DesthDc As Long, Pi
+
+MaxProg = (dest.ScaleWidth - 1) * 2
+dest.Picture = LoadPicture()
+Rfactor = 360 - Rfactor
+Rfactor = Rfactor * (3.14159265358979 / 180)
+c1x = src.ScaleWidth \ 2
+c1y = src.ScaleHeight \ 2
+c2x = dest.ScaleWidth \ 2
+c2y = dest.ScaleHeight \ 2
+If c2x < c2y Then n = c2y Else n = c2x
+n = (n - 1) * 2
+SrchDc = src.hDC
+DesthDc = dest.hDC
+For p2x = 0 To n / 2
+    For p2y = 0 To n / 2
+        If p2x = 0 Then a = Pi / 2 Else a = Atn(p2y / p2x)
+        r = Sqr(1& * p2x * p2x + 1& * p2y * p2y)
+        p1x = r * Cos(a + Rfactor)
+        p1y = r * Sin(a + Rfactor)
+        c0& = GetPixel(SrchDc, c1x + p1x, c1y + p1y)
+        c1& = GetPixel(SrchDc, c1x - p1x, c1y - p1y)
+        c2& = GetPixel(SrchDc, c1x + p1y, c1y - p1x)
+        c3& = GetPixel(SrchDc, c1x - p1y, c1y + p1x)
+        If c0& <> -1 Then SetPixel DesthDc, c2x + p2x, c2y + p2y, c0&
+        If c1& <> -1 Then SetPixel DesthDc, c2x - p2x, c2y - p2y, c1&
+        If c2& <> -1 Then SetPixel DesthDc, c2x + p2y, c2y - p2x, c2&
+        If c3& <> -1 Then SetPixel DesthDc, c2x - p2y, c2y + p2x, c3&
+    Next
+    If p2x > 0 Then
+        CurrProg = (dest.ScaleWidth - 1) + p2x
+        RaiseEvent OnProgress(CurrProg, MaxProg)
+    End If
+Next
+dest.Refresh
+RaiseEvent OnComplete(CurrProg)
+End Sub
+

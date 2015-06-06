@@ -1,0 +1,78 @@
+<HTML>
+<HEAD>
+</HEAD>
+<BODY>
+<H1>Label Definitions</H1>
+<P>A Label Definition consists of a line code, an x position, a y position, and a string information, each separated by a pipe ('|') character. A Label Definition can also contain setup information, detailing the label orientation for printing, the label size, and the font used on the label.</P>
+
+<H2>Format</H2>
+<P>{line code}|{x}|{y}|{information}</P>
+
+<H2>Line Codes</H2>
+<P><B>s</B> - Indiates settings for the label. <I>Setting</I> statements contain special information, as detailed below.</P>
+<P><B>f</B> - Draw a frame around the outside of the label. No other information is required when using this line code.</P>
+<P><B>b</B> - Draw a barcode, with the top left corner at the given coordinates.  Also, print the text equivalent immediately below the barcode.</P>
+<P><B>t</B> - Print the given text, with the top left corner at the given coordinates.</P>
+
+<H2>x And y Positions</H2>
+<P>The coordinates are in number of pixels from the left for the <B>x</B> position, or from the top for the <B>y</B> position, respectively.</P>
+<P>The <B>x</B> position can be from -[width] to [width], where [width] is the actual width of the useable space on the label. This value can also be the character "c", which indicates that the {information} will be centered across the label. A negative value indicates that the {information} is indented from the right side of the label, i.e. right justified. Setting this value to either extreme means that the {information} may not be viewable. <I>Note:</I> For drawing a barcode, use only values from 0 to [width], as the barcode cannot be right justified.</P>
+<P>The <B>y</B> position can be from 0 to the actual height of the useable space on the label.  However, setting this value to the height of the label means that the {information} may not be viewable.</P>
+
+<H2>Information</H2>
+<P>The <B>{information}</B> can contain text and/or variables.  Variables are indicated by a leading and trailing tilde ("~"), and will be replaced by data when previewing or printing the label. For example, "~date~" is a valid data variable.</P>
+
+<H2>Settings</H2>
+<P>Setting statements should always be at the top of the label definition. There are four (4) types of setting statements: bar<U>c</U>ode format, <U>o</U>rientation, <U>s</U>ize, and <U>f</U>ont.</P>
+
+<H3>Barcode Format</H3>
+<P>The <B>barcode format</B> setting statement has one possible entry.  By default, <I>Code 39</I> is assumed, but <I>Interleaved 2 of 5</I> can be used by inserting the following statement into the definition file:<BR>
+&nbsp;&nbsp;s|c|I25</P>
+<P><B>Note:</B> <I>Interleaved 2 of 5</I> barcodes only support numeric values, where <I>Code 39</I> supports nearly all characters.</P>
+
+<H3>Orientation</H3>
+<P>The <B>orientation</B> setting statement has one (1) item, which indicates if the label should be printed in portrait or landscape mode. The two (2) possibilities for an orientation setting statement are as follows:<BR>
+<TABLE CELLPADDING=1 BORDER=0>
+<TR><TD>Portrait</TD><TD>= s|o|p</TD></TR>
+<TR><TD>Landscape</TD><TD>= s|o|l</TD></TR>
+</TABLE></P>
+<P><I>Default:</I> If this statement is not included, the label will be printed in portrait mode.</P>
+
+<H3>Size</H3>
+<P>The <B>size</B> setting statement must be in the following format:<BR>
+&nbsp;&nbsp;s|s|{scale}|{scale height}|{scale width}</P>
+
+<P>The <I>{scale}</I> value must be one (1) of the following: "in" (inches), "pix" (pixels), or "cm" (centimeters).</P>
+<P>The <I>{scale height}</I> value must be numeric, and indicates the actual useable height of the label, in the given scale.</P>
+<P>The <I>{scale width}</I> value must be numeric, and indicates the actual useable width of the label, in the given scale.</P>
+
+<P><I>Default:</I> If this statement is not included, the default values will be used.  The default scale is inches, with scale height set to 1 inch and scale width set to 3 inches.</P>
+
+<H3>Font</H3>
+<P>The <B>font</B> setting statement must be in the following format:<BR>
+&nbsp;&nbsp;s|f|{font name}|{font size}|{bold}|{italic}</P>
+
+<P>The font setting applies to all of the text on the label, but does not affect any generated barcodes.</P>
+<P>The <I>{font name}</I> must be the name of a valid font. If the font is invalid, or the name is spelled incorrectly, the default <I>{font name}</I> will be used.</P>
+<P>The <I>{bold}</I> value must be "true" or "false", where "true" indicates that all text will be bold.</P>
+<P>The <I>{italic}</I> value must be "true" or "false", where "true" indicates that all text will be in italics.</P>
+
+<P><I>Default:</I> If this statement is not included, the default font setting will be used, which is Arial, size 8, Bold.</P>
+
+<H2>Sample</H2>
+<P><TABLE CELLPADDING=10 BORDER=1>
+  <TR><TD>
+    s|o|l<BR>
+    s|s|pix|85|285<BR>
+    s|f|Arial|8|true|false<BR>
+    f<BR>
+    b|c|10|Label Test<BR>
+    t|10|65|James Pollard<BR>
+    t|-10|65|~date~<BR>
+  </TD><TD>
+    <img src="sample.bmp"
+  </TD></TR>
+</TABLE></P>
+
+</BODY>
+</HTML>

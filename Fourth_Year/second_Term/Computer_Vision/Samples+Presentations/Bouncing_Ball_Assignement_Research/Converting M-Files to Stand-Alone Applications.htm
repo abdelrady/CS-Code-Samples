@@ -1,0 +1,1005 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!-- saved from url=(0045)http://engr.nmsu.edu/~etti/5_1/5_1f/5_1f.html -->
+<HTML><HEAD><TITLE>Converting M-Files to Stand-Alone Applications</TITLE>
+<META http-equiv=Content-Type content="text/html; charset=iso-8859-1">
+<META content="MSHTML 6.00.2900.2180" name=GENERATOR>
+<STYLE>H1 {
+	FONT-WEIGHT: bold; FONT-SIZE: 24pt; MARGIN-LEFT: 0in; MARGIN-RIGHT: 0in; FONT-FAMILY: "Times New Roman"
+}
+DIV.Section1 {
+	page: Section1
+}
+</STYLE>
+</HEAD>
+<BODY 
+background="Converting M-Files to Stand-Alone Applications_files/whitmarb.jpg"><B>
+<DIV align=center>
+<CENTER>
+<TABLE cellPadding=0 width="100%" border=6>
+  <TBODY>
+  <TR>
+    <TD colSpan=2>
+      <P align=center><IMG height=90 
+      src="Converting M-Files to Stand-Alone Applications_files/head1.gif" 
+      width=434> </P></TD></TR></CENTER>
+  <TR>
+    <TD>
+      <P align=left><STRONG>Volume 5 No.1, Winter 2003</STRONG></P></TD>
+    <TD><STRONG>
+      <P align=right>ISSN# 1523-9926</STRONG></P></TD></TR></TBODY></TABLE></DIV>
+<H2 align=center>Converting M-Files to Stand-Alone Applications</H2>
+<DIV align=center>
+<CENTER>
+<TABLE width="75%" border=0>
+  <TBODY>
+  <TR>
+    <TD align=middle width="48%">Rafic Bachnak</TD>
+    <TD align=middle width="7%"></TD>
+    <TD align=middle width="45%">
+      <P style="MARGIN-LEFT: -7.65pt">Roger Lee</P></TD></TR>
+  <TR>
+    <TD align=middle width="48%"><A 
+      href="mailto:Rbachnak@falcon.tamucc.edu">Rbachnak@falcon.tamucc.edu</A></TD>
+    <TD align=middle width="7%"></TD>
+    <TD align=middle width="45%"><B><A 
+      href="mailto:Leery@navair.navy.mil">Leery@navair.navy.mil</A> </B></TD></TR>
+  <TR>
+    <TD align=middle width="48%"><B>Engineering Technology </B></TD>
+    <TD align=middle width="7%"></TD>
+    <TD align=middle width="45%"><B>Avionics </B></TD></TR>
+  <TR>
+    <TD align=middle width="48%"><B><SPAN 
+      style="FONT-SIZE: 12pt; FONT-FAMILY: 'Times New Roman'; mso-bidi-font-size: 10.0pt; mso-fareast-font-family: 'Times New Roman'; mso-ansi-language: EN-US; mso-fareast-language: EN-US; mso-bidi-language: AR-SA">Texas 
+      A&amp;M University-CC</SPAN> </B></TD>
+    <TD align=middle width="7%"></TD>
+    <TD align=middle width="45%"><B><SPAN 
+      style="FONT-SIZE: 12pt; FONT-FAMILY: 'Times New Roman'; mso-bidi-font-size: 10.0pt; mso-fareast-font-family: 'Times New Roman'; mso-ansi-language: EN-US; mso-fareast-language: EN-US; mso-bidi-language: AR-SA">Naval 
+      Air Systems Command</SPAN> </B></TD></TR></TBODY></TABLE></CENTER></DIV>
+<HR>
+</B>
+<H3 align=center>&nbsp;</H3>
+<H3 align=center>ABSTRACT</H3>
+<P align=left><SPAN 
+style="FONT-SIZE: 12pt; FONT-FAMILY: 'Times New Roman'; mso-bidi-font-size: 10.0pt; mso-fareast-font-family: 'Times New Roman'; mso-ansi-language: EN-US; mso-fareast-language: EN-US; mso-bidi-language: AR-SA">MATLAB 
+has been recognized as the premier program for numerical computations and data 
+visualization.<SPAN style="mso-spacerun: yes">&nbsp; </SPAN>Due to the fact that 
+MATLAB is an interpreted language, M-files execute slower than compiled programs 
+written in other languages, such as C, C++, and Fortran.<SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN>Furthermore, M-files require the 
+presence of MATLAB to run.<SPAN style="mso-spacerun: yes">&nbsp; 
+</SPAN>Recently, The MathWorks introduced a set of tools to automatically 
+convert M-files into executable programs that will run independently of 
+MATLAB.<SPAN style="mso-spacerun: yes">&nbsp; </SPAN>This paper states the 
+important features of the Compiler, describes the conversion process, and 
+presents examples that illustrate the steps involved in creating stand-alone 
+applications.<SPAN style="mso-spacerun: yes">&nbsp; </SPAN>Test results that 
+compare execution times of M-files and executable programs are also 
+presented.</SPAN></P>
+<P align=left>&nbsp;</P>
+<H3 align=center>INTRODUCTION</H3>
+<P>MATLAB is a powerful language that simplifies the process of solving 
+technical problems in a variety of disciplines by including a very extensive 
+library of predefined functions.<SPAN style="mso-spacerun: yes">&nbsp; </SPAN>It 
+also offers many special-purpose tool boxes that address specific areas, such as 
+signal processing and control systems, and provides Graphical User Interface 
+(GUI) tools that make it suitable for application development.<SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp; </SPAN>Because of these capabilities, 
+MATLAB has been recognized as the premier program for numerical computations and 
+data visualization and has been used by the educational, industrial, and 
+government communities all over the world.</P>
+<P>&nbsp;</P>
+<P>Due to the fact that MATLAB is an interpreted language, MATLAB files 
+(M-files) execute slower than compiled programs written in other languages, such 
+as C, C++, and Fortran.<SPAN style="mso-spacerun: yes">&nbsp; </SPAN>In 
+addition, M-files require the presence of MATLAB to run.<SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp; </SPAN>To address these weaknesses, The 
+MathWorks recently introduced a set of tools that automatically convert M-files 
+into MEX files and C/C++ source code, which can then be compiled to produce 
+stand-alone applications.<SPAN style="mso-spacerun: yes">&nbsp; 
+</SPAN>Stand-alone applications are executable programs that can run even if 
+MATLAB is not installed on the system.<SPAN style="mso-spacerun: yes">&nbsp; 
+</SPAN>The tools required for generating stand-alone applications are: MATLAB, 
+the MATLAB Compiler, the MATLAB C/C++ Math Library, and a C/C++ compiler.<SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN>The MATLAB C/C++ Graphics Library is 
+also required to create stand-alone applications that make use of Handle 
+Graphics<SUP>®</SUP> functions. The process of converting M-files to C/C++ files 
+and creating stand-alone applications is described in three documents totaling 
+over 1000 pages.<SPAN style="mso-spacerun: yes">&nbsp; </SPAN>This paper 
+describes the important features of the Compiler and its associated tools, 
+states the benefits of converting M-files to MEX and stand-alone applications, 
+and presents examples that illustrate the steps involved in the conversion 
+process.</P>
+<P align=left>&nbsp;</P>
+<H3 align=center>THE MATLAB<SUP>®</SUP> COMPILER</H3>
+<P style="MARGIN-RIGHT: 0in"><SPAN 
+style="TEXT-DECORATION: none; text-underline: none">The MathWorks uses the 
+phrase MATLAB Compiler, with a capital letter C, to refer to the product that 
+translates M-files to C or C++ source code [1].<SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN>They also use the word "compiler" with a 
+lowercase c to refer to the C or C++ compiler. The MATLAB<SUP>®</SUP> Compiler 
+version 2.1 may be used to take M-files as input and produce the following 
+outputs:</SPAN></P>
+<UL>
+  <LI>
+  <P 
+  style="MARGIN-LEFT: 0.5in; TEXT-INDENT: -0.25in; mso-list: l26 level1 lfo15; tab-stops: list .5in"><SPAN 
+  style="TEXT-DECORATION: none; text-underline: none">C source code for building 
+  MEX-files</SPAN> </P>
+  <LI>
+  <P 
+  style="MARGIN-LEFT: 0.5in; TEXT-INDENT: -0.25in; mso-list: l26 level1 lfo15; tab-stops: list .5in"><SPAN 
+  style="TEXT-DECORATION: none; text-underline: none">C or C++ source code for 
+  combining with other modules to form stand-alone applications.&nbsp;</SPAN> 
+  </P>
+  <LI>
+  <P 
+  style="MARGIN-LEFT: 0.5in; TEXT-INDENT: -0.25in; mso-list: l26 level1 lfo15; tab-stops: list .5in"><SPAN 
+  style="TEXT-DECORATION: none; text-underline: none">C code S-functions for use 
+  with Simulink<SUP>®</SUP></SPAN> </P>
+  <LI>
+  <P 
+  style="MARGIN-LEFT: 0.5in; TEXT-INDENT: -0.25in; mso-list: l26 level1 lfo15; tab-stops: list .5in"><SPAN 
+  style="TEXT-DECORATION: none; text-underline: none">C shared libraries and C++ 
+  static libraries</SPAN> </P></LI></UL>
+<P>MEX-files run in the same workspace as the MATLAB interpreter, however, 
+stand-alone C/C++ applications run independently of MATLAB.<SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN>There are four main reasons to compile 
+M-files:<SPAN style="mso-spacerun: yes">&nbsp; </SPAN>(1) To speed up the 
+execution of programs: Compiled C or C++ code typically runs faster than its 
+M-file equivalent, (2) To create stand-alone applications: These applications 
+take advantage of the mathematical functions of MATLAB but do not require its 
+presence to run, (3) To create C shared libraries or C++ static libraries:<SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN>The Compiler may be used to create a C 
+shared library (dynamically linked libraries, or DLLs, on Microsoft Windows 
+95/98/2000/NT) or a C++ static library from an algorithm developed in 
+MATLAB.<SPAN style="mso-spacerun: yes">&nbsp;&nbsp; </SPAN>The algorithm may 
+then be integrated into a C/C++ application, and (4) To hide proprietary 
+algorithms: M-files are ASCII text files that anyone can view and modify.<SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN>MEX-files or stand-alone applications 
+can not be viewed and modified.<SPAN style="mso-spacerun: yes">&nbsp; </SPAN>The 
+current Compiler supports most of the functionality of MATLAB, however, it 
+cannot compile script M-files, function M-files that call a script, and function 
+M-files that use objects.</P>
+<P align=left>&nbsp;</P>
+<H3 align=left>THE MATLAB<SUP>®</SUP> C/C++ GRAPHICS LIBRARY</H3>
+<P>The C/C++ Graphics Library is a collection of graphics routines that make the 
+MATLAB plotting and visualization capabilities available to stand-alone C and 
+C++ applications [4].<SPAN style="mso-spacerun: yes">&nbsp; </SPAN>The library 
+contains more than 100 routines, including MATLAB 6.0 built-in graphics 
+functions, such as surf, plot, get, and set, and some commonly used M-file 
+graphics functions, such as newplot, gcf, gca, gco, and gcbf.<SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN>Using the graphics library with the 
+Compiler and the C/C++ Math Library makes it possible to compile M-files that 
+include lines, text, meshes, and polygons, as well as graphical user interface 
+(GUI) components such as menus, push buttons, and dialog boxes.</P>
+<P>&nbsp;</P>
+<P>The C/C++ Graphics Library does not support some MATLAB features, including 
+MATLAB objects, MATLAB Java objects, plotedit command, and propedit 
+command.<SPAN style="mso-spacerun: yes">&nbsp; </SPAN>In addition to these 
+restrictions, the graphics library provides limited support for certain callback 
+coding practices.<SPAN style="mso-spacerun: yes">&nbsp; </SPAN>Furthermore, the 
+graphics library supports only a subset of print command switches to specify 
+device drivers.<SPAN style="mso-spacerun: yes">&nbsp; </SPAN>For example, the 
+graphics library supports most of the MATLAB built-in drivers, such as the 
+PostScript drivers, but it does not support any of the Ghostscript drivers.<SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN>The C/C++ Graphics Library is available 
+for these platforms:<SPAN style="mso-spacerun: yes">&nbsp; </SPAN>PCs running 
+Microsoft Windows or Linux, Sun, HP, SGI, and Compaq Alpha UNIX platforms. The 
+process of creating stand-alone applications is similar for both PC and UNIX 
+machines.<SPAN style="mso-spacerun: yes">&nbsp; </SPAN>To create a stand-alone 
+graphics application, the Compiler is used along with the Graphics Library 
+bundle file.<SPAN style="mso-spacerun: yes">&nbsp; </SPAN>Bundle files are ASCII 
+text files that contain Compiler command line options and arguments. For 
+example, to compile an M-file called test1.m into a C application, the following 
+command is entered the MATLAB prompt.</P>
+<P style="MARGIN-LEFT: 0.5in; TEXT-INDENT: 0.5in">mcc -B sgl test1</P>
+<P>This command invokes the Compiler, using the -B flag to specify the bundle 
+file used to create C stand-alone graphics applications, sgl.<SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN>The first time the Compiler is run to 
+create a stand-alone graphics application, it creates a subdirectory, named 
+\bin, in the current working directory. The Compiler puts in these directory 
+versions of the MATLAB menu bar and toolbar figure files that are used by 
+stand-alone graphics applications at run-time.<SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN>The command for a C++ application is mcc 
+–B sglcpp fname.</P>
+<P align=left>&nbsp;</P>
+<P align=left>UNIX WORKSTATIONS</P>
+<P class=MsoNormal>The Compiler supports the following UNIX Compilers:</P>
+<P class=MsoNormal 
+style="MARGIN-LEFT: 0.5in; TEXT-INDENT: -0.25in; mso-list: l15 level1 lfo31; tab-stops: list .5in"><SPAN 
+style="FONT-FAMILY: Symbol">·<SPAN 
+style="FONT: 7pt 'Times New Roman'">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN></SPAN>The GNU C compiler, gcc, (except on HP and SGI64)</P>
+<P class=MsoNormal 
+style="MARGIN-LEFT: 0.5in; TEXT-INDENT: -0.25in; mso-list: l15 level1 lfo31; tab-stops: list .5in"><SPAN 
+style="FONT-FAMILY: Symbol">·<SPAN 
+style="FONT: 7pt 'Times New Roman'">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN></SPAN>The system's native ANSI C compiler on all UNIX platforms</P>
+<P class=MsoNormal 
+style="MARGIN-LEFT: 0.5in; TEXT-INDENT: -0.25in; mso-list: l15 level1 lfo31; tab-stops: list .5in"><SPAN 
+style="FONT-FAMILY: Symbol">·<SPAN 
+style="FONT: 7pt 'Times New Roman'">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN></SPAN>The system's native C++ compiler on all UNIX platforms (except 
+Linux)</P>
+<P class=MsoNormal 
+style="MARGIN-LEFT: 0.5in; TEXT-INDENT: -0.25in; mso-list: l15 level1 lfo31; tab-stops: list .5in"><SPAN 
+style="FONT-FAMILY: Symbol">·<SPAN 
+style="FONT: 7pt 'Times New Roman'">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN></SPAN>The GNU C++ compiler, g++, on Linux.</P>
+<P class=MsoBodyText style="MARGIN-RIGHT: 0in">There are several restrictions 
+regarding the use of supported compilers, including [4]:<SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN>(1) The SGI C compiler does not handle 
+denormalized floating-point values correctly. Denormalized floating-point 
+numbers are numbers that are greater than 0 and less than the value of DBL_MIN 
+in the compiler's float.h file; (2) Due to a limitation of the GNU C++ compiler 
+(g++) on Linux, try...catch...end blocks do not work; (3) The -A debugline: on 
+option does not work on the GNU C++ compiler (g++) on Linux because it uses 
+try...catch...end.</P>
+<P align=left>&nbsp;</P>
+<H3 align=center>PC WORKSTATIONS</H3>
+<P style="MARGIN-RIGHT: 0in"><SPAN 
+style="TEXT-DECORATION: none; text-underline: none">The Compiler supports the 
+following ANSI C and C++ PC Compilers:</SPAN></P>
+<P class=MsoNormal 
+style="MARGIN-LEFT: 0.5in; TEXT-INDENT: -0.25in; mso-list: l23 level1 lfo18; tab-stops: list .5in"><SPAN 
+style="FONT-FAMILY: Symbol">·<SPAN 
+style="FONT: 7pt 'Times New Roman'">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN></SPAN>Lcc C version 2.4 (included with MATLAB)</P>
+<P class=MsoNormal 
+style="MARGIN-LEFT: 0.5in; TEXT-INDENT: -0.25in; mso-list: l23 level1 lfo18; tab-stops: list .5in"><SPAN 
+style="FONT-FAMILY: Symbol">·<SPAN 
+style="FONT: 7pt 'Times New Roman'">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN></SPAN>Watcom C/C++ versions 10.6 and 11.0</P>
+<P class=MsoNormal 
+style="MARGIN-LEFT: 0.5in; TEXT-INDENT: -0.25in; mso-list: l23 level1 lfo18; tab-stops: list .5in"><SPAN 
+style="FONT-FAMILY: Symbol">·<SPAN 
+style="FONT: 7pt 'Times New Roman'">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN></SPAN>Borland C++ versions 5.0, 5.2, 5.3, 5.4, and 5.5</P>
+<P class=MsoNormal 
+style="MARGIN-LEFT: 0.5in; TEXT-INDENT: -0.25in; mso-list: l23 level1 lfo18; tab-stops: list .5in"><SPAN 
+style="FONT-FAMILY: Symbol">·<SPAN 
+style="FONT: 7pt 'Times New Roman'">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN></SPAN>Microsoft Visual C++ (MSVC) versions 5.0 and 6.0</P>
+<P class=MsoNormal>The MATLAB installer should add the following path to the 
+Windows operating system environment:<SPAN style="mso-spacerun: yes">&nbsp; 
+</SPAN>SET PATH=”%PATH%;C:\matlabr12\bin\win32”.<SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp; </SPAN>Selecting a C/C++ compiler is 
+accomplished by typing “mbuild -setup &lt;RET&gt;”<SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN>then following the instructions. 
+Although the Compiler supports the creation of stand-alone C++ applications, it 
+does not support the creation of C++ MEX-files, on both UNIX and PC 
+machines.</P>
+<P align=left>&nbsp;</P>
+<H3 align=center>CREATING MEX FILES</H3>
+<P class=MsoNormal>Creating MEX-files on PC or UNIX workstations is a similar 
+process.<SPAN style="mso-spacerun: yes">&nbsp; </SPAN>The examples presented 
+here were tested on a PC workstation running Windows.<SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN>The Compiler (mcc), when invoked with 
+the -x macro option, translates M code to C code, generates a MEX wrapper, and 
+invokes the mex utility, which builds the C MEX-file source into a MEX-file by 
+linking the MEX-file with the MEX version of the math libraries 
+(libmatlbmx).</P>
+<P class=MsoNormal>&nbsp;</P>
+<P class=MsoNormal>The MATLAB interpreter dynamically loads MEX-files as they 
+are needed.<SPAN style="mso-spacerun: yes">&nbsp; </SPAN>Most MEX-files run 
+significantly faster than their M-file equivalents.<SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN>Consider the M-file called “PolyRoots” 
+shown in Fig. 1, which finds the roots of polynomial y=x^2 + x + 1.<SPAN 
+style="mso-spacerun: yes">&nbsp;</SPAN></P>
+<DIV align=center>
+<CENTER>
+<TABLE width="50%" border=1>
+  <TBODY>
+  <TR>
+    <TD>
+      <P class=MsoNormal 
+      style="MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px; LINE-HEIGHT: 100%">%*************************************************</P>
+      <P class=MsoNormal 
+      style="MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px; LINE-HEIGHT: 100%">% This 
+      program finds the roots of polynomial y=x^2 + x + 1<SPAN 
+      style="mso-spacerun: yes">&nbsp;&nbsp; </SPAN>*<SPAN 
+      style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</SPAN></P>
+      <P class=MsoNormal 
+      style="MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px; LINE-HEIGHT: 100%">%*************************************************</P>
+      <P class=MsoNormal 
+      style="MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px; LINE-HEIGHT: 100%">function 
+      PolyRoots</P>
+      <P class=MsoNormal 
+      style="MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px; LINE-HEIGHT: 100%">roots([1 1 
+      1])</P>
+      <P class=MsoNormal 
+      style="MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px; LINE-HEIGHT: 100%">&nbsp;</P>
+      <P class=MsoNormal 
+      style="MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px; LINE-HEIGHT: 100%" 
+      align=center>Fig. 1 M-file to find the roots of a 
+  polynomial</P></TD></TR></TBODY></TABLE></CENTER></DIV>
+<P class=MsoNormal>Typing PolyRoots at the MATLAB prompt will run the program 
+and produce:</P>
+<P class=MsoNormal 
+style="MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px; MARGIN-LEFT: 1in">ans =</P>
+<P class=MsoNormal 
+style="MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px; MARGIN-LEFT: 1in">&nbsp;</P>
+<P class=MsoNormal 
+style="MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px; MARGIN-LEFT: 1in"><SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN>-0.5000 + 0.8660i</P>
+<P class=MsoNormal 
+style="MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px; MARGIN-LEFT: 1in"><SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN>-0.5000 - 0.8660i</P>
+<P class=MsoNormal>To create a MEX-file, the mcc command is used at the MATLAB 
+prompt as follows.</P>
+<P class=MsoNormal style="MARGIN-LEFT: 0.5in; TEXT-INDENT: 0.5in">mcc –x 
+PolyRoots</P>
+<P class=MsoNormal>This mcc command generates the following files:</P>
+<P class=MsoNormal 
+style="MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px; MARGIN-LEFT: 0.5in; TEXT-INDENT: 0.5in">PolyRoots.dll<SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;</SPAN></P>
+<P class=MsoNormal 
+style="MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px; MARGIN-LEFT: 0.5in; TEXT-INDENT: 0.5in">PolyRoots_mex.c<SPAN 
+style="mso-spacerun: yes">&nbsp;</SPAN></P>
+<P class=MsoNormal 
+style="MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px; TEXT-INDENT: 0.5in"><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>PolyRoots.h<SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</SPAN></P>
+<P class=MsoNormal 
+style="MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px; MARGIN-LEFT: 0.5in; TEXT-INDENT: 0.5in">roots.h<SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</SPAN></P>
+<P class=MsoNormal 
+style="MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px; MARGIN-LEFT: 0.5in; TEXT-INDENT: 0.5in">PolyRoots.c</P>
+<P class=MsoNormal 
+style="MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px; MARGIN-LEFT: 0.5in; TEXT-INDENT: 0.5in">&nbsp;</P>
+<P class=MsoNormal style="MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px">PolyRoots.c 
+contains MEX-file C source code</P>
+<P class=MsoNormal style="MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px">PolyRoots.h 
+contains the public information</P>
+<P class=MsoNormal style="MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px">PolyRoots_mex.c 
+containing the MEX-function interface (MEX wrapper)</P>
+<P class=MsoNormal style="MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px">PolyRoots.dll is 
+the dynamic link library file of the the executable MEX-file</P>
+<P class=MsoNormal style="MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px">Roots.h is <SPAN 
+style="LAYOUT-GRID-MODE: line; COLOR: black">a header file that contains 
+function prototype for roots.m</SPAN></P>
+<P class=MsoNormal>&nbsp;</P>
+<P class=MsoNormal>mcc automatically invokes mex to create PolyRoots.dll from 
+PolyRoots.c and PolyRoots_mex.c. The mex utility encapsulates the appropriate C 
+compiler and linker options for the system.<SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN>The MEX version of the file is invoked 
+from the MATLAB interpreter the same way an M-file version is invoked.<SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN>Typing PolyRoots at the MATLAB prompt 
+yields the same exact results as before. <SPAN 
+style="mso-spacerun: yes">&nbsp;</SPAN>Given an M-file and a MEX-file with the 
+same root name in the same directory, the MEX-file takes precedence.<SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN>MATLAB runs the MEX-file version rather 
+than the M-file version.</P>
+<P align=left>&nbsp;</P>
+<H3 align=center>CREATING STAND-ALONE APPLICATIONS</H3>
+<P>A MathWorks utility, mbuild, provides an easy way to specify an options file 
+that can be used to set the compiler and linker settings, change compilers or 
+compiler settings, switch between C and C++ development, and build an 
+application.<SPAN style="mso-spacerun: yes">&nbsp; </SPAN>The Compiler (mcc) 
+automatically invokes mbuild under certain conditions. In particular, mcc -m or 
+mcc –p invokes mbuild to perform compilation and linking.<SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN>To prevent mcc from invoking mbuild 
+automatically, the -c option can be used. For example, mcc -mc filename. On 
+systems where there is exactly one C or C++ compiler, the mbuild utility 
+automatically configures itself for the appropriate compiler.<SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN>On systems where there is more than one 
+C or C++ compiler, the mbuild utility lets you select which of the compilers you 
+want to use. Once a C or C++ compiler is selected, that compiler becomes the 
+default compiler.<SPAN style="mso-spacerun: yes">&nbsp; </SPAN>The user may 
+later specify another compiler<SPAN style="mso-spacerun: yes">&nbsp; </SPAN>by 
+following the same procedure.</P>
+<P>&nbsp;</P>
+<P>The Compiler, when invoked with the -m macro option, translates input M-files 
+into C source code that is usable in any of the supported executable types. The 
+Compiler also produces the required wrapper file suitable for a stand-alone 
+application. Then, an ANSI C compiler compiles these C source code files and the 
+resulting object files are linked against the C/C++ Math Library. <SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;</SPAN>Similarly, the Compiler (mcc), when 
+invoked with the -p macro option, translates input M-files into C++ source code 
+that is usable in any of the executable types except MEX.<SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN>The source code for a stand-alone C or 
+C++ application consists either entirely of M-files or some combination of 
+M-files, MEX-files, and C or C++ source code files.<SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN>After compiling the C or C++ source 
+code, the resulting object file is linked with the object libraries.</P>
+<P>&nbsp;</P>
+<P>When you use the Compiler to compile an M-file, it generates C or C++ code, a 
+header file, and a wrapper file.<SPAN style="mso-spacerun: yes">&nbsp; 
+</SPAN>The C or C++ code and the header file are independent of the final target 
+type and target platform. That is, the C or C++ code and header file are 
+identical no matter what the desired final output (i.e. MEX-functions, 
+stand-alone applications, or libraries). The wrapper file, however, provides the 
+code necessary to support the output executable type.<SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN>So, the wrapper file is different for 
+each executable type.<SPAN style="mso-spacerun: yes">&nbsp; </SPAN>Consider the 
+M-file called “PolyVal” shown in Fig. 2.</P>
+<DIV align=center>
+<CENTER>
+<TABLE width="50%" border=1>
+  <TBODY>
+  <TR>
+    <TD width="100%">
+      <P 
+      style="MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px; LINE-HEIGHT: 100%">%***************************************************************</P>
+      <P style="MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px; LINE-HEIGHT: 100%">% This 
+      program evaluates the polynomial y=x^4 + 2x^3 - x^2 + 4x - 5<SPAN 
+      style="mso-spacerun: yes">&nbsp; </SPAN>at<SPAN 
+      style="mso-spacerun: yes">&nbsp; </SPAN>x=5, 6</P>
+      <P 
+      style="MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px; LINE-HEIGHT: 100%">%***************************************************************</P>
+      <P style="MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px; LINE-HEIGHT: 100%">function 
+      y=PolyValue(poly,x)</P>
+      <P style="MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px; LINE-HEIGHT: 100%">poly=[1 
+      2 -1 4 -5];</P>
+      <P style="MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px; LINE-HEIGHT: 100%">x=[5, 
+      6];</P>
+      <P 
+      style="MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px; LINE-HEIGHT: 100%">y=polyval(poly, 
+      x)</P>
+      <P 
+      style="MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px; LINE-HEIGHT: 100%">&nbsp;</P>
+      <P style="MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px; LINE-HEIGHT: 100%" 
+      align=center><SPAN 
+      style="FONT-SIZE: 12pt; FONT-FAMILY: 'Times New Roman'; mso-bidi-font-size: 10.0pt; mso-fareast-font-family: 'Times New Roman'; mso-ansi-language: EN-US; mso-fareast-language: EN-US; mso-bidi-language: AR-SA">Fig. 
+      2<SPAN style="mso-spacerun: yes">&nbsp; </SPAN>M-file to compute the value 
+      of a polynomial</SPAN></P></TD></TR></TBODY></TABLE></CENTER></DIV>
+<P class=MsoNormal>This program evaluates a polynomial at two given points.<SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN>Typing PolyVal at the MATLAB prompt 
+yields</P>
+<P class=MsoNormal style="MARGIN-LEFT: 0.5in; TEXT-INDENT: 0.5in">ans =</P>
+<P class=MsoNormal style="MARGIN-LEFT: 0.5in; TEXT-INDENT: 0.5in"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>865<SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>1711</P>
+<P class=MsoNormal>To create an executable stand-alone file, the mcc command is 
+used at the MATLAB prompt as follows</P>
+<P class=MsoNormal style="MARGIN-LEFT: 0.5in; TEXT-INDENT: 0.5in">mcc -m 
+PolyValue</P>
+<P class=MsoNormal>This mcc command generates the following files:</P>
+<P class=MsoNormal 
+style="MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px; MARGIN-LEFT: 0.5in; TEXT-INDENT: 0.5in">PolyValue.h<SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</SPAN></P>
+<P class=MsoNormal 
+style="MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px; MARGIN-LEFT: 0.5in; TEXT-INDENT: 0.5in">PolyValue_main.c<SPAN 
+style="mso-spacerun: yes">&nbsp;</SPAN></P>
+<P class=MsoNormal 
+style="MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px; MARGIN-LEFT: 0.5in; TEXT-INDENT: 0.5in">bin<SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</SPAN></P>
+<P class=MsoNormal 
+style="MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px; MARGIN-LEFT: 0.5in; TEXT-INDENT: 0.5in">PolyValue.c<SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</SPAN></P>
+<P class=MsoNormal 
+style="MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px; MARGIN-LEFT: 0.5in; TEXT-INDENT: 0.5in">PolyValue.exe</P>
+<P class=MsoNormal 
+style="MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px; MARGIN-LEFT: 27pt; TEXT-INDENT: -27pt"><SPAN 
+style="LAYOUT-GRID-MODE: line; COLOR: black">PolyValue.h contains the public 
+information.</SPAN></P>
+<P class=MsoNormal style="MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px"><SPAN 
+style="LAYOUT-GRID-MODE: line; COLOR: black">PolyValue_main.c contain .EXE 
+function interface (wrapper).</SPAN></P>
+<P class=MsoNormal style="MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px"><SPAN 
+style="LAYOUT-GRID-MODE: line; COLOR: black">bin is a directory containing the 
+MATLAB menu bar and toolbar figure files.&nbsp;</SPAN></P>
+<P class=MsoNormal style="MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px"><SPAN 
+style="LAYOUT-GRID-MODE: line; COLOR: black">PolyValue.c is the C source 
+code.</SPAN></P>
+<P class=MsoNormal style="MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px"><SPAN 
+style="LAYOUT-GRID-MODE: line; COLOR: black">PolyValue.exe is the executable 
+application.</SPAN></P>
+<P class=MsoNormal>&nbsp;</P>
+<P class=MsoNormal>Note that when executing the mcc command to link files and 
+libraries, mcc actually calls the mbuild script to perform the functions.<SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN>To run the stand-alone application, 
+PolyValue, invoke it by typing its name on the MS-DOS command line. However, 
+MATLAB offers a quick way to shell out to DOS by using the bang (!) function. 
+The exclamation point character, “!”, is a shell escape and indicates that the 
+rest of the input line is a command to the operating system. It is used to 
+invoke utilities or run other programs without quitting from MATLAB.<SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN>At the MATLAB prompt type</P>
+<P class=MsoNormal style="MARGIN-LEFT: 0.5in; TEXT-INDENT: 0.5in">!PolyValue</P>
+<P class=MsoNormal>The application should run and display the same exact results 
+as before.<SPAN style="mso-spacerun: yes">&nbsp; </SPAN>After quitting the 
+program, the operating system returns control to MATLAB.</P>
+<P class=MsoNormal>&nbsp;</P>
+<P class=MsoNormal>To distribute a stand-alone application, a package containing 
+the following files must be created: (1) The application executable, (2) The 
+contents, if any, of the directory named bin, (3) Any custom MEX-files the 
+application uses, and (4) All the MATLAB Math run-time libraries.<SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN>The C Math library has prepackaged all 
+the MATLAB run-time libraries required by stand-alone applications into a 
+single, self-extracting archive file, called the Math and Graphics Run-Time 
+Library Installer (mglinstaller.exe).<SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp; </SPAN>On the PC, the installer is 
+located in C:\matlabR12\extern\lib\win32\.<SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp; </SPAN>When run, the Installer will 
+extract the libraries from the archive and install them in subdirectories of a 
+directory specified by the user.</P>
+<P align=left>&nbsp;</P>
+<H3 align=center>INPUTTING FROM THE KEYBOARD AND READING DATA FILES</H3>
+<P align=left>It is often necessary to create interactive programs that allow 
+the user to enter input from the keyboard.<SPAN style="mso-spacerun: yes">&nbsp; 
+</SPAN>Furthermore, in many applications, the input must come from previously 
+generated data files stored in binary or MATLAB format. Consider the M-file 
+program of Fig. 3.<SPAN style="mso-spacerun: yes">&nbsp; </SPAN>This program, 
+ReadDataFile, loads input data “signal” from a mat-file then calls a function, 
+DispImg, to display the image of the data, “signal”.</P>
+<DIV align=center>
+<CENTER>
+<TABLE width="50%" border=1>
+  <TBODY>
+  <TR>
+    <TD width="100%">
+      <P class=MsoNormal 
+      style="MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px">%**********************************************************</P>
+      <P class=MsoNormal style="MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px">% This 
+      programs loads data from an input file and displays the image<SPAN 
+      style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN>*</P>
+      <P class=MsoNormal 
+      style="MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px">%**********************************************************</P>
+      <P class=MsoNormal style="MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px">fname = 
+      input('Enter input file name (without extension [.mat]): ', 's');</P>
+      <P class=MsoNormal style="MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px">tic</P>
+      <P class=MsoFooter 
+      style="MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px; tab-stops: .5in">%load input 
+      data from matlab file *.mat</P>
+      <P class=MsoNormal 
+      style="MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px">disp('STARTING: Load input 
+      data ...');</P>
+      <P class=MsoNormal style="MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px">eval(['load 
+      ' fname]);</P>
+      <P class=MsoNormal 
+      style="MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px">cuttail=0;<SPAN 
+      style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</SPAN><SPAN 
+      style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+      </SPAN>%as defined in function Dispimg</P>
+      <P class=MsoNormal 
+      style="MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px">dispimg(signal,'LIN',cuttail,0);<SPAN 
+      style="mso-spacerun: yes">&nbsp; </SPAN>%call dispimg</P>
+      <P class=MsoNormal style="MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px">toc<SPAN 
+      style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+      </SPAN>%stop timer</P>
+      <P class=MsoNormal style="MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px" 
+      align=center>&nbsp;</P>
+      <P style="MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px" align=center><SPAN 
+      style="FONT-SIZE: 12pt; FONT-FAMILY: 'Times New Roman'; mso-bidi-font-size: 10.0pt; mso-fareast-font-family: 'Times New Roman'; mso-ansi-language: EN-US; mso-fareast-language: EN-US; mso-bidi-language: AR-SA">Fig. 
+      3<SPAN style="mso-spacerun: yes">&nbsp; </SPAN>Loading a data file and 
+      displaying image</SPAN></P></TD></TR></TBODY></TABLE></CENTER></DIV>
+<P class=MsoNormal>This program can be run at the MATLAB prompt by typing 
+ReadDataFile as follows</P>
+<P class=MsoNormal 
+style="MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px; MARGIN-LEFT: 0.5in">&gt;&gt;ReadDataFile</P>
+<P class=MsoNormal 
+style="MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px; MARGIN-LEFT: 0.5in">&gt;&gt;Enter 
+input file name (without extension [.mat]): test3</P>
+<P class=MsoNormal 
+style="MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px; MARGIN-LEFT: 0.5in">STARTING: Load 
+input data ...</P>
+<P class=MsoNormal 
+style="MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px; MARGIN-LEFT: 0.5in">mean and standar 
+deviation of real are 0.012599<SPAN style="mso-spacerun: yes">&nbsp; 
+</SPAN>0.51493</P>
+<P class=MsoNormal 
+style="MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px; MARGIN-LEFT: 0.5in">mean and standar 
+deviation of imag are -0.012585<SPAN style="mso-spacerun: yes">&nbsp; 
+</SPAN>0.50625</P>
+<P class=MsoNormal 
+style="MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px; MARGIN-LEFT: 0.5in">magnitude min 
+and max are 0<SPAN style="mso-spacerun: yes">&nbsp; </SPAN>2.8454</P>
+<P class=MsoNormal 
+style="MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px; MARGIN-LEFT: 0.5in">threshold is 
+2.8454</P>
+<P class=MsoNormal 
+style="MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px; MARGIN-LEFT: 0.5in">display image in 
+LIN scale</P>
+<P class=MsoNormal 
+style="MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px; MARGIN-LEFT: 0.5in">&nbsp;</P>
+<P class=MsoNormal 
+style="MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px; MARGIN-LEFT: 0.5in">elapsed_time 
+=</P>
+<P class=MsoNormal 
+style="MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px; MARGIN-LEFT: 0.5in">&nbsp;</P>
+<P class=MsoNormal 
+style="MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px; MARGIN-LEFT: 0.5in"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp; </SPAN>37.6800</P>
+<P class=MsoNormal style="MARGIN-BOTTOM: 5px">In addition to the above output, 
+the program produces a graph representing the image of the input data “signal” 
+as shown in the following figure.<SPAN style="mso-ignore: vglayout"> 
+<DIV align=center>
+<CENTER>
+<TABLE cellSpacing=0 cellPadding=0>
+  <TBODY>
+  <TR>
+    <TD>
+      <P style="MARGIN-TOP: 3px; MARGIN-BOTTOM: 3px; LINE-HEIGHT: 150%" 
+      align=center><IMG height=327 
+      src="Converting M-Files to Stand-Alone Applications_files/5_1f.h1.jpg" 
+      width=401 border=0></P></TD></TR></TBODY></TABLE></CENTER></DIV></SPAN>
+<P>As stated earlier, the Compiler does not support the INPUT function to 
+manipulate workspace environment.<SPAN style="mso-spacerun: yes">&nbsp; 
+</SPAN>Therefore, the Compiler can not correctly compile the program of Fig. 
+3.<SPAN style="mso-spacerun: yes">&nbsp; </SPAN>To get around this restriction, 
+one can manually edit the C code generated by the Compiler.<SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN>This approach, however, is inefficient 
+and not practical.<SPAN style="mso-spacerun: yes">&nbsp; </SPAN>The C/C++ 
+Graphics Library offers an input dialog box MATLAB function, INPUTDLG, which can 
+be used to automatically solve this problem.<SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN>The above example may be modified as 
+shown in Fig. 5. The modified program consists of a main function, 
+ReadDataFile2, which calls two functions, LoadInput and DispImg.<SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN>Creating a stand-alone application by 
+writing the source code in more than one M-file is very practical.<SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN>This approach allows the programmer to 
+take advantage of MATLAB's interpretive development environment.<SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN>After getting the M-file version of the 
+program to work properly, the code is compiled and converted into a stand-alone 
+application.</P>
+<DIV align=center>
+<CENTER>
+<TABLE height=367 width="50%" border=1>
+  <TBODY>
+  <TR>
+    <TD width="100%" height=361>
+      <P 
+      style="MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px">%**********************************************************</P>
+      <P style="MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px">% This programs loads data 
+      from an input file and displays the image<SPAN 
+      style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN>*</P>
+      <P 
+      style="MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px">%**********************************************************</P>
+      <P style="MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px">function ReadDataFile2</P>
+      <P style="MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px">% prompt for input file 
+      name</P>
+      <P style="MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px">prompt={'Enter input file 
+      name (without extension [.mat]): '};</P>
+      <P style="MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px">tic<SPAN 
+      style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</SPAN>%start 
+      timer</P>
+      <P style="MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px">title2='Input File 
+      name';</P>
+      <P style="MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px">lines=1;</P>
+      <P style="MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px"><SPAN 
+      style="FONT-SIZE: 12pt; FONT-FAMILY: 'Times New Roman'; mso-bidi-font-size: 10.0pt; mso-fareast-font-family: 'Times New Roman'; mso-ansi-language: EN-US; mso-fareast-language: EN-US; mso-bidi-language: AR-SA">defaultfn={'test250'};</SPAN> 
+
+      <P style="MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px">fname1 = inputdlg(prompt, 
+      title2, lines, defaultfn);</P>
+      <P style="MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px">fname=fname1{1}<SPAN 
+      style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp; </SPAN>%extracting the 
+      first element in the array</P>
+      <P style="MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px">%</P>
+      <P 
+      style="MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px">signal=loadinput(fname);<SPAN 
+      style="mso-spacerun: yes">&nbsp; </SPAN>%call loadinput to read file</P>
+      <P style="MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px">cuttail=0;<SPAN 
+      style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</SPAN><SPAN 
+      style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+      </SPAN>%as defined in function Dispimg</P>
+      <P 
+      style="MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px">dispimg(signal,'LIN',cuttail,0);<SPAN 
+      style="mso-spacerun: yes">&nbsp; </SPAN>%call dispimg</P>
+      <P style="MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px">toc<SPAN 
+      style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+      </SPAN>%stop timer</P>
+      <P style="MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px">&nbsp;</P>
+      <P style="MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px" align=center><SPAN 
+      style="FONT-SIZE: 12pt; FONT-FAMILY: 'Times New Roman'; mso-bidi-font-size: 10.0pt; mso-fareast-font-family: 'Times New Roman'; mso-ansi-language: EN-US; mso-fareast-language: EN-US; mso-bidi-language: AR-SA">Fig. 
+      5 Loading a data file and displaying 
+image</SPAN></P></TD></TR></TBODY></TABLE></CENTER></DIV>
+<P align=left>We show in Fig. 6 the function that reads the input data file as 
+requested by ReadDataFile2, LoadInput.</P>
+<DIV align=center>
+<CENTER>
+<TABLE width="50%" border=1>
+  <TBODY>
+  <TR>
+    <TD width="100%">
+      <P 
+      style="MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px">%*************************************</P>
+      <P style="MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px">%This function reads an 
+      input data file (.mat)<SPAN 
+      style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp; </SPAN>*</P>
+      <P 
+      style="MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px">%*************************************</P>
+      <P style="MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px">function 
+      signal=loadinput(fname1)</P>
+      <P style="MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px">% Reading input signal<SPAN 
+      style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</SPAN></P>
+      <P style="MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px">load(fname1, 'signal');</P>
+      <P style="MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px">&nbsp;</P>
+      <P style="MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px" align=center>Fig. 6 
+      Function to read an input data file</P></TD></TR></TBODY></TABLE></CENTER></DIV>
+<P class=MsoNormal>Since ReadDataFile2 uses a graphics library function, the 
+graphics library must be included when compiling the file as follows</P>
+<P class=MsoNormal style="MARGIN-LEFT: 1in; TEXT-INDENT: 0.5in">mcc -B sgl 
+ReadDataFile2 dispimg loadinput</P>
+<P class=MsoNormal>This command creates an executable file, ReadDataFile2.exe, 
+which can be run at the MATLAB prompt by typing</P>
+<P class=MsoNormal 
+style="MARGIN-LEFT: 1in; TEXT-INDENT: 0.5in">!ReadDataFile2</P>
+<P class=MsoNormal>Running the program produces the following input box</P>
+<P align=center><SPAN 
+style="FONT-SIZE: 12pt; FONT-FAMILY: 'Times New Roman'; mso-bidi-font-size: 10.0pt; mso-fareast-font-family: 'Times New Roman'; mso-ansi-language: EN-US; mso-fareast-language: EN-US; mso-bidi-language: AR-SA"><IMG 
+height=114 
+src="Converting M-Files to Stand-Alone Applications_files/5_1f.h2.jpg" width=400 
+v:shapes="_x0000_i1025"></SPAN></P>
+<P align=left>Instead of the default “test250”, the user can type in a desired 
+file name.<SPAN style="mso-spacerun: yes">&nbsp; </SPAN>After clicking on OK, 
+the program produces the same exact results as before (except a different 
+execution time).<SPAN style="mso-spacerun: yes">&nbsp;</SPAN></P>
+<H3 align=center>CREATING AND TESTING A STAND-ALONE REAL APPLICATION</H3>
+<P class=MsoNormal>The examples presented so far require little time to 
+execute.<SPAN style="mso-spacerun: yes">&nbsp; </SPAN>To illustrate the benefits 
+of the Compiler and its associated libraries, a program that implements the 
+Range Migration Algorithm for Synthetic Aperture Radar (SAR) image formation was 
+used.<SPAN style="mso-spacerun: yes">&nbsp; </SPAN>The program, which is not 
+shown here, consists of a main function (rma8c) and six subfunctions.<SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN>The executable code is produced by 
+typing</P>
+<P class=MsoNormal style="MARGIN-LEFT: 0.5in">mcc -B sgl rma8c loadinput dispimg 
+localmax stolt_int2 resol3db invpaint</P>
+<P class=MsoNormal>&nbsp;</P>
+<P class=MsoNormal>The program was run at the MATLAB prompt by typing</P>
+<P class=MsoNormal><SPAN 
+style="mso-tab-count: 2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>!rma8c</P>
+<P class=MsoNormal>&nbsp;</P>
+<P class=MsoNormal>To compare the execution speed of M-files, MEX files, and EXE 
+files, rma8c was run on a 1GHz machine with these three types.<SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN>The upper part of Table 1 summarizes the 
+results.</P>
+<P class=MsoNormal style="TEXT-ALIGN: center" align=center>Table 1 Comparison of 
+execution times</P>
+<TABLE 
+style="BORDER-RIGHT: medium none; BORDER-TOP: medium none; MARGIN-LEFT: 9.9pt; BORDER-LEFT: medium none; BORDER-BOTTOM: medium none; BORDER-COLLAPSE: collapse; mso-table-layout-alt: fixed; mso-border-alt: solid windowtext .5pt; mso-padding-alt: 0in 5.4pt 0in 5.4pt" 
+cellSpacing=0 cellPadding=0 border=1>
+  <TBODY>
+  <TR>
+    <TD 
+    style="BORDER-RIGHT: medium none; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0in; BORDER-LEFT: medium none; WIDTH: 81pt; PADDING-TOP: 0in; BORDER-BOTTOM: windowtext 0.5pt solid" 
+    vAlign=top width=108>
+      <P class=MsoNormal>&nbsp;</P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 0.5pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0in; BORDER-LEFT: medium none; WIDTH: 1.25in; PADDING-TOP: 0in; BORDER-BOTTOM: windowtext 0.5pt solid" 
+    vAlign=top width=120 colSpan=2>
+      <P class=MsoNormal>&nbsp;</P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 0.5pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: windowtext 0.5pt solid; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0in; BORDER-LEFT: medium none; WIDTH: 3.75in; PADDING-TOP: 0in; BORDER-BOTTOM: windowtext 0.5pt solid; mso-border-left-alt: solid windowtext .5pt" 
+    vAlign=top width=360 colSpan=4>
+      <P class=MsoNormal style="TEXT-ALIGN: center" align=center>Execution time 
+      (seconds)</P></TD></TR>
+  <TR>
+    <TD 
+    style="BORDER-RIGHT: windowtext 0.5pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0in; BORDER-LEFT: windowtext 0.5pt solid; WIDTH: 81pt; PADDING-TOP: 0in; BORDER-BOTTOM: windowtext 0.5pt solid; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=108>
+      <P class=MsoNormal>Machine</P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 0.5pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0in; BORDER-LEFT: medium none; WIDTH: 49.5pt; PADDING-TOP: 0in; BORDER-BOTTOM: windowtext 0.5pt solid; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=66>
+      <P class=MsoNormal>File</P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 0.5pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0in; BORDER-LEFT: medium none; WIDTH: 40.5pt; PADDING-TOP: 0in; BORDER-BOTTOM: windowtext 0.5pt solid; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=54>
+      <P class=MsoNormal>Run #</P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 0.5pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0in; BORDER-LEFT: medium none; WIDTH: 49.5pt; PADDING-TOP: 0in; BORDER-BOTTOM: windowtext 0.5pt solid; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=66>
+      <P class=MsoNormal>M-File</P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 0.5pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0in; BORDER-LEFT: medium none; WIDTH: 58.5pt; PADDING-TOP: 0in; BORDER-BOTTOM: windowtext 0.5pt solid; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=78>
+      <P class=MsoNormal>MEX-file</P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 0.5pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0in; BORDER-LEFT: medium none; WIDTH: 0.75in; PADDING-TOP: 0in; BORDER-BOTTOM: windowtext 0.5pt solid; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=72>
+      <P class=MsoNormal>.EXE C</P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 0.5pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0in; BORDER-LEFT: medium none; WIDTH: 1.5in; PADDING-TOP: 0in; BORDER-BOTTOM: windowtext 0.5pt solid; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=144>
+      <P class=MsoNormal>Ratio (.EXE/M-file</P></TD></TR>
+  <TR style="HEIGHT: 16.15pt">
+    <TD 
+    style="BORDER-RIGHT: windowtext 0.5pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0in; BORDER-LEFT: windowtext 0.5pt solid; WIDTH: 81pt; PADDING-TOP: 0in; BORDER-BOTTOM: windowtext 0.5pt solid; HEIGHT: 16.15pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=108 rowSpan=2>
+      <P class=MsoNormal>1 GHz PC,</P>
+      <P class=MsoNormal>128 MB RAM</P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 0.5pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0in; BORDER-LEFT: medium none; WIDTH: 49.5pt; PADDING-TOP: 0in; BORDER-BOTTOM: windowtext 0.5pt solid; HEIGHT: 16.15pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=66 rowSpan=2>
+      <P class=MsoNormal>Rma8c</P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 0.5pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0in; BORDER-LEFT: medium none; WIDTH: 40.5pt; PADDING-TOP: 0in; BORDER-BOTTOM: windowtext 0.5pt solid; HEIGHT: 16.15pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=54>
+      <P class=MsoNormal>1</P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 0.5pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0in; BORDER-LEFT: medium none; WIDTH: 49.5pt; PADDING-TOP: 0in; BORDER-BOTTOM: windowtext 0.5pt solid; HEIGHT: 16.15pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=66>
+      <P class=MsoNormal>734.24</P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 0.5pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0in; BORDER-LEFT: medium none; WIDTH: 58.5pt; PADDING-TOP: 0in; BORDER-BOTTOM: windowtext 0.5pt solid; HEIGHT: 16.15pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=78>
+      <P class=MsoNormal>397.43</P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 0.5pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0in; BORDER-LEFT: medium none; WIDTH: 0.75in; PADDING-TOP: 0in; BORDER-BOTTOM: windowtext 0.5pt solid; HEIGHT: 16.15pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=72>
+      <P class=MsoNormal>328.40</P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 0.5pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0in; BORDER-LEFT: medium none; WIDTH: 1.5in; PADDING-TOP: 0in; BORDER-BOTTOM: windowtext 0.5pt solid; HEIGHT: 16.15pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=144>
+      <P class=MsoNormal>0.447</P></TD></TR>
+  <TR style="HEIGHT: 17.05pt">
+    <TD 
+    style="BORDER-RIGHT: windowtext 0.5pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0in; BORDER-LEFT: medium none; WIDTH: 40.5pt; PADDING-TOP: 0in; BORDER-BOTTOM: windowtext 0.5pt solid; HEIGHT: 17.05pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=54>
+      <P class=MsoNormal>2</P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 0.5pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0in; BORDER-LEFT: medium none; WIDTH: 49.5pt; PADDING-TOP: 0in; BORDER-BOTTOM: windowtext 0.5pt solid; HEIGHT: 17.05pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=66>
+      <P class=MsoNormal>739.15</P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 0.5pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0in; BORDER-LEFT: medium none; WIDTH: 58.5pt; PADDING-TOP: 0in; BORDER-BOTTOM: windowtext 0.5pt solid; HEIGHT: 17.05pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=78>
+      <P class=MsoNormal>405.51</P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 0.5pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0in; BORDER-LEFT: medium none; WIDTH: 0.75in; PADDING-TOP: 0in; BORDER-BOTTOM: windowtext 0.5pt solid; HEIGHT: 17.05pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=72>
+      <P class=MsoNormal>331.26</P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 0.5pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0in; BORDER-LEFT: medium none; WIDTH: 1.5in; PADDING-TOP: 0in; BORDER-BOTTOM: windowtext 0.5pt solid; HEIGHT: 17.05pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=144>
+      <P class=MsoNormal>0.447</P></TD></TR>
+  <TR style="HEIGHT: 16.15pt">
+    <TD 
+    style="BORDER-RIGHT: windowtext 0.5pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0in; BORDER-LEFT: windowtext 0.5pt solid; WIDTH: 81pt; PADDING-TOP: 0in; BORDER-BOTTOM: windowtext 0.5pt solid; HEIGHT: 16.15pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=108 rowSpan=2>
+      <P class=MsoNormal>1 GHz PC,</P>
+      <P class=MsoNormal>128 MB RAM</P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 0.5pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0in; BORDER-LEFT: medium none; WIDTH: 49.5pt; PADDING-TOP: 0in; BORDER-BOTTOM: windowtext 0.5pt solid; HEIGHT: 16.15pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=66 rowSpan=2>
+      <P class=MsoNormal>Rma8cs</P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 0.5pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0in; BORDER-LEFT: medium none; WIDTH: 40.5pt; PADDING-TOP: 0in; BORDER-BOTTOM: windowtext 0.5pt solid; HEIGHT: 16.15pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=54>
+      <P class=MsoNormal>1</P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 0.5pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0in; BORDER-LEFT: medium none; WIDTH: 49.5pt; PADDING-TOP: 0in; BORDER-BOTTOM: windowtext 0.5pt solid; HEIGHT: 16.15pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=66>
+      <P class=MsoNormal>688.55</P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 0.5pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0in; BORDER-LEFT: medium none; WIDTH: 58.5pt; PADDING-TOP: 0in; BORDER-BOTTOM: windowtext 0.5pt solid; HEIGHT: 16.15pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=78>
+      <P class=MsoNormal>339.99</P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 0.5pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0in; BORDER-LEFT: medium none; WIDTH: 0.75in; PADDING-TOP: 0in; BORDER-BOTTOM: windowtext 0.5pt solid; HEIGHT: 16.15pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=72>
+      <P class=MsoNormal>306.48</P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 0.5pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0in; BORDER-LEFT: medium none; WIDTH: 1.5in; PADDING-TOP: 0in; BORDER-BOTTOM: windowtext 0.5pt solid; HEIGHT: 16.15pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=144>
+      <P class=MsoNormal>0.445</P></TD></TR>
+  <TR style="HEIGHT: 17.05pt">
+    <TD 
+    style="BORDER-RIGHT: windowtext 0.5pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0in; BORDER-LEFT: medium none; WIDTH: 40.5pt; PADDING-TOP: 0in; BORDER-BOTTOM: windowtext 0.5pt solid; HEIGHT: 17.05pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=54>
+      <P class=MsoNormal>2</P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 0.5pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0in; BORDER-LEFT: medium none; WIDTH: 49.5pt; PADDING-TOP: 0in; BORDER-BOTTOM: windowtext 0.5pt solid; HEIGHT: 17.05pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=66>
+      <P class=MsoNormal>690.31</P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 0.5pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0in; BORDER-LEFT: medium none; WIDTH: 58.5pt; PADDING-TOP: 0in; BORDER-BOTTOM: windowtext 0.5pt solid; HEIGHT: 17.05pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=78>
+      <P class=MsoNormal>338.67</P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 0.5pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0in; BORDER-LEFT: medium none; WIDTH: 0.75in; PADDING-TOP: 0in; BORDER-BOTTOM: windowtext 0.5pt solid; HEIGHT: 17.05pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=72>
+      <P class=MsoNormal>305.39</P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 0.5pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0in; BORDER-LEFT: medium none; WIDTH: 1.5in; PADDING-TOP: 0in; BORDER-BOTTOM: windowtext 0.5pt solid; HEIGHT: 17.05pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=144>
+      <P class=MsoNormal>0.442</P></TD></TR></TBODY></TABLE>
+<P class=MsoNormal>A shorter version of Rma8c, Rma8cs, was created by removing 
+code that generates several intermediate graphs. Rma8cs was run on the same 
+machine and the results are shown in the lower part of Table 1.</P>
+<P class=MsoNormal style="TEXT-ALIGN: center" align=center></P>
+<H3 style="MARGIN-RIGHT: 0in; TEXT-ALIGN: center" align=center><SPAN 
+style="TEXT-TRANSFORM: uppercase">Summary of Commands</SPAN></H3>
+<P class=MsoNormal>The following summarizes how to use the MATLAB Compiler to 
+generate some of the most common results.<SPAN style="mso-spacerun: yes">&nbsp; 
+</SPAN>The commands apply to both UNIX and PC machines.<SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN>Note that you can add the -g option to 
+any of these commands for debugging purposes.</P>
+<P class=MsoNormal></P>
+<H3 style="MARGIN-RIGHT: 0in">Converting from MATLAB to MEX Files</H3>
+<P class=MsoNormal>To convert an M-file into C and create the corresponding MEX 
+file that runs at the MATLAB prompt:</P>
+<P class=MsoNormal style="MARGIN-LEFT: 0.5in; TEXT-INDENT: 0.5in">mcc –x mainfn 
+sub1fn sub2fn</P>
+<P class=MsoFooter style="tab-stops: .5in">&nbsp;</P>
+<H3 style="MARGIN-RIGHT: 0in">Converting from MATLAB to EXE Files (C 
+compiler)</H3>
+<P class=MsoNormal>To convert an M-file into C and to create a corresponding 
+stand-alone executable file that can be run without MATLAB (at the DOS prompt), 
+use:</P>
+<P class=MsoNormal style="MARGIN-LEFT: 0.5in; TEXT-INDENT: 0.5in">mcc –m mainfn 
+sub1fn sub2fn</P>
+<P class=MsoNormal>&nbsp;</P>
+<P class=MsoNormal>To convert an M-file that contains Handle Graphics functions 
+into C and to create a corresponding stand-alone executable file that can be run 
+without MATLAB (at the DOS prompt), use:</P>
+<P class=MsoNormal style="MARGIN-LEFT: 0.5in; TEXT-INDENT: 0.5in">mcc –B sgl 
+mainfn sub1fn sub2fn</P>
+<P class=MsoNormal>&nbsp;</P>
+<H3 style="MARGIN-RIGHT: 0in">Converting from MATLAB to EXE Files (C++ 
+compiler)</H3>
+<P class=MsoNormal>To convert an M-file into C++ and to create a corresponding 
+stand-alone executable file that can be run without MATLAB (at the DOS prompt), 
+use:</P>
+<P class=MsoNormal style="MARGIN-LEFT: 0.5in; TEXT-INDENT: 0.5in">mcc –p mainfn 
+sub1fn sub2fn</P>
+<P class=MsoNormal>&nbsp;</P>
+<P class=MsoNormal>To convert an M-file that contains Handle Graphics functions 
+into C++ and to create a corresponding stand-alone executable file that can be 
+run without MATLAB (at the DOS prompt), use:</P>
+<P class=MsoNormal style="MARGIN-LEFT: 0.5in; TEXT-INDENT: 0.5in">mcc –B sglcpp 
+mainfn sub1fn sub2fn</P>
+<P class=MsoNormal>&nbsp;</P>
+<H3 style="MARGIN-RIGHT: 0in">Converting from MATLAB to C Code</H3>
+<P class=MsoNormal>To produce a C file from an M-file (and functions), use:</P>
+<P class=MsoNormal style="MARGIN-LEFT: 0.5in; TEXT-INDENT: 0.5in">mcc –mc mainfn 
+sub1fn sub2fn</P>
+<P class=MsoNormal>To produce a EXE file from a C file, use:</P>
+<P class=MsoNormal style="MARGIN-LEFT: 0.5in; TEXT-INDENT: 0.5in">mbuild mainfn 
+sub1fn sub2fn</P>
+<P class=MsoNormal>&nbsp;</P>
+<H3 style="MARGIN-RIGHT: 0in">Creating Libraries</H3>
+<P class=MsoNormal>To create a C library, use mcc -m -W lib:libfoo -T link:lib 
+foo.m.<SPAN style="mso-spacerun: yes">&nbsp;&nbsp; </SPAN>To create a C++ 
+library, use: mcc -p -W lib:libfoo -T compile:lib foo.m.</P>
+<P class=MsoNormal>&nbsp;</P>
+<P class=MsoNormal>To create a C shared library that performs specialized 
+calculations that you can call from your own programs, use: mcc -W lib:mylib -L 
+C -t -T link:lib -h Function1 Function2 ...</P>
+<P class=MsoNormal>&nbsp;</P>
+<H3 style="MARGIN-RIGHT: 0in; TEXT-ALIGN: center" align=center><SPAN 
+style="TEXT-TRANSFORM: uppercase">Conclusion</SPAN></H3>
+<P><SPAN style="TEXT-DECORATION: none; text-underline: none">MATLAB files 
+execute slower than compiled programs written in other languages, such as C, 
+C++, and Fortran.<SPAN style="mso-spacerun: yes">&nbsp; </SPAN>In addition, 
+M-files require the presence of MATLAB to run.<SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp; </SPAN>The MathWorks recently introduced 
+a set of tools that automatically convert M-files into C/C++ source code, which 
+can then be compiled to produce stand-alone applications. This paper discusses 
+the major features of the Compiler suite, describes the benefits of compiling 
+M-files, and presents examples that illustrate the steps involved in the 
+conversion process.<SPAN style="mso-spacerun: yes">&nbsp; </SPAN>Test results 
+show that execution time of .EXE files is less than 50% of that of M-files.<SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN>While the Compiler offers an easy way to 
+convert M-files to stand-alone applications, it has <SPAN 
+style="LAYOUT-GRID-MODE: line">some major limitations.</SPAN></SPAN></P>
+<P class=MsoNormal>&nbsp;</P>
+<H3 style="MARGIN-RIGHT: 0in; TEXT-ALIGN: center" align=center><SPAN 
+style="TEXT-TRANSFORM: uppercase">References</SPAN></H3>
+<P class=MsoNormal 
+style="MARGIN-LEFT: 0.25in; TEXT-INDENT: -0.25in; mso-list: l5 level1 lfo14; tab-stops: list .25in">1.<SPAN 
+style="FONT: 7pt 'Times New Roman'">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN>The 
+MATLAB Compiler User’s Guide Version 2.1 (264 pages).</P>
+<P class=MsoNormal 
+style="MARGIN-LEFT: 0.25in; TEXT-INDENT: -0.25in; mso-list: l5 level1 lfo14; tab-stops: list .25in">2.<SPAN 
+style="FONT: 7pt 'Times New Roman'">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN>The 
+MATLAB C Math Library User’s Guide Version 2.1 (332 pages).</P>
+<P class=MsoNormal 
+style="MARGIN-LEFT: 0.25in; TEXT-INDENT: -0.25in; mso-list: l5 level1 lfo14; tab-stops: list .25in">3.<SPAN 
+style="FONT: 7pt 'Times New Roman'">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN>The 
+MATLAB C Math Library Reference Version 2.1 (429 pages).</P>
+<P class=MsoNormal 
+style="MARGIN-LEFT: 0.25in; TEXT-INDENT: -0.25in; mso-list: l5 level1 lfo14; tab-stops: list .25in">4.<SPAN 
+style="FONT: 7pt 'Times New Roman'">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN>The 
+MATLAB C/C++ Graphics Library Version 2.0 (52 pages).</P>
+<P align=center>&nbsp;</P>
+<P class=MsoNormal align=center><SPAN 
+style="FONT-SIZE: 12pt; FONT-FAMILY: Univers; mso-bidi-font-size: 10.0pt">&nbsp;</SPAN><A 
+href="http://engr.nmsu.edu/~etti/5_1/5_1.html"><STRONG><BIG>Return to <EM>This 
+Issues</EM> Home Page</BIG></STRONG></A></P></BODY></HTML>

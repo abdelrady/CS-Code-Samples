@@ -1,0 +1,177 @@
+From: <Saved by Microsoft Internet Explorer 5>
+Subject: 
+Date: Wed, 12 Mar 2008 18:33:55 +0200
+MIME-Version: 1.0
+Content-Type: text/html;
+	charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
+Content-Location: http://www.ima.umn.edu/~arnold/calculus/bounce/bounce.m
+X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2900.2180
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD>
+<META http-equiv=3DContent-Type content=3D"text/html; =
+charset=3Diso-8859-1">
+<META content=3D"MSHTML 6.00.2900.2180" name=3DGENERATOR></HEAD>
+<BODY><PRE>(* This mathematica file creates the frames for three =
+animations which
+   animate a bouncing ball. The first animation only shows the ball
+   together with a clock and axes. The second adds the graph of
+   the height versus time, and the third displays the graph of the
+   derivative as well.  (Actually we show a graph of the derivative
+   divided by 20, so that the same axes can be used for the function and
+   the derivative.
+
+   The ball is released at time 0 from 100 centimeters.  We display
+   its height versus time over the interval [0,3], measured in second,
+   although it comes to rest at time 2.4 seconds.  The height function
+   is a piecewise quadratic.  It is reasonably realistic, but not meant
+   to conform to any exact model.
+
+   Douglas N. Arnold, 8/29/92, 8/25/94
+
+   Douglas N. Arnold  &lt;dna@math.psu.edu&gt;
+   Department of Mathematics
+   Penn State
+   University Park, PA  16802
+
+   Online documentation related to this file can be found at WWW URL
+   http://www.math.psu.edu/dna/graphics.html.
+*)
+
+BeginPackage["Bounce`", "Graphics`Colors`"]
+
+Begin["Private`"]
+
+(* Define the ground contact times.  These have been adjusted to give a
+fairly realistic bouncing ball, but also to be integers/20.  This way we
+can animate with frames every 1/20 second and the ball always hits the
+ground exactly at a frame time.
+*)
+
+xp =3D {-10, 10, 23, 32, 38, 42, 45, 47, 48}/20
+g[x_]:=3D 0 /; x &lt;=3D First[xp] || x &gt;=3D Last[xp]
+g[x_]:=3D
+  Module[{m},
+    m =3D Last[Position[Map[(#&lt;x)&amp;,xp],True]][[1]];
+    Return[400(x-xp[[m]])(xp[[m+1]]-x)]; ]
+
+(* Define its derivative divided by 20 *)
+
+gp[x_]:=3D 0 /; x &lt;=3D First[xp] || x &gt;=3D Last[xp]
+gp[x_]:=3D
+  Module[{m},
+    m =3D Last[Position[Map[(#&lt;x)&amp;,xp],True]][[1]];
+    Return[20(xp[[m]]+xp[[m+1]]-2 x)]; ]
+
+(* Set limits of display, times for frames, and options to =
+ShowAnimation. *)
+
+    {{xmin,xmax},{ymin,ymax}} =3D {{-.5,3},{-20,120}}
+    times =3D Table[t,{t,0,3,1/20}]
+    opts0 =3D ( AnimationFunction -&gt; =
+(DisplayAnimation["bounce0.anim",#]&amp;) )
+    opts1 =3D ( AnimationFunction -&gt; =
+(DisplayAnimation["bounce1.anim",#]&amp;) )
+    opts2 =3D ( AnimationFunction -&gt; =
+(DisplayAnimation["bounce2.anim",#]&amp;) )
+
+(* Define a single frame of the animation. *)
+
+frame[i_,showgraph_,showdgraph_] :=3D
+        ( x =3D N[times[[i]]];
+        y =3D g[x];
+(* Create the graph, a polyline plotting the height of the ball versus =
+time
+   from time 0 to the present moment.  Use the points with integer =
+abscissas
+   as breakpoints for the polyline except include the present point as
+   well and include the starting point twice so that Line doesn't get
+   confused on the first frame when it has only one endpoint. *)
+        graph =3D If[showgraph,
+         { Blue, Thickness[0.007],
+             Line[Map[{#,g[#]}&amp; , =
+Prepend[Union[Table[t,{t,0,x,1/20}],{x}],0]]]},
+     {} ] ;
+(* Create the graph of the derivative.  This is a bit of a bother since
+   the derivative is undefined at the break points.  *)
+   dgraph =3D If[showdgraph,
+     eps =3D .005;
+     m =3D Last[Position[Map[(#&lt;x)&amp;,xp],True]][[1]];
+     Flatten[{Red, Thickness[0.007],
+     =
+Table[Line[Map[{#,gp[#]}&amp;,{Max[xp[[j]],0]+eps,xp[[j+1]]-eps}]],{j,1,m=
+-1}] ,
+     Line[Map[{#,gp[#]}&amp;,{Max[xp[[m]],0]+eps,Max[x,2 eps]-eps}]] }],
+     {} ] ;
+(* Create axes for the graph. *)
+	axes =3D {Black, Thickness[0.001], Line[{{0,-20},{0,120}}],
+	        Line[{{0,0},{60,0}}]};
+(* Create a solid rectangle for the ball to bounce on. *)
+	rectangle =3D {Black, Polygon[{{-.5,-20},{0,-20},{0,-3},{-.5,-3}}]};
+(* Create a bouncing ball. *)
+	ball =3D {Pink, PointSize[0.03], Point[{-.25,y}]};
+	dot =3D {Black, PointSize[0.005], Point[{-.25,y}]};
+(* Create the clock. *)
+        xc =3D xmin + .75 (xmax-xmin);
+	yc =3D ymin + .75 (ymax-ymin);
+	xr =3D .1 (xmax-xmin);
+	yr =3D .15 (ymax-ymin);
+	border =3D {Goldenrod, Thickness[0.001],
+	Polygon[Table[{xc,yc}+ {xr Cos[th],yr Sin[th]},{th,0,Pi, Pi/25}]]};
+        base =3D {Goldenrod, Thickness[0.001],
+	Polygon[{{xc-xr,yc},{xc-xr,yc-yr/4},{xc+xr,yc-yr/4},{xc+xr,yc} }]};
+	minordots =3D Flatten[{Black,PointSize[0.006],
+	Table[Point[{xc,yc}+ {xr Cos[th],yr Sin[th]}],{th,0,Pi,Pi/30}]}];
+	majordots =3D Flatten[{Black,PointSize[0.012],
+	Table[Point[{xc,yc}+ {xr Cos[th],yr Sin[th]}],{th,0,Pi,Pi/6}]}];
+	centerdot =3D {Black,PointSize[0.02],Point[{xc,yc}]};
+	numbers =3D {Text[0,{xc-1.2 xr,yc}],
+                   Text[1,{xc-.6 xr,yc+.6 Sqrt[3]yr}],
+                   Text[2,{xc+.6 xr,yc+.6 Sqrt[3]yr}],
+                   Text[3,{xc+1.2 xr,yc}]};
+	clockhand =3D {Black,Thickness[0.005],
+               Line[{{xc,yc},{xc,yc}
+                   +.85 {xr Cos[Pi-Pi x/3],yr Sin[Pi-Pi x/3]}}]};
+	clock =3D
+         =
+Flatten[{border,base,majordots,minordots,centerdot,numbers,clockhand}];
+(* Combine everything in a Graphics object. *)
+        Graphics[Flatten[{ graph, dgraph, axes, rectangle, ball, dot, =
+clock }],
+          PlotRange-&gt;{{xmin,xmax},{ymin,ymax}}, Frame-&gt;True] )
+
+(* Create the frames. *)
+
+prefix =3D "bounce0/T";
+pixels=3D400;
+filename[prefix_,number_] :=3D =
+StringJoin[prefix,ToString[number],".gif"]
+Table[ =
+Display[filename[prefix,i],frame[i,False,False],"gif",ImageSize-&gt;pixel=
+s],
+  {i,1,Length[times]}]
+prefix =3D "bounce1/T";
+filename[prefix_,number_] :=3D =
+StringJoin[prefix,ToString[number],".gif"]
+Table[ =
+Display[filename[prefix,i],frame[i,True,False],"gif",ImageSize-&gt;pixels=
+],
+  {i,1,Length[times]}]
+prefix =3D "bounce2/Tounce0/T";
+pix";
+filename[prefix_,number_] :=3D =
+StringJoin[prefix,ToString[number],".gif"]
+Table[ =
+Display[filename[prefix,i],frame[i,True,True],"gif",ImageSize-&gt;pixels]=
+,
+  {i,1,Length[times]}]
+
+End[] (* end of context private *)
+
+EndPackage[]
+
+(* write an exit message *)
+
+Print["-- wrote frames --"]
+</PRE></BODY></HTML>

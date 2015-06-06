@@ -1,0 +1,766 @@
+VERSION 5.00
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSCOMCTL.OCX"
+Object = "{3B7C8863-D78F-101B-B9B5-04021C009402}#1.2#0"; "RICHTX32.OCX"
+Begin VB.Form frmPreview 
+   Caption         =   "Preview"
+   ClientHeight    =   3285
+   ClientLeft      =   60
+   ClientTop       =   345
+   ClientWidth     =   10800
+   Icon            =   "frmPreview.frx":0000
+   LinkTopic       =   "Form1"
+   MDIChild        =   -1  'True
+   ScaleHeight     =   3285
+   ScaleWidth      =   10800
+   Begin MSComctlLib.ImageList ImageList1 
+      Left            =   5580
+      Top             =   1305
+      _ExtentX        =   1005
+      _ExtentY        =   1005
+      BackColor       =   -2147483643
+      ImageWidth      =   16
+      ImageHeight     =   16
+      MaskColor       =   12632256
+      _Version        =   393216
+      BeginProperty Images {2C247F25-8591-11D1-B16A-00C0F0283628} 
+         NumListImages   =   4
+         BeginProperty ListImage1 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmPreview.frx":058A
+            Key             =   "save"
+         EndProperty
+         BeginProperty ListImage2 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmPreview.frx":0B24
+            Key             =   "slide"
+         EndProperty
+         BeginProperty ListImage3 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmPreview.frx":10BE
+            Key             =   "oripicture"
+         EndProperty
+         BeginProperty ListImage4 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmPreview.frx":1658
+            Key             =   "filter"
+         EndProperty
+      EndProperty
+   End
+   Begin VB.Timer tmrSlide 
+      Enabled         =   0   'False
+      Interval        =   3000
+      Left            =   5040
+      Top             =   750
+   End
+   Begin VB.PictureBox picRulerContainer 
+      Align           =   1  'Align Top
+      Appearance      =   0  'Flat
+      AutoRedraw      =   -1  'True
+      AutoSize        =   -1  'True
+      BackColor       =   &H80000004&
+      BorderStyle     =   0  'None
+      ForeColor       =   &H80000008&
+      Height          =   405
+      Left            =   0
+      ScaleHeight     =   405
+      ScaleWidth      =   10800
+      TabIndex        =   6
+      TabStop         =   0   'False
+      Top             =   0
+      Width           =   10800
+      Begin VB.TextBox txtValue 
+         Alignment       =   1  'Right Justify
+         Height          =   315
+         Left            =   7515
+         TabIndex        =   16
+         Text            =   "0%"
+         Top             =   45
+         Width           =   570
+      End
+      Begin VB.ComboBox cboImageFilter 
+         Height          =   315
+         ItemData        =   "frmPreview.frx":1BF2
+         Left            =   5580
+         List            =   "frmPreview.frx":1C1A
+         Sorted          =   -1  'True
+         Style           =   2  'Dropdown List
+         TabIndex        =   14
+         Top             =   45
+         Width           =   1920
+      End
+      Begin MSComctlLib.Toolbar Toolbar1 
+         Height          =   330
+         Left            =   8100
+         TabIndex        =   11
+         Top             =   30
+         Width           =   2655
+         _ExtentX        =   4683
+         _ExtentY        =   582
+         ButtonWidth     =   609
+         ButtonHeight    =   582
+         Style           =   1
+         ImageList       =   "ImageList1"
+         _Version        =   393216
+         BeginProperty Buttons {66833FE8-8583-11D1-B16A-00C0F0283628} 
+            NumButtons      =   4
+            BeginProperty Button1 {66833FEA-8583-11D1-B16A-00C0F0283628} 
+               Key             =   "filter"
+               Object.ToolTipText     =   "Add filter to current picture"
+               ImageKey        =   "filter"
+            EndProperty
+            BeginProperty Button2 {66833FEA-8583-11D1-B16A-00C0F0283628} 
+               Key             =   "slide"
+               Object.ToolTipText     =   "Slide Show"
+               ImageKey        =   "slide"
+               Style           =   1
+            EndProperty
+            BeginProperty Button3 {66833FEA-8583-11D1-B16A-00C0F0283628} 
+               Key             =   "savejpg"
+               Object.ToolTipText     =   "Save Picture as JPEG file format"
+               ImageKey        =   "save"
+            EndProperty
+            BeginProperty Button4 {66833FEA-8583-11D1-B16A-00C0F0283628} 
+               Key             =   "oripicture"
+               Object.ToolTipText     =   "Back to Original Picture"
+               ImageKey        =   "oripicture"
+               Style           =   5
+               BeginProperty ButtonMenus {66833FEC-8583-11D1-B16A-00C0F0283628} 
+                  NumButtonMenus  =   1
+                  BeginProperty ButtonMenu1 {66833FEE-8583-11D1-B16A-00C0F0283628} 
+                     Key             =   "original"
+                     Text            =   "Original"
+                  EndProperty
+               EndProperty
+            EndProperty
+         EndProperty
+      End
+      Begin VB.ComboBox cboLstViewType 
+         BackColor       =   &H00FFFFFF&
+         Height          =   315
+         ItemData        =   "frmPreview.frx":1CA8
+         Left            =   4170
+         List            =   "frmPreview.frx":1CAA
+         TabIndex        =   8
+         Top             =   45
+         Width           =   900
+      End
+      Begin VB.ComboBox cboTable 
+         BackColor       =   &H00FFFFFF&
+         Height          =   315
+         ItemData        =   "frmPreview.frx":1CAC
+         Left            =   870
+         List            =   "frmPreview.frx":1CAE
+         Style           =   2  'Dropdown List
+         TabIndex        =   7
+         Top             =   45
+         Width           =   2280
+      End
+      Begin VB.Label Label3 
+         AutoSize        =   -1  'True
+         Caption         =   "Filter :"
+         Height          =   195
+         Left            =   5115
+         TabIndex        =   15
+         Top             =   90
+         Width           =   420
+      End
+      Begin VB.Label Label2 
+         AutoSize        =   -1  'True
+         Caption         =   "Appearance :"
+         Height          =   195
+         Left            =   3180
+         TabIndex        =   13
+         Top             =   90
+         Width           =   960
+      End
+      Begin VB.Label Label1 
+         AutoSize        =   -1  'True
+         Caption         =   "Selection :"
+         Height          =   195
+         Left            =   75
+         TabIndex        =   12
+         Top             =   75
+         Width           =   750
+      End
+   End
+   Begin VB.PictureBox picParent 
+      BackColor       =   &H00808080&
+      Height          =   2835
+      Left            =   0
+      ScaleHeight     =   2775
+      ScaleWidth      =   4035
+      TabIndex        =   0
+      Top             =   405
+      Width           =   4095
+      Begin VB.PictureBox picChild 
+         Appearance      =   0  'Flat
+         AutoRedraw      =   -1  'True
+         BackColor       =   &H80000005&
+         ForeColor       =   &H80000008&
+         Height          =   2055
+         Left            =   315
+         ScaleHeight     =   2025
+         ScaleWidth      =   3045
+         TabIndex        =   4
+         Top             =   90
+         Visible         =   0   'False
+         Width           =   3075
+      End
+      Begin VB.PictureBox picPreview 
+         Appearance      =   0  'Flat
+         AutoRedraw      =   -1  'True
+         BackColor       =   &H80000005&
+         ForeColor       =   &H80000008&
+         Height          =   2055
+         Index           =   0
+         Left            =   480
+         ScaleHeight     =   2025
+         ScaleWidth      =   3045
+         TabIndex        =   5
+         Top             =   -135
+         Visible         =   0   'False
+         Width           =   3075
+      End
+      Begin VB.PictureBox imgCorner 
+         BorderStyle     =   0  'None
+         ClipControls    =   0   'False
+         Height          =   240
+         Left            =   3360
+         ScaleHeight     =   240
+         ScaleWidth      =   240
+         TabIndex        =   3
+         Top             =   2340
+         Visible         =   0   'False
+         Width           =   240
+      End
+      Begin VB.HScrollBar hscPreview 
+         Height          =   255
+         LargeChange     =   2000
+         Left            =   300
+         SmallChange     =   500
+         TabIndex        =   2
+         Top             =   2280
+         Width           =   2895
+      End
+      Begin VB.VScrollBar vscPreview 
+         Height          =   2475
+         LargeChange     =   2000
+         Left            =   3720
+         SmallChange     =   500
+         TabIndex        =   1
+         Top             =   120
+         Width           =   270
+      End
+      Begin VB.PictureBox picPreview 
+         Appearance      =   0  'Flat
+         AutoRedraw      =   -1  'True
+         BackColor       =   &H80000005&
+         ForeColor       =   &H80000008&
+         Height          =   2055
+         Index           =   1
+         Left            =   0
+         ScaleHeight     =   2025
+         ScaleWidth      =   3045
+         TabIndex        =   10
+         Top             =   0
+         Visible         =   0   'False
+         Width           =   3075
+      End
+   End
+   Begin RichTextLib.RichTextBox rcbPrint 
+      Height          =   840
+      Left            =   2235
+      TabIndex        =   9
+      Top             =   1560
+      Visible         =   0   'False
+      Width           =   1215
+      _ExtentX        =   2143
+      _ExtentY        =   1482
+      _Version        =   393217
+      Enabled         =   -1  'True
+      TextRTF         =   $"frmPreview.frx":1CB0
+   End
+End
+Attribute VB_Name = "frmPreview"
+Attribute VB_GlobalNameSpace = False
+Attribute VB_Creatable = False
+Attribute VB_PredeclaredId = True
+Attribute VB_Exposed = False
+Option Explicit
+Private ScalePercent        As Integer
+Private picMarginLeft        As Long
+Private picCount            As Long
+Private WithEvents clsPic   As clsPicture
+Attribute clsPic.VB_VarHelpID = -1
+Private PrinterTop       As Currency
+Private PrinterBottom    As Currency
+
+Public Sub doPrint(ThePage As Long)
+Dim i       As Long
+
+    picPreview(0).Picture = LoadPicture()
+    picPreview(0).Cls
+    picPreview(1).Cls
+    picParent.Cls
+    
+    picChild.Picture = LoadPicture()
+    i = IIf(picMarginLeft <= 9075, vbPRORPortrait, vbPRORLandscape)
+    PrintPreview frmPreview.rcbPrint, 0, PrinterTop, 0, PrinterBottom, CInt(i), ThePage
+    picParent.ZOrder 0
+    'Me.Caption = "Print Preview of " & frmReport.RCBReport.Tag
+End Sub
+
+Public Sub Preview_Activate()
+    With picPreview(0)
+        .Picture = .Image
+        picChild.Move 0, 0, .Width, .Height
+        picChild.Picture = .Image
+        PictureShow True
+    End With
+    FillCboPercent
+    frmPreview.picParent.ZOrder 0
+End Sub
+
+Private Sub cboImageFilter_Click()
+txtValue.BackColor = &HC0C0FF
+End Sub
+
+Private Sub clsPic_OnComplete(ByVal CurrentValue As Long)
+    picRulerContainer.Enabled = True
+    picParent.Enabled = True
+    Screen.MousePointer = vbNormal
+    txtValue.BackColor = vbWhite
+    txtValue.Text = Val(txtValue.Tag) & "%"
+    Me.picChild.Refresh
+    Me.picPreview(0).ScaleMode = vbTwips
+    Me.picChild.ScaleMode = vbTwips
+    'If FindFormNow("frmReport") = True Then mdiMain.tbrStandard.Buttons("preview").Enabled = True
+End Sub
+
+Private Sub clsPic_OnProgress(ByVal CurrentValue As Long, ByVal MaxProg As Long)
+    'mdiMain.tbrStandard.Buttons("preview").Enabled = False
+    picRulerContainer.Enabled = False
+    picParent.Enabled = False
+    Screen.MousePointer = vbHourglass
+    txtValue.Text = (MaxProg - CurrentValue) / 100
+    txtValue.BackColor = &HC0C0FF
+    DoEvents
+End Sub
+
+Private Sub DoFilter(strType As String, TheColor As Long)
+Dim tempvalue       As Integer
+Dim IsFound         As Boolean
+
+Me.picPreview(0).ScaleMode = vbPixels
+Me.picChild.ScaleMode = vbPixels
+
+If clsPic Is Nothing Then Set clsPic = New clsPicture
+Select Case LCase(strType)
+    Case "+ sharpen": IsFound = True
+            clsPic.MySharpen picChild, Val(txtValue) / 10
+    Case "+ blur": IsFound = True
+            clsPic.MyBlur picChild, Val(txtValue) / 10
+    Case "+ diffuse": IsFound = True
+            clsPic.MyDiffuse picChild, Val(txtValue) / 10
+    Case "+ greyscale": IsFound = True
+            clsPic.MyGreyscale picChild
+    Case "+ invert": IsFound = True
+            clsPic.MyInvert picChild
+    Case "+ brighter": IsFound = True
+            clsPic.MyBrightness picChild, Val(txtValue)
+    Case "+ darker": IsFound = True
+            clsPic.MyBrightness picChild, -(Val(txtValue)) * 3
+    Case "+ outline": IsFound = True
+            clsPic.MyOutline picChild, picPreview(0), Val(txtValue) * 2.5
+    Case "+ emboss": IsFound = True
+            clsPic.MyEmboss picChild, 2 * Val(txtValue)
+    Case "+ pixelate": IsFound = True
+            tempvalue = (Val(txtValue) / 2) * (picChild.ScaleWidth / picPreview(0).ScaleWidth)
+            If tempvalue < 2 Then tempvalue = 2
+            clsPic.MyPixelate picChild, tempvalue
+    Case "+ contrast": IsFound = True
+            clsPic.ContrastPicture picChild, Val(txtValue) / 5
+    Case "+ photo-negative": IsFound = True
+            clsPic.NegativePicture picChild, 3
+End Select
+If IsFound = False Then
+    Me.picPreview(0).ScaleMode = vbTwips
+    Me.picChild.ScaleMode = vbTwips
+End If
+End Sub
+
+Private Sub cboLstViewType_Click()
+With cboLstViewType
+    ScalePercent = Val(.Text)
+End With
+If ScalePercent = 0 Then ScalePercent = 100
+PictureShow True
+cboLstViewType.Enabled = True
+Screen.MousePointer = vbNormal
+End Sub
+
+Private Sub cboLstViewType_KeyUp(KeyCode As Integer, Shift As Integer)
+If KeyCode = 13 Then
+    cboLstViewType_Click
+End If
+End Sub
+
+Private Sub cboTable_Click()
+Screen.MousePointer = vbHourglass
+On Error GoTo WriteMyError
+If cboTable.Tag = "PICTURE" Then
+    If cboTable.Tag = "" Then frmPreview.cboTable.Tag = "PICTURE"
+    If modFileInformation.CheckFileORdir(cboTable.Text) = True Then
+        Me.Caption = "Picture Preview [" & cboTable.Text & "]"
+        picPreview(0).Visible = False
+        picPreview(0).AutoSize = True
+        picPreview(0).Cls
+        picPreview(0).Picture = LoadPicture(cboTable.Text)
+        PictureShow True
+        picPreview(0).AutoSize = False
+        picChild.Visible = True
+        On Error Resume Next
+        'mdiMain.trview.Nodes("MyCollection\jpg\" & cboTable.Text).Selected = True
+        On Error GoTo WriteMyError
+        'Call PrintInPanel("Picture " & cboTable.ListIndex + 1 & " of " & cboTable.ListCount & " loaded... [" & cboTable.Text & "]", True)
+    End If
+Else
+    If cboTable.Tag = "Process" Then Exit Sub
+    Screen.MousePointer = vbHourglass
+    doPrint cboTable.ListIndex
+    cboLstViewType.Enabled = True
+End If
+WriteMyError:
+Screen.MousePointer = vbNormal
+End Sub
+
+Private Sub Form_Activate()
+    'mdiMain.trview.Nodes("preview").Bold = True
+End Sub
+
+Private Sub Form_Deactivate()
+    'mdiMain.trview.Nodes("preview").Bold = False
+End Sub
+
+Private Sub FillCboPercent()
+Dim iCount As Integer
+Dim strSearch As String
+        
+    With cboLstViewType
+        If Len(.Text) = 0 Then
+            .Clear
+            For iCount = 200 To 30 Step -10
+                .AddItem CStr(iCount) & "%"
+            Next
+            strSearch = "100%"
+            .ListIndex = SendMessage(.hWnd, CB_FINDSTRING, -1, ByVal strSearch)
+        End If
+    End With
+End Sub
+
+Private Sub Form_Load()
+Dim TheKey      As String
+Dim i           As Long
+
+On Error Resume Next
+Screen.MousePointer = vbHourglass
+'Me.Icon = mdiMain.imgList16x16.ListImages("preview").Picture
+'If Not mdiMain.trview.SelectedItem Is Nothing Then TheKey = mdiMain.trview.SelectedItem.Key
+'mdiMain.trview.Nodes.add "MyApplication", tvwChild, "preview", "Print Preview/Image Editor", "preview"
+'If mdiMain.trview.Nodes("MyApplication").Expanded = False Then mdiMain.trview.Nodes("MyApplication").Expanded = True
+Me.Visible = False
+For i = 200 To 30 Step -10
+    Me.cboLstViewType.AddItem CStr(i) & "%"
+Next
+Screen.MousePointer = vbNormal
+
+End Sub
+
+Private Sub Form_Resize()
+On Error GoTo WriteMyError
+    picParent.top = 0 + Me.picRulerContainer.Height
+    picParent.Height = Me.Height - picParent.top - 400
+    picParent.left = 0
+    picParent.Width = Me.Width - 80
+    If picChild.Width < picParent.Width Then
+        picChild.left = (Me.picParent.Width - picChild.Width) / 2
+    End If
+    If picChild.Height < picParent.Height Then
+        picChild.top = (Me.picParent.Height - picChild.Height) / 2
+    End If
+WriteMyError:
+End Sub
+
+Private Sub Form_Unload(Cancel As Integer)
+    If Me.WindowState = vbMaximized Then
+        SaveSetting App.Title, "Settings", "PREVState", Me.WindowState
+    ElseIf Me.WindowState <> vbMinimized Then
+        SaveSetting App.Title, "Settings", "PREVMainLeft", Me.left
+        SaveSetting App.Title, "Settings", "PREVMainTop", Me.top
+        SaveSetting App.Title, "Settings", "PREVMainWidth", Me.Width
+        SaveSetting App.Title, "Settings", "PREVMainHeight", Me.Height
+        SaveSetting App.Title, "Settings", "PREVState", Me.WindowState
+    End If
+    Set clsPic = Nothing
+    'Call UnloadEffect(Me)
+    'mdiMain.trview.Nodes.Remove "preview"
+    Set frmPreview = Nothing
+End Sub
+
+Public Sub PictureShow(IsOri As Boolean)
+Dim i   As Long
+    Screen.MousePointer = vbHourglass
+    If ScalePercent = 0 Then ScalePercent = 100
+    With picChild
+        .Height = (ScalePercent / 100) * picPreview(0).Height
+        .Width = (ScalePercent / 100) * picPreview(0).Width
+        If .Width < picParent.Width Then
+            .left = (Me.picParent.Width - .Width) / 2
+        End If
+        If .Height < picParent.Height Then
+            .top = (Me.picParent.Height - .Height) / 2
+        End If
+        picChild.Visible = False
+        If ScalePercent <> 100 Then
+            ResizeScrollBars
+            DoEvents
+            picChild.Cls
+            If IsOri = True Then
+                picChild.PaintPicture Me.picPreview(0).Image, 0, 0, .Width, .Height
+            Else
+                picChild.PaintPicture Me.picPreview(1).Image, 0, 0, .Width, .Height
+            End If
+        Else
+            ResizeScrollBars
+            DoEvents
+            picChild.Cls
+            If IsOri = True Then
+                picChild.Picture = picPreview(0).Picture
+            Else
+                picChild.Picture = picPreview(1).Picture
+            End If
+        End If
+        .Visible = True
+    End With
+    Me.hscPreview.ZOrder 0
+    Me.vscPreview.ZOrder 0
+
+    Screen.MousePointer = vbDefault
+End Sub
+
+Public Sub PreviewPrint()
+    Dim iCount, iPicCount As Integer
+    On Error GoTo WriteMyError
+    For iCount = 0 To picPreview.count - 1
+        picPreview(iCount).Picture = picPreview(iCount).Image
+    Next
+    If Printer.Copies > 0 Then
+        For iCount = 1 To Printer.Copies
+            Printer.Print
+            For iPicCount = 0 To picPreview.count - 1
+                Printer.PaintPicture picPreview(iPicCount).Picture, 0, 0
+                If iPicCount < picPreview.count - 1 Then _
+                    Printer.NewPage
+            Next
+            Printer.EndDoc
+        Next
+    End If
+    Exit Sub
+WriteMyError:
+    Select Case Err.Number
+        Case 482
+            MsgBox "Make sure that you have a printer installed.  If a " & _
+                "printer is installed, go into your printer properties " & _
+                "look under the Setup tab, and make sure the ICM checkbox " & _
+                "is checked and try printing again.", , "Printer Error"
+            Exit Sub
+        Case 32755
+            Exit Sub
+        Case Else
+            MsgBox Err.Number & " " & Err.Description, , "Preview - Printing"
+            Resume Next
+    End Select
+End Sub
+
+Private Sub tmrSlide_Timer()
+    tmrSlide.Interval = 1000
+    If cboTable.ListCount > 0 Then
+        picCount = picCount + 1
+        If cboTable.ListCount < picCount + 1 Then
+            picCount = 0
+        End If
+        cboTable.ListIndex = picCount
+    Else
+        tmrSlide.Enabled = False
+    End If
+End Sub
+
+Private Function IsImageJpeg(ByVal fname As String) As Boolean
+Dim bIsJpeg As Boolean
+Dim Index As Long
+Dim res As Long
+Dim ext() As String
+
+    IsImageJpeg = False
+    ' get file extension
+    ext = Split(fname, ".", -1, vbTextCompare)
+    Index = UBound(ext)
+    res = StrComp(ext(Index), "jpg", vbTextCompare)
+    If res = 0 Then IsImageJpeg = True
+    res = StrComp(ext(Index), "jpe", vbTextCompare)
+    If res = 0 Then IsImageJpeg = True
+    res = StrComp(ext(Index), "jpeg", vbTextCompare)
+    If res = 0 Then IsImageJpeg = True
+Erase ext
+End Function
+
+Private Sub Toolbar1_ButtonClick(ByVal Button As MSComctlLib.Button)
+Dim TheFilter       As String
+Dim MyRequest       As String
+Dim m_cDib          As cDIBSection
+Dim TempData        As String
+
+Select Case Button.Key
+Case "filter"
+    If Val(txtValue.Text) > 0 Then
+        Toolbar1.Buttons("slide").Enabled = False
+        Toolbar1.Buttons("oripicture").Enabled = False
+        Toolbar1.Buttons("savejpg").Enabled = False
+        txtValue.Enabled = False
+        
+        txtValue.Tag = txtValue.Text
+        Me.picPreview(1).Width = Me.picChild.Width
+        Me.picPreview(1).Height = Me.picChild.Height
+        Me.picPreview(1).Picture = Me.picChild.Image
+        FilterNow
+        
+        Toolbar1.Buttons("slide").Enabled = True
+        Toolbar1.Buttons("oripicture").Enabled = True
+        Toolbar1.Buttons("savejpg").Enabled = True
+        txtValue.Enabled = True
+    End If
+Case "oripicture"
+    Me.picChild.Picture = Me.picPreview(1).Image
+Case "slide"
+    If Button.Value = tbrPressed Then
+        Toolbar1.Buttons("filter").Enabled = False
+        Toolbar1.Buttons("oripicture").Enabled = False
+        Toolbar1.Buttons("savejpg").Enabled = False
+        txtValue.Enabled = False
+        picCount = cboTable.ListIndex
+        tmrSlide.Enabled = True
+    Else
+        Toolbar1.Buttons("filter").Enabled = True
+        Toolbar1.Buttons("oripicture").Enabled = True
+        Toolbar1.Buttons("savejpg").Enabled = True
+        txtValue.Enabled = True
+        tmrSlide.Enabled = False
+    End If
+Case "savejpg"
+'    TheFilter = WorkingMod.GetKeyVal("fileDialog.lst", "Image", "Data")
+'    If Len(TheFilter) = 0 Then
+'        TheFilter = "JPEG Image Format(*.jpg)" & Chr$(0) & "*.jpg; *.jpe; *.jpeg" & Chr$(0) & "Bitmap(*.bmp)" & Chr$(0) & "*.bmp"
+'    End If
+'    TheFilter = Replace(TheFilter, "|", Chr$(0))
+'    TempData = cboTable.List(cboTable.ListIndex)
+'    TempData = DetermineDirectory(TempData)
+'    MyRequest = SelectFile(MainMDi, TheFilter, OFS_FILE_SAVE_FLAGS, "jpg", 1, TempData, "Save as JPEG Picture Format")
+'    If MyRequest <> "" Then
+'        If IsImageJpeg(MyRequest) = True Then
+'            m_cDib.StartCreatePicture Me.picChild.hWnd, Me.picChild.hDC
+'            Helpers.SaveJPGToFile m_cDib, MyRequest
+'        Else
+'            SavePicture Me.picChild.Picture, MyRequest
+'        End If
+'    End If
+End Select
+End Sub
+
+Private Sub Toolbar1_ButtonMenuClick(ByVal ButtonMenu As MSComctlLib.ButtonMenu)
+Select Case ButtonMenu.Key
+Case "original"
+    Call PictureShow(True)
+End Select
+End Sub
+
+Private Sub txtValue_GotFocus()
+    txtValue.BackColor = vbWhite
+End Sub
+
+Private Sub FilterNow()
+Dim TheColor        As Long
+Dim MyRequest       As String
+    
+    Select Case cboImageFilter.Text
+    Case "+ Color"
+        MyRequest = SelectFile(MainMDi, "", OFS_FILE_OPEN_FLAGS, "", 2)
+        If MyRequest = "" Then
+            Exit Sub
+        Else
+            TheColor = Val(MyRequest)
+        End If
+    Case "-- Color"
+        TheColor = SelectFile(MainMDi, "", OFS_FILE_OPEN_FLAGS, "", 2)
+        If TheColor = "" Then
+            Exit Sub
+        Else
+            TheColor = Val(MyRequest)
+        End If
+    End Select
+    txtValue.Text = Val(txtValue.Text) & "%"
+    MyRequest = cboImageFilter.Text
+    If Len(MyRequest) > 0 Then Call DoFilter(MyRequest, TheColor)
+End Sub
+
+Private Sub vscPreview_Change()
+    picChild.top = (-vscPreview.Value)
+End Sub
+
+Private Sub vscPreview_Scroll()
+    picChild.top = (-vscPreview.Value)
+End Sub
+
+Private Sub hscPreview_Change()
+    picChild.left = (-hscPreview.Value)
+End Sub
+
+Private Sub hscPreview_Scroll()
+    picChild.left = (-hscPreview.Value)
+End Sub
+
+Private Sub ResizeScrollBars()
+On Error Resume Next
+    With vscPreview
+        If picChild.Height > picParent.Height Then
+            .Visible = True
+            .Max = picChild.Height - picParent.ScaleHeight + hscPreview.Height
+            .Min = 0
+            .LargeChange = picChild.Height - picParent.Height
+            imgCorner.Visible = True
+            vscPreview_Scroll
+        Else
+            .Max = 0
+        End If
+    End With
+    With hscPreview
+        If picChild.Width > picParent.Width Then
+            .Visible = True
+            .Max = picChild.Width - picParent.ScaleWidth + vscPreview.Width
+            .Min = 0
+            .LargeChange = picChild.Width - picParent.ScaleWidth
+            imgCorner.Visible = True
+            hscPreview_Scroll
+        Else
+            .Max = 0
+        End If
+    End With
+End Sub
+
+Private Sub picParent_Resize()
+On Error Resume Next
+    Dim iCount As Integer
+    With picParent
+        vscPreview.Move .ScaleLeft + .ScaleWidth - vscPreview.Width, .ScaleTop, vscPreview.Width, .ScaleHeight - hscPreview.Height
+        hscPreview.Move 0, .ScaleHeight - hscPreview.Height, .ScaleWidth - vscPreview.Width
+        imgCorner.Move vscPreview.left, hscPreview.top
+    End With
+    ResizeScrollBars
+End Sub
+
+

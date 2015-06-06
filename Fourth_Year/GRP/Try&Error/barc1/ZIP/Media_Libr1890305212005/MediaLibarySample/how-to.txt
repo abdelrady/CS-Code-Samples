@@ -1,0 +1,151 @@
+---------------------------------------------------------------------------------------
+' Project   : cBSTNStorage
+' DateTime  : 25/04/2005 20:37
+' Author    : D K Richmond
+' Status    : BETA RELEASE 1.3
+' Version   : Visual Basic 6 (SP6)
+' User Type : Beginner/Intermediate/Advanced
+' Applicable: Database/Data Sorting/Key Retrieval/Binary Trees/Node Traversals
+
+' ----------------------------------------
+'   How-To
+' ----------------------------------------
+'
+' Using Media Libray in Memory Mode Only:
+'
+' Make sure you are in memory mode, that's the book with the hand icon, not the book with the disc icon.
+' (top left corner of main screen)
+'
+'    Select 'Main' from the menu bar, and then click on 'Load Library'
+' wait for the status line at the bottom to finishing loading the library and 
+' ends with Loaded (n) Records : date time.
+'
+' Now click on button [ Show All Media ].
+' 
+' wait for the status line at the bottom to finishing loading the view and
+' ends with Loaded (n) Records : date time.
+' 
+' now click on any item in the listview and it will automatically appear with all the details
+' in the main form.  
+'
+' To make changes to the details, you need to click the [ Edit Media ] button.
+' Make changes to the details, but don't change the barcode).
+' When all changes entered, click the [ Update Media ] button.
+' Now to prove the changes are entered click the [ Search Media ] button.  This re-scans
+' the details in the store and re-loads them into the main form.
+' 
+' Note : buttons are enabled and disabled where appropriate.  This is a beta test version,
+'        to demonstrate the use of the BSTN class.  Sometimes the buttons may not be as
+'        expected, but clicking [ Search Media ] button usually gets the buttons you need
+'        enabled or try going to the 'Show All' screen and clicking on an item line.
+'
+' To add new media details, you need to click the [ Edit Media ] button.
+' Make changes to the details, enter a new barcode that does not exist in the library already.
+' When all changes entered, click the [ Add Media ] button.
+' Now to prove the changes are entered click the [ Search Media ] button.  This re-scans
+' the details in the memory store and re-loads them into the main form.
+'
+' To delete media details, you need to click the [ Delete Media ] button.
+' Once the barcode and the details, are deleted, 
+' to prove the changes are entered click the [ Search Media ] button.  This re-scans
+' the details in the store and will not re-load them into the main form as they don't exist, so
+' the previous information will stay in the details, until you load another media item.
+' 
+'
+' Using Media Libray in Disk Mode Only:
+' -------------------------------------
+'
+' Make sure you are in memory mode, that's the book with the hand icon, not the book with the disc icon.
+' (top left corner of main screen)
+'
+'    Click on 'Use Disk Media'   
+'
+' The book with the hand icon (top left corner of main screen), will change to the book with the disc.
+'
+' Now all the operations work directly on the disk file.
+'
+' Now click on button [ Show All Media ].
+' 
+' wait for the status line at the bottom to finishing loading the view and
+' ends with Loaded (n) Records : date time.
+' 
+' now click on any item in the listview and it will automatically appear with all the details
+' in the main form.  
+'
+' To make changes to the details, you need to click the [ Edit Media ] button.
+' Make changes to the details, but don't change the barcode).
+' When all changes entered, click the [ Update Media ] button.
+' Now to prove the changes are entered click the [ Search Media ] button.  This re-scans
+' the details in the disk store and re-loads them into the main form.
+' 
+' Note : buttons are enabled and disabled where appropriate.  This is a beta test version,
+'        to demonstrate the use of the BSTN class.  Sometimes the buttons may not be as
+'        expected, but clicking [ Search Media ] button usually gets the buttons you need
+'        enabled or try going to the 'Show All' screen and clicking on an item line.
+'
+' To add new media details, you need to click the [ Edit Media ] button.
+' Make changes to the details, enter a new barcode that does not exist in the library already.
+' When all changes entered, click the [ Add Media ] button.
+' Now to prove the changes are entered click the [ Search Media ] button.  This re-scans
+' the details in the disk store and re-loads them into the main form.
+'
+' To delete media details, you need to click the [ Delete Media ] button.
+' Once the barcode and the details, are deleted, 
+' to prove the changes are entered click the [ Search Media ] button.  This re-scans
+' the details in the store and will not re-load them into the main form as they don't exist, so
+' the previous information will stay in the details, until you load another media item.
+' 
+''  Select 'Main' from the menu bar, and then click on 'Load Library'
+' wait for the status line at the bottom to finishing loading the library and 
+' ends with Loaded (n) Records : date time.
+'
+'
+- IMPORTANT the download includes a <ready-made> disk media file!
+'           this is how to make one yourself once 
+'          you have trashed/amended the pre-made version
+
+' Make sure you are in memory mode, that's the book with the hand, not the book with the disc.
+' and the button's caption near the [ Close ] button says [ Use Disk Media ].
+
+' Select 'Main' from the menu bar, and then click on 'Build Disk File From Library (memory) '
+'
+'    Click on 'Use Disk Media'   - you're now using the new disk file you just built from the 
+'     original .dat library.
+'
+' IMPORTANT POINT:  If you decide to switch from Disk mode back to Memory mode, the Load Library operation,
+' is called automatically. This is because part of the memory store is used as a disk store cache, 
+' so the memory operations would be in a confused state otherwise.
+'
+'
+' Garbage Collection:
+' -------------------
+'
+' Under Menu tools, there are two options.  'Disk Media Garbage Stats' and 'Disk Media Garbage Collection'.
+' During Disk Mode media updates, and deletes rather than re-write all the files to shrink the 
+' media disk files deleted tokens are written to the disk instead.  This results in very quick updates.
+' An aggregate of all these deleted disk tokens makes up a percentage of garbage in the disk file.  
+' You can choose at anytime regardless of the percentage to perform a garbage collection.  This will 
+' automatically display the percentage of garbage before and after - after always showing 0% of course!
+' 
+' WARNING: These garbage routines are very new and testing is on-going.  If you are using these routines on data
+' that you want to keep take a backup of copy of the DATA directory under the application directory before
+' running the garbage collection.  This is because all the files will be rewritten during garbage collection
+' and whilst a failure should result in the original files remaining intact, there is always the unknown 
+' possibility of failure. If you should experience a failure, you can rebuild the disk file from the original
+' .dat file in the DATA directory using the menu option, 'Build Disk File from Library (memory) after a
+' Load Library to load the .dat file into memory first.
+'
+'
+' Data File Extensions: (DATA directory under application directory)
+' ------------------------------------------------------------------
+' .dat	 	- original library file details
+' .bsd		- disk media library details
+' .bsn		- binary tree node values and key file offsets
+' .bdo		- data offsets table
+' .bsk		- data key file and library records counter
+' .tmp		- temporary file create during disk re-builds
+'
+' Have Fun!!!
+' David K Richmond
+'
+' eof
