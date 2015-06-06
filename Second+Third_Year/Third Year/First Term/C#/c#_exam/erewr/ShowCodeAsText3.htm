@@ -1,0 +1,114 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!-- saved from url=(0085)http://www.planetsourcecode.com/vb/scripts/ShowCodeAsText.asp?txtCodeId=7203&lngWId=3 -->
+<HTML><HEAD>
+<META http-equiv=Content-Type content="text/html; charset=windows-1256">
+<META content="MSHTML 6.00.2900.2180" name=GENERATOR></HEAD>
+<BODY><XMP>
+//**************************************
+//INCLUDE files for :Maze Game SCC
+//**************************************
+nothing
+//**************************************
+// Name: Maze Game SCC
+// Description:The game just make right way to go out from the maze
+// By: Saleem Alhashedi
+//
+//
+// Inputs:nothing
+//
+// Returns:nothing
+//
+//Assumes:None
+//
+//Side Effects:Learn how to make the conditions
+//This code is copyrighted and has limited warranties.
+//Please see http://www.Planet-Source-Code.com/xq/ASP/txtCodeId.7203/lngWId.3/qx/vb/scripts/ShowCode.htm
+//for details.
+//**************************************
+
+#include<iostream.h>
+#include<conio.h>
+#include <stdlib.h>
+#include <dos.h>
+#include<stdio.h>
+#define size 12
+int maze[size][size],i,j,dir;
+int so=100;
+//******************************** Test function...
+
+
+    void test(){
+
+
+        	while(1){
+        	i=0+rand()%11;
+        	j=0+rand()%11;
+        	if((maze[i][j]==2)&&(i==0||i==11||j==0||j==11))break;}
+        	if(i==0){dir=4; gotoxy(70,3);printf("Dir = %c",25);}
+        	else if(i==11){dir=3;gotoxy(70,3);printf("Dir = %c",24);}
+        	else if(j==0){dir=2;gotoxy(70,3);cout<<"Dir = -->";}
+        	else if(j==11){dir=1;gotoxy(70,3);cout<<"Dir = <--";}
+
+
+            while(1){
+            	so+=10;
+            	gotoxy(j*5+5,i*2+1);textcolor(10);cprintf("*");
+            	gotoxy(70,2);cout<<"("<<i<<","<<j<<")";
+            	sound(so);delay(500);
+            	gotoxy(j*5+5,i*2+1);textcolor(12);cprintf("*");//cout<<"";
+            	nosound();
+            //----------------------------------------------- y--
+
+
+                	switch(dir){
+                		case 1: if((j==0||i==0)&&(maze[i-1][j]!=2||i-1<0))exit(1);
+                			else if(maze[i-1][j]==2){i--;dir=3;}
+                			else if(maze[i][j-1]==2){j--;dir=1;}
+                			else if(maze[i+1][j]==2||i+1>11){i++;dir=4;if(i>11)exit(1);}
+                			else{if(j>=11)exit(1);else{j++;dir=2;}}break;
+                //------------------------------------------------ y++
+                		case 2: if((j==11||i==11)&&(maze[i+1][j]!=2||i+1>11))exit(1);
+                			else if(maze[i+1][j]==2){i++;dir=4;}
+                			else if(maze[i][j+1]==2){j++;dir=2;}
+                			else if(maze[i-1][j]==2||i-1<0){i--;dir=3;if(i<0)exit(1);}
+                			else{if(j<=0)exit(1);else{j--;dir=1;}}break;
+                //------------------------------------------------ x--
+                		case 3: if((i==0||j==11)&&(maze[i][j+1]!=2||j+1>11))exit(1);
+                			else if(maze[i][j+1]==2){j++;dir=2;}
+                			else if(maze[i-1][j]==2){i--;dir=3;}
+                			else if(maze[i][j-1]==2||j-1<0){j--;dir=1;if(j<0)exit(1);}
+                			else{if(i>=11)exit(1);else{i++;dir=4;}}break;
+                //------------------------------------------------- x++
+                		case 4: if((i==11||j==0)&&(maze[i][j-1]!=2||j-1<0))exit(1);
+                			else if(maze[i][j-1]==2){j--;dir=1;}
+                			else if(maze[i+1][j]==2){i++;dir=4;}
+                			else if(maze[i][j+1]==2||j+1>11){j++;dir=2;if(j>11)exit(1);}
+                			else{if(i<=0)exit(1);else {i--;dir=3;}}break;
+                	}//end of switch...
+                	}//end of while...
+            }
+            //*********************************** Main Function...
+
+
+                void main(){
+                	clrscr();randomize();
+                	textmode(C80);
+                	for(i=0 ; i<size ; i++)
+
+
+                    		for(j=0 ; j<size ; j++){
+                    			maze[i][j]=1+rand()%2;
+
+
+                        			if(maze[i][j]==1){
+                        				gotoxy(j*5+5,i*2+1);cout<<"#";
+                        			}
+
+
+                            			else{
+                            				gotoxy(j*5+5,i*2+1);cout<<".";
+                            			}
+                            		}
+                            	test();getch();
+                        }
+		</XMP></BODY></HTML>

@@ -1,0 +1,241 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+<HTML lang="en-us">
+<HEAD>
+<TITLE>Windows API Guide: recv Function</TITLE>
+<META content="vbapi@vbapi.com" name="author">
+<META content="Information about the recv function in the Windows API, geared towards the Visual Basic user." name="description">
+<META content="Kuliniewicz,Windows,Windows 95,Windows NT,Windows 98,Windows CE,Windows 2000,API,Application Programming Interface,Programming,Visual Basic,Basic,VB,recv" name="keywords">
+<META content="Omicron HTML Editor" name="generator">
+<LINK href="default.css" tppabs="http://www.vbapi.com/css/default.css" rel="stylesheet" type="text/css">
+<LINK href="index-1.html" tppabs="http://www.vbapi.com/index.html" rel="home">
+<LINK href="glossary.html" tppabs="http://www.vbapi.com/ref/glossary.html" rel="glossary">
+<LINK href="copyrite.html" tppabs="http://www.vbapi.com/copyrite.html" rel="copyright">
+</HEAD>
+<BODY>
+
+<!-- Begin Adslot1 -->
+<CENTER>
+<SCRIPT language="JAVASCRIPT">
+<!-- hide from older browsers
+now = new Date();
+my_random = now.getTime();
+document.write('<A href="http://adex3.flycast.com/server/socket/127.0.0.1:2800/click/VBWorldnet/VBAPI/' + my_random + '">');
+document.write('<IMG width="468" height="60" border="1" src="http://adex3.flycast.com/server/socket/127.0.0.1:2800/ad/VBWorldnet/VBAPI/' + my_random + '"></A>');
+// -->
+</SCRIPT>
+</CENTER>
+<!-- End Adslot1 -->
+
+<HR>
+
+<H1>recv Function</H1>
+
+<P><CODE class="declare"><SPAN class="kw">Declare Function</SPAN> recv <SPAN class="kw">Lib</SPAN> "wsock32.dll" (<SPAN class="kw">ByVal</SPAN> s <SPAN class="kw">As Long</SPAN>, buf <SPAN class="kw">As Any</SPAN>, <SPAN class="kw">ByVal</SPAN> length <SPAN class="kw">As Long</SPAN>, <SPAN class="kw">ByVal</SPAN> flags <SPAN class="kw">As Long</SPAN>) <SPAN class="kw">As Long</SPAN></CODE></P>
+
+<H2>Platforms</H2>
+<P><UL>
+<LI><B>Windows 95:</B> Supported.
+<LI><B>Windows 98:</B> Supported.
+<LI><B>Windows NT:</B> Requires Windows NT 3.1 or later.
+<LI><B>Windows 2000:</B> Supported.
+<LI><B>Windows CE:</B> Requires Windows CE 1.0 or later.
+</UL></P>
+
+<H2>Description &amp; Usage</H2>
+<P><B>recv</B> receives data from a connected socket.  The socket must have already been connected to a network host via <A href="connect.html" tppabs="http://www.vbapi.com/ref/c/connect.html">connect</A>.  If no response is heard from the network host, the function times out and reports an error.</P>
+
+<H2>Return Value</H2>
+<P>If successful, the function returns the number of bytes successfully read from the socket.  If an error occured (for example, if the connection timed out), the function returns SOCKET_ERROR (use <A href="wsagetlasterror.html" tppabs="http://www.vbapi.com/ref/w/wsagetlasterror.html">WSAGetLastError</A> to get the error code).</P>
+
+<H2>Visual Basic-Specific Issues</H2>
+<P>If specifying a string for <VAR>buf</VAR>, the ByVal keyword must be placed in front of it.  See the example for a demonstration.</P>
+
+<H2>Parameters</H2>
+<P><DL>
+<DT><VAR>s</VAR><DD>A descriptor of the connected socket to receive data from.
+<DT><VAR>buf</VAR><DD>A buffer that receives the information obtained from the connection.  This buffer must be large enough to receive the amount of data requested.
+<DT><VAR>length</VAR><DD>The size in bytes of the buffer passed as <VAR>buf</VAR>.
+<DT><VAR>flags</VAR><DD>A combination of the following flags specifying additional options:
+<DL>
+<DT>MSG_OOB<DD>Process out-of-band data only.
+<DT>MSG_PEEK<DD>Peek at the incoming data by copying data into the buffer without removing it from the input queue.  If this flag is specified, the function returns the number of bytes of data currently pending to be received.
+</DL>
+</DL></P>
+
+<H2>Constant Definitions</H2>
+<P><PRE><CODE class="const"><SPAN class="kw">Const</SPAN> SOCKET_ERROR = -1
+<SPAN class="kw">Const</SPAN> MSG_OOB = &amp;H1
+<SPAN class="kw">Const</SPAN> MSG_PEEK = &amp;H2</CODE></PRE></P>
+
+<H2>Example</H2>
+<P>Download the main page of this web site (<A href="javascript:if(confirm('http://www.vbapi.com/  \n\nThis file was not retrieved by Teleport Pro, because it is addressed on a domain or path outside the boundaries set for its Starting Address.  \n\nDo you want to open it from the server?'))window.location='http://www.vbapi.com/'" tppabs="http://www.vbapi.com/">http://www.vbapi.com</A>).  This example supports a very crude implementation of HyperText Transport Protocol (HTTP), sending a request to the server and receiving the document.  The document downloaded, with HTTP headers removed, is output to the Debug window.  To prevent the program from appearing to lock up in the event of a momentary interruption in the transfer, a nonblocking socket is used.  To use this example, place a command button named cmdDownload on a form window.</P>
+
+<P>Note the careful use of GoTo in this example.  Since there are lots of things that can go wrong, and <A href="wsacleanup.html" tppabs="http://www.vbapi.com/ref/w/wsacleanup.html">WSACleanup</A> must be called at the end no matter what happens, the GoTo statements skip down to the end if an unrecoverable error occurs.  If VB had better exception handling, I would use that instead of GoTo.</P>
+
+<P><PRE><CODE class="example"><SPAN class="com">' This code is licensed according to the terms and conditions listed <A href="copyrite.html#license" tppabs="http://www.vbapi.com/copyrite.html#license" rel="copyright">here</A>.</SPAN>
+
+<SPAN class="com">' Declarations and such needed for the example:
+' (Copy them to the (declarations) section of a module.)</SPAN>
+<SPAN class="kw">Public Type</SPAN> <A href="wsadata.html" tppabs="http://www.vbapi.com/ref/w/wsadata.html">WSADATA</A>
+	wVersion <SPAN class="kw">As Integer</SPAN>
+	wHighVersion <SPAN class="kw">As Integer</SPAN>
+	szDescription <SPAN class="kw">As String</SPAN> * 257
+	szSystemStatus <SPAN class="kw">As String</SPAN> * 129
+	iMaxSockets <SPAN class="kw">As Long</SPAN>
+	iMaxUdpDg <SPAN class="kw">As Long</SPAN>
+	lpVendorInfo <SPAN class="kw">As Long</SPAN>
+<SPAN class="kw">End Type</SPAN>
+<SPAN class="kw">Public Declare Function</SPAN> <A href="wsastartup.html" tppabs="http://www.vbapi.com/ref/w/wsastartup.html">WSAStartup</A> <SPAN class="kw">Lib</SPAN> "wsock32.dll" (<SPAN class="kw">ByVal</SPAN> wVersionRequested <SPAN class="kw">As Integer</SPAN>, lpWSAData _
+	<SPAN class="kw">As</SPAN> <A href="wsadata.html" tppabs="http://www.vbapi.com/ref/w/wsadata.html">WSADATA</A>) <SPAN class="kw">As Long</SPAN>
+<SPAN class="kw">Public Declare Function</SPAN> <A href="wsacleanup.html" tppabs="http://www.vbapi.com/ref/w/wsacleanup.html">WSACleanup</A> <SPAN class="kw">Lib</SPAN> "wsock32.dll" () <SPAN class="kw">As Long</SPAN>
+<SPAN class="kw">Public Const</SPAN> AF_INET = 2
+<SPAN class="kw">Public Const</SPAN> SOCK_STREAM = 1
+<SPAN class="kw">Public Declare Function</SPAN> <A href="gethostbyname.html" tppabs="http://www.vbapi.com/ref/g/gethostbyname.html">gethostbyname</A> <SPAN class="kw">Lib</SPAN> "wsock32.dll" (<SPAN class="kw">ByVal</SPAN> name <SPAN class="kw">As String</SPAN>) <SPAN class="kw">As Long</SPAN>
+<SPAN class="kw">Public Type</SPAN> <A href="hostent.html" tppabs="http://www.vbapi.com/ref/h/hostent.html">hostent</A>
+	h_name <SPAN class="kw">As Long</SPAN>
+	h_aliases <SPAN class="kw">As Long</SPAN>
+	h_addrtype <SPAN class="kw">As Integer</SPAN>
+	h_length <SPAN class="kw">As Integer</SPAN>
+	h_addr_list <SPAN class="kw">As Long</SPAN>
+<SPAN class="kw">End Type</SPAN>
+<SPAN class="kw">Public Declare Function</SPAN> <A href="htons.html" tppabs="http://www.vbapi.com/ref/h/htons.html">htons</A> <SPAN class="kw">Lib</SPAN> "wsock32.dll" (<SPAN class="kw">ByVal</SPAN> hostshort <SPAN class="kw">As Integer</SPAN>) <SPAN class="kw">As Integer</SPAN>
+<SPAN class="kw">Public Declare Function</SPAN> <A href="socket.html" tppabs="http://www.vbapi.com/ref/s/socket.html">socket</A> <SPAN class="kw">Lib</SPAN> "wsock32.dll" (<SPAN class="kw">ByVal</SPAN> af <SPAN class="kw">As Long</SPAN>, <SPAN class="kw">ByVal</SPAN> prototype <SPAN class="kw">As Long</SPAN>, _
+	<SPAN class="kw">ByVal</SPAN> protocol <SPAN class="kw">As Long</SPAN>) <SPAN class="kw">As Long</SPAN>
+<SPAN class="kw">Public Type</SPAN> <A href="sockaddr.html" tppabs="http://www.vbapi.com/ref/s/sockaddr.html">sockaddr</A>
+	sin_family <SPAN class="kw">As Integer</SPAN>
+	sin_port <SPAN class="kw">As Integer</SPAN>
+	sin_addr <SPAN class="kw">As Long</SPAN>
+	sin_zero <SPAN class="kw">As String</SPAN> * 8
+<SPAN class="kw">End Type</SPAN>
+<SPAN class="kw">Public Declare Function</SPAN> <A href="connect.html" tppabs="http://www.vbapi.com/ref/c/connect.html">connect</A> <SPAN class="kw">Lib</SPAN> "wsock32.dll" (<SPAN class="kw">ByVal</SPAN> s <SPAN class="kw">As Long</SPAN>, name <SPAN class="kw">As</SPAN> <A href="sockaddr.html" tppabs="http://www.vbapi.com/ref/s/sockaddr.html">sockaddr</A>, <SPAN class="kw">ByVal</SPAN> namelen _
+	<SPAN class="kw">As Long</SPAN>) <SPAN class="kw">As Long</SPAN>
+<SPAN class="kw">Declare Function</SPAN> <A href="ioctlsocket.html" tppabs="http://www.vbapi.com/ref/i/ioctlsocket.html">ioctlsocket</A> <SPAN class="kw">Lib</SPAN> "wsock32.dll" (<SPAN class="kw">ByVal</SPAN> s <SPAN class="kw">As Long</SPAN>, <SPAN class="kw">ByVal</SPAN> cmd <SPAN class="kw">As Long</SPAN>, argp <SPAN class="kw">As Long</SPAN>) <SPAN class="kw">As Long</SPAN>
+<SPAN class="kw">Public Const</SPAN> FIONBIO = &amp;H8004667E
+<SPAN class="kw">Public Declare Function</SPAN> <A href="send.html" tppabs="http://www.vbapi.com/ref/s/send.html">send</A> <SPAN class="kw">Lib</SPAN> "wsock32.dll" (<SPAN class="kw">ByVal</SPAN> s <SPAN class="kw">As Long</SPAN>, buf <SPAN class="kw">As Any</SPAN>, <SPAN class="kw">ByVal</SPAN> length <SPAN class="kw">As Long</SPAN>, _
+	<SPAN class="kw">ByVal</SPAN> flags <SPAN class="kw">As Long</SPAN>) <SPAN class="kw">As Long</SPAN>
+<SPAN class="kw">Public Declare Function</SPAN> <B>recv</B> <SPAN class="kw">Lib</SPAN> "wsock32.dll" (<SPAN class="kw">ByVal</SPAN> s <SPAN class="kw">As Long</SPAN>, buf <SPAN class="kw">As Any</SPAN>, <SPAN class="kw">ByVal</SPAN> length <SPAN class="kw">As Long</SPAN>, _
+	<SPAN class="kw">ByVal</SPAN> flags <SPAN class="kw">As Long</SPAN>) <SPAN class="kw">As Long</SPAN>
+<SPAN class="kw">Public Declare Function</SPAN> <A href="closesocket.html" tppabs="http://www.vbapi.com/ref/c/closesocket.html">closesocket</A> <SPAN class="kw">Lib</SPAN> "wsock32.dll" (<SPAN class="kw">ByVal</SPAN> s <SPAN class="kw">As Long</SPAN>) <SPAN class="kw">As Long</SPAN>
+<SPAN class="kw">Public Declare Sub</SPAN> <A href="copymemory.html" tppabs="http://www.vbapi.com/ref/c/copymemory.html">CopyMemory</A> <SPAN class="kw">Lib</SPAN> "kernel32.dll" <SPAN class="kw">Alias</SPAN> "RtlMoveMemory" (Destination <SPAN class="kw">As Any</SPAN>, Source _
+	<SPAN class="kw">As Any</SPAN>, <SPAN class="kw">ByVal</SPAN> Length <SPAN class="kw">As Long</SPAN>)
+<SPAN class="kw">Public Const</SPAN> SOCKET_ERROR = -1
+
+<SPAN class="com">' Define a useful macro.</SPAN>
+<SPAN class="kw">Public Function</SPAN> <A href="makeword.html" tppabs="http://www.vbapi.com/ref/m/makeword.html">MAKEWORD</A>(<SPAN class="kw">ByVal</SPAN> bLow <SPAN class="kw">As Byte</SPAN>, <SPAN class="kw">ByVal</SPAN> bHigh <SPAN class="kw">As Byte</SPAN>) <SPAN class="kw">As Integer</SPAN>
+	MAKEWORD = Val("&amp;H" &amp; Right("00" &amp; Hex(bHigh), 2) &amp; Right("00" &amp; Hex(bLow), 2))
+<SPAN class="kw">End Function</SPAN>
+
+<SPAN class="com">' *** Place the following code inside the form window. ***</SPAN>
+
+<SPAN class="kw">Private Sub</SPAN> cmdDownload_Click()
+	<SPAN class="kw">Dim</SPAN> wsockinfo <SPAN class="kw">As</SPAN> <A href="wsadata.html" tppabs="http://www.vbapi.com/ref/w/wsadata.html">WSADATA</A>  <SPAN class="com">' info about Winsock</SPAN>
+	<SPAN class="kw">Dim</SPAN> sock <SPAN class="kw">As Long</SPAN>          <SPAN class="com">' the socket descriptor</SPAN>
+	<SPAN class="kw">Dim</SPAN> pHostinfo <SPAN class="kw">As Long</SPAN>     <SPAN class="com">' pointer to info about the host computer</SPAN>
+	<SPAN class="kw">Dim</SPAN> hostinfo <SPAN class="kw">As</SPAN> <A href="hostent.html" tppabs="http://www.vbapi.com/ref/h/hostent.html">hostent</A>   <SPAN class="com">' info about the host computer</SPAN>
+	<SPAN class="kw">Dim</SPAN> pIPAddress <SPAN class="kw">As Long</SPAN>    <SPAN class="com">' pointer to host's IP address</SPAN>
+	<SPAN class="kw">Dim</SPAN> ipAddress <SPAN class="kw">As Long</SPAN>     <SPAN class="com">' host's IP address</SPAN>
+	<SPAN class="kw">Dim</SPAN> sockinfo <SPAN class="kw">As</SPAN> <A href="sockaddr.html" tppabs="http://www.vbapi.com/ref/s/sockaddr.html">sockaddr</A>  <SPAN class="com">' settings for the socket</SPAN>
+	<SPAN class="kw">Dim</SPAN> buffer <SPAN class="kw">As String</SPAN>      <SPAN class="com">' buffer for sending and receiving data</SPAN>
+	<SPAN class="kw">Dim</SPAN> reply <SPAN class="kw">As String</SPAN>       <SPAN class="com">' accumulates server's reply</SPAN>
+	<SPAN class="kw">Dim</SPAN> retval <SPAN class="kw">As Long</SPAN>        <SPAN class="com">' generic return value</SPAN>
+	
+	<SPAN class="com">' Begin a Winsock session.</SPAN>
+	retval = <A href="wsastartup.html" tppabs="http://www.vbapi.com/ref/w/wsastartup.html">WSAStartup</A>(<A href="makeword.html" tppabs="http://www.vbapi.com/ref/m/makeword.html">MAKEWORD</A>(2, 2), wsockinfo)
+	<SPAN class="kw">If</SPAN> retval &lt;&gt; 0 <SPAN class="kw">Then</SPAN>
+		<SPAN class="kw">Debug</SPAN>.<SPAN class="kw">Print</SPAN> "Unable to initialize Winsock! --"; retval
+		<SPAN class="kw">Exit Sub</SPAN>
+	<SPAN class="kw">End If</SPAN>
+	
+	<SPAN class="com">' Get information about the server to connect to.</SPAN>
+	pHostinfo = <A href="gethostbyname.html" tppabs="http://www.vbapi.com/ref/g/gethostbyname.html">gethostbyname</A>("www.vbapi.com")
+	<SPAN class="kw">If</SPAN> pHostinfo = 0 <SPAN class="kw">Then</SPAN>
+		<SPAN class="kw">Debug</SPAN>.<SPAN class="kw">Print</SPAN> "Unable to resolve host!"
+		<SPAN class="kw">GoTo</SPAN> Cleanup
+	<SPAN class="kw">End If</SPAN>
+	<SPAN class="com">' Copy information about the server into the structure.</SPAN>
+	<A href="copymemory.html" tppabs="http://www.vbapi.com/ref/c/copymemory.html">CopyMemory</A> hostinfo, <SPAN class="kw">ByVal</SPAN> pHostinfo, Len(hostinfo)
+	<SPAN class="kw">If</SPAN> hostinfo.h_addrtype &lt;&gt; AF_INET <SPAN class="kw">Then</SPAN>
+		<SPAN class="kw">Debug</SPAN>.<SPAN class="kw">Print</SPAN> "Couldn't get IP address of www.vbapi.com!"
+		<SPAN class="kw">GoTo</SPAN> Cleanup
+	<SPAN class="kw">End If</SPAN>
+	<SPAN class="com">' Get the server's IP address out of the structure.</SPAN>
+	<A href="copymemory.html" tppabs="http://www.vbapi.com/ref/c/copymemory.html">CopyMemory</A> pIPAddress, <SPAN class="kw">ByVal</SPAN> hostinfo.h_addr_list, 4
+	<A href="copymemory.html" tppabs="http://www.vbapi.com/ref/c/copymemory.html">CopyMemory</A> ipAddress, <SPAN class="kw">ByVal</SPAN> pIPAddress, 4
+	
+	<SPAN class="com">' Create a socket.</SPAN>
+	sock = <A href="socket.html" tppabs="http://www.vbapi.com/ref/s/socket.html">socket</A>(AF_INET, SOCK_STREAM, 0)
+	<SPAN class="kw">If</SPAN> sock = SOCKET_ERROR <SPAN class="kw">Then</SPAN>
+		<SPAN class="kw">Debug</SPAN>.<SPAN class="kw">Print</SPAN> "Unable to create socket!"
+		<SPAN class="kw">GoTo</SPAN> Cleanup
+	<SPAN class="kw">End If</SPAN>
+	
+	<SPAN class="com">' Make a connection to www.vbapi.com:80 (where the web server listens).</SPAN>
+	<SPAN class="kw">With</SPAN> sockinfo
+		<SPAN class="com">' Use Internet Protocol (IP)</SPAN>
+		.sin_family = AF_INET
+		<SPAN class="com">' Connect to port 80.</SPAN>
+		.sin_port = <A href="htons.html" tppabs="http://www.vbapi.com/ref/h/htons.html">htons</A>(80)
+		<SPAN class="com">' Connect to this IP address.</SPAN>
+		.sin_addr = ipAddress
+		<SPAN class="com">' Padding characters.</SPAN>
+		.sin_zero = String(8, vbNullChar)
+	<SPAN class="kw">End With</SPAN>
+	<SPAN class="kw">Debug</SPAN>.<SPAN class="kw">Print</SPAN> "Attempting to connect...."
+	retval = <A href="connect.html" tppabs="http://www.vbapi.com/ref/c/connect.html">connect</A>(sock, sockinfo, Len(sockinfo))
+	<SPAN class="kw">If</SPAN> retval &lt;&gt; 0 <SPAN class="kw">Then</SPAN>
+		<SPAN class="kw">Debug</SPAN>.<SPAN class="kw">Print</SPAN> "Unable to connect!"
+		<SPAN class="kw">GoTo</SPAN> Cleanup
+	<SPAN class="kw">End If</SPAN>
+	
+	<SPAN class="com">' Send an HTTP/GET request for the / document.</SPAN>
+	buffer = "GET / HTTP/1.1" &amp; vbCrLf &amp; _
+		"Host: www.vbapi.com" &amp; vbCrLf &amp; _
+		"User-Agent: HTTP-Test-Program" &amp; vbCrLf &amp; vbCrLf
+	retval = <A href="send.html" tppabs="http://www.vbapi.com/ref/s/send.html">send</A>(sock, <SPAN class="kw">ByVal</SPAN> buffer, Len(buffer), 0)
+	<SPAN class="kw">Debug</SPAN>.<SPAN class="kw">Print</SPAN> "Sent request.  Waiting for reply..."
+    
+	<SPAN class="com">' Make the socket non-blocking, so calls to recv don't halt the program waiting for input.</SPAN>
+	retval = <A href="ioctlsocket.html" tppabs="http://www.vbapi.com/ref/i/ioctlsocket.html">ioctlsocket</A>(sock, FIONBIO, 1)
+	
+	<SPAN class="com">' Read the response from the other system.  A more sophisticated program
+	' would watch to see if the connection ever times out (i.e., if the connection is
+	' lost).  For brevity, such code is omitted here.</SPAN>
+	<SPAN class="kw">Do</SPAN>
+		buffer = Space(4096)
+		retval = <B>recv</B>(sock, <SPAN class="kw">ByVal</SPAN> buffer, Len(buffer), 0)
+		<SPAN class="kw">If</SPAN> retval &lt;&gt; 0 <SPAN class="kw">And</SPAN> retval &lt;&gt; SOCKET_ERROR <SPAN class="kw">Then</SPAN>
+			reply = reply &amp; Left(buffer, retval)
+		<SPAN class="kw">End If</SPAN>
+		<SPAN class="com">' Process background events so the program doesn't appear to freeze.</SPAN>
+		DoEvents
+	<SPAN class="kw">Loop Until</SPAN> retval = 0
+	
+	<SPAN class="com">' Print the response from the server.</SPAN>
+	<SPAN class="kw">Debug</SPAN>.<SPAN class="kw">Print</SPAN> "Document Retrieved:"
+	<SPAN class="kw">Debug</SPAN>.<SPAN class="kw">Print</SPAN> reply
+	
+	<SPAN class="com">' Perform the necessary cleanup at the end.</SPAN>
+Cleanup:
+	retval = <A href="ioctlsocket.html" tppabs="http://www.vbapi.com/ref/i/ioctlsocket.html">closesocket</A>(sock)
+	retval = <A href="wsacleanup.html" tppabs="http://www.vbapi.com/ref/w/wsacleanup.html">WSACleanup</A>()
+<SPAN class="kw">End Sub</SPAN></CODE></PRE></P>
+
+<H2>See Also</H2>
+<P><A href="send.html" tppabs="http://www.vbapi.com/ref/s/send.html">recv</A></P>
+
+<H2>Category</H2>
+<P><A href="funcc.html#winsock" tppabs="http://www.vbapi.com/ref/funcc.html#winsock">Winsock</A></P>
+
+<P><A href="funca.html" tppabs="http://www.vbapi.com/ref/funca.html">Back to the Function list.</A><BR>
+<A href="index.html" tppabs="http://www.vbapi.com/ref/index.html" rel="index">Back to the Reference section.</A></P>
+
+<HR>
+
+<P><B>Last Modified:</B> January 21, 2001<BR>
+This page is copyright &copy; 2001 Paul Kuliniewicz.  
+<A href="copyrite.html" tppabs="http://www.vbapi.com/copyrite.html" rel="copyright">Copyright Information</A>  <B>Revised October 29, 2000</B><BR>
+<A href="index-1.html" tppabs="http://www.vbapi.com/index.html" rel="home">Go back to the Windows API Guide home page.</A><BR>
+E-mail: <A href="javascript:if(confirm('http://www.vbapi.com/email.html  \n\nThis file was not retrieved by Teleport Pro, because it is addressed on a domain or path outside the boundaries set for its Starting Address.  \n\nDo you want to open it from the server?'))window.location='http://www.vbapi.com/email.html'" tppabs="http://www.vbapi.com/email.html">vbapi@vbapi.com</A>  <A href="javascript:if(confirm('http://www.vbapi.com/email.html  \n\nThis file was not retrieved by Teleport Pro, because it is addressed on a domain or path outside the boundaries set for its Starting Address.  \n\nDo you want to open it from the server?'))window.location='http://www.vbapi.com/email.html#secure'" tppabs="http://www.vbapi.com/email.html#secure">Send Encrypted E-Mail</A><BR>
+This page is at <A href="recv.html" tppabs="http://www.vbapi.com/ref/r/recv.html">http://www.vbapi.com/ref/r/recv.html</A></P>
+</BODY>
+</HTML>

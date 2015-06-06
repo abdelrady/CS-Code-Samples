@@ -1,0 +1,108 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+<HTML lang="en-us">
+<HEAD>
+<TITLE>Windows API Guide: SetPixelV Function</TITLE>
+<META content="vbapi@vbapi.com" name="author">
+<META content="Information about the SetPixelV function in the Windows API, geared towards the Visual Basic user." name="description">
+<META content="Kuliniewicz,Windows,Windows 95,Windows NT,Windows 98,Windows CE,Windows 2000,API,Application Programming Interface,Programming,Visual Basic,Basic,VB,SetPixelV" name="keywords">
+<META content="Omicron HTML Editor" name="generator">
+<META content="Sat, 04 Sep 1999 03:23:00 GMT" http-equiv="Last-Modified">
+<LINK href="default.css" tppabs="http://www.vbapi.com/css/default.css" rel="stylesheet" type="text/css">
+<LINK href="index-1.html" tppabs="http://www.vbapi.com/index.html" rel="home">
+
+<LINK href="glossary.html" tppabs="http://www.vbapi.com/ref/glossary.html" rel="glossary">
+<LINK href="copyrite.html" tppabs="http://www.vbapi.com/copyrite.html" rel="copyright">
+</HEAD>
+<BODY>
+
+<!-- Begin Adslot1 -->
+<CENTER>
+<SCRIPT language="JAVASCRIPT">
+<!-- hide from older browsers
+now = new Date();
+my_random = now.getTime();
+document.write('<A href="http://adex3.flycast.com/server/socket/127.0.0.1:2800/click/VBWorldnet/VBAPI/' + my_random + '">');
+document.write('<IMG width="468" height="60" border="1" src="http://adex3.flycast.com/server/socket/127.0.0.1:2800/ad/VBWorldnet/VBAPI/' + my_random + '"></A>');
+// -->
+</SCRIPT>
+</CENTER>
+<!-- End Adslot1 -->
+
+<HR>
+
+<H1>SetPixelV Function</H1>
+
+<P><CODE class="declare">Declare Function SetPixelV Lib "gdi32.dll" (ByVal hdc As Long, ByVal X As Long, ByVal Y As Long, ByVal crColor As Long) As Long</CODE></P>
+
+<H2>Platforms</H2>
+<P><UL>
+<LI><B>Windows 95:</B> Supported.
+<LI><B>Windows 98:</B> Supported.
+<LI><B>Windows NT:</B> Requires Windows NT 3.1 or later.
+<LI><B>Windows 2000:</B> Supported.
+<LI><B>Windows CE:</B> Not Supported.
+</UL></P>
+
+<H2>Description &amp; Usage</H2>
+<P><B>SetPixelV</B> sets the color of a single pixel on a <A class="def" href="glossary.html#device" tppabs="http://www.vbapi.com/ref/glossary.html#device" rel="glossary">device</A>.  Because of color matching on the device, sometimes the color actually used on the device may differ from the color specified by the function.  The function will fail if the pixel specified is not visible or out of range when the function is called.  This function executes slightly more quickly than <A href="setpixel.html" tppabs="http://www.vbapi.com/ref/s/setpixel.html">SetPixel</A> because this function does not need to return the actual color used by the device.</P>
+
+<H2>Return Value</H2>
+<P>If an error occured, the function returns 0 (call <A href="getlasterror.html" tppabs="http://www.vbapi.com/ref/g/getlasterror.html">GetLastError</A> to get the error code).  If successful, the function returns a non-zero value.</P>
+
+<H2>Visual Basic-Specific Issues</H2>
+<P>None.</P>
+
+<H2>Parameters</H2>
+<P><DL>
+<DT><VAR>hdc</VAR><DD>A <A class="def" href="glossary.html#handle" tppabs="http://www.vbapi.com/ref/glossary.html#handle" rel="glossary">handle</A> to a <A class="def" href="glossary.html#devicecontext" tppabs="http://www.vbapi.com/ref/glossary.html#devicecontext" rel="glossary">device context</A> to the device to color a pixel of.
+<DT><VAR>X</VAR><DD>The x-coordinate of the pixel to color.
+<DT><VAR>Y</VAR><DD>The y-coordinate of the pixel to color.
+<DT><VAR>crColor</VAR><DD>The RGB value of the color to set the pixel to.
+</DL></P>
+
+<H2>Example</H2>
+<P><PRE><CODE class="example"><SPAN class="com">' This code is licensed according to the terms and conditions listed <A href="copyrite.html#license" tppabs="http://www.vbapi.com/copyrite.html#license" rel="copyright">here</A>.</SPAN>
+
+' Randomly color all the pixels in window Form1.  This example
+' gets the rectangle of Form1 and iterates through all the points
+' (pixels) inside of it.
+Dim winrect As <A href="rect.html" tppabs="http://www.vbapi.com/ref/r/rect.html">RECT</A>  ' rectangle of window Form1
+Dim rgbval As Long  ' RGB value of the randomly selected color
+Dim x As Long, y As Long  ' counters for x and y coordinates
+Dim retval As Long  ' return value
+
+' Get the rectangle of window Form1.
+retval = <A href="getwindowrect.html" tppabs="http://www.vbapi.com/ref/g/getwindowrect.html">GetWindowRect</A>(Form1.hWnd, winrect)
+
+' Loop through each pixel within Form1.
+For y = 0 To winrect.bottom - winrect.top
+  For x = 0 To winrect.right - winrect.left
+    ' Select a random color by choosing a value between 0 and 255
+    ' inclusive for each component of the color.
+    rgbval = RGB(Int(256 * Rnd), Int(256 * Rnd), Int(256 * Rnd))
+    ' Set the pixel to the color above.
+    retval = <B>SetPixelV</B>(Form1.hDC, x, y, rgbval)
+  Next x
+Next y</CODE></PRE></P>
+
+<H2>See Also</H2>
+<P><A href="getpixel.html" tppabs="http://www.vbapi.com/ref/g/getpixel.html">GetPixel</A>, <A href="setpixel.html" tppabs="http://www.vbapi.com/ref/s/setpixel.html">SetPixel</A></P>
+
+<H2>Category</H2>
+<P><A href="funcc.html#bitmaps" tppabs="http://www.vbapi.com/ref/funcc.html#bitmaps">Bitmaps</A></P>
+
+<P><A href="funca.html" tppabs="http://www.vbapi.com/ref/funca.html">Go back to the alphabetical Function listing.</A><BR>
+<A href="index.html" tppabs="http://www.vbapi.com/ref/index.html">Go back to the Reference section index.</A></P>
+
+<HR>
+
+<P><B>Last Modified:</B> September 3, 1999<BR>
+This page is copyright &copy; 1999 Paul Kuliniewicz.  
+<A href="copyrite.html" tppabs="http://www.vbapi.com/copyrite.html" rel="copyright">Copyright Information</A>  <B>Revised October 29, 2000</B><BR>
+
+<A href="index-1.html" tppabs="http://www.vbapi.com/index.html">Go back to the Windows API Guide home page.</A><BR>
+E-mail: <A href="javascript:if(confirm('http://www.vbapi.com/email.html  \n\nThis file was not retrieved by Teleport Pro, because it is addressed on a domain or path outside the boundaries set for its Starting Address.  \n\nDo you want to open it from the server?'))window.location='http://www.vbapi.com/email.html'" tppabs="http://www.vbapi.com/email.html">vbapi@vbapi.com</A>  <A href="javascript:if(confirm('http://www.vbapi.com/email.html  \n\nThis file was not retrieved by Teleport Pro, because it is addressed on a domain or path outside the boundaries set for its Starting Address.  \n\nDo you want to open it from the server?'))window.location='http://www.vbapi.com/email.html#secure'" tppabs="http://www.vbapi.com/email.html#secure">Send Encrypted E-Mail</A><BR>
+This page is at <A href="setpixelv.html" tppabs="http://www.vbapi.com/ref/s/setpixelv.html">http://www.vbapi.com/ref/s/setpixelv.html</A>
+</P>
+</BODY>
+</HTML>

@@ -1,0 +1,154 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+<HTML lang="en-us">
+<HEAD>
+<TITLE>Windows API Guide: EnumDisplaySettings Function</TITLE>
+<META content="vbapi@vbapi.com" name="author">
+<META content="Information about the EnumDisplaySettings function in the Windows API, geared towards the Visual Basic user." name="description">
+<META content="Kuliniewicz,Windows,Windows 95,Windows NT,Windows 98,Windows CE,Windows 2000,API,Application Programming Interface,Programming,Visual Basic,Basic,VB,EnumDisplaySettings" name="keywords">
+<META content="Omicron HTML Editor" name="generator">
+<LINK href="default.css" tppabs="http://www.vbapi.com/css/default.css" rel="stylesheet" type="text/css">
+<LINK href="index-1.html" tppabs="http://www.vbapi.com/index.html" rel="home">
+<LINK href="glossary.html" tppabs="http://www.vbapi.com/ref/glossary.html" rel="glossary">
+<LINK href="copyrite.html" tppabs="http://www.vbapi.com/copyrite.html" rel="copyright">
+</HEAD>
+<BODY>
+
+<!-- Begin Adslot1 -->
+<CENTER>
+<SCRIPT language="JAVASCRIPT">
+<!-- hide from older browsers
+now = new Date();
+my_random = now.getTime();
+document.write('<A href="http://adex3.flycast.com/server/socket/127.0.0.1:2800/click/VBWorldnet/VBAPI/' + my_random + '">');
+document.write('<IMG width="468" height="60" border="1" src="http://adex3.flycast.com/server/socket/127.0.0.1:2800/ad/VBWorldnet/VBAPI/' + my_random + '"></A>');
+// -->
+</SCRIPT>
+</CENTER>
+<!-- End Adslot1 -->
+
+<HR>
+
+<H1>EnumDisplaySettings Function</H1>
+
+<P><CODE class="declare"><SPAN class="kw">Declare Function</SPAN> EnumDisplaySettings <SPAN class="kw">Lib</SPAN> "user32.dll" <SPAN class="kw">Alias</SPAN> "EnumDisplaySettingsA" (<SPAN class="kw">ByVal</SPAN> lpszDeviceName <SPAN class="kw">As String</SPAN>, <SPAN class="kw">ByVal</SPAN> iModeNum <SPAN class="kw">As Long</SPAN>, lpDevMode <SPAN class="kw">As</SPAN> <A href="devmode.html" tppabs="http://www.vbapi.com/ref/d/devmode.html">DEVMODE</A>) <SPAN class="kw">As Long</SPAN>
+</CODE></P>
+
+<H2>Platforms</H2>
+<P><UL>
+<LI><B>Windows 95:</B> Supported.
+<LI><B>Windows 98:</B> Supported.
+<LI><B>Windows NT:</B> Requires Windows NT 3.51 or later.
+<LI><B>Windows 2000:</B> Supported.
+<LI><B>Windows CE:</B> Not Supported.
+</UL></P>
+
+<H2>Description &amp; Usage</H2>
+<P><B>EnumDisplaySettings</B> gets the display settings of one of a display device's graphics modes.  Specifically, the function gets the display mode's resolution, color depth, and frequency, along with some additional information.</P>
+
+<H2>Return Value</H2>
+<P>If successful, the function returns a non-zero value.  If an error occured, the function returns zero (<B>Windows NT/2000:</B> use <A href="getlasterror.html" tppabs="http://www.vbapi.com/ref/g/getlasterror.html">GetLastError</A> to get the error code).</P>
+
+<H2>Visual Basic-Specific Issues</H2>
+<P>None.</P>
+
+<H2>Parameters</H2>
+<P><DL>
+<DT><VAR>lpszDeviceName</VAR><DD><B>Windows 95, 98:</B> This must be a null string.  <B>Windows NT, 2000:</B> If this is a null string, the current display device is used.  Otherwise, this is the device name of the display device to examine.  The string is of the form "\\.\Display<VAR>X</VAR>", where <VAR>X</VAR> is 1, 2, or 3.
+<DT><VAR>iModeNum</VAR><DD>The number of the graphics mode to retrieve information about.  This could also be one of the following flags specifying a graphics mode:
+<DL>
+<DT>ENUM_CURRENT_SETTINGS<DD>Get information about the current display settings.
+<DT>ENUM_REGISTRY_SETTINGS<DD>Get information about the display settings stored in the registry.
+</DL>
+<DT><VAR>lpDevMode</VAR><DD>Receives information about the graphics mode.  Only the <VAR>dmBitsPerPixel</VAR>, <VAR>dmPelsWidth</VAR>, <VAR>dmPelsHeight</VAR>, <VAR>dmDisplayFlags</VAR>, and <VAR>dmDisplayFrequency</VAR> members have useful data in them.  Before calling the function, this structure's <VAR>dmSize</VAR> member must be properly set.
+</DL></P>
+
+<H2>Constant Definitions</H2>
+<P><PRE><CODE class="const"><SPAN class="kw">Const</SPAN> ENUM_CURRENT_SETTINGS = -1
+<SPAN class="kw">Const</SPAN> ENUM_REGISTRY_SETTINGS = -2</CODE></PRE></P>
+
+<H2>Example</H2>
+<P>Display information about the current display settings for the monitor.  To use this example, place a command button named Command1 on a form window.</P>
+
+<P><PRE><CODE class="example"><SPAN class="com">' This code is licensed according to the terms and conditions listed <A href="copyrite.html#license" tppabs="http://www.vbapi.com/copyrite.html#license" rel="copyright">here</A>.</SPAN>
+
+<SPAN class="com">' Declarations and such needed for the example:
+' (Copy them to the (declarations) section of a module.)</SPAN>
+<SPAN class="kw">Public Type</SPAN> <A href="devmode.html" tppabs="http://www.vbapi.com/ref/d/devmode.html">DEVMODE</A>
+	dmDeviceName <SPAN class="kw">As String</SPAN> * 32
+	dmSpecVersion <SPAN class="kw">As Integer</SPAN>
+	dmDriverVersion <SPAN class="kw">As Integer</SPAN>
+	dmSize <SPAN class="kw">As Integer</SPAN>
+	dmDriverExtra <SPAN class="kw">As Integer</SPAN>
+	dmFields <SPAN class="kw">As Long</SPAN>
+	dmOrientation <SPAN class="kw">As Integer</SPAN>
+	dmPaperSize <SPAN class="kw">As Integer</SPAN>
+	dmPaperLength <SPAN class="kw">As Integer</SPAN>
+	dmPaperWidth <SPAN class="kw">As Integer</SPAN>
+	dmScale <SPAN class="kw">As Integer</SPAN>
+	dmCopies <SPAN class="kw">As Integer</SPAN>
+	dmDefaultSource <SPAN class="kw">As Integer</SPAN>
+	dmPrintQuality <SPAN class="kw">As Integer</SPAN>
+	dmColor <SPAN class="kw">As Integer</SPAN>
+	dmDuplex <SPAN class="kw">As Integer</SPAN>
+	dmYResolution <SPAN class="kw">As Integer</SPAN>
+	dmTTOption <SPAN class="kw">As Integer</SPAN>
+	dmCollate <SPAN class="kw">As Integer</SPAN>
+	dmFormName <SPAN class="kw">As String</SPAN> * 32
+	dmUnusedPadding <SPAN class="kw">As Integer</SPAN>
+	dmBitsPerPixel <SPAN class="kw">As Integer</SPAN>
+	dmPelsWidth <SPAN class="kw">As Long</SPAN>
+	dmPelsHeight <SPAN class="kw">As Long</SPAN>
+	dmDisplayFlags <SPAN class="kw">As Long</SPAN>
+	dmDisplayFrequency <SPAN class="kw">As Long</SPAN>
+	<SPAN class="com">' The following only appear in Windows 95, 98, 2000</SPAN>
+	dmICMMethod <SPAN class="kw">As Long</SPAN>
+	dmICMIntent <SPAN class="kw">As Long</SPAN>
+	dmMediaType <SPAN class="kw">As Long</SPAN>
+	dmDitherType <SPAN class="kw">As Long</SPAN>
+	dmReserved1 <SPAN class="kw">As Long</SPAN>
+	dmReserved2 <SPAN class="kw">As Long</SPAN>
+	<SPAN class="com">' The following only appear in Windows 2000</SPAN>
+	dmPanningWidth <SPAN class="kw">As Long</SPAN>
+	dmPanningHeight <SPAN class="kw">As Long</SPAN>
+<SPAN class="kw">End Type</SPAN>
+<SPAN class="kw">Public Declare Function</SPAN> <B>EnumDisplaySettings</B> <SPAN class="kw">Lib</SPAN> "user32.dll" <SPAN class="kw">Alias</SPAN> "EnumDisplaySettingsA" (<SPAN class="kw">ByVal</SPAN> lpszDeviceName <SPAN class="kw">As String</SPAN>, _
+	<SPAN class="kw">ByVal</SPAN> iModeNum <SPAN class="kw">As Long</SPAN>, lpDevMode <SPAN class="kw">As</SPAN> <A href="devmode.html" tppabs="http://www.vbapi.com/ref/d/devmode.html">DEVMODE</A>) <SPAN class="kw">As Long</SPAN>
+<SPAN class="kw">Public Const</SPAN> ENUM_CURRENT_SETTINGS = -1
+<SPAN class="kw">Public Const</SPAN> ENUM_REGISTRY_SETTINGS = -2
+
+<SPAN class="com">' *** Place the following code inside the form window. ***</SPAN>
+
+<SPAN class="kw">Private Sub</SPAN> Command1_Click()
+	<SPAN class="kw">Dim</SPAN> dm <SPAN class="kw">As</SPAN> <A href="devmode.html" tppabs="http://www.vbapi.com/ref/d/devmode.html">DEVMODE</A>   <SPAN class="com">' info about the display device</SPAN>
+	<SPAN class="kw">Dim</SPAN> retval <SPAN class="kw">As Long</SPAN>  <SPAN class="com">' return value</SPAN>
+	
+	<SPAN class="com">' Initialize the structure.</SPAN>
+	dm.dmSize = Len(dm)
+	<SPAN class="com">' Get the display settings for the current monitor and mode.</SPAN>
+	retval = <B>EnumDisplaySettings</B>(vbNullString, ENUM_CURRENT_SETTINGS, dm)
+	<SPAN class="com">' Print some information about the display.</SPAN>
+	<SPAN class="kw">Debug</SPAN>.<SPAN class="kw">Print</SPAN> "- Bits Per Pixel: "; dm.dmBitsPerPixel
+	<SPAN class="kw">Debug</SPAN>.<SPAN class="kw">Print</SPAN> "- Width (Pixels): "; dm.dmPelsWidth
+	<SPAN class="kw">Debug</SPAN>.<SPAN class="kw">Print</SPAN> "- Height (Pixels):"; dm.dmPelsHeight
+	<SPAN class="kw">Debug</SPAN>.<SPAN class="kw">Print</SPAN> "- Display Freq.:  "; dm.dmDisplayFrequency
+<SPAN class="kw">End Sub</SPAN></CODE></PRE></P>
+
+<H2>See Also</H2>
+<P><A href="changedisplaysettings.html" tppabs="http://www.vbapi.com/ref/c/changedisplaysettings.html">ChangeDisplaySettings</A></P>
+
+<H2>Category</H2>
+<P><A href="funcc.html#devices" tppabs="http://www.vbapi.com/ref/funcc.html#devices">Devices</A></P>
+
+<P><A href="funca.html" tppabs="http://www.vbapi.com/ref/funca.html">Back to the Function list.</A><BR>
+<A href="index.html" tppabs="http://www.vbapi.com/ref/index.html" rel="index">Back to the Reference section.</A></P>
+
+<HR>
+
+<P><B>Last Modified:</B> January 21, 2001<BR>
+This page is copyright &copy; 2001 Paul Kuliniewicz.  
+<A href="copyrite.html" tppabs="http://www.vbapi.com/copyrite.html" rel="copyright">Copyright Information</A>  <B>Revised October 29, 2000</B><BR>
+<A href="index-1.html" tppabs="http://www.vbapi.com/index.html" rel="home">Go back to the Windows API Guide home page.</A><BR>
+E-mail: <A href="javascript:if(confirm('http://www.vbapi.com/email.html  \n\nThis file was not retrieved by Teleport Pro, because it is addressed on a domain or path outside the boundaries set for its Starting Address.  \n\nDo you want to open it from the server?'))window.location='http://www.vbapi.com/email.html'" tppabs="http://www.vbapi.com/email.html">vbapi@vbapi.com</A>  <A href="javascript:if(confirm('http://www.vbapi.com/email.html  \n\nThis file was not retrieved by Teleport Pro, because it is addressed on a domain or path outside the boundaries set for its Starting Address.  \n\nDo you want to open it from the server?'))window.location='http://www.vbapi.com/email.html#secure'" tppabs="http://www.vbapi.com/email.html#secure">Send Encrypted E-Mail</A><BR>
+This page is at <A href="enumdisplaysettings.html" tppabs="http://www.vbapi.com/ref/e/enumdisplaysettings.html">http://www.vbapi.com/ref/e/enumdisplaysettings.html</A></P>
+</BODY>
+</HTML>

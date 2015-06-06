@@ -1,0 +1,143 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+<HTML lang="en-us">
+<HEAD>
+<TITLE>Windows API Guide: IPM_SETFOCUS Message</TITLE>
+<META content="vbapi@vbapi.com" name="author">
+<META content="Information about the IPM_SETFOCUS message in the Windows API, geared towards the Visual Basic user." name="description">
+<META content="Kuliniewicz,Windows,Windows 95,Windows NT,Windows 98,Windows CE,Windows 2000,API,Application Programming Interface,Programming,Visual Basic,Basic,VB,IPM_SETFOCUS" name="keywords">
+<META content="Omicron HTML Editor" name="generator">
+<LINK href="default.css" tppabs="http://www.vbapi.com/css/default.css" rel="stylesheet" type="text/css">
+<LINK href="index-1.html" tppabs="http://www.vbapi.com/index.html" rel="home">
+<LINK href="glossary.html" tppabs="http://www.vbapi.com/ref/glossary.html" rel="glossary">
+<LINK href="copyrite.html" tppabs="http://www.vbapi.com/copyrite.html" rel="copyright">
+</HEAD>
+<BODY>
+
+<!-- Begin Adslot1 -->
+<CENTER>
+<SCRIPT language="JAVASCRIPT">
+<!-- hide from older browsers
+now = new Date();
+my_random = now.getTime();
+document.write('<A href="http://adex3.flycast.com/server/socket/127.0.0.1:2800/click/VBWorldnet/VBAPI/' + my_random + '">');
+document.write('<IMG width="468" height="60" border="1" src="http://adex3.flycast.com/server/socket/127.0.0.1:2800/ad/VBWorldnet/VBAPI/' + my_random + '"></A>');
+// -->
+</SCRIPT>
+</CENTER>
+<!-- End Adslot1 -->
+
+<HR>
+
+<H1>IPM_SETFOCUS Message</H1>
+
+<H2>Platforms</H2>
+<P><UL>
+<LI><B>Windows 95:</B> Requires Internet Explorer 4.0 or later.
+<LI><B>Windows 98:</B> Supported.
+<LI><B>Windows NT:</B> Requires Internet Explorer 4.0 or later.
+<LI><B>Windows 2000:</B> Supported.
+<LI><B>Windows CE:</B> Requires Windows CE 1.0 or later.
+</UL></P>
+
+<H2>Description &amp; Usage</H2>
+<P>Sending the <B>IPM_SETFOCUS</B> message to an <A href="ipaddress.html" tppabs="http://www.vbapi.com/ref/other/classes/ipaddress.html">IP Address contol</A> gives the control the keyboard focus.  The text in the particular field that is given the focus will automatically be selected.</P>
+
+<H2>Return Value</H2>
+<P>The message does not return a meaningful value.</P>
+
+<H2>Visual Basic-Specific Issues</H2>
+<P>None.</P>
+
+<H2>Parameters</H2>
+<P><DL>
+<DT><VAR>wParam</VAR><DD>Specifies the (zero-based) field of the control to give the focus to.  If this is greater than three, then the focus is set to the first blank field, or the first one if all fields are filled.
+</DL></P>
+
+<H2>Constant Definitions</H2>
+<P><PRE><CODE class="const"><SPAN class="kw">Const</SPAN> IPM_SETFOCUS = &amp;H468</CODE></PRE></P>
+
+<H2>Example</H2>
+<P>When the form loads, create an IP Address control and place it in the upper-left corner of the window.  When the user clicks button cmdClear, the contents of the IP Address control are erased and the keyboard focus is given to the first field in the control.</P>
+
+<P>To use this example, create a command button named cmdClear and place it on a form window.  The IP Address control will be created programmatically when the program starts.</P>
+
+<P><PRE><CODE class="example"><SPAN class="com">' This code is licensed according to the terms and conditions listed <A href="copyrite.html#license" tppabs="http://www.vbapi.com/copyrite.html#license" rel="copyright">here</A>.</SPAN>
+
+<SPAN class="com">' Declarations and such needed for the example:
+' (Copy them to the (declarations) section of a module.)</SPAN>
+<SPAN class="kw">Public Type</SPAN> <A href="initcommoncontrolsex_type.html" tppabs="http://www.vbapi.com/ref/i/initcommoncontrolsex_type.html">INITCOMMONCONTROLSEX_TYPE</A>
+	dwSize <SPAN class="kw">As Long</SPAN>
+	dwICC <SPAN class="kw">As Long</SPAN>
+<SPAN class="kw">End Type</SPAN>
+<SPAN class="kw">Public Declare Function</SPAN> <A href="initcommoncontrolsex.html" tppabs="http://www.vbapi.com/ref/i/initcommoncontrolsex.html">InitCommonControlsEx</A> <SPAN class="kw">Lib</SPAN> "comctl32.dll" (lpInitCtrls <SPAN class="kw">As</SPAN> _
+	<A href="initcommoncontrolsex_type.html" tppabs="http://www.vbapi.com/ref/i/initcommoncontrolsex_type.html">INITCOMMONCONTROLSEX_TYPE</A>) <SPAN class="kw">As Long</SPAN>
+<SPAN class="kw">Public Const</SPAN> ICC_INTERNET_CLASSES = &amp;H800
+<SPAN class="kw">Public Declare Function</SPAN> <A href="createwindowex.html" tppabs="http://www.vbapi.com/ref/c/createwindowex.html">CreateWindowEx</A> <SPAN class="kw">Lib</SPAN> "user32.dll" <SPAN class="kw">Alias</SPAN> "CreateWindowExA" (<SPAN class="kw">ByVal</SPAN> dwExStyle <SPAN class="kw">As Long</SPAN>, _
+	<SPAN class="kw">ByVal</SPAN> lpClassName <SPAN class="kw">As String</SPAN>, <SPAN class="kw">ByVal</SPAN> lpWindowName <SPAN class="kw">As String</SPAN>, <SPAN class="kw">ByVal</SPAN> dwStyle <SPAN class="kw">As Long</SPAN>, <SPAN class="kw">ByVal</SPAN> x _
+	<SPAN class="kw">As Long</SPAN>, <SPAN class="kw">ByVal</SPAN> y <SPAN class="kw">As Long</SPAN>, <SPAN class="kw">ByVal</SPAN> nWidth <SPAN class="kw">As Long</SPAN>, <SPAN class="kw">ByVal</SPAN> nHeight <SPAN class="kw">As Long</SPAN>, <SPAN class="kw">ByVal</SPAN> hWndParent <SPAN class="kw">As Long</SPAN>, _
+	<SPAN class="kw">ByVal</SPAN> hMenu <SPAN class="kw">As Long</SPAN>, <SPAN class="kw">ByVal</SPAN> hInstance <SPAN class="kw">As Long</SPAN>, lpParam <SPAN class="kw">As Any</SPAN>) <SPAN class="kw">As Long</SPAN>
+<SPAN class="kw">Public Const</SPAN> WC_IPADDRESS = "SysIPAddress32"
+<SPAN class="kw">Public Const</SPAN> WS_CHILD = &amp;H40000000
+<SPAN class="kw">Public Const</SPAN> WS_VISIBLE = &amp;H10000000
+<SPAN class="kw">Public Declare Function</SPAN> <A href="destroywindow.html" tppabs="http://www.vbapi.com/ref/d/destroywindow.html">DestroyWindow</A> <SPAN class="kw">Lib</SPAN> "user32.dll" (<SPAN class="kw">ByVal</SPAN> hWnd <SPAN class="kw">As Long</SPAN>) <SPAN class="kw">As Long</SPAN>
+<SPAN class="kw">Public Declare Function</SPAN> <A href="sendmessage.html" tppabs="http://www.vbapi.com/ref/s/sendmessage.html">SendMessage</A> <SPAN class="kw">Lib</SPAN> "user32.dll" <SPAN class="kw">Alias</SPAN> "SendMessageA" (<SPAN class="kw">ByVal</SPAN> hWnd <SPAN class="kw">As Long</SPAN>, <SPAN class="kw">ByVal</SPAN> Msg _
+	<SPAN class="kw">As Long</SPAN>, wParam <SPAN class="kw">As Any</SPAN>, lParam <SPAN class="kw">As Any</SPAN>) <SPAN class="kw">As Long</SPAN>
+<SPAN class="kw">Public Const</SPAN> <A href="ipm_clearaddress.html" tppabs="http://www.vbapi.com/ref/i/ipm_clearaddress.html">IPM_CLEARADDRESS</A> = &amp;H464
+<SPAN class="kw">Public Const</SPAN> <B>IPM_SETFOCUS</B> = &amp;H468
+
+<SPAN class="com">' *** Place the following code inside the form window. ***</SPAN>
+
+<SPAN class="kw">Private</SPAN> hIPControl <SPAN class="kw">As Long</SPAN>  <SPAN class="com">' handle to the IP Address control</SPAN>
+
+<SPAN class="com">' When the form is initialized, create an IP Address control in the
+' upper-left corner of the form.</SPAN>
+<SPAN class="kw">Private Sub</SPAN> Form_Initialize()
+	<SPAN class="kw">Dim</SPAN> comctls <SPAN class="kw">As</SPAN> <A href="initcommoncontrolsex_type.html" tppabs="http://www.vbapi.com/ref/i/initcommoncontrolsex_type.html">INITCOMMONCONTROLSEX_TYPE</A>  <SPAN class="com">' identifies the control to register</SPAN>
+	<SPAN class="kw">Dim</SPAN> retval <SPAN class="kw">As Long</SPAN>                        <SPAN class="com">' generic return value</SPAN>
+	
+	<SPAN class="com">' Register the IP Address control window class.</SPAN>
+	<SPAN class="kw">With</SPAN> comctls
+		.dwSize = Len(comctls)
+		.dwICC = ICC_INTERNET_CLASSES
+	<SPAN class="kw">End With</SPAN>
+	retval = <A href="initcommoncontrolsex.html" tppabs="http://www.vbapi.com/ref/i/initcommoncontrolsex.html">InitCommonControlsEx</A>(comctls)
+	
+	<SPAN class="com">' Create the IP Address control in the corner of the window.</SPAN>
+	hIPControl = <A href="createwindowex.html" tppabs="http://www.vbapi.com/ref/c/createwindowex.html">CreateWindowEx</A>(0, WC_IPADDRESS, "", WS_CHILD <SPAN class="kw">Or</SPAN> WS_VISIBLE, 0, 0, 125, 20, _
+		Me.hWnd, 0, App.hInstance, <SPAN class="kw">ByVal CLng(</SPAN>0<SPAN class="kw">)</SPAN>)
+<SPAN class="kw">End Sub</SPAN>
+
+<SPAN class="com">' Destroy the IP Address control when the form closes.</SPAN>
+<SPAN class="kw">Private Sub</SPAN> Form_Unload(Cancel <SPAN class="kw">As Integer</SPAN>)
+	<SPAN class="kw">Dim</SPAN> retval <SPAN class="kw">As Long</SPAN>  <SPAN class="com">' return value</SPAN>
+	
+	retval = <A href="destroywindow.html" tppabs="http://www.vbapi.com/ref/d/destroywindow.html">DestroyWindow</A>(hIPControl)
+<SPAN class="kw">End Sub</SPAN>
+
+<SPAN class="com">' Clear the contents of the IP Address control when the
+' use clicks this button.</SPAN>
+<SPAN class="kw">Private Sub</SPAN> cmdClear_Click()
+	<SPAN class="kw">Dim</SPAN> retval <SPAN class="kw">As Long</SPAN>
+	
+	<SPAN class="com">' Clear the contents of the control.</SPAN>
+	retval = <A href="sendmessage.html" tppabs="http://www.vbapi.com/ref/s/sendmessage.html">SendMessage</A>(hIPControl, <A href="ipm_clearaddress.html" tppabs="http://www.vbapi.com/ref/i/ipm_clearaddress.html">IPM_CLEARADDRESS</A>, <SPAN class="kw">ByVal CLng(</SPAN>0<SPAN class="kw">)</SPAN>, <SPAN class="kw">ByVal CLng(</SPAN>0<SPAN class="kw">)</SPAN>)
+	<SPAN class="com">' Give the first field (field 0) the keyboard focus.</SPAN>
+	retval = <A href="sendmessage.html" tppabs="http://www.vbapi.com/ref/s/sendmessage.html">SendMessage</A>(hIPControl, <B>IPM_SETFOCUS</B>, <SPAN class="kw">ByVal CLng(</SPAN>0<SPAN class="kw">)</SPAN>, <SPAN class="kw">ByVal CLng(</SPAN>0<SPAN class="kw">)</SPAN>)
+<SPAN class="kw">End Sub</SPAN></CODE></PRE></P>
+
+<H2>Category</H2>
+<P><A href="msgc.html#ipaddress" tppabs="http://www.vbapi.com/ref/msgc.html#ipaddress">IP Address Control</A></P>
+
+<P><A href="msga.html" tppabs="http://www.vbapi.com/ref/msga.html">Back to the Message list.</A><BR>
+<A href="index.html" tppabs="http://www.vbapi.com/ref/index.html" rel="index">Back to the Reference section.</A></P>
+
+<HR>
+
+<P><B>Last Modified:</B> October 29, 2000<BR>
+This page is copyright &copy; 2000 Paul Kuliniewicz.  
+<A href="copyrite.html" tppabs="http://www.vbapi.com/copyrite.html" rel="copyright">Copyright Information</A>  <B>Revised October 29, 2000</B><BR>
+<A href="index-1.html" tppabs="http://www.vbapi.com/index.html" rel="home">Go back to the Windows API Guide home page.</A><BR>
+E-mail: <A href="javascript:if(confirm('http://www.vbapi.com/email.html  \n\nThis file was not retrieved by Teleport Pro, because it is addressed on a domain or path outside the boundaries set for its Starting Address.  \n\nDo you want to open it from the server?'))window.location='http://www.vbapi.com/email.html'" tppabs="http://www.vbapi.com/email.html">vbapi@vbapi.com</A>  <A href="javascript:if(confirm('http://www.vbapi.com/email.html  \n\nThis file was not retrieved by Teleport Pro, because it is addressed on a domain or path outside the boundaries set for its Starting Address.  \n\nDo you want to open it from the server?'))window.location='http://www.vbapi.com/email.html#secure'" tppabs="http://www.vbapi.com/email.html#secure">Send Encrypted E-Mail</A><BR>
+This page is at <A href="ipm_setfocus.html" tppabs="http://www.vbapi.com/ref/i/ipm_setfocus.html">http://www.vbapi.com/ref/i/ipm_setfocus.html</A></P>
+</BODY>
+</HTML>

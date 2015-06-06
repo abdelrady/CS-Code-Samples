@@ -1,0 +1,175 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+<HTML lang="en-us">
+<HEAD>
+<TITLE>Windows API Guide: VS_FIXEDFILEINFO Structure</TITLE>
+<META content="vbapi@vbapi.com" name="author">
+<META content="Information about the VS_FIXEDFILEINFO structure in the Windows API, geared towards the Visual Basic user." name="description">
+<META content="Kuliniewicz,Windows,Windows 95,Windows NT,Windows 98,Windows CE,Windows 2000,API,Application Programming Interface,Programming,Visual Basic,Basic,VB,VS_FIXEDFILEINFO" name="keywords">
+<META content="Omicron HTML Editor" name="generator">
+<LINK href="default.css" tppabs="http://www.vbapi.com/css/default.css" rel="stylesheet" type="text/css">
+<LINK href="index-1.html" tppabs="http://www.vbapi.com/index.html" rel="home">
+<LINK href="glossary.html" tppabs="http://www.vbapi.com/ref/glossary.html" rel="glossary">
+<LINK href="copyrite.html" tppabs="http://www.vbapi.com/copyrite.html" rel="copyright">
+</HEAD>
+<BODY>
+
+<!-- Begin Adslot1 -->
+<CENTER>
+<SCRIPT language="JAVASCRIPT">
+<!-- hide from older browsers
+now = new Date();
+my_random = now.getTime();
+document.write('<A href="http://adex3.flycast.com/server/socket/127.0.0.1:2800/click/VBWorldnet/VBAPI/' + my_random + '">');
+document.write('<IMG width="468" height="60" border="1" src="http://adex3.flycast.com/server/socket/127.0.0.1:2800/ad/VBWorldnet/VBAPI/' + my_random + '"></A>');
+// -->
+</SCRIPT>
+</CENTER>
+<!-- End Adslot1 -->
+
+<HR>
+
+<H1>VS_FIXEDFILEINFO Structure</H1>
+
+<P><PRE class="type"><CODE type="type"><SPAN class="kw">Type</SPAN> VS_FIXEDFILEINFO
+	dwSignature <SPAN class="kw">As Long</SPAN>
+	dwStrucVersion <SPAN class="kw">As Long</SPAN>
+	dwFileVersionMS <SPAN class="kw">As Long</SPAN>
+	dwFileVersionLS <SPAN class="kw">As Long</SPAN>
+	dwProductVersionMS <SPAN class="kw">As Long</SPAN>
+	dwProductVersionLS <SPAN class="kw">As Long</SPAN>
+	dwFileFlagsMask <SPAN class="kw">As Long</SPAN>
+	dwFileFlags <SPAN class="kw">As Long</SPAN>
+	dwFileOS <SPAN class="kw">As Long</SPAN>
+	dwFileType <SPAN class="kw">As Long</SPAN>
+	dwFileSubtype <SPAN class="kw">As Long</SPAN>
+	dwFileDateMS <SPAN class="kw">As Long</SPAN>
+	dwFileDateLS <SPAN class="kw">As Long</SPAN>
+End Type</CODE></PRE></P>
+
+<H2>Description &amp; Usage</H2>
+<P>The <B>VS_FIXEDFILEINFO</B> structure holds version information that describes a 32-bit executable-type file.  No version information strings are stored in the structure.</P>
+
+<H2>Visual Basic-Specific Issues</H2>
+<P>None.</P>
+
+<H2>Data Members</H2>
+<P><DL>
+<DT><VAR>dwSignature</VAR><DD>The value &amp;HFEEF04BD.
+<DT><VAR>dwStrucVersion</VAR><DD>The version number of this structure.  The high-order <A class="def" href="glossary.html#word" tppabs="http://www.vbapi.com/ref/glossary.html#word" rel="glossary">word</A> holds the major version number, and the low-order word holds the minor version number.
+<DT><VAR>dwFileVersionMS</VAR><DD>The high-order <A class="def" href="glossary.html#dword" tppabs="http://www.vbapi.com/ref/glossary.html#dword" rel="glossary">dword</A> of the 64-bit version number.  The high-order word of this dword is the leftmost component of the version number, and the low-order word is the number immediately to the right of it.  (This is pretty much the major and minor version numbers of the file.)
+<DT><VAR>dwFileVersionLS</VAR><DD>The low-order dword of the 64-bit version number.  The low-order word of this dword is the rightmost component of the version number, and the high-order dword is the component immediately to the left of it.  (This is pretty much a major and minor revision number, if it is used at all.)
+<DT><VAR>dwProductVersionMS</VAR><DD>The high-order dword of the 64-bit version number of the product that the file was shipped with.  The format of this value is the same as that of <VAR>dwFileVersionMS</VAR>.
+<DT><VAR>dwProductVersionLS</VAR><DD>The low-order dword of the 64-bit version number of the product that the file was shipped with.  The format of this value is the same as that of <VAR>dwFileVersionLS</VAR>.
+<DT><VAR>dwFileFlagsMask</VAR><DD>A bitmask that specifies what bits of <VAR>dwFileFlags</VAR> are valid.
+<DT><VAR>dwFileFlags</VAR><DD>A combination of the following flags specifying additional information about the file's version.  Perform a bitwise And between this value and <VAR>dwFileFlagsMask</VAR> before checking for any of the following flags.
+<DL>
+<DT>VS_FF_DEBUG<DD>The file contains debugging information.
+<DT>VS_FF_INFOINFERRED<DD>The version information in this structure was not found inside the file, but instead was created when needed based on the best information available.  Therefore, this structure's information may differ slightly from what the "real" values are.
+<DT>VS_FF_PATCHED<DD>The file has been modified somehow and is not identical to the original file that shipped with the product.
+<DT>VS_FF_PRERELEASE<DD>The file is a prerelease development version, not a final commercial release.
+<DT>VS_FF_PRIVATEBUILD<DD>The file was not built using standard release procedures.  There should be data in the file's "PrivateBuild" version information string.
+<DT>VS_FF_SPECIALBUILD<DD>The file was built using standard release procedures, but is somehow different from the normal file having the same version number.  There should be data in the file's "SpecialBuild" version information string.
+</DL>
+<DT><VAR>dwFileOS</VAR><DD>One of the following flags specifying the operating system which the file was meant to run on:
+<DL>
+<DT>VOS_DOS<DD>The file was designed to run under MS-DOS.
+<DT>VOS_NT<DD>The file was designed to run under Windows NT/2000.
+<DT>VOS__WINDOWS16<DD>The file was designed to run under the 16-bit Windows API.
+<DT>VOS__WINDOWS32<DD>The file was designed to run under the 32-bit Windows API.
+<DT>VOS_OS216<DD>The file was designed to run under a 16-bit version of OS/2.
+<DT>VOS_OS232<DD>The file was designed to run under a 32-bit version of OS/2.
+<DT>VOS__PM16<DD>The file was designed to be run under a 16-bit version of Presentation Manager.
+<DT>VOS__PM32<DD>The file was designed to be run under a 32-bit version of Presentation Manager.
+<DT>VOS_UNKNOWN<DD>The operating system under which the file was designed to run could not be determined.
+</DL>
+<DT><VAR>dwFileType</VAR><DD>One of the following flags specifying the type of file this is:
+<DL>
+<DT>VFT_APP<DD>The file is an application.
+<DT>VFT_DLL<DD>The file is a Dynamic Link Library (DLL).
+<DT>VFT_DRV<DD>The file is a device driver.  <VAR>dwFileSubtype</VAR> contains more information.
+<DT>VFT_FONT<DD>The file is a font.  <VAR>dwFileSubtype</VAR> contains more information.
+<DT>VFT_STATIC_LIB<DD>The file is a static link library.
+<DT>VFT_VXD<DD>The file is a virtual device.
+<DT>VFT_UNKNOWN<DD>The type of file could not be determined.
+</DL>
+<DT><VAR>dwFileSubtype</VAR><DD>Specifies additional information about the file.  The usage of this element of the structure depends on the value of <VAR>dwFileType</VAR>.<BR><BR>
+If <VAR>dwFileType</VAR> is VFT_DRV, then this is one of the following flags specifying the type of driver:
+<DL>
+<DT>VFT2_DRV_COMM<DD>The file is a communications driver.
+<DT>VFT2_DRV_DISPLAY<DD>The file is a display driver.
+<DT>VFT2_DRV_INSTALLABLE<DD>The file is an installable driver.
+<DT>VFT2_DRV_KEYBOARD<DD>The file is a keyboard driver.
+<DT>VFT2_DRV_LANGUAGE<DD>The file is a language driver.
+<DT>VFT2_DRV_MOUSE<DD>The file is a mouse driver.
+<DT>VFT2_DRV_NETWORK<DD>The file is a network driver.
+<DT>VFT2_DRV_PRINTER<DD>The file is a printer driver.
+<DT>VFT2_DRV_SOUND<DD>The file is a sound driver.
+<DT>VFT2_DRV_SYSTEM<DD>The file is a system driver.
+<DT>VFT2_UNKNOWN<DD>The type of driver could not be determined.
+</DL><BR>
+If <VAR>dwFileType</VAR> is VFT_FONT, then this is one of the following flags specifying the type of font:
+<DL>
+<DT>VFT2_FONT_RASTER<DD>The file is a raster font.
+<DT>VFT2_FONT_TRUETYPE<DD>The file is a TrueType font.
+<DT>VFT2_FONT_VECTOR<DD>The file is a vector font.
+<DT>VFT2_UNKNOWN<DD>The type of font could not be determined.
+</DL>
+<DT><VAR>dwFileDateMS</VAR><DD>The high-order dword of the file's 64-bit creation date and time stamp.
+<DT><VAR>dwFileDateLS</VAR><DD>The low-order dword of the file's 64-bit creation date and time stamp.
+</DL></P>
+
+<H2>Constant Definitions</H2>
+<P><PRE><CODE class="const"><SPAN class="kw">Const</SPAN> VS_FF_DEBUG = &amp;H1
+<SPAN class="kw">Const</SPAN> VS_FF_INFOINFERRED = &amp;H10
+<SPAN class="kw">Const</SPAN> VS_FF_PATCHED = &amp;H4
+<SPAN class="kw">Const</SPAN> VS_FF_PRERELEASE = &amp;H2
+<SPAN class="kw">Const</SPAN> VS_FF_PRIVATEBUILD = &amp;H8
+<SPAN class="kw">Const</SPAN> VS_FF_PRIVATEBUILD = &amp;H8
+<SPAN class="kw">Const</SPAN> VOS_DOS = &amp;H10000
+<SPAN class="kw">Const</SPAN> VOS_NT = &amp;H40000
+<SPAN class="kw">Const</SPAN> VOS__WINDOWS16 = &H1
+<SPAN class="kw">Const</SPAN> VOS__WINDOWS32 = &H4
+<SPAN class="kw">Const</SPAN> VOS_OS216 = &H20000
+<SPAN class="kw">Const</SPAN> VOS_OS232 = &H30000
+<SPAN class="kw">Const</SPAN> VOS__PM16 = &H2
+<SPAN class="kw">Const</SPAN> VOS__PM32 = &H3
+<SPAN class="kw">Const</SPAN> VOS_UNKNOWN = &H0
+<SPAN class="kw">Const</SPAN> VFT_APP = &H1
+<SPAN class="kw">Const</SPAN> VFT_DLL = &H2
+<SPAN class="kw">Const</SPAN> VFT_DRV = &H3
+<SPAN class="kw">Const</SPAN> VFT_FONT = &H4
+<SPAN class="kw">Const</SPAN> VFT_STATIC_LIB = &H7
+<SPAN class="kw">Const</SPAN> VFT_VXD = &H5
+<SPAN class="kw">Const</SPAN> VFT_UNKNOWN = &H0
+<SPAN class="kw">Const</SPAN> VFT2_DRV_COMM = &amp;HA
+<SPAN class="kw">Const</SPAN> VFT2_DRV_DISPLAY = &amp;H4
+<SPAN class="kw">Const</SPAN> VFT2_DRV_INSTALLABLE = &amp;H8
+<SPAN class="kw">Const</SPAN> VFT2_DRV_KEYBOARD = &amp;H2
+<SPAN class="kw">Const</SPAN> VFT2_DRV_LANGUAGE = &amp;H3
+<SPAN class="kw">Const</SPAN> VFT2_DRV_MOUSE = &amp;H5
+<SPAN class="kw">Const</SPAN> VFT2_DRV_NETWORK = &amp;H6
+<SPAN class="kw">Const</SPAN> VFT2_DRV_PRINTER = &amp;H1
+<SPAN class="kw">Const</SPAN> VFT2_DRV_SOUND = &amp;H9
+<SPAN class="kw">Const</SPAN> VFT2_DRV_SYSTEM = &amp;H7
+<SPAN class="kw">Const</SPAN> VFT2_FONT_RASTER = &amp;H1
+<SPAN class="kw">Const</SPAN> VFT2_FONT_TRUETYPE = &amp;H3
+<SPAN class="kw">Const</SPAN> VFT2_FONT_VECTOR = &amp;H2
+<SPAN class="kw">Const</SPAN> VFT2_UNKNOWN = &amp;H0
+</CODE></PRE></P>
+
+<H2>Used By</H2>
+<P><A href="verqueryvalue.html" tppabs="http://www.vbapi.com/ref/v/verqueryvalue.html">VerQueryValue</A></P>
+
+<P><A href="structa.html" tppabs="http://www.vbapi.com/ref/structa.html">Back to the Structure list.</A><BR>
+<A href="index.html" tppabs="http://www.vbapi.com/ref/index.html" rel="index">Back to the Reference section.</A></P>
+
+<HR>
+
+<P><B>Last Modified:</B> July 30, 2000<BR>
+This page is copyright &copy; 2000 Paul Kuliniewicz.  
+<A href="copyrite.html" tppabs="http://www.vbapi.com/copyrite.html" rel="copyright">Copyright Information</A>  <B>Revised October 29, 2000</B><BR>
+<A href="index-1.html" tppabs="http://www.vbapi.com/index.html" rel="home">Go back to the Windows API Guide home page.</A><BR>
+E-mail: <A href="javascript:if(confirm('http://www.vbapi.com/email.html  \n\nThis file was not retrieved by Teleport Pro, because it is addressed on a domain or path outside the boundaries set for its Starting Address.  \n\nDo you want to open it from the server?'))window.location='http://www.vbapi.com/email.html'" tppabs="http://www.vbapi.com/email.html">vbapi@vbapi.com</A> <A href="javascript:if(confirm('http://www.vbapi.com/email.html  \n\nThis file was not retrieved by Teleport Pro, because it is addressed on a domain or path outside the boundaries set for its Starting Address.  \n\nDo you want to open it from the server?'))window.location='http://www.vbapi.com/email.html#secure'" tppabs="http://www.vbapi.com/email.html#secure">Send Encrypted E-Mail</A><BR>
+This page is at <A href="vs_fixedfileinfo.html" tppabs="http://www.vbapi.com/ref/v/vs_fixedfileinfo.html">http://www.vbapi.com/ref/v/vs_fixedfileinfo.html</A></P>
+</BODY>
+</HTML>

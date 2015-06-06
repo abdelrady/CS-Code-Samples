@@ -1,0 +1,650 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!-- saved from url=(0050)http://www.cs.wisc.edu/~dyer/cs540/notes/fopc.html -->
+<HTML><HEAD><TITLE>CS 540 Lecture Notes: First-Order Logic</TITLE>
+<META http-equiv=Content-Type content="text/html; charset=iso-8859-1">
+<META content="MSHTML 6.00.2900.2180" name=GENERATOR></HEAD>
+<BODY vLink=#0060f0 link=#ff3300 bgColor=#ffffff>
+<TABLE width="100%">
+  <TBODY>
+  <TR>
+    <TD align=left>University of Wisconsin - Madison</TD>
+    <TD align=middle>CS 540 Lecture Notes</TD>
+    <TD align=right>C. R. Dyer</TD></TR></TBODY></TABLE>
+<P>
+<P>
+<CENTER><FONT size=6>First-Order Logic</FONT> (Chapters 8 - 9)</CENTER>
+<P>
+<HR>
+
+<P>
+<H3>First-Order Logic (FOL or FOPC) Syntax</H3>
+<UL>
+  <LI>User defines these primitives: 
+  <UL>
+    <LI><B>Constant symbols</B> (i.e., the "individuals" in the world) E.g., 
+    Mary, 3 
+    <LI><B>Function symbols</B> (mapping individuals to individuals) E.g., 
+    father-of(Mary) = John, color-of(Sky) = Blue 
+    <LI><B>Predicate symbols</B> (mapping from individuals to truth values) 
+    E.g., greater(5,3), green(Grass), color(Grass, Green) </LI></UL>
+  <P></P>
+  <LI>FOL supplies these primitives: 
+  <UL>
+    <LI><B>Variable symbols</B>. E.g., <TT>x</TT>, <TT>y</TT> 
+    <LI><B>Connectives</B>. Same as in PL: not (~), and (^), or (v), implies 
+    (=&gt;), if and only if (&lt;=&gt;) 
+    <LI><B>Quantifiers</B>: Universal (<TT>A</TT>) and Existential (<TT>E</TT>) 
+    <UL>
+      <LI>Universal quantification corresponds to conjunction ("and") in that 
+      <TT>(Ax)P(x)</TT> means that <TT>P</TT> holds for all values of <TT>x</TT> 
+      in the domain associated with that variable. E.g., <TT>(Ax) dolphin(x) 
+      =&gt; mammal(x)</TT> 
+      <LI>Existential quantification corresponds to disjunction ("or") in that 
+      <TT>(Ex)P(x)</TT> means that <TT>P</TT> holds for some value of <TT>x</TT> 
+      in the domain associated with that variable. E.g., <TT>(Ex) mammal(x) ^ 
+      lays-eggs(x)</TT> 
+      <LI>Universal quantifiers usually used with "implies" to form "if-then 
+      rules." E.g., <TT>(Ax) cs540-student(x) =&gt; smart(x)</TT> means "All 
+      cs540 students are smart." You rarely use universal quantification to make 
+      blanket statements about every individual in the world: 
+      <TT>(Ax)cs540-student(x) ^ smart(x)</TT> meaning that everyone in the 
+      world is a cs540 student and is smart. 
+      <LI>Existential quantifiers usually used with "and" to specify a list of 
+      properties or facts about an individual. E.g., <TT>(Ex) cs540-student(x) ^ 
+      smart(x)</TT> means "there is a cs540 student who is smart." A common 
+      mistake is to represent this English sentence as the FOL sentence: 
+      <TT>(Ex) cs540-student(x) =&gt; smart(x)</TT> But consider what happens 
+      when there is a person who is NOT a cs540-student. 
+      <LI>Switching the order of universal quantifiers does not change the 
+      meaning: <TT>(Ax)(Ay)P(x,y)</TT> is logically equivalent to 
+      <TT>(Ay)(Ax)P(x,y)</TT>. Similarly, you can switch the order of 
+      existential quantifiers. 
+      <LI>Switching the order of universals and existentials <I>does</I> change 
+      meaning: 
+      <UL>
+        <LI>Everyone likes someone: <TT>(Ax)(Ey)likes(x,y)</TT> 
+        <LI>Someone is liked by everyone: <TT>(Ey)(Ax)likes(x,y)</TT> 
+      </LI></UL></LI></UL></LI></UL>
+  <P></P>
+  <LI>Sentences are built up from terms and atoms: 
+  <UL>
+    <LI>A <B>term</B> (denoting a real-world individual) is a constant symbol, a 
+    variable symbol, or an n-place function of n terms. For example, <I>x</I> 
+    and <I>f(x1, ..., xn)</I> are terms, where each <I>xi</I> is a term. 
+    <LI>An <B>atom</B> (which has value true or false) is either an 
+    <TT>n</TT>-place predicate of <TT>n</TT> terms, or, if <TT>P</TT> and 
+    <TT>Q</TT> are atoms, then <TT>~P, P V Q, P ^ Q, P =&gt; Q, P &lt;=&gt; 
+    Q</TT> are atoms 
+    <LI>A <B>sentence</B> is an atom, or, if <TT>P</TT> is a sentence and 
+    <TT>x</TT> is a variable, then <TT>(Ax)P</TT> and <TT>(Ex)P</TT> are 
+    sentences 
+    <LI>A <B>well-formed formula (wff)</B> is a sentence containing no "free" 
+    variables. I.e., all variables are "bound" by universal or existential 
+    quantifiers. E.g., <TT>(Ax)P(x,y)</TT> has <TT>x</TT> bound as a universally 
+    quantified variable, but <TT>y</TT> is free. </LI></UL></LI></UL>
+<P>
+<H3>Translating English to FOL</H3>
+<UL>
+  <LI>Every gardener likes the sun.<BR><TT>(Ax) gardener(x) =&gt; 
+  likes(x,Sun)</TT> 
+  <LI>You can fool some of the people all of the time.<BR><TT>(Ex) (person(x) ^ 
+  (At)(time(t) =&gt; can-fool(x,t)))</TT> 
+  <LI>You can fool all of the people some of the time.<BR><TT>(Ax) (person(x) 
+  =&gt; (Et) (time(t) ^ can-fool(x,t)))</TT> 
+  <LI>All purple mushrooms are poisonous.<BR><TT>(Ax) (mushroom(x) ^ purple(x)) 
+  =&gt; poisonous(x)</TT> 
+  <LI>No purple mushroom is poisonous.<BR><TT>~(Ex) purple(x) ^ mushroom(x) ^ 
+  poisonous(x)</TT> <BR>or, equivalently,<BR><TT>(Ax) (mushroom(x) ^ purple(x)) 
+  =&gt; ~poisonous(x)</TT> 
+  <LI>There are exactly two purple mushrooms.<BR><TT>(Ex)(Ey) mushroom(x) ^ 
+  purple(x) ^ mushroom(y) ^ purple(y) ^ ~(x=y) ^ (Az) (mushroom(z) ^ purple(z)) 
+  =&gt; ((x=z) v (y=z))</TT> 
+  <LI>Deb is not tall.<BR><TT>~tall(Deb)</TT> 
+  <LI>X is above Y if X is on directly on top of Y or else there is a pile of 
+  one or more other objects directly on top of one another starting with X and 
+  ending with Y.<BR><TT>(Ax)(Ay) above(x,y) &lt;=&gt; (on(x,y) v (Ez) (on(x,z) ^ 
+  above(z,y)))</TT> </LI></UL>
+<P>
+<H3>Inference Rules for FOL</H3>
+<UL>
+  <LI>Inference rules for PL apply to FOL as well. For example, Modus Ponens, 
+  And-Introduction, And-Elimination, etc. 
+  <LI>New (sound) inference rules for use with quantifiers: 
+  <UL>
+    <LI><B>Universal Elimination</B><BR>If <TT>(Ax)P(x)</TT> is true, then 
+    <TT>P(c)</TT> is true, where <TT>c</TT> is a constant in the domain of 
+    <TT>x</TT>. For example, from <TT>(Ax)eats(Ziggy, x)</TT> we can infer 
+    <TT>eats(Ziggy, IceCream)</TT>. The variable symbol can be replaced by any 
+    ground term, i.e., any constant symbol or function symbol applied to ground 
+    terms only. 
+    <LI><B>Existential Introduction</B><BR>If <TT>P(c)</TT> is true, then 
+    <TT>(Ex)P(x)</TT> is inferred. For example, from <TT>eats(Ziggy, 
+    IceCream)</TT> we can infer <TT>(Ex)eats(Ziggy, x)</TT>. All instances of 
+    the given constant symbol are replaced by the new variable symbol. Note that 
+    the variable symbol cannot already exist anywhere in the expression. 
+    <LI><B>Existential Elimination</B><BR>From <TT>(Ex)P(x)</TT> infer 
+    <TT>P(c)</TT>. For example, from <TT>(Ex)eats(Ziggy, x)</TT> infer 
+    <TT>eats(Ziggy, Cheese)</TT>. Note that the variable is replaced by a 
+    <I>brand new</I> constant that does not occur in this or <I>any other</I> 
+    sentence in the Knowledge Base. In other words, we don't want to 
+    accidentally draw other inferences about it by introducing the constant. All 
+    we know is there must be <I>some</I> constant that makes this true, so we 
+    can introduce a brand new one to stand in for that (unknown) constant. 
+  </LI></UL>
+  <LI><B>Paramodulation</B><BR>
+  <UL>
+    <LI>Given two sentences <TT>(P1 v ... v PN)</TT> and <TT>(t=s v Q1 v ... v 
+    QM)</TT> where each <TT>Pi</TT> and <TT>Qi</TT> is a literal (see definition 
+    below) and <TT>Pj</TT> contains a term <TT>t</TT>, derive new sentence 
+    <TT>(P1 v ... v Pj-1 v Pj[s] v Pj+1 v ... v PN v Q1 v ... v QM)</TT> where 
+    <TT>Pj[s]</TT> means a single occurrence of the term <TT>t</TT> is replaced 
+    by the term <TT>s</TT> in <TT>Pj</TT> 
+    <LI>Example: From <TT>P(a)</TT> and <TT>a=b</TT> derive <TT>P(b)</TT> 
+  </LI></UL>
+  <LI><B>Generalized Modus Ponens (GMP)</B><BR>
+  <UL>
+    <LI>Combines And-Introduction, Universal-Elimination, and Modus Ponens 
+    <LI>Example: from <TT>P(c), Q(c)</TT>, and <TT>(Ax)(P(x) ^ Q(x)) =&gt; 
+    R(x)</TT>, derive <TT>R(c)</TT> 
+    <LI>In general, given atomic sentences <TT>P1, P2, ..., PN</TT>, and 
+    implication sentence <TT>(Q1 ^ Q2 ^ ... ^ QN) =&gt; R</TT>, where <TT>Q1, 
+    ..., QN</TT> and <TT>R</TT> are atomic sentences, and <TT>subst(Theta, Pi) = 
+    subst(Theta, Qi)</TT> for i=1,...,N, derive new sentence: <TT>subst(Theta, 
+    R)</TT> 
+    <LI><TT>subst(Theta, alpha)</TT> denotes the result of applying a set of 
+    substitutions defined by <TT>Theta</TT> to the sentence <TT>alpha</TT> 
+    <LI>A substitution list <TT>Theta = {v1/t1, v2/t2, ..., vn/tn}</TT> means to 
+    replace all occurrences of variable symbol <TT>vi</TT> by term <TT>ti</TT>. 
+    Substitutions are made in left-to-right order in the list. Example: 
+    <TT>subst({x/IceCream, y/Ziggy}, eats(y,x)) = eats(Ziggy, IceCream)</TT> 
+    </LI></UL></LI></UL>
+<P>
+<H3>Automated Inference for FOL</H3>
+<UL>
+  <LI>Automated inference using FOL is harder than using PL because variables 
+  can take on potentially an infinite number of possible values from their 
+  domain. Hence there are potentially an infinite number of ways to apply 
+  Universal-Elimination rule of inference 
+  <LI>Godel's Completeness Theorem says that FOL entailment is only 
+  semidecidable. That is, if a sentence is true given a set of axioms, there is 
+  a procedure that will determine this. However, if the sentence is false, then 
+  there is no guarantee that a procedure will ever determine this. In other 
+  words, the procedure may never halt in this case. 
+  <LI>The Truth Table method of inference is not complete for FOL because the 
+  truth table size may be infinite 
+  <LI>Natural Deduction is complete for FOL but is not practical for automated 
+  inference because the "branching factor" in a search is too large, caused by 
+  the fact that we would have to potentially try every inference rule in every 
+  possible way using the set of known sentences 
+  <LI>Generalized Modus Ponens is not complete for FOL 
+  <LI>Generalized Modus Ponens is complete for KBs containing only <B>Horn 
+  clauses</B> 
+  <UL>
+    <LI>A Horn clause is a sentence of the form:<BR><TT>(Ax) (P1(x) ^ P2(x) ^ 
+    ... ^ Pn(x)) =&gt; Q(x)</TT><BR>where there are 0 or more <TT>Pi</TT>'s, and 
+    the <TT>Pi</TT>'s and <TT>Q</TT> are positive (i.e., un-negated) literals 
+    <LI>Horn clauses represent a subset of the set of sentences representable in 
+    FOL. For example, <TT>P(a) v Q(a)</TT> is a sentence in FOL but is not a 
+    Horn clause. 
+    <LI>Natural deduction using GMP is complete for KBs containing only Horn 
+    clauses. Proofs start with the given axioms/premises in KB, deriving new 
+    sentences using GMP until the goal/query sentence is derived. This defines a 
+    <B>forward chaining</B> inference procedure because it moves "forward" from 
+    the KB to the goal. 
+    <UL>
+      <LI>Example: KB = All cats like fish, cats eat everything they like, and 
+      Ziggy is a cat. In FOL, KB =<BR>
+      <OL>
+        <LI><TT>(Ax) cat(x) =&gt; likes(x, Fish)</TT> 
+        <LI><TT>(Ax)(Ay) (cat(x) ^ likes(x,y)) =&gt; eats(x,y)</TT> 
+        <LI><TT>cat(Ziggy)</TT> </LI></OL>
+      <P>Goal query: Does Ziggy eat fish?
+      <P>
+      <P>Proof:<BR>
+      <OL>
+        <LI>Use GMP with (1) and (3) to derive: 4. <TT>likes(Ziggy, Fish)</TT> 
+        <LI>Use GMP with (3), (4) and (2) to derive <TT>eats(Ziggy, Fish)</TT> 
+        <LI>So, Yes, Ziggy eats fish. </LI></OL></LI></UL>
+    <LI><B>Backward-chaining</B> deduction using GMP is complete for KBs 
+    containing only Horn clauses. Proofs start with the goal query, find 
+    implications that would allow you to prove it, and then prove each of the 
+    antecedents in the implication, continuing to work "backwards" until we get 
+    to the axioms, which we know are true. 
+    <UL>
+      <LI>Example: Does Ziggy eat fish?
+      <P>To prove <TT>eats(Ziggy, Fish)</TT>, first see if this is known from 
+      one of the axioms directly. Here it is not known, so see if there is a 
+      Horn clause that has the consequent (i.e., right-hand side) of the 
+      implication matching the goal. Here,
+      <P>Proof:<BR>
+      <OL>
+        <LI>Goal matches RHS of Horn clause (2), so try and prove new sub-goals 
+        <TT>cat(Ziggy)</TT> and <TT>likes(Ziggy, Fish)</TT> that correspond to 
+        the LHS of (2) 
+        <LI><TT>cat(Ziggy)</TT> matches axiom (3), so we've "solved" that 
+        sub-goal 
+        <LI><TT>likes(Ziggy, Fish)</TT> matches the RHS of (1), so try and prove 
+        <TT>cat(Ziggy)</TT> 
+        <LI><TT>cat(Ziggy)</TT> matches (as it did earlier) axiom (3), so we've 
+        solved this sub-goal 
+        <LI>There are no unsolved sub-goals, so we're done. Yes, Ziggy eats 
+        fish. </LI></OL></LI></UL></LI></UL></LI></UL>
+<P>
+<H3>Resolution Refutation Procedure (aka Resolution Procedure)</H3>
+<UL>
+  <LI>Resolution procedure is a sound and complete inference procedure for FOL 
+  <LI>Resolution procedure uses a single rule of inference: the Resolution Rule 
+  (RR), which is a generalization of the same rule used in PL. 
+  <LI>Resolution Rule for PL:<BR>From sentence <TT>P1 v P2 v ... v Pn</TT> and 
+  sentence <TT>~P1 v Q2 v ... v Qm</TT> derive <B>resolvent sentence</B>: <TT>P2 
+  v ... v Pn v Q2 v ... v Qm</TT> 
+  <UL>
+    <LI>Examples<BR>
+    <UL>
+      <LI>From <TT>P</TT> and <TT>~P v Q</TT>, derive <TT>Q</TT> (Modus 
+      Ponens)<BR>
+      <LI>From <TT>(~P v Q)</TT> and <TT>(~Q v R)</TT>, derive <TT>~P v 
+      R</TT><BR>
+      <LI>From <TT>P</TT> and <TT>~P</TT>, derive <TT>False</TT><BR>
+      <LI>From <TT>(P v Q)</TT> and <TT>(~P v ~Q)</TT>, derive <TT>True</TT> 
+      </LI></UL></LI></UL>
+  <LI>Resolution Rule for FOL:<BR>Given sentence <TT>P1 v ... v Pn</TT> and 
+  sentence <TT>Q1 v ... v Qm</TT> where each <TT>Pi</TT> and <TT>Qi</TT> is a 
+  <B>literal</B>, i.e., a positive or negated predicate symbol with its terms, 
+  if <TT>Pj</TT> and <TT>~Qk</TT> <B>unify</B> with substitution list 
+  <TT>Theta</TT>, then derive the resolvent sentence:<BR><TT>subst(Theta, P1 v 
+  ... v Pj-1 v Pj+1 v ... v Pn v Q1 v ... Qk-1 v Qk+1 v ... v Qm)</TT> 
+  <UL>
+    <LI>Example<BR>
+    <UL>
+      <LI>From clause <TT>P(x, f(a)) v P(x, f(y)) v Q(y)</TT> and clause 
+      <TT>~P(z, f(a)) v ~Q(z)</TT>, derive resolvent clause <TT>P(z, f(y)) v 
+      Q(y) v ~Q(z)</TT> using <TT>Theta = {x/z}</TT> </LI></UL></LI></UL></LI></UL>
+<P>
+<H3>Unification</H3>
+<UL>
+  <LI>Unification is a "pattern matching" procedure that takes two atomic 
+  sentences, called <B>literals</B>, as input, and returns "failure" if they do 
+  not match and a substitution list, <TT>Theta</TT>, if they do match. That is, 
+  <TT>unify(p,q) = Theta</TT> means <TT>subst(Theta, p) = subst(Theta, q)</TT> 
+  for two atomic sentences <TT>p</TT> and <TT>q</TT>. 
+  <LI><TT>Theta</TT> is called the <B>most general unifier (mgu)</B> 
+  <LI>All variables in the given two literals are implicitly universally 
+  quantified 
+  <LI>To make literals match, replace (universally-quantified) variables by 
+  terms 
+  <LI>Unification algorithm
+  <P><PRE><TT>procedure unify(p, q, theta)
+  Scan p and q left-to-right and find the first corresponding
+     terms where p and q "disagree"  ; where p and q not equal
+  If there is no disagreement, return theta  ; success
+  Let r and s be the terms in p and q, respectively,
+     where disagreement first occurs
+  If variable(r) then
+     theta = union(theta, {r/s})
+     unify(subst(theta, p), subst(theta, q), theta)
+  else if variable(s) then
+     theta = union(theta, {s/r})
+     unify(subst(theta, p), subst(theta, q), theta)
+  else return "failure"
+end</TT>
+</PRE>
+  <LI>Examples 
+  <TABLE>
+    <TBODY>
+    <TR>
+      <TH align=left>Literal 1</TH>
+      <TH align=left>Literal 2</TH>
+      <TH align=left>Result of Unify</TH></TR>
+    <TR>
+      <TD><TT>parents(x, father(x), mother(Bill))</TT></TD>
+      <TD><TT>parents(Bill, father(Bill), y)</TT></TD>
+      <TD><TT>{x/Bill, y/mother(Bill)}</TT></TD></TR>
+    <TR>
+      <TD><TT>parents(x, father(x), mother(Bill))</TT></TD>
+      <TD><TT>parents(Bill, father(y), z)</TT></TD>
+      <TD><TT>{x/Bill, y/Bill, z/mother(Bill)}</TT></TD></TR>
+    <TR>
+      <TD><TT>parents(x, father(x), mother(Jane))</TT></TD>
+      <TD><TT>parents(Bill, father(y), mother(y))</TT></TD>
+      <TD><TT>Failure</TT></TD></TR></TBODY></TABLE>
+  <P></P>
+  <LI>Unify is a linear time algorithm that returns the <B>most general unifier 
+  (mgu)</B>, i.e., a shortest length substitution list that makes the two 
+  literals match. (In general, there is not a unique minimum length substitution 
+  list, but unify returns one of those of minimum length.) 
+  <LI>A variable can never be replaced by a term containing that variable. For 
+  example, <TT>x/f(x)</TT> is illegal. This <B>"occurs check"</B> should be done 
+  in the above pseudo-code before making the recursive calls. </LI></UL>
+<P>
+<H3>Resolution Refutation Procedure (aka Resolution Procedure)</H3>
+<UL>
+  <LI>Proof by contradiction method 
+  <LI>Given a consistent set of axioms <TT>KB</TT> and goal sentence <TT>Q</TT>, 
+  we want to show that <TT>KB |= Q</TT>. This means that every interpretation 
+  <TT>I</TT> that satisfies <TT>KB</TT>, satisfies <TT>Q</TT>. But we know that 
+  any interpretation <TT>I</TT> satisfies either <TT>Q</TT> or <TT>~Q</TT>, but 
+  not both. Therefore if in fact <TT>KB |= Q</TT>, an interpretation that 
+  satisfies KB, satisfies <TT>Q</TT> and does not satisfy <TT>~Q</TT>. Hence KB 
+  union {<TT>~Q</TT>} is unsatisfiable, i.e., that it's false under all 
+  interpretations. 
+  <LI>In other words, <TT>(KB |- Q) &lt;=&gt; (KB ^ ~Q |- False)</TT> 
+  <LI>What's the gain? If KB union <TT>~Q</TT> is unsatisfiable, then some 
+  <I>finite</I> subset is unsatisfiable 
+  <LI>Resolution procedure can be used to establish that a given sentence 
+  <TT>Q</TT> is entailed by KB; however, it <I>cannot</I>, in general, be used 
+  to generate all logical consequences of a set sentences. Also, the resolution 
+  procedure cannot be used to prove that <TT>Q</TT> is <I>not</I> entailed by 
+  KB. 
+  <LI>Resolution procedure won't always give an answer since entailment is only 
+  semidecidable. And you can't just run two proofs in parallel, one trying to 
+  prove <TT>Q</TT> and the other trying to prove <TT>~Q</TT>, since KB might not 
+  entail either one. 
+  <LI>Algorithm<BR><PRE>procedure resolution-refutation(KB, Q)
+   ;; KB is a set of consistent, true FOL sentences
+   ;; Q is a goal sentence that we want to derive
+   ;; return success if KB |- Q, and failure otherwise
+   KB = union(KB, ~Q)
+   while false not in KB do
+      pick 2 sentences, S1 and S2, in KB that contain
+	  literals that unify
+      if none, return "failure"
+      resolvent = resolution-rule(S1, S2)
+      KB = union(KB, resolvent)
+   return "success"
+end
+</PRE></LI></UL>
+<P>
+<H3>Example using PL Sentences</H3>
+<UL>
+  <LI>From the sentence "Heads I win, tails you lose," prove that "I win."
+  <P>First, define the axioms in KB: 
+  <OL>
+    <LI>"Heads I win, tails you lose."<BR><TT>(Heads =&gt; IWin)</TT> or, 
+    equivalently, <TT>(~Heads v IWin)</TT><BR><TT>(Tails =&gt; YouLose)</TT> or, 
+    equivalently, <TT>(~Tails v YouLose)</TT> 
+    <LI>Add some general knowledge axioms about coins, winning, and 
+    losing:<BR><TT>(Heads v Tails)</TT><BR><TT>(YouLose =&gt; IWin)</TT> or, 
+    equivalently, <TT>(~YouLose v IWin)</TT><BR><TT>(IWin =&gt; YouLose)</TT> 
+    or, equivalently, <TT>(~IWin v YouLose)</TT> </LI></OL>
+  <P></P>
+  <LI>Goal: <TT>IWin</TT> 
+  <LI>Proof: 
+  <TABLE width="100%">
+    <TBODY>
+    <TR>
+      <TH align=left>Sentence 1</TH>
+      <TH align=left>Sentence 2</TH>
+      <TH align=left>Resolvent</TH></TR>
+    <TR>
+      <TD><TT>~IWin</TT></TD>
+      <TD><TT>~Heads v IWin</TT></TD>
+      <TD><TT>~Heads</TT></TD></TR>
+    <TR>
+      <TD><TT>~Heads</TT></TD>
+      <TD><TT>Heads v Tails</TT></TD>
+      <TD><TT>Tails</TT></TD></TR>
+    <TR>
+      <TD><TT>Tails</TT></TD>
+      <TD><TT>~Tails v YouLose</TT></TD>
+      <TD><TT>YouLose</TT></TD></TR>
+    <TR>
+      <TD><TT>YouLose</TT></TD>
+      <TD><TT>~YouLose v IWin</TT></TD>
+      <TD><TT>IWin</TT></TD></TR>
+    <TR>
+      <TD><TT>IWin</TT></TD>
+      <TD><TT>~IWin</TT></TD>
+      <TD><TT>False</TT></TD></TR></TBODY></TABLE></LI></UL>
+<P>
+<H3>Problems Yet to Be Addressed</H3>
+<UL>
+  <LI>Resolution rule of inference is only applicable with sentences that are in 
+  the form <TT>P1 v P2 v ... v Pn</TT>, where each <TT>Pi</TT> is a negated or 
+  un-negated predicate and contains functions, constants, and universally 
+  quantified variables, so can we convert every FOL sentence into this form? 
+  <LI>How to pick which pair of sentences to resolve? 
+  <LI>How to pick which pair of literals, one from each sentence, to unify? 
+</LI></UL>
+<P>
+<H3>Converting FOL Sentences to Clause Form</H3>
+<UL>
+  <LI>Every FOL sentence can be converted to a logically equivalent sentence 
+  that is in a "normal form" called <B>clause form</B> 
+  <LI>Steps to convert a sentence to clause form: 
+  <OL>
+    <LI>Eliminate all <TT>&lt;=&gt;</TT> connectives by replacing each instance 
+    of the form <TT>(P &lt;=&gt; Q)</TT> by the equivalent expression <TT>((P 
+    =&gt; Q) ^ (Q =&gt; P))</TT> 
+    <LI>Eliminate all <TT>=&gt;</TT> connectives by replacing each instance of 
+    the form <TT>(P =&gt; Q)</TT> by <TT>(~P v Q)</TT> 
+    <LI>Reduce the scope of each negation symbol to a single predicate by 
+    applying equivalences such as converting <TT>~~P</TT> to <TT>P</TT>; <TT>~(P 
+    v Q)</TT> to <TT>~P ^ ~Q</TT>; <TT>~(P ^ Q)</TT> to <TT>~P v ~Q</TT>; 
+    <TT>~(Ax)P</TT> to <TT>(Ex)~P</TT>, and <TT>~(Ex)P</TT> to <TT>(Ax)~P</TT> 
+    <LI>Standardize variables: rename all variables so that each quantifier has 
+    its own unique variable name. For example, convert <TT>(Ax)P(x)</TT> to 
+    <TT>(Ay)P(y)</TT> if there is another place where variable <TT>x</TT> is 
+    already used. 
+    <LI>Eliminate existential quantification by introducing <B>Skolem 
+    functions</B>. For example, convert <TT>(Ex)P(x)</TT> to <TT>P(c)</TT> where 
+    <TT>c</TT> is a brand new constant symbol that is not used in any other 
+    sentence. <TT>c</TT> is called a <B>Skolem constant</B>. More generally, if 
+    the existential quantifier is within the scope of a universal quantified 
+    variable, then introduce a Skolem function that depend on the universally 
+    quantified variable. For example, <TT>(Ax)(Ey)P(x,y)</TT> is converted to 
+    <TT>(Ax)P(x, f(x))</TT>. <TT>f</TT> is called a <B>Skolem function</B>, and 
+    must be a brand new function name that does not occur in any other sentence 
+    in the entire KB. 
+    <UL>
+      <LI>Example: <TT>(Ax)(Ey)loves(x,y)</TT> is converted to 
+      <TT>(Ax)loves(x,f(x))</TT> where in this case <TT>f(x)</TT> specifies the 
+      person that <TT>x</TT> loves. (If we knew that everyone loved their 
+      mother, then <TT>f</TT> could stand for the <TT>mother-of</TT> function. 
+      </LI></UL>
+    <LI>Remove universal quantification symbols by first moving them all to the 
+    left end and making the scope of each the entire sentence, and then just 
+    dropping the "prefix" part. For example, convert <TT>(Ax)P(x)</TT> to 
+    <TT>P(x)</TT>. 
+    <LI>Distribute "and" over "or" to get a conjunction of disjunctions called 
+    <B>conjunctive normal form</B>. Convert <TT>(P ^ Q) v R</TT> to <TT>(P v R) 
+    ^ (Q v R)</TT>, and convert <TT>(P v Q) v R</TT> to <TT>(P v Q v R)</TT>. 
+    <LI>Split each conjunct into a separate <B>clause</B>, which is just a 
+    disjunction ("or") of negated and un-negated predicates, called 
+    <B>literals</B>. 
+    <LI>Standardize variables apart again so that each clause contains variable 
+    names that do not occur in any other clause. </LI></OL>
+  <P></P>
+  <LI>Example
+  <P>Convert the sentence <TT>(Ax)(P(x) =&gt; ((Ay)(P(y) =&gt; P(f(x,y))) ^ 
+  ~(Ay)(Q(x,y) =&gt; P(y))))</TT> 
+  <P>
+  <OL>
+    <LI>Eliminate <TT>&lt;=&gt;</TT><BR>Nothing to do here. 
+    <LI>Eliminate <TT>=&gt;</TT><BR><TT>(Ax)(~P(x) v ((Ay)(~P(y) v P(f(x,y))) ^ 
+    ~(Ay)(~Q(x,y) v P(y))))</TT> 
+    <LI>Reduce scope of negation<BR><TT>(Ax)(~P(x) v ((Ay)(~P(y) v P(f(x,y))) ^ 
+    (Ey)(Q(x,y) ^ ~P(y))))</TT> 
+    <LI>Standardize variables<BR><TT>(Ax)(~P(x) v ((Ay)(~P(y) v P(f(x,y))) ^ 
+    (Ez)(Q(x,z) ^ ~P(z))))</TT> 
+    <LI>Eliminate existential quantification<BR><TT>(Ax)(~P(x) v ((Ay)(~P(y) v 
+    P(f(x,y))) ^ (Q(x,g(x)) ^ ~P(g(x)))))</TT> 
+    <LI>Drop universal quantification symbols<BR><TT>(~P(x) v ((~P(y) v 
+    P(f(x,y))) ^ (Q(x,g(x)) ^ ~P(g(x)))))</TT> 
+    <LI>Convert to conjunction of disjunctions<BR><TT>(~P(x) v ~P(y) v 
+    P(f(x,y))) ^ (~P(x) v Q(x,g(x))) ^ (~P(x) v ~P(g(x)))</TT> 
+    <LI>Create separate clauses<BR>
+    <UL>
+      <LI><TT>~P(x) v ~P(y) v P(f(x,y))</TT> 
+      <LI><TT>~P(x) v Q(x,g(x))</TT> 
+      <LI><TT>~P(x) v ~P(g(x))</TT> </LI></UL>
+    <LI>Standardize variables<BR>
+    <UL>
+      <LI><TT>~P(x) v ~P(y) v P(f(x,y))</TT> 
+      <LI><TT>~P(z) v Q(z,g(z))</TT> 
+      <LI><TT>~P(w) v ~P(g(w))</TT> </LI></UL></LI></OL></LI></UL>
+<P>
+<H3>Revised Resolution Refutation Procedure</H3><PRE>procedure resolution-refutation(KB, Q)
+   ;; KB is a set of consistent, true FOL sentences
+   ;; Q is a goal sentence that we want to derive
+   ;; return success if KB |- Q, and failure otherwise
+   KB = union(KB, ~Q)
+   KB = clause-form(KB)  ; convert sentences to clause form
+   while false not in KB do
+     pick 2 clauses, C1 and C2, that contain literals that unify
+     if none, return "failure"
+     resolvent = resolution-rule(C1, C2)
+     KB = union(KB, resolvent)
+   return "success"
+end
+</PRE>
+<P>
+<H3>Example: Hoofers Club</H3>
+<UL>
+  <LI><B>Problem Statement</B>
+  <P>Tony, Shi-Kuo and Ellen belong to the Hoofers Club. Every member of the 
+  Hoofers Club is either a skier or a mountain climber or both. No mountain 
+  climber likes rain, and all skiers like snow. Ellen dislikes whatever Tony 
+  likes and likes whatever Tony dislikes. Tony likes rain and snow. 
+  <P></P>
+  <LI><B>Query</B>
+  <P>Is there a member of the Hoofers Club who is a mountain climber but not a 
+  skier? 
+  <P></P>
+  <LI><B>Translation into FOL Sentences</B>
+  <P>Let <TT>S(x)</TT> mean <TT>x</TT> is a skier, <TT>M(x)</TT> mean <TT>x</TT> 
+  is a mountain climber, and <TT>L(x,y)</TT> mean <TT>x</TT> likes <TT>y</TT>, 
+  where the domain of the first variable is Hoofers Club members, and the domain 
+  of the second variable is snow and rain. We can now translate the above 
+  English sentences into the following FOL wffs: 
+  <P>
+  <OL>
+    <LI><TT>(Ax) S(x) v M(x)</TT> 
+    <LI><TT>~(Ex) M(x) ^ L(x, Rain)</TT> 
+    <LI><TT>(Ax) S(x) =&gt; L(x, Snow)</TT> 
+    <LI><TT>(Ay) L(Ellen, y) &lt;=&gt; ~L(Tony, y)</TT> 
+    <LI><TT>L(Tony, Rain)</TT> 
+    <LI><TT>L(Tony, Snow)</TT> 
+    <P></P>
+    <LI>Query: <TT>(Ex) M(x) ^ ~S(x)</TT> 
+    <LI>Negation of the Query: <TT>~(Ex) M(x) ^ ~S(x)</TT> </LI></OL>
+  <P></P>
+  <LI><B>Conversion to Clause Form</B>
+  <P>
+  <OL>
+    <LI><TT>S(x1) v M(x1)</TT> 
+    <LI><TT>~M(x2) v ~L(x2, Rain)</TT> 
+    <LI><TT>~S(x3) v L(x3, Snow)</TT> 
+    <LI><TT>~L(Tony, x4) v ~L(Ellen, x4)</TT> 
+    <LI><TT>L(Tony, x5) v L(Ellen, x5)</TT> 
+    <LI><TT>L(Tony, Rain)</TT> 
+    <LI><TT>L(Tony, Snow)</TT> 
+    <LI>Negation of the Query: <TT>~M(x7) v S(x7)</TT> </LI></OL>
+  <P></P>
+  <LI><B>Resolution Refutation Proof</B>
+  <P>
+  <TABLE width="100%">
+    <TBODY>
+    <TR>
+      <TH align=left>Clause 1</TH>
+      <TH align=left>Clause 2</TH>
+      <TH align=left>Resolvent</TH>
+      <TH align=left>MGU (i.e., Theta)</TH></TR>
+    <TR>
+      <TD>8</TD>
+      <TD>1</TD>
+      <TD>9. <TT>S(x1)</TT></TD>
+      <TD><TT>{x7/x1}</TT></TD></TR>
+    <TR>
+      <TD>9</TD>
+      <TD>3</TD>
+      <TD>10. <TT>L(x1, Snow)</TT></TD>
+      <TD><TT>{x3/x1}</TT></TD></TR>
+    <TR>
+      <TD>10</TD>
+      <TD>4</TD>
+      <TD>11. <TT>~L(Tony, Snow)</TT></TD>
+      <TD><TT>{x4/Snow, x1/Ellen}</TT></TD></TR>
+    <TR>
+      <TD>11</TD>
+      <TD>7</TD>
+      <TD>12. <TT>False</TT></TD>
+      <TD><TT>{}</TT></TD></TR></TBODY></TABLE>
+  <P></P>
+  <LI><B>Answer Extraction</B>
+  <P>
+  <TABLE width="100%">
+    <TBODY>
+    <TR>
+      <TH align=left>Clause 1</TH>
+      <TH align=left>Clause 2</TH>
+      <TH align=left>Resolvent</TH>
+      <TH align=left>MGU (i.e., Theta)</TH></TR>
+    <TR>
+      <TD><TT>~M(x7) v S(x7) v (M(x7) ^ ~S(x7))</TT></TD>
+      <TD>1</TD>
+      <TD>9. <TT>S(x1) v (M(x1) ^ ~S(x1))</TT></TD>
+      <TD><TT>{x7/x1}</TT></TD></TR>
+    <TR>
+      <TD>9</TD>
+      <TD>3</TD>
+      <TD>10. <TT>L(x1, Snow) v (M(x1) ^ ~S(x1))</TT></TD>
+      <TD><TT>{x3/x1}</TT></TD></TR>
+    <TR>
+      <TD>10</TD>
+      <TD>4</TD>
+      <TD>11. <TT>~L(Tony, Snow) v (M(Ellen) ^ ~S(Ellen))</TT></TD>
+      <TD><TT>{x4/Snow, x1/Ellen}</TT></TD></TR>
+    <TR>
+      <TD>11</TD>
+      <TD>7</TD>
+      <TD>12. <TT>M(Ellen) ^ ~S(Ellen)</TT></TD>
+      <TD><TT>{}</TT></TD></TR></TBODY></TABLE>
+  <P></P>
+  <LI><B>Answer to the Query</B>
+  <P>Ellen! </P></LI></UL>
+<P>
+<H3>Resolution Procedure as Search through a Search Space</H3>
+<UL>
+  <LI>Resolution procedure can be thought of as the bottom-up construction of a 
+  search tree, where the leaves are the clauses produced by KB and the negation 
+  of the goal. When a pair of clauses generates a new resolvent clause, add a 
+  new node to the tree with arcs directed from the resolvent to the two parent 
+  clauses. The resolution procedure succeeds when a node containing the 
+  <I>False</I> clause is produced, becoming the root node of the tree. 
+  <LI>A strategy is complete if its use guarantees that the empty clause (i.e., 
+  <TT>false</TT>) can be derived whenever it is entailed 
+  <LI>Some Strategies for Controlling Resolution's Search 
+  <UL>
+    <LI>Breadth-First 
+    <UL>
+      <LI>Level 0 clauses are those from the original axioms and the negation of 
+      the goal. Level k clauses are the resolvents computed from two clauses, 
+      one of which must be from level k-1 and the other from any earlier level. 
+      <LI>Compute all level 1 clauses possible, then all possible level 2 
+      clauses, etc. 
+      <LI>Complete, but very inefficient. </LI></UL>
+    <LI>Set-of-Support 
+    <UL>
+      <LI>At least one parent clause must be from the negation of the goal or 
+      one of the "descendents" of such a goal clause (i.e., derived from a goal 
+      clause) 
+      <LI>Complete (assuming all possible set-of-support clauses are derived) 
+      </LI></UL>
+    <LI>Unit Resolution 
+    <UL>
+      <LI>At least one parent clause must be a "unit clause," i.e., a clause 
+      containing a single literal 
+      <LI>Not complete in general, but complete for Horn clause KBs </LI></UL>
+    <LI>Input Resolution 
+    <UL>
+      <LI>At least one parent from the set of original clauses (from the axioms 
+      and the negation of the goal) 
+      <LI>Not complete in general, but complete for Horn clause KBs 
+  </LI></UL></LI></UL></LI></UL>
+<P>
+<P>
+<HR>
+
+<P><TT>Last modified October 14, 1998</TT> <BR>Copyright © 1996 by Charles R. 
+Dyer. All rights reserved. </P></BODY></HTML>

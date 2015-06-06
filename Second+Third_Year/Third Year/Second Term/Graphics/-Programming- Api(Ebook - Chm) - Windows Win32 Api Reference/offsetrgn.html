@@ -1,0 +1,84 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+<HTML lang="en-us">
+<HEAD>
+<TITLE>Windows API Guide: OffsetRgn Function</TITLE>
+<META content="vbapi@vbapi.com" name="author">
+<META content="Information about the OffsetRgn function in the Windows API, geared towards the Visual Basic user." name="description">
+<META content="Kuliniewicz,Windows,Windows 95,Windows NT,Windows 98,Windows 32s,32s,API,Application Programming Interface,Programming,Visual Basic,Basic,VB,OffsetRgn" name="keywords">
+<META content="Omicron HTML Editor" name="generator">
+<LINK href="default.css" tppabs="http://www.vbapi.com/css/default.css" rel="stylesheet" type="text/css">
+<LINK href="index-1.html" tppabs="http://www.vbapi.com/index.html" rel="home">
+</HEAD>
+<BODY>
+
+<!-- Begin Adslot1 -->
+<CENTER>
+<SCRIPT language="JAVASCRIPT">
+<!-- hide from older browsers
+now = new Date();
+my_random = now.getTime();
+document.write('<A href="http://adex3.flycast.com/server/socket/127.0.0.1:2800/click/VBWorldnet/VBAPI/' + my_random + '">');
+document.write('<IMG width="468" height="60" border="1" src="http://adex3.flycast.com/server/socket/127.0.0.1:2800/ad/VBWorldnet/VBAPI/' + my_random + '"></A>');
+// -->
+</SCRIPT>
+</CENTER>
+<!-- End Adslot1 -->
+
+<HR>
+
+<H1>OffsetRgn Function</H1>
+
+<P><CODE class="declare">Declare Function OffsetRgn Lib "gdi32.dll" (ByVal hRgn As Long, ByVal x As Long, ByVal y As Long) As Long</CODE>
+
+<P><B>Platforms:</B> Win 32s, Win 95/98, Win NT
+
+<P><B>OffsetRgn</B> translates (slides) a region by a specified amount horizontally and vertically.  The region can be moved in any direction left, right, up, or down.  The function returns 0 if an error occured, or exactly one of the following flags identifying the shape of the region which was moved:
+<DL class="ghost">
+<DT>COMPLEXREGION = 3<DD>The region is not empty but is not a rectangle.
+<DT>NULLREGION = 1<DD>The region is empty, i.e., null.
+<DT>SIMPLEREGION = 2<DD>The region is rectangular in shape.
+</DL>
+
+<DL>
+<DT><VAR>hRgn</VAR><DD>A handle to the region to move.
+<DT><VAR>x</VAR><DD>The number of pixels to move the region horizontally.  Positive values move to the right; negative ones move to the left.
+<DT><VAR>y</VAR><DD>The number of pixels to move the region vertically.  Positive values move down; negative ones move up.
+</DL>
+
+<P><B>Example:</B>
+<PRE><CODE class="example">' On window Form1, fill an elliptical region in light gray.  Then translate the
+' region 50 pixels right and 20 pixels up and fill it with dark gray.
+Dim hRgn As Long  ' handle to the region
+Dim hLightBrush As Long, hDarkBrush As Long  ' handles to the two brushes to be used
+Dim retval As Long  ' generic return value
+
+' Create the elliptical region.
+hRgn = <A href="createellipticrgn.html" tppabs="http://www.vbapi.com/ref/c/createellipticrgn.html">CreateEllipticRgn</A>(20, 100, 220, 200)  ' bounding rectangle (20,100)-(220,200)
+' Get handles to the light and dark gray solid stock brushes.
+hLightBrush = <A href="getstockobject.html" tppabs="http://www.vbapi.com/ref/g/getstockobject.html">GetStockObject</A>(LTGRAY_BRUSH)
+hDarkBrush = <A href="getstockobject.html" tppabs="http://www.vbapi.com/ref/g/getstockobject.html">GetStockObject</A>(DKGRAY_BRUSH)
+
+' Fill in the region in its current location on Form1 in light gray.
+retval = <A href="fillrgn.html" tppabs="http://www.vbapi.com/ref/f/fillrgn.html">FillRgn</A>(Form1.hDC, hRgn, hLightBrush)
+' Slide the region 50 pixels right and 20 pixels up.
+retval = <B>OffsetRgn</B>(hRgn, 50, -20)  ' -20 means 20 up, not down
+' Fill in the region in its new location in dark gray.
+retval = <A href="fillrgn.html" tppabs="http://www.vbapi.com/ref/f/fillrgn.html">FillRgn</A>(Form1.hDC, hRgn, hDarkBrush)
+
+' Delete the region to free up resources.
+retval = <A href="deleteobject.html" tppabs="http://www.vbapi.com/ref/d/deleteobject.html">DeleteObject</A>(hRgn)</CODE></PRE>
+
+<P><B>Category:</B> <A href="index.html#regions" tppabs="http://www.vbapi.com/ref/index.html#regions">Regions</A></P>
+
+<P><A href="funca.html" tppabs="http://www.vbapi.com/ref/funca.html">Go back to the alphabetical Function listing.</A><BR>
+<A href="index.html" tppabs="http://www.vbapi.com/ref/index.html">Go back to the Reference section index.</A></P>
+
+<HR>
+
+<P>This page is copyright &copy; 2000 Paul Kuliniewicz.  <A href="copyrite.html" tppabs="http://www.vbapi.com/copyrite.html" rel="copyright">Copyright Information.</A><BR>
+<A href="index-1.html" tppabs="http://www.vbapi.com/index.html">Go back to the Windows API Guide home page.</A><BR>
+E-mail: <A href="javascript:if(confirm('http://www.vbapi.com/email.html  \n\nThis file was not retrieved by Teleport Pro, because it is addressed on a domain or path outside the boundaries set for its Starting Address.  \n\nDo you want to open it from the server?'))window.location='http://www.vbapi.com/email.html'" tppabs="http://www.vbapi.com/email.html">vbapi@vbapi.com</A>  <A href="javascript:if(confirm('http://www.vbapi.com/email.html  \n\nThis file was not retrieved by Teleport Pro, because it is addressed on a domain or path outside the boundaries set for its Starting Address.  \n\nDo you want to open it from the server?'))window.location='http://www.vbapi.com/email.html#secure'" tppabs="http://www.vbapi.com/email.html#secure">Send Encrypted E-Mail</A><BR>
+This page is at <A href="offsetrgn.html" tppabs="http://www.vbapi.com/ref/o/offsetrgn.html">http://www.vbapi.com/ref/o/offsetrgn.html</A>
+
+</BODY>
+</HTML>

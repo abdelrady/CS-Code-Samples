@@ -1,0 +1,412 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!-- saved from url=(0053)http://www.cs.wisc.edu/~dyer/cs540/notes/search1.html -->
+<HTML><HEAD><TITLE>CS 540 Lecture Notes: Uninformed Search</TITLE>
+<META http-equiv=Content-Type content="text/html; charset=iso-8859-1">
+<META content="MSHTML 6.00.2900.2180" name=GENERATOR></HEAD>
+<BODY vLink=#0060f0 link=#ff3300 bgColor=#ffffff>
+<TABLE width="100%">
+  <TBODY>
+  <TR>
+    <TD align=left>University of Wisconsin - Madison</TD>
+    <TD align=middle>CS 540 Lecture Notes</TD>
+    <TD align=right>C. R. Dyer</TD></TR></TBODY></TABLE>
+<P>
+<P>
+<CENTER><FONT size=6>Uninformed Search</FONT> (Chapter 3)</CENTER>
+<P>
+<HR>
+
+<P>
+<H3>Building Goal-Based Agents</H3>To build a goal-based agent we need to answer 
+the following questions: 
+<OL>
+  <LI>What is the <B>goal</B> to be achieved?
+  <P>Could describe a situation we want to achieve, a set of properties that we 
+  want to hold, etc. Requires defining a "goal test" so that we know what it 
+  means to have achieved/satisfied our goal.
+  <P>This is a hard part that is rarely tackled in AI, usually assuming that the 
+  system designer or user will specify the goal to be achieved. Certainly 
+  psychologists and motivational speakers always stress the importance of people 
+  establishing clear goals for themselves as the first step towards solving a 
+  problem. What are <I>your</I> goals???
+  <P></P>
+  <LI>What are the <B>actions</B>?
+  <P>Quantify all of the primitive actions or events that are sufficient to 
+  describe all necessary changes in solving a task/goal. No uncertainty 
+  associated with what an action does to the world. That is, given an action 
+  (also called an <B>operator</B> or <B>move</B>) and a description of the 
+  current state of the world, the action completely specifies (1) if that action 
+  CAN be applied to the current world (i.e., is it applicable and legal), and 
+  (2) what the exact state of the world will be after the action is performed in 
+  the current world (i.e., we don't need any "history" information to be able to 
+  compute what the new world looks like).
+  <P>Note also that actions can all be considered as discrete events that can be 
+  thought of as occurring at an instant of time. That is, the world is in one 
+  situation, then an action occurs and the world is now in a new situation. For 
+  example, if "Mary is in class" and then performs the action "go home," then in 
+  the next situation she is "at home." There is no representation of a point in 
+  time where she is neither in class nor at home (i.e., in the state of "going 
+  home").
+  <P>The number of operators needed depends on the representation used in 
+  describing a state (see below). For example, in the 8-puzzle, we could specify 
+  4 possible moves for each of the 8 tiles, resulting in a total of 4*8=32 
+  operators. On the other hand, we could specify four moves for the "blank" 
+  square and there would need to be only 4 operators.
+  <P></P>
+  <LI>What information is necessary to encode about the the world to 
+  sufficiently describe all relevant aspects to solving the goal? That is, what 
+  knowledge needs to be represented in a <B>state description</B> to adequately 
+  describe the current <B>state</B> or <B>situation</B> of the world?
+  <P>The size of a problem is usually described in terms of the number of states 
+  that are possible. For example, in Tic-Tac-Toe there are about 3^9 states. In 
+  Checkers there are about 10^40 states. Rubik's Cube has about 10^19 states. 
+  Chess has about 10^120 states in a typical game.
+  <P>We will use the <B>Closed World Assumption</B>: All necessary information 
+  about a problem domain is available in each percept so that each state is a 
+  complete description of the world. There is no incomplete information at any 
+  point in time.
+  <P>What's in a state is the <I>knowledge representation problem</I>. That is, 
+  we must decide what information from the raw percept data is relevant to keep, 
+  and what form the data should be represented in so as to make explicit the 
+  most important features of the data for solving the goal. Is the color of the 
+  boat relevant to solving the Missionaries and Cannibals problem? Is sunspot 
+  activity relevant to predicting the stock market? <I>What</I> to represent is 
+  a very hard problem that is usually left to the system designer to specify. 
+  <I>How</I> to represent domain knowledge is a topic that will be treated later 
+  in the course.
+  <P>Related to this is the issue of what <B>level of abstraction</B> or detail 
+  to describe the world. Too fine-grained and we'll "miss the forest for the 
+  trees." Too coarse-grained and we'll miss critical details for solving the 
+  problem.
+  <P>The number of states depends on the representation and level of abstraction 
+  chosen. For example, in the Remove-5-Sticks problem, if we represent the 
+  individual sticks, then there are 17-choose-5 possible ways of removing 5 
+  sticks. On the other hand, if we represent the "squares" defined by 4 sticks, 
+  then there are 6 squares initially and we must remove 3 squares, so only 
+  6-choose-3 ways of removing 3 squares.
+  <P></P></LI></OL>
+<P>
+<H3>Examples</H3>
+<UL>
+  <LI><B>8-Puzzle</B><BR>Given an initial configuration of 8 numbered tiles on a 
+  3 x 3 board, move the tiles in such a way so as to produce a desired goal 
+  configuration of the tiles. State = 3 x 3 array configuration of the tiles on 
+  the board. Operators: Move Blank square Left, Right, Up or Down. (Note: this 
+  is a more efficient encoding of the operators than one in which each of four 
+  possible moves for each of the 8 distinct tiles is used.) Initial State: A 
+  particular configuration of the board. Goal: A particular configuration of the 
+  board.
+  <P></P>
+  <LI><B>Missionaries and Cannibals</B><BR>There are 3 missionaries, 3 
+  cannibals, and 1 boat that can carry up to two people on one side of a river. 
+  Goal: Move all the missionaries and cannibals across the river. Constraint: 
+  Missionaries can never be outnumbered by cannibals on either side of the 
+  river, or else the missionaries are killed. State = configuration of 
+  missionaries and cannibals and boat on each side of the river. Operators: Move 
+  boat containing some set of occupants across the river (in either direction) 
+  to the other side.
+  <P>
+  <P></P>
+  <LI><B>Cryptarithmetic</B><BR>Find an assignment of digits (0, ..., 9) to 
+  letters so that a given arithmetic expression is true. For example, SEND + 
+  MORE = MONEY Note: In this problem, unlike the two above, the solution is NOT 
+  a sequence of actions that transforms the initial state into the goal state, 
+  but rather the solution is simply finding a goal node that includes an 
+  assignment of digits to each of the distinct letters in the given problem. 
+  <P></P>
+  <LI><B>Remove 5 Sticks</B><BR>Given the following configuration of sticks, 
+  remove exactly 5 sticks in such a way that the remaining configuration forms 
+  exactly 3 squares. 
+  <CENTER><PRE> - -
+| | |
+ - -
+| | |
+ - -
+| | |
+ - -
+</PRE></CENTER>
+  <P></P>
+  <LI><B>Water Jug Problem</B><BR>Given a 5-gallon jug and a 2-gallon jug, with 
+  the 5-gallon jug initially full of water and the 2-gallon jug empty, the goal 
+  is to fill the 2-gallon jug with exactly one gallon of water.
+  <P>
+  <UL>
+    <LI>State = (x,y), where x = number of gallons of water in the 5-gallon jug 
+    and y is gallons in the 2-gallon jug 
+    <LI>Initial State = (5,0) 
+    <LI>Goal State = (*,1), where * means any amount 
+    <LI>Operators 
+    <UL>
+      <LI>(x,y) -&gt; (0,y) ; empty 5-gal jug 
+      <LI>(x,y) -&gt; (x,0) ; empty 2-gal jug 
+      <LI>(x,2) and x&lt;=3 -&gt; (x+2,0) ; pour 2-gal into 5-gal 
+      <LI>(x,0) and x&gt;=2 -&gt; (x-2,2) ; pour 5-gal into 2-gal 
+      <LI>(1,0) -&gt; (0,1) ; empty 5-gal into 2-gal </LI></UL>
+    <LI>State Space (also called the Problem Space) <PRE>                     (5,0) = Start
+		     /  \
+                 (3,2)  (0,0)
+                  / \
+              (3,0) (0,2)
+               /
+           (1,2)
+            /
+        (1,0)
+	 /
+     (0,1) = Goal
+</PRE></LI></UL>
+  <P></P></LI></UL>
+<P>
+<H3>Formalizing Search in a State Space</H3>
+<P>
+<UL>
+  <LI>A <B>state space</B> is a <I>graph</I>, (V, E), where V is a set of 
+  <B>nodes</B> and E is a set of <B>arcs</B>, where each arc is <I>directed</I> 
+  from a node to another node
+  <P></P>
+  <LI>Each <B>node</B> is a data structure that contains a state description 
+  <I>plus</I> other information such as the parent of the node, the name of the 
+  operator that generated the node from that parent, and other bookkeeping data
+  <P></P>
+  <LI>Each <B>arc</B> corresponds to an instance of one of the operators. When 
+  the operator is applied to the state associated with the arc's source node, 
+  then the resulting state is the state associated with the arc's destination 
+  node
+  <P></P>
+  <LI>Each arc has a fixed, positive cost associated with it corresponding to 
+  the cost of the operator
+  <P></P>
+  <LI>Each node has a set of <I>successor nodes</I> corresponding to all of the 
+  legal operators that can be applied at the source node's state. The process of 
+  <B>expanding a node</B> means to generate all of the successor nodes and add 
+  them and their associated arcs to the state-space graph
+  <P></P>
+  <LI>One or more nodes are designated as <B>start nodes</B>
+  <P></P>
+  <LI>A <B>goal test</B> predicate is applied to a state to determine if its 
+  associated node is a <B>goal node</B>
+  <P></P>
+  <LI>A <B>solution</B> is a sequence of operators that is associated with a 
+  <I>path</I> in a state space from a start node to a goal node
+  <P></P>
+  <LI>The <B>cost of a solution</B> is the sum of the arc costs on the solution 
+  path
+  <P></P>
+  <LI>State-space search is the process of searching through a state space for a 
+  solution by <I>making explicit a sufficient portion of an implicit state-space 
+  graph to include a goal node</I>. Hence, initially V={S}, where S is the start 
+  node; when S is expanded, its successors are generated and those nodes are 
+  added to V and the associated arcs are added to E. This process continues 
+  until a goal node is found
+  <P></P>
+  <LI>Each node implicitly or explicitly represents a <B>partial solution 
+  path</B> (and cost of the partial solution path) from the start node to the 
+  given node. In general, from this node there are many possible paths (and 
+  therefore solutions) that have this partial path as a prefix
+  <P></P></LI></UL>
+<P>
+<H3>State-Space Search Algorithm</H3><PRE><B>function</B> general-search(problem, QUEUEING-FUNCTION)
+  ;; problem describes the start state, operators, goal test, and
+  ;;   operator costs
+  ;; queueing-function is a comparator function that ranks two states
+  ;; general-search returns either a goal node or "failure"
+
+  nodes = MAKE-QUEUE(MAKE-NODE(problem.INITIAL-STATE))
+  <B>loop</B>
+     <B>if</B> EMPTY(nodes) <B>then return</B> "failure"
+     node = REMOVE-FRONT(nodes)
+     <B>if</B> problem.GOAL-TEST(node.STATE) succeeds
+	<B>then return</B> node
+     nodes = QUEUEING-FUNCTION(nodes, EXPAND(node, problem.OPERATORS))
+     ;; Note: The goal test is NOT done when nodes are generated
+     ;; Note: This algorithm does not detect loops
+  <B>end</B>
+</PRE>
+<P>
+<H4>Key Procedures to be Defined</H4>
+<UL>
+  <LI>EXPAND<BR>Generate all successor nodes of a given node
+  <P></P>
+  <LI>GOAL-TEST<BR>Test if state satisfies all goal conditions
+  <P></P>
+  <LI>QUEUEING-FUNCTION<BR>Used to maintain a ranked list of nodes that are 
+  candidates for expansion
+  <P></P></LI></UL>
+<P>
+<H4>Key Issues</H4>
+<UL>
+  <LI>Search process constructs a <B>search tree</B>, where root is the initial 
+  state and all of the leaf nodes are nodes that have not yet been expanded 
+  (i.e., they are in the list "nodes") or are nodes that have no successors 
+  (i.e., they're "deadends" because no operators were applicable and yet they 
+  are not goals)
+  <P></P>
+  <LI>Search tree may be infinite because of loops even if state space is small
+  <P></P>
+  <LI>Return a path or a node depending on problem. E.g., in cryptarithmetic 
+  return a node; in 8-puzzle return a path
+  <P></P>
+  <LI>Changing definition of the QUEUEING-FUNCTION leads to different search 
+  strategies
+  <P></P></LI></UL>
+<P>
+<H4>Evaluating Search Strategies</H4>
+<UL>
+  <LI><B>Completeness</B><BR>Guarantees finding a solution whenever one exists
+  <P></P>
+  <LI><B>Time Complexity</B><BR>How long (worst or average case) does it take to 
+  find a solution? Usually measured in terms of the number of nodes expanded. 
+  For an overview of "Big-Oh" notation used for measuring time (and space) 
+  complexity, see <A 
+  href="http://www.cs.wisc.edu/~condon/cs577/handouts/big-oh.ps">CS 577 notes on 
+  Big-Oh notation</A>. 
+  <P></P>
+  <LI><B>Space Complexity</B><BR>How much space is used by the algorithm? 
+  Usually measured in terms of the maximum size that the "nodes" list becomes 
+  during the search.
+  <P></P>
+  <LI><B>Optimality/Admissibility</B><BR>If a solution is found, is it 
+  guaranteed to be an optimal one? That is, is it the one with minimum cost?
+  <P></P></LI></UL>
+<P>
+<H3>Uninformed Search Strategies</H3>This set of strategies orders nodes without 
+using any domain specific information.
+<P>
+<UL>
+  <LI><B>Breadth-First</B> (BFS)<BR>
+  <UL>
+    <LI>Enqueue nodes on <TT>nodes</TT> in FIFO (first-in, first-out) order. 
+    That is, <TT>nodes</TT> used as a <I>queue</I> data structure to order 
+    nodes. 
+    <LI>Complete 
+    <LI>Optimal (i.e., admissible) if all operators have the same cost. 
+    Otherwise, not optimal but finds solution with shortest path length. 
+    <LI>Exponential time and space complexity, O(b^d), where d is the depth of 
+    the solution and b is the branching factor (i.e., number of children) at 
+    each node 
+    <LI>Will take a long time to find solutions with a large number of steps 
+    because must look at all shorter length possibilities first 
+    <LI>A complete search tree of depth d where each non-leaf node has b 
+    children, has a total of 1 + b + b^2 + ... + b^d = (b^(d+1) - 1)/(b-1) nodes 
+
+    <LI>For a complete search tree of depth 12, where every node at depths 0, 
+    ..., 11 has 10 children and every node at depth 12 has 0 children, there are 
+    1 + 10 + 100 + 1000 + ... + 10^12 = (10^13 - 1)/9 = O(10^12) nodes in the 
+    complete search tree. If BFS expands 1000 nodes/sec and each node uses 100 
+    bytes of storage, then BFS will take 35 years to run in the worst case, and 
+    it will use 111 terabytes of memory! </LI></UL>
+  <LI><B>Depth-First</B> (DFS)<BR>
+  <UL>
+    <LI>Enqueue nodes on <TT>nodes</TT> in LIFO (last-in, first-out) order. That 
+    is, <TT>nodes</TT> used as a <I>stack</I> data structure to order nodes. 
+    <LI>May not terminate without a "depth bound," i.e., cutting off search 
+    below a fixed depth D 
+    <LI>Not complete (with or without cycle detection, and with or without a 
+    cutoff (depth boound) depth) 
+    <LI>Exponential time, O(b^d), but only linear space, O(bd), required 
+    <LI>Can find long solutions quickly if lucky 
+    <LI>When search hits a deadend, can only back up one level at a time even if 
+    the "problem" occurs because of a bad operator choice near the top of the 
+    tree. Hence, only does "<I>chronological backtracking</I>" </LI></UL>
+  <LI><B>Uniform-Cost</B> (UCS)<BR>
+  <UL>
+    <LI>Enqueue nodes by path cost. That is, let <I>g(n)</I> = cost of the path 
+    from the start node to the current node n. Sort <TT>nodes</TT> by increasing 
+    value of <I>g</I>. 
+    <LI>Called "Dijkstra's Algorithm" in the algorithms literature 
+    <LI>Similar to "Branch and Bound Algorithm" in operations research 
+    literature 
+    <LI>Complete 
+    <LI>Optimal/Admissible 
+    <LI>Admissibility depends on the goal test being applied when a node is 
+    removed from the nodes list, not when it's parent node is expanded and the 
+    node is first generated 
+    <LI>Exponential time and space complexity, O(b^d) </LI></UL>
+  <LI><B>Depth-First Iterative Deepening</B> (IDS)<BR>
+  <UL>
+    <LI><PRE>c=1
+<B>until</B> solution found <B>do</B>
+   DFS with depth bound (aka cutoff) c
+   c = c+1</PRE>
+    <LI>First do DFS to depth 1 (i.e., consider children of the start node to 
+    have no successors); then, if no solution found, do DFS to depth 2; etc. 
+    <LI>Complete 
+    <LI>Optimal/Admissible if all operators have the same cost. Otherwise, not 
+    optimal but does guarantee finding solution of shortest length (like BFS). 
+    <LI>Time complexity is a little worse than BFS or DFS because nodes near the 
+    top of the search tree are generated multiple times, but because almost all 
+    of the nodes are near the bottom of a tree, the worst case time complexity 
+    is still exponential, O(b^d) 
+    <LI>Example: If branching factor is b and solution is at depth d, then all 
+    nodes at depth d are generated at most once, all nodes at depth d-1 are 
+    generated at most twice, etc. Hence b^d + 2b^(d-1) + ... + db &lt;= b^d / (1 
+    - 1/b)^2 = O(b^d). If b=4, then worst case is 1.78 * 4^d. In other words 78% 
+    more nodes searched than exist at depth d (in the worst case). 
+    <LI>Linear space complexity, O(bd), like DFS 
+    <LI>Has advantage of BFS (i.e., completeness) and also advantages of DFS 
+    (i.e., limited space and finds longer paths more quickly) </LI></UL></LI></UL>
+<P>
+<H3>Example Illustrating Uninformed Search Strategies</H3><PRE>             S ... Initial State
+            /|\
+          1/ 5 \8
+          /  |  \
+         A   B   C
+        /|\  |  / 
+      3/ 7 9 4 /5  
+      /  |  \|/
+     D   E   G .... Goal State
+    </PRE><B>Nodes expanded by: </B>
+<UL>
+  <LI>Depth-First Search: S A D E G <BR>Solution found: S A G 
+  <P></P>
+  <LI>Breadth-First Search: S A B C D E G <BR>Solution found: S A G 
+  <P></P>
+  <LI>Uniform-Cost Search: S A D B C E G <BR>Solution found: S B G <BR>This is 
+  the only uninformed search that worries about costs.
+  <P></P>
+  <LI>Iterative-Deepening Search: S A B C S A D E G <BR>Solution found: S A G 
+  <P></P></LI></UL><B>Depth-First Search </B><PRE>    return GENERAL-SEARCH(<I>problem</I>, ENQUEUE-AT-FRONT) </PRE><LISTING>    expanded
+    node	nodes list
+    ----	----------
+		{ S }
+      S		{ A B C }
+      A		{ D E G B C}	
+      D		{ E G B C }
+      E		{ G B C }		
+      G		{ B C }	
+
+    Solution path found is S A G  <-- this G has cost 10
+    Number of nodes expanded (including goal node) = 5
+      </LISTING><B>Breadth-First Search </B><PRE>    return GENERAL-SEARCH(<I>problem</I>, ENQUEUE-AT-END) </PRE><LISTING>    expanded
+    node	nodes list
+    ----	----------
+		{ S }
+      S		{ A B C }
+      A		{ B C D E G }	
+      B		{ C D E G G' }
+      C		{ D E G G' G" }		
+      D		{ E G G' G" }	
+      E		{ G G' G" }	
+      G		{ G' G" }
+
+    Solution path found is S A G  <-- this G also has cost 10
+    Number of nodes expanded (including goal node) = 7
+      </LISTING><B>Uniform-Cost Search </B><PRE>    return GENERAL-SEARCH(<I>problem</I>, ENQUEUE-BY-PATH-COST) </PRE><LISTING>    expanded
+    node	nodes list
+    ----	----------
+		{ S }
+      S		{ A(1) B(5) C(8) }
+      A		{ D(4) B(5) C(8) E(8) G(10) }	(note, we don't return G)
+      D		{ B(5) C(8) E(8) G(10) }
+      B		{ C(8) E(8) G(9) G(10) }		
+      C		{ E(8) G(9) G(10) G(13) }	
+      E		{ G(9) G(10) G(13) }
+      G		{ }				
+
+    Solution path found is S B G  <-- this G has cost 9, not 10
+    Number of nodes expanded (including goal node) = 7
+      </LISTING>
+<P>
+<HR>
+
+<P>Copyright © 1996-2003 by Charles R. Dyer. All rights reserved. 
+</P></BODY></HTML>

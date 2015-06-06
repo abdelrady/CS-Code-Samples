@@ -1,0 +1,386 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!-- saved from url=(0039)http://www2.webng.com/amrlearn/123.html -->
+<HTML><HEAD><TITLE>DDA Line Algorithm And Dashed Line</TITLE><LINK 
+href="123_files/stylesheet.css" type=text/css rel=stylesheet>
+<META http-equiv=Content-Type content="text/html; charset=UTF-8">
+<META content="Computer Graphics, DDA Line Algorithm And Dashed Line " 
+name=description>
+<META content="Computer Graphics, DDA, Line, Algorithm, And, Dashed, Line " 
+name=keywords>
+<META content="Copyright 2007 Amr Saber" name=copyright>
+<META content="MSHTML 6.00.2900.2180" name=GENERATOR></HEAD>
+<BODY>
+<CENTER>
+<DIV id=header>
+<SCRIPT type=text/javascript><!--
+google_ad_client = "pub-9653171024150495";
+google_alternate_color = "C3D9FF";
+google_ad_width = 728;
+google_ad_height = 90;
+google_ad_format = "728x90_as";
+google_ad_type = "text";
+//2007-02-02: header
+google_ad_channel = "7161698987";
+//--></SCRIPT>
+
+<SCRIPT src="123_files/show_ads.js" type=text/javascript>
+</SCRIPT>
+</DIV></CENTER>
+<DIV id=index>
+<H3>Goooooooogle</H3>
+<SCRIPT type=text/javascript><!--
+google_ad_client = "pub-9653171024150495";
+google_alternate_color = "C3D9FF";
+google_ad_width = 120;
+google_ad_height = 600;
+google_ad_format = "120x600_as";
+google_ad_type = "text";
+//2007-02-02: header, right
+google_ad_channel = "7161698987+2593520185";
+//--></SCRIPT>
+
+<SCRIPT src="123_files/show_ads.js" type=text/javascript>
+</SCRIPT>
+</DIV>
+<DIV id=index2>
+<H3>Goooooooogle</H3>
+<SCRIPT type=text/javascript><!--
+google_ad_client = "pub-9653171024150495";
+google_alternate_color = "C3D9FF";
+google_ad_width = 120;
+google_ad_height = 600;
+google_ad_format = "120x600_as";
+google_ad_type = "text";
+google_ad_channel = "";
+//--></SCRIPT>
+
+<SCRIPT src="123_files/show_ads.js" type=text/javascript>
+</SCRIPT>
+</DIV>
+<DIV id=content>
+<H3>DDA Line Algorithm And Dashed Line</H3><TEXTAREA>#include&lt;windows.h&gt;
+#include&lt;math.h&gt;
+float xx1,yy1,xx2,yy2;
+LRESULT CALLBACK WndProc(HWND , UINT , WPARAM ,LPARAM);
+static char gszClassName[] = "MyWindowClass";
+static HINSTANCE ghInstance = NULL;
+
+void Dashed_line(const float x_1,const float y_1,const float x_2,
+					  const float y_2,const float line_type,HDC);
+
+void DDA_ALGORITHM(float xPoint1, float yPoint1, float xPoint2, float yPoint2, COLORREF col,HDC hdc);
+int WINAPI WinMain(HINSTANCE hInstance , HINSTANCE hprevInstance , LPSTR lpCmdLine ,int nCmdShow)
+{
+	WNDCLASSEX WndClass;
+	HWND hwnd;
+	MSG Msg;
+	ghInstance = hInstance ;
+	WndClass.cbSize = sizeof(WNDCLASSEX);
+	WndClass.style = NULL;
+	WndClass.lpfnWndProc = WndProc ;
+	WndClass.cbClsExtra =0;
+	WndClass.cbWndExtra = 0;
+	WndClass.hInstance =ghInstance ;
+	WndClass.hIcon = LoadIcon(NULL,IDI_APPLICATION);
+	WndClass.hCursor =LoadCursor(NULL ,IDC_ARROW);
+    WndClass.hbrBackground = (HBRUSH)(COLOR_WINDOW+21);
+    WndClass.lpszMenuName = NULL ;
+	WndClass.lpszClassName = gszClassName ;
+	WndClass.hIconSm = LoadIcon(NULL , IDI_APPLICATION);
+	if(!RegisterClassEx(&amp;WndClass))
+	{
+		MessageBox(0, "window registeration failed!!","error",MB_ICONSTOP|MB_OK);
+		return 0;
+	}
+
+	hwnd =CreateWindowEx(WS_EX_STATICEDGE , gszClassName ," Ch5 Clipping",WS_OVERLAPPEDWINDOW ,
+		CW_USEDEFAULT ,CW_USEDEFAULT,1320,1240,NULL,NULL,ghInstance,NULL);
+	if(hwnd == NULL)
+	{
+		MessageBox(0,"windows greated failed!!","Error" ,MB_ICONSTOP|MB_OK);
+         return 0;
+	}
+	ShowWindow(hwnd,nCmdShow);
+	UpdateWindow(hwnd);
+	while(GetMessage(&amp;Msg ,NULL ,0,0))
+	{
+		TranslateMessage(&amp;Msg);
+		DispatchMessage(&amp;Msg);
+	}
+	return Msg.wParam;
+}
+/*//\\//\\\////\\//\\\////\\//\\\////\\//\\\////\\//\\\////\\//\\\//*/
+
+//====================================================================
+LRESULT CALLBACK WndProc(HWND hwnd ,UINT Message ,WPARAM wparam ,LPARAM
+						 lparam)
+{
+	COLORREF col=RGB(0,0,250);
+	COLORREF C1=RGB(250,0,0),C2=RGB(0,0,0);
+	HDC      hdc;
+	hdc=GetDC( hwnd );
+
+const int x_1=90;const int y_1=90;const int x_2=280;
+					  const int y_2=280;const int line_type=2;
+
+	switch(Message)
+	{
+	case WM_CLOSE :
+		DestroyWindow(hwnd);
+	break ;
+	
+	case WM_DESTROY:
+		PostQuitMessage(0);
+	break ;
+
+	case WM_RBUTTONDOWN:
+		hdc=GetDC(hwnd);
+			xx1 = LOWORD(lparam);
+			yy1 = HIWORD(lparam);
+			ReleaseDC(hwnd,hdc);
+	break;
+
+	case WM_LBUTTONDOWN:
+		hdc=GetDC(hwnd);
+		xx2 = LOWORD(lparam);
+		yy2 = HIWORD(lparam);
+		
+
+		Dashed_line(xx1,yy1, xx2, yy2, line_type, hdc);
+
+
+		//DDA_ALGORITHM(xx1,yy1,xx2,yy2,col,hdc);
+		ReleaseDC(hwnd,hdc);
+		break;
+	default:
+		return DefWindowProc(hwnd,Message,wparam,lparam);
+	}
+	return 0;
+}
+/*====================================================================*/
+void DDA_ALGORITHM(float xPoint1, float yPoint1, float xPoint2, float yPoint2, COLORREF col,HDC hdc)
+{
+	float xBegin  =  xPoint1;
+	float xFinal  =  xPoint2;
+	float yBegin  =  yPoint1;
+	float yFinal  =  yPoint2;
+	float slope = (yPoint2 - yPoint1) / (xPoint2 - xPoint1);
+	float slopeInverse  =  1 / slope;
+
+	if(xPoint1&gt;xPoint2 &amp;&amp; yPoint1&gt;yPoint2)
+	{
+		xBegin  =  xPoint2;
+	    xFinal  =  xPoint1;
+		yBegin  =  yPoint2;
+	    yFinal  =  yPoint1;
+	}
+	int x = int(xBegin);
+	int y = int(yBegin);
+
+	// if the line is parallel to the y coordinate
+	if((xBegin - xFinal) == 0)
+		if(yBegin &lt; yFinal)	// and y starting point greater than y end
+			while(y &lt;= yFinal)
+			{
+				SetPixel(hdc, x, y, col);
+				y ++;	// increment y
+			}
+		else
+			while(y &gt;= yFinal)
+			{
+				SetPixel(hdc, x, y, col);
+				y --;	// decrement y
+			}
+	// if the line is parallel to the x coordinate
+	else
+		if((yBegin - yFinal) == 0)
+			if(xBegin &lt; xFinal) // and x starting point greater than x end
+				while(x &lt;= xFinal)
+				{
+					SetPixel(hdc, x, y, col);
+					x ++;
+				}
+			else
+				while(x &gt;= xFinal)
+				{
+					SetPixel(hdc, x, y, col);
+					x --;
+				}
+	else
+		if(slope &gt;= 1 || slope &lt;= -1) // new case
+		{
+			if(yFinal &gt; yBegin) // from begin to end
+				while(y &lt;= yFinal)
+				{
+					x = int(xBegin + 0.5);
+					xBegin = xBegin + slopeInverse;
+					SetPixel(hdc, x, y, col);
+					y ++;
+				}
+			else		// from end to begin
+				while(y &gt;= yFinal)
+				{
+					x = int(xBegin + 0.5);
+					xBegin = xBegin - slopeInverse;
+					SetPixel(hdc, x, y, col);
+					y --;
+				}
+		}
+	else
+		if(slopeInverse &gt;= 1 || slopeInverse &lt;= -1) // new case
+		{
+			if(xFinal &gt; xBegin)	// from begin to end
+				while(x &lt;= xFinal)
+				{
+					y = int(yBegin + 0.5);
+					yBegin = yBegin + slope;
+					SetPixel(hdc, x, y, col);
+					x ++;
+				}
+			else		// from end to begin
+				while(x &gt;= xFinal)
+				{
+					y = int(yBegin + 0.5);
+					yBegin = yBegin - slope;
+					SetPixel(hdc, x, y, col);
+					x --;
+				}
+		}//if
+}
+/***********************************************************************
+***********************************************************************
+***********************************************************************
+***********************************************************************/
+void Dashed_line(const float x_1,const float y_1,const float x_2,
+					  const float y_2,const float line_type,HDC hdc)
+    {
+       int count=0;
+ 	   int color=RGB(255,0,0);	
+       int x1=x_1;
+       int y1=y_1;
+
+       int x2=x_2;
+       int y2=y_2;
+
+       if(x_1&gt;x_2)
+	  {
+	     x1=x_2;
+	     y1=y_2;
+
+	     x2=x_1;
+	     y2=y_1;
+	  }
+
+       int dx=abs(x2-x1);
+       int dy=abs(y2-y1);
+       int inc_dec=((y2&gt;=y1)?1:-1);
+
+       if(dx&gt;dy)
+	  {
+	     int two_dy=(2*dy);
+	     int two_dy_dx=(2*(dy-dx));
+	     int p=((2*dy)-dx);
+
+	     int x=x1;
+	     int y=y1;
+		 SetPixel(hdc,x,y,RGB(255,0,0));
+	    while(x&lt;x2)
+		{
+		   x++;
+
+		   if(p&lt;0)
+		      p+=two_dy;
+
+		   else
+		      {
+			 y+=inc_dec;
+			 p+=two_dy_dx;
+		      }
+
+		   if((count%2)!=0 &amp;&amp; line_type==0)
+			  SetPixel(hdc,x,y,RGB(255,0,0));
+		   else if((count%5)!=4 &amp;&amp; line_type==1)
+		      SetPixel(hdc,x,y,RGB(255,0,0));
+
+		   else if((count%10)!=8 &amp;&amp; (count%10)!=9 &amp;&amp; line_type==2)
+			   SetPixel(hdc,x,y,RGB(255,0,0));
+
+		   else if((count%20)!=18 &amp;&amp; (count%20)!=19 &amp;&amp; line_type==3)
+		      SetPixel(hdc,x,y,RGB(255,0,0));
+
+		   else if((count%12)!=7 &amp;&amp; (count%12)!=8 &amp;&amp;
+			    (count%12)!=10 &amp;&amp; (count%12)!=11 &amp;&amp; line_type==4)
+		      SetPixel(hdc,x,y,RGB(255,0,0));
+
+		   count++;
+		}
+	  }
+
+       else
+	  {
+	     int two_dx=(2*dx);
+	     int two_dx_dy=(2*(dx-dy));
+	     int p=((2*dx)-dy);
+
+	     int x=x1;
+	     int y=y1;
+
+	     SetPixel(hdc,x,y,RGB(255,0,0));
+
+	     while(y!=y2)
+		{
+		   y+=inc_dec;
+
+		   if(p&lt;0)
+		      p+=two_dx;
+
+		   else
+		      {
+			 x++;
+			 p+=two_dx_dy;
+		      }
+
+		   if((count%2)!=0 &amp;&amp; line_type==0)
+		     SetPixel(hdc,x,y,RGB(255,0,0));
+		   else if((count%5)!=4 &amp;&amp; line_type==1)
+		      SetPixel(hdc,x,y,RGB(255,0,0));
+		   else if((count%10)!=8 &amp;&amp; (count%10)!=9 &amp;&amp; line_type==2)
+		     SetPixel(hdc,x,y,RGB(255,0,0));
+
+		   else if((count%20)!=18 &amp;&amp; (count%20)!=19 &amp;&amp; line_type==3)
+		     SetPixel(hdc,x,y,RGB(255,0,0));
+
+		   else if((count%12)!=7 &amp;&amp; (count%12)!=8 &amp;&amp;
+			    (count%12)!=10 &amp;&amp; (count%12)!=11 &amp;&amp; line_type==4)
+		      SetPixel(hdc,x,y,RGB(255,0,0));
+
+		   count++;
+		}
+	  }
+    }
+</TEXTAREA> <BR>
+<CENTER><IMG 
+style="BORDER-RIGHT: #0066cf 1px solid; BORDER-TOP: #0066cf 1px solid; BORDER-LEFT: #0066cf 1px solid; WIDTH: 350px; BORDER-BOTTOM: #0066cf 1px solid; HEIGHT: 300px" 
+src="123_files/dash.jpg"> </CENTER><!-- Search Google -->
+<CENTER>
+<FORM action=http://www.google.com/custom method=get target=_top>
+<TABLE bgColor=#ffffff>
+  <TBODY>
+  <TR>
+    <TD vAlign=top noWrap align=left height=32><A 
+      href="http://www.google.com/"><IMG alt=Google 
+      src="123_files/Logo_25wht.gif" align=middle border=0></IMG></A> <LABEL 
+      style="DISPLAY: none" for=sbi>Enter your search terms</LABEL> <INPUT 
+      id=sbi maxLength=255 size=40 name=q></INPUT> <LABEL style="DISPLAY: none" 
+      for=sbb>Submit search form</LABEL> <INPUT id=sbb type=submit value=Search name=sa></INPUT> <INPUT type=hidden 
+      value=pub-9653171024150495 name=client></INPUT> <INPUT type=hidden value=1 
+      name=forid></INPUT> <INPUT type=hidden value=ISO-8859-1 name=ie></INPUT> 
+      <INPUT type=hidden value=ISO-8859-1 name=oe></INPUT> <INPUT type=hidden 
+      value=active name=safe></INPUT> <INPUT type=hidden 
+      value=GALT:#008000;GL:1;DIV:#336699;VLC:663399;AH:center;BGC:FFFFFF;LBGC:336699;ALC:0000FF;LC:0000FF;T:000000;GFNT:0000FF;GIMP:0000FF;FORID:1 
+      name=cof></INPUT> <INPUT type=hidden value=en name=hl></INPUT> 
+  </TD></TR></TBODY></TABLE></FORM></CENTER><!-- Search Google -->
+<H3><A 
+href="http://www2.webng.com/amrlearn/Index.html">Home</A>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A 
+href="http://www2.webng.com/amrlearn/126.html">Previous</A>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A 
+href="http://www2.webng.com/amrlearn/122.html">Next</A></H3></DIV></BODY></HTML>

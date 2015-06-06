@@ -1,0 +1,108 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+<HTML lang="en-us">
+<HEAD>
+<TITLE>Windows API Guide: GetEnvironmentVariable Function</TITLE>
+<META content="vbapi@vbapi.com" name="author">
+<META content="Information about the GetEnvironmentVariable function in the Windows API, geared towards the Visual Basic user." name="description">
+<META content="Kuliniewicz,Windows,Windows 95,Windows NT,Windows 98,Windows CE,Windows 2000,API,Application Programming Interface,Programming,Visual Basic,Basic,VB,GetEnvironmentVariable" name="keywords">
+<META content="Omicron HTML Editor" name="generator">
+<LINK href="default.css" tppabs="http://www.vbapi.com/css/default.css" rel="stylesheet" type="text/css">
+<LINK href="index-1.html" tppabs="http://www.vbapi.com/index.html" rel="home">
+<LINK href="glossary.html" tppabs="http://www.vbapi.com/ref/glossary.html" rel="glossary">
+<LINK href="copyrite.html" tppabs="http://www.vbapi.com/copyrite.html" rel="copyright">
+</HEAD>
+<BODY>
+
+<!-- Begin Adslot1 -->
+<CENTER>
+<SCRIPT language="JAVASCRIPT">
+<!-- hide from older browsers
+now = new Date();
+my_random = now.getTime();
+document.write('<A href="http://adex3.flycast.com/server/socket/127.0.0.1:2800/click/VBWorldnet/VBAPI/' + my_random + '">');
+document.write('<IMG width="468" height="60" border="1" src="http://adex3.flycast.com/server/socket/127.0.0.1:2800/ad/VBWorldnet/VBAPI/' + my_random + '"></A>');
+// -->
+</SCRIPT>
+</CENTER>
+<!-- End Adslot1 -->
+
+<HR>
+
+<H1>GetEnvironmentVariable Function</H1>
+
+<P><CODE class="declare"><SPAN class="kw">Declare Function</SPAN> GetEnvironmentVariable <SPAN class="kw">Lib</SPAN> "kernel32.dll" <SPAN class="kw">Alias</SPAN> "GetEnvironmentVariableA" (<SPAN class="kw">ByVal</SPAN> lpName <SPAN class="kw">As String</SPAN>, <SPAN class="kw">ByVal</SPAN> lpBuffer <SPAN class="kw">As String</SPAN>, <SPAN class="kw">ByVal</SPAN> nSize <SPAN class="kw">As Long</SPAN>) <SPAN class="kw">As Long</SPAN></CODE></P>
+
+<H2>Platforms</H2>
+<P><UL>
+<LI><B>Windows 95:</B> Supported.
+<LI><B>Windows 98:</B> Supported.
+<LI><B>Windows NT:</B> Requires Windows NT 3.1 or later.
+<LI><B>Windows 2000:</B> Supported.
+<LI><B>Windows CE:</B> Not Supported.
+</UL></P>
+
+<H2>Description &amp; Usage</H2>
+<P><B>GetEnvironmentVariable</B> reads the value of one of the computer's environment variables.  The value is placed into the string buffer passed as the <VAR>lpBuffer</VAR> parameter.</P>
+
+<H2>Return Value</H2>
+<P>If the specified environment variable does not exist, the function returns zero.  If the string passed as <VAR>lpBuffer</VAR> was too short to receive the environment variable's value, the function returns the necessary minimum buffer length.  If successful, the function returns the length of the string copied into <VAR>lpBuffer</VAR>, not counting the terminating null character.</P>
+
+<H2>Visual Basic-Specific Issues</H2>
+<P>None.</P>
+
+<H2>Parameters</H2>
+<P><DL>
+<DT><VAR>lpName</VAR><DD>The name of the environment variable to read.
+<DT><VAR>lpBuffer</VAR><DD>Receives the value of the environment variable.  This string must be sufficiently long to receive the value copied into it.
+<DT><VAR>nSize</VAR><DD>The length of the string passed as <VAR>lpBuffer</VAR>.
+</DL></P>
+
+<H2>Example</H2>
+<P>Read the BLASTER environment variable, which contains some information about the Sound Blaster configuration on the computer.  Typically, this variable is only used by DOS programs, so it isn't very useful for Windows applications.  But then again, this is just an example of how to use <B>GetEnvironmentVariable</B>.  The example runs when button Command1 is clicked, so you must place a command button named Command1 on a form window before running this example.</P>
+
+<P><PRE><CODE class="example"><SPAN class="com">' This code is licensed according to the terms and conditions listed <A href="copyrite.html#license" tppabs="http://www.vbapi.com/copyrite.html#license" rel="copyright">here</A>.</SPAN>
+
+<SPAN class="com">' Declarations and such needed for the example:
+' (Copy them to the (declarations) section of a module.)</SPAN>
+<SPAN class="kw">Public Declare Function</SPAN> <B>GetEnvironmentVariable</B> <SPAN class="kw">Lib</SPAN> "kernel32.dll" <SPAN class="kw">Alias</SPAN> "GetEnvironmentVariableA" (<SPAN class="kw">ByVal</SPAN> _
+	lpName <SPAN class="kw">As String</SPAN>, <SPAN class="kw">ByVal</SPAN> lpBuffer <SPAN class="kw">As String</SPAN>, <SPAN class="kw">ByVal</SPAN> nSize <SPAN class="kw">As Long</SPAN>) <SPAN class="kw">As Long</SPAN>
+
+<SPAN class="com">' *** Place the following code inside a form window. ***</SPAN>
+
+<SPAN class="kw">Private Sub</SPAN> Command1_Click()
+	<SPAN class="kw">Dim</SPAN> envvar <SPAN class="kw">As String</SPAN>  <SPAN class="com">' receives the value of the environment variable</SPAN>
+	<SPAN class="kw">Dim</SPAN> slength <SPAN class="kw">As Long</SPAN>  <SPAN class="com">' length of the string copied into envvar</SPAN>
+	
+	<SPAN class="com">' Make enough room in envvar to receive the data.</SPAN>
+	envvar = Space(256)
+	<SPAN class="com">' Read the value of the BLASTER environment variable.</SPAN>
+	slength = <B>GetEnvironmentVariable</B>("BLASTER", envvar, Len(envvar))
+	
+	<SPAN class="kw">If</SPAN> slength = 0 <SPAN class="kw">Then</SPAN>
+		<SPAN class="kw">Debug</SPAN>.<SPAN class="kw">Print</SPAN> "The BLASTER environment variable does not exist on this system."
+	<SPAN class="kw">Else</SPAN>
+		<SPAN class="com">' Remove the terminating null and everything following it.</SPAN>
+		envvar = Left(envvar, slength)
+		<SPAN class="kw">Debug</SPAN>.<SPAN class="kw">Print</SPAN> "BLASTER = "; envvar
+	<SPAN class="kw">End If</SPAN>
+<SPAN class="kw">End Sub</SPAN></CODE></PRE></P>
+
+<H2>See Also</H2>
+<P><A href="setenvironmentvariable.html" tppabs="http://www.vbapi.com/ref/s/setenvironmentvariable.html">SetEnvironmentVariable</A></P>
+
+<H2>Category</H2>
+<P><A href="funcc.html#processthread" tppabs="http://www.vbapi.com/ref/funcc.html#processthread">Processes &amp; Threads</A></P>
+
+<P><A href="funca.html" tppabs="http://www.vbapi.com/ref/funca.html">Back to the Function list.</A><BR>
+<A href="index.html" tppabs="http://www.vbapi.com/ref/index.html" rel="index">Back to the Reference section.</A></P>
+
+<HR>
+
+<P><B>Last Modified:</B> August 26, 2000<BR>
+This page is copyright &copy; 2000 Paul Kuliniewicz.  
+<A href="copyrite.html" tppabs="http://www.vbapi.com/copyrite.html" rel="copyright">Copyright Information</A>  <B>Revised October 29, 2000</B><BR>
+<A href="index-1.html" tppabs="http://www.vbapi.com/index.html" rel="home">Go back to the Windows API Guide home page.</A><BR>
+E-mail: <A href="javascript:if(confirm('http://www.vbapi.com/email.html  \n\nThis file was not retrieved by Teleport Pro, because it is addressed on a domain or path outside the boundaries set for its Starting Address.  \n\nDo you want to open it from the server?'))window.location='http://www.vbapi.com/email.html'" tppabs="http://www.vbapi.com/email.html">vbapi@vbapi.com</A>  <A href="javascript:if(confirm('http://www.vbapi.com/email.html  \n\nThis file was not retrieved by Teleport Pro, because it is addressed on a domain or path outside the boundaries set for its Starting Address.  \n\nDo you want to open it from the server?'))window.location='http://www.vbapi.com/email.html#secure'" tppabs="http://www.vbapi.com/email.html#secure">Send Encrypted E-Mail</A><BR>
+This page is at <A href="getenvironmentvariable.html" tppabs="http://www.vbapi.com/ref/g/getenvironmentvariable.html">http://www.vbapi.com/ref/g/getenvironmentvariable.html</A></P>
+</BODY>
+</HTML>

@@ -1,0 +1,87 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+<HTML lang="en-us">
+<HEAD>
+<TITLE>Windows API Guide: GlobalUnlock Function</TITLE>
+<META content="vbapi@vbapi.com" name="author">
+<META content="Information about the GlobalUnlock function in the Windows API, geared towards the Visual Basic user." name="description">
+<META content="Kuliniewicz,Windows,Windows 95,Windows NT,Windows 98,Windows 32s,32s,API,Application Programming Interface,Programming,Visual Basic,Basic,VB,GlobalUnlock" name="keywords">
+<META content="Omicron HTML Editor" name="generator">
+<LINK href="default.css" tppabs="http://www.vbapi.com/css/default.css" rel="stylesheet" type="text/css">
+<LINK href="index-1.html" tppabs="http://www.vbapi.com/index.html" rel="home">
+</HEAD>
+<BODY>
+
+<!-- Begin Adslot1 -->
+<CENTER>
+<SCRIPT language="JAVASCRIPT">
+<!-- hide from older browsers
+now = new Date();
+my_random = now.getTime();
+document.write('<A href="http://adex3.flycast.com/server/socket/127.0.0.1:2800/click/VBWorldnet/VBAPI/' + my_random + '">');
+document.write('<IMG width="468" height="60" border="1" src="http://adex3.flycast.com/server/socket/127.0.0.1:2800/ad/VBWorldnet/VBAPI/' + my_random + '"></A>');
+// -->
+</SCRIPT>
+</CENTER>
+<!-- End Adslot1 -->
+
+<HR>
+
+<H1>GlobalUnlock Function</H1>
+
+<P><CODE class="declare">Declare Function GlobalUnlock Lib "kernel32.dll" (ByVal hMem As Long) As Long</CODE>
+
+<P><B>Platforms:</B> Win 32s, Win 95/98, Win NT
+
+<P><B>GlobalUnlock</B> decrements the lock count of a moveable memory block by one.  The memory block is locked if its lock count is greater than zero; it is considered unlocked if its lock count is zero.  A moveable memory block cannot be moved or discarded while it is locked.  The function returns 1 if, after decrementing the lock count, the memory block is still locked.  The function returns 0 if, after decrementing the lock count, either the memory block is now unlocked or an error occured.
+
+<DL>
+<DT><VAR>hMem</VAR><DD>A handle to the moveable memory block to decrement the lock count of.
+</DL>
+
+<P><B>Example:</B>
+<PRE><CODE class="example">' Use a block of memory as an intermediary step to copy
+' the contents of array s() to array t().  Yes, you could copy them directly,
+' but this demonstrates a few different memory functions.
+Dim s(0 To 255) As Integer, t(0 To 255) As Integer  ' arrays to copy from/to
+Dim c As Integer, retval As Long  ' counter variable &amp; return value
+Dim hMem As Long, pMem As Long  ' handle and pointer to memory block
+
+' Initialize the source array s()'s data
+For c = 0 To 255
+  s(c) = 2 * c  ' each element equals double its index
+Next c
+
+' Allocate a moveable block of memory (returns a handle) (Integer type = 2 bytes)
+hMem = <A href="globalalloc.html" tppabs="http://www.vbapi.com/ref/g/globalalloc.html">GlobalAlloc</A>(GMEM_MOVEABLE Or GMEM_ZEROINIT, 256 * 2)
+' Lock the memory block, returning a pointer to it
+pMem = <A href="globallock.html" tppabs="http://www.vbapi.com/ref/g/globallock.html">GlobalLock</A>(hMem)
+' Copy the entire contents of s() to the memory block
+' Note that pMem is ByVal because we want its contents, not a pointer to it
+<A href="copymemory.html" tppabs="http://www.vbapi.com/ref/c/copymemory.html">CopyMemory</A> ByVal pMem, s(0), 256 * 2
+' Copy the contents of the memory block to t()  (we could have just copied s() to t())
+<A href="copymemory.html" tppabs="http://www.vbapi.com/ref/c/copymemory.html">CopyMemory</A> t(0), ByVal pMem, 256 * 2
+' Unlock the memory block, destroying the pointer and freeing resources
+x = <B>GlobalUnlock</B>(hMem)
+' Free the memory block (de-allocate it)
+x = <A href="globalfree.html" tppabs="http://www.vbapi.com/ref/g/globalfree.html">GlobalFree</A>(hMem)
+
+' Verify that t() = s(), which it should
+For c = 0 To 255
+  If s(c) &lt;&gt; t(c) Then Debug.Print "Copy attempt failed."
+End If</CODE></PRE>
+
+<P><B>See Also:</B> <A href="globallock.html" tppabs="http://www.vbapi.com/ref/g/globallock.html">GlobalLock</A><BR>
+<B>Category:</B> <A href="index.html#memory" tppabs="http://www.vbapi.com/ref/index.html#memory">Memory</A></P>
+
+<P><A href="funca.html" tppabs="http://www.vbapi.com/ref/funca.html">Go back to the alphabetical Function listing.</A><BR>
+<A href="index.html" tppabs="http://www.vbapi.com/ref/index.html">Go back to the Reference section index.</A></P>
+
+<HR>
+
+<P>This page is copyright &copy; 2000 Paul Kuliniewicz.  <A href="copyrite.html" tppabs="http://www.vbapi.com/copyrite.html" rel="copyright">Copyright Information.</A><BR>
+<A href="index-1.html" tppabs="http://www.vbapi.com/index.html">Go back to the Windows API Guide home page.</A><BR>
+E-mail: <A href="javascript:if(confirm('http://www.vbapi.com/email.html  \n\nThis file was not retrieved by Teleport Pro, because it is addressed on a domain or path outside the boundaries set for its Starting Address.  \n\nDo you want to open it from the server?'))window.location='http://www.vbapi.com/email.html'" tppabs="http://www.vbapi.com/email.html">vbapi@vbapi.com</A>  <A href="javascript:if(confirm('http://www.vbapi.com/email.html  \n\nThis file was not retrieved by Teleport Pro, because it is addressed on a domain or path outside the boundaries set for its Starting Address.  \n\nDo you want to open it from the server?'))window.location='http://www.vbapi.com/email.html#secure'" tppabs="http://www.vbapi.com/email.html#secure">Send Encrypted E-Mail</A><BR>
+This page is at <A href="globalunlock.html" tppabs="http://www.vbapi.com/ref/g/globalunlock.html">http://www.vbapi.com/ref/g/globalunlock.html</A>
+
+</BODY>
+</HTML>

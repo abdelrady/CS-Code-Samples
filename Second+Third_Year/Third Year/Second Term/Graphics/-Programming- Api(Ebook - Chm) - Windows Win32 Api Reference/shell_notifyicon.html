@@ -1,0 +1,167 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+<HTML lang="en-us">
+<HEAD>
+<TITLE>Windows API Guide: Shell_NotifyIcon Function</TITLE>
+<META content="vbapi@vbapi.com" name="author">
+<META content="Information about the Shell_NotifyIcon function in the Windows API, geared towards the Visual Basic user." name="description">
+<META content="Kuliniewicz,Windows,Windows 95,Windows NT,Windows 98,Windows CE,Windows 2000,API,Application Programming Interface,Programming,Visual Basic,Basic,VB,Shell_NotifyIcon" name="keywords">
+<META content="Omicron HTML Editor" name="generator">
+<LINK href="default.css" tppabs="http://www.vbapi.com/css/default.css" rel="stylesheet" type="text/css">
+<LINK href="index-1.html" tppabs="http://www.vbapi.com/index.html" rel="home">
+<LINK href="glossary.html" tppabs="http://www.vbapi.com/ref/glossary.html" rel="glossary">
+<LINK href="copyrite.html" tppabs="http://www.vbapi.com/copyrite.html" rel="copyright">
+</HEAD>
+<BODY>
+
+<!-- Begin Adslot1 -->
+<CENTER>
+<SCRIPT language="JAVASCRIPT">
+<!-- hide from older browsers
+now = new Date();
+my_random = now.getTime();
+document.write('<A href="http://adex3.flycast.com/server/socket/127.0.0.1:2800/click/VBWorldnet/VBAPI/' + my_random + '">');
+document.write('<IMG width="468" height="60" border="1" src="http://adex3.flycast.com/server/socket/127.0.0.1:2800/ad/VBWorldnet/VBAPI/' + my_random + '"></A>');
+// -->
+</SCRIPT>
+</CENTER>
+<!-- End Adslot1 -->
+
+<HR>
+
+<H1>Shell_NotifyIcon Function</H1>
+
+<P><CODE class="declare">Declare Function Shell_NotifyIcon Lib "shell32.dll" Alias "Shell_NotifyIconA" (ByVal dwMessage As Long, pnid As <A href="notifyicondata.html" tppabs="http://www.vbapi.com/ref/n/notifyicondata.html">NOTIFYICONDATA</A>) As Long</CODE></P>
+
+<H2>Platforms</H2>
+<P><UL>
+<LI><B>Windows 95:</B> Supported.
+<LI><B>Windows 98:</B> Supported.
+<LI><B>Windows NT:</B> Requires Windows NT 4.0 or later.
+<LI><B>Windows 2000:</B> Supported.
+<LI><B>Windows CE:</B> Requires Windows CE 1.0 or later.
+</UL></P>
+
+<H2>Description &amp; Usage</H2>
+<P><B>Shell_NotifyIcon</B> manipulates an icon located in the taskbar's status area, commonly referred to as the "system tray."  This function adds a new icon, removes an existing icon, or changes an existing icon owned by the calling program.  Programs typically use tray icons when they run in the background without a window; the icon gives the user a way to access the running program.</P>
+
+<P>All of a tray icon's <A class="def" href="glossary.html#message" tppabs="http://www.vbapi.com/ref/glossary.html#message" rel="glossary">messages</A> are sent to its owner window for processing.  See the page for the <A href="notifyicondata.html" tppabs="http://www.vbapi.com/ref/n/notifyicondata.html">NOTIFYICONDATA</A> structure for more details on how this is done.  The standard behavior of <B>Shell_NotifyIcon</B> used the following messages: <A href="wm_mousemove.html" tppabs="http://www.vbapi.com/ref/w/wm_mousemove.html">WM_MOUSEMOVE</A>, <A href="wm_lbuttondown.html" tppabs="http://www.vbapi.com/ref/w/wm_lbuttondown.html">WM_LBUTTONDOWN</A>, <A href="wm_lbuttonup.html" tppabs="http://www.vbapi.com/ref/w/wm_lbuttonup.html">WM_LBUTTONUP</A>, <A href="wm_rbuttondown.html" tppabs="http://www.vbapi.com/ref/w/wm_rbuttondown.html">WM_RBUTTONDOWN</A>, <A href="wm_rbuttonup.html" tppabs="http://www.vbapi.com/ref/w/wm_rbuttonup.html">WM_RBUTTONUP</A>, etc.</P>
+
+<H2>Return Value</H2>
+<P>The function returns 0 if an error occured, or a non-zero value if successful.</P>
+
+<H2>Visual Basic-Specific Issues</H2>
+<P>None.</P>
+
+<H2>Parameters</H2>
+<P><DL>
+<DT><VAR>dwMessage</VAR><DD>One of the following flags specifying the action to take:
+<DL>
+<DT>NIM_ADD<DD>Add the icon described by <VAR>pnid</VAR> to the system tray.
+<DT>NIM_DELETE<DD>Remove the icon described by <VAR>pnid</VAR> from the system tray.
+<DT>NIM_MODIFY<DD>Modify the icon described by <VAR>pnid</VAR>.
+<DT>NIM_SETFOCUS<DD><B>Windows 2000:</B> Return the focus to the system tray.  This should be done after completing the user interface operations associated with the icon.
+<DT>NIM_SETVERSION<DD><B>Windows 2000:</B> Use the <VAR>uVersion</VAR> member of the structure passed as <VAR>pnid</VAR> to determine which taskbar behavior to use.  The two options are the Windows 2000-specific behavior and the behavior found on other Windows platforms.  Note that this guide does not explain how to use the behavior introduced by Windows 2000.
+</DL>
+<DT><VAR>pnid</VAR><DD>Provides identifying information and settings for the tray icon, as needed by the value passed as <VAR>dwMessage</VAR>.
+</DL></P>
+
+<H2>Constant Definitions</H2>
+<P><PRE><CODE class="const">Const NIM_ADD = &amp;H0
+Const NIM_DELETE = &amp;H2
+Const NIM_MODIFY = &amp;H1
+Const NIM_SETFOCUS = &amp;H4
+Const NIM_SETVERSION = &amp;H8</CODE></PRE></P>
+
+<H2>Example</H2>
+<P><B>Note:</B> To use this example, you must first use the Menu Editor utility to create a small menu on Form1.  Create a menu called mnuTrayIconPopup with its Visible check box cleared.  Then, create two menu items under it: mnuAbout and mnuExit.  You can give those items whatever captions you which; those are what will be displayed in the menu.  If you do this properly, you will not see a menu bar in Form1 but the example code will function properly.</P>
+
+<P><PRE><CODE class="example"><SPAN class="com">' This code is licensed according to the terms and conditions listed <A href="copyrite.html#license" tppabs="http://www.vbapi.com/copyrite.html#license" rel="copyright">here</A>.</SPAN>
+
+' Place an icon in the system tray when window Form1 opens.  When right-
+' clicked, a small pop-up menu appears.  The icon is deleted when Form1 closes.
+' Notice how the window procedure for Form1 is extended in order to process the
+' messages for the icon.  Also, note the application-defined message used for tray
+' icons.
+
+' *** Place the following code in a module. ***
+' Public variable definitions.
+Public pOldProc As Long  ' pointer to Form1's previous window procedure
+Public Const PK_TRAYICON = &amp;H401  ' program-defined message for tray icon action
+
+' This function acts as the new window procedure for Form1.  It handles the program-
+' defined PK_TRAYICON message, used whenever a user event occurs with the
+' tray icon.
+Public Function <A href="windowproc.html" tppabs="http://www.vbapi.com/ref/w/windowproc.html">WindowProc</A>(ByVal hWnd As Long, ByVal uMsg As Long, ByVal wParam As Long, ByVal lParam As Long) As Long
+  Select Case uMsg
+  Case PK_TRAYICON
+    ' If the user released the right mouse button over the icon, display the
+    ' mnuTrayIconPopup menu at the mouse cursor's position.  Make
+    ' mnuAbout the default selection in the menu.
+    If lParam = <A href="wm_rbuttonup.html" tppabs="http://www.vbapi.com/ref/w/wm_rbuttonup.html">WM_RBUTTONUP</A> Then
+      Form1.PopupMenu mnuTrayIconPopup, , , , mnuAbout
+    End If
+    WindowProc = 1  ' this return value doesn't really matter
+  Case Else
+    ' Pass the message to the procedure Visual Basic provided.
+    WindowProc = <A href="callwindowproc.html" tppabs="http://www.vbapi.com/ref/c/callwindowproc.html">CallWindowProc</A>(pOldProc, hWnd, Msg, wParam, lParam)
+  End Select
+End Function
+
+' *** Place the following code in Form1. ***
+' This function creates the tray icon and hooks up the window procedure
+' when Form1 first opens.
+Private Sub Form1_Open()
+  Dim nid As <A href="notifyicondata.html" tppabs="http://www.vbapi.com/ref/n/notifyicondata.html">NOTIFYICONDATA</A>  ' icon information
+  Dim retval As Long  ' return value
+
+  ' Put the icon settings into the structure.
+  With nid
+    .cbSize = Len(nid)  ' size of structure
+    .hWnd = Form1.hWnd  ' owner of the icon and processor of its messages
+    .uID = 1  ' unique identifier for the window's tray icons
+    .uFlags = NIF_ICON Or NIF_MESSAGE Or NIF_TIP  ' provide icon, message, and tool tip text
+    .uCallbackMessage = PK_TRAYICON  ' message to use for icon events
+    .hIcon = Form1.Icon  ' handle to the icon to actually display in the tray
+    .szTip = "Sample Tray Icon" &amp; vbNullChar  ' tool tip text for icon
+  End With
+
+  ' Add the icon to the system tray.
+  retval = <B>Shell_NotifyIcon</B>(NIM_ADD, nid)
+  ' Set the new window procedure for window Form1.
+  pOldProc = <A href="setwindowlong.html" tppabs="http://www.vbapi.com/ref/s/setwindowlong.html">SetWindowLong</A>(Form1.hWnd, GWL_WNDPROC, AddressOf <A href="windowproc.html" tppabs="http://www.vbapi.com/ref/w/windowproc.html">WindowProc</A>)
+End Sub
+
+' This function removes the tray icon and returns the old window procedure to use.
+Private Sub Form1_Unload(Cancel As Integer)
+  Dim nid As <A href="notifyicondata.html" tppabs="http://www.vbapi.com/ref/n/notifyicondata.html">NOTIFYICONDATA</A>  ' icon information
+  Dim retval As Long  ' return value
+
+  ' Load the structure with just the identifying information.
+  With nid
+    .cbSize = Len(nid)  ' size of structure
+    .hWnd = Form1.hWnd  ' handle of owning window
+    .uId = 1  ' unique identifier
+  End With
+  ' Remove the icon from the system tray.
+  retval = <B>Shell_NotifyIcon</B>(NIM_DELETE, nid)
+
+  ' Make the old window procedure the current window procedure.
+  retval = <A href="setwindowlong.html" tppabs="http://www.vbapi.com/ref/s/setwindowlong.html">SetWindowLong</A>(Form1.hWnd, GWL_WNDPROC, pOldProc)
+End Sub</CODE></PRE></P>
+
+<H2>Category</H2>
+<P><A href="funcc.html#shell" tppabs="http://www.vbapi.com/ref/funcc.html#shell">Shell</A></P>
+
+<P><A href="funca.html" tppabs="http://www.vbapi.com/ref/funca.html">Back to the Function list.</A><BR>
+<A href="index.html" tppabs="http://www.vbapi.com/ref/index.html" rel="index">Back to the Reference section.</A></P>
+
+<HR>
+
+<P><B>Last Modified:</B> March 19, 2000<BR>
+This page is copyright &copy; 2000 Paul Kuliniewicz.  
+<A href="copyrite.html" tppabs="http://www.vbapi.com/copyrite.html" rel="copyright">Copyright Information</A>  <B>Revised October 29, 2000</B><BR>
+<A href="index-1.html" tppabs="http://www.vbapi.com/index.html" rel="home">Go back to the Windows API Guide home page.</A><BR>
+E-mail: <A href="javascript:if(confirm('http://www.vbapi.com/email.html  \n\nThis file was not retrieved by Teleport Pro, because it is addressed on a domain or path outside the boundaries set for its Starting Address.  \n\nDo you want to open it from the server?'))window.location='http://www.vbapi.com/email.html'" tppabs="http://www.vbapi.com/email.html">vbapi@vbapi.com</A>  <A href="javascript:if(confirm('http://www.vbapi.com/email.html  \n\nThis file was not retrieved by Teleport Pro, because it is addressed on a domain or path outside the boundaries set for its Starting Address.  \n\nDo you want to open it from the server?'))window.location='http://www.vbapi.com/email.html#secure'" tppabs="http://www.vbapi.com/email.html#secure">Send Encrypted E-Mail</A><BR>
+This page is at <A href="shell_notifyicon.html" tppabs="http://www.vbapi.com/ref/s/shell_notifyicon.html">http://www.vbapi.com/ref/s/shell_notifyicon.html</A></P>
+</BODY>
+</HTML>

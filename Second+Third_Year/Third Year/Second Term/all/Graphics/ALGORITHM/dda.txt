@@ -1,0 +1,31 @@
+void DDA(HDC hdc,int x1,int x2, int y1, int y2 , COLORREF col)
+{
+	float dx=x2-x1;
+	float dy=y2-y1;
+	float m=dy/dx;
+	int x,y,xend,yend;
+	if(m<=1)
+	{
+		x=x1;
+		yend=y1;
+		while(x<x2)
+		{
+			y=(int)(yend+0.5);
+			SetPixel(hdc,x,y,col);
+			x++;
+			yend=yend+m;
+		}
+	}
+	else if(m>1)
+	{
+		y=y1;
+		xend=x1;
+		while(y<y2)
+		{
+			x=(int)(xend+0.5);
+			SetPixel(hdc,x,y,col);
+			y++;
+			xend=xend+(1/m);
+		}
+	}
+}

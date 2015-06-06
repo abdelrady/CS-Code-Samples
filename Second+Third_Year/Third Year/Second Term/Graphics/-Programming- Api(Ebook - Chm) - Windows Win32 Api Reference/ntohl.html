@@ -1,0 +1,207 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+<HTML lang="en-us">
+<HEAD>
+<TITLE>Windows API Guide: ntohl Function</TITLE>
+<META content="vbapi@vbapi.com" name="author">
+<META content="Information about the ntohl function in the Windows API, geared towards the Visual Basic user." name="description">
+<META content="Kuliniewicz,Windows,Windows 95,Windows NT,Windows 98,Windows CE,Windows 2000,API,Application Programming Interface,Programming,Visual Basic,Basic,VB,ntohl" name="keywords">
+<META content="Omicron HTML Editor" name="generator">
+<LINK href="default.css" tppabs="http://www.vbapi.com/css/default.css" rel="stylesheet" type="text/css">
+<LINK href="index-1.html" tppabs="http://www.vbapi.com/index.html" rel="home">
+<LINK href="glossary.html" tppabs="http://www.vbapi.com/ref/glossary.html" rel="glossary">
+<LINK href="copyrite.html" tppabs="http://www.vbapi.com/copyrite.html" rel="copyright">
+</HEAD>
+<BODY>
+
+<!-- Begin Adslot1 -->
+<CENTER>
+<SCRIPT language="JAVASCRIPT">
+<!-- hide from older browsers
+now = new Date();
+my_random = now.getTime();
+document.write('<A href="http://adex3.flycast.com/server/socket/127.0.0.1:2800/click/VBWorldnet/VBAPI/' + my_random + '">');
+document.write('<IMG width="468" height="60" border="1" src="http://adex3.flycast.com/server/socket/127.0.0.1:2800/ad/VBWorldnet/VBAPI/' + my_random + '"></A>');
+// -->
+</SCRIPT>
+</CENTER>
+<!-- End Adslot1 -->
+
+<HR>
+
+<H1>ntohl Function</H1>
+
+<P><CODE class="declare"><SPAN class="kw">Declare Function</SPAN> ntohl <SPAN class="kw">Lib</SPAN> "wsock32.dll" (<SPAN class="kw">ByVal</SPAN> hostlong <SPAN class="kw">As Long</SPAN>) <SPAN class="kw">As Long</SPAN></CODE></P>
+
+<H2>Platforms</H2>
+<P><UL>
+<LI><B>Windows 95:</B> Supported.
+<LI><B>Windows 98:</B> Supported.
+<LI><B>Windows NT:</B> Requires Windows NT 3.1 or later.
+<LI><B>Windows 2000:</B> Supported.
+<LI><B>Windows CE:</B> Requires Windows CE 1.0 or later.
+</UL></P>
+
+<H2>Description &amp; Usage</H2>
+<P><B>ntohl</B> converts a 32-bit network address from network byte order to host byte order.  Since the TCP/IP protocol uses big-endian byte order for network addresses, <B>nothl</B> ensures that the proper byte order is being used when manipulating IP addresses locally, regardless of whether the platform uses little-endian or big-endian ordering.</P>
+
+<H2>Return Value</H2>
+<P>The function returns the address converted to host byte order.</P>
+
+<H2>Visual Basic-Specific Issues</H2>
+<P>None.</P>
+
+<H2>Parameters</H2>
+<P><DL>
+<DT><VAR>hostlong</VAR><DD>A 32-bit network address in network order to be converted to host byte order.
+</DL></P>
+
+<H2>Example</H2>
+<P>When the form window opens, create an IP address control in the upper-left corner and initialize it to the IP address of the computer.  No special effort is needed to run this example, since the IP Address control is created programmatically when the form loads.</P>
+
+<P><PRE><CODE class="example"><SPAN class="com">' This code is licensed according to the terms and conditions listed <A href="copyrite.html#license" tppabs="http://www.vbapi.com/copyrite.html#license" rel="copyright">here</A>.</SPAN>
+
+<SPAN class="com">' Declarations and such needed for the example:
+' (Copy them to the (declarations) section of a module.)</SPAN>
+<SPAN class="kw">Public Type</SPAN> <A href="wsadata.html" tppabs="http://www.vbapi.com/ref/w/wsadata.html">WSADATA</A>
+	wVersion <SPAN class="kw">As Integer</SPAN>
+	wHighVersion <SPAN class="kw">As Integer</SPAN>
+	szDescription <SPAN class="kw">As String</SPAN> * 257
+	szSystemStatus <SPAN class="kw">As String</SPAN> * 129
+	iMaxSockets <SPAN class="kw">As Long</SPAN>
+	iMaxUdpDg <SPAN class="kw">As Long</SPAN>
+	lpVendorInfo <SPAN class="kw">As Long</SPAN>
+<SPAN class="kw">End Type</SPAN> 
+<SPAN class="kw">Public Declare Function</SPAN> <A href="wsastartup.html" tppabs="http://www.vbapi.com/ref/w/wsastartup.html">WSAStartup</A> <SPAN class="kw">Lib</SPAN> "wsock32.dll" (<SPAN class="kw">ByVal</SPAN> wVersionRequested <SPAN class="kw">As Integer</SPAN>, lpWSAData _
+	<SPAN class="kw">As</SPAN> <A href="wsadata.html" tppabs="http://www.vbapi.com/ref/w/wsadata.html">WSADATA</A>) <SPAN class="kw">As Long</SPAN>
+<SPAN class="kw">Public Declare Function</SPAN> <A href="wsacleanup.html" tppabs="http://www.vbapi.com/ref/w/wsacleanup.html">WSACleanup</A> <SPAN class="kw">Lib</SPAN> "wsock32.dll" () <SPAN class="kw">As Long</SPAN>
+<SPAN class="kw">Public Type</SPAN> <A href="hostent.html" tppabs="http://www.vbapi.com/ref/h/hostent.html">HOSTENT</A>
+	h_name <SPAN class="kw">As Long</SPAN>
+	h_aliases <SPAN class="kw">As Long</SPAN>
+	h_addrtype <SPAN class="kw">As Integer</SPAN>
+	h_length <SPAN class="kw">As Integer</SPAN>
+	h_addr_list <SPAN class="kw">As Long</SPAN>
+<SPAN class="kw">End Type</SPAN>
+<SPAN class="kw">Public Const</SPAN> AF_INET = 2
+<SPAN class="kw">Public Declare Function</SPAN> <A href="gethostname.html" tppabs="http://www.vbapi.com/ref/g/gethostname.html">gethostname</A> <SPAN class="kw">Lib</SPAN> "wsock32.dll" (<SPAN class="kw">ByVal</SPAN> name <SPAN class="kw">As String</SPAN>, <SPAN class="kw">ByVal</SPAN> namelen <SPAN class="kw">As Long</SPAN>) <SPAN class="kw">As Long</SPAN>
+<SPAN class="kw">Public Declare Function</SPAN> <A href="gethostbyname.html" tppabs="http://www.vbapi.com/ref/g/gethostbyname.html">gethostbyname</A> <SPAN class="kw">Lib</SPAN> "wsock32.dll" (<SPAN class="kw">ByVal</SPAN> name <SPAN class="kw">As String</SPAN>) <SPAN class="kw">As Long</SPAN>
+<SPAN class="kw">Public Declare Function</SPAN> <B>ntohl</B> <SPAN class="kw">Lib</SPAN> "wsock32.dll" (<SPAN class="kw">ByVal</SPAN> hostlong <SPAN class="kw">As Long</SPAN>) <SPAN class="kw">As Long</SPAN>
+<SPAN class="kw">Public Declare Sub</SPAN> <A href="copymemory.html" tppabs="http://www.vbapi.com/ref/c/copymemory.html">CopyMemory</A> <SPAN class="kw">Lib</SPAN> "kernel32.dll" <SPAN class="kw">Alias</SPAN> "RtlMoveMemory" (Destination <SPAN class="kw">As Any</SPAN>, Source _
+	<SPAN class="kw">As Any</SPAN>, <SPAN class="kw">ByVal</SPAN> length <SPAN class="kw">As Long</SPAN>)
+<SPAN class="kw">Public Declare Function</SPAN> <A href="lstrlen.html" tppabs="http://www.vbapi.com/ref/l/lstrlen.html">lstrlen</A> <SPAN class="kw">Lib</SPAN> "kernel32.dll" <SPAN class="kw">Alias</SPAN> "lstrlenA" (<SPAN class="kw">ByVal</SPAN> lpString <SPAN class="kw">As Any</SPAN>) <SPAN class="kw">As Long</SPAN>
+<SPAN class="kw">Public Declare Function</SPAN> <A href="lstrcpy.html" tppabs="http://www.vbapi.com/ref/l/lstrcpy.html">lstrcpy</A> <SPAN class="kw">Lib</SPAN> "kernel32.dll" <SPAN class="kw">Alias</SPAN> "lstrcpyA" (<SPAN class="kw">ByVal</SPAN> lpString1 <SPAN class="kw">As Any</SPAN>, <SPAN class="kw">ByVal</SPAN> _
+	lpString2 <SPAN class="kw">As Any</SPAN>) <SPAN class="kw">As Long</SPAN>
+<SPAN class="kw">Public Type</SPAN> <A href="initcommoncontrolsex_type.html" tppabs="http://www.vbapi.com/ref/i/initcommoncontrolsex_type.html">INITCOMMONCONTROLSEX_TYPE</A>
+	dwSize <SPAN class="kw">As Long</SPAN>
+	dwICC <SPAN class="kw">As Long</SPAN>
+<SPAN class="kw">End Type</SPAN>
+<SPAN class="kw">Public Declare Function</SPAN> <A href="initcommoncontrolsex.html" tppabs="http://www.vbapi.com/ref/i/initcommoncontrolsex.html">InitCommonControlsEx</A> <SPAN class="kw">Lib</SPAN> "comctl32.dll" (lpInitCtrls <SPAN class="kw">As</SPAN> _
+	<A href="initcommoncontrolsex_type.html" tppabs="http://www.vbapi.com/ref/i/initcommoncontrolsex_type.html">INITCOMMONCONTROLSEX_TYPE</A>) <SPAN class="kw">As Long</SPAN>
+<SPAN class="kw">Public Const</SPAN> ICC_INTERNET_CLASSES = &amp;H800
+<SPAN class="kw">Public Declare Function</SPAN> <A href="createwindowex.html" tppabs="http://www.vbapi.com/ref/c/createwindowex.html">CreateWindowEx</A> <SPAN class="kw">Lib</SPAN> "user32.dll" <SPAN class="kw">Alias</SPAN> "CreateWindowExA" (<SPAN class="kw">ByVal</SPAN> dwExStyle <SPAN class="kw">As Long</SPAN>, _
+	<SPAN class="kw">ByVal</SPAN> lpClassName <SPAN class="kw">As String</SPAN>, <SPAN class="kw">ByVal</SPAN> lpWindowName <SPAN class="kw">As String</SPAN>, <SPAN class="kw">ByVal</SPAN> dwStyle <SPAN class="kw">As Long</SPAN>, <SPAN class="kw">ByVal</SPAN> x _
+	<SPAN class="kw">As Long</SPAN>, <SPAN class="kw">ByVal</SPAN> y <SPAN class="kw">As Long</SPAN>, <SPAN class="kw">ByVal</SPAN> nWidth <SPAN class="kw">As Long</SPAN>, <SPAN class="kw">ByVal</SPAN> nHeight <SPAN class="kw">As Long</SPAN>, <SPAN class="kw">ByVal</SPAN> hWndParent <SPAN class="kw">As Long</SPAN>, _
+	<SPAN class="kw">ByVal</SPAN> hMenu <SPAN class="kw">As Long</SPAN>, <SPAN class="kw">ByVal</SPAN> hInstance <SPAN class="kw">As Long</SPAN>, lpParam <SPAN class="kw">As Any</SPAN>) <SPAN class="kw">As Long</SPAN>
+<SPAN class="kw">Public Const</SPAN> WC_IPADDRESS = "SysIPAddress32"
+<SPAN class="kw">Public Const</SPAN> WS_CHILD = &amp;H40000000
+<SPAN class="kw">Public Const</SPAN> WS_VISIBLE = &amp;H10000000
+<SPAN class="kw">Public Declare Function</SPAN> <A href="destroywindow.html" tppabs="http://www.vbapi.com/ref/d/destroywindow.html">DestroyWindow</A> <SPAN class="kw">Lib</SPAN> "user32.dll" (<SPAN class="kw">ByVal</SPAN> hWnd <SPAN class="kw">As Long</SPAN>) <SPAN class="kw">As Long</SPAN>
+<SPAN class="kw">Public Declare Function</SPAN> <A href="sendmessage.html" tppabs="http://www.vbapi.com/ref/s/sendmessage.html">SendMessage</A> <SPAN class="kw">Lib</SPAN> "user32.dll" <SPAN class="kw">Alias</SPAN> "SendMessageA" (<SPAN class="kw">ByVal</SPAN> hWnd <SPAN class="kw">As Long</SPAN>, <SPAN class="kw">ByVal</SPAN> Msg _
+	<SPAN class="kw">As Long</SPAN>, wParam <SPAN class="kw">As Any</SPAN>, lParam <SPAN class="kw">As Any</SPAN>) <SPAN class="kw">As Long</SPAN>
+<SPAN class="kw">Public Const</SPAN> <A href="ipm_setaddress.html" tppabs="http://www.vbapi.com/ref/i/ipm_setaddress.html">IPM_SETADDRESS</A> = &amp;H465
+
+<SPAN class="com">' Define a relevant API macro.</SPAN>
+
+<SPAN class="kw">Public Function</SPAN> <A href="makeword.html" tppabs="http://www.vbapi.com/ref/m/makeword.html">MAKEWORD</A>(<SPAN class="kw">ByVal</SPAN> bLow <SPAN class="kw">As Byte</SPAN>, <SPAN class="kw">ByVal</SPAN> bHigh <SPAN class="kw">As Byte</SPAN>) <SPAN class="kw">As Integer</SPAN>
+	MAKEWORD = Val("&amp;H" &amp; Right("00" &amp; Hex(bHigh), 2) &amp; Right("00" &amp; Hex(bLow), 2))
+<SPAN class="kw">End Function</SPAN>
+
+<SPAN class="com">' *** Place the following code inside the form window. ***</SPAN>
+
+<SPAN class="kw">Private</SPAN> hIPControl <SPAN class="kw">As Long</SPAN>  <SPAN class="com">' handle to the IP Address control</SPAN>
+
+<SPAN class="com">' When the form is initialized, create an IP Address control in the
+' upper-left corner of the form.</SPAN>
+<SPAN class="kw">Private Sub</SPAN> Form_Initialize()
+	<SPAN class="kw">Dim</SPAN> comctls <SPAN class="kw">As</SPAN> <A href="initcommoncontrolsex_type.html" tppabs="http://www.vbapi.com/ref/i/initcommoncontrolsex_type.html">INITCOMMONCONTROLSEX_TYPE</A>  <SPAN class="com">' identifies the control to register</SPAN>
+	<SPAN class="kw">Dim</SPAN> sockinfo <SPAN class="kw">As</SPAN> <A href="wsadata.html" tppabs="http://www.vbapi.com/ref/w/wsadata.html">WSADATA</A>  <SPAN class="com">' information about Winsock</SPAN>
+	<SPAN class="kw">Dim</SPAN> hostinfo <SPAN class="kw">As</SPAN> <A href="hostent.html" tppabs="http://www.vbapi.com/ref/h/hostent.html">HOSTENT</A>  <SPAN class="com">' information about an Internet host</SPAN>
+	<SPAN class="kw">Dim</SPAN> pHostinfo <SPAN class="kw">As Long</SPAN>    <SPAN class="com">' pointer to a HOSTENT structure</SPAN>
+	<SPAN class="kw">Dim</SPAN> localhostName <SPAN class="kw">As String</SPAN>  <SPAN class="com">' the computer's domain name</SPAN>
+	<SPAN class="kw">Dim</SPAN> pIPAddress <SPAN class="kw">As Long</SPAN>   <SPAN class="com">' pointer to an IP address dword</SPAN>
+	<SPAN class="kw">Dim</SPAN> ipAddress_n <SPAN class="kw">As Long</SPAN>    <SPAN class="com">' the IP address in network byte order</SPAN>
+	<SPAN class="kw">Dim</SPAN> ipAddress_h <SPAN class="kw">As Long</SPAN>  <SPAN class="com">' the IP address in host byte order</SPAN>
+	<SPAN class="kw">Dim</SPAN> retval <SPAN class="kw">As Long</SPAN>                        <SPAN class="com">' generic return value</SPAN>
+	
+	<SPAN class="com">' Register the IP Address control window class.</SPAN>
+	<SPAN class="kw">With</SPAN> comctls
+		.dwSize = Len(comctls)
+		.dwICC = ICC_INTERNET_CLASSES
+	<SPAN class="kw">End With</SPAN>
+	retval = <A href="initcommoncontrolsex.html" tppabs="http://www.vbapi.com/ref/i/initcommoncontrolsex.html">InitCommonControlsEx</A>(comctls)
+	
+	<SPAN class="com">' Create the IP Address control in the corner of the window.</SPAN>
+	hIPControl = <A href="createwindowex.html" tppabs="http://www.vbapi.com/ref/c/createwindowex.html">CreateWindowEx</A>(0, WC_IPADDRESS, "", WS_CHILD <SPAN class="kw">Or</SPAN> WS_VISIBLE, 0, 0, 125, 20, _
+		Me.hWnd, 0, App.hInstance, <SPAN class="kw">ByVal CLng(</SPAN>0<SPAN class="kw">)</SPAN>)
+	
+	<SPAN class="com">' Open a new Winsock session (version 2.2).</SPAN>
+	retval = <A href="wsastartup.html" tppabs="http://www.vbapi.com/ref/w/wsastartup.html">WSAStartup</A>(<A href="makeword.html" tppabs="http://www.vbapi.com/ref/m/makeword.html">MAKEWORD</A>(2, 2), sockinfo)
+	<SPAN class="kw">If</SPAN> retval &lt;&gt; 0 <SPAN class="kw">Then</SPAN>
+		<SPAN class="kw">Debug</SPAN>.<SPAN class="kw">Print</SPAN> "ERROR: Attempt to open Winsock failed: error"; retval
+		<SPAN class="kw">Exit Sub</SPAN>
+	<SPAN class="kw">End If</SPAN>
+	
+	<SPAN class="com">' Get the domain name of the computer, or, failing that, a string
+	' that gethostbyname can handle to give an IP address.</SPAN>
+	localhostName = Space(256)
+	retval = <A href="gethostname.html" tppabs="http://www.vbapi.com/ref/g/gethostname.html">gethostname</A>(localhostName, 256)
+	localhostName = Left(localhostName, InStr(localhostName, vbNullChar) - 1)
+	<SPAN class="com">' Get information about this computer on the network.</SPAN>
+	<SPAN class="com">' Get information about the domain specified in txtDomain.</SPAN>
+	pHostinfo = <A href="gethostbyname.html" tppabs="http://www.vbapi.com/ref/g/gethostbyname.html">gethostbyname</A>(localhostName)
+	<SPAN class="kw">If</SPAN> pHostinfo = 0 <SPAN class="kw">Then</SPAN>
+		<SPAN class="kw">Debug</SPAN>.<SPAN class="kw">Print</SPAN> "Unable to resolve domain name."
+	<SPAN class="kw">Else</SPAN>
+		<SPAN class="com">' Copy the data into a HOSTENT structure.</SPAN>
+		<A href="copymemory.html" tppabs="http://www.vbapi.com/ref/c/copymemory.html">CopyMemory</A> hostinfo, <SPAN class="kw">ByVal</SPAN> pHostinfo, Len(hostinfo)
+		<SPAN class="kw">If</SPAN> hostinfo.h_addrtype &lt;&gt; AF_INET <SPAN class="kw">Then</SPAN>
+			<SPAN class="kw">Debug</SPAN>.<SPAN class="kw">Print</SPAN> "A non-IP address was returned."
+		<SPAN class="kw">Else</SPAN>
+			<SPAN class="com">' Copy the pointer to the first (and probably only) IP address in the structure.</SPAN>
+			<A href="copymemory.html" tppabs="http://www.vbapi.com/ref/c/copymemory.html">CopyMemory</A> pIPAddress, <SPAN class="kw">ByVal</SPAN> hostinfo.h_addr_list, 4
+			<SPAN class="com">' Copy the actual IP address.</SPAN>
+			<A href="copymemory.html" tppabs="http://www.vbapi.com/ref/c/copymemory.html">CopyMemory</A> ipAddress_n, <SPAN class="kw">ByVal</SPAN> pIPAddress, 4
+			<SPAN class="com">' Convert it to host byte order.</SPAN>
+			ipAddress_h = <B>ntohl</B>(ipAddress_n)
+			<SPAN class="com">' Set the IP Address control to hold this address.</SPAN>
+			retval = <A href="sendmessage.html" tppabs="http://www.vbapi.com/ref/s/sendmessage.html">SendMessage</A>(hIPControl, <A href="ipm_setaddress.html" tppabs="http://www.vbapi.com/ref/i/ipm_setaddress.html">IPM_SETADDRESS</A>, _
+				<SPAN class="kw">ByVal CLng(</SPAN>0<SPAN class="kw">)</SPAN>, <SPAN class="kw">ByVal</SPAN> ipAddress_h)
+		<SPAN class="kw">End If</SPAN>
+	<SPAN class="kw">End If</SPAN>
+<SPAN class="kw">End Sub</SPAN>
+
+<SPAN class="com">' Destroy the IP Address control when the form closes.</SPAN>
+<SPAN class="kw">Private Sub</SPAN> Form_Unload(Cancel <SPAN class="kw">As Integer</SPAN>)
+	<SPAN class="kw">Dim</SPAN> retval <SPAN class="kw">As Long</SPAN>  <SPAN class="com">' return value</SPAN>
+	
+	retval = <A href="destroywindow.html" tppabs="http://www.vbapi.com/ref/d/destroywindow.html">DestroyWindow</A>(hIPControl)
+<SPAN class="kw">End Sub</SPAN></CODE></PRE></P>
+
+<H2>See Also</H2>
+<P><A href="htonl.html" tppabs="http://www.vbapi.com/ref/h/htonl.html">htonl</A></P>
+
+<H2>Category</H2>
+<P><A href="funcc.html#winsock" tppabs="http://www.vbapi.com/ref/funcc.html#winsock">Winsock</A></P>
+
+<P><A href="funca.html" tppabs="http://www.vbapi.com/ref/funca.html">Back to the Function list.</A><BR>
+<A href="index.html" tppabs="http://www.vbapi.com/ref/index.html" rel="index">Back to the Reference section.</A></P>
+
+<HR>
+
+<P><B>Last Modified:</B> October 29, 2000<BR>
+This page is copyright &copy; 2000 Paul Kuliniewicz.  
+<A href="copyrite.html" tppabs="http://www.vbapi.com/copyrite.html" rel="copyright">Copyright Information</A>  <B>Revised October 29, 2000</B><BR>
+<A href="index-1.html" tppabs="http://www.vbapi.com/index.html" rel="home">Go back to the Windows API Guide home page.</A><BR>
+E-mail: <A href="javascript:if(confirm('http://www.vbapi.com/email.html  \n\nThis file was not retrieved by Teleport Pro, because it is addressed on a domain or path outside the boundaries set for its Starting Address.  \n\nDo you want to open it from the server?'))window.location='http://www.vbapi.com/email.html'" tppabs="http://www.vbapi.com/email.html">vbapi@vbapi.com</A>  <A href="javascript:if(confirm('http://www.vbapi.com/email.html  \n\nThis file was not retrieved by Teleport Pro, because it is addressed on a domain or path outside the boundaries set for its Starting Address.  \n\nDo you want to open it from the server?'))window.location='http://www.vbapi.com/email.html#secure'" tppabs="http://www.vbapi.com/email.html#secure">Send Encrypted E-Mail</A><BR>
+This page is at <A href="ntohl.html" tppabs="http://www.vbapi.com/ref/n/ntohl.html">http://www.vbapi.com/ref/h/ntohl.html</A></P>
+</BODY>
+</HTML>

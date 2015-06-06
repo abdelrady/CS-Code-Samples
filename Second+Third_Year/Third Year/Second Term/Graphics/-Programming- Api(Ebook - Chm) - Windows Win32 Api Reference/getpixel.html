@@ -1,0 +1,105 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+<HTML lang="en-us">
+<HEAD>
+<TITLE>Windows API Guide: GetPixel Function</TITLE>
+<META content="vbapi@vbapi.com" name="author">
+<META content="Information about the GetPixel function in the Windows API, geared towards the Visual Basic user." name="description">
+<META content="Kuliniewicz,Windows,Windows 95,Windows NT,Windows 98,Windows CE,Windows 2000,API,Application Programming Interface,Programming,Visual Basic,Basic,VB,GetPixel" name="keywords">
+<META content="Omicron HTML Editor" name="generator">
+<META content="Fri, 03 Sep 1999 01:15:00 GMT" http-equiv="Last-Modified">
+<LINK href="default.css" tppabs="http://www.vbapi.com/css/default.css" rel="stylesheet" type="text/css">
+<LINK href="index-1.html" tppabs="http://www.vbapi.com/index.html" rel="home">
+
+<LINK href="glossary.html" tppabs="http://www.vbapi.com/ref/glossary.html" rel="glossary">
+<LINK href="copyrite.html" tppabs="http://www.vbapi.com/copyrite.html" rel="copyright">
+</HEAD>
+<BODY>
+
+<!-- Begin Adslot1 -->
+<CENTER>
+<SCRIPT language="JAVASCRIPT">
+<!-- hide from older browsers
+now = new Date();
+my_random = now.getTime();
+document.write('<A href="http://adex3.flycast.com/server/socket/127.0.0.1:2800/click/VBWorldnet/VBAPI/' + my_random + '">');
+document.write('<IMG width="468" height="60" border="1" src="http://adex3.flycast.com/server/socket/127.0.0.1:2800/ad/VBWorldnet/VBAPI/' + my_random + '"></A>');
+// -->
+</SCRIPT>
+</CENTER>
+<!-- End Adslot1 -->
+
+<HR>
+
+<H1>GetPixel Function</H1>
+
+<P><CODE class="declare">Declare Function GetPixel Lib "gdi32.dll" (ByVal hdc As Long, ByVal nXPos As Long, ByVal nYPos As Long) As Long</CODE></P>
+
+<H2>Platforms</H2>
+<P><UL>
+<LI><B>Windows 95:</B> Supported.
+<LI><B>Windows 98:</B> Supported.
+<LI><B>Windows NT:</B> Requires Windows NT 3.1 or later.
+<LI><B>Windows 2000:</B> Supported.
+<LI><B>Windows CE:</B> Requires Windows CE 1.0 or later.
+</UL></P>
+
+<H2>Description &amp; Usage</H2>
+<P><B>GetPixel</B> determines the color of a specific pixel on a <A class="def" href="glossary.html#device" tppabs="http://www.vbapi.com/ref/glossary.html#device" rel="glossary">device</A>.  The function finds the RGB value of the pixel which is checked.</P>
+
+<H2>Return Value</H2>
+<P>If an error occured, the function returns &amp;HFFFF.  If successful, the function returns the RGB value of the pixel which was checked.</P>
+
+<H2>Visual Basic-Specific Issues</H2>
+<P>None.</P>
+
+<H2>Parameters</H2>
+<P><DL>
+<DT><VAR>hdc</VAR><DD>A <A class="def" href="glossary.html#handle" tppabs="http://www.vbapi.com/ref/glossary.html#handle" rel="glossary">handle</A> to a <A class="def" href="glossary.html#devicecontext" tppabs="http://www.vbapi.com/ref/glossary.html#devicecontext" rel="glossary">device context</A> to the device to check a pixel of.
+<DT><VAR>nXPos</VAR><DD>The x-coordinate of the pixel to determine the color of.
+<DT><VAR>nYPos</VAR><DD>The y-coordinate of the pixel to determine the color of.
+</DL></P>
+
+<H2>Example</H2>
+<P><PRE><CODE class="example"><SPAN class="com">' This code is licensed according to the terms and conditions listed <A href="copyrite.html#license" tppabs="http://www.vbapi.com/copyrite.html#license" rel="copyright">here</A>.</SPAN>
+
+' Fill all of window Form1 with the color which is located at
+' coordinate (75,100).  Fill the window by filling its rectangle using a
+' brush derived from the color of the pixel.
+Dim rgbVal As Long  ' RGB color of the pixel
+Dim hBrush As Long  ' handle to the brush we'll create
+Dim winrect As <A href="rect.html" tppabs="http://www.vbapi.com/ref/r/rect.html">RECT</A>  ' rectangle of Form1
+Dim retval As Long  ' return value
+
+' Determine the color of the pixel on Form1 at (75,100).
+rgbVal = <B>GetPixel</B>(Form1.hDC, 75, 100)
+
+' Get the dimensions of the rectangle of window Form1.
+retval = <A href="getwindowrect.html" tppabs="http://www.vbapi.com/ref/g/getwindowrect.html">GetWindowRect</A>(Form1.hWnd, winrect)
+' Create a solid brush of that color.
+hBrush = <A href="createsolidbrush.html" tppabs="http://www.vbapi.com/ref/c/createsolidbrush.html">CreateSolidBrush</A>(rgbVal)
+' Use that brush to fill in all of Form1 (its entire rectangle).
+retval = <A href="fillrect.html" tppabs="http://www.vbapi.com/ref/f/fillrect.html">FillRect</A>(Form1.hDC, winrect, hBrush)
+' Delete the brush we created to save resources.
+retval = <A href="deleteobject.html" tppabs="http://www.vbapi.com/ref/d/deleteobject.html">DeleteObject</A>(hBrush)</CODE></PRE></P>
+
+<H2>See Also</H2>
+<P><A href="setpixel.html" tppabs="http://www.vbapi.com/ref/s/setpixel.html">SetPixel</A>, <A href="setpixelv.html" tppabs="http://www.vbapi.com/ref/s/setpixelv.html">SetPixelV</A></P>
+
+<H2>Category</H2>
+<P><A href="funcc.html#bitmaps" tppabs="http://www.vbapi.com/ref/funcc.html#bitmaps">Bitmaps</A></P>
+
+<P><A href="funca.html" tppabs="http://www.vbapi.com/ref/funca.html">Go back to the alphabetical Function listing.</A><BR>
+<A href="index.html" tppabs="http://www.vbapi.com/ref/index.html">Go back to the Reference section index.</A></P>
+
+<HR>
+
+<P><B>Last Modified:</B> September 2, 1999<BR>
+This page is copyright &copy; 1999 Paul Kuliniewicz.  
+<A href="copyrite.html" tppabs="http://www.vbapi.com/copyrite.html" rel="copyright">Copyright Information</A>  <B>Revised October 29, 2000</B><BR>
+
+<A href="index-1.html" tppabs="http://www.vbapi.com/index.html">Go back to the Windows API Guide home page.</A><BR>
+E-mail: <A href="javascript:if(confirm('http://www.vbapi.com/email.html  \n\nThis file was not retrieved by Teleport Pro, because it is addressed on a domain or path outside the boundaries set for its Starting Address.  \n\nDo you want to open it from the server?'))window.location='http://www.vbapi.com/email.html'" tppabs="http://www.vbapi.com/email.html">vbapi@vbapi.com</A>  <A href="javascript:if(confirm('http://www.vbapi.com/email.html  \n\nThis file was not retrieved by Teleport Pro, because it is addressed on a domain or path outside the boundaries set for its Starting Address.  \n\nDo you want to open it from the server?'))window.location='http://www.vbapi.com/email.html#secure'" tppabs="http://www.vbapi.com/email.html#secure">Send Encrypted E-Mail</A><BR>
+This page is at <A href="getpixel.html" tppabs="http://www.vbapi.com/ref/g/getpixel.html">http://www.vbapi.com/ref/g/getpixel.html</A>
+</P>
+</BODY>
+</HTML>

@@ -1,0 +1,164 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+<HTML lang="en-us">
+<HEAD>
+<TITLE>Windows API Guide: WSACleanup Function</TITLE>
+<META content="vbapi@vbapi.com" name="author">
+<META content="Information about the WSACleanup function in the Windows API, geared towards the Visual Basic user." name="description">
+<META content="Kuliniewicz,Windows,Windows 95,Windows NT,Windows 98,Windows CE,Windows 2000,API,Application Programming Interface,Programming,Visual Basic,Basic,VB,WSACleanup" name="keywords">
+<META content="Omicron HTML Editor" name="generator">
+<LINK href="default.css" tppabs="http://www.vbapi.com/css/default.css" rel="stylesheet" type="text/css">
+<LINK href="index-1.html" tppabs="http://www.vbapi.com/index.html" rel="home">
+<LINK href="glossary.html" tppabs="http://www.vbapi.com/ref/glossary.html" rel="glossary">
+<LINK href="copyrite.html" tppabs="http://www.vbapi.com/copyrite.html" rel="copyright">
+</HEAD>
+<BODY>
+
+<!-- Begin Adslot1 -->
+<CENTER>
+<SCRIPT language="JAVASCRIPT">
+<!-- hide from older browsers
+now = new Date();
+my_random = now.getTime();
+document.write('<A href="http://adex3.flycast.com/server/socket/127.0.0.1:2800/click/VBWorldnet/VBAPI/' + my_random + '">');
+document.write('<IMG width="468" height="60" border="1" src="http://adex3.flycast.com/server/socket/127.0.0.1:2800/ad/VBWorldnet/VBAPI/' + my_random + '"></A>');
+// -->
+</SCRIPT>
+</CENTER>
+<!-- End Adslot1 -->
+
+<HR>
+
+<H1>WSACleanup Function</H1>
+
+<P><CODE class="declare"><SPAN class="kw">Declare Function</SPAN> WSACleanup <SPAN class="kw">Lib</SPAN> "wsock32.dll" () <SPAN class="kw">As Long</SPAN></CODE></P>
+
+<H2>Platforms</H2>
+<P><UL>
+<LI><B>Windows 95:</B> Supported.
+<LI><B>Windows 98:</B> Supported.
+<LI><B>Windows NT:</B> Requires Windows NT 3.1 or later.
+<LI><B>Windows 2000:</B> Supported.
+<LI><B>Windows CE:</B> Requires Windows CE 1.0 or later.
+</UL></P>
+
+<H2>Description &amp; Usage</H2>
+<P><B>WSACleanup</B> frees the resources allocated when when the program began using Windows Sockets (Winsock) functions.  Your program must call this function once it no longer needs to use Winsock functions, so that it frees the resources the prior call to <A href="wsastartup.html" tppabs="http://www.vbapi.com/ref/w/wsastartup.html">WSAStartup</A> consumed.  The resources will not be freed unless the program calls <B>WSACleanup</B> the same number of times as it called <A href="wsastartup.html" tppabs="http://www.vbapi.com/ref/w/wsastartup.html">WSAStartup</A> (in case that function had been called more than once).</P>
+
+<H2>Return Value</H2>
+<P>If successful, the function returns zero.  If an error occured, the function returns -1 (use <A href="wsagetlasterror.html" tppabs="http://www.vbapi.com/ref/w/wsagetlasterror.html">WSAGetLastError</A> to get the error code).</P>
+
+<H2>Visual Basic-Specific Issues</H2>
+<P>None.</P>
+
+<H2>Parameters</H2>
+<P>None.</P>
+
+<H2>Example</H2>
+<P>Print the IP address associated with a domain name specified by the user.  Winsock is briefly used to resolve the domain name and format a printable IP address string.  The user enters the domain name to resolve in text box txtDomain, and the domain name is resolved when the user clicks button cmdGetIP.</P>
+
+<P>To run this example, place a text box named txtDomain and a command button named cmdGetIP on a form window.</P>
+
+<P><PRE><CODE class="example"><SPAN class="com">' This code is licensed according to the terms and conditions listed <A href="copyrite.html#license" tppabs="http://www.vbapi.com/copyrite.html#license" rel="copyright">here</A>.</SPAN>
+
+<SPAN class="com">' Declarations and such needed for the example:
+' (Copy them to the (declarations) section of a module.)</SPAN>
+<SPAN class="kw">Public Type</SPAN> <A href="wsadata.html" tppabs="http://www.vbapi.com/ref/w/wsadata.html">WSADATA</A>
+	wVersion <SPAN class="kw">As Integer</SPAN>
+	wHighVersion <SPAN class="kw">As Integer</SPAN>
+	szDescription <SPAN class="kw">As String</SPAN> * 257
+	szSystemStatus <SPAN class="kw">As String</SPAN> * 129
+	iMaxSockets <SPAN class="kw">As Long</SPAN>
+	iMaxUdpDg <SPAN class="kw">As Long</SPAN>
+	lpVendorInfo <SPAN class="kw">As Long</SPAN>
+<SPAN class="kw">End Type</SPAN> 
+<SPAN class="kw">Public Declare Function</SPAN> <A href="wsastartup.html" tppabs="http://www.vbapi.com/ref/w/wsastartup.html">WSAStartup</A> <SPAN class="kw">Lib</SPAN> "wsock32.dll" (<SPAN class="kw">ByVal</SPAN> wVersionRequested <SPAN class="kw">As Integer</SPAN>, lpWSAData _
+	<SPAN class="kw">As</SPAN> <A href="wsadata.html" tppabs="http://www.vbapi.com/ref/w/wsadata.html">WSADATA</A>) <SPAN class="kw">As Long</SPAN>
+<SPAN class="kw">Public Declare Function</SPAN> <B>WSACleanup</B> <SPAN class="kw">Lib</SPAN> "wsock32.dll" () <SPAN class="kw">As Long</SPAN>
+<SPAN class="kw">Public Type</SPAN> <A href="hostent.html" tppabs="http://www.vbapi.com/ref/h/hostent.html">HOSTENT</A>
+	h_name <SPAN class="kw">As Long</SPAN>
+	h_aliases <SPAN class="kw">As Long</SPAN>
+	h_addrtype <SPAN class="kw">As Integer</SPAN>
+	h_length <SPAN class="kw">As Integer</SPAN>
+	h_addr_list <SPAN class="kw">As Long</SPAN>
+<SPAN class="kw">End Type</SPAN>
+<SPAN class="kw">Public Const</SPAN> AF_INET = 2
+<SPAN class="kw">Public Declare Function</SPAN> <A href="gethostbyname.html" tppabs="http://www.vbapi.com/ref/g/gethostbyname.html">gethostbyname</A> <SPAN class="kw">Lib</SPAN> "wsock32.dll" (<SPAN class="kw">ByVal</SPAN> name <SPAN class="kw">As String</SPAN>) <SPAN class="kw">As Long</SPAN>
+<SPAN class="kw">Public Declare Function</SPAN> <A href="inet_ntoa.html" tppabs="http://www.vbapi.com/ref/i/inet_ntoa.html">inet_ntoa</A> <SPAN class="kw">Lib</SPAN> "wsock32.dll" (<SPAN class="kw">ByVal</SPAN> inaddr <SPAN class="kw">As Long</SPAN>) <SPAN class="kw">As Long</SPAN>
+<SPAN class="kw">Public Declare Sub</SPAN> <A href="copymemory.html" tppabs="http://www.vbapi.com/ref/c/copymemory.html">CopyMemory</A> <SPAN class="kw">Lib</SPAN> "kernel32.dll" <SPAN class="kw">Alias</SPAN> "RtlMoveMemory" (Destination <SPAN class="kw">As Any</SPAN>, Source _
+	<SPAN class="kw">As Any</SPAN>, <SPAN class="kw">ByVal</SPAN> length <SPAN class="kw">As Long</SPAN>)
+<SPAN class="kw">Public Declare Function</SPAN> <A href="lstrlen.html" tppabs="http://www.vbapi.com/ref/l/lstrlen.html">lstrlen</A> <SPAN class="kw">Lib</SPAN> "kernel32.dll" <SPAN class="kw">Alias</SPAN> "lstrlenA" (<SPAN class="kw">ByVal</SPAN> lpString <SPAN class="kw">As Any</SPAN>) <SPAN class="kw">As Long</SPAN>
+<SPAN class="kw">Public Declare Function</SPAN> <A href="lstrcpy.html" tppabs="http://www.vbapi.com/ref/l/lstrcpy.html">lstrcpy</A> <SPAN class="kw">Lib</SPAN> "kernel32.dll" <SPAN class="kw">Alias</SPAN> "lstrcpyA" (<SPAN class="kw">ByVal</SPAN> lpString1 <SPAN class="kw">As Any</SPAN>, <SPAN class="kw">ByVal</SPAN> _
+	lpString2 <SPAN class="kw">As Any</SPAN>) <SPAN class="kw">As Long</SPAN>
+
+<SPAN class="com">' Define a relevant API macro.</SPAN>
+
+<SPAN class="kw">Public Function</SPAN> <A href="makeword.html" tppabs="http://www.vbapi.com/ref/m/makeword.html">MAKEWORD</A>(<SPAN class="kw">ByVal</SPAN> bLow <SPAN class="kw">As Byte</SPAN>, <SPAN class="kw">ByVal</SPAN> bHigh <SPAN class="kw">As Byte</SPAN>) <SPAN class="kw">As Integer</SPAN>
+	MAKEWORD = Val("&amp;H" &amp; Right("00" &amp; Hex(bHigh), 2) &amp; Right("00" &amp; Hex(bLow), 2))
+<SPAN class="kw">End Function</SPAN>
+
+<SPAN class="com">' *** Place the following code inside the form window. ***</SPAN>
+
+<SPAN class="kw">Private Sub</SPAN> cmdGetIP_Click()
+	<SPAN class="kw">Dim</SPAN> sockinfo <SPAN class="kw">As</SPAN> <A href="wsadata.html" tppabs="http://www.vbapi.com/ref/w/wsadata.html">WSADATA</A>  <SPAN class="com">' information about Winsock</SPAN>
+	<SPAN class="kw">Dim</SPAN> hostinfo <SPAN class="kw">As</SPAN> <A href="hostent.html" tppabs="http://www.vbapi.com/ref/h/hostent.html">HOSTENT</A>  <SPAN class="com">' information about an Internet host</SPAN>
+	<SPAN class="kw">Dim</SPAN> pHostinfo <SPAN class="kw">As Long</SPAN>    <SPAN class="com">' pointer to a HOSTENT structure</SPAN>
+	<SPAN class="kw">Dim</SPAN> pIPAddress <SPAN class="kw">As Long</SPAN>   <SPAN class="com">' pointer to an IP address dword</SPAN>
+	<SPAN class="kw">Dim</SPAN> ipAddress <SPAN class="kw">As Long</SPAN>    <SPAN class="com">' an IP address, packed into a dword</SPAN>
+	<SPAN class="kw">Dim</SPAN> pIPString <SPAN class="kw">As Long</SPAN>    <SPAN class="com">' pointer to an IP address formatted as a string</SPAN>
+	<SPAN class="kw">Dim</SPAN> ipString <SPAN class="kw">As String</SPAN>   <SPAN class="com">' holds a human-readable IP address string</SPAN>
+	<SPAN class="kw">Dim</SPAN> retval <SPAN class="kw">As Long</SPAN>       <SPAN class="com">' generic return value</SPAN>
+	
+	<SPAN class="com">' Open up a Winsock session, using version 2.2.</SPAN>
+	retval = <A href="wsastartup.html" tppabs="http://www.vbapi.com/ref/w/wsastartup.html">WSAStartup</A>(<A href="makeword.html" tppabs="http://www.vbapi.com/ref/m/makeword.html">MAKEWORD</A>(2, 2), sockinfo)
+	<SPAN class="kw">If</SPAN> retval &lt;&gt; 0 <SPAN class="kw">Then</SPAN>
+		<SPAN class="kw">Debug</SPAN>.<SPAN class="kw">Print</SPAN> "ERROR: Attempt to open Winsock failed: error"; retval
+		<SPAN class="kw">Exit Sub</SPAN>
+	<SPAN class="kw">End If</SPAN>
+	
+	<SPAN class="com">' Get information about the domain specified in txtDomain.</SPAN>
+	pHostinfo = <A href="gethostbyname.html" tppabs="http://www.vbapi.com/ref/g/gethostbyname.html">gethostbyname</A>(txtDomain.Text)
+	<SPAN class="kw">If</SPAN> pHostinfo = 0 <SPAN class="kw">Then</SPAN>
+		<SPAN class="kw">Debug</SPAN>.<SPAN class="kw">Print</SPAN> "Unable to resolve domain name."
+	<SPAN class="kw">Else</SPAN>
+		<SPAN class="com">' Copy the data into a HOSTENT structure.</SPAN>
+		<A href="copymemory.html" tppabs="http://www.vbapi.com/ref/c/copymemory.html">CopyMemory</A> hostinfo, <SPAN class="kw">ByVal</SPAN> pHostinfo, Len(hostinfo)
+		<SPAN class="kw">If</SPAN> hostinfo.h_addrtype &lt;&gt; AF_INET <SPAN class="kw">Then</SPAN>
+			<SPAN class="kw">Debug</SPAN>.<SPAN class="kw">Print</SPAN> "A non-IP address was returned."
+		<SPAN class="kw">Else</SPAN>
+			<SPAN class="com">' Copy the pointer to the first (and probably only) IP address in the structure.</SPAN>
+			<A href="copymemory.html" tppabs="http://www.vbapi.com/ref/c/copymemory.html">CopyMemory</A> pIPAddress, <SPAN class="kw">ByVal</SPAN> hostinfo.h_addr_list, 4
+			<SPAN class="com">' Copy the actual IP address.</SPAN>
+			<A href="copymemory.html" tppabs="http://www.vbapi.com/ref/c/copymemory.html">CopyMemory</A> ipAddress, <SPAN class="kw">ByVal</SPAN> pIPAddress, 4
+			<SPAN class="com">' Convert the IP address into a human-readable string.</SPAN>
+			pIPString = <A href="inet_ntoa.html" tppabs="http://www.vbapi.com/ref/i/inet_ntoa.html">inet_ntoa</A>(ipAddress)
+			<SPAN class="com">' Copy the result into a string variable.</SPAN>
+			ipString = Space(<A href="lstrlen.html" tppabs="http://www.vbapi.com/ref/l/lstrlen.html">lstrlen</A>(pIPString))
+			retval = <A href="lstrcpy.html" tppabs="http://www.vbapi.com/ref/l/lstrcpy.html">lstrcpy</A>(ipString, pIPString)
+			<SPAN class="com">' Print the result: a human-readable IP address.</SPAN>
+			<SPAN class="kw">Debug</SPAN>.<SPAN class="kw">Print</SPAN> ipString
+		<SPAN class="kw">End If</SPAN>
+	<SPAN class="kw">End If</SPAN>
+	
+	<SPAN class="com">' Close the Winsock session.</SPAN>
+	retval = <B>WSACleanup</B>()
+<SPAN class="kw">End Sub</SPAN></CODE></PRE></P>
+
+<H2>See Also</H2>
+<P><A href="wsastartup.html" tppabs="http://www.vbapi.com/ref/w/wsastartup.html">WSAStartup</A></P>
+
+<H2>Category</H2>
+<P><A href="funcc.html#winsock" tppabs="http://www.vbapi.com/ref/funcc.html#winsock">Winsock</A></P>
+
+<P><A href="funca.html" tppabs="http://www.vbapi.com/ref/funca.html">Back to the Function list.</A><BR>
+<A href="index.html" tppabs="http://www.vbapi.com/ref/index.html" rel="index">Back to the Reference section.</A></P>
+
+<HR>
+
+<P><B>Last Modified:</B> October 29, 2000<BR>
+This page is copyright &copy; 2000 Paul Kuliniewicz.  
+<A href="copyrite.html" tppabs="http://www.vbapi.com/copyrite.html" rel="copyright">Copyright Information</A>  <B>Revised October 29, 2000</B><BR>
+<A href="index-1.html" tppabs="http://www.vbapi.com/index.html" rel="home">Go back to the Windows API Guide home page.</A><BR>
+E-mail: <A href="javascript:if(confirm('http://www.vbapi.com/email.html  \n\nThis file was not retrieved by Teleport Pro, because it is addressed on a domain or path outside the boundaries set for its Starting Address.  \n\nDo you want to open it from the server?'))window.location='http://www.vbapi.com/email.html'" tppabs="http://www.vbapi.com/email.html">vbapi@vbapi.com</A>  <A href="javascript:if(confirm('http://www.vbapi.com/email.html  \n\nThis file was not retrieved by Teleport Pro, because it is addressed on a domain or path outside the boundaries set for its Starting Address.  \n\nDo you want to open it from the server?'))window.location='http://www.vbapi.com/email.html#secure'" tppabs="http://www.vbapi.com/email.html#secure">Send Encrypted E-Mail</A><BR>
+This page is at <A href="wsacleanup.html" tppabs="http://www.vbapi.com/ref/w/wsacleanup.html">http://www.vbapi.com/ref/w/wsacleanup.html</A></P>
+</BODY>
+</HTML>

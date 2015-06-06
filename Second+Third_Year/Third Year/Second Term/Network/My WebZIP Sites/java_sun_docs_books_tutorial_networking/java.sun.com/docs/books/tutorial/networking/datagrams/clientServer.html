@@ -1,0 +1,631 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<html>
+    <head>
+        <title>Writing a Datagram Client and Server (The Java&trade; Tutorials &gt; 
+            Custom Networking &gt; All About Datagrams)
+</title>
+<style type="text/css">
+    .FigureCaption   { 
+        margin-left: 1in; 
+        margin-right: 1in; 
+        font-family: sans-serif; 
+        font-size: smaller; 
+        text-align: justify;
+    }
+    #TopBar_bl {
+        background: url(../../images/java_bar_bl.gif) 0 100% no-repeat;
+        width: 100%;
+        height: 60px;
+    }
+    #TopBar_br {
+        background: url(../../images/java_bar_br.gif) 100% 100% no-repeat;
+        width: 100%;
+        height: 60px;
+    }
+    #TopBar_tl {
+        background: url(../../images/java_bar_tl.gif) 0 0 no-repeat;
+        width: 100%;
+        height: 60px;
+    }
+    #TopBar_tr {
+        background: url(../../images/java_bar_tr.gif) 100% 0 no-repeat;
+        width: 100%;
+        height: 60px;
+    }
+    #TopBar {
+        background: #35556B url(../../images/java_bar.gif);
+        margin: 10px 10px 0 10px;
+        height:60px;
+        min-width:700px;
+        color: white;
+        font-family: sans-serif; 
+        font-weight: bold;
+    }
+    @media print {
+        #BreadCrumbs, #Download {
+            display: none;
+        }
+    }
+    #TopBar_right {
+        line-height: 14px;
+        float: right;
+        padding-top: 2px;
+        padding-right: 30px;
+        text-align: center;
+    }
+    @media print {
+        #TopBar_right {
+            display: none;
+        }
+    }
+    #TopBar_right a {
+        font-size: 12px;
+        margin: 3px;
+        padding: 0;
+    }
+    #TopBar a:visited, #TopBar a:link {
+        color: white;
+        text-decoration: none;
+    }
+    #TopBar a:hover, #TopBar a:active  {
+        background-color: white;
+        color: #35556B;
+    }
+    #BreadCrumbs {
+        padding: 4px 5px 0.5em 0;
+        font-family: sans-serif; 
+        float: right;
+    }
+    #BreadCrumbs a {
+        color: blue;
+    }
+    #BreadCrumbs a:visited, #BreadCrumbs a:link {
+        text-decoration: none;
+    }
+    #BreadCrumbs a:hover, #BreadCrumbs a:active {
+        text-decoration: underline;
+    }
+    #PageTitle {
+        margin: 0 5px 0.5em 0;
+        color: #E76F00;
+        font-family: sans-serif; 
+        font-weight: bold;
+        font-size: 20px;
+    }
+    .LeftBar_shown {
+        width: 13em;
+        float: left;
+        margin-left: 10px;
+        margin-top: 4px;
+        margin-bottom: 2em;
+    }
+    @media print {
+        .LeftBar_shown {
+            display: none;
+        }
+    }
+    .LeftBar_hidden {
+        display: none;
+    }
+    #Footer {
+        padding-top: 10px;
+        padding-left: 10px;
+        margin-right: 10px;
+    }
+    .NavBit  {
+        padding: 4px 5px 0.5em 0;
+        font-family: sans-serif; 
+    }
+    @media print {
+        .NavBit {
+            display: none;
+        }
+    }
+    #TagNotes {
+        text-align: right;
+        font-size: smaller;
+        font-family: sans-serif; 
+    }
+    @media print {
+        #TagNotes a:visited, #TagNotes a:link {
+            color: #35556B;
+            text-decoration: none;
+        }
+    }
+    #Contents a, .NavBit a, #TagNotes a {
+        color: blue
+    }
+    #TagNotes a:visited, #TagNotes a:link,
+    #Contents a:visited, #Contents a:link,
+    .NavBit a:visited, .NavBit a:link {
+        text-decoration: none;
+    }
+    #TagNotes a:hover, #TagNotes a:active,   
+    #Contents a:hover, #Contents a:active,   
+    .NavBit a:hover, .NavBit a:active {  
+        text-decoration: underline;
+    }
+    #Contents {
+        float: left;
+        font-family: sans-serif; 
+    }
+    @media print {
+        #Contents {
+            display: none;
+        }
+    }
+    @media screen {
+        div.PrintHeaders {
+            display: none;
+        }
+    }
+    .linkLESSON, .nolinkLESSON {
+        margin-left: 0.5em;
+        text-indent: -0.5em
+    }
+    .linkAHEAD, .nolinkAHEAD, .linkQUESTIONS, .nolinkQUESTIONS   {
+        margin-left: 1.5em; 
+        text-indent: -0.5em
+    }
+    .linkBHEAD, .nolinkBHEAD   {
+        margin-left: 2.5em;
+        text-indent: -0.5em
+    }
+    .linkCHEAD, .nolinkCHEAD   {
+        margin-left: 3.5em;
+        text-indent: -0.5em
+    }
+    .nolinkLESSON, .nolinkAHEAD, .nolinkBHEAD, .nolinkCHEAD,
+    .nolinkQUESTIONS {
+        font-weight: bold;
+        color: #E76F00;
+    }
+    .MainFlow_indented {
+        margin-right: 10px;
+        margin-left: 15em;
+        margin-bottom: 2em;
+
+    }
+    .MainFlow_wide {
+        margin-right: 10px;
+        margin-left: 10px;
+        margin-bottom: 2em;
+
+    }
+    @media print {
+        .MainFlow_indented, .MainFlow_wide {
+            padding-top: 0;
+            margin-top: 10px;
+            margin-right: 10px;
+            margin-left: 0;
+        }
+    }
+    h3, h4, h5 {
+        color: #E76F00;
+        font-family: sans-serif;
+    }
+    #ToggleLeft {
+        display: none;
+    }
+
+    /t
+
+</style>
+<script type="text/javascript">
+    function leftBar() {
+        var nameq = 'tutorial_showLeftBar='
+        var cookies = document.cookie.split(';');
+        for (var i = 0; i < cookies.length; i++) {
+            var cookieString = cookies[i];
+            while (cookieString.charAt(0) == ' ') {
+                cookieString = cookieString.substring(1, cookieString.length);
+            }
+            if (cookieString.indexOf(nameq) == 0) {
+                cookieValue =  cookieString.substring(nameq.length,
+                        cookieString.length);
+                return cookieValue == 'yes';
+            }
+        }
+        return true;
+    }
+
+    function showLeft(b) {
+        var contents = document.getElementById("LeftBar");
+        var main = document.getElementById("MainFlow");
+        var toggle = document.getElementById("ToggleLeft");
+        if (b) {
+            contents.className = "LeftBar_shown";
+            main.className = "MainFlow_indented";
+            toggle.innerHTML = "Hide the TOC";
+            document.cookie = 'tutorial_showLeftBar=yes; path=/';
+        } else {
+            contents.className = "LeftBar_hidden";
+            main.className = "MainFlow_wide";
+            toggle.innerHTML = "Show the TOC";
+            document.cookie = 'tutorial_showLeftBar=no; path=/';
+        }
+    }
+
+    function toggleLeft() {
+        showLeft(document.getElementById("LeftBar").className ==
+                "LeftBar_hidden");
+        document.getElementById("ToggleLeft").blur();
+    }
+
+    function load() {
+        showLeft(leftBar());
+        document.getElementById("ToggleLeft").style.display="inline";
+    }
+    
+</script>
+
+    </head>
+<body onload="load()">
+
+
+<!-- Copyright © 2005. Spidersoft Ltd -->
+<style>
+A.applink:hover {border: 2px dotted #DCE6F4;padding:2px;background-color:#ffff00;color:green;text-decoration:none}
+A.applink       {border: 2px dotted #DCE6F4;padding:2px;color:#2F5BFF;background:transparent;text-decoration:none}
+A.info          {color:#2F5BFF;background:transparent;text-decoration:none}
+A.info:hover    {color:green;background:transparent;text-decoration:underline}
+</style>
+<div style='BORDER: 1px solid #DCE6F4; MARGIN-TOP: 20px; MARGIN-BOTTOM: 20px; MARGIN-LEFT: 5px; MARGIN-RIGHT: 5px; PADDING: 5px; BACKGROUND-COLOR: #eef8ff;line-height:180%; COLOR: #000000; font-family: Arial; font-size: 8pt; width=100%; FILTER: progid:DXImageTransform.Microsoft.Gradient(GradientType=0, StartColorStr="#FFFFFFFF", EndColorStr="#F2F5FAFF");'>
+This page was saved using <a class="applink" href="http://www.spidersoft.com"><b>WebZIP 7.0.3.1030</b></a> <a class="applink" href="http://www.spidersoft.com"><b>offline browser</b></a>  (Unregistered) on  02/12/07 7:59:23 PM.<br>
+<b>Address:</b> <a class="info" href="http://java.sun.com/docs/books/tutorial/networking/datagrams/clientServer.html">http://java.sun.com/docs/books/tutorial/networking/datagrams/clientServer.html</a><br>
+<b>Title:</b> Writing a Datagram Client and Server (The Java&trade; Tutorials &gt;             Custom Networking &gt; All About Datagrams) &nbsp;&bull;&nbsp; <b>Size:</b> 22118 &nbsp;&bull;&nbsp; <b>Last Modified:</b> Fri, 10 Nov 2006 00:58:21 GMT<br></div>
+<!-- /Copyright © 2005. Spidersoft Ltd -->
+
+
+    <div id=TopBar> <div id=TopBar_tr> <div id=TopBar_tl> <div id=TopBar_br> <div id=TopBar_bl> 
+                        <div id=TopBar_right> 
+                            <a target="_blank"
+                                href="http://java.sun.com/javase/6/download.jsp">Download
+                                the JDK</a>
+                            <br>
+                            <a href="http://java.sun.com/docs/books/tutorial/search.html" target="_blank">Search the
+                                Tutorials</a>
+                            <br>
+                            <a href="javascript:toggleLeft()"
+                                id="ToggleLeft">Hide the TOC</a>
+                        </div>
+                    </div> </div> </div> </div> </div>
+    <div class=PrintHeaders>
+        <b>Trail:</b> Custom Networking
+        <br><b>Lesson:</b> All About Datagrams
+    </div>
+
+    <div id=LeftBar class=LeftBar_shown>
+        <div id=Contents>
+            <div class="linkLESSON"><a href="index.html">All About Datagrams</a></div>
+<div class="linkAHEAD"><a href="definition.html">What Is a Datagram?</a></div>
+<div class="nolinkAHEAD">Writing a Datagram Client and Server</div>
+<div class="linkAHEAD"><a href="broadcasting.html">Broadcasting to Multiple Recipients</a></div>
+</div>
+    </div>
+    <div id=MainFlow class=MainFlow_indented>
+            <span id=BreadCrumbs>
+                <a href=http://java.sun.com/docs/books/tutorial/index.html target=_top>Home Page</a>
+                &gt;
+                <a href=../index.html target=_top>Custom Networking</a>
+                &gt;
+                <a href=index.html target=_top>All About Datagrams</a>
+            </span>
+            <div class=NavBit>
+                <a target=_top href=definition.html>&laquo;&nbsp;Previous</a>&nbsp;&bull;&nbsp;<a target=_top href=../TOC.html>Trail</a>&nbsp;&bull;&nbsp;<a target=_top href=broadcasting.html>Next&nbsp;&raquo;</a>
+            </div>
+            <div id=PageTitle>Writing a Datagram Client and Server</div>
+            <blockquote>
+The example featured in this section consists of two applications: a
+client and a server. The server continuously receives datagram packets
+over a datagram socket. Each datagram packet received by the server
+indicates a client request for a quotation. When the server receives a
+datagram, it replies by sending a datagram packet that contains a
+one-line "quote of the moment" back to the client.
+<p>
+The client application in this example is fairly simple. It sends a
+single datagram packet to the server indicating that the client would
+like to receive a quote of the moment. The client then waits for the
+server to send a datagram packet in response.
+<p>
+Two classes implement the server application:
+<code>QuoteServer</code> and <code>QuoteServerThread</code>.
+A single class implements the client application: <code>QuoteClient</code>. 
+<p>
+Let's investigate these classes,
+starting with the class that contains the <code>main</code>
+method for the server application.
+<a class="TutorialLink" target="_top" href="http://java.sun.com/docs/books/tutorial/deployment/applet/server.html">Working with a Server-Side Application </a>contains an applet version of the <code>QuoteClient</code> class.
+
+<a name=mainprogram>
+</blockquote>
+<h3>The QuoteServer Class</h3>
+</a>
+<blockquote>
+The
+
+<a class="SourceLink" target="_blank" href="examples/QuoteServer.java"><code>QuoteServer</code></a> class,
+shown here in its entirety, contains a single method:
+the <code>main</code> method for the quote server application.
+The <code>main</code> method simply creates a new <code>QuoteServerThread</code>
+object and starts it: 
+<blockquote><pre>
+import java.io.*;
+
+public class QuoteServer {
+    public static void main(String[] args) throws IOException {
+        new QuoteServerThread().start();
+    }
+}
+</pre></blockquote>
+The <code>QuoteServerThread</code> class implements
+the main logic of the quote server. 
+</blockquote>
+
+<h3>The <code>QuoteServerThread</code> Class</h3>
+<blockquote>
+When created,
+the 
+<a class="SourceLink" target="_blank" href="examples/QuoteServerThread.java"><code>QuoteServerThread</code></a>
+creates a <code>DatagramSocket</code> on port 4445 (arbitrarily chosen).
+This is the <code>DatagramSocket</code> through which
+the server communicates with all of its clients.
+<blockquote><pre>
+public QuoteServerThread() throws IOException {
+    this("QuoteServer");
+}
+public QuoteServerThread(String name) throws IOException {
+    super(name);
+    socket = new DatagramSocket(4445);
+
+    try {
+        in = new BufferedReader(
+                  new FileReader("one-liners.txt"));	
+    } catch (FileNotFoundException e)
+        System.err.println("Couldn't open quote file. " + 
+                          "Serving time instead.");
+    }
+}  
+
+</pre></blockquote>
+Remember that certain ports are dedicated to well-known services and
+you cannot use them. If you specify a port that is in use, the creation
+of the <code>DatagramSocket</code> will fail.
+<p>
+The constructor also opens a <code>BufferedReader</code>
+on a file named <a href="examples/one-liners.txt">one-liners.txt</a>
+which contains a list of quotes.
+Each quote in the file is on a line by itself. 
+<p>
+Now for the interesting part of the <code>QuoteServerThread</code>:  its
+<code>run</code> method. The <code>run</code> method overrides <code>run</code>
+in the <code>Thread</code> class and
+provides the implementation for the thread.
+For information about threads, see
+<a class="TutorialLink" target="_top" href="http://java.sun.com/docs/books/tutorial/essential/concurrency/runthread.html">Defining and Starting a Thread</a>.
+<p>
+The <code>run</code> method contains a <code>while</code> loop
+that continues as long as there are more quotes in the file.
+During each iteration of the loop,
+the thread waits for a <code>DatagramPacket</code>
+to arrive over the <code>DatagramSocket</code>.
+The packet indicates a request from a client.
+In response to the client's request,
+the <code>QuoteServerThread</code> gets a quote from the file,
+puts it in a <code>DatagramPacket</code>
+and sends it over the <code>DatagramSocket</code>
+to the client that asked for it.
+<p>
+Let's look first at the section that receives the requests from clients: 
+<blockquote><pre>
+byte[] buf = new byte[256];
+DatagramPacket packet = new DatagramPacket(buf, buf.length);
+socket.receive(packet);
+</pre></blockquote>
+The first statement creates an array of bytes which is then used to
+create a <code>DatagramPacket</code>. The <code>DatagramPacket</code>
+will be used to receive a
+datagram from the socket because of the constructor used to create it.
+This constructor requires only two arguments: a byte array that
+contains client-specific data and the length of the byte array. When
+constructing a <code>DatagramPacket</code>
+to send over the <code>DatagramSocket</code>, you also
+must supply the Internet address and port number of the packet's
+destination. You'll see this later when we discuss how the server
+responds to a client request.
+<p>
+The last statement in the previous code snippet receives a datagram
+from the socket (the information received from the client gets copied
+into the packet). The receive method waits forever until a packet is
+received. If no packet is received, the server makes no further
+progress and just waits.
+<p>
+Now assume that, the server has received a request from a client for a
+quote. Now the server must respond. This section of code in the run
+method constructs the response:
+<blockquote><pre>
+String dString = null;
+if (in == null)
+    dString = new Date().toString();
+else
+    dString = getNextQuote();
+buf = dString.getBytes();
+</pre></blockquote>
+If the quote file did not get opened for some reason, then <code>in</code> equals
+null. If this is the case, the quote server serves up the time of day
+instead. Otherwise, the quote server gets the next quote from the
+already opened file. Finally, the code converts the string to an array
+of bytes.
+<p>
+Now, the <code>run</code> method sends the response
+to the client over the <code>DatagramSocket</code> with this code:
+<blockquote><pre>
+InetAddress address = packet.getAddress();
+int port = packet.getPort();
+packet = new DatagramPacket(buf, buf.length, address, port);
+socket.send(packet);
+</pre></blockquote>
+The first two statements in this code segment get the Internet address
+and the port number, respectively, from the datagram packet received
+from the client. The Internet address and port number indicate where
+the datagram packet came from. This is where the server must send its
+response. In this example, the byte array of the datagram packet
+contains no relevant information. The arrival of the packet itself
+indicates a request from a client that can be found at the Internet
+address and port number indicated in the datagram packet.
+<p>
+The third statement creates a new <code>DatagramPacket</code> object intended for
+sending a datagram message over the datagram socket. You can tell that
+the new <code>DatagramPacket</code> is intended to send data over the
+socket because of the constructor used to create it. This constructor
+requires four arguments. The first two arguments are the same required
+by the constructor used to create receiving datagrams: a byte array
+containing the message from the sender to the receiver and the length
+of this array. The next two arguments are different: an Internet
+address and a port number. These two arguments are the complete address
+of the destination of the datagram packet and must be supplied by the
+sender of the datagram. The last line of code sends the <code>DatagramPacket</code>
+on its way.
+<p>
+When the server has read all the quotes from the quote file,
+the <code>while</code> loop terminates and the <code>run</code> method cleans up:
+<blockquote><pre>
+socket.close();
+</pre></blockquote>
+</blockquote>
+
+<h3>The QuoteClient Class</h3>
+<blockquote>
+The 
+<a class="SourceLink" target="_blank" href="examples/QuoteClient.java"><code>QuoteClient</code></a>
+class implements a client application for the <code>QuoteServer</code>. This
+application sends a request to the <code>QuoteServer</code>, waits for the response,
+and, when the response is received, displays it to the standard output.
+Let's look at the code in detail.
+<p>
+The <code>QuoteClient</code> class contains one method, the <code>main</code>
+method for the
+client application. The top of the <code>main</code> method declares several local
+variables for its use:
+<blockquote><pre>
+int port;
+InetAddress address;
+DatagramSocket socket = null;
+DatagramPacket packet;
+byte[] sendBuf = new byte[256];
+</pre></blockquote>
+First, the <code>main</code> method processes the command-line arguments
+used to invoke the <code>QuoteClient</code> application:
+<blockquote><pre>
+if (args.length != 1) {
+     System.out.println("Usage: java QuoteClient &lt;hostname&gt;");
+     return;
+}
+</pre></blockquote>
+The <code>QuoteClient</code> application requires one command-line arguments:
+the name of the machine on which the <code>QuoteServer</code> is running. 
+<p>
+Next, the <code>main</code> method creates a <code>DatagramSocket</code>: 
+<blockquote><pre>
+DatagramSocket socket = new DatagramSocket();
+</pre></blockquote>
+The client uses a constructor that does not require a port number.
+This constructor just binds the <code>DatagramSocket</code>
+to any available local port.
+It doesn't matter what port the client is bound to
+because the <code>DatagramPacket</code>s contain the addressing information.
+The server gets the port number from the <code>DatagramPacket</code>s
+and send its response to that port.
+<p>
+Next, the <code>QuoteClient</code> program sends a request to the server: 
+<blockquote><pre>
+byte[] buf = new byte[256];
+InetAddress address = InetAddress.getByName(args[0]);
+DatagramPacket packet = new DatagramPacket(buf, buf.length, 
+                                           address, 4445);
+socket.send(packet);
+</pre></blockquote>
+The code segment gets the Internet address for the host named on the
+command line (presumably the name of the machine on which the server is
+running). This <code>InetAddress</code> and the port number 4445 (the port number
+that the server used to create its <code>DatagramSocket</code>) are then used to
+create <code>DatagramPacket</code> destined for that Internet address and port
+number. Therefore the <code>DatagramPacket</code> will be delivered to the quote
+server.
+<p>
+Note that the code creates a <code>DatagramPacket</code> with an empty byte array.
+The byte array is empty because this datagram packet is simply
+a request to the server for information.
+All the server needs to know to send a response--the address and port number
+to which reply--is automatically part of the packet. 
+<p>
+Next, the client gets a response from the server and displays it: 
+<blockquote><pre>
+packet = new DatagramPacket(buf, buf.length);
+socket.receive(packet);
+String received = new String(packet.getData());
+System.out.println("Quote of the Moment: " + received);
+</pre></blockquote>
+To get a response from the server, the client creates a "receive"
+packet and uses the <code>DatagramSocket</code> receive method to receive the reply
+from the server. The receive method waits until a datagram packet
+destined for the client comes through the socket. Note that if the
+server's reply is somehow lost, the client will wait forever because of
+the no-guarantee policy of the datagram model. Normally, a client sets
+a timer so that it doesn't wait forever for a reply; if no reply
+arrives, the timer goes off and the client retransmits.
+<p>
+When the client receives a reply from the server, the client uses the
+getData method to retrieve that data from the packet. The client then
+converts the data to a string and displays it.
+</blockquote>
+
+<h3>Running the Server and Client</h3>
+<blockquote>
+After you've successfully compiled the server and the client programs,
+you run them. You have to run the server program first. Just use the
+Java interpreter and specify the <code>QuoteServer</code> class name.
+<p>
+Once the server has started, you can run the client program. Remember
+to run the client program with one command-line argument: the name of
+the host on which the <code>QuoteServer</code> is running.
+<p>
+After the client sends a request and receives a response from the server,
+you should see output similar to this: 
+<blockquote><pre>
+Quote of the Moment:
+Good programming is 99% sweat and 1% coffee.
+</pre></blockquote>
+
+
+        </blockquote>
+        <div class=NavBit>
+            <a target=_top href=definition.html>&laquo; Previous</a>
+            &bull;
+            <a target=_top href=../TOC.html>Trail</a>
+            &bull;
+            <a target=_top href=broadcasting.html>Next &raquo;</a>
+        </div>
+    </div>
+    <div id=Footer>
+<div id=TagNotes>
+    Problems with the examples? Try <a target="_blank"
+        href=http://java.sun.com/docs/books/tutorial/information/run-examples.html>Compiling and Running
+        the Examples: FAQs</a>.
+    <br>
+    Complaints? Compliments? Suggestions? <a target="_blank"
+        href="http://developer.sun.com/contact/tutorial_feedback.jsp">Give
+    us your feedback</a>.
+<br><br>
+    <a target="_blank" href="http://java.sun.com/docs/books/tutorial/information/copyright.html">Copyright</a>
+    1995-2006 Sun Microsystems, Inc.  All rights reserved.
+    <span id=Download>
+</span></div> 
+
+    </div>
+    <div class=PrintHeaders>
+        <b>Previous page:</b> What Is a Datagram?
+        <br><b>Next page:</b> Broadcasting to Multiple Recipients
+    </div>
+    </body>
+<script language="JavaScript" src="../../../../../js/omi/jsc/s_code_remote.js"></script></html> 

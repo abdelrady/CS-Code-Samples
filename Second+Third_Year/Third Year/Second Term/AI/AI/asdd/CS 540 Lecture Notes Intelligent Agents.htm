@@ -1,0 +1,167 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!-- saved from url=(0052)http://www.cs.wisc.edu/~dyer/cs540/notes/agents.html -->
+<HTML><HEAD><TITLE>CS 540 Lecture Notes: Intelligent Agents</TITLE>
+<META http-equiv=Content-Type content="text/html; charset=iso-8859-1">
+<META content="MSHTML 6.00.2900.2180" name=GENERATOR></HEAD>
+<BODY vLink=#0060f0 link=#ff3300 bgColor=#ffffff>
+<TABLE width="100%">
+  <TBODY>
+  <TR>
+    <TD align=left>University of Wisconsin - Madison</TD>
+    <TD align=middle>CS 540 Lecture Notes</TD>
+    <TD align=right>C. R. Dyer</TD></TR></TBODY></TABLE>
+<P>
+<P>
+<CENTER><FONT size=6>Intelligent Agents</FONT> (Chapter 2)</CENTER>
+<P>
+<HR>
+
+<P>
+<H3>What is an Intelligent Agent?</H3>
+<UL>
+  <LI>One definition: An (intelligent) <B>agent</B> perceives it environment via 
+  sensors and acts rationally upon that environment with its effectors. Hence, 
+  an agent gets percepts one at a time, and maps this percept sequence to 
+  actions. 
+  <P></P>
+  <LI>Another definition: An agent is a computer software system whose main 
+  characteristics are situatedness, autonomy, adaptivity, and sociability. 
+</LI></UL>
+<P>
+<H3>Agent Characteristics</H3>
+<UL>
+  <LI>Situatedness <BR>The agent receives some form of sensory input from its 
+  environment, and it performs some action that changes its environment in some 
+  way. Examples of environments: the physical world and the Internet. 
+  <LI>Autonomy <BR>The agent can act without direct intervention by humans or 
+  other agents and that it has control over its own actions and internal state. 
+  <LI>Adaptivity <BR>The agent is capable of (1) reacting flexibly to changes in 
+  its environment; (2) taking goal-directed initiative (i.e., is pro-active), 
+  when appropriate; and (3) learning from its own experience, its environment, 
+  and interactions with others. 
+  <LI>Sociability <BR>The agent is capable of interacting in a peer-to-peer 
+  manner with other agents or humans. </LI></UL>
+<P>
+<H3>Examples of Agents</H3>
+<P>
+<TABLE border=1>
+  <TBODY>
+  <TR>
+    <TH>Agent Type</TH>
+    <TH>Percepts</TH>
+    <TH>Actions</TH>
+    <TH>Goals</TH>
+    <TH>Environment</TH></TR>
+  <TR>
+    <TD>Bin-Picking Robot</TD>
+    <TD>Images</TD>
+    <TD>Grasp objects; Sort into bins</TD>
+    <TD>Parts in correct bins</TD>
+    <TD>Conveyor belt</TD></TR>
+  <TR>
+    <TD>Medical Diagnosis</TD>
+    <TD>Patient symptoms, tests</TD>
+    <TD>Tests and treatments</TD>
+    <TD>Healthy patient</TD>
+    <TD>Patient &amp; hospital</TD></TR>
+  <TR>
+    <TD><A href="http://jango.excite.com/xsh/index.dcg?">Excite's Jango 
+      product finder</A></TD>
+    <TD>Web pages</TD>
+    <TD>navigate web, gather relevant products</TD>
+    <TD>Find best price for a product</TD>
+    <TD>Internet</TD></TR>
+  <TR>
+    <TD>Webcrawler Softbot</TD>
+    <TD>Web pages</TD>
+    <TD>Follow links, pattern matching</TD>
+    <TD>Collect info on a subject</TD>
+    <TD>Internet</TD></TR>
+  <TR>
+    <TD>Financial forecasting software</TD>
+    <TD>Financial data</TD>
+    <TD>Gather data on companies</TD>
+    <TD>Pick stocks to buy &amp; sell</TD>
+    <TD>Stock market, company reports</TD></TR></TBODY></TABLE>
+<P>
+<H3>How to Evaluate an Agent's Behavior/Performance?</H3>
+<UL>
+  <LI>Rationality =&gt; Need a performance measure to say how well a task has 
+  been achieved. An ideal rational agent should, for each possible percept 
+  sequence, do whatever actions will maximize its performance measure based on 
+  (1) the percept sequence, and (2) its built-in and acquired knowledge. Hence 
+  includes information gathering, not "rational ignorance." 
+  <P></P>
+  <LI>Types of objective performance measures: false alarm rate, false dismissal 
+  rate, time taken, resources required, effect on environment, etc. 
+  <P></P>
+  <LI>Examples: Benchmarks and test sets, Turing test (there is no homunculus!) 
+  </LI></UL>
+<P>
+<H3>Approaches to Agent Design</H3>
+<OL>
+  <LI><B>Simple Reflex Agent</B>
+  <P>
+  <UL>
+    <LI>Table lookup of percept-action pairs defining all possible 
+    condition-action rules necessary to interact in an environment 
+    <LI>Problems 
+    <UL>
+      <LI>Too big to generate and to store (Chess has about 10<SUP>120</SUP> 
+      states, for example) 
+      <LI>No knowledge of non-perceptual parts of the current state 
+      <LI>Not adaptive to changes in the environment; requires entire table to 
+      be updated if changes occur 
+      <LI>Looping: Can't make actions conditional </LI></UL></LI></UL>
+  <P></P>
+  <LI><B>Reflex Agent with Internal State</B>
+  <P>
+  <UL>
+    <LI>Encode "internal state" of the world to remember the past as contained 
+    in earlier percepts 
+    <LI>Needed because sensors do not usually give the entire state of the world 
+    at each input, so perception of the environment is captured over time. 
+    "State" used to encode different "world states" that generate the same 
+    immediate percept. 
+    <LI>Requires ability to represent change in the world; one possibility is to 
+    represent just the latest state, but then can't reason about hypothetical 
+    courses of action 
+    <LI>Example: Rodney Brooks's Subsumption Architecture<BR>Main idea: build 
+    complex, intelligent robots by decomposing behaviors into a hierarchy of 
+    skills, each completely defining a complete percept-action cycle for one 
+    very specific task. For example, avoiding contact, wandering, exploring, 
+    recognizing doorways, etc. Each behavior is modeled by a finite-state 
+    machine with a few states (though each state may correspond to a complex 
+    function or module). Behaviors are loosely-coupled, asynchronous 
+    interactions. </LI></UL>
+  <P></P>
+  <LI><B>Goal-Based Agent</B>
+  <P>
+  <UL>
+    <LI>Choose actions so as to achieve a (given or computed) goal= a 
+    description of a desirable situation 
+    <LI>Keeping track of the current state is often not enough--- need to add 
+    goals to decide which situations are good 
+    <LI>Deliberative instead of reactive 
+    <LI>May have to consider long sequences of possible actions before deciding 
+    if goal is achieved--- involves consideration of the future, "what will 
+    happen if I do...?" </LI></UL>
+  <P></P>
+  <LI><B>Utility-Based Agent</B>
+  <P>
+  <UL>
+    <LI>When there are multiple possible alternatives, how to decide which one 
+    is best? 
+    <LI>A goal specifies a crude distinction between a happy and unhappy state, 
+    but often need a more general performance measure that describes "degree of 
+    happiness" 
+    <LI>Utility function U: State --&gt; Reals<BR>indicating a measure of 
+    success or happiness when at a given state 
+    <LI>Allows decisions comparing choice between conflicting goals, and choice 
+    between likelihood of success and importance of goal (if achievement is 
+    uncertain) </LI></UL></LI></OL>
+<P>
+<HR>
+
+<P>Copyright © 1996-2003 by Charles R. Dyer. All rights reserved. 
+</P></BODY></HTML>

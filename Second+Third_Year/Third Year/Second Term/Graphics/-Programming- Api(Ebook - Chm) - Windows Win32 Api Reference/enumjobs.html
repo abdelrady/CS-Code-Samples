@@ -1,0 +1,160 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+<HTML lang="en-us">
+<HEAD>
+<TITLE>Windows API Guide: EnumJobs Function</TITLE>
+<META content="vbapi@vbapi.com" name="author">
+<META content="Information about the EnumJobs function in the Windows API, geared towards the Visual Basic user." name="description">
+<META content="Kuliniewicz,Windows,Windows 95,Windows NT,Windows 98,Windows CE,Windows 2000,API,Application Programming Interface,Programming,Visual Basic,Basic,VB,EnumJobs" name="keywords">
+<META content="Omicron HTML Editor" name="generator">
+<META content="Wed, 24 Nov 1999 21:53:00 GMT" http-equiv="Last-Modified">
+<LINK href="default.css" tppabs="http://www.vbapi.com/css/default.css" rel="stylesheet" type="text/css">
+<LINK href="index-1.html" tppabs="http://www.vbapi.com/index.html" rel="home">
+
+<LINK href="glossary.html" tppabs="http://www.vbapi.com/ref/glossary.html" rel="glossary">
+<LINK href="copyrite.html" tppabs="http://www.vbapi.com/copyrite.html" rel="copyright">
+</HEAD>
+<BODY>
+
+<!-- Begin Adslot1 -->
+<CENTER>
+<SCRIPT language="JAVASCRIPT">
+<!-- hide from older browsers
+now = new Date();
+my_random = now.getTime();
+document.write('<A href="http://adex3.flycast.com/server/socket/127.0.0.1:2800/click/VBWorldnet/VBAPI/' + my_random + '">');
+document.write('<IMG width="468" height="60" border="1" src="http://adex3.flycast.com/server/socket/127.0.0.1:2800/ad/VBWorldnet/VBAPI/' + my_random + '"></A>');
+// -->
+</SCRIPT>
+</CENTER>
+<!-- End Adslot1 -->
+
+<HR>
+
+<H1>EnumJobs Function</H1>
+
+<P><CODE class="declare">Declare Function EnumJobs Lib "winspool.drv" Alias "EnumJobsA" (ByVal hPrinter As Long, ByVal FirstJob As Long, ByVal NoJobs As Long, ByVal Level As Long, pJob As Long, ByVal cbBuf As Long, pcbNeeded As Long, pcReturned As Long) As Long</CODE></P>
+
+<H2>Platforms</H2>
+<P><UL>
+<LI><B>Windows 95:</B> Supported.
+<LI><B>Windows 98:</B> Supported.
+<LI><B>Windows NT:</B> Requires Windows NT 3.1 or later.
+<LI><B>Windows 2000:</B> Supported.
+<LI><B>Windows CE:</B> Not Supported.
+</UL></P>
+
+<H2>Description &amp; Usage</H2>
+<P><B>EnumJobs</B> enumerates all of the print jobs pending for a given printer.  The function can retrieve either (relatively) brief or detailed information describing each job in the print queue for that printer.  Note that, instead of placing the information directly into the corresponding structures, the function places the information into an array.  The array's contents must then be transfered to one or more structures.  In order to determine how much space is necessary to receive the information about each print job, first call the function with <VAR>cbBuf</VAR> set to 0.  The function will set the variable passed as <VAR>pcbNeeded</VAR> to the size in bytes of the array necessary hold the information.</P>
+
+<H2>Return Value</H2>
+<P>If an error occured, the function returns 0 (use <A href="getlasterror.html" tppabs="http://www.vbapi.com/ref/g/getlasterror.html">GetLastError</A> to get the error code).  If successful, the function returns a non-zero value.</P>
+
+<H2>Visual Basic-Specific Issues</H2>
+<P>The data retrieved by the function cannot be directly copied into structure(s) using <A href="copymemory.html" tppabs="http://www.vbapi.com/ref/c/copymemory.html">CopyMemory</A> or some other method.  Instead, each (desired) member of the structure must manually be copied from the array to the structure, using the corresponding array indices.  Each structure's contents appear sequentially in the array, and one structure immediately follows another.  See the example code for a demonstration on how this is done.
+
+<P>Additionally, strings are not stored directly.  Instead, the data placed into the array contains <A class="def" href="glossary.html#pointer" tppabs="http://www.vbapi.com/ref/glossary.html#pointer" rel="glossary">pointers</A> to strings whenever necessary.  The string manipulation API functions <A href="lstrlen.html" tppabs="http://www.vbapi.com/ref/l/lstrlen.html">lstrlen</A> and <A href="lstrcpy.html" tppabs="http://www.vbapi.com/ref/l/lstrcpy.html">lstrcpy</A> are needed to copy the pointed-to string into the structure's string data member(s).  Again, see the example for a clearer demonstration.  However, to copy structures stored under the original structure, <A href="copymemory.html" tppabs="http://www.vbapi.com/ref/c/copymemory.html">CopyMemory</A> can be used.  Of course, numeric data members can be copied directly from the array to the structure.</P></P>
+
+<P>Finally, when determining the space needed for the array, both <VAR>pJob</VAR> and </VAR>cbBuf</VAR> must be set to 0.  To set <VAR>pJob</VAR> to 0, the expression ByVal 0 must be used.</P>
+
+<H2>Parameters</H2>
+<P><DL>
+<DT><VAR>hPrinter</VAR><DD>A <A class="def" href="glossary.html#handle" tppabs="http://www.vbapi.com/ref/glossary.html#handle" rel="glossary">handle</A> to the printer to enumerate the print jobs of.
+<DT><VAR>FirstJob</VAR><DD>The zero-baded position in the print queue to begin print job enumeration from.  To enumerate all jobs, of course set this to 0.  To enumerate everything except the first job, set this to 1 (identifying the second print job), etc.
+<DT><VAR>NoJobs</VAR><DD>The maximum number of print jobs to enumerate.
+<DT><VAR>Level</VAR><DD>Identifies the format of the information placed into the array passed as <VAR>pJob</VAR>.  If this is 1, the data is in the format of <A href="job_info_1.html" tppabs="http://www.vbapi.com/ref/j/job_info_1.html">JOB_INFO_1</A> structures.  If this is 2, the data is in the format of <A href="job_info_2.html" tppabs="http://www.vbapi.com/ref/j/job_info_2.html">JOB_INFO_2</A> structures.
+<DT><VAR>pJob</VAR><DD>An array which receives all the information about the print jobs retrieved by the function.  The format of this data is specified in <VAR>Level</VAR>.  The array must be large enough to receive all the data.  If you are setting <VAR>cbBuf</VAR> to 0, this must also be 0.
+<DT><VAR>cbBuf</VAR><DD>The size in bytes of the array passed as <VAR>pJob</VAR>.  To determine how large the array must be, set this to 0.
+<DT><VAR>pcbNeeded</VAR><DD>Receives the number of bytes of data copied into the array passed as <VAR>pJob</VAR>.  If the function failed, this is the minimum size in bytes which the array passed as <VAR>pJob</VAR> must be.
+<DT><VAR>pcReturned</VAR><DD>Receives the number of print jobs retrieved by the function.
+</DL></P>
+
+<H2>Example</H2>
+<P><PRE><CODE class="example"><SPAN class="com">' This code is licensed according to the terms and conditions listed <A href="copyrite.html#license" tppabs="http://www.vbapi.com/copyrite.html#license" rel="copyright">here</A>.</SPAN>
+
+' Display a little information about each print job in the
+' queue for the default printer.  Note how both <A href="enumprinters.html" tppabs="http://www.vbapi.com/ref/e/enumprinters.html">EnumPrinters</A> and
+' <B>EnumJobs</B> first copy the data into the arrays before placing
+' the information into the desired structure.
+Dim pi1 As <A href="printer_info_1.html" tppabs="http://www.vbapi.com/ref/p/printer_info_1.html">PRINTER_INFO_1</A>  ' holds a little information about the printer
+Dim hPrinter As Long  ' handle to the default printer once it is opened
+Dim arraybuf() As Long  ' resizable array used as a buffer
+Dim jobinfo As <A href="job_info_2.html" tppabs="http://www.vbapi.com/ref/j/job_info_2.html">JOB_INFO_2</A>  ' holds detailed info about a print job
+Dim needed As Long  ' receives space needed in the buffer array
+Dim numitems As Long  ' receives the number of items returned
+Dim lendivfour As Long  ' the size in Long-type units of the jobinfo structure
+Dim c As Long  ' counter variable
+Dim retval As Long  ' return value
+
+' -- Get the name of the default printer. --
+' Determine how much space is needed to get the printer information.
+retval = <A href="enumprinters.html" tppabs="http://www.vbapi.com/ref/e/enumprinters.html">EnumPrinters</A>(PRINTER_ENUM_DEFAULT, "", 1, ByVal 0, 0, needed, numitems)
+' Resize the array buffer to the needed size in bytes.
+ReDim arraybuf(0 To needed / 4 - 1)  ' remember each element is 4 bytes
+' Retrieve the information about the default printer.
+retval = <A href="enumprinters.html" tppabs="http://www.vbapi.com/ref/e/enumprinters.html">EnumPrinters</A>(PRINTER_ENUM_DEFAULT, "", 1, arraybuf(0), needed, needed, numitems)
+' Copy the printer name into the structure.  The rest is unnecessary.
+pi1.pName = Space(<A href="lstrlen.html" tppabs="http://www.vbapi.com/ref/l/lstrlen.html">lstrlen</A>(arraybuf(2)))
+retval = <A href="lstrcpy.html" tppabs="http://www.vbapi.com/ref/l/lstrcpy.html">lstrcpy</A>(pi1.pName, arraybuf(2))
+
+' -- Obtain a handle to the default printer (using default configuration). --
+retval = <A href="openprinter.html" tppabs="http://www.vbapi.com/ref/o/openprinter.html">OpenPrinter</A>(pi1.pName, hPrinter, ByVal CLng(0))
+
+' -- Enumerate the default printer's print jobs currently queued. --
+' Determine how much space is needed to get the print jobs' information.
+retval = <B>EnumJobs</B>(hPrinter, 0, 100, 2, ByVal 0, 0, needed, numitems)
+' Resize the array buffer to the needed size in bytes.
+ReDim arraybuf(0 To needed / 4 - 1)  ' remember each element is 4 bytes
+' Retrieve the information about the print jobs.
+retval = <B>EnumJobs</B>(hPrinter, 0, 100, 2, arraybuf(0), needed, needed, numitems)
+' Display the number of print jobs currently in the queue.
+If numitems > 0 Then
+  Debug.Print "There are"; numitems; "print jobs currently in the queue."
+Else
+  Debug.Print "No print jobs are currently in the queue."
+End If
+
+' For each print job, copy its data into the structure.  Then display selected
+' information from the structure.  For brevity, this example copies only a
+' few of the data members into the structure.
+lendivfour = Len(jobinfo) / 4  ' this is the number of elements for each structure in the array
+For c = 0 To numitems - 1  ' loop through each item
+  ' Copy selected information into the structure: the job ID number, the
+  ' name of the user who printed it, the total number of pages, and
+  ' the time it was added into the queue.
+  jobinfo.JobID = arraybuf(lendivfour * c)  ' the first element of the array chunk
+  jobinfo.pUserName = Space(<A href="lstrlen.html" tppabs="http://www.vbapi.com/ref/l/lstrlen.html">lstrlen</A>(arraybuf(lendivfour * c + 3)))  ' fourth element
+  retval = <A href="lstrcpy.html" tppabs="http://www.vbapi.com/ref/l/lstrcpy.html">lstrcpy</A>(jobinfo.pUserName, arraybuf(lendivfour * c + 3))
+  jobinfo.TotalPages = arraybuf(lendivfour * c + 18)  ' nineteenth element
+  <A href="copymemory.html" tppabs="http://www.vbapi.com/ref/c/copymemory.html">CopyMemory</A> jobinfo.Submitted, arraybuf(lendivfour * c + 20), Len(jobinfo.Submitted)  ' twenty-first element
+  
+  ' Display the copied information.
+  Debug.Print "Job ID number:"; jobinfo.JobID
+  Debug.Print "Printed by user: "; jobinfo.pUserName
+  Debug.Print "Number of pages:"; jobinfo.TotalPages
+  Debug.Print "Placed in queue on: ";
+  ' (display the date and time stored in jobinfo.Submitted)
+  Debug.Print jobinfo.Submitted.wMonth; "-"; jobinfo.Submitted.wDay; "-"; jobinfo.Submitted.wYear; " ";
+  Debug.Print jobinfo.Submitted.wHour; ":"; jobinfo.Submitted.wMinute; ":"; jobinfo.Submitted.wSecond; " GMT"
+Next c
+
+' Close the printer handle now that it is no longer needed.
+retval = <A href="closeprinter.html" tppabs="http://www.vbapi.com/ref/c/closeprinter.html">ClosePrinter</A>(hPrinter)</CODE></PRE></P>
+
+<H2>Category</H2>
+<P><A href="funcc.html#printers" tppabs="http://www.vbapi.com/ref/funcc.html#printers">Printers</A></P>
+
+<P><A href="funca.html" tppabs="http://www.vbapi.com/ref/funca.html">Go back to the alphabetical Function listing.</A><BR>
+<A href="index.html" tppabs="http://www.vbapi.com/ref/index.html">Go back to the Reference section index.</A></P>
+
+<HR>
+
+<P><B>Last Modified:</B> November 24, 1999<BR>
+This page is copyright &copy; 1999 Paul Kuliniewicz.  
+<A href="copyrite.html" tppabs="http://www.vbapi.com/copyrite.html" rel="copyright">Copyright Information</A>  <B>Revised October 29, 2000</B><BR>
+
+<A href="index-1.html" tppabs="http://www.vbapi.com/index.html">Go back to the Windows API Guide home page.</A><BR>
+E-mail: <A href="javascript:if(confirm('http://www.vbapi.com/email.html  \n\nThis file was not retrieved by Teleport Pro, because it is addressed on a domain or path outside the boundaries set for its Starting Address.  \n\nDo you want to open it from the server?'))window.location='http://www.vbapi.com/email.html'" tppabs="http://www.vbapi.com/email.html">vbapi@vbapi.com</A>  <A href="javascript:if(confirm('http://www.vbapi.com/email.html  \n\nThis file was not retrieved by Teleport Pro, because it is addressed on a domain or path outside the boundaries set for its Starting Address.  \n\nDo you want to open it from the server?'))window.location='http://www.vbapi.com/email.html#secure'" tppabs="http://www.vbapi.com/email.html#secure">Send Encrypted E-Mail</A><BR>
+This page is at <A href="enumjobs.html" tppabs="http://www.vbapi.com/ref/e/enumjobs.html">http://www.vbapi.com/ref/e/enumjobs.html</A>
+</P>
+</BODY>
+</HTML>

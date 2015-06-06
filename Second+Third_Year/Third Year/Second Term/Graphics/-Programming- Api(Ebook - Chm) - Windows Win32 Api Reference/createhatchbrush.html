@@ -1,0 +1,80 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+<HTML lang="en-us">
+<HEAD>
+<TITLE>Windows API Guide: CreateHatchBrush Function</TITLE>
+<META content="vbapi@vbapi.com" name="author">
+<META content="Information about the CreateHatchBrush function in the Windows API, geared towards the Visual Basic user." name="description">
+<META content="Kuliniewicz,Windows,Windows 95,Windows NT,Windows 98,Windows 32s,32s,API,Application Programming Interface,Programming,Visual Basic,Basic,VB,CreateHatchBrush" name="keywords">
+<META content="Omicron HTML Editor" name="generator">
+<LINK href="default.css" tppabs="http://www.vbapi.com/css/default.css" rel="stylesheet" type="text/css">
+<LINK href="index-1.html" tppabs="http://www.vbapi.com/index.html" rel="home">
+</HEAD>
+<BODY>
+
+<!-- Begin Adslot1 -->
+<CENTER>
+<SCRIPT language="JAVASCRIPT">
+<!-- hide from older browsers
+now = new Date();
+my_random = now.getTime();
+document.write('<A href="http://adex3.flycast.com/server/socket/127.0.0.1:2800/click/VBWorldnet/VBAPI/' + my_random + '">');
+document.write('<IMG width="468" height="60" border="1" src="http://adex3.flycast.com/server/socket/127.0.0.1:2800/ad/VBWorldnet/VBAPI/' + my_random + '"></A>');
+// -->
+</SCRIPT>
+</CENTER>
+<!-- End Adslot1 -->
+
+<HR>
+
+<H1>CreateHatchBrush Function</H1>
+
+<P><CODE class="declare">Declare Function CreateHatchBrush Lib "gdi32.dll" (ByVal nIndex As Long, ByVal crColor As Long) As Long</CODE>
+
+<P><B>Platforms:</B> Win 32s, Win 95/98, Win NT
+
+<P><B>CreateHatchBrush</B> creates a hatched brush object.  When used to fill an area or shape, this brush produces a pattern of lines (a "hatch pattern") in a single color using an 8x8 unit cell.  After the program finishes using the hatched brush, it should use <A href="deleteobject.html" tppabs="http://www.vbapi.com/ref/d/deleteobject.html">DeleteObject</A> to delete the brush and free system resources.  The function returns a handle to the newly created hatched brush if successful, or 0 if an error occured.
+
+<DL>
+<DT><VAR>nIndex</VAR><DD>Exactly one of the following flags specifying which hatch pattern to use to make the brush:
+<DL>
+<DT>HS_BDIAGONAL = 3<DD>Diagonal lines from the bottom-left to the upper-right.
+<DT>HS_CROSS = 4<DD>Cross pattern of horizontal and vertical lines.
+<DT>HS_DIAGCROSS = 5<DD>Cross pattern of perpendicular diagonal lines.
+<DT>HS_FDIAGONAL = 2<DD>Diagonal lines from the upper-left to the bottom-right.
+<DT>HS_HORIZONTAL = 0<DD>Horizontal lines.
+<DT>HS_VERTICAL = 1<DD>Vertical lines.
+</DL>
+<DT><VAR>crColor</VAR><DD>The RGB value of the color to give the hatched brush.  Visual Basic users can use the RGB() function to generate this value.
+</DL>
+
+<P><B>Example:</B>
+<PRE><CODE class="example">' Draw a rectangle with corners (10,20) and (175,100)
+' on window Form1.  Use a yellow brush with a diagonal cross pattern to fill the rectangle.
+Dim hbrush As Long  ' receives handle to the hatched yellow brush
+Dim holdbrush As Long  ' receives handle to Form1's default brush
+Dim retval As Long  ' return value
+
+hbrush = <B>CreateHatchBrush</B>(HS_DIAGCROSS, RGB(255, 255, 0))  ' create a hatched yellow brush
+' Save Form1's default brush so we can restore it after the program is finished
+holdbrush = <A href="selectobject.html" tppabs="http://www.vbapi.com/ref/s/selectobject.html">SelectObject</A>(Form1.hDC, hbrush)  ' select the brush
+' Draw the rectangle filled using the hatched yellow brush
+retval = <A href="rectangle.html" tppabs="http://www.vbapi.com/ref/r/rectangle.html">Rectangle</A>(Form1.hDC, 10, 20, 175, 100)
+' Restore Form1's previous brush before destroying the created one
+retval = <A href="selectobject.html" tppabs="http://www.vbapi.com/ref/s/selectobject.html">SelectObject</A>(Form1.hDC, holdbrush)  ' select old brush
+retval = <A href="deleteobject.html" tppabs="http://www.vbapi.com/ref/d/deleteobject.html">DeleteObject</A>(hbrush)  ' destroy the hatched yellow brush</CODE></PRE>
+
+<P><B>See Also:</B> <A href="createsolidbrush.html" tppabs="http://www.vbapi.com/ref/c/createsolidbrush.html">CreateSolidBrush</A><BR>
+<B>Category:</B> <A href="index.html#brushes" tppabs="http://www.vbapi.com/ref/index.html#brushes">Brushes</A></P>
+
+<P><A href="funca.html" tppabs="http://www.vbapi.com/ref/funca.html">Go back to the alphabetical Function listing.</A><BR>
+<A href="index.html" tppabs="http://www.vbapi.com/ref/index.html">Go back to the Reference section index.</A></P>
+
+<HR>
+
+<P>This page is copyright &copy; 2000 Paul Kuliniewicz.  <A href="copyrite.html" tppabs="http://www.vbapi.com/copyrite.html" rel="copyright">Copyright Information.</A><BR>
+<A href="index-1.html" tppabs="http://www.vbapi.com/index.html">Go back to the Windows API Guide home page.</A><BR>
+E-mail: <A href="javascript:if(confirm('http://www.vbapi.com/email.html  \n\nThis file was not retrieved by Teleport Pro, because it is addressed on a domain or path outside the boundaries set for its Starting Address.  \n\nDo you want to open it from the server?'))window.location='http://www.vbapi.com/email.html'" tppabs="http://www.vbapi.com/email.html">vbapi@vbapi.com</A>  <A href="javascript:if(confirm('http://www.vbapi.com/email.html  \n\nThis file was not retrieved by Teleport Pro, because it is addressed on a domain or path outside the boundaries set for its Starting Address.  \n\nDo you want to open it from the server?'))window.location='http://www.vbapi.com/email.html#secure'" tppabs="http://www.vbapi.com/email.html#secure">Send Encrypted E-Mail</A><BR>
+This page is at <A href="createhatchbrush.html" tppabs="http://www.vbapi.com/ref/c/createhatchbrush.html">http://www.vbapi.com/ref/c/createhatchbrush.html</A>
+
+</BODY>
+</HTML>

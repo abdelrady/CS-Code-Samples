@@ -1,0 +1,276 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!-- saved from url=(0085)http://www.planetsourcecode.com/vb/scripts/ShowCodeAsText.asp?txtCodeId=3745&lngWId=3 -->
+<HTML><HEAD>
+<META http-equiv=Content-Type content="text/html; charset=windows-1256">
+<META content="MSHTML 6.00.2900.2180" name=GENERATOR></HEAD>
+<BODY><XMP>
+//**************************************
+//INCLUDE files for :Maze Game
+//**************************************
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+#include <string.h>
+//**************************************
+// Name: Maze Game
+// Description:The program goes trough a 20 by 40 field, from top left, and finds the path to the bottom right position.
+This is a program to which you have to provide some file which contains the maze. Maze is a 20 by 40 field of 'X's and 'O's.
+// By: PeCoNi =)
+//
+//
+// Inputs:Parameters are ..
+ProgramName file.ext .. where the file contains some maze similar to this:
+OOOOXOOOOXOXOOOXOXXOOOOXOOXOOOXOOOXOXXXO
+XXXOXOOOOOXXOOOXXOOOXOXOXOXXXXOOOXXXOOOO
+XXXOXXOXOOXXOXOOOOOOXXOOOOXXOXOOOOXOOOOO
+OXOOOXOXXXOXXXOXXOXOXXOOXXXOXOOOOXOXOOOX
+XOOXXXXXOOXXXOOXXXOXOOXOOXOXXOOOXOOXOOOO
+XOOXXOXXXOXXOXOOOOXXOXXOXOOOXXXOXXOOXOXX
+OOXXOXXXXXOXOXOOOOOOXOXOOOOOOXOOOXXXOOXX
+XOXXOOOOOOOOOOOOXOOXXXXOOXXOOOOXXOOOXOXO
+XOXXOXXOOXOXOXXOOXOXOOOXOXXOOXOOOOOOXOOO
+OOOOXXOOXXXXOXOOXOOOOXXXXOOOOOXOXXXXOXXX
+XOOOOOXOOOXOOXXOXXXXOOOOXOXXOOOXOOOXXXXO
+OOXOXOOXXOXXOOOXOOOOOXXOOOOXXXOOXOXXXXOX
+XOXOXXOXXOOXOXOOXOOOOXOXXXOXOOOXXOXOOOOO
+XXXOXOOXXOOOOOXXOOOOOOOOOOOOOOOOXXXOXOOX
+OXOOOOXOOXXOXOXXXOXXXXOXXOXXOOOOXOOOXOOO
+OOOXOOXXXOOOXOOXOOXOOXOXOOOOXOOOXOOOOOOX
+OXOXOOOOOOXXXOOXXOXXOXXOXXXXOXXOOOXXXXXX
+XXOOXXXOXXXOXOOOOOXXXOXXOXXOOXOOXOOOOOXX
+OXXXOXOXXOXOXXOXXOOXXXXOXOXXOOXOXXXXOXXX
+XXOXXOOXOOXOOOOOXXXXXXOOXXOXXOOOXOXOOOOO
+//
+// Returns:None
+//
+//Assumes:None
+//
+//Side Effects:None
+//This code is copyrighted and has limited warranties.
+//Please see http://www.Planet-Source-Code.com/xq/ASP/txtCodeId.3745/lngWId.3/qx/vb/scripts/ShowCode.htm
+//for details.
+//**************************************
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+#include <string.h>
+// Programmed by Petar Smilajkov
+// Program is of course as is, with no guaranty of anything... I am no responsibile for any kind of thing happening on your computer :)
+// Use for study purpose... All Rights Reserved :)
+// PrOtOtYpEs and GlObAl VaRiAbLeS :)
+typedef struct
+
+
+    {
+    	int r; // row
+    	int c; // col..
+}coord; // name of struct
+typedef struct
+
+
+    {
+    	coord s[800]; // 800 max coords
+    	int Top;	 // # of records on stack & next free space
+}stack;
+coord Pop();		// Prototypes of Pop
+void Push(coord);	// and Push Functions
+stack path; // Path is out stack :)
+char Maze[20][40];
+char WorkMaze[20][40];
+int main(int argc, char *argv[])
+
+
+    {
+    	// Main Variables and func, prototypes ....
+    	void InitMaze(char *);
+    	void PrintMaze();
+    	void InsertPath();
+    	int PathFinder(coord);
+    	coord start={0,0}; // Start with (0,0) of (R,C)
+    	path.Top=0;		 // init the top :)	
+    	if(argc==1)
+
+
+        	{
+        		printf("\n\nAyyy BumperSticker, you gotta put the file name too :)\n\n");
+        		exit(1); // bye bye
+        	}
+        	InitMaze(argv[1]); // inits the maze with the file user sends
+        	PrintMaze();	 // Prints the Maze :)
+        	printf("\nPress 's' to start the search...\n");
+        	getchar(); // just pauses untill some char is entered :)
+        	getchar(); // since getchar gets 1 char, when we press
+        			 // enter after letter, we have to get that somehow too :)
+        	
+        	if(PathFinder(start)) // if Path is true (found)
+
+
+            	{
+            		printf("\nPath Found! :)\n\nPress key 's' to print the path...\n");
+            		getchar(); // get one char ... no need for 2 getchar, since is the end :)
+            		InsertPath(); // insert path to the maze
+            		PrintMaze(); // jejeje
+            	}
+            	else
+            		printf("\nSorry, No Path Found :(\n\n"); // nnnnnn :)
+            	
+            	return 0;
+        }
+        // Function that Pops the Stack
+        coord Pop()
+
+
+            {
+            	return path.s[--path.Top]; // pops value of current top, and then decrements Top!
+        }
+        // Function that Pushes cood onto Stack
+        void Push(coord c) 
+
+
+            {
+            	path.s[path.Top++]=c; // Pushes the value of C, to the stack, and increments the Top!
+        }
+        	
+        // Jejejeje
+        void InitMaze(char *file)
+
+
+            {
+            	int i,j,temp; // indexes and temp
+            	FILE *inp=fopen(file, "r"); 
+            	
+            	if(inp==NULL) // if no file
+
+
+                	{
+                		printf("\nCannot open the file!!!!\n\n");
+                		exit(1); // bye bye
+                	}
+                	for(i=0;i<20;i++)
+
+
+                    	{
+                    		for(j=0;j<40;j++)
+
+
+                        		{
+                        			temp=fgetc(inp);		// get char from file
+                        			Maze[i][j]=temp;		// store it into the mazes
+                        			WorkMaze[i][j]=temp;
+                        		}
+                        		// this protects us from old DOS text files with \r at end
+                        		if(((temp=fgetc(inp))=='\r')) // it gets it once, and then again
+                        			fgetc(inp); 
+                        		
+                        	}
+                        	fclose(inp); // closing the file :)
+                    }
+                    // Gosh .....
+                    void PrintMaze()
+
+
+                        {
+                        	int i,j; // indexers
+                        	for(i=0;i<20;i++)
+
+
+                            	{
+                            		for(j=0;j<40;j++)
+                            			printf("%c",Maze[i][j]);
+                            		printf("\n"); // put new line after first row
+                            	}
+                        }
+                        // Function that inserts the path into the main maze :)
+                        void InsertPath()
+
+
+                            {
+                            	coord x; 
+                            	while(path.Top>0)
+
+
+                                	{
+                                		x=Pop(); // pop the coord
+                                		Maze[x.r][x.c]='*'; // plug it in to the Main Maze :)
+                                	}
+                            }
+                            // Most important Function .. Find the path :)
+                            int PathFinder(coord c)
+
+
+                                {
+                                	coord temp=c;
+                                	Push(c);
+                                	if(c.r==19 && c.c==39) // Check if it is already at the end :)
+                                		return 1; // path found since we are at the field 19,39
+                                	
+                                	WorkMaze[c.r][c.c]='X'; // mark it as no way there .... temproary :)
+                                	if(c.c<39 && WorkMaze[c.r][c.c+1]!='X') // Go right man
+
+
+                                    	{
+                                    		temp.c++; // increasse the col
+                                    		if(PathFinder(temp)) // same as Path Finder(tmp)=TRUE :) jeje
+                                    			return 1; // path found
+                                    		else
+
+
+                                        		{
+                                        			Pop();
+                                        			temp.c--;
+                                        		}
+                                        	}
+                                        	if(c.r<19 && WorkMaze[c.r+1][c.c]!='X') // Go down man
+
+
+                                            	{
+                                            		temp.r++; // increasse the row
+                                            		if(PathFinder(temp)) // same as Path Finder(tmp)=TRUE :) jeje
+                                            			return 1; // path found
+                                            		else
+
+
+                                                		{
+                                                			Pop();
+                                                			temp.r--;
+                                                		}
+                                                	}
+                                                	
+                                                	if(c.c>0 && WorkMaze[c.r][c.c-1]!='X') // Now go a little bit left
+
+
+                                                    	{
+                                                    		temp.c--; // increasse the col
+                                                    		if(PathFinder(temp)) // same as Path Finder(tmp)=TRUE :) jeje
+                                                    			return 1; // path found
+                                                    		else 
+
+
+                                                        		{
+                                                        			Pop();
+                                                        			temp.c++;
+                                                        		}
+                                                        	}
+                                                        	
+                                                        	if(c.r>0 && WorkMaze[c.r-1][c.c]!='X') // Now check the top
+
+
+                                                            	{
+                                                            		temp.r--; // increasse the row
+                                                            		if(PathFinder(temp)) // same as Path Finder(tmp)=TRUE :) jeje
+                                                            			return 1; // path found
+                                                            		else 
+
+
+                                                                		{
+                                                                			Pop();
+                                                                			temp.r++;
+                                                                		}
+                                                                	}
+                                                                	
+                                                                	return 0; // upsssss no path :)
+                                                                	
+                                                            }
+
+		</XMP></BODY></HTML>

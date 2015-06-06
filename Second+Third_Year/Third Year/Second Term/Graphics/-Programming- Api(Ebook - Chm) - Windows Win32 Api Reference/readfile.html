@@ -1,0 +1,125 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+<HTML lang="en-us">
+<HEAD>
+<TITLE>Windows API Guide: ReadFile Function</TITLE>
+<META content="vbapi@vbapi.com" name="author">
+<META content="Information about the ReadFile function in the Windows API, geared towards the Visual Basic user." name="description">
+<META content="Kuliniewicz,Windows,Windows 95,Windows NT,Windows 98,Windows CE,Windows 2000,API,Application Programming Interface,Programming,Visual Basic,Basic,VB,ReadFile" name="keywords">
+<META content="Omicron HTML Editor" name="generator">
+<META content="Wed, 13 Oct 1999 23:21:00 GMT" http-equiv="Last-Modified">
+<LINK href="default.css" tppabs="http://www.vbapi.com/css/default.css" rel="stylesheet" type="text/css">
+<LINK href="index-1.html" tppabs="http://www.vbapi.com/index.html" rel="home">
+
+<LINK href="glossary.html" tppabs="http://www.vbapi.com/ref/glossary.html" rel="glossary">
+<LINK href="copyrite.html" tppabs="http://www.vbapi.com/copyrite.html" rel="copyright">
+</HEAD>
+<BODY>
+
+<!-- Begin Adslot1 -->
+<CENTER>
+<SCRIPT language="JAVASCRIPT">
+<!-- hide from older browsers
+now = new Date();
+my_random = now.getTime();
+document.write('<A href="http://adex3.flycast.com/server/socket/127.0.0.1:2800/click/VBWorldnet/VBAPI/' + my_random + '">');
+document.write('<IMG width="468" height="60" border="1" src="http://adex3.flycast.com/server/socket/127.0.0.1:2800/ad/VBWorldnet/VBAPI/' + my_random + '"></A>');
+// -->
+</SCRIPT>
+</CENTER>
+<!-- End Adslot1 -->
+
+<HR>
+
+<H1>ReadFile Function</H1>
+
+<P><CODE class="declare">Declare Function ReadFile Lib "kernel32.dll" (ByVal hFile As Long, lpBuffer As Any, ByVal nNumberOfBytesToRead As Long, lpNumberOfBytesRead As Long, lpOverlapped As Any) As Long</CODE></P>
+
+<H2>Platforms</H2>
+<P><UL>
+<LI><B>Windows 95:</B> Supported.
+<LI><B>Windows 98:</B> Supported.
+<LI><B>Windows NT:</B> Requires Windows NT 3.1 or later.
+<LI><B>Windows 2000:</B> Supported.
+<LI><B>Windows CE:</B> Requires Windows CE 1.0 or later.
+</UL></P>
+
+<H2>Description &amp; Usage</H2>
+<P><B>ReadFile</B> reads the desired amount of bytes from a file.  The file must of course have been opened with at least read-level access.  If the file is synchronous (not overlapped), the function begins reading the file from the current position of the <A class="def" href="glossary.html#filepointer" tppabs="http://www.vbapi.com/ref/glossary.html#filepointer" rel="glossary">file pointer</A>, and the function automatically adjusts the file pointer to point to the byte immediately after the last byte read.  If the file is asynchronous (overlapped), the structure passed as <VAR>lpOverlapped</VAR> identifies the point to begin reading from, and the program calling the function is responsible for updating the file pointer.</P>
+
+<H2>Return Value</H2>
+<P>If an error occured, the function returns 0 (use <A href="getlasterror.html" tppabs="http://www.vbapi.com/ref/g/getlasterror.html">GetLastError</A> to get the error code).  If successful (including if the function attempted to read past the end of the file), the function returns a non-zero value.</P>
+
+<H2>Visual Basic-Specific Issues</H2>
+<P>When passing a string as <VAR>lpBuffer</VAR> to receive the data read from the file, the ByVal keyword must preceed the string.  The keyword is not necessary for any other data types passed for <VAR>lpBuffer</VAR>.  When passing 0 for <VAR>lpOverlapped</VAR>, the expression ByVal CLng(0) must be used.</P>
+
+<H2>Parameters</H2>
+<P><DL>
+<DT><VAR>hFile</VAR><DD>A <A class="def" href="glossary.html#handle" tppabs="http://www.vbapi.com/ref/glossary.html#handle" rel="glossary">handle</A> to the file to read from.  The file must have at least read-level access.
+<DT><VAR>lpBuffer</VAR><DD>The variable, array, or structure which receives the data read from the file.
+<DT><VAR>nNumberOfBytesToRead</VAR><DD>The number of bytes of data to read from the file and put into <VAR>lpBuffer</VAR>.
+<DT><VAR>lpNumberOfBytesRead</VAR><DD>Receives the number of bytes of data actually read from the file.  If this is less than <VAR>lpNumberOfBytesToRead</VAR>, the function has attempted to read beyond the end of the file.
+<DT><VAR>lpOverlapped</VAR><DD>If the file is asynchronous (overlapped), this is an <A href="overlapped.html" tppabs="http://www.vbapi.com/ref/o/overlapped.html">OVERLAPPED</A> structure specifying where to begin reading from.  If the file is synchronous (not overlapped), this must be 0.
+</DL></P>
+
+<H2>Example</H2>
+<P><PRE><CODE class="example"><SPAN class="com">' This code is licensed according to the terms and conditions listed <A href="copyrite.html#license" tppabs="http://www.vbapi.com/copyrite.html#license" rel="copyright">here</A>.</SPAN>
+
+' Read both a Long (32-bit) number and a String from the file
+' C:\Test\myfile.txt.  Notice how the ByVal keyword must be used
+' when reading a string variable.
+Dim longbuffer As Long  ' receives long read from file
+Dim stringbuffer As String  ' receives string read from file
+Dim numread As Long  ' receives number of bytes read from file
+Dim hFile As Long  ' handle of the open file
+Dim retval As Long  ' return value
+
+' Open the file for read-level access.
+hFile = <A href="createfile.html" tppabs="http://www.vbapi.com/ref/c/createfile.html">CreateFile</A>("C:\Test\myfile.txt", GENERAL_READ, FILE_SHARE_READ, ByVal CLng(0), OPEN_EXISTING, FILE_ATTRIBUTE_ARCHIVE, 0)
+If hfile = -1 Then  ' the file could not be opened
+  Debug.Print "Unable to open the file -- it probably does not exist."
+  End  ' abort the program
+End If
+
+' Read a Long-type number from the file
+retval = <B>ReadFile</B>(hFile, longbuffer, Len(longbuffer), numread, ByVal CLng(0))
+If numread < Len(longbuffer) Then  ' EOF reached
+  Debug.Print "End of file encountered -- could not read the data."
+Else
+  Debug.Print "Number read from file:"; longbuffer
+End If
+
+' Read a 10-character string from the file
+stringbuffer = Space(10)  ' make room in the buffer
+retval = <B>ReadFile</B>(hFile, ByVal stringbuffer, 10, numread, ByVal CLng(0))
+If numread = 0 Then  ' EOF reached
+  Debug.Print "End of file encountered -- could not read any data."
+ElseIf numread < 10 Then  ' read between 0 and 10 bytes
+  Debug.Print "Incomplete string read: "; Left(stringbuffer, numread)
+Else
+  Debug.Print "String read from file: "; stringbuffer
+End If
+
+' Close the file.
+retval = <A href="closehandle.html" tppabs="http://www.vbapi.com/ref/c/closehandle.html">CloseHandle</A>(hFile)</CODE></PRE></P>
+
+<H2>See Also</H2>
+<P><A href="setfilepointer.html" tppabs="http://www.vbapi.com/ref/s/setfilepointer.html">SetFilePointer</A>, <A href="writefile.html" tppabs="http://www.vbapi.com/ref/w/writefile.html">WriteFile</A></P>
+
+<H2>Category</H2>
+<P><A href="funcc.html#files" tppabs="http://www.vbapi.com/ref/funcc.html#files">Files</A></P>
+
+<P><A href="funca.html" tppabs="http://www.vbapi.com/ref/funca.html">Go back to the alphabetical Function listing.</A><BR>
+<A href="index.html" tppabs="http://www.vbapi.com/ref/index.html">Go back to the Reference section index.</A></P>
+
+<HR>
+
+<P><B>Last Modified:</B> October 13, 1999<BR>
+This page is copyright &copy; 1999 Paul Kuliniewicz.  
+<A href="copyrite.html" tppabs="http://www.vbapi.com/copyrite.html" rel="copyright">Copyright Information</A>  <B>Revised October 29, 2000</B><BR>
+
+<A href="index-1.html" tppabs="http://www.vbapi.com/index.html">Go back to the Windows API Guide home page.</A><BR>
+E-mail: <A href="javascript:if(confirm('http://www.vbapi.com/email.html  \n\nThis file was not retrieved by Teleport Pro, because it is addressed on a domain or path outside the boundaries set for its Starting Address.  \n\nDo you want to open it from the server?'))window.location='http://www.vbapi.com/email.html'" tppabs="http://www.vbapi.com/email.html">vbapi@vbapi.com</A>  <A href="javascript:if(confirm('http://www.vbapi.com/email.html  \n\nThis file was not retrieved by Teleport Pro, because it is addressed on a domain or path outside the boundaries set for its Starting Address.  \n\nDo you want to open it from the server?'))window.location='http://www.vbapi.com/email.html#secure'" tppabs="http://www.vbapi.com/email.html#secure">Send Encrypted E-Mail</A><BR>
+This page is at <A href="readfile.html" tppabs="http://www.vbapi.com/ref/r/readfile.html">http://www.vbapi.com/ref/r/readfile.html</A>
+</P>
+</BODY>
+</HTML>

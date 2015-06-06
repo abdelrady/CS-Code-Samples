@@ -1,0 +1,91 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+<HTML lang="en-us">
+<HEAD>
+<TITLE>Windows API Guide: GlobalMemoryStatus Function</TITLE>
+<META content="vbapi@vbapi.com" name="author">
+<META content="Information about the GlobalMemoryStatus function in the Windows API, geared towards the Visual Basic user." name="description">
+<META content="Kuliniewicz,Windows,Windows 95,Windows NT,Windows 98,Windows CE,Windows 2000,API,Application Programming Interface,Programming,Visual Basic,Basic,VB,GlobalMemoryStatus" name="keywords">
+<META content="Omicron HTML Editor" name="generator">
+<LINK href="default.css" tppabs="http://www.vbapi.com/css/default.css" rel="stylesheet" type="text/css">
+<LINK href="index-1.html" tppabs="http://www.vbapi.com/index.html" rel="home">
+<LINK href="glossary.html" tppabs="http://www.vbapi.com/ref/glossary.html" rel="glossary">
+<LINK href="copyrite.html" tppabs="http://www.vbapi.com/copyrite.html" rel="copyright">
+</HEAD>
+<BODY>
+
+<!-- Begin Adslot1 -->
+<CENTER>
+<SCRIPT language="JAVASCRIPT">
+<!-- hide from older browsers
+now = new Date();
+my_random = now.getTime();
+document.write('<A href="http://adex3.flycast.com/server/socket/127.0.0.1:2800/click/VBWorldnet/VBAPI/' + my_random + '">');
+document.write('<IMG width="468" height="60" border="1" src="http://adex3.flycast.com/server/socket/127.0.0.1:2800/ad/VBWorldnet/VBAPI/' + my_random + '"></A>');
+// -->
+</SCRIPT>
+</CENTER>
+<!-- End Adslot1 -->
+
+<HR>
+
+<H1>GlobalMemoryStatus Function</H1>
+
+<P><CODE class="declare">Declare Sub GlobalMemoryStatus Lib "kernel32.dll" (lpBuffer As <A href="memorystatus.html" tppabs="http://www.vbapi.com/ref/m/memorystatus.html">MEMORYSTATUS</A>)</CODE></P>
+
+<H2>Platforms</H2>
+<P><UL>
+<LI><B>Windows 95:</B> Supported.
+<LI><B>Windows 98:</B> Supported.
+<LI><B>Windows NT:</B> Requires Windows NT 3.1 or later.
+<LI><B>Windows 2000:</B> Supported but Obsolete; use <A href="globalmemorystatusex.html" tppabs="http://www.vbapi.com/ref/g/globalmemorystatusex.html">GlobalMemoryStatusEx</A> instead.
+<LI><B>Windows CE:</B> Unknown.
+</UL></P>
+
+<H2>Description &amp; Usage</H2>
+<P><B>GlobalMemoryStatus</B> retrieves the current status of the computer's memory.  It reports both the total memory available and the amount of unused memory.  This function only works properly on computers with no more than 4 GB of memory.  If the computer has more than 4 GB of memory, the values reported by <B>GlobalMemoryStatus</B> are the actual values modulo 4 (for example, a computer with 5 GB total memory would be reported as having only 1 GB of memory).  For computers with more than 4 GB of memory, use the <A href="globalmemorystatusex.html" tppabs="http://www.vbapi.com/ref/g/globalmemorystatusex.html">GlobalMemoryStatusEx</A> function instead.</P>
+
+<H2>Return Value</H2>
+<P><B>GlobalMemoryStatusEx</B> does not return a value.</P>
+
+<H2>Visual Basic-Specific Issues</H2>
+<P>None.</P>
+
+<H2>Parameters</H2>
+<P><DL>
+<DT><VAR>lpBuffer</VAR><DD>Receives the current status of the computer's memory.  The <VAR>dwLength</VAR> member of the structure does not have to be set before calling the function.
+</DL></P>
+
+<H2>Example</H2>
+<P><PRE><CODE class="example"><SPAN class="com">' This code is licensed according to the terms and conditions listed <A href="copyrite.html#license" tppabs="http://www.vbapi.com/copyrite.html#license" rel="copyright">here</A>.</SPAN>
+
+' Display the amounts of total and available physical memory
+' on the computer.  Also calculate the percentage of used physical memory.
+Dim ms As <A href="memorystatus.html" tppabs="http://www.vbapi.com/ref/m/memorystatus.html">MEMORYSTATUS</A>
+
+' Get the current memory status.
+<B>GlobalMemoryStatus</B> ms
+' Display total and available physical memory, in KB.
+Debug.Print "Total Physical Memory:"; ms.dwTotalPhys \ 1024; "KB"
+Debug.Print "Available Physical Memory:"; ms.dwAvailPhys \ 1024; "KB"
+' Calculate percentage of physical memory in use.
+Debug.Print "Used Physical Memory:"; 100 - 100 * ms.dwAvailPhys \ ms.dwTotalPhys; "%"</CODE></PRE></P>
+
+<H2>See Also</H2>
+<P><A href="globalmemorystatusex.html" tppabs="http://www.vbapi.com/ref/g/globalmemorystatusex.html">GlobalMemoryStatusEx</A></P>
+
+<H2>Category</H2>
+<P><A href="funcc.html#memory" tppabs="http://www.vbapi.com/ref/funcc.html#memory">Memory</A></P>
+
+<P><A href="funca.html" tppabs="http://www.vbapi.com/ref/funca.html">Back to the Function list.</A><BR>
+<A href="index.html" tppabs="http://www.vbapi.com/ref/index.html" rel="index">Back to the Reference section.</A></P>
+
+<HR>
+
+<P><B>Last Modified:</B> March 19, 2000<BR>
+This page is copyright &copy; 2000 Paul Kuliniewicz.  
+<A href="copyrite.html" tppabs="http://www.vbapi.com/copyrite.html" rel="copyright">Copyright Information</A>  <B>Revised October 29, 2000</B><BR>
+<A href="index-1.html" tppabs="http://www.vbapi.com/index.html" rel="home">Go back to the Windows API Guide home page.</A><BR>
+E-mail: <A href="javascript:if(confirm('http://www.vbapi.com/email.html  \n\nThis file was not retrieved by Teleport Pro, because it is addressed on a domain or path outside the boundaries set for its Starting Address.  \n\nDo you want to open it from the server?'))window.location='http://www.vbapi.com/email.html'" tppabs="http://www.vbapi.com/email.html">vbapi@vbapi.com</A>  <A href="javascript:if(confirm('http://www.vbapi.com/email.html  \n\nThis file was not retrieved by Teleport Pro, because it is addressed on a domain or path outside the boundaries set for its Starting Address.  \n\nDo you want to open it from the server?'))window.location='http://www.vbapi.com/email.html#secure'" tppabs="http://www.vbapi.com/email.html#secure">Send Encrypted E-Mail</A><BR>
+This page is at <A href="globalmemorystatus.html" tppabs="http://www.vbapi.com/ref/g/globalmemorystatus.html">http://www.vbapi.com/ref/g/globalmemorystatus.html</A></P>
+</BODY>
+</HTML>

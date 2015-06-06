@@ -1,0 +1,111 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+<HTML lang="en-us">
+<HEAD>
+<TITLE>Windows API Guide: MOUSEINPUT Structure</TITLE>
+<META content="vbapi@vbapi.com" name="author">
+<META content="Information about the MOUSEINPUT structure in the Windows API, geared towards the Visual Basic user." name="description">
+<META content="Kuliniewicz,Windows,Windows 95,Windows NT,Windows 98,Windows CE,Windows 2000,API,Application Programming Interface,Programming,Visual Basic,Basic,VB,MOUSEINPUT" name="keywords">
+<META content="Omicron HTML Editor" name="generator">
+<META content="Thu, 12 Aug 1999 02:55:00 GMT" http-equiv="Last-Modified">
+<LINK href="default.css" tppabs="http://www.vbapi.com/css/default.css" rel="stylesheet" type="text/css">
+<LINK href="index-1.html" tppabs="http://www.vbapi.com/index.html" rel="home">
+
+<LINK href="glossary.html" tppabs="http://www.vbapi.com/ref/glossary.html" rel="glossary">
+<LINK href="copyrite.html" tppabs="http://www.vbapi.com/copyrite.html" rel="copyright">
+</HEAD>
+<BODY>
+
+<!-- Begin Adslot1 -->
+<CENTER>
+<SCRIPT language="JAVASCRIPT">
+<!-- hide from older browsers
+now = new Date();
+my_random = now.getTime();
+document.write('<A href="http://adex3.flycast.com/server/socket/127.0.0.1:2800/click/VBWorldnet/VBAPI/' + my_random + '">');
+document.write('<IMG width="468" height="60" border="1" src="http://adex3.flycast.com/server/socket/127.0.0.1:2800/ad/VBWorldnet/VBAPI/' + my_random + '"></A>');
+// -->
+</SCRIPT>
+</CENTER>
+<!-- End Adslot1 -->
+
+<HR>
+
+<H1>MOUSEINPUT Structure</H1>
+
+<P><PRE><CODE class="type">Type MOUSEINPUT
+  dx As Long
+  dy As Long
+  mouseData As Long
+  dwFlags As Long
+  time As Long
+  dwExtraInfo As Long
+End Type</CODE></PRE></P>
+
+<H2>Description &amp; Usage</H2>
+<P>The <B>MOUSEINPUT</B> structure holds information about a mouse input event.  The various data members identify the nature of the input.</P>
+
+<H2>Visual Basic-Specific Issues</H2>
+<P>None.</P>
+
+<H2>Data Members</H2>
+<P><DL>
+<DT><VAR>dx</VAR><DD>Specifies either the x-coordinate of absolute mouse movement or the amount of relative movement along the x-axis.  For relative motion, positive values move right and negative values move left.
+<DT><VAR>dy</VAR><DD>Specifies either the y-coordinate of absolute mouse movement or the amount of relative movement along the y-axis.  For relative motion, positive values move down and negative values move up.
+<DT><VAR>mouseData</VAR><DD><B>Windows NT, 2000:</B> If <VAR>dwFlags</VAR> contains MOUSEEVENTF_WHEEL, this specifies the amount of wheel movement, in integer multiples of WHEEL_DATA.  Positive values mean forward (away) rotation, and negative values mean backwards (toward) rotation.  <B>Windows 2000:</B> If <VAR>dwFlags</VAR> contains either MOUSEEVENTF_XDOWN or MOUSEEVENTF_XUP, this is a combination of the following flags specifying which X buttons have been pressed or released:
+<DL>
+<DT>XBUTTON1<DD>The first X button was pressed or released.
+<DT>XBUTTON2<DD>The second X button was pressed or released.
+</DL>
+<DT><VAR>dwFlags</VAR><DD>A combination of the following flags specifying which mouse input information the event describes.  Only specify button status information for those which have changed.  Note that scroll wheel movement and X button status cannot be simultaneously specified because they both use the <VAR>mouseData</VAR> data member.
+<DL>
+<DT>MOUSEEVENTF_ABSOLUTE<DD>The <VAR>dx</VAR> and <VAR>dy</VAR> data members contain absolute mouse coordinates.  In the coordinate system used by the function, the screen's upper-left corner has coordinates (0,0) and the lower-right corner has coordinates (65535,65535), regardless of the actual screen size.  If this flag is not set, <VAR>dx</VAR> and <VAR>dy</VAR> contain relative coordinates, whose actual amount of movement depends on the current mouse speed and acceleration settings.
+<DT>MOUSEEVENTF_LEFTDOWN<DD>The left button was pressed.
+<DT>MOUSEEVENTF_LEFTUP<DD>The left button was released.
+<DT>MOUSEEVENTF_MIDDLEDOWN<DD>The middle button was pressed.
+<DT>MOUSEEVENTF_MIDDLEUP<DD>The middle button was released.
+<DT>MOUSEEVENTF_MOVE<DD>The mouse moved.  The <VAR>dx</VAR> and <VAR>dy</VAR> data members specify the amount or location of the movement.
+<DT>MOUSEEVENTF_RIGHTDOWN<DD>The right button was pressed.
+<DT>MOUSEEVENTF_RIGHTUP<DD>The right button was released.
+<DT>MOUSEEVENTF_WHEEL<DD><B>Windows NT, 2000:</B> The scroll wheel has moved.  The <VAR>dwData</VAR> data member specifies the amount of movement.
+<DT>MOUSEEVENTF_XDOWN<DD><B>Windows 2000:</B> An X button was pressed.  The <VAR>dwData</VAR> parameter identifies which X buttons.
+<DT>MOUSEEVENTF_XUP<DD><B>Windows 2000:</B> An X button was released.  The <VAR>dwData</VAR> parameter identifies which X buttons.
+</DL>
+<DT><VAR>time</VAR><DD>The time stamp of the mouse input event, in milliseconds.  If this is 0, the system provides a time stamp.
+<DT><VAR>dwExtraInfo</VAR><DD>An additional 32-bit value associated with the mouse event.
+</DL></P>
+
+<H2>Constant Definitions</H2>
+<P><PRE><CODE class="const">Const MOUSEEVENTF_ABSOLUTE = &amp;H8000
+Const MOUSEEVENTF_LEFTDOWN = &amp;H2
+Const MOUSEEVENTF_LEFTUP = &amp;H4
+Const MOUSEEVENTF_MIDDLEDOWN = &amp;H20
+Const MOUSEEVENTF_MIDDLEUP = &amp;H40
+Const MOUSEEVENTF_MOVE = &amp;H1
+Const MOUSEEVENTF_RIGHTDOWN = &amp;H8
+Const MOUSEEVENTF_RIGHTUP = &amp;H10
+Const MOUSEEVENTF_WHEEL = &amp;H80
+Const MOUSEEVENTF_XDOWN = &amp;H100
+Const MOUSEEVENTF_XUP = &amp;H200
+Const WHEEL_DELTA = 120
+Const XBUTTON1 = &amp;H1
+Const XBUTTON2 = &amp;H2</CODE></PRE></P>
+
+<H2>Used By</H2>
+<P><A href="input_type.html" tppabs="http://www.vbapi.com/ref/i/input_type.html">INPUT_TYPE</A></P>
+
+<P><A href="structa.html" tppabs="http://www.vbapi.com/ref/structa.html">Go back to the alphabetical Structure listing.</A><BR>
+<A href="index.html" tppabs="http://www.vbapi.com/ref/index.html">Go back to the Reference section index.</A></P>
+
+<HR>
+
+<P>
+<B>Last Modified:</B> August 11, 1999<BR>
+This page is copyright &copy; 1999 Paul Kuliniewicz.  
+<A href="copyrite.html" tppabs="http://www.vbapi.com/copyrite.html" rel="copyright">Copyright Information</A>  <B>Revised October 29, 2000</B><BR>
+
+<A href="index-1.html" tppabs="http://www.vbapi.com/index.html">Go back to the Windows API Guide home page.</A><BR>
+E-mail: <A href="javascript:if(confirm('http://www.vbapi.com/email.html  \n\nThis file was not retrieved by Teleport Pro, because it is addressed on a domain or path outside the boundaries set for its Starting Address.  \n\nDo you want to open it from the server?'))window.location='http://www.vbapi.com/email.html'" tppabs="http://www.vbapi.com/email.html">vbapi@vbapi.com</A>  <A href="javascript:if(confirm('http://www.vbapi.com/email.html  \n\nThis file was not retrieved by Teleport Pro, because it is addressed on a domain or path outside the boundaries set for its Starting Address.  \n\nDo you want to open it from the server?'))window.location='http://www.vbapi.com/email.html#secure'" tppabs="http://www.vbapi.com/email.html#secure">Send Encrypted E-Mail</A><BR>
+This page is at <A href="mouseinput.html" tppabs="http://www.vbapi.com/ref/m/mouseinput.html">http://www.vbapi.com/ref/m/mouseinput.html</A>
+</P>
+</BODY>
+</HTML>

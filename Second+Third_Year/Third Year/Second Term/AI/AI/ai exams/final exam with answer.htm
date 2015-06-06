@@ -1,0 +1,311 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!-- saved from url=(0039)http://catarina.usc.edu/yaxu/551/1.html -->
+<HTML><HEAD><TITLE>CSCI551 1996 Spring Final Exam: Sample ANSWER</TITLE>
+<META http-equiv=Content-Type content="text/html; charset=windows-1256">
+<META content="MSHTML 6.00.2900.2180" name=GENERATOR></HEAD>
+<BODY>
+<CENTER>
+<H1>Sample Answer to CSCI 551 Final Exam (Spring' 96)</H1>
+<P>Written By <I>Ya Xu</I>, 04/10/1996<BR><A 
+href="mailto:yaxu@catarina.usc.edu">
+<ADDRESS>yaxu@usc.edu</ADDRESS></A></CENTER>
+<HR>
+
+<H3>1. Queueing <BR>Flow 1 has four back to back packets of length p, Flow 1 one 
+packet of size 2 *p, followed by a one packet time delay followed by another 
+packet of size 2*P, Flow 3 has one packet of size 4*P. Assume all the incoming 
+and outcoming flows have rate P, flow1, flow2 and flow 3 come right after 
+another
+<P>a)Given the folllowing three flows feeding into a fair queueing switch, show 
+how the actual delays differ from the ideal delays that would have been 
+experienced using Bit by bit round robin. <BR>b) Given the above three flow 
+sharing a single FIFO queue, show the delays tht would be experienced by each 
+flow. </H3><PRE>(a) Suppose the first packet of Flow 1, 2, 3 arrives in the same time.
+
+   For bit-by-bit robin: Flow 1 and Flow 4 will be sent out in the same
+			 time, Flow 2 is sent out one packet time delay
+			 after them
+
+   For actual FQ,(suppose Pi = 1)
+
+   Flow 1: F1 = 1, F2 = 2, F3 = 3, F4 = 4
+   Flow 2: F1 = 2, F2 = 5
+   Flow 3: F1 = 4
+
+   The order of sending is: first packet of flow 1, 1st packet of flow 2,
+   2nd packet of flow 1, 3nd packet of flow 1, 1th packet of flow 3, 
+   4th packet of flow 1, 2nd packet of flow 2.
+
+b) Suppose the first packet of Flow 1, 2, 3 arrives in the same time
+    The order of sending: 1st packet of flow 1, 1st packet of flow 2,
+    1st packet of flow 3, 2nd packet of flow 1, 2nd packet of flow 2,
+    3nd packet of flow 1, 4th packet of flow 1
+</PRE>
+<P>
+<H3>2.Congestion control <BR>a) Give an example for the following topology of 
+the implication of using <BR>i)additive increase and additive decrease <BR>ii) 
+multiplicative increase and multiplicative decrease <BR>10Mbps 
+Ethernet--------router -------1.54Mbps Longline---------router--- -------10Mbps 
+Ethernet <BR>b)In slow stars phase of TCP congestion control the window is 
+increased by 1, in steady state the window is increased by 1/Cwnd. Describe the 
+resulting behavior and justify it. <BR>c)Compare the use of TCP congestion 
+control and Random Early Drop gateways to the use of DECbit scheme. Address 
+response to congestion, fairness, protocol complexity, and other issues you 
+think are important. <BR></H3>(a)
+<LI>For the hosts on the 10Mbps Ethernet, they should use additive increase/ 
+multiplicative decrease. The reason is: when the data goes to the low bandwidth 
+1.54Mbps link, the routers need many buffers, additive increase/multiplicative 
+decrease can avoid congestion on the router. 
+<P></P>
+<LI>For the hosts on the 1.54Mbps link, they should use multiplicative increase, 
+additive decrease. Because the routers do not need many buffers, the 
+multiplicative increase/additive decrease can improve the throughput when 
+congestion seldom happens. 
+<P>(b)</P>
+<LI>The congestion window size increases exponentially until congestion occurs. 
+<LI>When congestion occurs (indicated by a timeout or the reception of duplicate 
+ACKs), one half of the current window is saved in ssthresh (at least two).
+<LI>When new data is ACKed by the other end, we increase congestion window 
+(cwnd): If cwnd =&lt; ssthresh, we are doing the slow start; otherwise we are 
+doing congestion avoidance. 
+<LI>Slow start continues until we are halfway to where we were when congestion 
+occurred, and then congestion avoidance takes over. 
+<LI>Slow start dicates that cwnd start at one segment, and be incremented by one 
+segment every time an ACK is received. 
+<LI>Congestion avoidance dictates that cwnd be incremented by 1/cwnd, each time 
+an ACK is received. This is an additive increase. We want to increase cwnd by at 
+most one segment each round-trip time (regardless how many ACKs are received in 
+that RTT). 
+<P>(c) A problem with end to end congestion control schemes is </P>
+<LI>the presence of congestion is detected through the effects of congestion, 
+e.g., packet loss, increased round trip time, changes in the throughput 
+gradient, etc., rather than the congestion itself e.g. overflowing queues. There 
+can also be a problem with fairness and non-compliant sources. 
+<LI>It seems logical then to place the congestion control mechanism at the 
+location of the congestion, i.e., the gateways. The gateway knows how congested 
+it is and can notify sources explicitly, either by marking a congestion bit, or 
+by dropping packets. 
+<LI>The main drawback to marking packets with a congestion bit, as opposed to 
+simply dropping them, is that TCP makes no provision for it currently. 
+<P></P>
+<LI>One method for gateways to notify the source of congestion is to drop 
+packets. This is done automatically when the queue is full. The default 
+algorithm is when the queue is full drop the any new packets.
+<LI>Early Random Drop gateways are a slight improvement over Tail Drop and 
+Random Drop in that they drop incoming packets with a fixed probability whenever 
+the queue size exceeds a certain threshold. 
+<P></P>
+<LI>In the DECbit scheme the gateway calculates the average queue length over a 
+period of time and marking every packet (rather than dropping it) if the average 
+is greater than 1. 
+<LI>The sources then decrease their window size multiplicatively once every two 
+round trip times if at least half of the packets in the last window were marked, 
+otherwise the window is increased additively. 
+<P></P>
+<LI>The RED gateway showed higher throughput for smaller buffer sizes than the 
+other algorithms. 
+<LI>It was also shown that RED was not as biased against burst traffic as were 
+Tail Drop or Random Drop. 
+<P></P>
+<LI>When RED is implemented to drop packets rather than mark them, it handles 
+misbehaving sources well. If a source is using more than its fair share of the 
+bandwidth, then by the probabilistic function, more of its packets will be 
+dropped. However if the gateway marks the packets, it is up to the sources to 
+comply. 
+<P>
+<H3>3. Integrated Services <BR>a) Virtual Clock <BR>1) Address the affect of the 
+Averaging interval on the behavior of Virtual Clock, give an example with 
+different Averaging Intervals to illustrate your answer. <BR>2)Does Virtual 
+Clock implement FQ or WFQ and why? 
+<P>b)CSZ <BR>For the following three flows feeding into a CSZ router, <BR>Flow 
+1: 1 packet of size P, followed by 1 idle time of length P, followed by 1 packet 
+of P... <BR>Flow 2: 2 packets of size P back to back, followed by idle of time 
+2P,... <BR>Flow 3: 4 packets of size P back to back, followed by idle of time 4P 
+Will the end point experience ? if: <BR>aa) They use prdictive service and are 
+all in the same service class. <BR>bb)They use predictive service and each is in 
+a different class from the other <BR>cc) They each use guaranteed service. 
+<BR>dd) They each use best effort service. 
+<P>c) What kind of buffering and playout should the end system do if these are 
+approaches appropriate for: <BR>aa) real time interactive Audio flows 
+<BR>bb)rebroadcast of a seminar (audio and video)? <BR></H3>(a) 
+<P>(1) </P>
+<LI>1/AR =&lt; AI =&lt; total flow duration 
+<LI>If AI is set to its lower bound, then the source would be transmitting at a 
+constant rate, much as in a circuit-switch netword. 
+<LI>On the other hand, if AI is as large as the total duration of the flow, the 
+source would be allowed to transmit data in an arbitrary manner, just as in a 
+purely connectionless network. 
+<P>(2) </P>
+<LI>Vclock is similar to WFQ. The reason is the different VirtualTick in fact 
+assign different "weight" to different queue. 
+<P>(b) 
+<P>aa) </P>
+<LI>This implies that they are all satisfied with the same delay jitter; thus 
+they all have the same play-back point and thus the same deadline. Every flow 
+will have chance to get jitter but the possiblity is less. 
+<P>bb)</P>
+<LI>There are going to have jitter. But the higher priority class will have less 
+chance to get jitter. 
+<P>cc)</P>
+<LI>No jitter. They all get guarantee from the network. dd)
+<LI>Jitter. No guarantee from the network. 
+<P>c) aa)</P>
+<LI>No buffer and play-back point. Because each packet is sent to the user 
+whenever it arrives. 
+<P>bb)</P>
+<LI>This is a play-back application. The end system buffers to store all packets 
+which arrive before the play-back point. 
+<P>
+<H3>4. Admission Control and RSVP
+<P>a) How do each of the following affect measurement based admission control 
+for CSZ: <BR>i) T, the measurement interval <BR>ii) If flows vary a lot in their 
+trafic pattern from one T internal to another. <BR>iii)If flows are 
+synchronized(ie multiple video streams experience a scene change at the same 
+time) 
+<P>b) Justify each of the following RSVP Design choices <BR>i) Receiver 
+initiated reservation <BR>ii)Reservation style that supports shared reservations 
+<BR>iii)Soft state refreshing <BR>iv)Separation of reservation from routing. 
+</H3>
+<P>(a) 
+<P>(1) T controls the adaptability of measurement mechanism. Smaller T means 
+more adaptability, but larger T results in greater stability. 
+<P>(2) Lots of overhead but better utilization 
+<P>(3) Good utilization without much overhead 
+<P>(b) 
+<P>(1)</P>
+<LI>Most of multimedia applications have more receivers than senders. Also, 
+receivers may have different requirements. For example, one receiver might want 
+to receive data from only one sender, while others might wish to receive data 
+from all senders. Rather than have the senders keep track of a potentially large 
+number of receivers, it makes more sense to let receivers keep track of their 
+own needs, This is receiver-oriented approach adopted by RSVP. 
+<P>(2)</P>
+<LI>With multicast, it is possible that the resources reserved upstream of this 
+point are adequate to serve multiple receivers.
+<LI>If the new request has more loose requirement than old one, it may use old 
+reservation then no new reservation is required.
+<LI>If the new request has more rigid requirement, the router first see if it 
+can accept the request, if it can, the old reservation is released and new 
+reservation is created. In general, reservations can be merged in this way to 
+meet the needs of all receivers downstream of the merge point. 
+<P>(3) </P>
+<LI>RSVP should not detract from the robustness in today's connectionless 
+networks. It is possible for routers to crash and reboot and links to go up and 
+down while end-to-end connection is still maintained. 
+<LI>RSVP tries to maintain this robustness by using the idea of soft state in 
+the router. Soft state does not need to be explicitly deleted when it is no 
+longer needed. Instead, it times out after some fairly short period if it is not 
+periodically refreshed. 
+<P>(4)It is very straightforward to increase or decrease the level of resource 
+allocation provided to a receiver. 
+<P>
+<H3>5. Traffic Shaping 
+<P>a)Show the outputs of the following flow shaped by a leaky bucket(r=P) and a 
+token bucket. Flow has a burst of 10 back packets of length P, followed by idle 
+of 20 packet times. Leaky bucket and Token bucket are described by usual 
+parameters where the token bucket size is 5*P <BR>b)What are the advantages and 
+disadvantages and illustrating examples for each of the following approaches <PRE>                          Token bucket                         Token bucket                      Measurement
+                           at edges                                 at each node                        based at nodes
+Adv.s
+
+Disadv.s
+
+Best and
+Worst case
+Examples
+</PRE></H3>
+<P><PRE>(a) Suppose that 1 packet is sent per time unit.
+
+For leaky bucket, r = peak rate, therefore all 10 packets are sent out continuously, 5 tokens
+are left in the bucket in the end.
+
+For token bucket, r = average rate = 1/3 packet/per time unit. the output is:
+
+time		1  2  3  4  5  6  7  8  9  ... 27 28 29 30 ...
+
+sent packet:          1        2        3  ...  9       10
+5 tokens are left in the bucket in the end.
+
+(b)
+				ADV				DISADV
+Measurement 
+based at nodes		    1. better link utilization		1. higher risk of overhead
+			    2. more effective in using
+			       bandwidth
+
+Token bucket		    1. ensure a host does not		1. no control on network    
+at edges		   violate its promised traffic		   nodes.
+			   characteristics
+
+Token bucket		  1. Effective on existing flow		1. not flexible for new flow
+at each modes		  2. Simple				2. possible bad utilization
+</PRE>
+<HR>
+<PRE>Example				BEST				WORST
+
+Measurement		flows are synchronized		flows vary a lot in traffic pattern
+based at nodes
+
+Token bucket		  no other flow between		many other flows exist between
+at edges		  edges				edges
+
+Token bucket		Fixed pattern flow		varing pattern flows
+at each modes
+</PRE>
+<H3>6. Reliable Multicast <BR>a) Give an examples of how multicasting the reply 
+to a request-for-retransmission performs, where each example illustratees one of 
+the following two situations: <BR>i)the advantages of using mcast for replies 
+<BR>ii)the disadvantages of using mcast for replies <BR>b)Randomization is used 
+in sending both requests and replies. Describe how it is used and what purpose 
+it serves and what, if any, disadvantages/costs it introduces. <BR></H3>
+<P>(a) </P>
+<LI>The advantage is that the receiver(s) who request(s) retransmission might 
+get quick reply from its(their) neighbors instead of always going to the sender. 
+
+<LI>The disadvantage is the multicast for reply brings overhead to the network. 
+<LI>Suppression should be used both in the requester and in the replier. 
+<P>(b) </P>
+<LI>Randomization is used for suppressing the overhead. 
+<LI>When the requesters want to send retransmission request, they first wait a 
+random time, then send out the request. If the request get the retransmission 
+request that it wants to send during the period of random wait, it must stop its 
+retransmission request action. 
+<LI>The same process is also used in the repliers. 
+<LI>The advantage is suppressing the overhead. 
+<LI>The disadvantage is that the response time become longer. 
+<P>
+<H3>7.Security 
+<P>Suppose you want to use a needham-schroeder authenticatin mechanism to 
+authenticatea receiver host to its first hop router before acceptingan RSVP 
+reservation request. <BR>a)Describe the exchange between the host and router and 
+what the two nodes need to share in terms of keys or use of an A server. <BR>b) 
+would you recommend this approach for use between each Receiver and Each node 
+along the path to the source? What would it achieve and at what cost? 
+<BR>c)Would you recommend this approach for use between each pair of 
+neighbouring codes? What would it acheve? <PRE></PRE></H3>
+<P>(a) 
+<P></P>
+<LI>The host first sends a message to server S that identifies both itself and 
+router. 
+<LI>The server then generates a timestamp T, a lifetime L, and a new session key 
+K. 
+<LI>Server S then replies to host with 2 part message: encrypted T,L,K, id for 
+the host using the key sharing with the host; encrypted T,L,K, if for the router 
+using the key sharing with the router. 
+<LI>When the host gets the message, it can decrypt the first part but not the 
+second part. The host simply pass the second part to the router, along with the 
+encryption of the host and T using the new session key K. 
+<LI>Finally, the router decrypts the part of message from the host that was 
+originally encrypted by the S, and recovers T,K, and the host. It uses K to 
+decrypt the half of the message encrypted by A, and replies with message that 
+encrypts T+1 using K. 
+<LI>Now the router and the host can communicate with each other using the shared 
+secret Key K to ensure privacy. 
+<P>(b) </P>
+<LI>Yes. The host can be sure about who is the router. 
+<LI>High cost. 
+<P>(c)</P>
+<LI>This should be recommended because each neighboring nodes can authenticate 
+each other before the RESV. 
+<HR>
+</LI></BODY></HTML>

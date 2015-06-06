@@ -1,0 +1,113 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+<HTML lang="en-us">
+<HEAD>
+<TITLE>Windows API Guide: RemoveProp Function</TITLE>
+<META content="vbapi@vbapi.com" name="author">
+<META content="Information about the RemoveProp function in the Windows API, geared towards the Visual Basic user." name="description">
+<META content="Kuliniewicz,Windows,Windows 95,Windows NT,Windows 98,Windows CE,Windows 2000,API,Application Programming Interface,Programming,Visual Basic,Basic,VB,RemoveProp" name="keywords">
+<META content="Omicron HTML Editor" name="generator">
+<META content="Thu, 23 Dec 1999 18:13:00 GMT" http-equiv="Last-Modified">
+<LINK href="default.css" tppabs="http://www.vbapi.com/css/default.css" rel="stylesheet" type="text/css">
+<LINK href="index-1.html" tppabs="http://www.vbapi.com/index.html" rel="home">
+
+<LINK href="glossary.html" tppabs="http://www.vbapi.com/ref/glossary.html" rel="glossary">
+<LINK href="copyrite.html" tppabs="http://www.vbapi.com/copyrite.html" rel="copyright">
+</HEAD>
+<BODY>
+
+<!-- Begin Adslot1 -->
+<CENTER>
+<SCRIPT language="JAVASCRIPT">
+<!-- hide from older browsers
+now = new Date();
+my_random = now.getTime();
+document.write('<A href="http://adex3.flycast.com/server/socket/127.0.0.1:2800/click/VBWorldnet/VBAPI/' + my_random + '">');
+document.write('<IMG width="468" height="60" border="1" src="http://adex3.flycast.com/server/socket/127.0.0.1:2800/ad/VBWorldnet/VBAPI/' + my_random + '"></A>');
+// -->
+</SCRIPT>
+</CENTER>
+<!-- End Adslot1 -->
+
+<HR>
+
+<H1>RemoveProp Function</H1>
+
+<P><CODE class="declare">Declare Function RemoveProp Lib "user32.dll" Alias "RemovePropA" (ByVal hWnd As Long, ByVal lpString As String) As Long</CODE></P>
+
+<H2>Platforms</H2>
+<P><UL>
+<LI><B>Windows 95:</B> Supported.
+<LI><B>Windows 98:</B> Supported.
+<LI><B>Windows NT:</B> Requires Windows NT 3.1 or later.
+<LI><B>Windows 2000:</B> Supported.
+<LI><B>Windows CE:</B> Not Supported.
+</UL></P>
+
+<H2>Description &amp; Usage</H2>
+<P><B>RemoveProp</B> removes a <A class="def" href="glossary.html#windowproperty" tppabs="http://www.vbapi.com/ref/glossary.html#windowproperty" rel="glossary">window property</A> from a window.  This property must have been previously set using the <A href="setprop.html" tppabs="http://www.vbapi.com/ref/s/setprop.html">SetProp</A> function.  Your program must remove all window properties it creates before the window they are attached to closes.  However, never remove any window properties not created by your program.  Although this function deletes the property itself, it does not affect the data referenced by the property in any way.</P>
+
+<H2>Return Value</H2>
+<P>If an error occured, the function returns 0.  If successful, the function returns a <A class="def" href="glossary.html#handle" tppabs="http://www.vbapi.com/ref/glossary.html#handle" rel="glossary">handle</A> to the data which was attached to the property.  The program is then responsible for deallocating this data, if necessary.</P>
+
+<H2>Visual Basic-Specific Issues</H2>
+<P>None.</P>
+
+<H2>Parameters</H2>
+<P><DL>
+<DT><VAR>hWnd</VAR><DD>A handle to remove one of the window properties of.
+<DT><VAR>lpString</VAR><DD>The name of the window property to remove.
+</DL></P>
+
+<H2>Example</H2>
+<P><PRE><CODE class="example"><SPAN class="com">' This code is licensed according to the terms and conditions listed <A href="copyrite.html#license" tppabs="http://www.vbapi.com/copyrite.html#license" rel="copyright">here</A>.</SPAN>
+
+' Set the "LookupFile" property of window Form1 to a string.
+' This example also shows how to remove the property.
+Dim hStr As Long, pStr As Long  ' handle and pointer to the string
+Dim thevalue As String  ' the string referenced by the handle
+Dim retval As Long  ' return value
+
+' Set the value of the string (this could be anything, really).
+thevalue = "C:\Icons\default.ico"
+' Create a memory block...
+hStr = <A href="globalalloc.html" tppabs="http://www.vbapi.com/ref/g/globalalloc.html">GlobalAlloc</A>(GMEM_MOVEABLE Or GMEM_ZEROINIT, Len(thevalue))
+' ...and copy the string into it.
+pStr = <A href="globallock.html" tppabs="http://www.vbapi.com/ref/g/globallock.html">GlobalLock</A>(hStr)  ' get a pointer to the block
+retval = <A href="lstrcpy.html" tppabs="http://www.vbapi.com/ref/l/lstrcpy.html">lstrcpy</A>(pStr, text)  ' copy the string
+retval = <A href="globalunlock.html" tppabs="http://www.vbapi.com/ref/g/globalunlock.html">GlobalUnlock</A>(hStr)  ' release the pointer
+
+' The handle hStr now refers to a memory block holding the string.  Set
+' the "LookupFile" property to this memory block.
+retval = <A href="setprop.html" tppabs="http://www.vbapi.com/ref/s/setprop.html">SetProp</A>(Form1.hWnd, "LookupFile", hStr)
+' Note how we cannot yet free the memory block since it is still in use.
+
+' *** INSERT OTHER CODE (such as the <A href="getprop.html" tppabs="http://www.vbapi.com/ref/g/getprop.html">GetProp</A> example) HERE ***
+
+' The following code releases the "LookupFile" property and frees
+' the memory block to which it points.
+' (this code assumes the same Dims as above)
+hStr = <B>RemoveProp</B>(Form1.hWnd, "LookupFile")
+' The property is gone; now free the memory block.
+retval = <A href="globalfree.html" tppabs="http://www.vbapi.com/ref/g/globalfree.html">GlobalFree</A>(hStr)</CODE></PRE></P>
+
+<H2>See Also</H2>
+<P><A href="setprop.html" tppabs="http://www.vbapi.com/ref/s/setprop.html">SetProp</A></P>
+
+<H2>Category</H2>
+<P><A href="funcc.html#windowproperties" tppabs="http://www.vbapi.com/ref/funcc.html#windowproperties">Window Properties</A></P>
+
+<P><A href="funca.html" tppabs="http://www.vbapi.com/ref/funca.html">Go back to the alphabetical Function listing.</A><BR>
+<A href="index.html" tppabs="http://www.vbapi.com/ref/index.html">Go back to the Reference section index.</A></P>
+
+<HR>
+
+<P><B>Last Modified:</B> December 23, 1999<BR>
+This page is copyright &copy; 1999 Paul Kuliniewicz.  
+<A href="copyrite.html" tppabs="http://www.vbapi.com/copyrite.html" rel="copyright">Copyright Information</A>  <B>Revised October 29, 2000</B><BR>
+
+<A href="index-1.html" tppabs="http://www.vbapi.com/index.html">Go back to the Windows API Guide home page.</A><BR>
+E-mail: <A href="javascript:if(confirm('http://www.vbapi.com/email.html  \n\nThis file was not retrieved by Teleport Pro, because it is addressed on a domain or path outside the boundaries set for its Starting Address.  \n\nDo you want to open it from the server?'))window.location='http://www.vbapi.com/email.html'" tppabs="http://www.vbapi.com/email.html">vbapi@vbapi.com</A>  <A href="javascript:if(confirm('http://www.vbapi.com/email.html  \n\nThis file was not retrieved by Teleport Pro, because it is addressed on a domain or path outside the boundaries set for its Starting Address.  \n\nDo you want to open it from the server?'))window.location='http://www.vbapi.com/email.html#secure'" tppabs="http://www.vbapi.com/email.html#secure">Send Encrypted E-Mail</A><BR>
+This page is at <A href="removeprop.html" tppabs="http://www.vbapi.com/ref/r/removeprop.html">http://www.vbapi.com/ref/r/removeprop.html</A>
+</P>
+</BODY>
+</HTML>

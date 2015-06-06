@@ -1,0 +1,242 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+<HTML lang="en-us">
+<HEAD>
+<TITLE>Windows API Guide: GetSystemMenu Function</TITLE>
+<META content="vbapi@vbapi.com" name="author">
+<META content="Information about the GetSystemMenu function in the Windows API, geared towards the Visual Basic user." name="description">
+<META content="Kuliniewicz,Windows,Windows 95,Windows NT,Windows 98,Windows CE,Windows 2000,API,Application Programming Interface,Programming,Visual Basic,Basic,VB,GetSystemMenu" name="keywords">
+<META content="Omicron HTML Editor" name="generator">
+<LINK href="default.css" tppabs="http://www.vbapi.com/css/default.css" rel="stylesheet" type="text/css">
+<LINK href="index-1.html" tppabs="http://www.vbapi.com/index.html" rel="home">
+<LINK href="glossary.html" tppabs="http://www.vbapi.com/ref/glossary.html" rel="glossary">
+<LINK href="copyrite.html" tppabs="http://www.vbapi.com/copyrite.html" rel="copyright">
+</HEAD>
+<BODY>
+
+<!-- Begin Adslot1 -->
+<CENTER>
+<SCRIPT language="JAVASCRIPT">
+<!-- hide from older browsers
+now = new Date();
+my_random = now.getTime();
+document.write('<A href="http://adex3.flycast.com/server/socket/127.0.0.1:2800/click/VBWorldnet/VBAPI/' + my_random + '">');
+document.write('<IMG width="468" height="60" border="1" src="http://adex3.flycast.com/server/socket/127.0.0.1:2800/ad/VBWorldnet/VBAPI/' + my_random + '"></A>');
+// -->
+</SCRIPT>
+</CENTER>
+<!-- End Adslot1 -->
+
+<HR>
+
+<H1>GetSystemMenu Function</H1>
+
+<P><CODE class="declare"><SPAN class="kw">Declare Function</SPAN> GetSystemMenu <SPAN class="kw">Lib</SPAN> "user32.dll" (<SPAN class="kw">ByVal</SPAN> hWnd <SPAN class="kw">As Long</SPAN>, <SPAN class="kw">ByVal</SPAN> bRevert <SPAN class="kw">As Long</SPAN>) <SPAN class="kw">As Long</SPAN></CODE></P>
+
+<H2>Platforms</H2>
+<P><UL>
+<LI><B>Windows 95:</B> Supported.
+<LI><B>Windows 98:</B> Supported.
+<LI><B>Windows NT:</B> Requires Windows NT 3.1 or later.
+<LI><B>Windows 2000:</B> Supported.
+<LI><B>Windows CE:</B> Requires Windows CE 1.0 or later.
+</UL></P>
+
+<H2>Description &amp; Usage</H2>
+<P><B>GetSystemMenu</B> obtains a <A class="def" href="glossary.html#handle" tppabs="http://www.vbapi.com/ref/glossary.html#handle" rel="glossary">handle</A> to a window's system menu (also known as its control menu).  This menu is what appears when the application icon on the title bar is clicked, or when the title bar itself is right-clicked.  Once you get a handle to a window's system menu, you can use the other menu functions to add or remove items from it.  However, note that all items on a system menu send the <A href="wm_syscommand.html" tppabs="http://www.vbapi.com/ref/w/wm_syscommand.html">WM_SYSCOMMAND</A> message to the parent window instead of the usual <A href="wm_command.html" tppabs="http://www.vbapi.com/ref/w/wm_command.html">WM_COMMAND</A> message.  Alternately, <B>GetSystemMenu</B> could also be used to restore the system menu to its default appearance, removing any modifications done to it.</P>
+
+<H2>Return Value</H2>
+<P>If the <VAR>bRevert</VAR> parameter is zero, <B>GetSystemMenu</B> returns a handle to the window's system menu.  If <VAR>bRevert</VAR> is nonzero, this function returns 0.</P>
+
+<H2>Visual Basic-Specific Issues</H2>
+<P>None.</P>
+
+<H2>Parameters</H2>
+<P><DL>
+<DT><VAR>hWnd</VAR><DD>A handle to the window to locate the system menu of.
+<DT><VAR>bRevert</VAR><DD>If zero, the function obtains a handle to the window's system menu.  If nonzero, the function instead reverts the system menu back to its default appearance.
+</DL></P>
+
+<H2>Example</H2>
+<P><PRE><CODE class="example"><SPAN class="com">' This code is licensed according to the terms and conditions listed <A href="copyrite.html#license" tppabs="http://www.vbapi.com/copyrite.html#license" rel="copyright">here</A>.</SPAN>
+
+<SPAN class="com">' Declarations and such needed for the example:
+' (Copy them to the (declarations) section of a module.)
+' There's quite a few declarations for this example, but it's worth it!</SPAN>
+<SPAN class="kw">Public Declare Function</SPAN> <B>GetSystemMenu</B> <SPAN class="kw">Lib</SPAN> "user32.dll" (<SPAN class="kw">ByVal</SPAN> hWnd <SPAN class="kw">As Long</SPAN>, <SPAN class="kw">ByVal</SPAN> bRevert _
+	<SPAN class="kw">As Long</SPAN>) <SPAN class="kw">As Long</SPAN>
+<SPAN class="kw">Public Declare Function</SPAN> <A href="getmenuitemcount.html" tppabs="http://www.vbapi.com/ref/g/getmenuitemcount.html">GetMenuItemCount</A> <SPAN class="kw">Lib</SPAN> "user32.dll" (<SPAN class="kw">ByVal</SPAN> hMenu <SPAN class="kw">As Long</SPAN>) <SPAN class="kw">As Long</SPAN>
+<SPAN class="kw">Public Type</SPAN> <A href="menuiteminfo.html" tppabs="http://www.vbapi.com/ref/m/menuiteminfo.html">MENUITEMINFO</A>
+	cbSize <SPAN class="kw">As Long</SPAN>
+	fMask <SPAN class="kw">As Long</SPAN>
+	fType <SPAN class="kw">As Long</SPAN>
+	fState <SPAN class="kw">As Long</SPAN>
+	wID <SPAN class="kw">As Long</SPAN>
+	hSubMenu <SPAN class="kw">As Long</SPAN>
+	hbmpChecked <SPAN class="kw">As Long</SPAN>
+	hbmpUnchecked <SPAN class="kw">As Long</SPAN>
+	dwItemData <SPAN class="kw">As Long</SPAN>
+	dwTypeData <SPAN class="kw">As String</SPAN>
+	cch <SPAN class="kw">As Long</SPAN>
+<SPAN class="kw">End Type</SPAN>
+<SPAN class="kw">Public Const</SPAN> MIIM_STATE = &amp;H1
+<SPAN class="kw">Public Const</SPAN> MIIM_ID = &amp;H2
+<SPAN class="kw">Public Const</SPAN> MIIM_TYPE = &amp;H10
+<SPAN class="kw">Public Const</SPAN> MFT_SEPARATOR = &amp;H800
+<SPAN class="kw">Public Const</SPAN> MFT_STRING = &amp;H0
+<SPAN class="kw">Public Const</SPAN> MFS_ENABLED = &amp;H0
+<SPAN class="kw">Public Const</SPAN> MFS_CHECKED = &amp;H8
+<SPAN class="kw">Public Declare Function</SPAN> <A href="insertmenuitem.html" tppabs="http://www.vbapi.com/ref/i/insertmenuitem.html">InsertMenuItem</A> <SPAN class="kw">Lib</SPAN> "user32.dll" <SPAN class="kw">Alias</SPAN> "InsertMenuItemA" (<SPAN class="kw">ByVal</SPAN> _
+	hMenu <SPAN class="kw">As Long</SPAN>, <SPAN class="kw">ByVal</SPAN> uItem <SPAN class="kw">As Long</SPAN>, <SPAN class="kw">ByVal</SPAN> fByPosition <SPAN class="kw">As Long</SPAN>, lpmii _
+	<SPAN class="kw">As</SPAN> <A href="menuiteminfo.html" tppabs="http://www.vbapi.com/ref/m/menuiteminfo.html">MENUITEMINFO</A>) <SPAN class="kw">As Long</SPAN>
+<SPAN class="kw">Public Declare Function</SPAN> <A href="setmenuiteminfo.html" tppabs="http://www.vbapi.com/ref/s/setmenuiteminfo.html">SetMenuItemInfo</A> <SPAN class="kw">Lib</SPAN> "user32.dll" <SPAN class="kw">Alias</SPAN> "SetMenuItemInfoA" (<SPAN class="kw">ByVal</SPAN> _
+	hMenu <SPAN class="kw">As Long</SPAN>, <SPAN class="kw">ByVal</SPAN> uItem <SPAN class="kw">As Long</SPAN>, <SPAN class="kw">ByVal</SPAN> fByPosition <SPAN class="kw">As Long</SPAN>, lpmii _
+	<SPAN class="kw">As</SPAN> <A href="menuiteminfo.html" tppabs="http://www.vbapi.com/ref/m/menuiteminfo.html">MENUITEMINFO</A>) <SPAN class="kw">As Long</SPAN>
+
+<SPAN class="kw">Public Declare Function</SPAN> <A href="setwindowpos.html" tppabs="http://www.vbapi.com/ref/s/setwindowpos.html">SetWindowPos</A> <SPAN class="kw">Lib</SPAN> "user32.dll" (<SPAN class="kw">ByVal</SPAN> hWnd <SPAN class="kw">As Long</SPAN>, <SPAN class="kw">ByVal</SPAN> _
+	hWndInsertAfter <SPAN class="kw">As Long</SPAN>, <SPAN class="kw">ByVal</SPAN> x <SPAN class="kw">As Long</SPAN>, <SPAN class="kw">ByVal</SPAN> y <SPAN class="kw">As Long</SPAN>, <SPAN class="kw">ByVal</SPAN> cx <SPAN class="kw">As Long</SPAN>, <SPAN class="kw">ByVal</SPAN> _
+	cy <SPAN class="kw">As Long</SPAN>, <SPAN class="kw">ByVal</SPAN> wFlags <SPAN class="kw">As Long</SPAN>) <SPAN class="kw">As Long</SPAN>
+<SPAN class="kw">Public Const</SPAN> HWND_TOPMOST = -1
+<SPAN class="kw">Public Const</SPAN> HWND_NOTOPMOST = -2
+<SPAN class="kw">Public Const</SPAN> SWP_NOMOVE = &amp;H2
+<SPAN class="kw">Public Const</SPAN> SWP_NOSIZE = &amp;H1
+<SPAN class="kw">Public Declare Function</SPAN> <A href="setwindowlong.html" tppabs="http://www.vbapi.com/ref/s/setwindowlong.html">SetWindowLong</A> <SPAN class="kw">Lib</SPAN> "user32.dll" <SPAN class="kw">Alias</SPAN> "SetWindowLongA" (<SPAN class="kw">ByVal</SPAN> hWnd _
+	<SPAN class="kw">As Long</SPAN>, <SPAN class="kw">ByVal</SPAN> nIndex <SPAN class="kw">As Long</SPAN>, <SPAN class="kw">ByVal</SPAN> dwNewLong <SPAN class="kw">As Long</SPAN>) <SPAN class="kw">As Long</SPAN>
+<SPAN class="kw">Public Const</SPAN> GWL_WNDPROC = -4
+<SPAN class="kw">Public Declare Function</SPAN> <A href="callwindowproc.html" tppabs="http://www.vbapi.com/ref/c/callwindowproc.html">CallWindowProc</A> <SPAN class="kw">Lib</SPAN> "user32.dll" <SPAN class="kw">Alias</SPAN> "CallWindowProcA" (<SPAN class="kw">ByVal</SPAN> _
+	lpPrevWndFunc <SPAN class="kw">As Long</SPAN>, <SPAN class="kw">ByVal</SPAN> hWnd <SPAN class="kw">As Long</SPAN>, <SPAN class="kw">ByVal</SPAN> Msg <SPAN class="kw">As Long</SPAN>, <SPAN class="kw">ByVal</SPAN> wParam _
+	<SPAN class="kw">As Long</SPAN>, <SPAN class="kw">ByVal</SPAN> lParam <SPAN class="kw">As Long</SPAN>) <SPAN class="kw">As Long</SPAN>
+<SPAN class="kw">Public Const</SPAN> <A href="wm_syscommand.html" tppabs="http://www.vbapi.com/ref/w/wm_syscommand.html">WM_SYSCOMMAND</A> = &amp;H112
+<SPAN class="kw">Public Const</SPAN> <A href="wm_initmenu.html" tppabs="http://www.vbapi.com/ref/w/wm_initmenu.html">WM_INITMENU</A> = &amp;H116
+
+<SPAN class="com">' Add an option to make window Form1 "Always On Top" to the bottom of its system
+' menu.  A check mark appears next to this option when active.  The menu item acts as a toggle.
+' Note how subclassing the window is necessary to process the two messages needed
+' to give the added system menu item its full functionality.</SPAN>
+
+<SPAN class="com">' *** Place the following code in a module. ***</SPAN>
+
+<SPAN class="kw">Public</SPAN> pOldProc <SPAN class="kw">As Long</SPAN>  <SPAN class="com">' pointer to Form1's previous window procedure</SPAN>
+<SPAN class="kw">Public</SPAN> ontop <SPAN class="kw">As Boolean</SPAN>  <SPAN class="com">' identifies if Form1 is always on top or not</SPAN>
+
+<SPAN class="com">' The following function acts as Form1's window procedure to process messages.</SPAN>
+<SPAN class="kw">Public Function</SPAN> <A href="windowproc.html" tppabs="http://www.vbapi.com/ref/w/windowproc.html">WindowProc</A> (<SPAN class="kw">ByVal</SPAN> hwnd <SPAN class="kw">As Long</SPAN>, <SPAN class="kw">ByVal</SPAN> uMsg <SPAN class="kw">As Long</SPAN>, <SPAN class="kw">ByVal</SPAN> wParam _
+		<SPAN class="kw">As Long</SPAN>, <SPAN class="kw">ByVal</SPAN> lParam <SPAN class="kw">As Long</SPAN>) <SPAN class="kw">As Long</SPAN>
+	<SPAN class="kw">Dim</SPAN> hSysMenu <SPAN class="kw">As Long</SPAN>     <SPAN class="com">' handle to Form1's system menu</SPAN>
+	<SPAN class="kw">Dim</SPAN> mii <SPAN class="kw">As</SPAN> <A href="menuiteminfo.html" tppabs="http://www.vbapi.com/ref/m/menuiteminfo.html">MENUITEMINFO</A>  <SPAN class="com">' menu item information for Always On Top</SPAN>
+	<SPAN class="kw">Dim</SPAN> retval <SPAN class="kw">As Long</SPAN>       <SPAN class="com">' return value</SPAN>
+	
+	<SPAN class="kw">Select Case</SPAN> uMsg
+	<SPAN class="kw">Case</SPAN> <A href="wm_initmenu.html" tppabs="http://www.vbapi.com/ref/w/wm_initmenu.html">WM_INITMENU</A>
+		<SPAN class="com">' Before displaying the system menu, make sure that the Always On Top
+		' option is properly checked.</SPAN>
+		hSysMenu = <B>GetSystemMenu</B>(hwnd, 0)
+		<SPAN class="kw">With</SPAN> mii
+			<SPAN class="com">' Size of the structure.</SPAN>
+			.cbSize = Len(mii)
+			<SPAN class="com">' Only use what needs to be changed.</SPAN>
+			.fMask = MIIM_STATE
+			<SPAN class="com">' If Form1 is now always on top, check the item.</SPAN>
+			.fState = MFS_ENABLED <SPAN class="kw">Or</SPAN> IIf(ontop, MFS_CHECKED, 0)
+		<SPAN class="kw">End With</SPAN>
+		retval = <A href="setmenuiteminfo.html" tppabs="http://www.vbapi.com/ref/s/setmenuiteminfo.html">SetMenuItemInfo</A>(hSysMenu, 1, 0, mii)
+		WindowProc = 0
+	<SPAN class="kw">Case</SPAN> <A href="wm_syscommand.html" tppabs="http://www.vbapi.com/ref/w/wm_syscommand.html">WM_SYSCOMMAND</A>
+		<SPAN class="com">' If Always On Top (ID = 1) was selected, change the on top/not on top
+		' setting of Form1 to match.</SPAN>
+		<SPAN class="kw">If</SPAN> wParam = 1 <SPAN class="kw">Then</SPAN>
+			<SPAN class="com">' Reverse the setting and make it the current one.</SPAN>
+			ontop = <SPAN class="kw">Not</SPAN> ontop
+			retval = <A href="setwindowpos.html" tppabs="http://www.vbapi.com/ref/s/setwindowpos.html">SetWindowPos</A>(hwnd, IIf(ontop, HWND_TOPMOST, HWND_NOTOPMOST), _
+				0, 0, 0, 0, SWP_NOMOVE <SPAN class="kw">Or</SPAN> SWP_NOSIZE)
+			WindowProc = 0
+		<SPAN class="kw">Else</SPAN>
+			<SPAN class="com">' Some other item was selected.  Let the previous window procedure
+			' process it.</SPAN>
+			WindowProc = <A href="callwindowproc.html" tppabs="http://www.vbapi.com/ref/c/callwindowproc.html">CallWindowProc</A>(pOldProc, hwnd, uMsg, wParam, lParam)
+		<SPAN class="kw">End If</SPAN>
+	<SPAN class="kw">Case Else</SPAN>
+		<SPAN class="com">' If this is some other message, let the previous procedure handle it.</SPAN>
+		WindowProc = <A href="callwindowproc.html" tppabs="http://www.vbapi.com/ref/c/callwindowproc.html">CallWindowProc</A>(pOldProc, hwnd, uMsg, wParam, lParam)
+	<SPAN class="kw">End Select</SPAN>
+<SPAN class="kw">End Function</SPAN>
+
+<SPAN class="com">' *** Place the following code inside Form1. ***</SPAN>
+
+<SPAN class="com">' When Form1 loads, add Always On Top to the system menu and set up the
+' new window procedure.</SPAN>
+<SPAN class="kw">Private Sub</SPAN> Form_Load()
+	<SPAN class="kw">Dim</SPAN> hSysMenu <SPAN class="kw">As Long</SPAN>     <SPAN class="com">' handle to the system menu</SPAN>
+	<SPAN class="kw">Dim</SPAN> count <SPAN class="kw">As Long</SPAN>        <SPAN class="com">' the number of items initially on the menu</SPAN>
+	<SPAN class="kw">Dim</SPAN> mii <SPAN class="kw">As</SPAN> <A href="menuiteminfo.html" tppabs="http://www.vbapi.com/ref/m/menuiteminfo.html">MENUITEMINFO</A>  <SPAN class="com">' describes a menu item to add</SPAN>
+	<SPAN class="kw">Dim</SPAN> retval <SPAN class="kw">As Long</SPAN>       <SPAN class="com">' return value</SPAN>
+	
+	<SPAN class="com">' Get a handle to the system menu.</SPAN>
+	hSysMenu = <B>GetSystemMenu</B>(Form1.hWnd, 0)
+	<SPAN class="com">' See how many items are currently in it.</SPAN>
+	count = <A href="getmenuitemcount.html" tppabs="http://www.vbapi.com/ref/g/getmenuitemcount.html">GetMenuItemCount</A>(hSysMenu)
+	
+	<SPAN class="com">' Add a separator bar and then Always On Top to the system menu.</SPAN>
+	<SPAN class="kw">With</SPAN> mii
+		<SPAN class="com">' The size of the structure.</SPAN>
+		.cbSize = Len(mii)
+		<SPAN class="com">' What parts of the structure to use.</SPAN>
+		.fMask = MIIM_ID <SPAN class="kw">Or</SPAN> MIIM_TYPE
+		<SPAN class="com">' This is a separator.</SPAN>
+		.fType = MFT_SEPARATOR
+		<SPAN class="com">' It has an ID of 0.</SPAN>
+		.wID = 0
+	<SPAN class="kw">End With</SPAN>
+	<SPAN class="com">' Add the separator to the end of the system menu.</SPAN>
+	retval = <A href="insertmenuitem.html" tppabs="http://www.vbapi.com/ref/i/insertmenuitem.html">InsertMenuItem</A>(hSysMenu, count, 1, mii)
+	
+	<SPAN class="com">' Likewise, add the Always On Top command.</SPAN>
+	<SPAN class="kw">With</SPAN> mii
+		.fMask = MIIM_STATE <SPAN class="kw">Or</SPAN> MIIM_ID <SPAN class="kw">Or</SPAN> MIIM_TYPE
+		<SPAN class="com">' This is a regular text item.</SPAN>
+		.fType = MFT_STRING
+		<SPAN class="com">' The option is enabled.</SPAN>
+		.fState = MFS_ENABLED
+		<SPAN class="com">' It has an ID of 1 (this identifies it in the window procedure).</SPAN>
+		.wID = 1
+		<SPAN class="com">' The text to place in the menu item.</SPAN>
+		.dwTypeData = "&Always On Top"
+		.cch = Len(.dwTypeData)
+	<SPAN class="kw">End With</SPAN>
+	<SPAN class="com">' Add this to the bottom of the system menu.</SPAN>
+	retval = <A href="insertmenuitem.html" tppabs="http://www.vbapi.com/ref/i/insertmenuitem.html">InsertMenuItem</A>(hSysMenu, count + 1, 1, mii)
+	
+	<SPAN class="com">' Set the custom window procedure to process Form1's messages.</SPAN>
+	ontop = <SPAN class="kw">False</SPAN>
+	pOldProc = <A href="setwindowlong.html" tppabs="http://www.vbapi.com/ref/s/setwindowlong.html">SetWindowLong</A>(Form1.hWnd, GWL_WNDPROC, <SPAN class="kw">AddressOf</SPAN> <A href="windowproc.html" tppabs="http://www.vbapi.com/ref/w/windowproc.html">WindowProc</A>)
+<SPAN class="kw">End Sub</SPAN>
+
+<SPAN class="com">' Before unloading, restore the default system menu and remove the
+' custom window procedure.</SPAN>
+<SPAN class="kw">Private Sub</SPAN> Form_Unload(Cancel <SPAN class="kw">As Integer</SPAN>)
+	<SPAN class="kw">Dim</SPAN> retval <SPAN class="kw">As Long</SPAN>  <SPAN class="com">' return value</SPAN>
+	
+	<SPAN class="com">' Replace the previous window procedure to prevent crashing.</SPAN>
+	retval = <A href="setwindowlong.html" tppabs="http://www.vbapi.com/ref/s/setwindowlong.html">SetWindowLong</A>(Form1.hWnd, GWL_WNDPROC, pOldProc)
+	<SPAN class="com">' Remove the modifications made to the system menu.</SPAN>
+	retval = <B>GetSystemMenu</B>(Form1.hWnd, 1)
+<SPAN class="kw">End Sub</SPAN></CODE></PRE></P>
+
+<H2>See Also</H2>
+<P><A href="getmenu.html" tppabs="http://www.vbapi.com/ref/g/getmenu.html">GetMenu</A></P>
+
+<H2>Category</H2>
+<P><A href="funcc.html#menus" tppabs="http://www.vbapi.com/ref/funcc.html#menus">Menus</A></P>
+
+<P><A href="funca.html" tppabs="http://www.vbapi.com/ref/funca.html">Back to the Function list.</A><BR>
+<A href="index.html" tppabs="http://www.vbapi.com/ref/index.html" rel="index">Back to the Reference section.</A></P>
+
+<HR>
+
+<P><B>Last Modified:</B> June 4, 2000<BR>
+This page is copyright &copy; 2000 Paul Kuliniewicz.  
+<A href="copyrite.html" tppabs="http://www.vbapi.com/copyrite.html" rel="copyright">Copyright Information</A>  <B>Revised October 29, 2000</B><BR>
+<A href="index-1.html" tppabs="http://www.vbapi.com/index.html" rel="home">Go back to the Windows API Guide home page.</A><BR>
+E-mail: <A href="javascript:if(confirm('http://www.vbapi.com/email.html  \n\nThis file was not retrieved by Teleport Pro, because it is addressed on a domain or path outside the boundaries set for its Starting Address.  \n\nDo you want to open it from the server?'))window.location='http://www.vbapi.com/email.html'" tppabs="http://www.vbapi.com/email.html">vbapi@vbapi.com</A>  <A href="javascript:if(confirm('http://www.vbapi.com/email.html  \n\nThis file was not retrieved by Teleport Pro, because it is addressed on a domain or path outside the boundaries set for its Starting Address.  \n\nDo you want to open it from the server?'))window.location='http://www.vbapi.com/email.html#secure'" tppabs="http://www.vbapi.com/email.html#secure">Send Encrypted E-Mail</A><BR>
+This page is at <A href="getsystemmenu.html" tppabs="http://www.vbapi.com/ref/g/getsystemmenu.html">http://www.vbapi.com/ref/g/getsystemmenu.html</A></P>
+</BODY>
+</HTML>

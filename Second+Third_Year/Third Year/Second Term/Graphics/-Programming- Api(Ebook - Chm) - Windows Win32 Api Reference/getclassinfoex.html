@@ -1,0 +1,107 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+<HTML lang="en-us">
+<HEAD>
+<TITLE>Windows API Guide: GetClassInfoEx Function</TITLE>
+<META content="vbapi@vbapi.com" name="author">
+<META content="Information about the GetClassInfoEx function in the Windows API, geared towards the Visual Basic user." name="description">
+<META content="Kuliniewicz,Windows,Windows 95,Windows NT,Windows 98,Windows CE,Windows 2000,API,Application Programming Interface,Programming,Visual Basic,Basic,VB,GetClassInfoEx" name="keywords">
+<META content="Omicron HTML Editor" name="generator">
+<META content="Sun, 22 Aug 1999 00:13:00 GMT" http-equiv="Last-Modified">
+<LINK href="default.css" tppabs="http://www.vbapi.com/css/default.css" rel="stylesheet" type="text/css">
+<LINK href="index-1.html" tppabs="http://www.vbapi.com/index.html" rel="home">
+
+<LINK href="glossary.html" tppabs="http://www.vbapi.com/ref/glossary.html" rel="glossary">
+<LINK href="copyrite.html" tppabs="http://www.vbapi.com/copyrite.html" rel="copyright">
+</HEAD>
+<BODY>
+
+<!-- Begin Adslot1 -->
+<CENTER>
+<SCRIPT language="JAVASCRIPT">
+<!-- hide from older browsers
+now = new Date();
+my_random = now.getTime();
+document.write('<A href="http://adex3.flycast.com/server/socket/127.0.0.1:2800/click/VBWorldnet/VBAPI/' + my_random + '">');
+document.write('<IMG width="468" height="60" border="1" src="http://adex3.flycast.com/server/socket/127.0.0.1:2800/ad/VBWorldnet/VBAPI/' + my_random + '"></A>');
+// -->
+</SCRIPT>
+</CENTER>
+<!-- End Adslot1 -->
+
+<HR>
+
+<H1>GetClassInfoEx Function</H1>
+
+<P><CODE class="declare">Declare Function GetClassInfoEx Lib "user32.dll" Alias "GetClassInfoExA" (ByVal hinst As Long, ByVal lpszClass As String, lpwcx As <A href="wndclassex.html" tppabs="http://www.vbapi.com/ref/w/wndclassex.html">WNDCLASSEX</A>) As Long</CODE></P>
+
+<H2>Platforms</H2>
+<P><UL>
+<LI><B>Windows 95:</B> Supported.
+<LI><B>Windows 98:</B> Supported.
+<LI><B>Windows NT:</B> Requires Windows NT 3.5 or later.
+<LI><B>Windows 2000:</B> Supported.
+<LI><B>Windows CE:</B> Not Supported.
+</UL></P>
+
+<H2>Description &amp; Usage</H2>
+<P><B>GetClassInfoEx</B> retrieves all of the information associated with a <A class="def" href="glossary.html#windowclass" tppabs="http://www.vbapi.com/ref/glossary.html#windowclass" rel="glossary">window class</A>.  The information is placed into the structure passed as <VAR>lpwcx</VAR>.</P>
+
+<H2>Return Value</H2>
+<P>If an error occured, the function returns 0 (use <A href="getlasterror.html" tppabs="http://www.vbapi.com/ref/g/getlasterror.html">GetLastError</A> to get the error code).  If successful, the function returns a non-zero value.</P>
+
+<H2>Visual Basic-Specific Issues</H2>
+<P>None.</P>
+
+<H2>Parameters</H2>
+<P><DL>
+<DT><VAR>hinst</VAR><DD>A <A class="def" href="glossary.html#handle" tppabs="http://www.vbapi.com/ref/glossary.html#handle" rel="glossary">handle</A> to the instance which owns the window class, or 0 if the window class is defined by the operating system.
+<DT><VAR>lpszClass</VAR><DD>The name of the window class to retrieve information about.
+<DT><VAR>lpwcx</VAR><DD>Receives the information about the window class.
+</DL></P>
+
+<H2>Example</H2>
+<P><PRE><CODE class="example"><SPAN class="com">' This code is licensed according to the terms and conditions listed <A href="copyrite.html#license" tppabs="http://www.vbapi.com/copyrite.html#license" rel="copyright">here</A>.</SPAN>
+
+' Draw the regular icon and small icon from the window class to which
+' window Form1 belongs.  The two icons are drawn on Form1.
+Dim classinfo As <A href="wndclassex.html" tppabs="http://www.vbapi.com/ref/w/wndclassex.html">WNDCLASSEX</A>  ' receives the class information
+Dim classname As String  ' receives the name of the window class
+Dim slength As Long  ' the length of the window class's name
+Dim retval As Long  ' return value
+
+' First, get the name of the window class to which Form1 belongs.
+classname = Space(255)  ' make enough room in the buffer
+slength = <A href="getclassname.html" tppabs="http://www.vbapi.com/ref/g/getclassname.html">GetClassName</A>(Form1.hWnd, classname, 255)  ' get the name
+classname = Left(classname, slength)  ' remove the empty space
+
+' Get the information about the window class.  Since this is a Visual Basic-
+' generated window, its window class belongs to the application.
+retval = <B>GetClassInfoEx</B>(App.hInstance, classname, classinfo)
+
+' Now draw the window class's regular and small icons on window Form1.
+' Draw the regular icon.
+retval = <A href="drawiconex.html" tppabs="http://www.vbapi.com/ref/d/drawiconex.html">DrawIconEx</A>(Form1.hDC, 0, 0, classinfo.hIcon, 0, 0, 0, 0, DI_NORMAL)
+' Draw the small icon.
+retval = <A href="drawiconex.html" tppabs="http://www.vbapi.com/ref/d/drawiconex.html">DrawIconEx</A>(Form1.hDC, 50, 0, classinfo.hIconSm, 0, 0, 0, 0, DI_NORMAL)</CODE></PRE></P>
+
+<H2>See Also</H2>
+<P><A href="getclassinfo.html" tppabs="http://www.vbapi.com/ref/g/getclassinfo.html">GetClassInfo</A>, <A href="getclasslong.html" tppabs="http://www.vbapi.com/ref/g/getclasslong.html">GetClassLong</A></P>
+
+<H2>Category</H2>
+<P><A href="funcc.html#windowclasses" tppabs="http://www.vbapi.com/ref/funcc.html#windowclasses">Window Classes</A></P>
+
+<P><A href="funca.html" tppabs="http://www.vbapi.com/ref/funca.html">Go back to the alphabetical Function listing.</A><BR>
+<A href="index.html" tppabs="http://www.vbapi.com/ref/index.html">Go back to the Reference section index.</A></P>
+
+<HR>
+
+<P><B>Last Modified:</B> August 21, 1999<BR>
+This page is copyright &copy; 1999 Paul Kuliniewicz.  
+<A href="copyrite.html" tppabs="http://www.vbapi.com/copyrite.html" rel="copyright">Copyright Information</A>  <B>Revised October 29, 2000</B><BR>
+
+<A href="index-1.html" tppabs="http://www.vbapi.com/index.html">Go back to the Windows API Guide home page.</A><BR>
+E-mail: <A href="javascript:if(confirm('http://www.vbapi.com/email.html  \n\nThis file was not retrieved by Teleport Pro, because it is addressed on a domain or path outside the boundaries set for its Starting Address.  \n\nDo you want to open it from the server?'))window.location='http://www.vbapi.com/email.html'" tppabs="http://www.vbapi.com/email.html">vbapi@vbapi.com</A>  <A href="javascript:if(confirm('http://www.vbapi.com/email.html  \n\nThis file was not retrieved by Teleport Pro, because it is addressed on a domain or path outside the boundaries set for its Starting Address.  \n\nDo you want to open it from the server?'))window.location='http://www.vbapi.com/email.html#secure'" tppabs="http://www.vbapi.com/email.html#secure">Send Encrypted E-Mail</A><BR>
+This page is at <A href="getclassinfoex.html" tppabs="http://www.vbapi.com/ref/g/getclassinfoex.html">http://www.vbapi.com/ref/g/getclassinfoex.html</A>
+</P>
+</BODY>
+</HTML>

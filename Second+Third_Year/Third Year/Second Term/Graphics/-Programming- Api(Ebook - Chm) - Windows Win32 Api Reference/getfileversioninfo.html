@@ -1,0 +1,226 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+<HTML lang="en-us">
+<HEAD>
+<TITLE>Windows API Guide: GetFileVersionInfo Function</TITLE>
+<META content="vbapi@vbapi.com" name="author">
+<META content="Information about the GetFileVersionInfo function in the Windows API, geared towards the Visual Basic user." name="description">
+<META content="Kuliniewicz,Windows,Windows 95,Windows NT,Windows 98,Windows CE,Windows 2000,API,Application Programming Interface,Programming,Visual Basic,Basic,VB,GetFileVersionInfo" name="keywords">
+<META content="Omicron HTML Editor" name="generator">
+<LINK href="default.css" tppabs="http://www.vbapi.com/css/default.css" rel="stylesheet" type="text/css">
+<LINK href="index-1.html" tppabs="http://www.vbapi.com/index.html" rel="home">
+<LINK href="glossary.html" tppabs="http://www.vbapi.com/ref/glossary.html" rel="glossary">
+<LINK href="copyrite.html" tppabs="http://www.vbapi.com/copyrite.html" rel="copyright">
+</HEAD>
+<BODY>
+
+<!-- Begin Adslot1 -->
+<CENTER>
+<SCRIPT language="JAVASCRIPT">
+<!-- hide from older browsers
+now = new Date();
+my_random = now.getTime();
+document.write('<A href="http://adex3.flycast.com/server/socket/127.0.0.1:2800/click/VBWorldnet/VBAPI/' + my_random + '">');
+document.write('<IMG width="468" height="60" border="1" src="http://adex3.flycast.com/server/socket/127.0.0.1:2800/ad/VBWorldnet/VBAPI/' + my_random + '"></A>');
+// -->
+</SCRIPT>
+</CENTER>
+<!-- End Adslot1 -->
+
+<HR>
+
+<H1>GetFileVersionInfo Function</H1>
+
+<P><CODE class="declare"><SPAN class="kw">Declare Function</SPAN> GetFileVersionInfo <SPAN class="kw">Lib</SPAN> "version.dll" <SPAN class="kw">Alias</SPAN> "GetFileVersionInfoA" (<SPAN class="kw">ByVal</SPAN> lptstrFilename <SPAN class="kw">As String</SPAN>, <SPAN class="kw">ByVal </SPAN>dwHandle <SPAN class="kw">As Long</SPAN>, <SPAN class="kw">ByVal</SPAN> dwLen <SPAN class="kw">As Long</SPAN>, lpData <SPAN class="kw">As Any</SPAN>) <SPAN class="kw">As Long</SPAN></CODE></P>
+
+<H2>Platforms</H2>
+<P><UL>
+<LI><B>Windows 95:</B> Supported.
+<LI><B>Windows 98:</B> Supported.
+<LI><B>Windows NT:</B> Requires Windows NT 3.1 or later.
+<LI><B>Windows 2000:</B> Supported.
+<LI><B>Windows CE:</B> Not Supported.
+</UL></P>
+
+<H2>Description &amp; Usage</H2>
+<P><B>GetFileVersionInfo</B> extracts the version information resource stored inside a 32-bit executable-type file.  The version information resource is a series of bytes that is difficult to read directly.  Use the <A href="verqueryvalue.html" tppabs="http://www.vbapi.com/ref/v/verqueryvalue.html">VerQueryValue</A> to retrieve the desired pieces of data from the resource.</P>
+
+<H2>Return Value</H2>
+<P>If successful, the function returns a non-zero value.  If an error occured, the function returns 0 (use <A href="getlasterror.html" tppabs="http://www.vbapi.com/ref/g/getlasterror.html">GetLastError</A> to get the error code).</P>
+
+<H2>Visual Basic-Specific Issues</H2>
+<P>None.</P>
+
+<H2>Parameters</H2>
+<P><DL>
+<DT><VAR>lpstrFilename</VAR><DD>The full path and filename of the file.
+<DT><VAR>dwHandle</VAR><DD>Reserved -- set to 0.
+<DT><VAR>dwLen</VAR><DD>The size in bytes of the buffer passed as <VAR>lpData</VAR>.
+<DT><VAR>lpData</VAR><DD>A buffer, such as a byte array, that receives the version information resource of the file.
+</DL></P>
+
+<H2>Example</H2>
+<P>Display information about the file whose full path and filename is entered into textbox Text1.  Display the version number, copyright information, and file description when button Command1 is pressed.  To use this example, you obviously have to enter the filename of a 32-bit executable/DLL/etc. into Text1.  Obviously, this example requires that you create a text box called Text1 and a command button called Command1.</P>
+
+<P><PRE><CODE class="example"><SPAN class="com">' This code is licensed according to the terms and conditions listed <A href="copyrite.html#license" tppabs="http://www.vbapi.com/copyrite.html#license" rel="copyright">here</A>.</SPAN>
+
+<SPAN class="com">' Declarations and such needed for the example:
+' (Copy them to the (declarations) section of a module.)</SPAN>
+<SPAN class="kw">Public Declare Function</SPAN> <B>GetFileVersionInfo</B> <SPAN class="kw">Lib</SPAN> "version.dll" <SPAN class="kw">Alias</SPAN> "GetFileVersionInfoA" _
+	(<SPAN class="kw">ByVal</SPAN> lptstrFilename <SPAN class="kw">As String</SPAN>, <SPAN class="kw">ByVal</SPAN> dwHandle <SPAN class="kw">As Long</SPAN>, <SPAN class="kw">ByVal</SPAN> dwLen <SPAN class="kw">As Long</SPAN>, _
+	lpData <SPAN class="kw">As Any</SPAN>) <SPAN class="kw">As Long</SPAN>
+<SPAN class="kw">Public Declare Function</SPAN> <A href="getfileversioninfosize.html" tppabs="http://www.vbapi.com/ref/g/getfileversioninfosize.html">GetFileVersionInfoSize</A> <SPAN class="kw">Lib</SPAN> "version.dll" <SPAN class="kw">Alias</SPAN> _
+	"GetFileVersionInfoSizeA" (<SPAN class="kw">ByVal</SPAN> lptstrFilename <SPAN class="kw">As String</SPAN>, lpdwHandle <SPAN class="kw">As Long</SPAN>) <SPAN class="kw">As Long</SPAN>
+<SPAN class="kw">Public Declare Function</SPAN> <A href="verqueryvalue.html" tppabs="http://www.vbapi.com/ref/v/verqueryvalue.html">VerQueryValue</A> <SPAN class="kw">Lib</SPAN> "version.dll" <SPAN class="kw">Alias</SPAN> "VerQueryValueA" (pBlock _
+	<SPAN class="kw">As Any</SPAN>, <SPAN class="kw">ByVal</SPAN> lpSubBlock <SPAN class="kw">As String</SPAN>, lplpBuffer <SPAN class="kw">As Long</SPAN>, puLen <SPAN class="kw">As Long</SPAN>) <SPAN class="kw">As Long</SPAN>
+<SPAN class="kw">Public Declare Function</SPAN> <A href="lstrcpy.html" tppabs="http://www.vbapi.com/ref/l/lstrcpy.html">lstrcpy</A> <SPAN class="kw">Lib</SPAN> "kernel32.dll" <SPAN class="kw">Alias</SPAN> "lstrcpyA" (<SPAN class="kw">ByVal</SPAN> lpString1 _
+	<SPAN class="kw">As Any</SPAN>, <SPAN class="kw">ByVal</SPAN> lpString2 <SPAN class="kw">As Any</SPAN>) <SPAN class="kw">As Long</SPAN>
+<SPAN class="kw">Public Declare Sub</SPAN> <A href="copymemory.html" tppabs="http://www.vbapi.com/ref/c/copymemory.html">CopyMemory</A> <SPAN class="kw">Lib</SPAN> "kernel32.dll" <SPAN class="kw">Alias</SPAN> "RtlMoveMemory" (Destination <SPAN class="kw">As Any</SPAN>, _
+	Source <SPAN class="kw">As Any</SPAN>, <SPAN class="kw">ByVal</SPAN> Length <SPAN class="kw">As Long</SPAN>)
+<SPAN class="kw">Public Type</SPAN> <A href="vs_fixedfileinfo.html" tppabs="http://www.vbapi.com/ref/v/vs_fixedfileinfo.html">VS_FIXEDFILEINFO</A>
+	dwSignature <SPAN class="kw">As Long</SPAN>
+	dwStrucVersion <SPAN class="kw">As Long</SPAN>
+	dwFileVersionMS <SPAN class="kw">As Long</SPAN>
+	dwFileVersionLS <SPAN class="kw">As Long</SPAN>
+	dwProductVersionMS <SPAN class="kw">As Long</SPAN>
+	dwProductVersionLS <SPAN class="kw">As Long</SPAN>
+	dwFileFlagsMask <SPAN class="kw">As Long</SPAN>
+	dwFileFlags <SPAN class="kw">As Long</SPAN>
+	dwFileOS <SPAN class="kw">As Long</SPAN>
+	dwFileType <SPAN class="kw">As Long</SPAN>
+	dwFileSubtype <SPAN class="kw">As Long</SPAN>
+	dwFileDateMS <SPAN class="kw">As Long</SPAN>
+	dwFileDateLS <SPAN class="kw">As Long</SPAN>
+<SPAN class="kw">End Type</SPAN>
+<SPAN class="kw">Public Const</SPAN> VFT_APP = &amp;H1
+<SPAN class="kw">Public Const</SPAN> VFT_DLL = &amp;H2
+<SPAN class="kw">Public Const</SPAN> VFT_DRV = &amp;H3
+<SPAN class="kw">Public Const</SPAN> VFT_VXD = &amp;H5
+
+<SPAN class="com">' *** Place the following function definitions inside a module. ***</SPAN>
+
+<SPAN class="com">' HIWORD and LOWORD are API macros defined below.</SPAN>
+<SPAN class="kw">Public Function</SPAN> <A href="hiword.html" tppabs="http://www.vbapi.com/ref/h/hiword.html">HIWORD</A> (<SPAN class="kw">ByVal</SPAN> dwValue <SPAN class="kw">As Long</SPAN>) <SPAN class="kw">As Long</SPAN>
+	<SPAN class="kw">Dim</SPAN> hexstr <SPAN class="kw">As String</SPAN>
+	hexstr = Right("00000000" &amp; Hex(dwValue), 8)
+	HIWORD = <SPAN class="kw">CLng(</SPAN>"&amp;H" &amp; Left(hexstr, 4)<SPAN class="kw">)</SPAN>
+<SPAN class="kw">End Function</SPAN>
+<SPAN class="kw">Public Function</SPAN> <A href="loword.html" tppabs="http://www.vbapi.com/ref/l/loword.html">LOWORD</A> (<SPAN class="kw">ByVal</SPAN> dwValue <SPAN class="kw">As Long</SPAN>) <SPAN class="kw">As Long</SPAN>
+	<SPAN class="kw">Dim</SPAN> hexstr <SPAN class="kw">As String</SPAN>
+	hexstr = Right("00000000" &amp; Hex(dwValue), 8)
+	LOWORD = <SPAN class="kw">CLng(</SPAN>"&amp;H" &amp; Right(hexstr, 4)<SPAN class="kw">)</SPAN>
+<SPAN class="kw">End Function</SPAN>
+
+<SPAN class="com">' This nifty subroutine swaps two byte values without needing a buffer variable.
+' This technique, which uses Xor, works as long as the two values to be swapped are
+' numeric and of the same data type (here, both Byte).</SPAN>
+<SPAN class="kw">Public Sub</SPAN> SwapByte (byte1 <SPAN class="kw">As Byte</SPAN>, byte2 <SPAN class="kw">As Byte</SPAN>)
+	byte1 = byte1 <SPAN class="kw">Xor</SPAN> byte2
+	byte2 = byte1 <SPAN class="kw">Xor</SPAN> byte2
+	byte1 = byte1 <SPAN class="kw">Xor</SPAN> byte2
+<SPAN class="kw">End Sub</SPAN>
+
+<SPAN class="com">' This function creates a hexadecimal string to represent a number, but it
+' outputs a string of a fixed number of digits.  Extra zeros are added to make
+' the string the proper length.  The "&amp;H" prefix is not put into the string.</SPAN>
+<SPAN class="kw">Public Function</SPAN> FixedHex (<SPAN class="kw">ByVal</SPAN> hexval <SPAN class="kw">As Long</SPAN>, <SPAN class="kw">ByVal</SPAN> nDigits <SPAN class="kw">As Long</SPAN>) <SPAN class="kw">As String</SPAN>
+	FixedHex = Right("00000000" &amp; Hex(hexval), nDigits)
+<SPAN class="kw">End Function</SPAN>
+
+<SPAN class="com">' *** Place the following code inside the form that has Command1 and Text1. ***</SPAN>
+
+<SPAN class="kw">Private Sub</SPAN> Command1_Click()
+	<SPAN class="kw">Dim</SPAN> vffi <SPAN class="kw">As</SPAN> <A href="vs_fixedfileinfo.html" tppabs="http://www.vbapi.com/ref/v/vs_fixedfileinfo.html">VS_FIXEDFILEINFO</A>  <SPAN class="com">' version info structure</SPAN>
+	<SPAN class="kw">Dim</SPAN> buffer() <SPAN class="kw">As Byte</SPAN>          <SPAN class="com">' buffer for version info resource</SPAN>
+	<SPAN class="kw">Dim</SPAN> pData <SPAN class="kw">As Long</SPAN>             <SPAN class="com">' pointer to version info data</SPAN>
+	<SPAN class="kw">Dim</SPAN> nDataLen <SPAN class="kw">As Long</SPAN>          <SPAN class="com">' length of info pointed at by pData</SPAN>
+	<SPAN class="kw">Dim</SPAN> cpl(0 <SPAN class="kw">To</SPAN> 3) <SPAN class="kw">As Byte</SPAN>       <SPAN class="com">' buffer for code page &amp; language</SPAN>
+	<SPAN class="kw">Dim</SPAN> cplstr <SPAN class="kw">As String</SPAN>          <SPAN class="com">' 8-digit hex string of cpl</SPAN>
+	<SPAN class="kw">Dim</SPAN> dispstr <SPAN class="kw">As String</SPAN>         <SPAN class="com">' string used to display version information</SPAN>
+	<SPAN class="kw">Dim</SPAN> retval <SPAN class="kw">As Long</SPAN>            <SPAN class="com">' generic return value</SPAN>
+	
+	<SPAN class="com">' First, get the size of the version info resource.  If this function fails, then Text1
+	' identifies a file that isn't a 32-bit executable/DLL/etc.</SPAN>
+	nDataLen = <A href="getfileversioninfosize.html" tppabs="http://www.vbapi.com/ref/g/getfileversioninfosize.html">GetFileVersionInfoSize</A>(Text1.Text, pData)
+	<SPAN class="kw">If</SPAN> nDataLen = 0 <SPAN class="kw">Then</SPAN>
+		<SPAN class="kw">Debug</SPAN>.<SPAN class="kw">Print</SPAN> "Not a 32-bit executable!"
+		<SPAN class="ke">Exit Sub</SPAN>
+	<SPAN class="kw">End If</SPAN>
+	<SPAN class="com">' Make the buffer large enough to hold the version info resource.</SPAN>
+	<SPAN class="kw">ReDim</SPAN> buffer(0 <SPAN class="kw">To</SPAN> nDataLen - 1) <SPAN class="kw">As Byte</SPAN>
+	<SPAN class="com">' Get the version information resource.</SPAN>
+	retval = <B>GetFileVersionInfo</B>(Text1.Text, 0, nDataLen, buffer(0))
+	
+	<SPAN class="com">' Get a pointer to a structure that holds a bunch of data.</SPAN>
+	retval = <A href="verqueryvalue.html" tppabs="http://www.vbapi.com/ref/v/verqueryvalue.html">VerQueryValue</A>(buffer(0), "\", pData, nDataLen)
+	<SPAN class="com">' Copy that structure into the one we can access.</SPAN>
+	<A href="copymemory.html" tppabs="http://www.vbapi.com/ref/c/copymemory.html">CopyMemory</A> vffi, <SPAN class="kw">ByVal</SPAN> pData, nDataLen
+	<SPAN class="com">' Display the full version number of the file.</SPAN>
+	dispstr = Trim(Str(<A href="hiword.html" tppabs="http://www.vbapi.com/ref/h/hiword.html">HIWORD</A>(vffi.dwFileVersionMS))) &amp; "." &amp; _
+		Trim(Str(<A href="loword.html" tppabs="http://www.vbapi.com/ref/l/loword.html">LOWORD</A>(vffi.dwFileVersionMS))) &amp; "." &amp; _
+		Trim(Str(<A href="hiword.html" tppabs="http://www.vbapi.com/ref/h/hiword.html">HIWORD</A>(vffi.dwFileVersionLS))) &amp; "." &amp; _
+		Trim(Str(<A href="loword.html" tppabs="http://www.vbapi.com/ref/l/loword.html">LOWORD</A>(vffi.dwFileVersionLS)))
+	<SPAN class="kw">Debug</SPAN>.<SPAN class="kw">Print</SPAN> "Version Number: "; dispstr
+	<SPAN class="com">' Display the type of file it is (i.e., executable, DLL, etc.).</SPAN>
+	<SPAN class="kw">Select Case</SPAN> vffi.dwFileType
+	<SPAN class="kw">Case</SPAN> VFT_APP
+		dispstr = "Application"
+	<SPAN class="kw">Case</SPAN> VFT_DLL
+		dispstr = "Dynamic Link Library (DLL)"
+	<SPAN class="kw">Case</SPAN> VFT_DRV
+		dispstr = "Device Driver"
+	<SPAN class="kw">Case</SPAN> VFT_VXD
+		dispstr = "Virtual Device Driver"
+	<SPAN class="kw">Case Else</SPAN>
+		dispstr = "Unknown"
+	<SPAN class="kw">End Select</SPAN>
+	<SPAN class="kw">Debug.Print</SPAN> "File Type: "; dispstr
+	
+	<SPAN class="com">' Before reading any strings out of the resource, we must first determine the code page
+	' and language.  The code to get this information follows.</SPAN>
+	retval = <A href="verqueryvalue.html" tppabs="http://www.vbapi.com/ref/v/verqueryvalue.html">VerQueryValue</A>(buffer(0), "\VarFileInfo\Translation", pData, nDataLen)
+	<SPAN class="com">' Copy that informtion into the byte array.</SPAN>
+	<A href="copymemory.html" tppabs="http://www.vbapi.com/ref/c/copymemory.html">CopyMemory</A> cpl(0), <SPAN class="kw">ByVal</SPAN> pData, 4
+	<SPAN class="com">' It is necessary to swap the first two bytes, as well as the last two bytes.</SPAN>
+	SwapByte cpl(0), cpl(1)
+	SwapByte cpl(2), cpl(3)
+	<SPAN class="com">' Convert those four bytes into a 8-digit hexadecimal string.</SPAN>
+	cplstr = FixedHex(cpl(0), 2) &amp; FixedHex(cpl(1), 2) &amp; FixedHex(cpl(2), 2) &amp; _
+		FixedHex(cpl(3), 2)
+	<SPAN class="com">' cplstr now represents the code page and language to read strings as.</SPAN>
+	
+	<SPAN class="com">' Read the copyright information from the version info resource.</SPAN>
+	retval = <A href="verqueryvalue.html" tppabs="http://www.vbapi.com/ref/v/verqueryvalue.html">VerQueryValue</A>(buffer(0), "\StringFileInfo\" &amp; cplstr &amp; "\LegalCopyright", _
+		pData, nDataLen)
+	<SPAN class="com">' Copy that data into a string for display.</SPAN>
+	dispstr = Space(nDataLen)
+	retval = <A href="lstrcpy.html" tppabs="http://www.vbapi.com/ref/l/lstrcpy.html">lstrcpy</A>(dispstr, pData)
+	<SPAN class="com">' Display the result.</SPAN>
+	<SPAN class="kw">Debug</SPAN>.<SPAN class="kw">Print</SPAN> "Copyright Info: "; dispstr
+	<SPAN class="com">' Similarly, read a description of the file and display it.</SPAN>
+	retval = <A href="verqueryvalue.html" tppabs="http://www.vbapi.com/ref/v/verqueryvalue.html">VerQueryValue</A>(buffer(0), "\StringFileInfo\" &amp; cplstr &amp; "\FileDescription", _
+		pData, nDataLen)
+	dispstr = Space(nDataLen)
+	retval = <A href="lstrcpy.html" tppabs="http://www.vbapi.com/ref/l/lstrcpy.html">lstrcpy</A>(dispstr, pData)
+	<SPAN class="kw">Debug</SPAN>.<SPAN class="kw">Print</SPAN> "File Description: "; dispstr
+<SPAN class="kw">End Sub</SPAN></CODE></PRE></P>
+
+<H2>See Also</H2>
+<P><A href="getfileversioninfosize.html" tppabs="http://www.vbapi.com/ref/g/getfileversioninfosize.html">GetFileVersionInfoSize</A>, 
+<A href="verqueryvalue.html" tppabs="http://www.vbapi.com/ref/v/verqueryvalue.html">VerQueryValue</A></P>
+
+<H2>Category</H2>
+<P><A href="funcc.html#files" tppabs="http://www.vbapi.com/ref/funcc.html#files">Files</A></P>
+
+<P><A href="funca.html" tppabs="http://www.vbapi.com/ref/funca.html">Back to the Function list.</A><BR>
+<A href="index.html" tppabs="http://www.vbapi.com/ref/index.html" rel="index">Back to the Reference section.</A></P>
+
+<HR>
+
+<P><B>Last Modified:</B> July 30, 2000<BR>
+This page is copyright &copy; 2000 Paul Kuliniewicz.  
+<A href="copyrite.html" tppabs="http://www.vbapi.com/copyrite.html" rel="copyright">Copyright Information</A>  <B>Revised October 29, 2000</B><BR>
+<A href="index-1.html" tppabs="http://www.vbapi.com/index.html" rel="home">Go back to the Windows API Guide home page.</A><BR>
+E-mail: <A href="javascript:if(confirm('http://www.vbapi.com/email.html  \n\nThis file was not retrieved by Teleport Pro, because it is addressed on a domain or path outside the boundaries set for its Starting Address.  \n\nDo you want to open it from the server?'))window.location='http://www.vbapi.com/email.html'" tppabs="http://www.vbapi.com/email.html">vbapi@vbapi.com</A>  <A href="javascript:if(confirm('http://www.vbapi.com/email.html  \n\nThis file was not retrieved by Teleport Pro, because it is addressed on a domain or path outside the boundaries set for its Starting Address.  \n\nDo you want to open it from the server?'))window.location='http://www.vbapi.com/email.html#secure'" tppabs="http://www.vbapi.com/email.html#secure">Send Encrypted E-Mail</A><BR>
+This page is at <A href="getfileversioninfo.html" tppabs="http://www.vbapi.com/ref/g/getfileversioninfo.html">http://www.vbapi.com/ref/g/getfileversioninfo.html</A></P>
+</BODY>
+</HTML>

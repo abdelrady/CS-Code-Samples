@@ -1,0 +1,158 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+<HTML lang="en-us">
+<HEAD>
+<TITLE>Windows API Guide: RegSetValueEx Function</TITLE>
+<META content="vbapi@vbapi.com" name="author">
+<META content="Information about the RegSetValueEx function in the Windows API, geared towards the Visual Basic user." name="description">
+<META content="Kuliniewicz,Windows,Windows 95,Windows NT,Windows 98,Windows CE,Windows 2000,API,Application Programming Interface,Programming,Visual Basic,Basic,VB,RegSetValueEx" name="keywords">
+<META content="Omicron HTML Editor" name="generator">
+<META content="Sat, 11 Sep 1999 22:44:00 GMT" http-equiv="Last-Modified">
+<LINK href="default.css" tppabs="http://www.vbapi.com/css/default.css" rel="stylesheet" type="text/css">
+<LINK href="index-1.html" tppabs="http://www.vbapi.com/index.html" rel="home">
+
+<LINK href="glossary.html" tppabs="http://www.vbapi.com/ref/glossary.html" rel="glossary">
+<LINK href="copyrite.html" tppabs="http://www.vbapi.com/copyrite.html" rel="copyright">
+</HEAD>
+<BODY>
+
+<!-- Begin Adslot1 -->
+<CENTER>
+<SCRIPT language="JAVASCRIPT">
+<!-- hide from older browsers
+now = new Date();
+my_random = now.getTime();
+document.write('<A href="http://adex3.flycast.com/server/socket/127.0.0.1:2800/click/VBWorldnet/VBAPI/' + my_random + '">');
+document.write('<IMG width="468" height="60" border="1" src="http://adex3.flycast.com/server/socket/127.0.0.1:2800/ad/VBWorldnet/VBAPI/' + my_random + '"></A>');
+// -->
+</SCRIPT>
+</CENTER>
+<!-- End Adslot1 -->
+
+<HR>
+
+<H1>RegSetValueEx Function</H1>
+
+<P><CODE class="declare">Declare Function RegSetValueEx Lib "advapi32.dll" Alias "RegSetValueExA" (ByVal hKey As Long, ByVal lpValueName As String, ByVal Reserved As Long, ByVal dwType As Long, lpData As Any, ByVal cbData As Long) As Long</CODE></P>
+
+<H2>Platforms</H2>
+<P><UL>
+<LI><B>Windows 95:</B> Supported.
+<LI><B>Windows 98:</B> Supported.
+<LI><B>Windows NT:</B> Requires Windows NT 3.1 or later.
+<LI><B>Windows 2000:</B> Supported.
+<LI><B>Windows CE:</B> Requires Windows CE 1.0 or later.
+</UL></P>
+
+<H2>Description &amp; Usage</H2>
+<P><B>RegSetValueEx</B> writes a value to a registry key.  If the value does not already exist, it will be created.  The value can be of any of the registry data types.</P>
+
+<H2>Return Value</H2>
+<P>If an error occured, the function returns a non-zero error code.  If successful, the function returns 0.</P>
+
+<H2>Visual Basic-Specific Issues</H2>
+<P>When writing a string or a single numeric value, the <VAR>lpData</VAR> parameter must be prefixed by the ByVal keyword.  Any other values (such as byte arrays) do not need the ByVal keyword.</P>
+
+<H2>Parameters</H2>
+<P><DL>
+<DT><VAR>hKey</VAR><DD>A <A class="def" href="glossary.html#handle" tppabs="http://www.vbapi.com/ref/glossary.html#handle" rel="glossary">handle</A> to the registry key to write the value under.  This could also be one of the following flags identifying one of the predefined registry base keys:
+<DL>
+<DT>HKEY_CLASSES_ROOT<DD>The HKEY_CLASSES_ROOT base key.
+<DT>HKEY_CURRENT_CONFIG<DD>The HKEY_CURRENT_CONFIG base key.
+<DT>HKEY_CURRENT_USER<DD>The HKEY_CURRENT_USER base key.
+<DT>HKEY_DYN_DATA<DD><B>Windows 95, 98:</B> The HKEY_DYN_DATA base key.
+<DT>HKEY_LOCAL_MACHINE<DD>The HKEY_LOCAL_MACHINE base key.
+<DT>HKEY_PERFORMANCE_DATA<DD><B>Windows NT, 2000:</B> The HKEY_PERFORMANCE_DATA base key.
+<DT>HKEY_USERS<DD>The HKEY_USERS base key.
+</DL>
+<DT><VAR>lpValueName</VAR><DD>The name of the value to set.  If this is an empty string, the function writes to the unnamed default value (<B>Windows 95:</B> the default value always has the REG_SZ data type).
+<DT><VAR>Reserved</VAR><DD>Reserved.  Set to 0.
+<DT><VAR>dwType</VAR><DD>One of the following flags identifying the data type of the data to write to the registry:
+<DL>
+<DT>REG_BINARY<DD>A non-text sequence of bytes.
+<DT>REG_DWORD<DD>Same as REG_DWORD_LITTLE_ENDIAN.
+<DT>REG_DWORD_BIG_ENDIAN<DD>A 32-bit integer stored in big-endian format.  This is the opposite of the way Intel-based computers normally store numbers -- the <A class="def" href="glossary.html#word" tppabs="http://www.vbapi.com/ref/glossary.html#word" rel="glossary">word</A> order is reversed.
+<DT>REG_DWORD_LITTLE_ENDIAN<DD>A 32-bit integer stored in little-endian format.  This is the way Intel-based computers normally store numbers.
+<DT>REG_EXPAND_SZ<DD>A null-terminated string which contains unexpanded environment variables.
+<DT>REG_LINK<DD>A Unicode symbolic link.
+<DT>REG_MULTI_SZ<DD>A series of strings, each separated by a null character and the entire set terminated by a two null characters.
+<DT>REG_NONE<DD>No data type.
+<DT>REG_RESOURCE_LIST<DD>A list of resources in the resource map.
+<DT>REG_SZ<DD>A string terminated by a null character.
+</DL>
+<DT><VAR>lpData</VAR><DD>The number, string, or other data to write to the registry.
+<DT><VAR>cbData</VAR><DD>The size in bytes of the data being written to the registry.
+</DL></P>
+
+<H2>Constant Definitions</H2>
+<P><PRE><CODE class="const">Const HKEY_CLASSES_ROOT = &amp;H80000000
+Const HKEY_CURRENT_CONFIG = &amp;H80000005
+Const HKEY_CURRENT_USER = &amp;H80000001
+Const HKEY_DYN_DATA = &amp;H80000006
+Const HKEY_LOCAL_MACHINE = &amp;H80000002
+Const HKEY_PERFORMANCE_DATA = &amp;H80000004
+Const HKEY_USERS = &amp;H80000003
+Const REG_BINARY = 3
+Const REG_DWORD = 4
+Const REG_DWORD_BIG_ENDIAN = 5
+Const REG_DWORD_LITTLE_ENDIAN = 4
+Const REG_EXPAND_SZ = 2
+Const REG_LINK = 6
+Const REG_MULTI_SZ = 7
+Const REG_NONE = 0
+Const REG_RESOURCE_LIST = 8
+Const REG_SZ = 1</CODE></PRE></P>
+
+<H2>Example</H2>
+<P><PRE><CODE class="example"><SPAN class="com">' This code is licensed according to the terms and conditions listed <A href="copyrite.html#license" tppabs="http://www.vbapi.com/copyrite.html#license" rel="copyright">here</A>.</SPAN>
+
+' Create a key called HKEY_CURRENT_USER\Software\MyCorp\MyProgram\Config.
+' Then create a "username" value under that key and set its value to "Rimmer".
+Dim hregkey As Long  ' receives handle to the newly created or opened registry key
+Dim secattr As <A href="security_attributes.html" tppabs="http://www.vbapi.com/ref/s/security_attributes.html">SECURITY_ATTRIBUTES</A>  ' security settings of the key
+Dim subkey As String  ' name of the subkey to create
+Dim neworused As Long  ' receives 1 if new key was created or 2 if an existing key was opened
+Dim stringbuffer As String  ' the string to put into the registry
+Dim retval As Long  ' return value
+
+' Set the name of the new key and the default security settings
+subkey = "Software\MyCorp\MyProgram\Config"
+secattr.nLength = Len(secattr)  ' size of the structure
+secattr.lpSecurityDescriptor = 0  ' default security level
+secattr.bInheritHandle = True  ' the default value for this setting
+
+' Create or open the registry key
+retval = <A href="regcreatekeyex.html" tppabs="http://www.vbapi.com/ref/r/regcreatekeyex.html">RegCreateKeyEx</A>(HKEY_CURRENT_USER, subkey, 0, "", 0, KEY_WRITE, secattr, hregkey, neworused)
+If retval &lt;&gt; 0 Then  ' error during open
+  Debug.Print "Error opening or creating registry key -- aborting."
+  End  ' terminate the program
+End If
+
+' Write the string to the registry.  Note that because Visual Basic is being used, the string
+' passed to the function must explicitly be passed ByVal.
+stringbuffer = "Rimmer" & vbNullChar  ' note how a null character must be appended to the string
+retval = <B>RegSetValueEx</B>(hregkey, "username", 0, REG_SZ, ByVal stringbuffer, Len(stringbuffer))  ' write the string
+
+' Close the registry key
+retval = <A href="regclosekey.html" tppabs="http://www.vbapi.com/ref/r/regclosekey.html">RegCloseKey</A>(hregkey)</CODE></PRE></P>
+
+<H2>See Also</H2>
+<P><A href="regdeletevalue.html" tppabs="http://www.vbapi.com/ref/r/regdeletevalue.html">RegDeleteValue</A>, <A href="regqueryvalueex.html" tppabs="http://www.vbapi.com/ref/r/regqueryvalueex.html">RegQueryValueEx</A></P>
+
+<H2>Category</H2>
+<P><A href="funcc.html#registry" tppabs="http://www.vbapi.com/ref/funcc.html#registry">Registry</A></P>
+
+<P><A href="funca.html" tppabs="http://www.vbapi.com/ref/funca.html">Go back to the alphabetical Function listing.</A><BR>
+<A href="index.html" tppabs="http://www.vbapi.com/ref/index.html">Go back to the Reference section index.</A></P>
+
+<HR>
+
+<P><B>Last Modified:</B> September 11, 1999<BR>
+This page is copyright &copy; 1999 Paul Kuliniewicz.  
+<A href="copyrite.html" tppabs="http://www.vbapi.com/copyrite.html" rel="copyright">Copyright Information</A>  <B>Revised October 29, 2000</B><BR>
+
+<A href="index-1.html" tppabs="http://www.vbapi.com/index.html">Go back to the Windows API Guide home page.</A><BR>
+E-mail: <A href="javascript:if(confirm('http://www.vbapi.com/email.html  \n\nThis file was not retrieved by Teleport Pro, because it is addressed on a domain or path outside the boundaries set for its Starting Address.  \n\nDo you want to open it from the server?'))window.location='http://www.vbapi.com/email.html'" tppabs="http://www.vbapi.com/email.html">vbapi@vbapi.com</A>  <A href="javascript:if(confirm('http://www.vbapi.com/email.html  \n\nThis file was not retrieved by Teleport Pro, because it is addressed on a domain or path outside the boundaries set for its Starting Address.  \n\nDo you want to open it from the server?'))window.location='http://www.vbapi.com/email.html#secure'" tppabs="http://www.vbapi.com/email.html#secure">Send Encrypted E-Mail</A><BR>
+This page is at <A href="regsetvalueex.html" tppabs="http://www.vbapi.com/ref/r/regsetvalueex.html">http://www.vbapi.com/ref/r/regsetvalueex.html</A>
+</P>
+</BODY>
+</HTML>

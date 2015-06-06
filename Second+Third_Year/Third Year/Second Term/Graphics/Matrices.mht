@@ -1,0 +1,1482 @@
+From: <Saved by Microsoft Internet Explorer 5>
+Subject: Matrices
+Date: Tue, 18 Jul 2000 05:19:46 +0300
+MIME-Version: 1.0
+Content-Type: multipart/related;
+	boundary="----=_NextPart_000_0030_01BFF077.C9FF4EF0";
+	type="text/html"
+X-MimeOLE: Produced By Microsoft MimeOLE V5.00.2919.6600
+
+This is a multi-part message in MIME format.
+
+------=_NextPart_000_0030_01BFF077.C9FF4EF0
+Content-Type: text/html;
+	charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
+Content-Location: http://www.geocities.com/SiliconValley/2151/matrices.html
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD><TITLE>Matrices</TITLE>
+<META content=3D"text/html; charset=3Diso-8859-1" =
+http-equiv=3DContent-Type>
+<META content=3D"Mark Feldman" name=3DAuthor>
+<META content=3D"Mark Feldman's Personal Home Page" name=3DDescription>
+<META content=3D"MSHTML 5.00.2919.6307" name=3DGENERATOR></HEAD>
+<BODY aLink=3D#ff0000 bgColor=3D#ffffff link=3D#0000ee text=3D#000000=20
+vLink=3D#551a8b>&nbsp;=20
+<CENTER>
+<TABLE bgColor=3D#00ffff border=3D0 width=3D"100%">
+  <TBODY>
+  <TR>
+    <TD><B><FONT face=3DArial><FONT color=3D#0000ff><FONT=20
+      =
+size=3D+1>Matrices</FONT></FONT></FONT></B></TD></TR></TBODY></TABLE></CE=
+NTER>&nbsp;<B><FONT=20
+size=3D-1>Introduction</FONT></B>=20
+<P><FONT size=3D-1>Matrices are extremely handy for writing fast 3D =
+programs. As=20
+you'll see they are just a 4x4 list of numbers, but they do have 2 very=20
+important properties:</FONT>=20
+<UL>
+  <LI><FONT size=3D-1>1) They can be used to efficiently keep track of=20
+  transformations, ie actions which occur in a VR program such as =
+movement,=20
+  rotation, zoom in/out etc.</FONT> </LI></UL>
+<UL>
+  <LI><FONT size=3D-1>2) A single matrix can represent an infinate =
+number of these=20
+  transformations in any combination. Let's say the user in your program =
+walks=20
+  forward, turns left, looks up, backs up a bit etc... All you need to =
+do is=20
+  keep a copy of a master matrix in memory and adjust it as the user =
+does these=20
+  things. At any point you then use this one matrix to figure out where=20
+  everything in your virtual world should be drawn on the screen.</FONT> =
+
+</LI></UL><FONT size=3D-1>A tranformation is simply a way of taking a =
+set of=20
+points and modifying them in some way to get a new set of points. For =
+example,=20
+if the user moves 10 units forward in a certain direction then the net =
+result is=20
+the same as if all objects in the world moved 10 units in the opposite=20
+direction.</FONT>=20
+<P><FONT size=3D-1>In 3D computer graphics it is often convenient to =
+assume that=20
+the view-point is always at the origin &lt;0,0,0&gt;. Not only does it =
+make it=20
+easier to render a scene but it often makes it a lot faster as well. =
+Instead of=20
+having the user move around the world we can keep the user at the origin =
+and=20
+make the objects move around instead. From the users point of view it =
+will look=20
+exactly the same. Matrices are a fast and convenient tool to perform =
+these=20
+transformations.</FONT>=20
+<P><B><FONT size=3D-1>A Point in Space</FONT></B>=20
+<P><FONT size=3D-1>As mentioned above, a point or vector can be =
+represented in 3D=20
+space as &lt;x,y,z&gt;. When using matrix math it helps to represent it =
+as=20
+&lt;x,y,z,w&gt;. That extra w there helps make things like movement =
+easier to=20
+deal with. If we have a point in 3D space we can convert it to this new =
+format=20
+by setting w to 1. In this text I'll be representing all points in space =
+as a=20
+collumn vector:</FONT> <PRE><B><FONT color=3D#008080><FONT =
+size=3D-1>|x|</FONT></FONT></B></PRE><PRE><B><FONT color=3D#008080><FONT =
+size=3D-1>|y|</FONT></FONT></B></PRE><PRE><B><FONT color=3D#008080><FONT =
+size=3D-1>|z|</FONT></FONT></B></PRE><PRE><B><FONT color=3D#008080><FONT =
+size=3D-1>|w| &lt;- w=3D1</FONT></FONT></B></PRE><B><FONT=20
+size=3D-1>Modifying the Position of a Point</FONT></B>=20
+<P><FONT size=3D-1>Let's say we want to take any point &lt;x,y,z,w&gt; =
+given and=20
+do something to it to get a new point. A row vector can be used to =
+represent how=20
+we want to change a point:</FONT> <PRE><B><FONT color=3D#008080><FONT =
+size=3D-1>These =
+values&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&=
+nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; =
+|x|</FONT></FONT></B></PRE><PRE><B><FONT color=3D#008080><FONT =
+size=3D-1>contain =
+the&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbs=
+p;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; =
+|y|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; This is =
+our</FONT></FONT></B></PRE><PRE><B><FONT color=3D#008080><FONT =
+size=3D-1>info on how we ----&gt; |A B C D|&nbsp; . |z|&nbsp;&nbsp; =
+&lt;--- point in 3D</FONT></FONT></B></PRE><PRE><B><FONT =
+color=3D#008080><FONT size=3D-1>want to =
+change&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&=
+nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; =
+|w|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; =
+space</FONT></FONT></B></PRE><PRE><B><FONT color=3D#008080><FONT =
+size=3D-1>the point</FONT></FONT></B></PRE><FONT=20
+size=3D-1>To figure out how the row vector |A B C D| changes a point, we =
+can=20
+visualize lying the point's collumn vector on it's side on top of it =
+like=20
+this:</FONT> <PRE><B><FONT color=3D#008080><FONT size=3D-1>| x&nbsp; =
+y&nbsp; z&nbsp; w |</FONT></FONT></B></PRE><PRE><B><FONT =
+color=3D#008080><FONT size=3D-1>| A&nbsp; B&nbsp; C&nbsp; D =
+|&nbsp;&nbsp;&nbsp;&nbsp; =3D (x * A) + (y * B) + (z * C) + (w * =
+D)</FONT></FONT></B></PRE><FONT=20
+size=3D-1>Compare this to the artical on <A=20
+href=3D"http://www.geocities.com/SiliconValley/2151/math3d.html">basic =
+3D math</A>=20
+and you'll see that we are in fact taking the dot product of the two =
+vectors.=20
+What we do above is mutiply each top item by the item under it and add =
+the=20
+results up to get the answer.</FONT>=20
+<P><FONT size=3D-1>Let's say we want to be able to take any point =
+&lt;x,y,z,w&gt;=20
+and figure out the coordinates for the point &lt;x',y',z',1&gt; which is =
+exactly=20
+4 units to the "right" of it, ie the point which is 4 units further =
+along the x=20
+axis. We can do this by using 4 row vectors. The first one will =
+calculate the=20
+new x point (x'), the next one the new y point (y') and so on. First =
+let's look=20
+at calculating x'.</FONT>=20
+<P><FONT size=3D-1>We know that the new x point can be calculated like =
+this: x' =3D=20
+x + 4, so a row vector to calculate this would be:</FONT> <PRE><B><FONT =
+color=3D#008080><FONT =
+size=3D-1>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nb=
+sp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | 1&nbsp; =
+0&nbsp; 0&nbsp; 4 |</FONT></FONT></B></PRE><FONT=20
+size=3D-1>i.e. when we multiply this out by a point &lt;x,y,z,w&gt; =
+we'll=20
+get:</FONT> <PRE><B><FONT color=3D#008080><FONT size=3D-1>(x * 1) + (y * =
+0) + (z * 0) + (w * 4) =3D x + 4</FONT></FONT></B></PRE><FONT=20
+size=3D-1>We also know that y' =3D y, z' =3D z and w =3D 1, so we can =
+calculate the row=20
+vectors for each of the other values, and stack them all on top of each=20
+other:</FONT> <PRE><B><FONT color=3D#008080><FONT size=3D-1>x row vector =
+----&gt;&nbsp;&nbsp;&nbsp; | 1&nbsp; 0&nbsp; 0&nbsp; 4 =
+|&nbsp;&nbsp;&nbsp; x'=3D1*x + 0*y + 0*z + 4 =3D x + =
+4</FONT></FONT></B></PRE><PRE><B><FONT color=3D#008080><FONT size=3D-1>y =
+row vector ----&gt;&nbsp;&nbsp;&nbsp; | 0&nbsp; 1&nbsp; 0&nbsp; 0 =
+|&nbsp;&nbsp;&nbsp; x'=3D0*x + 1*y + 0*z + 0 =3D =
+y</FONT></FONT></B></PRE><PRE><B><FONT color=3D#008080><FONT size=3D-1>z =
+row vector ----&gt;&nbsp;&nbsp;&nbsp; | 0&nbsp; 0&nbsp; 1&nbsp; 0 =
+|&nbsp;&nbsp;&nbsp; x'=3D0*x + 0*y + 1*z + 0 =3D =
+z</FONT></FONT></B></PRE><PRE><B><FONT color=3D#008080><FONT size=3D-1>1 =
+row vector ----&gt;&nbsp;&nbsp;&nbsp; | 0&nbsp; 0&nbsp; 0&nbsp; 1 =
+|&nbsp;&nbsp;&nbsp; x'=3D0*x + 0*y + 0*z + 1 =3D =
+1</FONT></FONT></B></PRE><FONT=20
+size=3D-1>And VOILA! That's what a matrix is! To take a point =
+&lt;x,y,z,w&gt; and=20
+calculate the new point we just mutiply the point by each of the row=20
+vectors.</FONT>=20
+<P><FONT size=3D-1>Here's a more generic representation of what we are=20
+doing:</FONT> <PRE><B><FONT color=3D#008080><FONT =
+size=3D-1>|x'|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | =
+M11&nbsp; M12&nbsp; M13&nbsp; M14 |&nbsp;&nbsp;&nbsp; | x =
+|</FONT></FONT></B></PRE><PRE><B><FONT color=3D#008080><FONT =
+size=3D-1>|y'|&nbsp;&nbsp;&nbsp; =3D&nbsp;&nbsp;&nbsp; | M21&nbsp; =
+M22&nbsp; M23&nbsp; M24 |&nbsp;&nbsp;&nbsp; | y =
+|</FONT></FONT></B></PRE><PRE><B><FONT color=3D#008080><FONT =
+size=3D-1>|z'|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | =
+M31&nbsp; M32&nbsp; M33&nbsp; M34 |&nbsp;&nbsp;&nbsp; | z =
+|</FONT></FONT></B></PRE><PRE><B><FONT color=3D#008080><FONT =
+size=3D-1>|w'|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | =
+M41&nbsp; M42&nbsp; M43&nbsp; M44 |&nbsp;&nbsp;&nbsp; | w =
+|</FONT></FONT></B></PRE><FONT=20
+size=3D-1>In this case &lt;x,y,z,w&gt; is the point we are popping in,=20
+&lt;x',y',z',w'&gt; is the point we'll be getting out, and each number =
+in the=20
+matrix is represented by Mij, where i =3D row number and j =3D collumn=20
+number.</FONT>=20
+<P><FONT size=3D-1>Following the line of reasoning above, we can figure =
+out how to=20
+calculate the new point based on the given point and the matrix:</FONT> =
+<PRE><B><FONT color=3D#408080><FONT size=3D-1>x' =3D (x * M11) + (y * =
+M12) + (z * M13) + M14</FONT></FONT></B></PRE><PRE><B><FONT =
+color=3D#408080><FONT size=3D-1>y' =3D (x * M21) + (y * M22) + (z * M23) =
++ M24</FONT></FONT></B></PRE><PRE><B><FONT color=3D#408080><FONT =
+size=3D-1>z' =3D (x * M31) + (y * M32) + (z * M33) + =
+M34</FONT></FONT></B></PRE><PRE><B><FONT color=3D#408080><FONT =
+size=3D-1>w' =3D (x * M41) + (y * M42) + (z * M43) + =
+M44</FONT></FONT></B></PRE><FONT=20
+size=3D-1>In practice, we don't really need that last equation, we know =
+that it=20
+will always equal 1 so we don't have to calculate it (well it better =
+equal 1,=20
+otherwise we've done something wrong!!).</FONT>=20
+<P><FONT size=3D-1>Plugging a point into a matrix like this and getting =
+a new=20
+point out is called "tranforming" a point by a matrix, just keep that in =
+mind so=20
+you know what to call your procedure to do it!</FONT>=20
+<P><FONT size=3D-1>A few of the more commonly used matrices follow. Now =
+that you=20
+know how matrices work you should be able to derive these yourself, but =
+heck I=20
+may as well save you the trouble.</FONT>=20
+<P><B><FONT size=3D-1>Doing nothing</FONT></B>=20
+<P><FONT size=3D-1>You often need a matrix to pop out exactly the same =
+point as=20
+was plugged in. The matrix to do this is called the identity =
+matrix:</FONT> <PRE><B><FONT color=3D#008080><FONT size=3D-1>|&nbsp; =
+1&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0 =
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; x' =
+=3D x</FONT></FONT></B></PRE><PRE><B><FONT color=3D#008080><FONT =
+size=3D-1>|&nbsp; 0&nbsp;&nbsp;&nbsp; 1&nbsp;&nbsp;&nbsp; =
+0&nbsp;&nbsp;&nbsp; 0 =
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; y' =
+=3D y</FONT></FONT></B></PRE><PRE><B><FONT color=3D#008080><FONT =
+size=3D-1>|&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; =
+1&nbsp;&nbsp;&nbsp; 0 =
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; z' =
+=3D z</FONT></FONT></B></PRE><PRE><B><FONT color=3D#008080><FONT =
+size=3D-1>|&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; =
+0&nbsp;&nbsp;&nbsp; 1 |</FONT></FONT></B></PRE><B><FONT=20
+size=3D-1>Translation</FONT></B>=20
+<P><FONT size=3D-1>A translation is simply adding (or subtracting) a =
+point to any=20
+given point. Let's say you want to add TX to x, TY to y and TZ to z. The =
+matrix=20
+to do this is:</FONT> <PRE><B><FONT color=3D#008080><FONT =
+size=3D-1>|&nbsp; 1&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; =
+0&nbsp;&nbsp;&nbsp; tx =
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; x' =
+=3D x + tx</FONT></FONT></B></PRE><PRE><B><FONT color=3D#008080><FONT =
+size=3D-1>|&nbsp; 0&nbsp;&nbsp;&nbsp; 1&nbsp;&nbsp;&nbsp; =
+0&nbsp;&nbsp;&nbsp; ty =
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; y' =
+=3D y + ty</FONT></FONT></B></PRE><PRE><B><FONT color=3D#008080><FONT =
+size=3D-1>|&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; =
+1&nbsp;&nbsp;&nbsp; tz =
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; z' =
+=3D z + tz</FONT></FONT></B></PRE><PRE><B><FONT color=3D#008080><FONT =
+size=3D-1>|&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; =
+0&nbsp;&nbsp;&nbsp; 1&nbsp; |</FONT></FONT></B></PRE><B><FONT=20
+size=3D-1>Scaling</FONT></B>=20
+<P><FONT size=3D-1>Sometimes we may need to scale a point, ie mutiply =
+each axis by=20
+a given number. This is handy for things like zoom effects.</FONT> =
+<PRE><B><FONT color=3D#008080><FONT size=3D-1>|&nbsp; sx&nbsp;&nbsp; =
+0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0 =
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; x' =
+=3D sx * x</FONT></FONT></B></PRE><PRE><B><FONT color=3D#008080><FONT =
+size=3D-1>|&nbsp; 0&nbsp;&nbsp;&nbsp; sy&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; =
+0 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; y' =
+=3D sy * y</FONT></FONT></B></PRE><PRE><B><FONT color=3D#008080><FONT =
+size=3D-1>|&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; sz&nbsp;&nbsp; =
+0 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; z' =
+=3D sz * tz</FONT></FONT></B></PRE><PRE><B><FONT color=3D#008080><FONT =
+size=3D-1>|&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; =
+0&nbsp;&nbsp;&nbsp; 1 |</FONT></FONT></B></PRE><FONT=20
+size=3D-1>Of course, if you only want to scale along the X axis (say) =
+then you=20
+simply set SX to the scale value and set SY and SZ to 1.</FONT>=20
+<P><B><FONT size=3D-1>Basic Rotations</FONT></B>=20
+<P><FONT size=3D-1>Things start getting a wee bit tricky here. For =
+starters we can=20
+rotate things around the x axis, the y axis, or the z axis. Notice how =
+each axis=20
+forms a line in 3D space? Well we can also rotate things around any =
+arbitrary=20
+line. This is handy if we want to do effects like objects rotating about =
+their=20
+own axis (I'll discuss this a bit later).</FONT>=20
+<P><FONT size=3D-1>The matrix for rotating around the x axis by angle =
+=E9 is:</FONT>=20
+<PRE><B><FONT color=3D#008080><FONT size=3D-1>|&nbsp; =
+1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; =
+0&nbsp;&nbsp;&nbsp;&nbsp; 0 =
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; x' =
+=3D x</FONT></FONT></B></PRE><PRE><B><FONT size=3D-1><FONT =
+color=3D#008080>|&nbsp; 0&nbsp;&nbsp;&nbsp; cos </FONT><FONT =
+color=3D#408080>=E9</FONT><FONT color=3D#008080>&nbsp; -sin </FONT><FONT =
+color=3D#408080>=E9</FONT><FONT color=3D#008080>&nbsp; 0 =
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; y' =
+=3D (cos </FONT><FONT color=3D#408080>=E9) * y</FONT><FONT =
+color=3D#008080> - (sin </FONT><FONT color=3D#408080>=E9) * =
+z</FONT></FONT></B></PRE><PRE><B><FONT size=3D-1><FONT =
+color=3D#008080>|&nbsp; 0&nbsp;&nbsp;&nbsp; sin </FONT><FONT =
+color=3D#408080>=E9</FONT><FONT color=3D#008080>&nbsp;&nbsp; cos =
+</FONT><FONT color=3D#408080>=E9</FONT><FONT color=3D#008080>&nbsp; 0 =
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; z' =
+=3D (sin </FONT><FONT color=3D#408080>=E9) * y</FONT><FONT =
+color=3D#008080> + (cos </FONT><FONT color=3D#408080>=E9) * =
+z</FONT></FONT></B></PRE><PRE><B><FONT color=3D#008080><FONT =
+size=3D-1>|&nbsp; 0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; =
+0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp;&nbsp; 1 =
+|</FONT></FONT></B></PRE><FONT=20
+size=3D-1>The matrix for rotating around the y axis by angle =E9 =
+is:</FONT> <PRE><B><FONT size=3D-1><FONT color=3D#008080>|&nbsp; cos =
+</FONT><FONT color=3D#408080>=E9</FONT><FONT =
+color=3D#008080>&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; sin </FONT><FONT =
+color=3D#408080>=E9</FONT><FONT color=3D#008080>&nbsp;&nbsp; 0 =
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; x' =
+=3D (cos </FONT><FONT color=3D#408080>=E9) * x</FONT><FONT =
+color=3D#008080> + (sin </FONT><FONT color=3D#408080>=E9) * =
+z</FONT></FONT></B></PRE><PRE><B><FONT color=3D#008080><FONT =
+size=3D-1>|&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp;&nbsp; =
+1&nbsp;&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0 =
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; y' =
+=3D y</FONT></FONT></B></PRE><PRE><B><FONT size=3D-1><FONT =
+color=3D#008080>|&nbsp; -sin </FONT><FONT =
+color=3D#408080>=E9</FONT><FONT color=3D#008080>&nbsp; =
+0&nbsp;&nbsp;&nbsp; cos </FONT><FONT color=3D#408080>=E9</FONT><FONT =
+color=3D#008080>&nbsp;&nbsp; 0 =
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; z' =
+=3D -(sin </FONT><FONT color=3D#408080>=E9) * x</FONT><FONT =
+color=3D#008080> + (cos </FONT><FONT color=3D#408080>=E9) * =
+z</FONT></FONT></B></PRE><PRE><B><FONT color=3D#008080><FONT =
+size=3D-1>|&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; =
+0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1 =
+|</FONT></FONT></B></PRE><FONT=20
+size=3D-1>And the matrix for rotating around the zaxis by angle =E9 =
+is:</FONT> <PRE><B><FONT size=3D-1><FONT color=3D#008080>|&nbsp; cos =
+</FONT><FONT color=3D#408080>=E9</FONT><FONT =
+color=3D#008080>&nbsp;&nbsp; -sin </FONT><FONT =
+color=3D#408080>=E9</FONT><FONT color=3D#008080>&nbsp;&nbsp; =
+0&nbsp;&nbsp;&nbsp; 0 =
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; x' =
+=3D (cos </FONT><FONT color=3D#408080>=E9) * x</FONT><FONT =
+color=3D#008080> - (sin </FONT><FONT color=3D#408080>=E9) * =
+y</FONT></FONT></B></PRE><PRE><B><FONT size=3D-1><FONT =
+color=3D#008080>|&nbsp; sin </FONT><FONT color=3D#408080>=E9</FONT><FONT =
+color=3D#008080>&nbsp;&nbsp;&nbsp; cos </FONT><FONT =
+color=3D#408080>=E9</FONT><FONT color=3D#008080>&nbsp;&nbsp; =
+0&nbsp;&nbsp;&nbsp; 0 =
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; y' =
+=3D (sin </FONT><FONT color=3D#408080>=E9) * x</FONT><FONT =
+color=3D#008080> + (cos </FONT><FONT color=3D#408080>=E9) * =
+y</FONT></FONT></B></PRE><PRE><B><FONT color=3D#008080><FONT =
+size=3D-1>|&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; =
+0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1&nbsp;&nbsp;&nbsp; 0 =
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; z' =
+=3D z</FONT></FONT></B></PRE><PRE><B><FONT color=3D#008080><FONT =
+size=3D-1>|&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; =
+0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 1 =
+|</FONT></FONT></B></PRE><B><FONT=20
+size=3D-1>Mirroring</FONT></B>=20
+<P><FONT size=3D-1>Mirroring involves flipping all points about an =
+arbitrary plane=20
+in 3D space. This is illustrated in figure 1.</FONT>=20
+<CENTER><PRE><IMG alt=3D"Mirroring a point about a plane" height=3D193 =
+src=3D"http://www.geocities.com/SiliconValley/2151/matrices_1.gif" =
+width=3D457></PRE></CENTER><FONT=20
+size=3D-1>From the diagram we can easily see that to mirror a point we =
+need=20
+to:</FONT>=20
+<UL>
+  <LI><FONT size=3D-1>1) Calculate the distance of the point from the =
+plane</FONT>=20
+
+  <LI><FONT size=3D-1>2) Move the point in the opposite direction to the =
+plane=20
+  normal a distance of 2 * dist.</FONT> </LI></UL><FONT size=3D-1>The =
+distance of a=20
+point from a plane can be calculated easily with the plane =
+equation:</FONT> <PRE><B><FONT color=3D#408080><FONT size=3D-1>dist =3D =
+p * normal + k</FONT></FONT></B></PRE><FONT=20
+size=3D-1>(Normally this equation assumes that the plane normal is a =
+unit vector.=20
+In this particular case however this is not a requirement).</FONT>=20
+<P><FONT size=3D-1>Based on the information above we can see that the =
+final mirror=20
+equation is:</FONT> <PRE><B><FONT color=3D#408080><FONT size=3D-1>p' =3D =
+p - 2 * dist * normal</FONT></FONT></B></PRE><PRE><B><FONT =
+color=3D#408080><FONT size=3D-1>&nbsp;&nbsp; =3D p - 2 * (p * normal + =
+k) * normal</FONT></FONT></B></PRE><PRE><B><FONT color=3D#408080><FONT =
+size=3D-1>&nbsp;&nbsp; =3D p - 2 * (p.x*normal.x + p.y*normal.y + =
+p.z*normal.z + k) * normal</FONT></FONT></B></PRE><FONT=20
+size=3D-1>Expanding this out we get the equation for each element in =
+p':</FONT> <PRE><B><FONT color=3D#408080><FONT size=3D-1>p'.x =3D p.x - =
+2*p.x*nx*nx + 2*p.y*ny*nx + 2*p.z*nz*nx + =
+2*k*nx</FONT></FONT></B></PRE><PRE><B><FONT color=3D#408080><FONT =
+size=3D-1>p'.y =3D p.y - 2*p.x*nx*ny + 2*p.y*ny*ny + 2*p.z*nz*ny + =
+2*k*ny</FONT></FONT></B></PRE><PRE><B><FONT color=3D#408080><FONT =
+size=3D-1>p'.z =3D p.z - 2*p.x*nx*nz + 2*p.y*ny*nz + 2*p.z*nz*nz + =
+2*k*nz</FONT></FONT></B></PRE><FONT=20
+size=3D-1>where &lt;nx,ny,nz&gt;=3Dnormal. Thus the final mirror matrix =
+for any=20
+given plane p*&lt;nx,ny,nz&gt;+k=3D0 is:</FONT> <PRE><B><FONT =
+color=3D#008080><FONT size=3D-1>| 1-2*nx*nx&nbsp;&nbsp;&nbsp; =
+-2*nx*ny&nbsp;&nbsp;&nbsp;&nbsp; -2*nx*nz&nbsp;&nbsp;&nbsp;&nbsp; =
+-2*nx*k |</FONT></FONT></B></PRE><PRE><B><FONT color=3D#008080><FONT =
+size=3D-1>|&nbsp; -2*ny*nx&nbsp;&nbsp; 1-2*ny*ny&nbsp;&nbsp;&nbsp;&nbsp; =
+-2*ny*nz&nbsp;&nbsp;&nbsp;&nbsp; -2*ny*k =
+|</FONT></FONT></B></PRE><PRE><B><FONT color=3D#008080><FONT =
+size=3D-1>|&nbsp; -2*nz*nx&nbsp;&nbsp;&nbsp; -2*nz*ny&nbsp;&nbsp;&nbsp; =
+1-2*nz*nz&nbsp;&nbsp;&nbsp;&nbsp; -2*nz*k =
+|</FONT></FONT></B></PRE><PRE><B><FONT color=3D#008080><FONT =
+size=3D-1>|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; =
+0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; =
+0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; =
+0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; =
+1&nbsp;&nbsp; |</FONT></FONT></B></PRE><FONT=20
+size=3D-1>(Note the common terms: m[0][1]=3Dm[1][0], m[0][2]=3Dm[2][0], =
+and=20
+m[1][2]=3Dm[2][1]).</FONT>=20
+<P><B><FONT size=3D-1>Multiplying Matrices</FONT></B>=20
+<P><FONT size=3D-1>So now that we know how to represent each of the =
+different=20
+types of matrix operations, how do we combine them? By multiplying two =
+matrices=20
+together:</FONT> <PRE><B><FONT color=3D#408080><FONT size=3D-1>P =3D B x =
+A</FONT></FONT></B></PRE><FONT=20
+size=3D-1>If transforming a point by A gives one effect, and =
+transforming it by B=20
+gives another, then transforming it by P alone gives you the same result =
+as if=20
+you had transformed it by A then by B. You can keep mutiplying a matrix =
+by as=20
+many other matrices as you like, and each time the end product will =
+contain the=20
+info for all of them in the correct order.</FONT>=20
+<P><FONT size=3D-1>To multiply B by A, you treat each collumn in A as a =
+seperate=20
+collumn vector, and transform it by matrix B to get the new collumn. =
+Let's look=20
+at doing it for the first collumn in A:</FONT> <PRE><B><FONT =
+color=3D#408080><FONT =
+size=3D-1>|P11|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |B11&nbsp; B12&nbsp; =
+B13&nbsp; B14|&nbsp;&nbsp;&nbsp;&nbsp; =
+|A11|</FONT></FONT></B></PRE><PRE><B><FONT color=3D#408080><FONT =
+size=3D-1>|P21|&nbsp;&nbsp; =3D&nbsp;&nbsp; |B21&nbsp; B22&nbsp; =
+B23&nbsp; B24|&nbsp;&nbsp;&nbsp;&nbsp; =
+|A21|</FONT></FONT></B></PRE><PRE><B><FONT color=3D#408080><FONT =
+size=3D-1>|P31|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |B31&nbsp; B32&nbsp; =
+B33&nbsp; B34|&nbsp;&nbsp;&nbsp;&nbsp; =
+|A31|</FONT></FONT></B></PRE><PRE><B><FONT color=3D#408080><FONT =
+size=3D-1>|P41|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |B41&nbsp; B42&nbsp; =
+B43&nbsp; B44|&nbsp;&nbsp;&nbsp;&nbsp; =
+|A41|</FONT></FONT></B></PRE><FONT=20
+size=3D-1>So that first collumn of P will be:</FONT> <PRE><B><FONT =
+color=3D#408080><FONT size=3D-1>| (A11 * B11) + (A21 * B12) + (A31 * =
+B13) + (A41 * B14) |</FONT></FONT></B></PRE><PRE><B><FONT =
+color=3D#408080><FONT size=3D-1>| (A11 * B21) + (A21 * B22) + (A31 * =
+B23) + (A41 * B24) |</FONT></FONT></B></PRE><PRE><B><FONT =
+color=3D#408080><FONT size=3D-1>| (A11 * B31) + (A21 * B32) + (A31 * =
+B33) + (A41 * B34) |</FONT></FONT></B></PRE><PRE><B><FONT =
+color=3D#408080><FONT size=3D-1>| (A11 * B41) + (A21 * B42) + (A31 * =
+B43) + (A41 * B44) |</FONT></FONT></B></PRE><FONT=20
+size=3D-1>We need to split the A matrix up into it's 4 collumn vectors =
+and=20
+transform each collumn vector by matrix B to get 4 new collumn =
+vectors:</FONT> <PRE><B><FONT color=3D#408080><FONT =
+size=3D-1>|P11|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |B11&nbsp; B12&nbsp; =
+B13&nbsp; B14|&nbsp;&nbsp;&nbsp;&nbsp; =
+|A11|</FONT></FONT></B></PRE><PRE><B><FONT color=3D#408080><FONT =
+size=3D-1>|P21|&nbsp;&nbsp; =3D&nbsp;&nbsp; |B21&nbsp; B22&nbsp; =
+B23&nbsp; B24|&nbsp;&nbsp;&nbsp;&nbsp; =
+|A21|</FONT></FONT></B></PRE><PRE><B><FONT color=3D#408080><FONT =
+size=3D-1>|P31|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |B31&nbsp; B32&nbsp; =
+B33&nbsp; B34|&nbsp;&nbsp;&nbsp;&nbsp; =
+|A31|</FONT></FONT></B></PRE><PRE><B><FONT color=3D#408080><FONT =
+size=3D-1>|P41|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |B41&nbsp; B42&nbsp; =
+B43&nbsp; B44|&nbsp;&nbsp;&nbsp;&nbsp; =
+|A41|</FONT></FONT></B></PRE><PRE><B><FONT color=3D#408080><FONT =
+size=3D-1>|P12|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |B11&nbsp; B12&nbsp; =
+B13&nbsp; B14|&nbsp;&nbsp;&nbsp;&nbsp; =
+|A12|</FONT></FONT></B></PRE><PRE><B><FONT color=3D#408080><FONT =
+size=3D-1>|P22|&nbsp;&nbsp; =3D&nbsp;&nbsp; |B21&nbsp; B22&nbsp; =
+B23&nbsp; B24|&nbsp;&nbsp;&nbsp;&nbsp; =
+|A22|</FONT></FONT></B></PRE><PRE><B><FONT color=3D#408080><FONT =
+size=3D-1>|P32|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |B31&nbsp; B32&nbsp; =
+B33&nbsp; B34|&nbsp;&nbsp;&nbsp;&nbsp; =
+|A32|</FONT></FONT></B></PRE><PRE><B><FONT color=3D#408080><FONT =
+size=3D-1>|P42|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |B41&nbsp; B42&nbsp; =
+B43&nbsp; B44|&nbsp;&nbsp;&nbsp;&nbsp; =
+|A42|</FONT></FONT></B></PRE><PRE><B><FONT color=3D#408080><FONT =
+size=3D-1>|P13|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |B11&nbsp; B12&nbsp; =
+B13&nbsp; B14|&nbsp;&nbsp;&nbsp;&nbsp; =
+|A13|</FONT></FONT></B></PRE><PRE><B><FONT color=3D#408080><FONT =
+size=3D-1>|P23|&nbsp;&nbsp; =3D&nbsp;&nbsp; |B21&nbsp; B22&nbsp; =
+B23&nbsp; B24|&nbsp;&nbsp;&nbsp;&nbsp; =
+|A23|</FONT></FONT></B></PRE><PRE><B><FONT color=3D#408080><FONT =
+size=3D-1>|P33|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |B31&nbsp; B32&nbsp; =
+B33&nbsp; B34|&nbsp;&nbsp;&nbsp;&nbsp; =
+|A33|</FONT></FONT></B></PRE><PRE><B><FONT color=3D#408080><FONT =
+size=3D-1>|P43|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |B41&nbsp; B42&nbsp; =
+B43&nbsp; B44|&nbsp;&nbsp;&nbsp;&nbsp; =
+|A43|</FONT></FONT></B></PRE><PRE><B><FONT color=3D#408080><FONT =
+size=3D-1>|P14|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |B11&nbsp; B12&nbsp; =
+B13&nbsp; B14|&nbsp;&nbsp;&nbsp;&nbsp; =
+|A14|</FONT></FONT></B></PRE><PRE><B><FONT color=3D#408080><FONT =
+size=3D-1>|P24|&nbsp;&nbsp; =3D&nbsp;&nbsp; |B21&nbsp; B22&nbsp; =
+B23&nbsp; B24|&nbsp;&nbsp;&nbsp;&nbsp; =
+|A24|</FONT></FONT></B></PRE><PRE><B><FONT color=3D#408080><FONT =
+size=3D-1>|P34|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |B31&nbsp; B32&nbsp; =
+B33&nbsp; B34|&nbsp;&nbsp;&nbsp;&nbsp; =
+|A34|</FONT></FONT></B></PRE><PRE><B><FONT color=3D#408080><FONT =
+size=3D-1>|P44|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |B41&nbsp; B42&nbsp; =
+B43&nbsp; B44|&nbsp;&nbsp;&nbsp;&nbsp; =
+|A44|</FONT></FONT></B></PRE><FONT=20
+size=3D-1>The resulting matrix is then made by combing these 4 collumn =
+vectors=20
+back into a single matrix:</FONT> <PRE><B><FONT color=3D#408080><FONT =
+size=3D-1>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | =
+P11&nbsp; P12&nbsp; P13&nbsp; P14 |</FONT></FONT></B></PRE><PRE><B><FONT =
+color=3D#408080><FONT size=3D-1>B x A =3D&nbsp;&nbsp; | P21&nbsp; =
+P22&nbsp; P23&nbsp; P24 |</FONT></FONT></B></PRE><PRE><B><FONT =
+color=3D#408080><FONT =
+size=3D-1>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | =
+P31&nbsp; P32&nbsp; P33&nbsp; P34 |</FONT></FONT></B></PRE><PRE><B><FONT =
+color=3D#408080><FONT =
+size=3D-1>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | =
+P41&nbsp; P42&nbsp; P43&nbsp; P44 |</FONT></FONT></B></PRE><FONT=20
+size=3D-1>One thing to keep in mind is that the bottom row in any matrix =
+will=20
+always be [0 0 0 1], so we can use this to slighty speed up matrix=20
+multiplication. Here's a general algorithm which will multiply 2=20
+matrices:</FONT> <PRE><B><FONT color=3D#408080><FONT size=3D-1>Let A and =
+B be our matrices,P will be the result (B x =
+A).</FONT></FONT></B></PRE><PRE><B><FONT color=3D#408080><FONT =
+size=3D-1>var i,,j : integer;</FONT></FONT></B></PRE><PRE><B><FONT =
+color=3D#408080><FONT size=3D-1>for i :=3D 0 to 2 =
+do</FONT></FONT></B></PRE><PRE><B><FONT color=3D#408080><FONT =
+size=3D-1>&nbsp;&nbsp;&nbsp; for j :=3D 0 to 3 =
+do</FONT></FONT></B></PRE><PRE><B><FONT color=3D#408080><FONT =
+size=3D-1>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; =
+begin</FONT></FONT></B></PRE><PRE><B><FONT color=3D#408080><FONT =
+size=3D-1>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nb=
+sp; P[i][j] :=3D 0;</FONT></FONT></B></PRE><PRE><B><FONT =
+color=3D#408080><FONT =
+size=3D-1>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nb=
+sp; for k :=3D 0 to 3 do</FONT></FONT></B></PRE><PRE><B><FONT =
+color=3D#408080><FONT =
+size=3D-1>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nb=
+sp;&nbsp;&nbsp;&nbsp;&nbsp; P[i][j] :=3D P[i][j] + B[i][k] * =
+A[k][j];</FONT></FONT></B></PRE><PRE><B><FONT color=3D#408080><FONT =
+size=3D-1>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; =
+end;</FONT></FONT></B></PRE><PRE><B><FONT color=3D#408080><FONT =
+size=3D-1>P[3][0] :=3D 0; { Set the bottom row to 0 0 0 1 =
+}</FONT></FONT></B></PRE><PRE><B><FONT color=3D#408080><FONT =
+size=3D-1>P[3][1] :=3D 0;</FONT></FONT></B></PRE><PRE><B><FONT =
+color=3D#408080><FONT size=3D-1>P[3][2] :=3D =
+0;</FONT></FONT></B></PRE><PRE><B><FONT color=3D#408080><FONT =
+size=3D-1>P[3][3] :=3D 1;</FONT></FONT></B></PRE><B><FONT=20
+size=3D-1>The Inverse Matrix</FONT></B>=20
+<P><FONT size=3D-1>Let's say we have two matrices A and B. If the =
+following is=20
+true:</FONT> <PRE><B><FONT color=3D#408080><FONT =
+size=3D-1>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nb=
+sp;&nbsp;&nbsp;&nbsp;&nbsp; | 1&nbsp;&nbsp; 0&nbsp;&nbsp; 0&nbsp;&nbsp; =
+0 |</FONT></FONT></B></PRE><PRE><B><FONT color=3D#408080><FONT =
+size=3D-1>A x B =3D B x A =3D | 0&nbsp;&nbsp; 1&nbsp;&nbsp; =
+0&nbsp;&nbsp; 0 |</FONT></FONT></B></PRE><PRE><B><FONT =
+color=3D#408080><FONT =
+size=3D-1>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nb=
+sp;&nbsp;&nbsp;&nbsp;&nbsp; | 0&nbsp;&nbsp; 0&nbsp;&nbsp; 1&nbsp;&nbsp; =
+0 |</FONT></FONT></B></PRE><PRE><B><FONT color=3D#408080><FONT =
+size=3D-1>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nb=
+sp;&nbsp;&nbsp;&nbsp;&nbsp; | 0&nbsp;&nbsp; 0&nbsp;&nbsp; 0&nbsp;&nbsp; =
+1 |</FONT></FONT></B></PRE><FONT=20
+size=3D-1>then we say that B is the _inverse_ of A (and visa-versa). If =
+you=20
+transform a point P1 by matrix A then you'll get a new point P2. If you =
+then=20
+transform P2 by matrix B, it'll return P1. The two matrixes have the =
+same effect=20
+but in "opposite" directions, eg if A moves all points 5 spaces to the =
+"left"=20
+then B will move them 5 spaces to the "right". Similarly if A rotates =
+space=20
+around a particular axis one way then B will rotate by the same amount =
+around=20
+the same axis in the opposite direction.</FONT>=20
+<P><FONT size=3D-1>There are several methods for calculating the inverse =
+of a=20
+matrix, for large matrices the Gaussian method is preferred. Gaussian =
+uses a=20
+technique called of "row reduction", first we create a large matrix like =
+
+so:</FONT> <PRE><B><FONT color=3D#408080><FONT =
+size=3D-1>&nbsp;&nbsp;&nbsp; This is the =
+matrix</FONT></FONT></B></PRE><PRE><B><FONT color=3D#408080><FONT =
+size=3D-1>&nbsp;&nbsp;&nbsp; we are trying =
+to&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp=
+;&nbsp;&nbsp;&nbsp; This is the =
+identity</FONT></FONT></B></PRE><PRE><B><FONT color=3D#408080><FONT =
+size=3D-1>&nbsp;&nbsp;&nbsp; find the inverse =
+of&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp=
+;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; =
+matrix</FONT></FONT></B></PRE><PRE><B><FONT color=3D#408080><FONT =
+size=3D-1>|&nbsp;&nbsp;&nbsp; A11&nbsp; A12&nbsp; A13&nbsp; =
+A14&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbs=
+p;&nbsp;&nbsp; 1&nbsp;&nbsp; 0&nbsp;&nbsp; 0&nbsp;&nbsp; =
+0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; =
+|</FONT></FONT></B></PRE><PRE><B><FONT color=3D#408080><FONT =
+size=3D-1>|&nbsp;&nbsp;&nbsp; A21&nbsp; A22&nbsp; A23&nbsp; =
+A24&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbs=
+p;&nbsp;&nbsp; 0&nbsp;&nbsp; 1&nbsp;&nbsp; 0&nbsp;&nbsp; =
+0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; =
+|</FONT></FONT></B></PRE><PRE><B><FONT color=3D#408080><FONT =
+size=3D-1>|&nbsp;&nbsp;&nbsp; A31&nbsp; A32&nbsp; A33&nbsp; =
+A34&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbs=
+p;&nbsp;&nbsp; 0&nbsp;&nbsp; 0&nbsp;&nbsp; 1&nbsp;&nbsp; =
+0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; =
+|</FONT></FONT></B></PRE><PRE><B><FONT color=3D#408080><FONT =
+size=3D-1>|&nbsp;&nbsp;&nbsp; A41&nbsp; A42&nbsp; A43&nbsp; =
+A44&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbs=
+p;&nbsp;&nbsp; 0&nbsp;&nbsp; 0&nbsp;&nbsp; 0&nbsp;&nbsp; =
+1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |</FONT></FONT></B></PRE><FONT=20
+size=3D-1>Our goal is to perform various "elementary row operations" on =
+this=20
+matrix to put it in the following form:</FONT> <PRE><B><FONT =
+color=3D#408080><FONT size=3D-1>&nbsp;&nbsp;&nbsp; Identity =
+matrix&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&=
+nbsp;&nbsp; The inverse</FONT></FONT></B></PRE><PRE><B><FONT =
+color=3D#408080><FONT size=3D-1>|&nbsp;&nbsp;&nbsp; 1&nbsp;&nbsp; =
+0&nbsp;&nbsp; 0&nbsp;&nbsp; =
+0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; B11&nbsp; =
+B12&nbsp; B13&nbsp; B14&nbsp;&nbsp;&nbsp; =
+|</FONT></FONT></B></PRE><PRE><B><FONT color=3D#408080><FONT =
+size=3D-1>|&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp; 1&nbsp;&nbsp; 0&nbsp;&nbsp; =
+0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; B21&nbsp; =
+B22&nbsp; B23&nbsp; B24&nbsp;&nbsp;&nbsp; =
+|</FONT></FONT></B></PRE><PRE><B><FONT color=3D#408080><FONT =
+size=3D-1>|&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp; 0&nbsp;&nbsp; 1&nbsp;&nbsp; =
+0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; B31&nbsp; =
+B32&nbsp; B33&nbsp; B34&nbsp;&nbsp;&nbsp; =
+|</FONT></FONT></B></PRE><PRE><B><FONT color=3D#408080><FONT =
+size=3D-1>|&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp; 0&nbsp;&nbsp; 0&nbsp;&nbsp; =
+1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; B41&nbsp; =
+B42&nbsp; B43&nbsp; B44&nbsp;&nbsp;&nbsp; |</FONT></FONT></B></PRE><FONT =
+
+size=3D-1>In the above matrices A is our initial matrix and B will be =
+the inverse=20
+of A.</FONT>=20
+<P><FONT size=3D-1>There are three kinds of elementary row operations we =
+can=20
+use:</FONT>=20
+<UL>
+  <LI><FONT size=3D-1><B>RULE 1</B> - Interchange two rows.</FONT>=20
+  <P><FONT size=3D-1><B>RULE 2</B> - Multiply any row by a constant =
+other than=20
+  0.</FONT>=20
+  <P><FONT size=3D-1><B>RULE 3 </B>- Add a constant multiple of any row =
+to another=20
+  row.</FONT></P></LI></UL><FONT size=3D-1>Here is the basic algorithm =
+to figure out=20
+which steps to perform as well as their order (this algorithm assumes =
+that the=20
+bottom row of a matrix is always [0 0 0 1]) :</FONT> <PRE><B><FONT =
+color=3D#408080><FONT size=3D-1>var i,j,row : =
+integer;</FONT></FONT></B></PRE><PRE><B><FONT color=3D#408080><FONT =
+size=3D-1>&nbsp;&nbsp;&nbsp; multiple,divisor : =
+real;</FONT></FONT></B></PRE><PRE><B><FONT color=3D#408080><FONT =
+size=3D-1>&nbsp;&nbsp;&nbsp; A : array[0..3][0..7] of =
+real;</FONT></FONT></B></PRE><PRE><B><FONT color=3D#408080><FONT =
+size=3D-1>Set values A[0..3][0..3] to our 4x4 =
+matrix</FONT></FONT></B></PRE><PRE><B><FONT color=3D#408080><FONT =
+size=3D-1>Set values A[0..3][4..7] to the 4x4 identity =
+matrix</FONT></FONT></B></PRE><PRE><B><FONT color=3D#408080><FONT =
+size=3D-1>{ Loop through each row }</FONT></FONT></B></PRE><PRE><B><FONT =
+color=3D#408080><FONT size=3D-1>for row :=3D 0 to 3 =
+do</FONT></FONT></B></PRE><PRE><B><FONT color=3D#408080><FONT =
+size=3D-1>&nbsp;&nbsp;&nbsp; begin</FONT></FONT></B></PRE><PRE><B><FONT =
+color=3D#408080><FONT =
+size=3D-1>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; { Make sure this =
+row doesn't have a 0 in A[row][row] (use RULE 1) =
+}</FONT></FONT></B></PRE><PRE><B><FONT color=3D#408080><FONT =
+size=3D-1>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if A[row][row] =3D =
+0 then</FONT></FONT></B></PRE><PRE><B><FONT color=3D#408080><FONT =
+size=3D-1>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nb=
+sp; begin</FONT></FONT></B></PRE><PRE><B><FONT color=3D#408080><FONT =
+size=3D-1>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nb=
+sp;&nbsp;&nbsp;&nbsp;&nbsp; find a row i where (i&gt;row) and (i&lt;3) =
+and (A[i][row] &lt;&gt; 0)</FONT></FONT></B></PRE><PRE><B><FONT =
+color=3D#408080><FONT =
+size=3D-1>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nb=
+sp;&nbsp;&nbsp;&nbsp;&nbsp; interchange rows 'i' and =
+'row'</FONT></FONT></B></PRE><PRE><B><FONT color=3D#408080><FONT =
+size=3D-1>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nb=
+sp; end;</FONT></FONT></B></PRE><PRE><B><FONT color=3D#408080><FONT =
+size=3D-1>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; { Divide this =
+row by a constant so that A[row][row] =3D 1 (use RULE 2) =
+}</FONT></FONT></B></PRE><PRE><B><FONT color=3D#408080><FONT =
+size=3D-1>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; divisor :=3D =
+A[row][row];</FONT></FONT></B></PRE><PRE><B><FONT color=3D#408080><FONT =
+size=3D-1>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; for j :=3D 0 =
+to 7 do</FONT></FONT></B></PRE><PRE><B><FONT color=3D#408080><FONT =
+size=3D-1>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nb=
+sp;&nbsp; A[row][j] :=3D A[row][j] / =
+divisor;</FONT></FONT></B></PRE><PRE><B><FONT color=3D#408080><FONT =
+size=3D-1>&nbsp;</FONT></FONT></B></PRE><PRE><B><FONT =
+color=3D#408080><FONT =
+size=3D-1>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; { Make all =
+other elements in collumn 'row' a 0 (use RULE 3) =
+}</FONT></FONT></B></PRE><PRE><B><FONT color=3D#408080><FONT =
+size=3D-1>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; for i :=3D 0 =
+to 2 do</FONT></FONT></B></PRE><PRE><B><FONT color=3D#408080><FONT =
+size=3D-1>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nb=
+sp;&nbsp; if i &lt;&gt; row then</FONT></FONT></B></PRE><PRE><B><FONT =
+color=3D#408080><FONT =
+size=3D-1>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nb=
+sp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; =
+begin</FONT></FONT></B></PRE><PRE><B><FONT color=3D#408080><FONT =
+size=3D-1>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nb=
+sp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; multiple :=3D =
+A[i][row];</FONT></FONT></B></PRE><PRE><B><FONT color=3D#408080><FONT =
+size=3D-1>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nb=
+sp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; for j :=3D 0 =
+to 7 do</FONT></FONT></B></PRE><PRE><B><FONT color=3D#408080><FONT =
+size=3D-1>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nb=
+sp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbs=
+p;&nbsp; A[i][j] :=3D A[i][j] - multiple * =
+A[row][j];</FONT></FONT></B></PRE><PRE><B><FONT color=3D#408080><FONT =
+size=3D-1>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nb=
+sp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; =
+end;</FONT></FONT></B></PRE><PRE><B><FONT color=3D#408080><FONT =
+size=3D-1>&nbsp;&nbsp;&nbsp;&nbsp; =
+end;</FONT></FONT></B></PRE><PRE><B><FONT color=3D#408080><FONT =
+size=3D-1>Return the matrix in the values =
+A[0..3][4..7]</FONT></FONT></B></PRE><FONT=20
+size=3D-1>There are cases where a matrix doesn't have an inverse. If =
+this happens=20
+then the first part of the algorithm above will fail, you won't be able =
+to find=20
+a row where A[i][row] !=3D 0. However, if you stick to the "normal" 3D =
+operations=20
+discussed in this article (translation, rotation, scaling etc) then the =
+matrices=20
+produced will always have an inverse.</FONT>=20
+<P><FONT size=3D-1>One other very important thing to remember is that =
+due to=20
+round-off errors you will often get values in the matrix such as =
+0.000001 which=20
+are supposed to be 0. When looking for a row where A[i][row] !=3D 0 you =
+must keep=20
+this in mind, and instead check that the absolute value is larger than =
+some=20
+small number (eg 0.0001).</FONT>=20
+<P><B><FONT size=3D-1>Rotating Around an Arbitrary Axis</FONT></B>=20
+<P><FONT size=3D-1>Let's say we need to rotate space by about an =
+arbitrary axis=20
+defined by the line o + kd (where o is the origin point &lt;ox,oy,oz&gt; =
+and d=20
+is the directional vector &lt;dx,dy,dz&gt;). Here are the steps needed =
+to=20
+perform this rotation:</FONT>=20
+<P><FONT size=3D-1>1) First translate all of space so that the line of =
+rotation=20
+starts at the origin. Do this by subtracting the line's origin point =
+from all=20
+points. Here is the matrix needed, along with it's inverse:</FONT> =
+<PRE><B><FONT color=3D#408080><FONT size=3D-1>&nbsp;&nbsp;&nbsp; =
+|&nbsp;&nbsp; 1&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp; =
+-ox&nbsp; =
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; =
+|&nbsp;&nbsp; 1&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp; =
+ox&nbsp; |</FONT></FONT></B></PRE><PRE><B><FONT color=3D#408080><FONT =
+size=3D-1>F =3D |&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 1&nbsp;&nbsp;&nbsp; =
+0&nbsp;&nbsp; -oy&nbsp; |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; F' =3D =
+|&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 1&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp; =
+oy&nbsp; |</FONT></FONT></B></PRE><PRE><B><FONT color=3D#408080><FONT =
+size=3D-1>&nbsp;&nbsp;&nbsp; |&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; =
+0&nbsp;&nbsp;&nbsp; 1&nbsp;&nbsp; -oz&nbsp; =
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; =
+|&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 1&nbsp;&nbsp; =
+oz&nbsp; |</FONT></FONT></B></PRE><PRE><B><FONT color=3D#408080><FONT =
+size=3D-1>&nbsp;&nbsp;&nbsp; |&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; =
+0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 1&nbsp;&nbsp; =
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; =
+|&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp; =
+1&nbsp;&nbsp; |</FONT></FONT></B></PRE><FONT=20
+size=3D-1>2) Next rotate space around the z axis until the line of =
+rotation lies=20
+in the x/z plane:</FONT> <PRE><B><FONT color=3D#408080><FONT =
+size=3D-1>&nbsp;&nbsp;&nbsp;&nbsp; |&nbsp;&nbsp; dx/v&nbsp;&nbsp; =
+dy/v&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp;&nbsp; 0&nbsp; =
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; =
+|&nbsp;&nbsp; dx/v&nbsp; -dy/v&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp;&nbsp; =
+0&nbsp; |</FONT></FONT></B></PRE><PRE><B><FONT color=3D#408080><FONT =
+size=3D-1>G =3D&nbsp; |&nbsp; -dy/v&nbsp;&nbsp; dx/v&nbsp;&nbsp; =
+0&nbsp;&nbsp;&nbsp;&nbsp; 0&nbsp; |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; =
+G' =3D |&nbsp;&nbsp; dy/v&nbsp;&nbsp; dx/v&nbsp;&nbsp; =
+0&nbsp;&nbsp;&nbsp;&nbsp; 0&nbsp; |</FONT></FONT></B></PRE><PRE><B><FONT =
+color=3D#408080><FONT size=3D-1>&nbsp;&nbsp;&nbsp;&nbsp; |&nbsp;&nbsp; =
+0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp;&nbsp; =
+1&nbsp;&nbsp;&nbsp;&nbsp; 0&nbsp; =
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; =
+|&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; =
+0&nbsp;&nbsp;&nbsp;&nbsp; 1&nbsp;&nbsp;&nbsp;&nbsp; 0&nbsp; =
+|</FONT></FONT></B></PRE><PRE><B><FONT color=3D#408080><FONT =
+size=3D-1>&nbsp;&nbsp;&nbsp;&nbsp; |&nbsp;&nbsp; =
+0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp;&nbsp; =
+0&nbsp;&nbsp;&nbsp;&nbsp; 1&nbsp; =
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; =
+|&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; =
+0&nbsp;&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp;&nbsp; 1&nbsp; =
+|</FONT></FONT></B></PRE><FONT=20
+size=3D-1>where v =3D SQRT(dx*dx + dy*dy). You will now have a new line =
+of rotation=20
+with one end at the origin and the other end at the point =
+&lt;v,0,dz&gt;.</FONT>=20
+
+<P><FONT size=3D-1>3) Now rotate space around the y axis until the line =
+of=20
+rotation lies along the z axis:</FONT> <PRE><B><FONT =
+color=3D#408080><FONT size=3D-1>&nbsp;&nbsp;&nbsp; |&nbsp;&nbsp; =
+dz/w&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; -v/w&nbsp;&nbsp; 0&nbsp; =
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; =
+|&nbsp;&nbsp; dz/w&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; =
+v/w&nbsp;&nbsp;&nbsp; 0&nbsp; |</FONT></FONT></B></PRE><PRE><B><FONT =
+color=3D#408080><FONT size=3D-1>H =3D |&nbsp;&nbsp;&nbsp; =
+0&nbsp;&nbsp;&nbsp;&nbsp; 1&nbsp;&nbsp;&nbsp;&nbsp; =
+0&nbsp;&nbsp;&nbsp;&nbsp; 0&nbsp; |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; =
+H' =3D |&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; =
+1&nbsp;&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp;&nbsp; 0&nbsp; =
+|</FONT></FONT></B></PRE><PRE><B><FONT color=3D#408080><FONT =
+size=3D-1>&nbsp;&nbsp;&nbsp; |&nbsp;&nbsp; v/w&nbsp;&nbsp;&nbsp; =
+0&nbsp;&nbsp;&nbsp; dz/w&nbsp;&nbsp; 0&nbsp; =
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; =
+|&nbsp;&nbsp; -v/w&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; =
+dz/w&nbsp;&nbsp; 0&nbsp; |</FONT></FONT></B></PRE><PRE><B><FONT =
+color=3D#408080><FONT size=3D-1>&nbsp;&nbsp;&nbsp; |&nbsp;&nbsp;&nbsp; =
+0&nbsp;&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp;&nbsp; =
+0&nbsp;&nbsp;&nbsp;&nbsp; 1&nbsp; =
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; =
+|&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; =
+0&nbsp;&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp;&nbsp; 1&nbsp; =
+|</FONT></FONT></B></PRE><FONT=20
+size=3D-1>where w =3D SQRT(v*v + dz*dz) =3D SQRT(dx*dx + dy*dy + =
+dz*dz).</FONT>=20
+<P><FONT size=3D-1>4) At this point the axis of rotation is a line lying =
+along the=20
+z axis between the points &lt;0,0,0&gt; and &lt;0,0,w&gt;, so you can =
+rotate=20
+space around the z axis by :</FONT> <PRE><B><FONT color=3D#408080><FONT =
+size=3D-1>&nbsp;&nbsp;&nbsp; |&nbsp;&nbsp; cos A&nbsp;&nbsp;&nbsp;&nbsp; =
+-sin A&nbsp;&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; =
+0&nbsp; |</FONT></FONT></B></PRE><PRE><B><FONT color=3D#408080><FONT =
+size=3D-1>W =3D |&nbsp;&nbsp; sin A&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; cos =
+A&nbsp;&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0&nbsp; =
+|</FONT></FONT></B></PRE><PRE><B><FONT color=3D#408080><FONT =
+size=3D-1>&nbsp;&nbsp;&nbsp; |&nbsp;&nbsp;&nbsp;&nbsp; =
+0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; =
+0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; =
+1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0&nbsp; =
+|</FONT></FONT></B></PRE><PRE><B><FONT color=3D#408080><FONT =
+size=3D-1>&nbsp;&nbsp;&nbsp; |&nbsp;&nbsp;&nbsp;&nbsp; =
+0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; =
+0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; =
+0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1&nbsp; =
+|</FONT></FONT></B></PRE><FONT=20
+size=3D-1>5) So to do the entire rotation you must first transform space =
+by F,G=20
+and H to align the axis of rotation along the z axis, then you do the =
+actual=20
+rotation around the z axis using matrix W, then you transform space by =
+H', G'=20
+and F' to put everything back into place. By multiplying these matrices =
+together=20
+you can create a single matrix to do the entire rotation:</FONT> =
+<PRE><B><FONT color=3D#408080><FONT size=3D-1>P =3D F' x G'x H' x W x H =
+x G x F</FONT></FONT></B></PRE><FONT=20
+size=3D-1>Any points transformed by this matrix will be rotated about =
+the line by=20
+an angle of A.</FONT>=20
+<P><B><FONT color=3D#ff0000><FONT size=3D-1>Note that this method is NOT =
+a good way=20
+of rotating points about an arbitrary axis. The term 1/v in the G and G' =
+
+matrices can result in a singularity. This can easily be fixed by =
+replacing G=20
+and G' with the identity matrix when v is 0, but I'll be including a =
+much faster=20
+and safer matrix in the final Win95GPE release.</FONT></FONT></B>=20
+<P><B><FONT size=3D-1>Solving Simultaneous Equations</FONT></B>=20
+<P><FONT size=3D-1>Imagine that we have the following equations:</FONT> =
+<PRE><B><FONT color=3D#408080><FONT size=3D-1>a*x + b*y + c*z + d =3D =
+0</FONT></FONT></B></PRE><PRE><B><FONT color=3D#408080><FONT =
+size=3D-1>e*x + f*y + g*z + h =3D 0</FONT></FONT></B></PRE><PRE><B><FONT =
+color=3D#408080><FONT size=3D-1>i*x + j*y + k*z + l =3D =
+0</FONT></FONT></B></PRE><FONT=20
+size=3D-1>Now imagine that we need to find a point &lt;x,y,z&gt; which =
+satisfies=20
+all 4 equations. These equations contain 12 unknowns, so it's clear that =
+it=20
+would be very difficult to solve using "regular" algebra.</FONT>=20
+<P><FONT size=3D-1>Matrices on the other hand provide us with a very =
+useful tool=20
+for solving such problems. We can create a matrix like this:</FONT> =
+<PRE><B><FONT color=3D#408080><FONT =
+size=3D-1>|0|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |a&nbsp; b&nbsp; =
+c&nbsp; d |&nbsp;&nbsp;&nbsp;&nbsp; =
+|x|</FONT></FONT></B></PRE><PRE><B><FONT color=3D#408080><FONT =
+size=3D-1>|0|&nbsp;&nbsp; =3D&nbsp;&nbsp; |e&nbsp; f&nbsp; g&nbsp; h =
+|&nbsp;&nbsp;&nbsp;&nbsp; |y|</FONT></FONT></B></PRE><PRE><B><FONT =
+color=3D#408080><FONT size=3D-1>|0|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; =
+|i&nbsp; j&nbsp; k&nbsp; l |&nbsp;&nbsp;&nbsp;&nbsp; =
+|z|</FONT></FONT></B></PRE><PRE><B><FONT color=3D#408080><FONT =
+size=3D-1>|1|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |0&nbsp; 0&nbsp; =
+0&nbsp; 1 |&nbsp;&nbsp;&nbsp;&nbsp; |1|</FONT></FONT></B></PRE><FONT=20
+size=3D-1>When we expand this out (as I showed earlier on in this =
+article) we get=20
+the 4 equations we are trying to solve. We also know that we can use the =
+inverse=20
+matrix to rearrange the equation:</FONT> <PRE><B><FONT =
+color=3D#408080><FONT =
+size=3D-1>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nb=
+sp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; =
+-1</FONT></FONT></B></PRE><PRE><B><FONT color=3D#408080><FONT =
+size=3D-1>|x|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |a&nbsp; b&nbsp; =
+c&nbsp; d |&nbsp;&nbsp;&nbsp;&nbsp; =
+|0|</FONT></FONT></B></PRE><PRE><B><FONT color=3D#408080><FONT =
+size=3D-1>|y|&nbsp;&nbsp; =3D&nbsp;&nbsp; |e&nbsp; f&nbsp; g&nbsp; h =
+|&nbsp;&nbsp;&nbsp;&nbsp; |0|</FONT></FONT></B></PRE><PRE><B><FONT =
+color=3D#408080><FONT size=3D-1>|z|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; =
+|i&nbsp; j&nbsp; k&nbsp; l |&nbsp;&nbsp;&nbsp;&nbsp; =
+|0|</FONT></FONT></B></PRE><PRE><B><FONT color=3D#408080><FONT =
+size=3D-1>|1|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |0&nbsp; 0&nbsp; =
+0&nbsp; 1 |&nbsp;&nbsp;&nbsp;&nbsp; |1|</FONT></FONT></B></PRE><FONT=20
+size=3D-1>These equations will expand out to the following:</FONT> =
+<PRE><B><FONT color=3D#408080><FONT size=3D-1>x =3D A*0 + B*0 + C*0 + =
+D*1 =3D D</FONT></FONT></B></PRE><PRE><B><FONT color=3D#408080><FONT =
+size=3D-1>y =3D E*0 + F*0 + G*0 + H*1 =3D =
+H</FONT></FONT></B></PRE><PRE><B><FONT color=3D#408080><FONT size=3D-1>z =
+=3D I*0 + J*0 + K*0 + L*1 =3D L</FONT></FONT></B></PRE><FONT=20
+size=3D-1>(I've captitalised the letters since the inverse matrix will =
+typically=20
+contain different values than the original).</FONT>=20
+<P><FONT size=3D-1>In summary, if we create a matrix from 3 parametric =
+equations=20
+and then calculate the inverse of that matrix then the 4th collumn will =
+contain=20
+a point which satifies all 3 equations. If the inverse matrix operation =
+fails=20
+then we know that the problem has no solution (or an infinate number of=20
+solutions).</FONT>=20
+<P><FONT size=3D-1>Incidently the fact that we'll only wind up using the =
+4th=20
+collumn can help in optimising this procedure since we don't need to =
+calculate=20
+the entire matrix.</FONT>=20
+<P><B><FONT size=3D-1>2D Matrices</FONT></B>=20
+<P><FONT size=3D-1>In this text I've been using 4x4 matrices for 3D =
+coordinate=20
+geometry, but it's just as easy to use a smaller matrix for 2D (or =
+higher), we=20
+simply drop the z term.</FONT>=20
+<P><FONT size=3D-1>2D matrices are of the form:</FONT> <PRE><B><FONT =
+color=3D#408080><FONT size=3D-1>|x'|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; =
+|M11&nbsp; M12&nbsp; M13 |&nbsp;&nbsp;&nbsp;&nbsp; =
+|x|</FONT></FONT></B></PRE><PRE><B><FONT color=3D#408080><FONT =
+size=3D-1>|y'|&nbsp;&nbsp; =3D&nbsp;&nbsp; |M21&nbsp; M22&nbsp; M23 =
+|&nbsp;&nbsp;&nbsp;&nbsp; |y|</FONT></FONT></B></PRE><PRE><B><FONT =
+color=3D#408080><FONT size=3D-1>|1 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; =
+| 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 1&nbsp; =
+|&nbsp;&nbsp;&nbsp;&nbsp; |1|</FONT></FONT></B></PRE><PRE><B><FONT =
+color=3D#408080><FONT size=3D-1>ie x' =3D M11*x + M12 * y + =
+M13</FONT></FONT></B></PRE><PRE><B><FONT color=3D#408080><FONT =
+size=3D-1>&nbsp;&nbsp; y' =3D M21*x + M22 * y + =
+M23</FONT></FONT></B></PRE><FONT=20
+size=3D-1>The 2D identity matrix is:</FONT> <PRE><B><FONT =
+color=3D#408080><FONT =
+size=3D-1>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | =
+1&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp; =
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=
+&nbsp; x' =3D x</FONT></FONT></B></PRE><PRE><B><FONT =
+color=3D#408080><FONT =
+size=3D-1>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | =
+0&nbsp;&nbsp;&nbsp; 1&nbsp;&nbsp;&nbsp; 0&nbsp; =
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=
+&nbsp; y' =3D y</FONT></FONT></B></PRE><PRE><B><FONT =
+color=3D#408080><FONT =
+size=3D-1>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | =
+0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 1&nbsp; =
+|</FONT></FONT></B></PRE><FONT=20
+size=3D-1>To translate by &lt;tx, ty&gt;:</FONT> <PRE><B><FONT =
+color=3D#408080><FONT =
+size=3D-1>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | =
+1&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; tx =
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=
+&nbsp;&nbsp; x' =3D x + tx</FONT></FONT></B></PRE><PRE><B><FONT =
+color=3D#408080><FONT =
+size=3D-1>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | =
+0&nbsp;&nbsp;&nbsp; 1&nbsp;&nbsp;&nbsp; ty =
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=
+&nbsp;&nbsp; y' =3D y + ty</FONT></FONT></B></PRE><PRE><B><FONT =
+color=3D#408080><FONT =
+size=3D-1>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | =
+0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 1&nbsp; =
+|</FONT></FONT></B></PRE><FONT=20
+size=3D-1>To scale by &lt;sx, sy&gt;:</FONT> <PRE><B><FONT =
+color=3D#408080><FONT =
+size=3D-1>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | =
+sx&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp; =
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=
+&nbsp;&nbsp; x' =3D x * sx</FONT></FONT></B></PRE><PRE><B><FONT =
+color=3D#408080><FONT =
+size=3D-1>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | =
+0&nbsp;&nbsp;&nbsp; sy&nbsp;&nbsp; 0&nbsp; =
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=
+&nbsp;&nbsp; y' =3D y * sy</FONT></FONT></B></PRE><PRE><B><FONT =
+color=3D#408080><FONT =
+size=3D-1>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | =
+0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 1&nbsp; =
+|</FONT></FONT></B></PRE><FONT=20
+size=3D-1>And to rotate about the origin by A radians:</FONT> =
+<PRE><B><FONT color=3D#408080><FONT =
+size=3D-1>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | =
+cos(A)&nbsp;&nbsp; -sin(A)&nbsp;&nbsp;&nbsp; 0&nbsp; =
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=
+&nbsp;&nbsp; x' =3D cos(A)*x&nbsp; - =
+sin(A)*y</FONT></FONT></B></PRE><PRE><B><FONT color=3D#408080><FONT =
+size=3D-1>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | =
+sin(A)&nbsp;&nbsp;&nbsp; cos(A)&nbsp;&nbsp;&nbsp; 0&nbsp; =
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=
+&nbsp;&nbsp; y' =3D sin(A)*x&nbsp; + =
+cos(A)*y</FONT></FONT></B></PRE><PRE><B><FONT color=3D#408080><FONT =
+size=3D-1>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |&nbsp;&nbsp; =
+0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; =
+0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1&nbsp; =
+|</FONT></FONT></B></PRE><B><FONT=20
+size=3D-1>Practical Applications</FONT></B>=20
+<P><FONT size=3D-1>This section is yet to be written. With all the math =
+out of the=20
+way I'll be showing how to actually apply this knowledge to a 3D =
+engine.</FONT>=20
+<P><FONT color=3D#ff0000><FONT size=3D-1><B><I>Important Note to =
+Direct3D=20
+Users:</I></B> Direct3D matrices are similar, but in the representation =
+used by=20
+the help file the "x" and "y" dimensions are swapped around. Thus they =
+show the=20
+translation matrix to be:</FONT></FONT> <PRE><B><FONT =
+color=3D#ff0000><FONT size=3D-1>| 1&nbsp; 0&nbsp; 0&nbsp; 0 =
+|</FONT></FONT></B></PRE><PRE><B><FONT color=3D#ff0000><FONT size=3D-1>| =
+0&nbsp; 1&nbsp; 0&nbsp; 0 |</FONT></FONT></B></PRE><PRE><B><FONT =
+color=3D#ff0000><FONT size=3D-1>| 0&nbsp; 0&nbsp; 1&nbsp; 0 =
+|</FONT></FONT></B></PRE><PRE><B><FONT color=3D#ff0000><FONT size=3D-1>| =
+tx ty tz 1 |</FONT></FONT></B></PRE><FONT=20
+color=3D#ff0000><FONT size=3D-1>and so on.</FONT></FONT> <BR>
+<HR width=3D"80%">
+&nbsp;=20
+<CENTER>
+<TABLE bgColor=3D#00ffff border=3D0 width=3D"100%">
+  <TBODY>
+  <TR>
+    <TD>&nbsp;</TD></TR></TBODY></TABLE></CENTER>&nbsp; <PRE><I><FONT =
+face=3DArial><FONT size=3D-1>Copyright (c) 1997 <A =
+href=3D"http://www.geocities.com/SiliconValley/2151">Mark Feldman</A> =
+(<A href=3D"mailto:pcgpe@geocities.com">pcgpe@geocities.com</A>) - All =
+Rights Reserved</FONT></FONT></I></PRE><PRE><I><FONT face=3DArial><FONT =
+size=3D-2>This article is part of <A =
+href=3D"http://www.geocities.com/SiliconValley/2151/win95gpe.html">The =
+Win95 Game Programmer's =
+Encyclopedia</A></FONT></FONT></I></PRE><PRE><I><FONT face=3DArial><FONT =
+size=3D-2>Please retain this footer if you distribute this =
+file.</FONT></FONT></I></PRE>&nbsp;=20
+
+<TABLE border=3D0>
+  <TBODY>
+  <TR>
+    <TD><A=20
+      =
+href=3D"http://www.geocities.com/SiliconValley/2151/graphics.html"><IMG=20
+      border=3D0 height=3D32=20
+      src=3D"http://www.geocities.com/SiliconValley/2151/back.jpg"=20
+width=3D32></A></TD>
+    <TD><I><FONT face=3DArial><FONT size=3D-2><A=20
+      =
+href=3D"http://www.geocities.com/SiliconValley/2151/graphics.html">Back =
+to=20
+      Graphics</A></FONT></FONT></I></TD></TR></TBODY></TABLE>&nbsp; =
+<!-- -->
+<SCRIPT language=3DJavaScript>=0A=
+<!--=0A=
+window.open("http://www.geocities.com/cgi-bin-local/GeoAD?pageID=3D/gp/Si=
+liconValley", "w3adQJYRZZZJ", "width=3D515,height=3D125");=0A=
+//-->=0A=
+</SCRIPT>
+<IMG alt=3D1 height=3D1 =
+src=3D"http://geo.yahoo.com/serv?s=3D76000007&amp;t=3D963930012"=20
+width=3D1> <!-- Yahoo! Menu service --></TABLE></NOSCRIPT></SCRIPT>
+<SCRIPT language=3DJavaScript=20
+src=3D"http://a372.g.a.yimg.com/f/372/27/1d/www.geocities.com/js_source/y=
+gIELib6.js"></SCRIPT>
+
+<SCRIPT language=3DJavaScript>var =
+yvContents=3D'http://geocities.yahoo.com/toto?s=3D76000007&l=3DNE&b=3D1&t=
+=3D963930012';yfEA(0);</SCRIPT>
+<!-- END Yahoo! Menu Service -->
+<SCRIPT language=3DJavaScript=20
+src=3D"http://a372.g.a.yimg.com/f/372/27/1d/www.geocities.com/js_source/g=
+eov2.js"></SCRIPT>
+
+<SCRIPT language=3Djavascript>geovisit();</SCRIPT>
+<NOSCRIPT><IMG border=3D0 height=3D1 =
+src=3D"http://visit.geocities.com/visit.gif"=20
+width=3D1></NOSCRIPT></BODY></HTML>
+
+------=_NextPart_000_0030_01BFF077.C9FF4EF0
+Content-Type: image/gif
+Content-Transfer-Encoding: base64
+Content-Location: http://www.geocities.com/SiliconValley/2151/matrices_1.gif
+
+R0lGODdhyQHBAKIAAP////8AAICAgAAA/wAAAAAAAAAAAAAAACwAAAAAyQHBAAAD/wi63P4wykmr
+vTjrzbv/YCiOZGmeaKqubOu+cCzPdG3feK7vfO//wKBwSCwaj8ikcslsOp/QqHRKrVqv2Kx2y+16
+v+CweEwum8/otHrNbrvf8Lh8Tq/b7/i8fs/v+/+AgVwEhIWCh4hZhYsEiY5MixCNkhiTDIyWD5kv
+mxmFAaABho+kRZmdJJ2bqBSsIYQcn6Ggo6W2PqopuZcbriC1F7KztLC3xjq7jcoLsJPOAMUKtbvM
+zNHPxcCp2q0Ew8PRx+I0yc/Q0ubZ0tXnDavr8M7pE5j19piV3t+h4eP+nA7MtbM0Dx6vdpcYsRto
+UKCkexDr5dvHz9e/iyWSsSMYb/9hJIQL3W1saNDEx2D6KPbDyNJkQJIICzLsKFLTyJglM67slhLc
+zpZAXx3EOVBmOoc5PdKceeInz2/cgkr9BYwjuplWoS0DmdSa1a8WO4SVIEyU06loW4xNY0/BgLdw
+4aadmyrkHHxu48qly/fV2Tt63/YdnDYw4cNSDSNejDHwAMaQx+3dG7kyKcELKFveLOhxA82cQyMC
+Lbr0H9KmU+tBrbp1HdauY8OBjWut7NslaO84ibs3C903CgmI6rs4CeDkCAlYTty48w/IYyhfTr35
+8+saoruYTr37X+zgKWhfwb279+/h0zsY37S8+fO21atnv43A+/vV48sPT98v/v//zKG3X3r9eeAe
+gO9ZN6B8BfZiH4IQCrggdg2i9CCEEUo4oXMV8oThh8NpuGFxHUZwIIgIijiiCu+4FItCXSVRYkAX
+ogiigiuqdUpTL1XQon66eDCjNTYWGSKQOdaVVV01tVITku0JidkHwhlppIpJirBVTNeco4w8CS2p
+FUE7/ehVNeHgqIGaEXRYpZVXYpmlgTSBdZVWSyFFFFdcGXWnQFCayCYEDZ4IJ4qDzvlLnTftqVGT
+Yo45TY9f2YVORJjKmZdnntR4KJyaKloJmjBlZeoo1ETKCpnqxMObV5lGBN2UFhj6aZGJiromqUSZ
+2qievjb55K8x+hVqZrSSZeut/7geq6uJCZWqVJ3ATjvUsHj2aimVziLLqaCeMntrt88Ky2Wwjm6l
+Cqs2tYsnoGfqlFuy7oQrLrO5lmtLoBKwtuy9h+arb2Wk/Qvwp+QO3JdmBh+McMIKzyXXmw5XHCC/
+EQ8GV8MWj4txxnzB1fHI8IGsGiEik0yywCanNV3KKo8MccviUAxzzBazTPNFFC93M84O67xzzfb6
+/BbQMn88NCn//ow0wEIv7UjDTj8tbtRSB9IzgFVbja/SWfOxNYJde/0w2GHfwfF7ZZsN6sxpx7H2
+fW27bSXccbcxN351290s2nmvMbaRffuNKN6BkzG4lYUbfiPgiSte9KeNO44h1v+RS95x5ZaniHjm
+ikwuLuedA/g56FQsDjDppeOHOepYqH4w660neDrskIhuMe21m3c77kjsfS/vvecHPBrCr3508XFC
+fnzwyc++PPOPO/+8EbIDTXznv18PRPSbD0D95dZ7TwT449vdvfk9oJ++2euzz4P77yP9uvxJ0F+/
+yvfjD/3+1Iuf/2oDwN4JcIAELCD3yofAI+hPgWdr4BkeCMG7HVCCP6BgBQ+HQTVocIMZ6qDgdAfC
+qzFQhEr4YAl9d0EUCkGFKzySC/VGwhhycIZugGEFW4jD89XQhp7rIRx0uL/+CbEKREyfEY+IxB8C
+MUBMvIsTgcjDKP7viUG0Ih3/kli6Kmoxf1OE4BK/GDosloyMduCi27yIxiWo0WpsbKMbwzi+OMpx
+jjEc4x0HQcfa6XGPfAShHQHZhDdWbJCELGQf/YbIROYOgH905BcM6bFJ0EuSaluk/TJxSUymUZMx
+a6Qnn0DJZrXpW6OsQyk/ZJ1OplJuoAyaKF8ZhVX+R0OupCUbbHkfEeVSlyNk5AmBOcFYBoxfvyRm
+MeF4rGQq0wyljOQz2WLMx81rmjmsZgiviU0armyY3dylNm03TGeGswswlCYAzHnOQEINnO3M5r0u
+yM54xq6aLaynPa3gPnXuc4ia9OcE9PlPKSRvkAQtaC3DOEuFhmFuDU2oQx9J/z4gSHSieDRdQzE6
+BlsJdFbr4WjqirbRByTroiLNYLhKWoEhpRQZNWJpv/Ty0pHKkAmKqalBP3qCnOoUCjIVj09/ChTH
+cAovRD2GUT3TlqQCpSy5OiEq9KQlGr3KXE61EFQkdLp+3I4axSJLVh/Sk1moKZJeHSZY+eSjsWqi
+rD7hiVRxMo9lyIMjd43WWtnVkWwE9YiEoAgx6BErTDkJr67600bgVZQeEauxTHGrNQRrFsIWFiJO
+8hKjYMKUSiUFqZ71rGQnK9jvXJVJ6srTtFjVKj6t6iaiHe2YVIIetK6jIOhi7FDWulppydYrW7VN
+V3vrqMd21rGQUi1bJQtVETTN1bdLmlS8LsXb6TL2r1Fs6m/HgdTteve74A2veMdL3vKa97zoTa96
+18ve9rr3vfCFQgIAADs=
+
+------=_NextPart_000_0030_01BFF077.C9FF4EF0
+Content-Type: image/jpeg
+Content-Transfer-Encoding: base64
+Content-Location: http://www.geocities.com/SiliconValley/2151/back.jpg
+
+/9j/4AAQSkZJRgABAgEASABIAAD/7QFSUGhvdG9zaG9wIDMuMAA4QklNA+0AAAAAABAASAAAAAEA
+AQBIAAAAAQABOEJJTQPzAAAAAAAIAAAAAAAAAAA4QklNJxAAAAAAAAoAAQAAAAAAAAACOEJJTQP1
+AAAAAABIAC9mZgABAGxmZgAGAAAAAAABAC9mZgABAKGZmgAGAAAAAAABADIAAAABAFoAAAAGAAAA
+AAABADUAAAABAC0AAAAGAAAAAAABOEJJTQP4AAAAAABwAAD/////////////////////////////
+A+gAAAAA/////////////////////////////wPoAAAAAP////////////////////////////8D
+6AAAAAD/////////////////////////////A+gAADhCSU0EAAAAAAAAAgAAOEJJTQQCAAAAAAAE
+AAAAADhCSU0EBgAAAAAAAgAE/+4ADkFkb2JlAGQAAAAAAf/bAIQABgQEBAUEBgUFBgkGBQYJCwgG
+BggLDAoKCwoKDBAMDAwMDAwQDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAEHBwcNDA0YEBAY
+FA4ODhQUDg4ODhQRDAwMDAwREQwMDAwMDBEMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwM/8AA
+EQgAIAAgAwERAAIRAQMRAf/EAaIAAAAHAQEBAQEAAAAAAAAAAAQFAwIGAQAHCAkKCwEAAgIDAQEB
+AQEAAAAAAAAAAQACAwQFBgcICQoLEAACAQMDAgQCBgcDBAIGAnMBAgMRBAAFIRIxQVEGE2EicYEU
+MpGhBxWxQiPBUtHhMxZi8CRygvElQzRTkqKyY3PCNUQnk6OzNhdUZHTD0uIIJoMJChgZhJRFRqS0
+VtNVKBry4/PE1OT0ZXWFlaW1xdXl9WZ2hpamtsbW5vY3R1dnd4eXp7fH1+f3OEhYaHiImKi4yNjo
++Ck5SVlpeYmZqbnJ2en5KjpKWmp6ipqqusra6voRAAICAQIDBQUEBQYECAMDbQEAAhEDBCESMUEF
+URNhIgZxgZEyobHwFMHR4SNCFVJicvEzJDRDghaSUyWiY7LCB3PSNeJEgxdUkwgJChgZJjZFGidk
+dFU38qOzwygp0+PzhJSktMTU5PRldYWVpbXF1eX1RlZmdoaWprbG1ub2R1dnd4eXp7fH1+f3OEhY
+aHiImKi4yNjo+DlJWWl5iZmpucnZ6fkqOkpaanqKmqq6ytrq+v/dAAQABP/aAAwDAQACEQMRAD8A
+9U4q880L89/IOu+d5fKOlzTXF0hZYdQVENlO8dOSwyBy70q1H9L0n4M0cjp6bPstT2Xmw4Y5Z1ET
+PDwf5Tr9X+l/nK9DzWq7FX//0FP+ci/z3uby5vvIvlp3t7K3d7XXr+hSSeRCUltY60ZYFYFJ3/4+
+P7tf9G5fWez7C7GEQM+TeR9WKP8AN/2z+v8Azf5n9f6A8Z/L3zh/g/zbY+Yfqn176kWP1X1PR5cl
+K/b4ycev8mbntTs/81jEOLgqXHy4ukvOP85Xun/Q5p/6k/8A7mP/AGa5ov8AQr/tn+w/4+tvTvyc
+/Oe2/MiHUKaW2l3Ngy8ovW+sK0bj4W5+nDQ8uQ48f9lmi7U7P/K5BDi47jx8uHrLzl/NS//RnH5+
+/kNH5pim8y+XYwnmOJa3NuKBbxEFAPATKooj/tfYf9lk3/Y3bJ054J74T/0q/wCOfzo/50f6a+b/
+AMtfJkHmXz9YeWtUaa0SaSSO5CjjKjRqxKkOPhYMPi2zo+29bPDgjPFKuKY9Xpn6OGUv6SH0X/0K
+H5F/6uV998f/ADTnKfy9rP5/+xx/8SlnX5Y/k/oH5etetpdzPcNfBBKZypoErSnEDxzB1WryZ5cW
+Q8Uq4ekf9yr/AP/S9U4qxhvy28mnzanmxdPSPXE/4+k+HkePHkwGzNx2qcsOaZiIGUuAfwX6P9Kr
+J8rV2Kv/2Q==
+
+------=_NextPart_000_0030_01BFF077.C9FF4EF0
+Content-Type: application/octet-stream
+Content-Transfer-Encoding: base64
+Content-Location: http://geo.yahoo.com/serv?s=76000007&t=963930012
+
+R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==
+
+------=_NextPart_000_0030_01BFF077.C9FF4EF0
+Content-Type: image/gif
+Content-Transfer-Encoding: base64
+Content-Location: http://visit.geocities.com/visit.gif
+
+R0lGODlhAQABAOMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAACH5BAEAAAAALAAAAAABAAEAAAQCEEQAOw==
+
+------=_NextPart_000_0030_01BFF077.C9FF4EF0
+Content-Type: application/octet-stream
+Content-Transfer-Encoding: quoted-printable
+Content-Location: http://a372.g.a.yimg.com/f/372/27/1d/www.geocities.com/js_source/ygIELib6.js
+
+ycH=3D"hidden";=0A=
+ycV=3D"visible";=0A=
+ycBU=3D'http://a372.g.a.yimg.com/f/372/27/1d/pic.geocities.com/images/dht=
+mlad/';=0A=
+ycMM1=3D'<tr><td valign=3Dmiddle bgcolor=3D"#dcdcdc"><a href=3D"';=0A=
+ycMM2=3D'" target=3D_new><img alt=3D"alt" src=3D"'+ycBU;=0A=
+ycMM3=3D'" width=3D14 height=3D14 border=3D0 hspace=3D4><font =
+face=3D"arial" size=3D"1" color=3D"#0000FF">';=0A=
+ycMM4=3D'</font></a></td></tr>';=0A=
+ycRF=3D';return false"';=0A=
+ycWSC=3D' onMouseOut=3D"window.status=3D\'\';return true"';=0A=
+ycWS1=3DycRF+' onMouseOver=3D"window.status=3D\'Minimize\';return =
+true"'+ycWSC;=0A=
+ycWS2=3DycRF+' onMouseOver=3D"window.status=3D\'Expand\';return =
+true"'+ycWSC;=0A=
+ycMa=3D'<area shape=3Drect coords=3D"2,2,84,14" =
+href=3Dhttp://geocities.yahoo.com/home/ target=3D_new><area shape=3Drect =
+coords=3D"';=0A=
+ycM0=3DycMa+'87,2,101,14" =
+href=3D"http://geocities.yahoo.com/addons/interact/adsquare.html" =
+target=3D_new>';=0A=
+ycM1=3DycMa+'104,2,118,14" href=3D"" =
+onClick=3D"javascript:yfOC(2)'+ycWS2+'>';=0A=
+ycM2=3DycMa+'121,2,135,14" ';=0A=
+ycOCH=3D'href=3D"" onClick=3D"javascript:yfOC(';=0A=
+ycL0=3D'<div style=3D"position: absolute; top: 0; left: 0; visibility: =
+hidden" id=3D';=0A=
+ycL1=3D'><table border=3D2 cellpadding=3D0 cellspacing=3D0><tr><td =
+valign=3Dtop bgcolor=3D#ffffff><table border=3D0 cellpadding=3D0 =
+cellspacing=3D0 width=3D138><tr><td valign=3Dtop><img usemap=3D#';=0A=
+ycL2=3D' id=3DbottomImage alt=3D"nav" src=3D"'+ycBU;=0A=
+ycL3=3D'" width=3D138 height=3D17 border=3D0></td></tr><tr><td =
+valign=3Dtop align=3Dcenter';=0A=
+ycL4=3D'<font face=3DArial size=3D-2 color=3DBlue>';=0A=
+var yvB;=0A=
+var yvM;=0A=
+var yvT;=0A=
+var yvS=3D0;=0A=
+var yvTO=3D10;=0A=
+var yvSID;=0A=
+var yvSM=3D0;=0A=
+var yvSMU;=0A=
+var yvVP=3D0;=0A=
+var yvVPU;=0A=
+var yvSE=3D0;=0A=
+var yvSEU;=0A=
+var yvMH=3D0;=0A=
+var yvMHU;=0A=
+var yvSG=3D0;=0A=
+var yvSGU;=0A=
+var yvSP=3D0;=0A=
+var yvSPU;=0A=
+var yvTF=3D1;=0A=
+var yvTI=3D0;=0A=
+var yvTr=3Dnew Image();=0A=
+var yvGA=3D0;=0A=
+var yvGAW;=0A=
+function yfPA(){=0A=
+document.all.yl0.style.left=3Ddocument.body.clientWidth-144;=0A=
+document.all.yl1.style.left=3Ddocument.body.clientWidth-144;=0A=
+document.all.yl2.style.left=3Ddocument.body.clientWidth-144;=0A=
+document.all.yl3.style.left=3Ddocument.body.clientWidth-144;=0A=
+}=0A=
+function yfWM(){=0A=
+document.write('</font></a></td></tr></table></td></tr>');=0A=
+if (yvSM){=0A=
+document.write(ycMM1+yvSMU+ycMM2+'msg.gif'+ycMM3+'Send Me a =
+Message'+ycMM4);=0A=
+}=0A=
+if (yvVP){=0A=
+document.write(ycMM1+yvVPU+ycMM2+'profile.gif'+ycMM3+'View My =
+Profile'+ycMM4);=0A=
+}=0A=
+if (yvSP){=0A=
+document.write(ycMM1+yvSPU+ycMM2+'spage.gif'+ycMM3+'Send This =
+Page'+ycMM4);=0A=
+}=0A=
+if (yvMH){=0A=
+document.write(ycMM1+yvMHU+ycMM2+'hood.gif'+ycMM3+'My =
+Neighborhood'+ycMM4);=0A=
+}=0A=
+if (yvSG){=0A=
+document.write(ycMM1+yvSGU+ycMM2+'gbook.gif'+ycMM3+'Sign My =
+Guestbook'+ycMM4);=0A=
+}=0A=
+document.write('</table></div>');=0A=
+}=0A=
+function yfD(){=0A=
+document.write('<map name=3Dym0>'+ycM0+ycM1+ycM2+ycOCH+'-1)'+ycRF+'" =
+onMouseOver=3D"window.status=3D\'Hide\';return true"'+ycWSC+'></map><map =
+name=3Dym1>'+ycM0+ycM1+ycM2+ycOCH+'0)'+ycWS1+'></map><map =
+name=3Dym2>'+ycM0+ycM2+ycOCH+'0)'+ycWS1+'></map>');=0A=
+document.write(ycL0+'yl0'+ycL1+'ym0'+ycL2+'geoup.gif'+ycL3+' =
+bgcolor=3D#ffffcc><a '+ycOCH+'2)'+ycWS2+'>'+ycL4+'<span =
+id=3Ddiv_yl0>'+yvT+'</span>');=0A=
+yfWM();=0A=
+document.write(ycL0+'yl1'+ycL1+'ym1'+ycL2+'geomid.gif'+ycL3+'><a =
+'+ycOCH+'2)'+ycWS2+'><span =
+id=3Ddiv_yl1>'+yvM+'</span></a></td></tr><tr><td align=3Dcenter><a =
+'+ycOCH+'2)'+ycWS2+'>'+ycL4+'More...');=0A=
+yfWM();=0A=
+document.write(ycL0+'yl2'+ycL1+'ym2'+ycL2+'geodown.gif'+ycL3+'><span =
+id=3Ddiv_yl2>'+yvB+'</span></td></tr><tr><td align=3Dcenter><a =
+'+ycOCH+'0)'+ycWS1+'>'+ycL4+'[Close]');=0A=
+yfWM();=0A=
+document.write(ycL0+'yl3'+ycL1+'ym2'+ycL2+'geodown.gif'+ycL3+'><span =
+id=3Ddiv_yl3>'+yvM+'</span></td></tr><tr><td align=3Dcenter><a =
+'+ycOCH+'2)'+ycWS1+'>'+ycL4+'[Close]');=0A=
+yfWM();=0A=
+}=0A=
+function yfOC(d){=0A=
+yfPA();=0A=
+if (yvTI!=3D0){=0A=
+clearTimeout(yvTI);=0A=
+}=0A=
+if (d=3D=3D-1){=0A=
+document.all.yl0.style.visibility=3DycH;=0A=
+document.all.yl1.style.visibility=3DycH;=0A=
+document.all.yl2.style.visibility=3DycH;=0A=
+document.all.yl3.style.visibility=3DycH;=0A=
+}=0A=
+if (d=3D=3D0){=0A=
+document.all.yl0.style.visibility=3DycV;=0A=
+document.all.yl1.style.visibility=3DycH;=0A=
+document.all.yl2.style.visibility=3DycH;=0A=
+document.all.yl3.style.visibility=3DycH;=0A=
+}=0A=
+if (d=3D=3D1){=0A=
+document.all.yl0.style.visibility=3DycH;=0A=
+if (yvS=3D=3D0){=0A=
+document.all.yl1.style.visibility=3DycV;=0A=
+} else {=0A=
+document.all.yl1.style.visibility=3DycH;=0A=
+}=0A=
+document.all.yl2.style.visibility=3DycH;=0A=
+if (yvS=3D=3D0){=0A=
+document.all.yl3.style.visibility=3DycH;=0A=
+} else {=0A=
+document.all.yl3.style.visibility=3DycV;=0A=
+}=0A=
+}=0A=
+if (d=3D=3D2){=0A=
+document.all.yl0.style.visibility=3DycH;=0A=
+document.all.yl1.style.visibility=3DycH;=0A=
+document.all.yl2.style.visibility=3DycV;=0A=
+document.all.yl3.style.visibility=3DycH;=0A=
+if (yvTF){=0A=
+yvTr.src=3D"http://rd.yahoo.com/"+yvSID+"/*http://us.yimg.com/i/sh/bl.gif=
+?"+Math.random();=0A=
+yvTF=3D0;=0A=
+}=0A=
+}=0A=
+}=0A=
+function yfSA(){=0A=
+if (yvS=3D=3D0){=0A=
+document.all.yl1.style.visibility=3DycV;=0A=
+} else {=0A=
+document.all.yl3.style.visibility=3DycV;=0A=
+}=0A=
+yvTI=3DsetTimeout("yfOC(0)",yvTO*1000);=0A=
+}=0A=
+function yfCA(w){=0A=
+var t=3D0;=0A=
+if(!w){=0A=
+w=3Dself;=0A=
+}=0A=
+if(w._ypa){=0A=
+t=3Dw._ypa;=0A=
+} else {=0A=
+if(w.document.body){=0A=
+t=3Dw.document.body.clientWidth*w.document.body.clientHeight;=0A=
+} else {=0A=
+t=3Ddocument.body.clientWidth*document.body.clientHeight;=0A=
+}=0A=
+w._ypa=3Dt;=0A=
+}=0A=
+if(t>=3DyvGA){=0A=
+yvGA=3Dt;=0A=
+yvGAW=3Dw;=0A=
+}=0A=
+}=0A=
+function yfFF(w){=0A=
+var i=3D0;=0A=
+if (w.document.body.text || w.frames.length=3D=3D0){=0A=
+yfCA(w);=0A=
+return;=0A=
+}=0A=
+for(i=3D0;i<w.frames.length;i++){=0A=
+if(w.frames[i].frames.length>0){=0A=
+yfFF(w.frames[i]);=0A=
+} else {=0A=
+yfCA(w.frames[i]);=0A=
+}=0A=
+}=0A=
+return;=0A=
+}=0A=
+function yfSH(){=0A=
+var r=3D0;=0A=
+if (window!=3Dtop){=0A=
+yfFF(top);=0A=
+if (yvGAW=3D=3Dself && !top.ad){=0A=
+r=3D1;=0A=
+top.ad=3D1;=0A=
+}=0A=
+} else {=0A=
+r=3D1;=0A=
+}=0A=
+return r;=0A=
+}=0A=
+function yfCF(){=0A=
+top.ad=3D0;=0A=
+}=0A=
+function yfEA(g){=0A=
+if (g =3D=3D 1) {=0A=
+top.gg=3Dg;=0A=
+}=0A=
+if (yfSH()=3D=3D1&&(top.gg=3D=3D0||top.gg!=3D1||!top.gg)){=0A=
+yfD();=0A=
+document.write('<script language=3D"JavaScript" =
+src=3D"'+yvContents+'"></scr');=0A=
+document.write('ipt>');=0A=
+yfPA();=0A=
+window.onresize=3DyfPA;=0A=
+window.onunload=3DyfCF;=0A=
+}=0A=
+}=0A=
+function yfID(yvB,yvM,yvT,yvTm,yvSv){=0A=
+yvTO=3DyvTm;=0A=
+yvS=3DyvSv;=0A=
+if (document.all.div_yl0)=0A=
+document.all.div_yl0.innerHTML=3DyvT;=0A=
+if (yvS=3D=3D0 && document.all.div_yl1)=0A=
+document.all.div_yl1.innerHTML=3DyvM;=0A=
+if (document.all.div_yl2)=0A=
+document.all.div_yl2.innerHTML=3DyvB;=0A=
+if (yvS!=3D0 && document.all.div_yl3)=0A=
+document.all.div_yl3.innerHTML=3DyvM;=0A=
+yfSA();=0A=
+}=0A=
+
+------=_NextPart_000_0030_01BFF077.C9FF4EF0
+Content-Type: application/octet-stream
+Content-Transfer-Encoding: quoted-printable
+Content-Location: http://a372.g.a.yimg.com/f/372/27/1d/www.geocities.com/js_source/geov2.js
+
+var ycsdone;=0A=
+function geovisit()=0A=
+{=0A=
+  var z;=0A=
+  if (ycsdone)=0A=
+    return;=0A=
+  z=3D"&r=3D"+escape(document.referrer);=0A=
+  z=3Dz+"&b=3D"+escape(navigator.appName+" "+navigator.appVersion);=0A=
+  w=3DparseFloat(navigator.appVersion);=0A=
+  if (w > 2.0) {=0A=
+    z=3Dz+"&s=3D"+screen.width+"x"+screen.height;=0A=
+    z=3Dz+"&o=3D"+navigator.platform;=0A=
+    v=3D"1.2";=0A=
+    if (navigator.appName !=3D "Netscape") {=0A=
+      z=3Dz+"&c=3D"+screen.colorDepth;=0A=
+    } else {=0A=
+      z=3Dz+"&c=3D"+screen.pixelDepth=0A=
+    }=0A=
+    z=3Dz+"&j=3D"+navigator.javaEnabled();=0A=
+  } else {=0A=
+    v=3D1.0;=0A=
+  }=0A=
+  z=3Dz+"&v=3D"+v;=0A=
+  document.writeln("<IMG BORDER=3D0 =
+SRC=3D\"http://visit.geocities.com/visit.gif?"+z+"\">");=0A=
+  ycsdone=3D1;=0A=
+}=0A=
+
+------=_NextPart_000_0030_01BFF077.C9FF4EF0--

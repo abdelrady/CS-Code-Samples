@@ -1,0 +1,158 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+<HTML lang="en-us">
+<HEAD>
+<TITLE>Windows API Guide: SHGetFileInfo Function</TITLE>
+<META content="vbapi@vbapi.com" name="author">
+<META content="Information about the SHGetFileInfo function in the Windows API, geared towards the Visual Basic user." name="description">
+<META content="Kuliniewicz,Windows,Windows 95,Windows NT,Windows 98,Windows CE,Windows 2000,API,Application Programming Interface,Programming,Visual Basic,Basic,VB,SHGetFileInfo" name="keywords">
+<META content="Omicron HTML Editor" name="generator">
+<META content="Wed, 22 Dec 1999 16:56:00 GMT" http-equiv="Last-Modified">
+<LINK href="default.css" tppabs="http://www.vbapi.com/css/default.css" rel="stylesheet" type="text/css">
+<LINK href="index-1.html" tppabs="http://www.vbapi.com/index.html" rel="home">
+
+<LINK href="glossary.html" tppabs="http://www.vbapi.com/ref/glossary.html" rel="glossary">
+<LINK href="copyrite.html" tppabs="http://www.vbapi.com/copyrite.html" rel="copyright">
+</HEAD>
+<BODY>
+
+<!-- Begin Adslot1 -->
+<CENTER>
+<SCRIPT language="JAVASCRIPT">
+<!-- hide from older browsers
+now = new Date();
+my_random = now.getTime();
+document.write('<A href="http://adex3.flycast.com/server/socket/127.0.0.1:2800/click/VBWorldnet/VBAPI/' + my_random + '">');
+document.write('<IMG width="468" height="60" border="1" src="http://adex3.flycast.com/server/socket/127.0.0.1:2800/ad/VBWorldnet/VBAPI/' + my_random + '"></A>');
+// -->
+</SCRIPT>
+</CENTER>
+<!-- End Adslot1 -->
+
+<HR>
+
+<H1>SHGetFileInfo Function</H1>
+
+<P><CODE class="declare">Declare Function SHGetFileInfo Lib "shell32.dll" Alias "SHGetFileInfoA" (ByVal pszPath As Any, ByVal dwFileAttributes As Long, psfi As <A href="shfileinfo.html" tppabs="http://www.vbapi.com/ref/s/shfileinfo.html">SHFILEINFO</A>, ByVal cbFileInfo As Long, ByVal uFlags As Long) As Long</CODE></P>
+
+<H2>Platforms</H2>
+<P><UL>
+<LI><B>Windows 95:</B> Supported.
+<LI><B>Windows 98:</B> Supported.
+<LI><B>Windows NT:</B> Requires Windows NT 4.0 or later.
+<LI><B>Windows 2000:</B> Supported.
+<LI><B>Windows CE:</B> Requires Windows CE 1.0 or later.
+</UL></P>
+
+<H2>Description &amp; Usage</H2>
+<P><B>SHGetFileInfo</B> retrieves information about a file system object in the shell.  Such file system objects include files, directories, <A class="def" href="glossary.html#virtualfolder" tppabs="http://www.vbapi.com/ref/glossary.html#virtualfolder" rel="glossary">virtual folders</A>, and drives.  The information retrieved generally relates to how the object appears in the system shell.</P>
+
+<H2>Return Value</H2>
+<P>If the <VAR>uFlags</VAR> parameter contains the SHGFI_EXETYPE flag, the function returns a value identifying the type of the executable file.  If both the low-order and high-order <A class="def" href="glossary.html#word" tppabs="http://www.vbapi.com/ref/glossary.html#word" rel="glossary">words</A> are not zero, the file is a Windows application.  If only the low-order word is not zero but the high-order word is zero, the file is an MS-DOS based program or batch file or a 32-bit Windows console application.  If the entire return value is zero, an error occured.</P>
+
+<P>If the <VAR>uFlags</VAR> parameter instead contains the SHGFI_SYSICONINDEX flag, the function returns a <A class="def" href="glossary.html#handle" tppabs="http://www.vbapi.com/ref/glossary.html#handle" rel="glossary">handle</A> to an internal image list which contains the icon requested by the function.  If this value is zero, an error occured.</P>
+
+<P>If neither of those two flags are specified, the return value is a non-zero value if successful, or zero if an error occured.</P>
+
+<H2>Visual Basic-Specific Issues</H2>
+<P>None.</P>
+
+<H2>Parameters</H2>
+<P><DL>
+<DT><VAR>pszPath</VAR><DD>The name of the file, directory, or drive to retrieve information about.  If <VAR>uFlags</VAR> contains the SHGFI_PIDL flag, this is instead a <A class="def" href="glossary.html#pointer" tppabs="http://www.vbapi.com/ref/glossary.html#pointer" rel="glossary">pointer</A> to an <A href="itemidlist.html" tppabs="http://www.vbapi.com/ref/i/itemidlist.html">ITEMIDLIST</A> structure (a PIDL) identifying a file system object.  If <VAR>uFlags</VAR> contains the SHGFI_USEFILEATTRIBUTES flag, this parameter does not have to refer to an actual file; the function will instead retrieve attributes which the file would have if it existes (such as information relating to its extension).
+<DT><VAR>dwFileAttributes</VAR><DD>If <VAR>uFlags</VAR> contains the SHGFI_USEFILEATTRIBUTES flag, this parameter is a combination of the following flags specifying the file attributes of the theoretical file.  If that flag is not specified, this parameter is ignored.
+<DL>
+<DT>FILE_ATTRIBUTE_ARCHIVE<DD>An archive file (which most files are).
+<DT>FILE_ATTRIBUTE_COMPRESSED<DD>A file residing in a compressed drive or directory.
+<DT>FILE_ATTRIBUTE_DIRECTORY<DD>A directory instead of a file.
+<DT>FILE_ATTRIBUTE_HIDDEN<DD>A hidden file, not normally visible to the user.
+<DT>FILE_ATTRIBUTE_NORMAL<DD>An attribute-less file (cannot be combined with other attributes).
+<DT>FILE_ATTRIBUTE_READONLY<DD>A read-only file.
+<DT>FILE_ATTRIBUTE_SYSTEM<DD>A system file, used exclusively by the operating system.
+</DL>
+<DT><VAR>psfi</VAR><DD>The structure that receives information about the file.
+<DT><VAR>cbFileInfo</VAR><DD>The size in bytes of the structure passed as <VAR>psfi</VAR>.
+<DT><VAR>uFlags</VAR><DD>A combination of the following flags specifying what information to retrieve about the file system object:
+<DL>
+<DT>SHGFI_ATTRIBUTES<DD>Retrieve the attributes of the file system object and put that information into the structure.
+<DT>SHGFI_DISPLAYNAME<DD>Retrieve the display name of the file system object.  This is its full name as presented in the system shell.
+<DT>SHGFI_EXETYPE<DD>Retrieve what type of executable file was passed to the function.  The result is returned by the function.  This flag cannot be used with any other flags.
+<DT>SHGFI_ICON<DD>Retrieve a handle to the icon used to depict the file system object and put it into the structure.  After using the handle, your program must use <A href="destroyicon.html" tppabs="http://www.vbapi.com/ref/d/destroyicon.html">DestroyIcon</A> to free up resources.
+<DT>SHGFI_ICONLOCATION<DD>Retrieve the name of the file which holds the icon used to depict the file system object and put it into the structure.
+<DT>SHGFI_LARGEICON<DD>When used with SHGFI_ICON, causes the function to retrieve the file system object's large icon.
+<DT>SHGFI_LINKOVERLAY<DD>When used with SHGFI_ICON, causes the function to add the link overlay (the "shortcut arrow" in the bottom right corner) to the icon.
+<DT>SHGFI_OPENICON<DD>When used with SHGFI_ICON, causes the function to use the icon which depicts the file system object as being open.  (This usually applies only to icons used to depict folders or directories.)
+<DT>SHGFI_PIDL<DD>Indicates that <VAR>pszPath</VAR> contains a PIDL instead of a filename.
+<DT>SHGFI_SELECTED<DD>When used with SHGFI_ICON, causes the function to add the tint of the system highlight color to the file system object's icon (making it look "selected").
+<DT>SHGFI_SHELLICONSIZE<DD>When used with SHGFI_ICON, causes the function to retrieve a shell-sized icon instead of the standard size of icon.
+<DT>SHGFI_SMALLICON<DD>When used with SHGFI_ICON, causes the function to retrieve the file system object's small icon.
+<DT>SHGFI_SYSICONINDEX<DD>Retrieve the index of the icon in an internal image list and place it into the structure.  The function returns a handle to the image list itself.  Note that trying to access any icon with an index not equal to the one placed inside the structure will cause unexpected results!
+<DT>SHGFI_TYPENAME<DD>Retrieve the name of the file type of the file system object and place it into the structure.
+<DT>SHGFI_USEFILEATTRIBUTES<DD>Instead of specifying a file that actually exists, <VAR>pszPath</VAR> gives the name of a possibly ficticious file and <VAR>dwFileAttributes</VAR> identifies the pretend file's attributes.  The function then behaves as if the file did exist and retrieves the appropriate information.  This flag cannot be used with the SHGFI_ATTRIBUTES, SHGFI_EXETYPE, or SHGFI_PIDL flags.
+</DL>
+</DL></P>
+
+<H2>Constant Definitions</H2>
+<P><PRE><CODE class="const">Const FILE_ATTRIBUTE_ARCHIVE = &H20
+Const FILE_ATTRIBUTE_COMPRESSED = &H800
+Const FILE_ATTRIBUTE_DIRECTORY = &H10
+Const FILE_ATTRIBUTE_HIDDEN = &H2
+Const FILE_ATTRIBUTE_NORMAL = &H0
+Const FILE_ATTRIBUTE_READONLY = &H1
+Const FILE_ATTRIBUTE_SYSTEM = &H4
+Const SHGFI_ATTRIBUTES = &H800
+Const SHGFI_DISPLAYNAME = &H200
+Const SHGFI_EXETYPE = &H2000
+Const SHGFI_ICON = &H100
+Const SHGFI_ICONLOCATION = &H1000
+Const SHGFI_LARGEICON = &H0
+Const SHGFI_LINKOVERLAY = &H8000
+Const SHGFI_OPENICON = &H2
+Const SHGFI_PIDL = &H8
+Const SHGFI_SELECTED = &H10000
+Const SHGFI_SHELLICONSIZE = &H4
+Const SHGFI_SMALLICON = &H1
+Const SHGFI_SYSICONINDEX = &H4000
+Const SHGFI_TYPENAME = &H400
+Const SHGFI_USEFILEATTRIBUTES = &H10</CODE></PRE></P>
+
+<H2>Example</H2>
+<P><PRE><CODE class="example"><SPAN class="com">' This code is licensed according to the terms and conditions listed <A href="copyrite.html#license" tppabs="http://www.vbapi.com/copyrite.html#license" rel="copyright">here</A>.</SPAN>
+
+' Retrieve information about a generic MP3 file found in the system
+' shell.  The file specified by the function does not actually exist,
+' but its properties will reflect what any MP3 file would probably
+' have (the .mp3 extension and the "archive" attribute).
+Dim info As <A href="shfileinfo.html" tppabs="http://www.vbapi.com/ref/s/shfileinfo.html">SHFILEINFO</A>  ' receives information about the file
+Dim retval As Long  ' return value of the function
+
+' Retrieve information about what the C:\dummy.mp3 file would
+' look like if it existed.
+retval = <B>SHGetFileInfo</B>("C:\dummy.mp3", FILE_ATTRIBUTE_ARCHIVE, info, Len(info), SHGFI_USEFILEATTRIBUTES Or SHGFI_TYPENAME Or SHGFI_ICON)
+
+' Display the name of the .mp3 file type on the computer.
+' (Note how the trailing nulls are removed from the string.)
+Debug.Print "The file type of .mp3 files is "; Left(info.szTypeName, InStr(info.szTypeName, vbNullChar) - 1)
+
+' Draw the icon used for MP3 files in the corner of window Form1.
+retval = <A href="drawicon.html" tppabs="http://www.vbapi.com/ref/d/drawicon.html">DrawIcon</A>(Form1.hDC, 0, 0, info.hIcon)
+' Destroy the icon handle to save resources.
+retval = <A href="destroyicon.html" tppabs="http://www.vbapi.com/ref/d/destroyicon.html">DestroyIcon</A>(info.hIcon)</CODE></PRE></P>
+
+<H2>Category</H2>
+<P><A href="funcc.html#shell" tppabs="http://www.vbapi.com/ref/funcc.html#shell">Shell</A></P>
+
+<P><A href="funca.html" tppabs="http://www.vbapi.com/ref/funca.html">Go back to the alphabetical Function listing.</A><BR>
+<A href="index.html" tppabs="http://www.vbapi.com/ref/index.html">Go back to the Reference section index.</A></P>
+
+<HR>
+
+<P><B>Last Modified:</B> December 22, 1999<BR>
+This page is copyright &copy; 1999 Paul Kuliniewicz.  
+<A href="copyrite.html" tppabs="http://www.vbapi.com/copyrite.html" rel="copyright">Copyright Information</A>  <B>Revised October 29, 2000</B><BR>
+
+<A href="index-1.html" tppabs="http://www.vbapi.com/index.html">Go back to the Windows API Guide home page.</A><BR>
+E-mail: <A href="javascript:if(confirm('http://www.vbapi.com/email.html  \n\nThis file was not retrieved by Teleport Pro, because it is addressed on a domain or path outside the boundaries set for its Starting Address.  \n\nDo you want to open it from the server?'))window.location='http://www.vbapi.com/email.html'" tppabs="http://www.vbapi.com/email.html">vbapi@vbapi.com</A>  <A href="javascript:if(confirm('http://www.vbapi.com/email.html  \n\nThis file was not retrieved by Teleport Pro, because it is addressed on a domain or path outside the boundaries set for its Starting Address.  \n\nDo you want to open it from the server?'))window.location='http://www.vbapi.com/email.html#secure'" tppabs="http://www.vbapi.com/email.html#secure">Send Encrypted E-Mail</A><BR>
+This page is at <A href="shgetfileinfo.html" tppabs="http://www.vbapi.com/ref/s/shgetfileinfo.html">http://www.vbapi.com/ref/s/shgetfileinfo.html</A>
+</P>
+</BODY>
+</HTML>

@@ -1,0 +1,92 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+<HTML lang="en-us">
+<HEAD>
+<TITLE>Windows API Guide: CreatePolyPolygonRgn Function</TITLE>
+<META content="vbapi@vbapi.com" name="author">
+<META content="Information about the CreatePolyPolygonRgn function in the Windows API, geared towards the Visual Basic user." name="description">
+<META content="Kuliniewicz,Windows,Windows 95,Windows NT,Windows 98,Windows 32s,32s,API,Application Programming Interface,Programming,Visual Basic,Basic,VB,CreatePolyPolygonRgn" name="keywords">
+<META content="Omicron HTML Editor" name="generator">
+<LINK href="default.css" tppabs="http://www.vbapi.com/css/default.css" rel="stylesheet" type="text/css">
+<LINK href="index-1.html" tppabs="http://www.vbapi.com/index.html" rel="home">
+</HEAD>
+<BODY>
+
+<!-- Begin Adslot1 -->
+<CENTER>
+<SCRIPT language="JAVASCRIPT">
+<!-- hide from older browsers
+now = new Date();
+my_random = now.getTime();
+document.write('<A href="http://adex3.flycast.com/server/socket/127.0.0.1:2800/click/VBWorldnet/VBAPI/' + my_random + '">');
+document.write('<IMG width="468" height="60" border="1" src="http://adex3.flycast.com/server/socket/127.0.0.1:2800/ad/VBWorldnet/VBAPI/' + my_random + '"></A>');
+// -->
+</SCRIPT>
+</CENTER>
+<!-- End Adslot1 -->
+
+<HR>
+
+<H1>CreatePolyPolygonRgn Function</H1>
+
+<P><CODE class="declare">Declare Function CreatePolyPolygonRgn Lib "gdi32.dll" (lpPoint As <A href="point_type.html" tppabs="http://www.vbapi.com/ref/p/point_type.html">POINT_TYPE</A>, lpPolyCounts As Long, ByVal nCount As Long, ByVal nPolyFillMode As Long) As Long </CODE>
+
+<P><B>Platforms:</B> Win 32s, Win 95/98, Win NT
+
+<P><B>CreatePolyPolygonRgn</B> creates a region consisting of multiple polygons.  The vertices of all the polygons are passed to the function in the array passed as <VAR>lpPoint</VAR>.  Another array specifies how many points within that array belong to each polygon.  The individual polygons are not joined in any way, forming a region of multiple unconnected polygonal areas.  Note that the fill mode for the multi-polygonal region must be specified explicitly, instead of using the filling mode set for whatever device the region is used on.  The function returns the handle to the newly created region if successful, or 0 if an error occured.
+
+<DL>
+<DT><VAR>lpPoint</VAR><DD>An array holding the vertices of every polygon making up the new region.  Specify each point for each polygon only once.  See the example for a demonstration of how to load multiple polygons into this array.
+<DT><VAR>lpPolyCounts</VAR><DD>An array specifying how many vertices in the array passed as <VAR>lpPoint</VAR> belong to each polygon.
+<DT><VAR>nCount</VAR><DD>The number of elements in the array passed as <VAR>lpPolyCounts</VAR>.
+<DT><VAR>nPolyFillMode</VAR><DD>Exactly one of the following flags specifying the fill mode used for each polygon within the region:
+<DL>
+<DT>ALTERNATE = 1<DD>Alternates between filling and not filling contiguous sections whose boundaries are determined by the edge(s) of the polygon crossing through the polygon's interior.
+<DT>WINDING = 2<DD>Any section inside the polygon is filled, regardless of any intra-polygonal boundaries and edges.
+</DL>
+</DL>
+
+<P><B>Example:</B>
+<PRE><CODE class="example">' Invert the points lying within a multi-polygonal region on window Form1.  The
+' region is made up of a triangle and a diamond.  The triangle has vertices (25,25), (50,50),
+' and (25,50).  The diamond has vertices (150,150), (200,200), (150,250), and (100,200).
+
+Dim vertex(0 To 6) As <A href="point_type.html" tppabs="http://www.vbapi.com/ref/p/point_type.html">POINT_TYPE</A> ' holds vertices of each polygon
+Dim numvertices(0 To 1) As Long  ' holds how many vertices belong to each polygon
+Dim hrgn As Long  ' handle to the multi-polygonal region
+Dim retval As Long  ' return value
+
+' Load the vertices of the triangle into the vertex array.
+vertex(0).x = 25: vertex(0).y = 25  ' 1st point: (25,25)
+vertex(1).x = 50: vertex(1).y = 50  ' 2nd point: (50,50)
+vertex(2).x = 25: vertex(2).y = 50  ' 3rd point: (25,50)
+numvertices(0) = 3  ' three vertices for the triangle
+
+' Load the vertices of the diamond into the vertex array.
+vertex(3).x = 150: vertex(3).y = 150  ' 1st point: (150,150)
+vertex(4).x = 200: vertex(4).y = 200  ' 2nd point: (200,200)
+vertex(5).x = 150: vertex(5).y = 250  ' 3rd point: (150,250)
+vertex(6).x = 100: vertex(6).y = 200  ' 4th point: (100,200)
+numvertices(1) = 4  ' four vertices for the triangle
+
+' Create the multi-polygonal region and get a handle to it.
+hrgn = <B>CreatePolyPolygonRgn</B>(vertex(0), numvertices(0), 2, ALTERNATE)
+' Invert the pixels within this region on Form1.
+retval = <A href="invertrgn.html" tppabs="http://www.vbapi.com/ref/i/invertrgn.html">InvertRgn</A>(Form1.hDC, hrgn)
+' Delete the region to free up resources.
+retval = <A href="deleteobject.html" tppabs="http://www.vbapi.com/ref/d/deleteobject.html">DeleteObject</A>(hrgn)</CODE></PRE>
+
+<P><B>See Also:</B> <A href="createpolygonrgn.html" tppabs="http://www.vbapi.com/ref/c/createpolygonrgn.html">CreatePolygonRgn</A><BR>
+<B>Category:</B> <A href="index.html#regions" tppabs="http://www.vbapi.com/ref/index.html#regions">Regions</A></P>
+
+<P><A href="funca.html" tppabs="http://www.vbapi.com/ref/funca.html">Go back to the alphabetical Function listing.</A><BR>
+<A href="index.html" tppabs="http://www.vbapi.com/ref/index.html">Go back to the Reference section index.</A></P>
+
+<HR>
+
+<P>This page is copyright &copy; 2000 Paul Kuliniewicz.  <A href="copyrite.html" tppabs="http://www.vbapi.com/copyrite.html" rel="copyright">Copyright Information.</A><BR>
+<A href="index-1.html" tppabs="http://www.vbapi.com/index.html">Go back to the Windows API Guide home page.</A><BR>
+E-mail: <A href="javascript:if(confirm('http://www.vbapi.com/email.html  \n\nThis file was not retrieved by Teleport Pro, because it is addressed on a domain or path outside the boundaries set for its Starting Address.  \n\nDo you want to open it from the server?'))window.location='http://www.vbapi.com/email.html'" tppabs="http://www.vbapi.com/email.html">vbapi@vbapi.com</A>  <A href="javascript:if(confirm('http://www.vbapi.com/email.html  \n\nThis file was not retrieved by Teleport Pro, because it is addressed on a domain or path outside the boundaries set for its Starting Address.  \n\nDo you want to open it from the server?'))window.location='http://www.vbapi.com/email.html#secure'" tppabs="http://www.vbapi.com/email.html#secure">Send Encrypted E-Mail</A><BR>
+This page is at <A href="createpolypolygonrgn.html" tppabs="http://www.vbapi.com/ref/c/createpolypolygonrgn.html">http://www.vbapi.com/ref/c/createpolypolygonrgn.html</A>
+
+</BODY>
+</HTML>

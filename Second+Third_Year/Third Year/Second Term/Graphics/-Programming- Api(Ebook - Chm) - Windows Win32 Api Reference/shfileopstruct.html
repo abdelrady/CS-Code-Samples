@@ -1,0 +1,118 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+<HTML lang="en-us">
+<HEAD>
+<TITLE>Windows API Guide: SHFILEOPSTRUCT Structure</TITLE>
+<META content="vbapi@vbapi.com" name="author">
+<META content="Information about the SHFILEOPSTRUCT structure in the Windows API, geared towards the Visual Basic user." name="description">
+<META content="Kuliniewicz,Windows,Windows 95,Windows NT,Windows 98,Windows CE,Windows 2000,API,Application Programming Interface,Programming,Visual Basic,Basic,VB,SHFILEOPSTRUCT" name="keywords">
+<META content="Omicron HTML Editor" name="generator">
+<LINK href="default.css" tppabs="http://www.vbapi.com/css/default.css" rel="stylesheet" type="text/css">
+<LINK href="index-1.html" tppabs="http://www.vbapi.com/index.html" rel="home">
+<LINK href="glossary.html" tppabs="http://www.vbapi.com/ref/glossary.html" rel="glossary">
+<LINK href="copyrite.html" tppabs="http://www.vbapi.com/copyrite.html" rel="copyright">
+</HEAD>
+<BODY>
+
+<!-- Begin Adslot1 -->
+<CENTER>
+<SCRIPT language="JAVASCRIPT">
+<!-- hide from older browsers
+now = new Date();
+my_random = now.getTime();
+document.write('<A href="http://adex3.flycast.com/server/socket/127.0.0.1:2800/click/VBWorldnet/VBAPI/' + my_random + '">');
+document.write('<IMG width="468" height="60" border="1" src="http://adex3.flycast.com/server/socket/127.0.0.1:2800/ad/VBWorldnet/VBAPI/' + my_random + '"></A>');
+// -->
+</SCRIPT>
+</CENTER>
+<!-- End Adslot1 -->
+
+<HR>
+
+<H1>SHFILEOPSTRUCT Structure</H1>
+
+<P><PRE><CODE class="type"><SPAN class="kw">Type</SPAN> SHFILEOPSTRUCT
+	hwnd <SPAN class="kw">As Long</SPAN>
+	wFunc <SPAN class="kw">As Long</SPAN>
+	pFrom <SPAN class="kw">As String</SPAN>
+	pTo <SPAN class="kw">As String</SPAN>
+	fFlags <SPAN class="kw">As Integer</SPAN>
+	fAnyOperationsAborted <SPAN class="kw">As Long</SPAN>
+	hNameMappings <SPAN class="kw">As Long</SPAN>
+	lpszProgressTitle <SPAN class="kw">As String</SPAN>
+<SPAN class="kw">End Type</SPAN></CODE></PRE></P>
+
+<H2>Description &amp; Usage</H2>
+<P>The <B>SHFILEOPSTRUCT</B> structure holds a description of a file operation to have the <A href="shfileoperation.html" tppabs="http://www.vbapi.com/ref/s/shfileoperation.html">SHFileOperation</A> function perform.  The contents of the structure identify the operation itself (copy, move, delete, or rename) as well as the targeted files and any other options.  In some cases, the structure also receives feedback information based on the actions of the operation.</P>
+
+<H2>Visual Basic-Specific Issues</H2>
+<P>Because of how Visual Basic byte-aligns structure contents, the <B>SHFILEOPSTRUCT</B> cannot be passed directly to <A href="shfileoperation.html" tppabs="http://www.vbapi.com/ref/s/shfileoperation.html">SHFileOperation</A> or any other API function.  Instead, it must be copied to a byte array in such a way to correct for the improper byte alignment.  Specifically, bytes 1 through 18 of the structure must immediately precede bytes 21 through 32.  In other words, bytes 19 and 20 must be removed.  (The given byte positions are given so that the first byte is byte #1.)  The example code for <A href="shfileoperation.html" tppabs="http://www.vbapi.com/ref/s/shfileoperation.html">SHFileOperation</A> demonstrates the most straightforward way to correct for this problem.</P>
+
+<H2>Data Members</H2>
+<P><DL>
+<DT><VAR>hwnd</VAR><DD>A <A class="def" href="glossary.html#handle" tppabs="http://www.vbapi.com/ref/glossary.html#handle" rel="glossary">handle</A> to the window that is performing the file operation.
+<DT><VAR>wFunc</VAR><DD>One of the following flags specifying which file operation to perform:
+<DL>
+<DT>FO_COPY<DD>Copy the files specified by <VAR>pFrom</VAR> to the location specified by <VAR>pTo</VAR>.
+<DT>FO_DELETE<DD>Delete the files specified by <VAR>pFrom</VAR>.  (To send files to the Recycle Bin, use this file operation and include the FOF_ALLOWUNDO flag in <VAR>fFlags</VAR>.)
+<DT>FO_MOVE<DD>Move the files specified by <VAR>pFrom</VAR> to the location specified by <VAR>pTo</VAR>.
+<DT>FO_RENAME<DD>Rename the files specified by <VAR>pFrom</VAR> to the names specified by <VAR>pTo</VAR>.
+</DL>
+<DT><VAR>pFrom</VAR><DD>A list of one or more files that are the source of the file operation.  If multiple files are specified, they must be separated by a null character.  The entire string must be terminated by two null characters.  Wildcard characters (* and ?) are allowed in the filenames.
+<DT><VAR>pTo</VAR><DD>A list of one or more paths or files that are the target of the file operation.  If multiple files or paths are specified, they must be separated by a null character.  The entire string must be terminated by two null characters.  Wildcard characters (* and ?) are sometimes allowed, depending on the operation.  Always specify the entire path and filename for any files or directories.
+<DT><VAR>fFlags</VAR><DD>A combination of the following flags specifying other options or settings:
+<DL>
+<DT>FOF_ALLOWUNDO<DD>Allow the user to Undo the file operation, if possible.  All paths must be fully qualified for this flag to work.
+<DT>FOF_FILESONLY<DD>If a *.* wildcard file is specified in <VAR>pFrom</VAR> or <VAR>pTo</VAR>, only perform the file operation on the files (and not the directories).
+<DT>FOF_MULTIDESTFILES<DD><VAR>pTo</VAR> specifies multiple destination files -- one for each source file in <VAR>pFrom</VAR> -- instead of a single target for all source files.
+<DT>FOF_NOCONFIRMATION<DD>Do not prompt the user with any confirmation dialogs, instead assuming a "Yes to All" response.
+<DT>FOF_NOCONFIRMMKDIR<DD>Do not confirm the creation of a new directory if the file operation requires one to be made.
+<DT>FOF_NO_CONNECTED_ELEMENTS<DD><B>Windows 2000:</B> Do not move connected files as a group; instead, move only the specified files.
+<DT>FOF_NOCOPYSECURITYATTRIBS<DD><B>Windows NT 4.71 and later, 2000:</B> Do not copy the security attributes of the files.
+<DT>FOF_NOERRORUI<DD>Do not display a message box if an error occurs.
+<DT>FOF_NORECURSION<DD>Only perform the file operation in the specified directory, not operating recursively into its subdirectories.
+<DT>FOF_RENAMEONCOLLISION<DD>If a file being moved, copied, or renamed conflicts with an existing file, give the file operated on a new name.
+<DT>FOF_SILENT<DD>Do not display a progress dialog box.
+<DT>FOF_SIMPLEPROGRESS<DD>Display a progress dialog box displaying the text specified by <VAR>lpszProgressTitle</VAR> but do not display the file names being processed.
+<DT>FOF_WANTMAPPINGHANDLE<DD>Create a <A href="shnamemapping.html" tppabs="http://www.vbapi.com/ref/s/shnamemapping.html">SHNAMEMAPPING</A> structure to identify any files that must be renamed as a result of the FOF_RENAMEONCOLLISION flag.  A handle to this structure is put into <VAR>hNameMappings</VAR>.
+<DT>FOF_WANTNUKEWARNING<DD><B>Windows 2000:</B> Warn the user if a file is being deleted rather than being sent to the Recycle Bin.
+</DL>
+<DT><VAR>fAnyOperationsAborted</VAR><DD>Receives a nonzero value if the user aborted any file operations before they were complete.  This receives 0 if all operations completed without user intervention.
+<DT><VAR>hNameMappings</VAR><DD>If <VAR>fFlags</VAR> contains FOF_WANTMAPPINGHANDLE, this receives a handle to an array of <A href="shnamemapping.html" tppabs="http://www.vbapi.com/ref/s/shnamemapping.html">SHNAMEMAPPING</A> structures that identify which files were renamed.  After use, this handle must be freed by the <A href="shfreenamemappings.html" tppabs="http://www.vbapi.com/ref/s/shfreenamemappings.html">SHFreeNameMappings</A> function.  <B>NOTE:</B> I have not been able to figure out how to use the mapping handle placed in this data member.  If anyone knows how, please <A href="javascript:if(confirm('http://www.vbapi.com/email.html  \n\nThis file was not retrieved by Teleport Pro, because it is addressed on a domain or path outside the boundaries set for its Starting Address.  \n\nDo you want to open it from the server?'))window.location='http://www.vbapi.com/email.html'" tppabs="http://www.vbapi.com/email.html">e-mail me</A>.
+<DT><VAR>lpszProgressTitle</VAR><DD>If <VAR>fFlags</VAR> contains the FOF_SIMPLEPROGRESS flag, this is the text to display in the progress dialog box.  This string must be null-terminated.
+</DL></P>
+
+<H2>Constant Definitions</H2>
+<P><PRE><CODE class="const"><SPAN class="kw">Const</SPAN> FO_COPY = &amp;H2
+<SPAN class="kw">Const</SPAN> FO_DELETE = &amp;H3
+<SPAN class="kw">Const</SPAN> FO_MOVE = &amp;H1
+<SPAN class="kw">Const</SPAN> FO_RENAME = &amp;H4
+<SPAN class="kw">Const</SPAN> FOF_ALLOWUNDO = &amp;H40
+<SPAN class="kw">Const</SPAN> FOF_FILESONLY = &amp;H80
+<SPAN class="kw">Const</SPAN> FOF_MULTIDESTFILES = &amp;H1
+<SPAN class="kw">Const</SPAN> FOF_NOCONFIRMATION = &amp;H10
+<SPAN class="kw">Const</SPAN> FOF_NOCONFIRMMKDIR = &amp;H200
+<SPAN class="kw">Const</SPAN> FOF_NO_CONNECTED_ELEMENTS = &amp;H1000
+<SPAN class="kw">Const</SPAN> FOF_NOCOPYSECURITYATTRIBS = &amp;H800
+<SPAN class="kw">Const</SPAN> FOF_NOERRORUI = &amp;H400
+<SPAN class="kw">Const</SPAN> FOF_RENAMEONCOLLISION = &amp;H8
+<SPAN class="kw">Const</SPAN> FOF_SILENT = &amp;H4
+<SPAN class="kw">Const</SPAN> FOF_SIMPLEPROGRESS = &amp;H100
+<SPAN class="kw">Const</SPAN> FOF_WANTMAPPINGHANDLE = &amp;H20
+<SPAN class="kw">Const</SPAN> FOF_WANTNUKEWARNING = &amp;H2000</CODE></PRE></P>
+
+<H2>Used By</H2>
+<P><A href="shfileoperation.html" tppabs="http://www.vbapi.com/ref/s/shfileoperation.html">SHFileOperation</A></P>
+
+<P><A href="structa.html" tppabs="http://www.vbapi.com/ref/structa.html">Back to the Structure list.</A><BR>
+<A href="index.html" tppabs="http://www.vbapi.com/ref/index.html" rel="index">Back to the Reference section.</A></P>
+
+<HR>
+
+<P><B>Last Modified:</B> April 16, 2000<BR>
+This page is copyright &copy; 2000 Paul Kuliniewicz.  
+<A href="copyrite.html" tppabs="http://www.vbapi.com/copyrite.html" rel="copyright">Copyright Information</A>  <B>Revised October 29, 2000</B><BR>
+<A href="index-1.html" tppabs="http://www.vbapi.com/index.html" rel="home">Go back to the Windows API Guide home page.</A><BR>
+E-mail: <A href="javascript:if(confirm('http://www.vbapi.com/email.html  \n\nThis file was not retrieved by Teleport Pro, because it is addressed on a domain or path outside the boundaries set for its Starting Address.  \n\nDo you want to open it from the server?'))window.location='http://www.vbapi.com/email.html'" tppabs="http://www.vbapi.com/email.html">vbapi@vbapi.com</A>  <A href="javascript:if(confirm('http://www.vbapi.com/email.html  \n\nThis file was not retrieved by Teleport Pro, because it is addressed on a domain or path outside the boundaries set for its Starting Address.  \n\nDo you want to open it from the server?'))window.location='http://www.vbapi.com/email.html#secure'" tppabs="http://www.vbapi.com/email.html#secure">Send Encrypted E-Mail</A><BR>
+This page is at <A href="shfileopstruct.html" tppabs="http://www.vbapi.com/ref/s/shfileopstruct.html">http://www.vbapi.com/ref/s/shfileopstruct.html</A></P>
+</BODY>
+</HTML>

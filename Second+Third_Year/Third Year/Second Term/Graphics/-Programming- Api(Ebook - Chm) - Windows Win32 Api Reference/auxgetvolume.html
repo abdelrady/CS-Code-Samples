@@ -1,0 +1,125 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+<HTML lang="en-us">
+<HEAD>
+<TITLE>Windows API Guide: auxGetVolume Function</TITLE>
+<META content="vbapi@vbapi.com" name="author">
+<META content="Information about the auxGetVolume function in the Windows API, geared towards the Visual Basic user." name="description">
+<META content="Kuliniewicz,Windows,Windows 95,Windows NT,Windows 98,Windows CE,Windows 2000,API,Application Programming Interface,Programming,Visual Basic,Basic,VB,auxGetVolume" name="keywords">
+<META content="Omicron HTML Editor" name="generator">
+<META content="Sat, 11 Sep 1999 00:00:00 GMT" http-equiv="Last-Modified">
+<LINK href="default.css" tppabs="http://www.vbapi.com/css/default.css" rel="stylesheet" type="text/css">
+<LINK href="index-1.html" tppabs="http://www.vbapi.com/index.html" rel="home">
+
+<LINK href="glossary.html" tppabs="http://www.vbapi.com/ref/glossary.html" rel="glossary">
+<LINK href="copyrite.html" tppabs="http://www.vbapi.com/copyrite.html" rel="copyright">
+</HEAD>
+<BODY>
+
+<!-- Begin Adslot1 -->
+<CENTER>
+<SCRIPT language="JAVASCRIPT">
+<!-- hide from older browsers
+now = new Date();
+my_random = now.getTime();
+document.write('<A href="http://adex3.flycast.com/server/socket/127.0.0.1:2800/click/VBWorldnet/VBAPI/' + my_random + '">');
+document.write('<IMG width="468" height="60" border="1" src="http://adex3.flycast.com/server/socket/127.0.0.1:2800/ad/VBWorldnet/VBAPI/' + my_random + '"></A>');
+// -->
+</SCRIPT>
+</CENTER>
+<!-- End Adslot1 -->
+
+<HR>
+
+<H1>auxGetVolume Function</H1>
+
+<P><CODE class="declare">Declare Function auxGetVolume Lib "winmm.dll" (ByVal uDeviceID As Long, lpdwVolume As Long) As Long</CODE></P>
+
+<H2>Platforms</H2>
+<P><UL>
+<LI><B>Windows 95:</B> Supported.
+<LI><B>Windows 98:</B> Supported.
+<LI><B>Windows NT:</B> Requires Windows NT 3.1 or later.
+<LI><B>Windows 2000:</B> Supported.
+<LI><B>Windows CE:</B> Not Supported.
+</UL></P>
+
+<H2>Description &amp; Usage</H2>
+<P><B>auxGetVolume</B> retrieves the current volume setting for an auxiliary audio <A class="def" href="glossary.html#device" tppabs="http://www.vbapi.com/ref/glossary.html#device" rel="glossary">device</A>.  This function will retreive the volume whether the device supports dual-channel volume control or not.</P>
+
+<H2>Return Value</H2>
+<P>If an error occured, the function returns a non-zero error code.  If successful, the function returns 0.</P>
+
+<H2>Visual Basic-Specific Issues</H2>
+<P>None.</P>
+
+<H2>Parameters</H2>
+<P><DL>
+<DT><VAR>uDeviceID</VAR><DD>The device ID of the auxiliary audio device to retrieve the volume of.  Valid values range from 0 to the number of auxiliary audio devices minus one.
+<DT><VAR>lpdwVolume</VAR><DD>Receives the volume settings of the device.  If the device supports separate left and right channel volumes, the low-order <A class="def" href="glossary.html#word" tppabs="http://www.vbapi.com/ref/glossary.html#word" rel="glossary">word</A> contains the left channel volume and the high-order word contains the right channel volume.  If the device does not support separate volumes, the low-order word contains the overall volume.  Valid volume settings range from &amp;H0 or &amp;HFFFF.
+</DL></P>
+
+<H2>Example</H2>
+<P><PRE><CODE class="example"><SPAN class="com">' This code is licensed according to the terms and conditions listed <A href="copyrite.html#license" tppabs="http://www.vbapi.com/copyrite.html#license" rel="copyright">here</A>.</SPAN>
+
+' Display the current volume setting of whatever device happens
+' to be auxiliary audio device 0.  This example identifies whether the
+' device has dual-channel volumes or not.
+Dim auxinfo As <A href="auxcaps.html" tppabs="http://www.vbapi.com/ref/a/auxcaps.html">AUXCAPS</A>  ' receives information about the device
+Dim numvols As Long  ' identifies number of volumes on the device
+Dim lrvol As Long  ' volumes of both channels (or just the overall volume)
+Dim lvol As Integer, rvol As Integer  ' volumes of left and right channels
+Dim retval As Long  ' return value
+
+' Figure out whether the device has one or two volume settings.
+retval = <A href="auxgetdevcaps.html" tppabs="http://www.vbapi.com/ref/a/auxgetdevcaps.html">auxGetDevCaps</A>(0, auxinfo, Len(auxinfo))
+If retval &lt;&gt; 0 Then  ' error
+  Debug.Print "Could not access auxiliary audio device 0 -- aborting."
+  End  ' give up
+End If
+If (auxinfo.dwSupport And AUXCAPS_LRVOLUME) = AUXCAPS_LRVOLUME Then
+  numvols = 2  ' separate left and right volumes
+Else
+  numvols = 1  ' only one overall volume
+End If
+
+' Determine the device's current volume.
+retval = <B>auxGetVolume</B>(0, lrvol)
+' Display the current volume setting for the device.
+If numvols = 2 Then
+  ' Separate the left and right channel volumes.  The next two lines look
+  ' like an excessively complicated way of doing it, but because of a
+  ' quirk in Visual Basic, the "obvious" way doesn't work properly.
+  lvol = Val("&amp;H" &amp; Hex(lrvol And (Not &amp;HFFFF0000)))
+  rvol = (lrvol And &amp;HFFFF0000) / &amp;H10000
+  ' Display the results in hexadecimal.
+  Debug.Print "Left Channel volume: "; Hex(lvol)
+  Debug.Print "Right Channel volume: "; Hex(rvol)
+Else
+  ' Extract the useful information as above, although we only want
+  ' the low-order word (placed into lvol).
+  lvol = Val("&amp;H" &amp; Hex(lrvol And (Not &amp;HFFFF0000)))
+  ' Display the results in hexadecimal.
+  Debug.Print "Volume: "; hex(lvol)  ' here, lvol is the overall volume
+End If</CODE></PRE></P>
+
+<H2>See Also</H2>
+<P><A href="auxsetvolume.html" tppabs="http://www.vbapi.com/ref/a/auxsetvolume.html">auxSetVolume</A></P>
+
+<H2>Category</H2>
+<P><A href="funcc.html#audio" tppabs="http://www.vbapi.com/ref/funcc.html#audio">Audio</A></P>
+
+<P><A href="funca.html" tppabs="http://www.vbapi.com/ref/funca.html">Go back to the alphabetical Function listing.</A><BR>
+<A href="index.html" tppabs="http://www.vbapi.com/ref/index.html">Go back to the Reference section index.</A></P>
+
+<HR>
+
+<P><B>Last Modified:</B> September 10, 1999<BR>
+This page is copyright &copy; 1999 Paul Kuliniewicz.  
+<A href="copyrite.html" tppabs="http://www.vbapi.com/copyrite.html" rel="copyright">Copyright Information</A>  <B>Revised October 29, 2000</B><BR>
+
+<A href="index-1.html" tppabs="http://www.vbapi.com/index.html">Go back to the Windows API Guide home page.</A><BR>
+E-mail: <A href="javascript:if(confirm('http://www.vbapi.com/email.html  \n\nThis file was not retrieved by Teleport Pro, because it is addressed on a domain or path outside the boundaries set for its Starting Address.  \n\nDo you want to open it from the server?'))window.location='http://www.vbapi.com/email.html'" tppabs="http://www.vbapi.com/email.html">vbapi@vbapi.com</A>  <A href="javascript:if(confirm('http://www.vbapi.com/email.html  \n\nThis file was not retrieved by Teleport Pro, because it is addressed on a domain or path outside the boundaries set for its Starting Address.  \n\nDo you want to open it from the server?'))window.location='http://www.vbapi.com/email.html#secure'" tppabs="http://www.vbapi.com/email.html#secure">Send Encrypted E-Mail</A><BR>
+This page is at <A href="auxgetvolume.html" tppabs="http://www.vbapi.com/ref/a/auxgetvolume.html">http://www.vbapi.com/ref/a/auxgetvolume.html</A>
+</P>
+</BODY>
+</HTML>

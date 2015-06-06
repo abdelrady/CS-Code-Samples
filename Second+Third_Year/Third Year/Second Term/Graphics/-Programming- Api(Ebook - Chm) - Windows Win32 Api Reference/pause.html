@@ -1,0 +1,164 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+<HTML lang="en-us">
+<HEAD>
+<TITLE>Windows API Guide: pause MCI Command String</TITLE>
+<META content="vbapi@vbapi.com" name="author">
+<META content="Information about the 'pause' MCI Command String in the Windows API, geared towards the Visual Basic user." name="description">
+<META content="Kuliniewicz,Windows,Windows 95,Windows NT,Windows 98,Windows CE,Windows 2000,API,Application Programming Interface,Programming,Visual Basic,Basic,VB,pause,MCI" name="keywords">
+<META content="Omicron HTML Editor" name="generator">
+<LINK href="default.css" tppabs="http://www.vbapi.com/css/default.css" rel="stylesheet" type="text/css">
+<LINK href="index-1.html" tppabs="http://www.vbapi.com/index.html" rel="home">
+<LINK href="glossary.html" tppabs="http://www.vbapi.com/ref/glossary.html" rel="glossary">
+<LINK href="copyrite.html" tppabs="http://www.vbapi.com/copyrite.html" rel="copyright">
+</HEAD>
+<BODY>
+
+<!-- Begin Adslot1 -->
+<CENTER>
+<SCRIPT language="JAVASCRIPT">
+<!-- hide from older browsers
+now = new Date();
+my_random = now.getTime();
+document.write('<A href="http://adex3.flycast.com/server/socket/127.0.0.1:2800/click/VBWorldnet/VBAPI/' + my_random + '">');
+document.write('<IMG width="468" height="60" border="1" src="http://adex3.flycast.com/server/socket/127.0.0.1:2800/ad/VBWorldnet/VBAPI/' + my_random + '"></A>');
+// -->
+</SCRIPT>
+</CENTER>
+<!-- End Adslot1 -->
+
+<HR>
+
+<H1>pause MCI Command String</H1>
+
+<P>"pause <VAR>lpszDeviceID</VAR>, <VAR>lpszFlags</VAR>"</P>
+
+<H2>Platforms</H2>
+<P><UL>
+<LI><B>Windows 95:</B> Supported.
+<LI><B>Windows 98:</B> Supported.
+<LI><B>Windows NT:</B> Requires Windows NT 3.1 or later.
+<LI><B>Windows 2000:</B> Supported.
+<LI><B>Windows CE:</B> Not Supported.
+</UL></P>
+
+<H2>Description &amp; Usage</H2>
+<P>The <B>pause</B> MCI command string pauses playback of an playing MCI device.  Typically, the current position does not change as a result of pausing playback.</P>
+
+<P>The following MCI device types recognize the <B>stop</B> command string: cdaudio, digitalvideo, sequencer, vcr, videodisk, waveaudio.</P>
+
+<H2>Return Value</H2>
+<P>The <B>pause</B> command string does not return any data.</P>
+
+<H2>Visual Basic-Specific Issues</H2>
+<P>None.</P>
+
+<H2>Parameters</H2>
+<P><DL>
+<DT><VAR>lpszDeviceID</VAR><DD>The device identifer string of the MCI device or file to pause.  This may be an alias to the device or file.
+<DT><VAR>lpszFlags</VAR><DD>Zero or more of the following options:
+<DL>
+<DT>"notify"<DD>When the command finishes, post the <A href="mm_mcinotify.html" tppabs="http://www.vbapi.com/ref/m/mm_mcinotify.html">MM_MCINOTIFY</A> message to the window specified in the call to <A href="mcisendstring.html" tppabs="http://www.vbapi.com/ref/m/mcisendstring.html">mciSendString</A>.
+<DT>"test" (digitalvideo and vcr only)<DD>Test to see if the device supports the <B>pause</B> command.  The device is not actually paused, and the call to <A href="mcisendstring.html" tppabs="http://www.vbapi.com/ref/m/mcisendstring.html">mciSendString</A> only returns successfully if the device supports the <B>pause</B> command.
+<DT>"wait"<DD>Do not have <A href="mcisendstring.html" tppabs="http://www.vbapi.com/ref/m/mcisendstring.html">mciSendString</A> return until the command finishes.
+</DL>
+</DL></P>
+
+<H2>Example</H2>
+<P>To run this code, place three command buttons on a form window.  Name one "cmdPlay" and set its Caption to "&amp;Play MIDI File".  Name another one "cmdStop" and set its Caption to "&amp;Stop MIDI File".  Finally, if you haven't figured it out yet, name the last one "cmdPause" and set its Caption to "&amp;Pause MIDI File".</P>
+
+<P><PRE><CODE class="example"><SPAN class="com">' This code is licensed according to the terms and conditions listed <A href="copyrite.html#license" tppabs="http://www.vbapi.com/copyrite.html#license" rel="copyright">here</A>.</SPAN>
+
+<SPAN class="com">' Declarations and such needed for the example:
+' (Copy them to the (declarations) section of a module.)</SPAN>
+<SPAN class="kw">Public Declare Function</SPAN> <A href="mcisendstring.html" tppabs="http://www.vbapi.com/ref/m/mcisendstring.html">mciSendString</A> <SPAN class="kw">Lib</SPAN> "winmm.dll" <SPAN class="kw">Alias</SPAN> "mciSendStringA" (<SPAN class="kw">ByVal</SPAN> _
+	lpszCommand <SPAN class="kw">As String</SPAN>, <SPAN class="kw">ByVal</SPAN> lpszReturnString <SPAN class="kw">As String</SPAN>, <SPAN class="kw">ByVal</SPAN> cchReturnLength _
+	<SPAN class="kw">As Long</SPAN>, <SPAN class="kw">ByVal</SPAN> hwndCallback <SPAN class="kw">As Long</SPAN>) <SPAN class="kw">As Long</SPAN>
+<SPAN class="kw">Public Declare Function</SPAN> <A href="mcigeterrorstring.html" tppabs="http://www.vbapi.com/ref/m/mcigeterrorstring.html">mciGetErrorString</A> <SPAN class="kw">Lib</SPAN> "winmm.dll" <SPAN class="kw">Alias</SPAN> "mciGetErrorStringA" (<SPAN class="kw">ByVal</SPAN> _
+	fdwError <SPAN class="kw">As Long</SPAN>, <SPAN class="kw">ByVal</SPAN> lpszErrorText <SPAN class="kw">As String</SPAN>, <SPAN class="kw">ByVal</SPAN> cchErrorText <SPAN class="kw">As Long</SPAN>) <SPAN class="kw">As Long</SPAN>
+
+<SPAN class="com">' Use the MCI to play, stop, or pause playback of a MIDI file.  The file C:\Music\canyon.mid
+' is opened when the form opens.  The various buttons behave as you'd expect.  The
+' only potential surprise is that the current position is not reset when playback stops; it
+' behaves just as pausing playback would.  The file closes when the form unloads.</SPAN>
+
+<SPAN class="com">' If anything goes wrong in the example, display a message box with
+' the MCI error message text.</SPAN>
+
+<SPAN class="kw">Private Sub</SPAN> Form_Load()
+	<SPAN class="com">' Open the file "C:\Music\canyon.mid" for later use in the example.
+	' Give it an alias of "canyon" so we don't need to refer to the filename again.</SPAN>
+	<SPAN class="kw">Dim</SPAN> errcode <SPAN class="kw">As Long</SPAN>  <SPAN class="com">' MCI error code</SPAN>
+	
+	errcode = <A href="mcisendstring.html" tppabs="http://www.vbapi.com/ref/m/mcisendstring.html">mciSendString</A>("<A href="open.html" tppabs="http://www.vbapi.com/ref/other/mci/open.html">open</A> C:\Music\canyon.mid alias canyon", "", 0, 0)
+	<SPAN class="kw">If</SPAN> errcode &lt;&gt; 0 <SPAN class="kw">Then</SPAN> DisplayError errcode
+<SPAN class="kw">End Sub</SPAN>
+
+<SPAN class="kw">Private Sub</SPAN> cmdPlay_Click()
+	<SPAN class="com">' Begin playback of the MIDI file when this button is pressed.</SPAN>
+	<SPAN class="kw">Dim</SPAN> errcode <SPAN class="kw">As Long</SPAN>  <SPAN class="com">' MCI error code</SPAN>
+	
+	errcode = <A href="mcisendstring.html" tppabs="http://www.vbapi.com/ref/m/mcisendstring.html">mciSendString</A>("<A href="play.html" tppabs="http://www.vbapi.com/ref/other/mci/play.html">play</A> canyon", "", 0, 0)
+	<SPAN class="kw">If</SPAN> errcode &lt;&gt; 0 <SPAN class="kw">Then</SPAN> DisplayError errcode
+<SPAN class="kw">End Sub</SPAN>
+
+<SPAN class="kw">Private Sub</SPAN> cmdStop_Click()
+	<SPAN class="com">' Stop playback of the MIDI file when this button is pressed.
+	' The position within the file does not move back to the beginning.</SPAN>
+	<SPAN class="kw">Dim</SPAN> errcode <SPAN class="kw">As Long</SPAN>  <SPAN class="com">' MCI error code</SPAN>
+	
+	errcode = <A href="mcisendstring.html" tppabs="http://www.vbapi.com/ref/m/mcisendstring.html">mciSendString</A>("<A href="stop.html" tppabs="http://www.vbapi.com/ref/other/mci/stop.html">stop</A> canyon", "", 0, 0)
+	<SPAN class="kw">If</SPAN> errcode &lt;&gt; 0 <SPAN class="kw">Then</SPAN> DisplayError errcode
+<SPAN class="kw">End Sub</SPAN>
+
+<SPAN class="kw">Private Sub</SPAN> cmdPause_Click()
+	<SPAN class="com">' Pause playback of the MIDI file when this button is pressed.
+	' The position within the file, naturally, does not revert to the beginning.</SPAN>
+	<SPAN class="kw">Dim</SPAN> errcode <SPAN class="kw">As Long</SPAN>  <SPAN class="com">' MCI error code</SPAN>
+	
+	errcode = <A href="mcisendstring.html" tppabs="http://www.vbapi.com/ref/m/mcisendstring.html">mciSendString</A>("<B>pause</B> canyon", "", 0, 0)
+	<SPAN class="kw">If</SPAN> errcode &lt;&gt; 0 <SPAN class="kw">Then</SPAN> DisplayError errcode
+<SPAN class="kw">End Sub</SPAN>
+
+<SPAN class="kw">Private Sub</SPAN> Form_Unload(Cancel <SPAN class="kw">As Integer</SPAN>)
+	<SPAN class="com">' Close the MIDI file when the form unloads.  This is important, because the
+	' MIDI driver can only work with one file at a time.  There's no need to check
+	' for an error here, since we're just closing the file.</SPAN>
+	<SPAN class="kw">Dim</SPAN> errcode <SPAN class="kw">As Long</SPAN>  <SPAN class="com">' MCI error code</SPAN>
+	
+	errcode = <A href="mcisendstring.html" tppabs="http://www.vbapi.com/ref/m/mcisendstring.html">mciSendString</A>("<A href="close.html" tppabs="http://www.vbapi.com/ref/other/mci/close.html">close</A> canyon", "", 0, 0)
+<SPAN class="kw">End Sub</SPAN>
+
+<SPAN class="kw">Private Sub</SPAN> DisplayError(<SPAN class="kw">ByVal</SPAN> errcode <SPAN class="kw">As Long</SPAN>)
+	<SPAN class="com">' This subroutine displays a dialog box with the text of the MCI error.  There's
+	' no reason to use the <A href="messagebox.html" tppabs="http://www.vbapi.com/ref/m/messagebox.html">MessageBox</A> API function; VB's MsgBox function will suffice.</SPAN>
+	<SPAN class="kw">Dim</SPAN> errstr <SPAN class="kw">As String</SPAN>  <SPAN class="com">' MCI error message text</SPAN>
+	<SPAN class="kw">Dim</SPAN> retval <SPAN class="kw">As Long</SPAN>    <SPAN class="com">' return value</SPAN>
+	
+	<SPAN class="com">' Get a string explaining the MCI error.</SPAN>
+	errstr = Space(128)
+	retval = <A href="mcigeterrorstring.html" tppabs="http://www.vbapi.com/ref/m/mcigeterrorstring.html">mciGetErrorString</A>(errcode, errstr, Len(errstr))
+	<SPAN class="com">' Remove the terminating null and empty space at the end.</SPAN>
+	errstr = Left(errstr, InStr(errstr, vbNullChar) - 1)
+	
+	<SPAN class="com">' Display a simple error message box.</SPAN>
+	retval = MsgBox(errstr, vbOKOnly <SPAN class="kw">Or</SPAN> vbCritical)
+<SPAN class="kw">End Sub</SPAN></CODE></PRE></P>
+
+<H2>See Also</H2>
+<P><A href="play.html" tppabs="http://www.vbapi.com/ref/other/mci/play.html">play</A>, 
+<A href="stop.html" tppabs="http://www.vbapi.com/ref/other/mci/stop.html">stop</A></P>
+
+<P><A href="index-2.html" tppabs="http://www.vbapi.com/ref/other/mci/index.html">Back to the MCI Command list.</A><BR>
+<A href="othera.html" tppabs="http://www.vbapi.com/ref/othera.html">Back to Other API Information.</A><BR>
+<A href="index.html" tppabs="http://www.vbapi.com/ref/index.html" rel="index">Back to the Reference section.</A></P>
+
+<HR>
+
+<P><B>Last Modified:</B> July 4, 2000<BR>
+This page is copyright &copy; 2000 Paul Kuliniewicz.  
+<A href="copyrite.html" tppabs="http://www.vbapi.com/copyrite.html" rel="copyright">Copyright Information</A>  <B>Revised October 29, 2000</B><BR>
+<A href="index-1.html" tppabs="http://www.vbapi.com/index.html" rel="home">Go back to the Windows API Guide home page.</A><BR>
+E-mail: <A href="javascript:if(confirm('http://www.vbapi.com/email.html  \n\nThis file was not retrieved by Teleport Pro, because it is addressed on a domain or path outside the boundaries set for its Starting Address.  \n\nDo you want to open it from the server?'))window.location='http://www.vbapi.com/email.html'" tppabs="http://www.vbapi.com/email.html">vbapi@vbapi.com</A>  <A href="javascript:if(confirm('http://www.vbapi.com/email.html  \n\nThis file was not retrieved by Teleport Pro, because it is addressed on a domain or path outside the boundaries set for its Starting Address.  \n\nDo you want to open it from the server?'))window.location='http://www.vbapi.com/email.html#secure'" tppabs="http://www.vbapi.com/email.html#secure">Send Encrypted E-Mail</A><BR>
+This page is at <A href="pause.html" tppabs="http://www.vbapi.com/ref/other/mci/pause.html">http://www.vbapi.com/ref/other/mci/pause.html</A></P>
+</BODY>
+</HTML>

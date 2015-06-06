@@ -1,0 +1,271 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+<HTML lang="en-us">
+<HEAD>
+<TITLE>Windows API Guide: SystemParametersInfo Function</TITLE>
+<META content="vbapi@vbapi.com" name="author">
+<META content="Information about the SystemParametersInfo function in the Windows API, geared towards the Visual Basic user." name="description">
+<META content="Kuliniewicz,Windows,Windows 95,Windows NT,Windows 98,Windows 32s,32s,API,Application Programming Interface,Programming,Visual Basic,Basic,VB,SystemParametersInfo" name="keywords">
+<META content="Omicron HTML Editor" name="generator">
+<LINK href="default.css" tppabs="http://www.vbapi.com/css/default.css" rel="stylesheet" type="text/css">
+<LINK href="index-1.html" tppabs="http://www.vbapi.com/index.html" rel="home">
+</HEAD>
+<BODY>
+
+<!-- Begin Adslot1 -->
+<CENTER>
+<SCRIPT language="JAVASCRIPT">
+<!-- hide from older browsers
+now = new Date();
+my_random = now.getTime();
+document.write('<A href="http://adex3.flycast.com/server/socket/127.0.0.1:2800/click/VBWorldnet/VBAPI/' + my_random + '">');
+document.write('<IMG width="468" height="60" border="1" src="http://adex3.flycast.com/server/socket/127.0.0.1:2800/ad/VBWorldnet/VBAPI/' + my_random + '"></A>');
+// -->
+</SCRIPT>
+</CENTER>
+<!-- End Adslot1 -->
+
+<HR>
+
+<H1>SystemParametersInfo Function</H1>
+
+<P><CODE class="declare">Declare Function SystemParametersInfo Lib "user32.dll" Alias "SystemParametersInfoA" (ByVal uAction As Long, ByVal uiParam As Long, pvParam As Any, ByVal fWinIni As Long) As Long</CODE>
+
+<P><B>Platforms:</B> Win 32s, Win 95/98, Win NT
+
+<P><B>SystemParametersInfo</B> reads or sets information about numerous settings in Windows.  These include Windows's accessibility features as well as various settings for other things.  The exact behavior of the function depends on the flag passed as <VAR>uAction</VAR>.  All sizes and dimensions used by this function are measured in pixels.  Whenever using a structure to receive information, the member identifying the size of the structure (if one exists) must be correctly set beforehand.  Note that, when setting properties via this function, that the user may not expect such settings to be changed; normally only the Control Panel applets set many of these properties.  The return value in almost all cases (there are exceptions, which are noted) is 0 if the function failed, or a non-zero value if the function succeeded.  <B>Note to Visual Basic users:</B> Whenever passing a string as <VAR>pvParam</VAR>, must explictly add the ByVal keyword before it.  This must also be done when explicitly setting the <VAR>pvParam</VAR> parameter to 0.  See the examples for a demonstration of when and how this is done.
+
+<DL>
+<DT><VAR>uAction</VAR><DD>Exactly one of the following flags specifying the action taken by the function:
+<DL>
+
+<DT>SPI_GETACCESSTIMEOUT = 60<DD>Retrieve information about the time-out period associated with the accessibility features.  <VAR>uiParam</VAR> must be the size of the <A href="accesstimeout.html" tppabs="http://www.vbapi.com/ref/a/accesstimeout.html">ACCESSTIMEOUT</A> structure.  <VAR>pvParam</VAR> is an <A href="accesstimeout.html" tppabs="http://www.vbapi.com/ref/a/accesstimeout.html">ACCESSTIMEOUT</A> structure receiving the time-out settings.
+
+<DT>SPI_GETANIMATION = 72<DD><B>Win 95/98 only:</B> Retrieve information about the animation effects associated with the user's actions.  <VAR>uiParam</VAR> must be 0.  <VAR>pvParam</VAR> is an <A href="animationinfo.html" tppabs="http://www.vbapi.com/ref/a/animationinfo.html">ANIMATIONINFO</A> structure receiving the animation effects settings.
+
+<DT>SPI_GETBEEP = 1<DD>Determine if the warning beeper is on or off.  <VAR>uiParam</VAR> must be 0.  <VAR>pvParam</VAR> is a Long-type variable which receives 0 if the warning beeper is off, or a non-zero value if it is on.
+
+<DT>SPI_GETBORDER = 5<DD>Retrieve the window sizing border multiplier factor, which determines the width of a window's sizing border.  <VAR>uiParam</VAR> must be 0.  <VAR>pvParam</VAR> is a Long-type variable which receives the current setting.
+
+<DT>SPI_GETDEFAULTINPUTLANG = 89<DD><B>Win 95/98 only:</B> Retrieve a handle to the keyboard layout used for the system's default input language.  <VAR>uiParam</VAR> must be 0.  <VAR>pvParam</VAR> is a Long-type variable which receives the handle.
+
+<DT>SPI_GETDRAGFULLWINDOWS = 38<DD><B>Win 95/98 only:</B> Determine if Windows displays the entire contents of a window when it is moved or resized (instead of merely displaying an outline of it).  <VAR>uiParam</VAR> must be 0.  <VAR>pvParam</VAR> is a Long-type variable which receives 0 if the contents are not displayed, or a non-zero value if they are.
+
+<DT>SPI_GETFASTTASKSWITCH = 35<DD>Determine if fast Alt-Tab task switching is enabled.  <VAR>uiParam</VAR> must be 0.  <VAR>pvParam</VAR> is a Long-type variable which receives 0 if fast task switching is not enabled, or a non-zero value if it is.
+
+<DT>SPI_GETFILTERKEYS = 50<DD>Retrieve the settings of the FilterKeys accessibility feature.  <VAR>uiParam</VAR> must be the size of the <A href="filterkeys.html" tppabs="http://www.vbapi.com/ref/f/filterkeys.html">FILTERKEYS</A> structure.  <VAR>pvParam</VAR> is a <A href="filterkeys.html" tppabs="http://www.vbapi.com/ref/f/filterkeys.html">FILTERKEYS</A> structure which receives the current settings of FilterKeys.
+
+<DT>SPI_GETFONTSMOOTHING = 74<DD>Determine whether font smoothing is enabled or not.  <VAR>uiParam</VAR> must be 0.  <VAR>pvParam</VAR> is a Long-type variable which receives 0 if font smoothing is not enabled, or a non-zero value if it is.
+
+<DT>SPI_GETGRIDGRANULARITY = 18<DD>Retrieve the current granularity of the desktop sizing grid.  <VAR>uiParam</VAR> must be 0.  <VAR>pvParam</VAR> is a Long-type variable which receives the current setting.
+
+<DT>SPI_GETHIGHCONTRAST = 66<DD><B>Win 95/98 only:</B> Retrieve the settings of the HighContrast accessibility feature.  <VAR>uiParam</VAR> must be 0.  <VAR>pvParam</VAR> is a <A href="highcontrast.html" tppabs="http://www.vbapi.com/ref/h/highcontrast.html">HIGHCONTRAST</A> structure which receives the current settings of HighContrast.
+
+<DT>SPI_GETICONMETRICS = 45<DD><B>Win 95/98 only:</B> Retrieve the metrics associated with icons, which determine how Windows displays icons.  <VAR>uiParam</VAR> must be 0.  <VAR>pvParam</VAR> is an <A href="iconmetrics.html" tppabs="http://www.vbapi.com/ref/i/iconmetrics.html">ICONMETRICS</A> structure which receives the icon metrics.
+
+<DT>SPI_GETICONTITLELOGFONT = 31<DD>Retrieve information about the logical font used to display the titles of icons.  <VAR>uiParam</VAR> must be the size of the <A href="logfont.html" tppabs="http://www.vbapi.com/ref/l/logfont.html">LOGFONT</A> structure.  <VAR>pvParam</VAR> is a <A href="logfont.html" tppabs="http://www.vbapi.com/ref/l/logfont.html">LOGFONT</A> structure which receives information about the logical font.
+
+<DT>SPI_GETICONTITLEWRAP = 25<DD>Determine if Windows word-wraps the text of icon titles.  <VAR>uiParam</VAR> must be 0.  <VAR>pvParam</VAR> is a Long-type variable which receives 0 if word-wrapping is not enabled, or a non-zero value if it is.
+
+<DT>SPI_GETKEYBOARDDELAY = 22<DD>Retrieve the current keyboard repeat delay setting, which is the time before a held key begins to repeat.  <VAR>uiParam</VAR> must be 0.  <VAR>pvParam</VAR> is a Long-type variable which receives the current delay setting (a value between 0 and 3).
+
+<DT>SPI_GETKEYBOARDPREF = 68<DD><B>Win 95/98 only:</B> Determine if the user relies on the keyboard instead of the mouse and wants programs to display keyboard interfaces which are otherwise hidden.  <VAR>uiParam</VAR> must be 0.  <VAR>pvParam</VAR> is a Long-type variable which receives 0 if the user does not rely on the keyboard, or a non-zero value if the user does.
+
+<DT>SPI_GETKEYBOARDSPEED = 10<DD>Retrieve the current keyboard repeat speed setting, which is the speed between repeats when a key is held.  <VAR>uiParam</VAR> must be 0.  <VAR>pvParam</VAR> is a Long-type variable which receives the current speed setting (a value between 0 and 31).
+
+<DT>SPI_GETLOWPOWERACTIVE = 83<DD><B>Win 95/98 only:</B> Determine if the system enters a low-power mode after a period of inactivity.  <VAR>uiParam</VAR> must be 0.  <VAR>pvParam</VAR> is a Long-type variable which receives 0 if low-power mode is not enabled, or a non-zero value if it is.
+
+<DT>SPI_GETLOWPOWERTIMEOUT = 79<DD><B>Win 95/98 only:</B> Retrieve the time, in seconds, which must elapse before Windows enters low-power mode.  <VAR>uiParam</VAR> must be 0.  <VAR>pvParam</VAR> is a Long-type variable which receives the current timeout value.
+
+<DT>SPI_GETMENUDROPALIGNMENT = 27<DD>Determine if popup menus are left- or right-aligned.  <VAR>uiParam</VAR> must be 0.  <VAR>pvParam</VAR> is a Long-type variable which receives 0 if the menus are right-aligned, or a non-zero value if they are left-aligned.
+
+<DT>SPI_GETMINIMIZEDMETRICS = 43<DD><B>Win 95/98 only:</B> Retrieve the metrics associated with minimized windows, which specify how Windows displays minimized windows.  <VAR>uiParam</VAR> must be the size of the <A href="minimizedmetrics.html" tppabs="http://www.vbapi.com/ref/m/minimizedmetrics.html">MINIMIZEDMETRICS</A> structure.  <VAR>pvParam</VAR> is a <A href="minimizedmetrics.html" tppabs="http://www.vbapi.com/ref/m/minimizedmetrics.html">MINIMIZEDMETRICS</A> structure which receives the minimized window metrics.
+
+<DT>SPI_GETMOUSE = 3<DD>Retrieve the x-axis and y-axis threshold values for the mouse as well as the mouse speed.  <VAR>uiParam</VAR> must be 0.  <VAR>pvParam</VAR> is a 3-element array of Long-type variables which receives the x-threshold, y-threshold, and mouse speed.
+
+<DT>SPI_GETMOUSEKEYS = 54<DD>Retrieve the settings of the MouseKeys accessibility feature.  <VAR>uiParam</VAR> must be the size of the <A href="mousekeys.html" tppabs="http://www.vbapi.com/ref/m/mousekeys.html">MOUSEKEYS</A> structure.  <VAR>pvParam</VAR> is a <A href="mousekeys.html" tppabs="http://www.vbapi.com/ref/m/mousekeys.html">MOUSEKEYS</A> structure which receives the current settings of MouseKeys.
+
+<DT>SPI_GETMOUSETRAILS = 94<DD><B>Win 95/98 only:</B> Retrieve the current mouse trails setting.  <VAR>uiParam</VAR> must be 0.  <VAR>pvParam</VAR> receives 0 or 1 if mouse trails are not enabled, or a value greater than one identifying the number of cursor images making up the mouse trail.
+
+<DT>SPI_GETNONCLIENTMETRICS = 41<DD><B>Win 95/98 only:</B> Retrieve the metrics associated with the nonclient areas of windows, which determine how Windows renders nonclient areas.  <VAR>uiParam</VAR> must be 0.  <VAR>pvParam</VAR> is a <A href="nonclientmetrics.html" tppabs="http://www.vbapi.com/ref/n/nonclientmetrics.html">NONCLIENTMETRICS</A> structure which receives the nonclient area metrics.
+
+<DT>SPI_GETPOWEROFFACTIVE = 84<DD><B>Win 95/98 only:</B> Determine if the system enters a power-off mode after a period of inactivity.  <VAR>uiParam</VAR> must be 0.  <VAR>pvParam</VAR> is a Long-type variable which receives 0 if power-off mode is not enabled, or a non-zero value if power-off mode is enabled.
+
+<DT>SPI_GETPOWEROFFTIMEOUT = 80<DD><B>Win 95/98 only:</B> Retrieve the time-out value, in seconds, that must elapse before Windows enters power-off mode.  <VAR>uiParam</VAR> must be 0.  <VAR>pvParam</VAR> is a Long-type variable which receives the time-out value for power-off mode.
+
+<DT>SPI_GETSCREENREADER = 70<DD><B>Win 95/98 only:</B> Determine if a screen reader utility is running.  If it is, applications should present more textual output instead of graphical output to help the reader function better.  <VAR>uiParam</VAR> must be 0.  <VAR>pvParam</VAR> is a Long-type variable which receives 0 if no screen reader is running, or a non-zero value if one is.
+
+<DT>SPI_GETSCREENSAVEACTIVE = 16<DD>Determine if a screen saver is set to run.  <VAR>uiParam</VAR> must be 0.  <VAR>pvParam</VAR> is a Long-type variable which receives 0 if no screen saver is set to run, or a non-zero value if one is.
+
+<DT>SPI_GETSCREENSAVETIMEOUT = 14<DD>Retrieve the time-out period, in seconds, which must elapse before the screen saver begins running.  <VAR>uiParam</VAR> must be 0.  <VAR>pvParam</VAR> is a Long-type variable which receives the time-out value.
+
+<DT>SPI_GETSERIALKEYS = 62<DD><B>Win 95/98 only:</B> Retrieve the settings of the SerialKeys accessibility feature.  <VAR>uiParam</VAR> must be 0.  <VAR>pvParam</VAR> is a <A href="serialkeys.html" tppabs="http://www.vbapi.com/ref/s/serialkeys.html">SERIALKEYS</A> structure which receives the current settings of SerialKeys.
+
+<DT>SPI_GETSHOWSOUNDS = 56<DD>Determine if the user desires visual information to replace or suppliment otherwise audio-only output.  <VAR>uiParam</VAR> must be 0.  <VAR>pvParam</VAR> is a Long-type variable which receives 0 if programs should not display this added visual information, or a non-zero value if they should.
+
+<DT>SPI_GETSOUNDSENTRY = 64<DD>Retrieve the settings of the SoundSentry accessibility feature.  <VAR>uiParam</VAR> must be the size of the <A href="soundsentry.html" tppabs="http://www.vbapi.com/ref/s/soundsentry.html">SOUNDSENTRY</A> structure.  <VAR>pvParam</VAR> is a <A href="soundsentry.html" tppabs="http://www.vbapi.com/ref/s/soundsentry.html">SOUNDSENTRY</A> structure which receives the current settings of SoundSentry.
+
+<DT>SPI_GETSTICKYKEYS = 58<DD>Retrieve the settings of the StickyKeys accessibility feature.  <VAR>uiParam</VAR> must be the size of the <A href="stickykeys.html" tppabs="http://www.vbapi.com/ref/s/stickykeys.html">STICKYKEYS</A> structure.  <VAR>pvParam</VAR> is a <A href="stickykeys.html" tppabs="http://www.vbapi.com/ref/s/stickykeys.html">STICKYKEYS</A> structure which receives the settings of StickyKeys.
+
+<DT>SPI_GETTOGGLEKEYS = 52<DD>Retrieve the settings of the ToggleKeys accessibility feature.  <VAR>uiParam</VAR> must be the size of the <A href="togglekeys.html" tppabs="http://www.vbapi.com/ref/t/togglekeys.html">TOGGLEKEYS</A> structure.  <VAR>pvParam</VAR> is a <A href="togglekeys.html" tppabs="http://www.vbapi.com/ref/t/togglekeys.html">TOGGLEKEYS</A> structure which receives the current settings of ToggleKeys.
+
+<DT>SPI_GETWINDOWSEXTENSION = 92<DD><B>Win 95/98 only:</B> Determine if the Windows extensions are installed.  Win 95 requires that Microsoft Plus! be installed to get the extensions; the extensions are integrated as a part of Win 98.  <VAR>uiParam</VAR> must be 1.  <VAR>pvParam</VAR> must be 0.  The function returns 0 if the extensions are disabled, or a non-zero value if they are enabled.
+
+<DT>SPI_GETWORKAREA = 48<DD><B>Win 95/98 only:</B> Retrieve the size of the working area, which is a rectangle identifying the area of the desktop not obscured by the taskbar.  <VAR>uiParam</VAR> must be 0.  <VAR>pvParam</VAR> is a <A href="rect.html" tppabs="http://www.vbapi.com/ref/r/rect.html">RECT</A> structure which receives the rectangle of the working area.
+
+<DT>SPI_ICONHORIZONTALSPACING = 13<DD>Set the width of the icon spacing cell.  <VAR>uiParam</VAR> is the new setting for the width.  <VAR>pvParam</VAR> must be 0.
+
+<DT>SPI_ICONVERTICALSPACING = 24<DD>Set the height of the icon spacing cell.  <VAR>uiParam</VAR> is the new setting for the height.  <VAR>pvParam</VAR> must be 0.
+
+<DT>SPI_LANGDRIVER = 12<DD><B>Win 95/98 only:</B> Retrieve the filename of the language driver.  <VAR>uiParam</VAR> must be 0.  <VAR>pvParam</VAR> is a String (with sufficient buffer space) which receives the filename of the language driver.
+
+<DT>SPI_SETACCESSTIMEOUT = 61<DD>Set information associated with the time-out period associated with the accessibility features.  <VAR>uiParam</VAR> must be the size of the <A href="accesstimeout.html" tppabs="http://www.vbapi.com/ref/a/accesstimeout.html">ACCESSTIMEOUT</A> structure.  <VAR>pvParam</VAR> is an <A href="accesstimeout.html" tppabs="http://www.vbapi.com/ref/a/accesstimeout.html">ACCESSTIMEOUT</A> structure holding the new time-out period settings.
+
+<DT>SPI_SETANIMATION = 73<DD><B>Win 95/98 only:</B> Set information about the animation effects associated with the user's actions.  <VAR>uiParam</VAR> must be 0.  <VAR>pvParam</VAR> is an <A href="animationinfo.html" tppabs="http://www.vbapi.com/ref/a/animationinfo.html">ANIMATIONINFO</A> structure holding the new animation effects settings.
+
+<DT>SPI_SETBEEP = 2<DD>Turn the warning beeper on or off.  <VAR>uiParam</VAR> is 0 to turn the beeper off, or a non-zero value to turn it on.  <VAR>pvParam</VAR> must be 0.
+
+<DT>SPI_SETBORDER = 6<DD>Set the window sizing border multiplier factor, which determines the width of a window's sizing border.  <VAR>uiParam</VAR> is the new setting.  <VAR>pvParam</VAR> must be 0.
+
+<DT>SPI_SETCURSORS = 87<DD>Reload the images used for the system cursors.  <VAR>uiParam</VAR> and <VAR>pvParam</VAR> must be 0.
+
+<DT>SPI_SETDEFAULTINPUTLANG = 90<DD><B>Win 95/98 only:</B> Set the keyboard layout used for the system's default input language.  <VAR>uiParam</VAR> is a handle to the keyboard layout to use.  <VAR>pvParam</VAR> must be 0.
+
+<DT>SPI_SETDESKPATTERN = 21<DD>Set the current desktop pattern bitmap by causing Windows to reread the Pattern setting in the [Desktop] section of WIN.INI.  Both <VAR>uiParam</VAR> and <VAR>pvParam</VAR> must be 0.
+
+<DT>SPI_SETDESKWALLPAPER = 20<DD>Set the current desktop wallpaper bitmap.  <VAR>uiParam</VAR> must be 0.  <VAR>pvParam</VAR> is a String holding the filename of the bitmap file to use as the wallpaper.
+
+<DT>SPI_SETDOUBLECLICKTIME = 32<DD>Set the time, in milliseconds, within which two successive mouse clicks must occur for Windows to interpret the input to be a double click.  <VAR>uiParam</VAR> is the new double click time.  <VAR>pvParam</VAR> must be 0.
+
+<DT>SPI_SETDOUBLECLKHEIGHT = 30<DD>Set the height of the rectangle within which two successive mouse clicks must occur for Windows to interpret the input to be a double click.  <VAR>uiParam</VAR> is the new height.  <VAR>pvParam</VAR> must be 0.
+
+<DT>SPI_SETDOUBLECLKWIDTH = 29<DD>Set the width of the rectangle within which two successive mouse clicks must occur for Windows to interpret the input to be a double click.  <VAR>uiParam</VAR> is the new width.  <VAR>pvParam</VAR> must be 0.
+
+<DT>SPI_SETDRAGFULLWINDOWS = 37<DD><B>Win 95/98 only:</B> Turn dragging of full windows (displaying the contents of a window while moving or resizing instead of just an empty border) on or off.  <VAR>uiParam</VAR> is 0 to turn dragging of full windows off, or a non-zero value to turn it on.
+
+<DT>SPI_SETDRAGHEIGHT = 77<DD><B>Win 95/98 only:</B> Set the height of the rectangle which the cursor must move out of with a button depressed for Windows to begin a drag operation.  <VAR>uiParam</VAR> is the new height.  <VAR>pvParam</VAR> must be 0.
+
+<DT>SPI_SETDRAGWIDTH = 76<DD><B>Win 95/98 only:</B> Set the width of the rectangle which the cursor must move out of with a button depressed for Windows to begin a drag operation.  <VAR>uiParam</VAR> is the new width.  <VAR>pvParam</VAR> must be 0.
+
+<DT>SPI_SETFASTTASKSWITCH = 36<DD>Turn fast Alt-Tab task switching on or off.  <VAR>uiParam</VAR> is 0 to turn fast switching off, or a non-zero value to turn it on.  <VAR>pvParam</VAR> must be 0.
+
+<DT>SPI_SETFILTERKEYS = 51<DD>Set the settings of the FilterKeys accessibility feature.  <VAR>uiParam</VAR> must be the size of the <A href="filterkeys.html" tppabs="http://www.vbapi.com/ref/f/filterkeys.html">FILTERKEYS</A> structure.  <VAR>pvParam</VAR> is a <A href="filterkeys.html" tppabs="http://www.vbapi.com/ref/f/filterkeys.html">FILTERKEYS</A> structure holding the new settings for FilterKeys.
+
+<DT>SPI_SETFONTSMOOTHING = 75<DD>Turn font smoothing on or off.  <VAR>uiParam</VAR> is 0 to turn font smoothing off, or a non-zero value to turn it on.
+
+<DT>SPI_SETGRIDGRANULARITY = 19<DD>Set the granularity of the desktop sizing grid.  <VAR>uiParam</VAR> is the new setting.  <VAR>pvParam</VAR> must be 0.
+
+<DT>SPI_SETHIGHCONTRAST = 67<DD><B>Win 95/98 only:</B> Set the settings of the HighContrast accessibility feature.  <VAR>uiParam</VAR> must be 0.  <VAR>pvParam</VAR> is a <A href="highcontrast.html" tppabs="http://www.vbapi.com/ref/h/highcontrast.html">HIGHCONTRAST</A> structure holding the new settings for HighContrast.
+
+<DT>SPI_SETICONMETRICS = 46<DD><B>Win 95/98 only:</B> Set the metrics associated with icons, which specify how Windows displays icons.  <VAR>uiParam</VAR> must be 0.  <VAR>pvParam</VAR> is an <A href="iconmetrics.html" tppabs="http://www.vbapi.com/ref/i/iconmetrics.html">ICONMETRICS</A> structure holding the new icon metrics.
+
+<DT>SPI_SETICONS = 88<DD>Reload the images used for the system icons.  <VAR>uiParam</VAR> and <VAR>pvParam</VAR> must be 0.
+
+<DT>SPI_SETICONTITLELOGFONT = 34<DD>Set the logical font used to display the text of icon titles.  <VAR>uiParam</VAR> must be the size of the <A href="logfont.html" tppabs="http://www.vbapi.com/ref/l/logfont.html">LOGFONT</A> structure.  <VAR>pvParam</VAR> is a <A href="logfont.html" tppabs="http://www.vbapi.com/ref/l/logfont.html">LOGFONT</A> structure holding the logical font to use.
+
+<DT>SPI_SETICONTITLEWRAP = 26<DD>Turn the word-wrapping of icon titles on or off.  <VAR>uiParam</VAR> is 0 to turn word-wrapping off, or a non-zero value to turn it on.  <VAR>pvParam</VAR> must be 0.
+
+<DT>SPI_SETKEYBOARDDELAY = 23<DD>Set the keyboard repeat-delay setting, which is the time that must elapse before a held key begins to repeat.  <VAR>uiParam</VAR> is the new delay setting, between 0 and 3 inclusive.  <VAR>pvParam</VAR> must be 0.
+
+<DT>SPI_SETKEYBOARDPREF = 69<DD><B>Win 95/98 only:</B> Tell Windows whether the user depends on the keyboard as the main input device and wishes programs to display additional keyboard-based interfaces.  <VAR>uiParam</VAR> is 0 to not indicate a keyboard preference, or a non-zero value to indicate one.  <VAR>pvParam</VAR> must be 0.
+
+<DT>SPI_SETKEYBOARDSPEED = 11<DD>Set the keyboard repeat-speed setting, which specifies the rate at which keys are repeated.  <VAR>uiParam</VAR> is the new speed setting, between 0 and 31 inclusive.  <VAR>pvParam</VAR> must be 0.
+
+<DT>SPI_SETLANGTOGGLE = 91<DD><B>Win 95/98 only:</B> Set the hot key used to switch keyboard input languages.  The new value is read from the registry at HKEY_CURRENT_USER\keyboard layout\toggle: 1 sets the hot key to ALT+SHIFT, 2 sets the hot key to CTRL+SHIFT, and 3 disables the hot key.  <VAR>uiParam</VAR> and <VAR>pvParam</VAR> must be 0.
+
+<DT>SPI_SETLOWPOWERACTIVE = 85<DD><B>Win 95/98 only:</B> Turn the low-power mode after a period of inactivity on or off.  <VAR>uiParam</VAR> is 0 to deactivate low-power mode, or 1 to activate to.  <VAR>pvParam</VAR> must be 0.
+
+<DT>SPI_SETLOWPOWERTIMEOUT = 81<DD><B>Win 95/98 only:</B> Set the time-out period (in seconds) which must elapse after user input before Windows enters low-power mode.  <VAR>uiParam</VAR> is the new time-out period.  <VAR>pvParam</VAR> must be 0.
+
+<DT>SPI_SETMENUDROPALIGNMENT = 28<DD>Set whether pop-up menus open to the left or to the right.  <VAR>uiParam</VAR> is 0 if they open to the left, or a non-zero value if they open to the right.  <VAR>pvParam</VAR> must be 0.
+
+<DT>SPI_SETMINIMIZEDMETRICS = 44<DD><B>Win 95/98 only:</B> Set the metrics associated with minimized windows, which determine how Windows displays minimized windows.  <VAR>uiParam</VAR> must be 0.  <VAR>pvParam</VAR> is a <A href="minimizedmetrics.html" tppabs="http://www.vbapi.com/ref/m/minimizedmetrics.html">MINIMIZEDMETRICS</A> structure holding the new metrics.
+
+<DT>SPI_SETMOUSE = 4<DD>Set the x-axis and y-axis threshold values for the mouse as well as the mouse speed.  <VAR>uiParam</VAR> must be 0.  <VAR>pvParam</VAR> is a three-element Long-type array; the first element is the x-threshold, the second element is the y-threshold, and the third element is the mouse speed.
+
+<DT>SPI_SETMOUSEBUTTONSWAP = 33<DD>Swap or unswap the meanings of the left and right mouse buttons.  <VAR>uiParam</VAR> is 0 to restore the left-to-left/right-to-right mapping, or a non-zero value to swap the buttons into a left-to-right/right-to-left mapping.  <VAR>pvParam</VAR> must be 0.
+
+<DT>SPI_SETMOUSEKEYS = 55<DD>Set the settings of the MouseKeys accessibility feature.  <VAR>uiParam</VAR> must be the size of the <A href="mousekeys.html" tppabs="http://www.vbapi.com/ref/m/mousekeys.html">MOUSEKEYS</A> structure.  <VAR>pvParam</VAR> is a <A href="mousekeys.html" tppabs="http://www.vbapi.com/ref/m/mousekeys.html">MOUSEKEYS</A> structure holding the new settings for MouseKeys.
+
+<DT>SPI_SETMOUSETRAILS = 93<DD><B>Win 95/98 only:</B> Set the length of the mouse trail.  <VAR>uiParam</VAR> is 0 or 1 to turn mouse trails off, or a value greater than one identifying the number of cursor images used to make up the mouse trail.  <VAR>pvParam</VAR> must be 0.
+
+<DT>SPI_SETNONCLIENTMETRICS = 42<DD><B>Win 95/98 only:</B> Set the metrics associated with the non-client areas of windows, which determine how Windows displays the non-client areas.  <VAR>uiParam</VAR> must be 0.  <VAR>pvParam</VAR> is a <A href="nonclientmetrics.html" tppabs="http://www.vbapi.com/ref/n/nonclientmetrics.html">NONCLIENTMETRICS</A> structure holding the new metrics.
+
+<DT>SPI_SETPENWINDOWS = 49<DD><B>Win 95/98 only:</B> Load or unload Microsoft Pen for Windows, if available.  <VAR>uiParam</VAR> is 0 to unload Pen, or a non-zero value to load Pen.  <VAR>pvParam</VAR> must be 0.
+
+<DT>SPI_SETPOWEROFFACTIVE = 86<DD><B>Win 95/98 only:</B> Set whether the system powers down after a period of inactivity.  <VAR>uiParam</VAR> is 0 to not enter power-off mode, or a non-zero value to enter power-off mode.  <VAR>pvParam</VAR> must be 0.
+
+<DT>SPI_SETPOWEROFFTIMEOUT = 82<DD><B>Win 95/98 only:</B> Set the time-out period, in seconds, which must elapse without user input before Windows enters power-off mode.  <VAR>uiParam</VAR> is the new time-out period.  <VAR>pvParam</VAR> must be 0.
+
+<DT>SPI_SETSCREENREADER = 71<DD><B>Win 95/98 only:</B> Set whether a screen-reading program is currently running.  <VAR>uiParam</VAR> is 0 if no reader is in use, or a non-zero value if one is.  <VAR>pvParam</VAR> must be 0.
+
+<DT>SPI_SETSCREENSAVEACTIVE = 17<DD>Set whether Windows activates a screen saver after a period of inactivity.  <VAR>uiParam</VAR> is 0 to turn the screen saver off, or a non-zero value to turn it on.  <VAR>pvParam</VAR> must be 0.
+
+<DT>SPI_SETSCREENSAVETIMEOUT = 15<DD>Set the time-out period, in seconds, which must elapse before Windows launches a screen saver.  <VAR>uiParam</VAR> is the new time-out period.  <VAR>pvParam</VAR> must be 0.
+
+<DT>SPI_SETSERIALKEYS = 63<DD><B>Win 95/98 only:</B> Set the settings of the SerialKeys accessibility feature.  <VAR>uiParam</VAR> must be 0.  <VAR>pvParam</VAR> is a <A href="serialkeys.html" tppabs="http://www.vbapi.com/ref/s/serialkeys.html">SERIALKEYS</A> structure holding the new settings for SerialKeys.
+
+<DT>SPI_SETSHOWSOUNDS = 57<DD>Turn the ShowSounds accessibility feature on or off.  <VAR>uiParam</VAR> is 0 to turn ShowSounds off, or a non-zero value to turn ShowSounds on.  <VAR>pvParam</VAR> must be 0.
+
+<DT>SPI_SETSOUNDSENTRY = 65<DD>Set the settings of the SoundSentry accessibility feature.  <VAR>uiParam</VAR> must be the size of the <A href="soundsentry.html" tppabs="http://www.vbapi.com/ref/s/soundsentry.html">SOUNDSENTRY</A> structure.  <VAR>pvParam</VAR> is a <A href="soundsentry.html" tppabs="http://www.vbapi.com/ref/s/soundsentry.html">SOUNDSENTRY</A> structure holding the new settings for SoundSentry.
+
+<DT>SPI_SETSTICKYKEYS = 59<DD>Set the settings of the StickyKeys accessibility feature.  <VAR>uiParam</VAR> is the size of the <A href="stickykeys.html" tppabs="http://www.vbapi.com/ref/s/stickykeys.html">STICKYKEYS</A> structure.  <VAR>pvParam</VAR> is a <A href="stickykeys.html" tppabs="http://www.vbapi.com/ref/s/stickykeys.html">STICKYKEYS</A> structure holding the new settings for StickyKeys.
+
+<DT>SPI_SETTOGGLEKEYS = 53<DD>Set the settings of the ToggleKeys accessibility feature.  <VAR>uiParam</VAR> is the size of the <A href="togglekeys.html" tppabs="http://www.vbapi.com/ref/t/togglekeys.html">TOGGLEKEYS</A> structure.  <VAR>pvParam</VAR> is a <A href="togglekeys.html" tppabs="http://www.vbapi.com/ref/t/togglekeys.html">TOGGLEKEYS</A> structure holding the new settings for ToggleKeys.
+
+<DT>SPI_SETWORKAREA = 47<DD><B>Win 95/98 only:</B> Set the rectangle defining the working area of the desktop.  The working area is the area of the desktop not obscured by the taskbar.  <VAR>uiParam</VAR> must be 0.  <VAR>pvParam</VAR> is a <A href="rect.html" tppabs="http://www.vbapi.com/ref/r/rect.html">RECT</A> structure holding the new working area rectangle.
+</DL>
+<DT><VAR>uiParam</VAR><DD>The purpose of this parameter varies with <VAR>uAction</VAR>.
+<DT><VAR>pvParam</VAR><DD>The purpose of this parameter varies with <VAR>uAction</VAR>.  In VB, if this is to be set as a string or to 0, the ByVal keyword must preceed it.
+<DT><VAR>fWinIni</VAR><DD>Zero or more of the following flags specifying the change notification to take place.  Generally, this can be set to 0 if the function merely queries information, but should be set to something if the function sets information.
+<DL>
+<DT>SPIF_SENDWININICHANGE = &amp;H2<DD>Broadcast the change made by the function to all running programs.
+<DT>SPIF_UPDATEINIFILE = &amp;H1<DD>Save the change made by the function to the user profile.
+</DL>
+</DL>
+
+<P><B>Example #1:</B>
+<PRE><CODE class="example">' Set the desktop wallpaper to the Clouds.bmp that comes with Windows.
+' Note how the string passed to the function is preceeded by the ByVal keyword.
+Dim windir As String  ' receives the path of the Windows directory
+Dim cloudpath As String  ' filename of Clouds.bmp
+Dim retval As Long  ' return value
+
+' Get the path of the Windows directory.
+windir = Space(255)  ' make room in the buffer
+retval = <A href="getwindowsdirectory.html" tppabs="http://www.vbapi.com/ref/g/getwindowsdirectory.html">GetWindowsDirectory</A>(windir, 255)  ' get the path name
+windir = Left(windir, InStr(windir, vbNullChar) - 1)  ' trim the null character and unused characters
+cloudpath = windir &amp; "Clouds.bmp"  ' add the filename to the path
+' Set the Windows wallpaper, saving the change and notifying all programs
+retval = <B>SystemParametersInfo</B>(SPI_SETDESKWALLPAPER, 0, ByVal cloudpath, SPIF_SENDWININICHANGE Or SPIF_UPDATEINIFILE)</CODE></PRE>
+
+<P><B>Example #2:</B>
+<PRE><CODE class="example">' Tell the user whether the MouseKeys accessibility feature is on
+' or off.  Note how the structure's cbSize parameter must be set first.
+Dim mk As <A href="mousekeys.html" tppabs="http://www.vbapi.com/ref/m/mousekeys.html">MOUSEKEYS</A>  ' holds settings for MouseKeys
+Dim retval As Long  ' return value
+
+mk.cbSize = Len(mk)  ' set the size of the structure
+' Load the MouseKeys settings into the structure.
+retval = <B>SystemParametersInfo</B>(SPI_GETMOUSEKEYS, Len(mk), mk, 0)  ' don't need to notify
+' Display whether MouseKeys is on or off.
+If (mk.dwFlags And MKF_MOUSEKEYSON) = MKF_MOUSEKEYSON Then
+  Debug.Print "MouseKeys is on."
+Else
+  Debug.Print "MouseKeys is off."
+End If</CODE></PRE>
+
+<P><B>See Also:</B> <A href="getsystemmetrics.html" tppabs="http://www.vbapi.com/ref/g/getsystemmetrics.html">GetSystemMetrics</A><BR>
+<B>Category:</B> <A href="index.html#accessibility" tppabs="http://www.vbapi.com/ref/index.html#accessibility">Accessibility</A></P>
+
+<P><A href="funca.html" tppabs="http://www.vbapi.com/ref/funca.html">Go back to the alphabetical Function listing.</A><BR>
+<A href="index.html" tppabs="http://www.vbapi.com/ref/index.html">Go back to the Reference section index.</A></P>
+
+<HR>
+
+<P>This page is copyright &copy; 2000 Paul Kuliniewicz.  <A href="copyrite.html" tppabs="http://www.vbapi.com/copyrite.html" rel="copyright">Copyright Information.</A><BR>
+<A href="index-1.html" tppabs="http://www.vbapi.com/index.html">Go back to the Windows API Guide home page.</A><BR>
+E-mail: <A href="javascript:if(confirm('http://www.vbapi.com/email.html  \n\nThis file was not retrieved by Teleport Pro, because it is addressed on a domain or path outside the boundaries set for its Starting Address.  \n\nDo you want to open it from the server?'))window.location='http://www.vbapi.com/email.html'" tppabs="http://www.vbapi.com/email.html">vbapi@vbapi.com</A>  <A href="javascript:if(confirm('http://www.vbapi.com/email.html  \n\nThis file was not retrieved by Teleport Pro, because it is addressed on a domain or path outside the boundaries set for its Starting Address.  \n\nDo you want to open it from the server?'))window.location='http://www.vbapi.com/email.html#secure'" tppabs="http://www.vbapi.com/email.html#secure">Send Encrypted E-Mail</A><BR>
+This page is at <A href="systemparametersinfo.html" tppabs="http://www.vbapi.com/ref/s/systemparametersinfo.html">http://www.vbapi.com/ref/s/systemparametersinfo.html</A>
+
+</BODY>
+</HTML>

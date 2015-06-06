@@ -1,0 +1,139 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+<HTML lang="en-us">
+<HEAD>
+<TITLE>Windows API Guide: BitBlt Function</TITLE>
+<META content="vbapi@vbapi.com" name="author">
+<META content="Information about the BitBlt function in the Windows API, geared towards the Visual Basic user." name="description">
+<META content="Kuliniewicz,Windows,Windows 95,Windows NT,Windows 98,Windows CE,Windows 2000,API,Application Programming Interface,Programming,Visual Basic,Basic,VB,BitBlt" name="keywords">
+<META content="Omicron HTML Editor" name="generator">
+<META content="Sat, 14 Aug 1999 01:10:00 GMT" http-equiv="Last-Modified">
+<LINK href="default.css" tppabs="http://www.vbapi.com/css/default.css" rel="stylesheet" type="text/css">
+<LINK href="index-1.html" tppabs="http://www.vbapi.com/index.html" rel="home">
+
+<LINK href="glossary.html" tppabs="http://www.vbapi.com/ref/glossary.html" rel="glossary">
+<LINK href="copyrite.html" tppabs="http://www.vbapi.com/copyrite.html" rel="copyright">
+</HEAD>
+<BODY>
+
+<!-- Begin Adslot1 -->
+<CENTER>
+<SCRIPT language="JAVASCRIPT">
+<!-- hide from older browsers
+now = new Date();
+my_random = now.getTime();
+document.write('<A href="http://adex3.flycast.com/server/socket/127.0.0.1:2800/click/VBWorldnet/VBAPI/' + my_random + '">');
+document.write('<IMG width="468" height="60" border="1" src="http://adex3.flycast.com/server/socket/127.0.0.1:2800/ad/VBWorldnet/VBAPI/' + my_random + '"></A>');
+// -->
+</SCRIPT>
+</CENTER>
+<!-- End Adslot1 -->
+
+<HR>
+
+<H1>BitBlt Function</H1>
+
+<P><CODE class="declare">Declare Function BitBlt Lib "gdi32.dll" (ByVal hdcDest As Long, ByVal nXDest As Long, ByVal nYDest As Long, ByVal nWidth As Long, ByVal nHeight As Long, ByVal hdcSrc As Long, ByVal nXSrc As Long, ByVal nYSrc As Long, ByVal dwRop As Long) As Long</CODE></P>
+
+<H2>Platforms</H2>
+<P><UL>
+<LI><B>Windows 95:</B> Supported.
+<LI><B>Windows 98:</B> Supported.
+<LI><B>Windows NT:</B> Requires Windows NT 3.1 or later.
+<LI><B>Windows 2000:</B> Supported.
+<LI><B>Windows CE:</B> Requires Windows CE 1.0 or later.
+</UL></P>
+
+<H2>Description &amp; Usage</H2>
+<P><B>BitBlt</B> performs a bit-block transfer of a rectangular portion of an image from one <A class="def" href="glossary.html#device" tppabs="http://www.vbapi.com/ref/glossary.html#device" rel="glossary">device</A> to another.  The dimensions of the transfered rectangle are perfectly preserved.  The function can perform a variety of raster operations to transfer the block from the source device to the target device.</P>
+
+<H2>Return Value</H2>
+<P>If an error occured, the function returns 0 (<B>Windows NT, 2000:</B> use <A href="getlasterror.html" tppabs="http://www.vbapi.com/ref/g/getlasterror.html">GetLastError</A> to get the error code).  If successful, the function returns a non-zero value.</P>
+
+<H2>Visual Basic-Specific Issues</H2>
+<P>None.</P>
+
+<H2>Parameters</H2>
+<P><DL>
+<DT><VAR>hdcDest</VAR><DD>A <A class="def" href="glossary.html#handle" tppabs="http://www.vbapi.com/ref/glossary.html#handle" rel="glossary">handle</A> to the <A class="def" href="glossary.html#devicecontext" tppabs="http://www.vbapi.com/ref/glossary.html#devicecontext" rel="glossary">device context</A> of the device which receives the transfered image block.
+<DT><VAR>nXDest</VAR><DD>The x-coordinate of the point to position the upper-left corner of the transfered image block.
+<DT><VAR>nYDest</VAR><DD>The y-coordinate of the point to position the upper-left corner of the transfered image block.
+<DT><VAR>nWidth</VAR><DD>The width in pixels of the image block.
+<DT><VAR>nHeight</VAR><DD>The height in pixels of the image block.
+<DT><VAR>hdcSrc</VAR><DD>A handle to the device context of the device which contains the image block to transfer.
+<DT><VAR>nXSrc</VAR><DD>The x-coordinate of the upper-left corner of the image block to transfer.
+<DT><VAR>nYSrc</VAR><DD>The y-coordinate of the upper-left corner of the image block to transfer.
+<DT><VAR>dwRop</VAR><DD>One of the following flags identifying the raster operation to use to transfer the image block.  Each raster operation uses the RGB color value of the source and/or target pixel to determine the new color of the target pixel.
+<DL>
+<DT>BLACKNESS<DD>Fill the destination rectangle with the color whose index is 0 in the physical palette (which is black by default).
+<DT>CAPTUREBLT<DD><B>Windows 98, 2000:</B> Include any windows layered on top of the window being used in the resulting image.
+<DT>DSTINVERT<DD>Invert the colors in the destination rectangle.
+<DT>MERGECOPY<DD>Merge the colors of the source rectangle with the specified pattern using the bitwise AND operator.
+<DT>MERGEPAINT<DD>Merge the colors of the inverted source rectangle with the colors of the destination rectangle using the bitwise OR operator.
+<DT>NOMIRRORBITMAP<DD><B>Windows 98, 2000:</B> Prevent the bitmap from being mirrored.
+<DT>NOTSRCCOPY<DD>Copy the inverted source rectangle to the destination rectangle.
+<DT>NOTSRCERASE<DD>Combine the colors of the source and destination rectangles using the bitwise OR operator and then invert the resulting color.
+<DT>PATCOPY<DD>Copy the specified pattern into the destination bitmap.
+<DT>PATINVERT<DD>Combine the colors of the specified pattern with the colors of the destination rectangle using the bitwise XOR operator.
+<DT>PATPAINT<DD>Combine the colors of the specified pattern with the colors of the inverted source rectangle using the bitwise OR operator.  Combine the result of that operation with the colors of the destination rectangle using the bitwise OR operator.
+<DT>SRCAND<DD>Combine the colors of the source and destination rectangles using the bitwise AND operator.
+<DT>SRCCOPY<DD>Copy the source rectangle directly into the destination rectangle.
+<DT>SRCERASE<DD>Combine the inverted colors of the destination rectangle with the colors of the source rectange using the bitwise AND operator.
+<DT>SRCINVERT<DD>Combine the colors of the source and destination rectangles using the bitwise XOR operator.
+<DT>SRCPAINT<DD>Combine the colors of the source and destination rectangles using the bitwise OR operator.
+<DT>WHITENESS<DD>Fill the destination rectangle with the color whose index is 1 in the physical palette (which is white by default).
+</DL>
+</DL></P>
+
+<H2>Constant Definitions</H2>
+<P><PRE><CODE class="const">Const BLACKNESS = &amp;H42
+' Const CAPTUREBLT = ???
+Const DSTINVERT = &amp;H550009
+Const MERGECOPY = &amp;HC000CA
+Const MERGEPAINT = &amp;HBB0226
+' Const NOMIRRORBITMAP = ???
+Const NOTSRCCOPY = &amp;H330008
+Const NOTSRCERASE = &amp;H1100A6
+Const PATCOPY = &amp;HF00021
+Const PATINVERT = &amp;H5A0049
+Const PATPAINT = &amp;HFB0A09
+Const SRCAND = &amp;H8800C6
+Const SRCCOPY = &amp;HCC0020
+Const SRCERASE = &amp;H440328
+Const SRCINVERT = &amp;H660046
+Const SRCPAINT = &amp;HEE0086
+Const WHITENESS = &amp;HFF0062</CODE></PRE></P>
+
+<H2>Example</H2>
+<P><PRE><CODE class="example"><SPAN class="com">' This code is licensed according to the terms and conditions listed <A href="copyrite.html#license" tppabs="http://www.vbapi.com/copyrite.html#license" rel="copyright">here</A>.</SPAN>
+
+' Copy a rectanglular image from window Form1 to window Form2
+' exactly (using SRCCOPY).  The rectangle has a width of 100 and a height of
+' 50.  The upper-left corner of the source block is (350, 250); the block
+' is placed at (0,0) in Form2.
+Dim retval As Long  ' return value
+
+' Transfer the image exactly as described above.
+retval = <B>BitBlt</B>(Form2.hDC, 0, 0, 100, 50, Form1.hDC, 350, 250, SRCCOPY)</CODE></PRE></P>
+
+<H2>See Also</H2>
+<P><A href="stretchblt.html" tppabs="http://www.vbapi.com/ref/s/stretchblt.html">StretchBlt</A></P>
+
+<H2>Category</H2>
+<P><A href="funcc.html#bitmaps" tppabs="http://www.vbapi.com/ref/funcc.html#bitmaps">Bitmaps</A></P>
+
+<P><A href="funca.html" tppabs="http://www.vbapi.com/ref/funca.html">Go back to the alphabetical Function listing.</A><BR>
+<A href="index.html" tppabs="http://www.vbapi.com/ref/index.html">Go back to the Reference section index.</A></P>
+
+<HR>
+
+<P>
+<B>Last Modified:</B> August 13, 1999<BR>
+This page is copyright &copy; 1999 Paul Kuliniewicz.  
+<A href="copyrite.html" tppabs="http://www.vbapi.com/copyrite.html" rel="copyright">Copyright Information</A>  <B>Revised October 29, 2000</B><BR>
+
+<A href="index-1.html" tppabs="http://www.vbapi.com/index.html">Go back to the Windows API Guide home page.</A><BR>
+E-mail: <A href="javascript:if(confirm('http://www.vbapi.com/email.html  \n\nThis file was not retrieved by Teleport Pro, because it is addressed on a domain or path outside the boundaries set for its Starting Address.  \n\nDo you want to open it from the server?'))window.location='http://www.vbapi.com/email.html'" tppabs="http://www.vbapi.com/email.html">vbapi@vbapi.com</A>  <A href="javascript:if(confirm('http://www.vbapi.com/email.html  \n\nThis file was not retrieved by Teleport Pro, because it is addressed on a domain or path outside the boundaries set for its Starting Address.  \n\nDo you want to open it from the server?'))window.location='http://www.vbapi.com/email.html#secure'" tppabs="http://www.vbapi.com/email.html#secure">Send Encrypted E-Mail</A><BR>
+This page is at <A href="javascript:if(confirm('http://www.vbapi.com/ref/b/bitblt.html.html  \n\nThis file was not retrieved by Teleport Pro, because the server reports that this file cannot be found.  \n\nDo you want to open it from the server?'))window.location='http://www.vbapi.com/ref/b/bitblt.html.html'" tppabs="http://www.vbapi.com/ref/b/bitblt.html.html">http://www.vbapi.com/ref/b/bitblt.html</A>
+</P>
+</BODY>
+</HTML>

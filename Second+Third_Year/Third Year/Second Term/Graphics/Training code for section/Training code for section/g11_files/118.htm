@@ -1,0 +1,256 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!-- saved from url=(0039)http://www2.webng.com/amrlearn/118.html -->
+<HTML><HEAD><TITLE>Animating A Line Via Translating It Using Bresenham's Algorithm</TITLE><LINK 
+href="118_files/stylesheet.css" type=text/css rel=stylesheet>
+<META http-equiv=Content-Type content="text/html; charset=UTF-8">
+<META 
+content="Computer Graphics, Animating A Line Via Translating It Using Bresenham's Algorithm " 
+name=description>
+<META 
+content="Computer Graphics, Computer, Graphics,Animation, Animating, A Line, Via, Translating,Translation, It, Using, Bresenham's, Algorithm, Bresenham's Algorithm " 
+name=keywords>
+<META content="Copyright 2007 Amr Saber" name=copyright>
+<META content="MSHTML 6.00.2900.2180" name=GENERATOR></HEAD>
+<BODY>
+<CENTER>
+<DIV id=header>
+<SCRIPT type=text/javascript><!--
+google_ad_client = "pub-9653171024150495";
+google_alternate_color = "C3D9FF";
+google_ad_width = 728;
+google_ad_height = 90;
+google_ad_format = "728x90_as";
+google_ad_type = "text";
+//2007-02-02: header
+google_ad_channel = "7161698987";
+//--></SCRIPT>
+
+<SCRIPT src="118_files/show_ads.js" type=text/javascript>
+</SCRIPT>
+</DIV></CENTER>
+<DIV id=index>
+<H3>Goooooooogle</H3>
+<SCRIPT type=text/javascript><!--
+google_ad_client = "pub-9653171024150495";
+google_alternate_color = "C3D9FF";
+google_ad_width = 120;
+google_ad_height = 600;
+google_ad_format = "120x600_as";
+google_ad_type = "text";
+//2007-02-02: header, right
+google_ad_channel = "7161698987+2593520185";
+//--></SCRIPT>
+
+<SCRIPT src="118_files/show_ads.js" type=text/javascript>
+</SCRIPT>
+</DIV>
+<DIV id=index2>
+<H3>Goooooooogle</H3>
+<SCRIPT type=text/javascript><!--
+google_ad_client = "pub-9653171024150495";
+google_alternate_color = "C3D9FF";
+google_ad_width = 120;
+google_ad_height = 600;
+google_ad_format = "120x600_as";
+google_ad_type = "text";
+google_ad_channel = "";
+//--></SCRIPT>
+
+<SCRIPT src="118_files/show_ads.js" type=text/javascript>
+</SCRIPT>
+</DIV>
+<DIV id=content>
+<H3>Animating A Line Via Translating It Using Bresenham's Algorithm</H3><TEXTAREA>Animate.cpp
+-------------
+//////////////
+--------------
+
+#include&lt;windows.h&gt;
+#include"fun.h"
+LRESULT CALLBACK WndProc(HWND,UINT,WPARAM,LPARAM);
+static char gszClassName[]="MyWindoClass";
+static HINSTANCE ghInstance=NULL;
+///*********************************************************************
+COLORREF color = RGB(0,0,255);
+int x1,y3,x2,y2;
+///*********************************************************************
+int WINAPI WinMain(HINSTANCE hInstance,HINSTANCE hprevInstance,LPSTR lpCmdLine,int nCmdShow)
+{
+	WNDCLASSEX WndClass;
+	HWND hwnd;
+	MSG Msg;
+	ghInstance=hInstance;
+	WndClass.cbSize=sizeof(WNDCLASSEX);
+	WndClass.style=NULL;
+	WndClass.lpfnWndProc=WndProc;
+	WndClass.cbClsExtra=0;
+	WndClass.cbWndExtra=0;
+	WndClass.hInstance=ghInstance;
+	WndClass.hIcon=LoadIcon(NULL,IDI_APPLICATION);
+	WndClass.hCursor=LoadCursor(NULL,IDC_ARROW);
+	WndClass.hbrBackground=(HBRUSH)(COLOR_WINDOW+1);
+	WndClass.lpszMenuName=NULL;
+	WndClass.lpszClassName=gszClassName;
+	WndClass.hIconSm=LoadIcon(NULL,IDI_APPLICATION);
+	
+	if(!RegisterClassEx(&amp;WndClass))
+	{
+		MessageBox(0,"Window Registation Failed!","Error",MB_ICONSTOP|MB_OK);
+		return 0;
+	}
+	hwnd=CreateWindowEx(WS_EX_STATICEDGE,gszClassName," First API Window",WS_OVERLAPPEDWINDOW,CW_USEDEFAULT,CW_USEDEFAULT,320,240,NULL,NULL,ghInstance,NULL);
+	if(hwnd==NULL)
+	{
+		MessageBox(0,"Window Creation Failed!","Error",MB_ICONSTOP|MB_OK);
+		return 0;
+	}
+	ShowWindow(hwnd,nCmdShow);
+	UpdateWindow(hwnd);
+	while(GetMessage(&amp;Msg,NULL,0,0))
+	{
+		TranslateMessage(&amp;Msg);
+		DispatchMessage(&amp;Msg);
+	}
+	return Msg.wParam;
+}
+
+LRESULT CALLBACK WndProc(HWND hwnd,UINT Message,WPARAM wparam,LPARAM lparam)
+{
+//	HDC dc=GetDC(hwnd);
+	switch(Message)
+	{
+	case WM_CLOSE:
+		DestroyWindow(hwnd);
+		break;
+		case WM_DESTROY:
+		PostQuitMessage(0);
+		break;
+		case WM_CHAR:
+		MessageBox(0,"Hello  World","Error",MB_ICONSTOP|MB_OK);
+		break;
+		case WM_LBUTTONDOWN:
+			hdc=GetDC(hwnd);
+			x1=LOWORD(lparam);
+			y3=HIWORD(lparam);
+			//DrowTri(30,130,150,150,190,190,color);	
+			DrowTri(20,50,150,100,250,50,color);
+		break;
+		case WM_RBUTTONUP:
+		
+			x2=LOWORD(lparam);
+			y2=HIWORD(lparam);
+			//bresenham(hdc, x1, y3,x2, y2,color);
+			Animate(20,50,150,100,250,50,color);
+			//Intercept(hdc,x1,y1,x2,y2,color);
+			ReleaseDC(hwnd,hdc);
+		break;
+		default:
+			return DefWindowProc(hwnd,Message,wparam,lparam);
+	
+}
+}
+
+===========================================================================
+===========================================================================
+Fun.h
+--------
+////////////
+-----------
+HDC hdc;
+int tx=20;
+int ty=40;
+int xa=0;
+int ya=0;
+void Translate(int x1,int y1,int x2,int y2,COLORREF color)
+{
+	int Nx1,Nx2,Ny1,Ny2;
+	Nx1=x1+tx;
+	Nx2=x2+tx;
+	Ny1=y1+ty;
+	Ny2=y2+ty;
+	MoveToEx(hdc,x1,y1,NULL);
+	LineTo(hdc,Nx2,Ny2);
+}
+//------------------------------ Bresenhams  ----------------
+void bresenham(HDC hdc,int xs,int ys,int xn,int yn,COLORREF color)
+{
+	int x=xs,y=ys;
+	int dX=xn-xs,dY=yn-ys,dT=2*(dY-dX),dS=2*dY;
+	int d=2*dY-dX;
+	SetPixel(hdc,x,y,color);
+	while(x&lt;xn)
+	{
+		x++;
+		if(d&lt;0)
+			d=d+dS;
+		else{
+			y++;
+			d=d+dT;
+		}
+		SetPixel(hdc,x,y,color);		
+	}
+}
+
+//-------------------------------------------------
+void DrowLine(HDC hdc,int x1,int y1,int x2,int y2)
+{
+	MoveToEx(hdc,x1,y1,NULL);
+		LineTo(hdc,x2,y2);
+}
+//---------------------------------------------------------
+void DrowTri(int x1,int y1,int x2,int y2,int x3,int y3,COLORREF color)
+{
+	bresenham(hdc,x1,y1,x2,y2,color);
+	bresenham(hdc,x1,y1,x3,y3,color);
+	bresenham(hdc,x3,y3,x2,y2,color);
+
+	}
+void Animate(int x1,int y1,int x2,int y2,int x3,int y3,COLORREF color)
+{
+	for(int i=0; i&lt;5; i++)
+	{
+  Translate( x1, y1, x2, y2,color);
+  Translate( x1, y1, x3, y3,color);
+  Translate( x2, y2, x3, y3,color);
+  	
+bresenham(hdc, x1+xa, y1+ya, x2+xa, y2+ya,color);
+bresenham(hdc, x1+xa, y1+ya, x3+xa, y3+ya,color);
+bresenham(hdc, x2+xa, y2+ya, x3+xa, y3+ya, color);
+
+		
+	tx+=20;
+	ty+=40;
+	xa+=20;
+	ya+=40;
+	}
+	Sleep(100);
+}
+
+
+
+</TEXTAREA> <BR>
+<CENTER><IMG 
+style="BORDER-RIGHT: #0066cf 1px solid; BORDER-TOP: #0066cf 1px solid; BORDER-LEFT: #0066cf 1px solid; WIDTH: 350px; BORDER-BOTTOM: #0066cf 1px solid; HEIGHT: 300px" 
+src="118_files/animate.gif"> </CENTER><!-- Search Google -->
+<CENTER>
+<FORM action=http://www.google.com/custom method=get target=_top>
+<TABLE bgColor=#ffffff>
+  <TBODY>
+  <TR>
+    <TD vAlign=top noWrap align=left height=32><A 
+      href="http://www.google.com/"><IMG alt=Google 
+      src="118_files/Logo_25wht.gif" align=middle border=0></IMG></A> <LABEL 
+      style="DISPLAY: none" for=sbi>Enter your search terms</LABEL> <INPUT 
+      id=sbi maxLength=255 size=40 name=q></INPUT> <LABEL style="DISPLAY: none" 
+      for=sbb>Submit search form</LABEL> <INPUT id=sbb type=submit value=Search name=sa></INPUT> <INPUT type=hidden 
+      value=pub-9653171024150495 name=client></INPUT> <INPUT type=hidden value=1 
+      name=forid></INPUT> <INPUT type=hidden value=ISO-8859-1 name=ie></INPUT> 
+      <INPUT type=hidden value=ISO-8859-1 name=oe></INPUT> <INPUT type=hidden 
+      value=active name=safe></INPUT> <INPUT type=hidden 
+      value=GALT:#008000;GL:1;DIV:#336699;VLC:663399;AH:center;BGC:FFFFFF;LBGC:336699;ALC:0000FF;LC:0000FF;T:000000;GFNT:0000FF;GIMP:0000FF;FORID:1 
+      name=cof></INPUT> <INPUT type=hidden value=en name=hl></INPUT> 
+  </TD></TR></TBODY></TABLE></FORM></CENTER><!-- Search Google -->
+<H3><A 
+href="http://www2.webng.com/amrlearn/Index.html">Home</A>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A 
+href="http://www2.webng.com/amrlearn/133.html">Previous</A>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A 
+href="http://www2.webng.com/amrlearn/136.html">Next</A></H3></DIV></BODY></HTML>

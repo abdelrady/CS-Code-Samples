@@ -1,0 +1,242 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!-- saved from url=(0059)http://sern.ucalgary.ca/courses/CPSC/533/W99/FOL/index.html -->
+<HTML><HEAD><TITLE>CPSC 533: Agents that Reason Logically</TITLE>
+<META http-equiv=Content-Type content="text/html; charset=iso-8859-1">
+<META content="MSHTML 6.00.2900.2180" name=GENERATOR></HEAD>
+<BODY 
+background="CPSC 533 Agents that Reason Logically_files/backgroundBlue.gif" 
+nosave>
+<DIV align=right><A href="mailto:kremer@cpsc.ucalgary.ca"><IMG height=14 
+alt="mail to" src="CPSC 533 Agents that Reason Logically_files/mailButton.gif" 
+width=19 border=0></A><I><A href="http://www.cpsc.ucalgary.ca/~kremer/">Rob 
+Kremer</A></I></DIV>
+<H2><A name=top></A><A href="http://www.ucalgary.ca/"><IMG alt=UofC 
+src="CPSC 533 Agents that Reason Logically_files/UofCSmall.gif" align=left 
+border=0></A><A href="http://sern.ucalgary.ca/courses/CPSC/533/W99/">CPSC 533: 
+Artificial Intelligence (W99)</A></H2>
+<HR>
+
+<H1><FONT face=arial>First-Order Logic</FONT></H1><FONT face=arial>Chapter 7 of 
+Stuart Russel and Pete Norvig (1995). Artificial Intelligence: A Modern 
+Approach. Prentice Hall, Upper Saddle River, New Jersey.</FONT> 
+<DIV align=right><FONT face=arial>(Also see <A 
+href="http://sern.ucalgary.ca/courses/CPSC/533/W99/FOL/FOL.ppt">PowerPoint 
+Slides</A> and <A 
+href="http://sern.ucalgary.ca/courses/CPSC/533/W99/FOL/FOLppt4.ppt">PowerPoint 
+v4.0 Slides</A>)</FONT></DIV>
+<HR width="100%">
+
+<H2>First-Order Logic</H2>
+<UL>
+  <LI><FONT size=+2>A.K.A.:</FONT> 
+  <UL>
+    <LI><FONT size=+1>FOL</FONT> 
+    <LI><FONT size=+1>First-Order Predicate Calculus</FONT> </LI></UL>
+  <LI><FONT size=+2>Builds on propositional logic</FONT> 
+  <UL>
+    <LI><FONT size=+1>Adds predicates, quantifiers, variables, and 
+    equality</FONT> </LI></UL></LI></UL>
+<H2>Ontological Commitents</H2>
+<UL>
+  <LI><FONT size=+2>Ontological commitments:</FONT> 
+  <UL>
+    <LI><FONT size=+1>Objects</FONT> 
+    <LI><FONT size=+1>Relations</FONT> 
+    <LI><FONT size=+1>Properties</FONT> 
+    <LI><FONT size=+1>Functions</FONT> </LI></UL>
+  <LI><FONT size=+2>Doesn’t make commitments on:</FONT> 
+  <UL>
+    <LI><FONT size=+1>categories</FONT> 
+    <LI><FONT size=+1>time</FONT> 
+    <LI><FONT size=+1>events</FONT> </LI></UL></LI></UL>
+<H2>Elements in a FOL World</H2>
+<UL>
+  <LI><FONT size=+2>Objects</FONT> 
+  <LI><FONT size=+2>Relations</FONT> 
+  <LI><FONT size=+2>Properties</FONT> 
+  <LI><FONT size=+2>Functions</FONT> </LI></UL>
+<H2>BNF</H2>
+<DIR><FONT size=+1>Sentence <FONT face=Symbol>®</FONT> AtomicSentence</FONT> 
+<DIR>
+<DIR><FONT size=+1>| Sentence Connective Sentence</FONT> <BR><FONT size=+1>| 
+Quantifier Variable, … Sentence</FONT> <BR><FONT size=+1>| <FONT 
+face=Symbol>Ø</FONT> Sentence</FONT> <BR><FONT size=+1>| 
+(Sentence)</FONT></DIR></DIR>
+<P><BR><FONT size=+1>AtomicSentence <FONT face=Symbol>®</FONT> Predicate(Term,…) 
+| Term = Term</FONT> 
+<P><FONT size=+1>Term <FONT face=Symbol>®</FONT> Function(Term,…)</FONT> 
+<DIR>
+<DIR><FONT size=+1>| Constant</FONT> <BR><FONT size=+1>| 
+Variable</FONT></DIR></DIR>
+<P><BR><FONT size=+1>Connective <FONT face=Symbol>® Þ | Ú | Ù | Û</FONT></FONT> 
+<P><FONT size=+1>Quantifier <FONT face=Symbol>®</FONT> <FONT face=Symbol>" 
+</FONT>| <FONT face=Symbol>$</FONT></FONT> 
+<P><FONT size=+1>Constant <FONT face=Symbol>®</FONT> A | X1 | John | ...</FONT> 
+<P><FONT size=+1>Variable <FONT face=Symbol>®</FONT> a | x | s | ...</FONT> 
+<P><FONT size=+1>Predicate <FONT face=Symbol>®</FONT> Before | HasColor | 
+Raining| ...</FONT> 
+<P><FONT size=+1>Function <FONT face=Symbol>®</FONT> Mother | LeftLegOf | 
+...</FONT></P></DIR>
+<H2>Extensions</H2>
+<UL>
+  <LI><FONT size=+2>Higher-order logic</FONT> 
+  <UL>
+    <LI><FONT size=+1>predicates on predicates</FONT> 
+    <LI><FONT size=+1>eg: <FONT face=Symbol>"</FONT>x,y. (x=y) <FONT 
+    face=Symbol>Û</FONT> (<FONT face=Symbol>"</FONT>p. p(x) <FONT 
+    face=Symbol>Û</FONT> p(y))</FONT> </LI></UL>
+  <LI><FONT size=+2>Lambda calculus</FONT> 
+  <UL>
+    <LI><FONT size=+1>introduce anonomous functions</FONT> 
+    <LI><FONT size=+1>eg: (<FONT face=Symbol>l</FONT>x,y. x</FONT><SUP><FONT 
+    size=-1>2</FONT></SUP><FONT size=+1>-y</FONT><SUP><FONT 
+    size=-1>2</FONT></SUP><FONT size=+1>) 1 2 <FONT face=Symbol>® 
+    1</FONT></FONT><FONT face=Symbol><SUP><FONT size=-1>2</FONT></SUP><FONT 
+    size=+1> - 2</FONT><SUP><FONT size=-1>2 </FONT></SUP><FONT size=+1>® 
+    -3</FONT></FONT> </LI></UL>
+  <LI><FONT size=+2>Uniqueness quantifier: <FONT face=Symbol>$</FONT>!</FONT> 
+  </LI></UL>
+<H2>Some Terms</H2>
+<UL>
+  <LI><FONT size=+2>Axiom: basic facts</FONT> 
+  <LI><FONT size=+2>Theorem: fact proved from the axioms (or other proved 
+  theorems)</FONT> 
+  <LI><FONT size=+2>Independent axiom: axiom that can’t be proved from other 
+  axioms</FONT> 
+  <LI><FONT size=+2>Definition (<FONT face=Symbol>º</FONT>): axiom of the form 
+  <FONT face=Symbol>aºb</FONT></FONT> </LI></UL>
+<H2>Tell and Ask</H2>
+<UL>
+  <LI><FONT size=+2>Tell(KB, <FONT face=Symbol>a</FONT>)</FONT> 
+  <UL>
+    <LI><FONT size=+1>puts statement <FONT face=Symbol>a</FONT> in the KB</FONT> 
+    </LI></UL>
+  <LI><FONT size=+2>Ask(KB, <FONT face=Symbol>a</FONT>)</FONT> 
+  <UL>
+    <LI><FONT size=+1>queries whether statement <FONT face=Symbol>a</FONT> is in 
+    or can be proved from the other statements in the domain</FONT> 
+    <LI><FONT size=+1>e.g.: Ask(KB, <FONT face=Symbol>$</FONT>x. 
+    Child(x,Spot))</FONT> 
+    <UL> <BR><FONT size=+1>The anwer might be "true", but this is 
+      unsatisfying. We really want to return the set of things that x might 
+      match (e.g. {x/Rover, x/Garfield})</FONT></UL></LI></UL></LI></UL>
+<H2>Time</H2>
+<DIR><FONT size=+2>In the Wumpus World, we need to be able to order some of our 
+knowledge:</FONT></DIR>
+<UL>
+  <UL>
+    <LI><FONT size=+2>time as a simple sequence of integers</FONT> 
+    <LI><FONT size=+2>we are ( or were) at a specific location at time 
+    <I>t</I></FONT> </LI></UL></UL>
+<H2>Percepts</H2>
+<UL>
+  <LI><FONT size=+2>A Percept is just a relation between a <I>tuple</I> of 
+  attributes and time.</FONT> 
+  <UL>
+    <LI><FONT size=+2>What the agent "sees" at that time.</FONT> 
+    <LI><FONT size=+2>e.g. Percept([Stench, Breeze, Glitter, None, None], 
+    5)</FONT> </LI></UL></LI></UL>
+<H2>A Generic Agent</H2>
+<DIR><FONT size=+2><B>function</B> KB-Agnet(percept) <B>returns</B> an 
+<I>action</I></FONT> 
+<DIR><FONT size=+2><B>static</B>: <I>KB</I>, a knowledge base</FONT> 
+<DIR>
+<DIR><FONT size=+2><I>t</I>, a counter, intially 0, indicating 
+time</FONT></DIR></DIR><FONT 
+size=+2>Tell(<I>KB</I>,Make-Percept-Sentence(<I>percept,t</I>))</FONT> <BR><FONT 
+size=+2>action <FONT face=Symbol>¬ 
+</FONT>Ask(<I>KB</I>,Make-Action-Query(<I>t</I>))</FONT> <BR><FONT 
+size=+2>Tell(<I>KB</I>,Make-Action-Sentence(<I>action,t</I>))</FONT> <BR><FONT 
+size=+2><I>t</I> <FONT face=Symbol>¬</FONT> <I>t</I>+1</FONT> <BR><FONT 
+size=+2>return <I>action</I></FONT></DIR></DIR>
+<H2>Wumpus World</H2>
+<UL>
+  <LI><FONT size=+2>Agents actions are:</FONT> <BR><FONT size=+2>Turn(Right), 
+  Turn(Left), Forward, Shoot, Grab, Release, Climb</FONT> 
+  <LI><FONT size=+2>Make-Action-Query(5) creates a query like:</FONT> <BR><FONT 
+  size=+2><FONT face=Symbol>$</FONT>a.Action(a,5)</FONT> 
+  <LI><FONT size=+2>Ask(KB,Make-Action-Query(5) might return the set 
+  {a/Grab}</FONT> </LI></UL>
+<H2>Abbreviating a bit</H2>
+<UL>
+  <LI><FONT size=+2>We don’t need to write out the whole precept every time we 
+  need to refer to some world-state; e.g.:</FONT> </LI></UL>
+<DIR>
+<DIR><FONT size=+2><FONT face=Symbol>"</FONT>b,g,u,c,t 
+Percept([Stench,b,g,u,c],t) <FONT face=Symbol>Þ</FONT> Stench(t)</FONT> 
+<P><FONT size=+2><FONT face=Symbol>"</FONT>s,g,u,c,t Percept([s,Breeze,g,u,c],t) 
+<FONT face=Symbol>Þ</FONT> Breeze(t)</FONT> 
+<P><FONT size=+2><FONT face=Symbol>"</FONT>s,b,u,c,t Percept([s,b,Glitter,uc],t) 
+<FONT face=Symbol>Þ</FONT> AtGold(t)</FONT></P></DIR></DIR>
+<H2>Situation Calculus</H2>&nbsp; 
+<BLOCKQUOTE><FONT size=+2>For predicates where time matters [like "where we 
+  are" -- At(Agent,location)], we just add a situation argment <I>as the last 
+  argum</I>ent.</FONT></BLOCKQUOTE>
+<UL>
+  <UL>
+    <LI><FONT size=+2>e.g. At(<I>Agent</I>,[1,1],S<SUB>o</SUB>) -- the agent is 
+    at [1,1] intially</FONT> 
+    <LI><FONT size=+2>We don’t need to bother with the situation argument for 
+    static facts (like where the pits are).</FONT> </LI></UL></UL>
+<H2>Effect Axioms</H2>&nbsp; 
+<BLOCKQUOTE><FONT size=+2>How does one say that if gold is present and the 
+  agent does a grab, then the agent is holding the gold in the resulting 
+  stituation?</FONT> <BR>&nbsp; 
+  <BLOCKQUOTE><FONT size=+2><FONT face=Symbol>"</FONT>s.AtGold(s) <FONT 
+    face=Symbol>Þ</FONT> Present(Gold,s)</FONT> <BR><FONT size=+2><FONT 
+    face=Symbol>"</FONT>s.Present(Gold,s) <FONT face=Symbol>Þ</FONT> 
+    Holding(Gold,Result(Grab,s))</FONT></BLOCKQUOTE>
+  <P><BR><FONT size=+2>How does one say that the agent is holding nothing after 
+  a Release action?</FONT> 
+  <BLOCKQUOTE><FONT size=+2><FONT face=Symbol>"</FONT>x,s. </FONT><FONT 
+    face=Symbol><FONT size=+1>Ø</FONT></FONT><FONT 
+    size=+2>Holding(x,Result(Grab,s))</FONT></BLOCKQUOTE></BLOCKQUOTE>
+<H2><FONT size=+2>Frame Axioms</FONT></H2>
+<BLOCKQUOTE><FONT size=+2>How does one say that if the agent is holding the 
+  gold and does not release it, it will be still holding it in the next 
+  state?</FONT> 
+  <BLOCKQUOTE><FONT size=+2><FONT face=Symbol>"</FONT>a,s.Holding(Gold,s) 
+    </FONT><FONT face=Symbol><FONT size=+1>Ù</FONT></FONT><FONT size=+2> a /= 
+    Release)&nbsp; <FONT face=Symbol>Þ</FONT> 
+  Holding(Gold,Result(a,s))</FONT></BLOCKQUOTE><FONT size=+2>If the agent is not 
+  holding the gold and does not or cannot grab it, it will not be holding it in 
+  the next state?</FONT> 
+  <BLOCKQUOTE><FONT size=+2><FONT face=Symbol>"</FONT>a,s. </FONT><FONT 
+    face=Symbol><FONT size=+1>Ø</FONT></FONT><FONT size=+2>Holding(Gold,s) 
+    </FONT><FONT face=Symbol><FONT size=+1>Ù</FONT></FONT><FONT size=+2> (a /= 
+    Grab </FONT><FONT face=Symbol><FONT size=+1>Ú</FONT></FONT><FONT size=+2> 
+    Present(Gold,s))&nbsp; <FONT face=Symbol>Þ</FONT> </FONT><FONT 
+    face=Symbol><FONT size=+1>Ø</FONT></FONT><FONT 
+    size=+2>Holding(Gold,Result(a,s))</FONT></BLOCKQUOTE></BLOCKQUOTE>
+<H2>Preferred Actions</H2>
+<DIR><FONT size=+2><FONT face=Symbol>"</FONT>a,s.Great(a,s) <FONT 
+face=Symbol>Þ</FONT> Action(a,s)</FONT> <BR>&nbsp; 
+<DIR><FONT size=+1>include picking up the gold and climbing out</FONT></DIR>
+<P><BR><FONT size=+2><FONT face=Symbol>"</FONT>a,s.Good(a,s) <FONT face=Symbol>Ù 
+(Ø$</FONT>b Great(b,s)) <FONT face=Symbol>Þ</FONT> Action(a,s)</FONT> <BR>&nbsp; 
+
+<DIR><FONT size=+1>include moving to an OK square that hasn’t been 
+visited</FONT></DIR>
+<P><BR><FONT size=+2><FONT face=Symbol>"</FONT>a,s.Medium(a,s) <FONT 
+face=Symbol>Ù (Ø$</FONT>b Great(b,s) <FONT face=Symbol>Ú</FONT> Good(b,s)) <FONT 
+face=Symbol>Þ</FONT> Action(a,s)</FONT> <BR>&nbsp; 
+<DIR><FONT size=+1>include moving to an OK, visited square</FONT></DIR>
+<P><BR><FONT size=+2><FONT face=Symbol>"</FONT>a,s.Risky(a,s) <FONT 
+face=Symbol>Ù (Ø$</FONT>b Great(b,s) <FONT face=Symbol>Ú</FONT> Good(b,s) <FONT 
+face=Symbol>Ú</FONT> Medium(b,s))<FONT face=Symbol> Þ</FONT> Action(a,s)</FONT> 
+<BR>&nbsp; 
+<DIR><FONT size=+1>include moving to an unknown square</FONT><FONT 
+size=+1></FONT> 
+<P><FONT size=+1>deadly actions include moving to a square that’s know to 
+contain a pit or a live wumpus</FONT></P></DIR></DIR>
+<HR>
+<A href="http://www.ucalgary.ca/"><IMG height=50 alt=UofC 
+src="CPSC 533 Agents that Reason Logically_files/UofCSmall.gif" width=52 
+align=left border=0></A><A 
+href="http://sern.ucalgary.ca/courses/CPSC/533/W99/">Artificial Intelligence 
+(W99)</A>, <A href="http://www.cpsc.ucalgary.ca/">Department of Computer 
+Science</A> 
+<ADDRESS><A href="mailto:kremer@cpsc.ucalgary.ca"><IMG height=14 alt="mail to" 
+src="CPSC 533 Agents that Reason Logically_files/mailButton.gif" width=19 
+border=0></A><I><A href="http://www.cpsc.ucalgary.ca/~kremer/">Rob 
+Kremer</A></I></ADDRESS></BODY></HTML>

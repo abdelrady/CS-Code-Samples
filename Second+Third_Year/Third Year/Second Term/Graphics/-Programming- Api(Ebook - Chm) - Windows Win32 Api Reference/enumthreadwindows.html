@@ -1,0 +1,119 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+<HTML lang="en-us">
+<HEAD>
+<TITLE>Windows API Guide: EnumThreadWindows Function</TITLE>
+<META content="vbapi@vbapi.com" name="author">
+<META content="Information about the EnumThreadWindows function in the Windows API, geared towards the Visual Basic user." name="description">
+<META content="Kuliniewicz,Windows,Windows 95,Windows NT,Windows 98,Windows CE,Windows 2000,API,Application Programming Interface,Programming,Visual Basic,Basic,VB,EnumThreadWindows" name="keywords">
+<META content="Omicron HTML Editor" name="generator">
+<META content="Sun, 15 Aug 1999 19:10:00 GMT" http-equiv="Last-Modified">
+<LINK href="default.css" tppabs="http://www.vbapi.com/css/default.css" rel="stylesheet" type="text/css">
+<LINK href="index-1.html" tppabs="http://www.vbapi.com/index.html" rel="home">
+
+<LINK href="glossary.html" tppabs="http://www.vbapi.com/ref/glossary.html" rel="glossary">
+<LINK href="copyrite.html" tppabs="http://www.vbapi.com/copyrite.html" rel="copyright">
+</HEAD>
+<BODY>
+
+<!-- Begin Adslot1 -->
+<CENTER>
+<SCRIPT language="JAVASCRIPT">
+<!-- hide from older browsers
+now = new Date();
+my_random = now.getTime();
+document.write('<A href="http://adex3.flycast.com/server/socket/127.0.0.1:2800/click/VBWorldnet/VBAPI/' + my_random + '">');
+document.write('<IMG width="468" height="60" border="1" src="http://adex3.flycast.com/server/socket/127.0.0.1:2800/ad/VBWorldnet/VBAPI/' + my_random + '"></A>');
+// -->
+</SCRIPT>
+</CENTER>
+<!-- End Adslot1 -->
+
+<HR>
+
+<H1>EnumThreadWindows Function</H1>
+
+<P><CODE class="declare">Declare Function EnumThreadWindows Lib "user32.dll" (ByVal dwThreadId As Long, ByVal lpfn As Long, ByVal lParam As Long) As Long</CODE></P>
+
+<H2>Platforms</H2>
+<P><UL>
+<LI><B>Windows 95:</B> Supported.
+<LI><B>Windows 98:</B> Supported.
+<LI><B>Windows NT:</B> Requires Windows NT 3.1 or later.
+<LI><B>Windows 2000:</B> Supported.
+<LI><B>Windows CE:</B> Not Supported.
+</UL></P>
+
+<H2>Description &amp; Usage</H2>
+<P><B>EnumThreadWindows</B> enumerates and provides <A class="def" href="glossary.html#handle" tppabs="http://www.vbapi.com/ref/glossary.html#handle" rel="glossary">handles</A> to all of the windows owned and controlled by a given <A class="def" href="glossary.html#thread" tppabs="http://www.vbapi.com/ref/glossary.html#thread" rel="glossary">thread</A>.  (Note that these windows include many windows not visible to the user.)  Each time a window is located, the function passes that handle to an application-defined callback function.  The function continues doing so until all windows have been enumerated, or until the process has been aborted.</P>
+
+<H2>Return Value</H2>
+<P>If an error occured, the function returns 0 (use <A href="getlasterror.html" tppabs="http://www.vbapi.com/ref/g/getlasterror.html">GetLastError</A> to get the error code).  If successful, the function returns a non-zero value.</P>
+
+<H2>Visual Basic-Specific Issues</H2>
+<P>None.</P>
+
+<H2>Parameters</H2>
+<P><DL>
+<DT><VAR>dwThreadId</VAR><DD>An identifier to the thread to enumerate the windows of.
+<DT><VAR>lpfn</VAR><DD>A <A class="def" href="glossary.html#pointer" tppabs="http://www.vbapi.com/ref/glossary.html#pointer" rel="glossary">pointer</A> to the application-defined callback function <A href="enumthreadwndproc.html" tppabs="http://www.vbapi.com/ref/e/enumthreadwndproc.html">EnumThreadWndProc</A>.
+<DT><VAR>lParam</VAR><DD>An additional value to pass to the application-defined callback function.
+</DL></P>
+
+<H2>Example</H2>
+<P><PRE><CODE class="example"><SPAN class="com">' This code is licensed according to the terms and conditions listed <A href="copyrite.html#license" tppabs="http://www.vbapi.com/copyrite.html#license" rel="copyright">here</A>.</SPAN>
+
+' Display the window title of all windows controlled by the thread
+' which the window Form1 is in.  This task is given to the callback function, which
+' will receive each handle individually.  Note that if the window has no title bar
+' text, it will not be displayed (for clarity's sake).
+
+' *** Place this code in a module.  This is the callback function. ***
+' This function displays the title bar text of the window identified by hwnd.
+Public Function <A href="enumthreadwndproc.html" tppabs="http://www.vbapi.com/ref/e/enumthreadwndproc.html">EnumThreadWndProc</A> (ByVal hwnd As Long, ByVal lParam As Long) As Long
+  Dim slength As Long, wintext As String  ' title bar text length and buffer
+  Dim retval As Long  ' return value
+  Static winnum As Integer  ' counter keeps track of how many windows have been enumerated
+
+  winnum = winnum + 1  ' one more window enumerated....
+  slength = <A href="getwindowtextlength.html" tppabs="http://www.vbapi.com/ref/g/getwindowtextlength.html">GetWindowTextLength</A>(hwnd) + 1  ' get length of title bar text
+  If slength > 1  ' if return value refers to non-empty string
+    buffer = Space(slength)  ' make room in the buffer
+    retval = <A href="getwindowtext.html" tppabs="http://www.vbapi.com/ref/g/getwindowtext.html">GetWindowText</A>(hwnd, buffer, slength)  ' get title bar text
+    Debug.Print "Window #"; winnum; " : ";  ' display number of enumerated window
+    Debug.Print Left(buffer, slength - 1)  ' display title bar text of enumerated window
+  End If
+
+  EnumThreadWndProc = 1  ' return value of 1 means continue enumeration
+End Function
+
+' *** Place this code wherever you want to enumerate the windows. ***
+Dim threadid As Long, processid As Long  ' receive id to thread and process of Form1
+Dim retval As Long  ' return value
+
+' Determine the thread which owns the window Form1.
+threadid = <A href="getwindowthreadprocessid.html" tppabs="http://www.vbapi.com/ref/g/getwindowthreadprocessid.html">GetWindowThreadProcessId</A>(Form1.hWnd, processid)
+' Use the callback function to list all of the enumerated thrad windows.  Note that lParam
+' is set to 0 because we don't need to pass any additional information to the function.
+retval = <B>EnumThreadWindows</B>(threadid, AddressOf <A href="enumthreadwndproc.html" tppabs="http://www.vbapi.com/ref/e/enumthreadwndproc.html">EnumThreadWndProc</A>, 0)</CODE></PRE>
+
+<H2>See Also</H2>
+<P><A href="enumchildwindows.html" tppabs="http://www.vbapi.com/ref/e/enumchildwindows.html">EnumChildWindows</A>, <A href="enumwindows.html" tppabs="http://www.vbapi.com/ref/e/enumwindows.html">EnumWindows</A></P>
+
+<H2>Category</H2>
+<P><A href="funcc.html#windows" tppabs="http://www.vbapi.com/ref/funcc.html#windows">Windows</A></P>
+
+<P><A href="funca.html" tppabs="http://www.vbapi.com/ref/funca.html">Go back to the alphabetical Function listing.</A><BR>
+<A href="index.html" tppabs="http://www.vbapi.com/ref/index.html">Go back to the Reference section index.</A></P>
+
+<HR>
+
+<P><B>Last Modified:</B> August 15, 1999<BR>
+This page is copyright &copy; 1999 Paul Kuliniewicz.  
+<A href="copyrite.html" tppabs="http://www.vbapi.com/copyrite.html" rel="copyright">Copyright Information</A>  <B>Revised October 29, 2000</B><BR>
+
+<A href="index-1.html" tppabs="http://www.vbapi.com/index.html">Go back to the Windows API Guide home page.</A><BR>
+E-mail: <A href="javascript:if(confirm('http://www.vbapi.com/email.html  \n\nThis file was not retrieved by Teleport Pro, because it is addressed on a domain or path outside the boundaries set for its Starting Address.  \n\nDo you want to open it from the server?'))window.location='http://www.vbapi.com/email.html'" tppabs="http://www.vbapi.com/email.html">vbapi@vbapi.com</A>  <A href="javascript:if(confirm('http://www.vbapi.com/email.html  \n\nThis file was not retrieved by Teleport Pro, because it is addressed on a domain or path outside the boundaries set for its Starting Address.  \n\nDo you want to open it from the server?'))window.location='http://www.vbapi.com/email.html#secure'" tppabs="http://www.vbapi.com/email.html#secure">Send Encrypted E-Mail</A><BR>
+This page is at <A href="enumthreadwindows.html" tppabs="http://www.vbapi.com/ref/e/enumthreadwindows.html">http://www.vbapi.com/ref/e/enumthreadwindows.html</A>
+</P>
+</BODY>
+</HTML>

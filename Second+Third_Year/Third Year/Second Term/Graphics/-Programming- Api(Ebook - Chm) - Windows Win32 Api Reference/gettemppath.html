@@ -1,0 +1,77 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+<HTML lang="en-us">
+<HEAD>
+<TITLE>Windows API Guide: GetTempPath Function</TITLE>
+<META content="vbapi@vbapi.com" name="author">
+<META content="Information about the GetTempPath function in the Windows API, geared towards the Visual Basic user." name="description">
+<META content="Kuliniewicz,Windows,Windows 95,Windows NT,Windows 98,Windows 32s,32s,API,Application Programming Interface,Programming,Visual Basic,Basic,VB,GetTempPath" name="keywords">
+<META content="Omicron HTML Editor" name="generator">
+<LINK href="default.css" tppabs="http://www.vbapi.com/css/default.css" rel="stylesheet" type="text/css">
+<LINK href="index-1.html" tppabs="http://www.vbapi.com/index.html" rel="home">
+</HEAD>
+<BODY>
+
+<!-- Begin Adslot1 -->
+<CENTER>
+<SCRIPT language="JAVASCRIPT">
+<!-- hide from older browsers
+now = new Date();
+my_random = now.getTime();
+document.write('<A href="http://adex3.flycast.com/server/socket/127.0.0.1:2800/click/VBWorldnet/VBAPI/' + my_random + '">');
+document.write('<IMG width="468" height="60" border="1" src="http://adex3.flycast.com/server/socket/127.0.0.1:2800/ad/VBWorldnet/VBAPI/' + my_random + '"></A>');
+// -->
+</SCRIPT>
+</CENTER>
+<!-- End Adslot1 -->
+
+<HR>
+
+<H1>GetTempPath Function</H1>
+
+<P><CODE class="declare">Declare Function GetTempPath Lib "kernel32.dll" Alias "GetTempPathA" (ByVal nBufferLength As Long, ByVal lpBuffer As String) As Long</CODE>
+
+<P><B>Platforms:</B> Win 32s, Win 95/98, Win NT
+
+<P><B>GetTempPath</B> determines Windows's default Temp directory.  The Temp directory is where temporary files made and used by Windows-based programs should be put.  Usually this will be the \Temp subdirectory under the Windows directory, but not necessarily.  The path of the directory is put into the string variable passed as <VAR>lpBuffer</VAR>.  The function returns the length of the string returned by the function if it succeeds, or 0 if it fails.
+
+<DL>
+<DT><VAR>nBufferLength</VAR><DD>The length in characters of <VAR>lpBuffer</VAR>
+<DT><VAR>lpBuffer</VAR><DD>A string that will receive the path of the Temp directory.
+</DL>
+
+<P><B>Example:</B>
+<PRE><CODE class="example">' Generate a temporary file (path)\api????.TMP, where (path)
+' is Windows's temporary file directory and ???? is a randomly assigned unique value.
+' Then display the name of the created file on the screen.
+Dim temppath As String  ' receives name of temporary file path
+Dim tempfile As String  ' receives name of temporary file
+Dim slength As Long  ' receives length of string returned for the path
+Dim lastfour As Long  ' receives hex value of the randomly assigned ????
+
+' Get Windows's temporary file path
+temppath = Space(255)  ' initialize the buffer to receive the path
+slength = <B>GetTempPath</B>(255, temppath)  ' read the path name
+temppath = Left(temppath, slength)  ' extract data from the variable
+
+' Get a uniquely assigned random file
+tempfile = Space(255)  ' initialize buffer to receive the filename
+lastfour = <A href="gettempfilename.html" tppabs="http://www.vbapi.com/ref/g/gettempfilename.html">GetTempFileName</A>(temppath, "api", 0, tempfile)  ' get a unique temporary file name
+' (Note that the file is also created for you in this case.)
+tempfile = Left(tempfile, InStr(tempfile, vbNullChar) - 1)  ' extract data from the variable
+Debug.Print "Temporary filename: "; tempfile</CODE></PRE>
+
+<P><B>See Also:</B> <A href="gettempfilename.html" tppabs="http://www.vbapi.com/ref/g/gettempfilename.html">GetTempFileName</A><BR>
+<B>Category:</B> <A href="index.html#systeminformation" tppabs="http://www.vbapi.com/ref/index.html#systeminformation">System Information</A></P>
+
+<P><A href="funca.html" tppabs="http://www.vbapi.com/ref/funca.html">Go back to the alphabetical Function listing.</A><BR>
+<A href="index.html" tppabs="http://www.vbapi.com/ref/index.html">Go back to the Reference section index.</A></P>
+
+<HR>
+
+<P>
+<A href="index-1.html" tppabs="http://www.vbapi.com/index.html">Go back to the Windows API Guide home page.</A><BR>
+E-mail: <A href="javascript:if(confirm('http://www.vbapi.com/email.html  \n\nThis file was not retrieved by Teleport Pro, because it is addressed on a domain or path outside the boundaries set for its Starting Address.  \n\nDo you want to open it from the server?'))window.location='http://www.vbapi.com/email.html'" tppabs="http://www.vbapi.com/email.html">rogue953@st-louis.crosswinds.net</A><BR>
+This page is at <A href="gettemppath.html" tppabs="http://www.vbapi.com/ref/g/gettemppath.html">http://www.vbapi.com/ref/g/gettemppath.html</A>
+
+</BODY>
+</HTML>

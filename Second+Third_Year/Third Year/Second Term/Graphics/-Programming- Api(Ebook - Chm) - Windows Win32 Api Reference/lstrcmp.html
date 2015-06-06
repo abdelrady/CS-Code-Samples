@@ -1,0 +1,122 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+<HTML lang="en-us">
+<HEAD>
+<TITLE>Windows API Guide: lstrcmp Function</TITLE>
+<META content="vbapi@vbapi.com" name="author">
+<META content="Information about the lstrcmp function in the Windows API, geared towards the Visual Basic user." name="description">
+<META content="Kuliniewicz,Windows,Windows 95,Windows NT,Windows 98,Windows CE,Windows 2000,API,Application Programming Interface,Programming,Visual Basic,Basic,VB,lstrcmp" name="keywords">
+<META content="Omicron HTML Editor" name="generator">
+<META content="Fri, 31 Dec 1999 03:13:00 GMT" http-equiv="Last-Modified">
+<LINK href="default.css" tppabs="http://www.vbapi.com/css/default.css" rel="stylesheet" type="text/css">
+<LINK href="index-1.html" tppabs="http://www.vbapi.com/index.html" rel="home">
+
+<LINK href="glossary.html" tppabs="http://www.vbapi.com/ref/glossary.html" rel="glossary">
+<LINK href="copyrite.html" tppabs="http://www.vbapi.com/copyrite.html" rel="copyright">
+</HEAD>
+<BODY>
+
+<!-- Begin Adslot1 -->
+<CENTER>
+<SCRIPT language="JAVASCRIPT">
+<!-- hide from older browsers
+now = new Date();
+my_random = now.getTime();
+document.write('<A href="http://adex3.flycast.com/server/socket/127.0.0.1:2800/click/VBWorldnet/VBAPI/' + my_random + '">');
+document.write('<IMG width="468" height="60" border="1" src="http://adex3.flycast.com/server/socket/127.0.0.1:2800/ad/VBWorldnet/VBAPI/' + my_random + '"></A>');
+// -->
+</SCRIPT>
+</CENTER>
+<!-- End Adslot1 -->
+
+<HR>
+
+<H1>lstrcmp Function</H1>
+
+<P><CODE class="declare">Declare Function lstrcmp Lib "kernel32.dll" Alias "lstrcmpA" (ByVal lpString1 As String, ByVal lpString2 As String) As Long</CODE></P>
+
+<H2>Platforms</H2>
+<P><UL>
+<LI><B>Windows 95:</B> Supported.
+<LI><B>Windows 98:</B> Supported.
+<LI><B>Windows NT:</B> Requires Windows NT 3.1 or later.
+<LI><B>Windows 2000:</B> Supported.
+<LI><B>Windows CE:</B> Not Supported.
+</UL></P>
+
+<H2>Description &amp; Usage</H2>
+<P><B>lstrcmp</B> compares two strings using a case-sensitive comparison based on the current user locale.  The function uses a word sort method, which places all symbols except hyphens and apostrophes before the letter "a" (hyphens and apostrophes are treated differently).  The strings are compared by comparing the first character of each string, then the second character, etc., until unequal characters are encountered.</P>
+
+<H2>Return Value</H2>
+<P>If the function returns a negative value, the first string is less than the second string (i.e., the first string comes before the second string in alphabetical order).  If the function returns 0, the two strings are equal.  If the function returns a positive value, the first string is greater than the second string.  In any case, the actual return value is the difference of the first unequal characters encountered.</P>
+
+<H2>Visual Basic-Specific Issues</H2>
+<P>None.</P>
+
+<H2>Parameters</H2>
+<P><DL>
+<DT><VAR>lpString1</VAR><DD>The first string to compare.
+<DT><VAR>lpString2</VAR><DD>The second string to compare.
+</DL></P>
+
+<H2>Example</H2>
+<P><PRE><CODE class="example"><SPAN class="com">' This code is licensed according to the terms and conditions listed <A href="copyrite.html#license" tppabs="http://www.vbapi.com/copyrite.html#license" rel="copyright">here</A>.</SPAN>
+
+' Use a case-senitive comparison method to alphabetically sort
+' nine words.  The sorting method simply compares each possible pair
+' of words; if a pair is out of alphabetical order, they are switched.
+Dim words(1 To 9) As String  ' the words to sort
+Dim tempstr As String  ' buffer used to swap strings
+Dim oc As Integer, ic As Integer  ' counter variables
+Dim compval As Long  ' result of comparison
+
+' Load the nine strings into the array.
+words(1) = "can't"
+words(2) = "cant"
+words(3) = "cannot"
+words(4) = "pants"
+words(5) = "co-op"
+words(6) = "coop"
+words(7) = "Denver"
+words(8) = "denver"
+words(9) = "denveR"
+
+' Sort the strings, swapping any pairs which are out of order.
+For oc = 1 To 8  ' first string of the pair
+  For ic = oc + 1 To 9  ' second string of the pair
+    ' Compare the two strings.
+    compval = <B>lstrcmp</B>(words(oc), words(ic))
+    ' If words(oc) is greater, swap them.
+    If compval > 0 Then
+      tempstr = words(oc)
+      words(oc) = words(ic)
+      words(ic) = tempstr
+    End If
+  Next ic
+Next oc
+
+' Display the list of sorted words.
+For oc = 1 To 9
+  Debug.Print words(oc)
+Next oc</CODE></PRE></P>
+
+<H2>See Also</H2>
+<P><A href="comparestring.html" tppabs="http://www.vbapi.com/ref/c/comparestring.html">CompareString</A>, <A href="lstrcmpi.html" tppabs="http://www.vbapi.com/ref/l/lstrcmpi.html">lstrcmpi</A></P>
+
+<H2>Category</H2>
+<P><A href="funcc.html#strings" tppabs="http://www.vbapi.com/ref/funcc.html#strings">Strings</A></P>
+
+<P><A href="funca.html" tppabs="http://www.vbapi.com/ref/funca.html">Go back to the alphabetical Function listing.</A><BR>
+<A href="index.html" tppabs="http://www.vbapi.com/ref/index.html">Go back to the Reference section index.</A></P>
+
+<HR>
+
+<P><B>Last Modified:</B> December 30, 1999<BR>
+This page is copyright &copy; 1999 Paul Kuliniewicz.  
+<A href="copyrite.html" tppabs="http://www.vbapi.com/copyrite.html" rel="copyright">Copyright Information</A>  <B>Revised October 29, 2000</B><BR>
+
+<A href="index-1.html" tppabs="http://www.vbapi.com/index.html">Go back to the Windows API Guide home page.</A><BR>
+E-mail: <A href="javascript:if(confirm('http://www.vbapi.com/email.html  \n\nThis file was not retrieved by Teleport Pro, because it is addressed on a domain or path outside the boundaries set for its Starting Address.  \n\nDo you want to open it from the server?'))window.location='http://www.vbapi.com/email.html'" tppabs="http://www.vbapi.com/email.html">vbapi@vbapi.com</A>  <A href="javascript:if(confirm('http://www.vbapi.com/email.html  \n\nThis file was not retrieved by Teleport Pro, because it is addressed on a domain or path outside the boundaries set for its Starting Address.  \n\nDo you want to open it from the server?'))window.location='http://www.vbapi.com/email.html#secure'" tppabs="http://www.vbapi.com/email.html#secure">Send Encrypted E-Mail</A><BR>
+This page is at <A href="lstrcmp.html" tppabs="http://www.vbapi.com/ref/l/lstrcmp.html">http://www.vbapi.com/ref/l/lstrcmp.html</A>
+</P>
+</BODY>
+</HTML>

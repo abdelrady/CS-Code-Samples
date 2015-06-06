@@ -1,0 +1,100 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+<HTML lang="en-us">
+<HEAD>
+<TITLE>Windows API Guide: RegOpenKeyEx Function</TITLE>
+<META content="vbapi@vbapi.com" name="author">
+<META content="Information about the RegOpenKeyEx function in the Windows API, geared towards the Visual Basic user." name="description">
+<META content="Kuliniewicz,Windows,Windows 95,Windows NT,Windows 98,Windows 32s,32s,API,Application Programming Interface,Programming,Visual Basic,Basic,VB,RegOpenKeyEx" name="keywords">
+<META content="Omicron HTML Editor" name="generator">
+<LINK href="default.css" tppabs="http://www.vbapi.com/css/default.css" rel="stylesheet" type="text/css">
+<LINK href="index-1.html" tppabs="http://www.vbapi.com/index.html" rel="home">
+</HEAD>
+<BODY>
+
+<!-- Begin Adslot1 -->
+<CENTER>
+<SCRIPT language="JAVASCRIPT">
+<!-- hide from older browsers
+now = new Date();
+my_random = now.getTime();
+document.write('<A href="http://adex3.flycast.com/server/socket/127.0.0.1:2800/click/VBWorldnet/VBAPI/' + my_random + '">');
+document.write('<IMG width="468" height="60" border="1" src="http://adex3.flycast.com/server/socket/127.0.0.1:2800/ad/VBWorldnet/VBAPI/' + my_random + '"></A>');
+// -->
+</SCRIPT>
+</CENTER>
+<!-- End Adslot1 -->
+
+<HR>
+
+<H1>RegOpenKeyEx Function</H1>
+
+<P><CODE class="declare">Declare Function RegOpenKeyEx Lib "advapi32.dll" Alias "RegOpenKeyExA" (ByVal hKey As Long, ByVal lpSubKey As String, ByVal ulOptions As Long, ByVal samDesired As Long, phkResult As Long) As Long</CODE>
+
+<P><B>Platforms:</B> Win 32s, Win 95/98, Win NT
+
+<P><B>RegOpenKeyEx</B> opens a key in the Windows registry.  The handle it gives must be used when you read to or write from any values under that key.  Unlike <A href="regcreatekeyex.html" tppabs="http://www.vbapi.com/ref/r/regcreatekeyex.html">RegCreateKeyEx</A>, this function will not create the key if it does not exist.  The function puts a handle to the opened key into the variable passed as <VAR>phkResult</VAR>.  The function returns 0 if successful, or a non-zero value error code if an error occured.
+
+<DL>
+<DT><VAR>hKey</VAR><DD>Either the handle to an open registry key or exactly one of the following flags that the desired key is under:
+<DL>
+<DT>HKEY_CURRENT_USER = &amp;H80000001<DD>The HKEY_CURRENT_USER base key, which stores program information for the current user.
+<DT>HKEY_LOCAL_MACHINE = &amp;H80000002<DD>The HKEY_LOCAL_MACHINE base key, which stores program information for all users.
+<DT>HKEY_USERS = &amp;H80000003<DD>The HKEY_USERS base key, which has all the information for any user (not just the one provided by HKEY_CURRENT_USER).
+<DT>HKEY_CURRENT_CONFIG = &amp;H80000005<DD>The HKEY_CURRENT_CONFIG base key, which stores computer configuration information.
+<DT>HKEY_DYN_DATA = &amp;H80000006<DD>The HKEY_DYN_DATA base key, which stores dynamic data.
+</DL>
+<DT><VAR>lpSubKey</VAR><DD>The name of the key to open.
+<DT><VAR>ulOptions</VAR><DD>Reserved.  Set to 0.
+<DT><VAR>samDesired</VAR><DD>One or more of the following flags specifying the desired read/write access:
+<DL>
+<DT>KEY_ALL_ACCESS = &amp;HF003F<DD>Permission for all types of access.
+<DT>KEY_CREATE_LINK = &amp;H20<DD>Permission to create symbolic links.
+<DT>KEY_CREATE_SUB_KEY = &amp;H4<DD>Permission to create subkeys.
+<DT>KEY_ENUMERATE_SUB_KEYS = &amp;H8<DD>Permission to enumerate subkeys.
+<DT>KEY_EXECUTE = &amp;H20019<DD>Same as KEY_READ.
+<DT>KEY_NOTIFY = &amp;H10<DD>Permission to give change notification.
+<DT>KEY_QUERY_VALUE = &amp;H1<DD>Permission to query subkey data.
+<DT>KEY_READ = &amp;H20019<DD>Permission for general read access.
+<DT>KEY_SET_VALUE = &amp;H2<DD>Permission to set subkey data.
+<DT>KEY_WRITE = &amp;H20006<DD>Permission for general write access.
+</DL>
+<DT><VAR>phkResult</VAR><DD>Receives the handle to the registry key.
+</DL>
+
+<P><B>Example:</B>
+<PRE><CODE class="example">' Open a key called HKEY_CURRENT_USER\Software\MyCorp\MyProgram\Config.
+' Then create a "username" value under that key and set its value to "Rimmer".
+Dim hregkey As Long  ' receives handle to the opened registry key
+Dim subkey As String  ' name of the subkey to create
+Dim retval As Long  ' return value
+
+' Set the name of the new key and the default security settings
+subkey = "Software\MyCorp\MyProgram\Config"
+
+' Open the registry key
+retval = <B>RegOpenKeyEx</B>(HKEY_CURRENT_USER, subkey, 0, KEY_WRITE, hregkey)
+If retval &lt;&gt; 0 Then  ' error during open
+  Debug.Print "Error opening registry key -- aborting."
+  End  ' terminate the program
+End If
+
+' Insert rest of code here.....
+
+' Close the registry key
+retval = <A href="regclosekey.html" tppabs="http://www.vbapi.com/ref/r/regclosekey.html">RegCloseKey</A>(hregkey)</CODE></PRE>
+
+<P><B>See Also:</B> <A href="regclosekey.html" tppabs="http://www.vbapi.com/ref/r/regclosekey.html">RegCloseKey</A>, <A href="regcreatekeyex.html" tppabs="http://www.vbapi.com/ref/r/regcreatekeyex.html">RegCreateKeyEx</A><BR>
+<B>Category:</B> <A href="index.html#registry" tppabs="http://www.vbapi.com/ref/index.html#registry">Registry</A></P>
+
+<P><A href="funca.html" tppabs="http://www.vbapi.com/ref/funca.html">Go back to the alphabetical Function listing.</A><BR>
+<A href="index.html" tppabs="http://www.vbapi.com/ref/index.html">Go back to the Reference section index.</A></P>
+
+<HR>
+
+<P>This page is copyright &copy; 2000 Paul Kuliniewicz.  <A href="copyrite.html" tppabs="http://www.vbapi.com/copyrite.html" rel="copyright">Copyright Information.</A><BR>
+<A href="index-1.html" tppabs="http://www.vbapi.com/index.html">Go back to the Windows API Guide home page.</A><BR>
+E-mail: <A href="javascript:if(confirm('http://www.vbapi.com/email.html  \n\nThis file was not retrieved by Teleport Pro, because it is addressed on a domain or path outside the boundaries set for its Starting Address.  \n\nDo you want to open it from the server?'))window.location='http://www.vbapi.com/email.html'" tppabs="http://www.vbapi.com/email.html">vbapi@vbapi.com</A>  <A href="javascript:if(confirm('http://www.vbapi.com/email.html  \n\nThis file was not retrieved by Teleport Pro, because it is addressed on a domain or path outside the boundaries set for its Starting Address.  \n\nDo you want to open it from the server?'))window.location='http://www.vbapi.com/email.html#secure'" tppabs="http://www.vbapi.com/email.html#secure">Send Encrypted E-Mail</A><BR>
+This page is at <A href="regopenkeyex.html" tppabs="http://www.vbapi.com/ref/r/regopenkeyex.html">http://www.vbapi.com/ref/r/regopenkeyex.html</A>
+
+</BODY>
+</HTML>

@@ -1,0 +1,95 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+<HTML lang="en-us">
+<HEAD>
+<TITLE>Windows API Guide: GetLastError Function</TITLE>
+<META content="vbapi@vbapi.com" name="author">
+<META content="Information about the GetLastError function in the Windows API, geared towards the Visual Basic user." name="description">
+<META content="Kuliniewicz,Windows,Windows 95,Windows NT,Windows 98,Windows CE,Windows 2000,API,Application Programming Interface,Programming,Visual Basic,Basic,VB,GetLastError" name="keywords">
+<META content="Omicron HTML Editor" name="generator">
+<META content="Thu, 06 Jan 2000 04:04:00 GMT" http-equiv="Last-Modified">
+<LINK href="default.css" tppabs="http://www.vbapi.com/css/default.css" rel="stylesheet" type="text/css">
+<LINK href="index-1.html" tppabs="http://www.vbapi.com/index.html" rel="home">
+
+<LINK href="glossary.html" tppabs="http://www.vbapi.com/ref/glossary.html" rel="glossary">
+<LINK href="copyrite.html" tppabs="http://www.vbapi.com/copyrite.html" rel="copyright">
+</HEAD>
+<BODY>
+
+<!-- Begin Adslot1 -->
+<CENTER>
+<SCRIPT language="JAVASCRIPT">
+<!-- hide from older browsers
+now = new Date();
+my_random = now.getTime();
+document.write('<A href="http://adex3.flycast.com/server/socket/127.0.0.1:2800/click/VBWorldnet/VBAPI/' + my_random + '">');
+document.write('<IMG width="468" height="60" border="1" src="http://adex3.flycast.com/server/socket/127.0.0.1:2800/ad/VBWorldnet/VBAPI/' + my_random + '"></A>');
+// -->
+</SCRIPT>
+</CENTER>
+<!-- End Adslot1 -->
+
+<HR>
+
+<H1>GetLastError Function</H1>
+
+<P><CODE class="declare">Declare Function GetLastError Lib "kernel32.dll" () As Long</CODE></P>
+
+<H2>Platforms</H2>
+<P><UL>
+<LI><B>Windows 95:</B> Supported.
+<LI><B>Windows 98:</B> Supported.
+<LI><B>Windows NT:</B> Requires Windows NT 3.1 or later.
+<LI><B>Windows 2000:</B> Supported.
+<LI><B>Windows CE:</B> Requires Windows CE 1.0 or later.
+</UL></P>
+
+<H2>Description &amp; Usage</H2>
+<P><B>GetLastError</B> obtains the <A href="errorcodes.html" tppabs="http://www.vbapi.com/ref/other/errorcodes.html">error code</A> returned by the last API function called.  Most API functions merely return a number saying if an error occured, but not specifying exactly which error occured.  This function gets a universal error code identifying the type of error that last occured.  Note that most functions set the code to 0 (success) if the function completes successfully, erasing the previous error code.  Therefore, be sure to check this error code immediately after an error is found.</P>
+
+<H2>Return Value</H2>
+<P>The function returns the <A href="errorcodes.html" tppabs="http://www.vbapi.com/ref/other/errorcodes.html">error code</A> of the last API function called by the program.</P>
+
+<H2>Visual Basic-Specific Issues</H2>
+<P>Although <B>GetLastError</B> works perfectly in Visual Basic, it will sometimes not appear to work.  This is because Visual Basic implicitly uses the API frequently to perform tasks which are seemingly intrinsic to the language.  These hidden API function calls will usually overwrite the error code which your code may be trying to read.  To compensate for this, the LastDllError property of the Err object, predefined in Visual Basic, caches the error code from the last API function explicitly called by your program.  You should use the expression Err.LastDllError instead of the <B>GetLastError</B> function to debug failed API function calls.</P>
+
+<H2>Parameters</H2>
+<P>None.</P>
+
+<H2>Example</H2>
+<P><PRE><CODE class="example"><SPAN class="com">' This code is licensed according to the terms and conditions listed <A href="copyrite.html#license" tppabs="http://www.vbapi.com/copyrite.html#license" rel="copyright">here</A>.</SPAN>
+
+' Demonstrate catching an invalid handle error.
+' If this code does not work, try replacing "GetLastError()" with Err.LastDllError.
+Dim retval As Long  ' return value of function
+Dim errorcode As Long  ' error code
+
+' Make an invalid call to the following function by giving it an invalid handle
+retval = <A href="closehandle.html" tppabs="http://www.vbapi.com/ref/c/closehandle.html">CloseHandle</A>(-1)  ' there is no handle -1!
+If retval = 0 Then  ' the return value will be 0 if an error occured
+  errorcode = <B>GetLastError</B>()  ' find the error code
+  If errorcode = 6 Then Debug.Print "ERROR: Invalid Handle Specified"  ' error 6 = invalid handle
+End If</CODE></PRE></P>
+
+<H2>See Also</H2>
+<P><A href="commdlgextendederror.html" tppabs="http://www.vbapi.com/ref/c/commdlgextendederror.html">CommDlgExtendedError</A>, 
+<A href="setlasterror.html" tppabs="http://www.vbapi.com/ref/s/setlasterror.html">SetLastError</A>, 
+<A href="setlasterrorex.html" tppabs="http://www.vbapi.com/ref/s/setlasterrorex.html">SetLastErrorEx</A></P>
+
+<H2>Category</H2>
+<P><A href="funcc.html#errors" tppabs="http://www.vbapi.com/ref/funcc.html#errors">Errors</A></P>
+
+<P><A href="funca.html" tppabs="http://www.vbapi.com/ref/funca.html">Go back to the alphabetical Function listing.</A><BR>
+<A href="index.html" tppabs="http://www.vbapi.com/ref/index.html">Go back to the Reference section index.</A></P>
+
+<HR>
+
+<P><B>Last Modified:</B> January 5, 2000<BR>
+This page is copyright &copy; 2000 Paul Kuliniewicz.  
+<A href="copyrite.html" tppabs="http://www.vbapi.com/copyrite.html" rel="copyright">Copyright Information</A>  <B>Revised October 29, 2000</B><BR>
+
+<A href="index-1.html" tppabs="http://www.vbapi.com/index.html">Go back to the Windows API Guide home page.</A><BR>
+E-mail: <A href="javascript:if(confirm('http://www.vbapi.com/email.html  \n\nThis file was not retrieved by Teleport Pro, because it is addressed on a domain or path outside the boundaries set for its Starting Address.  \n\nDo you want to open it from the server?'))window.location='http://www.vbapi.com/email.html'" tppabs="http://www.vbapi.com/email.html">vbapi@vbapi.com</A>  <A href="javascript:if(confirm('http://www.vbapi.com/email.html  \n\nThis file was not retrieved by Teleport Pro, because it is addressed on a domain or path outside the boundaries set for its Starting Address.  \n\nDo you want to open it from the server?'))window.location='http://www.vbapi.com/email.html#secure'" tppabs="http://www.vbapi.com/email.html#secure">Send Encrypted E-Mail</A><BR>
+This page is at <A href="getlasterror.html" tppabs="http://www.vbapi.com/ref/g/getlasterror.html">http://www.vbapi.com/ref/g/getlasterror.html</A>
+</P>
+</BODY>
+</HTML>

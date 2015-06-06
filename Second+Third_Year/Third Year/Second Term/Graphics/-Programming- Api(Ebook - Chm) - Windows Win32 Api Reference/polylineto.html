@@ -1,0 +1,77 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+<HTML lang="en-us">
+<HEAD>
+<TITLE>Windows API Guide: PolylineTo Function</TITLE>
+<META content="vbapi@vbapi.com" name="author">
+<META content="Information about the PolylineTo function in the Windows API, geared towards the Visual Basic user." name="description">
+<META content="Kuliniewicz,Windows,Windows 95,Windows NT,Windows 98,Windows 32s,32s,API,Application Programming Interface,Programming,Visual Basic,Basic,VB,PolylineTo" name="keywords">
+<META content="Omicron HTML Editor" name="generator">
+<LINK href="default.css" tppabs="http://www.vbapi.com/css/default.css" rel="stylesheet" type="text/css">
+<LINK href="index-1.html" tppabs="http://www.vbapi.com/index.html" rel="home">
+</HEAD>
+<BODY>
+
+<!-- Begin Adslot1 -->
+<CENTER>
+<SCRIPT language="JAVASCRIPT">
+<!-- hide from older browsers
+now = new Date();
+my_random = now.getTime();
+document.write('<A href="http://adex3.flycast.com/server/socket/127.0.0.1:2800/click/VBWorldnet/VBAPI/' + my_random + '">');
+document.write('<IMG width="468" height="60" border="1" src="http://adex3.flycast.com/server/socket/127.0.0.1:2800/ad/VBWorldnet/VBAPI/' + my_random + '"></A>');
+// -->
+</SCRIPT>
+</CENTER>
+<!-- End Adslot1 -->
+
+<HR>
+
+<H1>PolylineTo Function</H1>
+
+<P><CODE class="declare">Declare Function PolylineTo Lib "gdi32.dll" (ByVal hdc As Long, lppt As <A href="point_type.html" tppabs="http://www.vbapi.com/ref/p/point_type.html">POINT_TYPE</A>, ByVal cCount As Long) As Long</CODE>
+
+<P><B>Platforms:</B> Win 32s, Win 95/98, Win NT
+
+<P><B>PolylineTo</B> draws a series of connected lines on a graphics-capable device.  The points are given to the function inside an array passed as <VAR>lppt</VAR>.  The function draws lines connecting the device's current point to the first point, the first point to the second point, the second point to the third point, etc.  When the function is finished, it sets the current point to whatever the last point in the array is.  The original current point and the last point are not connected.  The lines are drawn in the device's current drawing color.  The function returns 1 if successful, or 0 if an error occured.
+
+<DL>
+<DT><VAR>hdc</VAR><DD>The device context of the device to draw the lines on.
+<DT><VAR>lppt</VAR><DD>An array of points to connect using the lines.
+<DT><VAR>cCount</VAR><DD>The number of elements in <VAR>lppt</VAR>.
+</DL>
+
+<P><B>Example:</B>
+<PRE><CODE class="example">' Draw a red triangle with corners (100,100), (200,150), and (0,150)
+' on window Form1.  The current point must first be set to (100,100), and the last
+' point must also be given as (100,100) to close the triangle.
+Dim points(0 To 2) As <A href="point_type.html" tppabs="http://www.vbapi.com/ref/p/point_type.html">POINT_TYPE</A>  ' points given to the function
+Dim curpt As <A href="point_type.html" tppabs="http://www.vbapi.com/ref/p/point_type.html">POINT_TYPE</A>  ' receives current point from MoveToEx
+Dim retval As Long  ' return value
+
+' Set Form1's current point to (100,100)
+retval = <A href="movetoex.html" tppabs="http://www.vbapi.com/ref/m/movetoex.html">MoveToEx</A>(Form1.hDC, 100, 100, curpt)
+
+' Load the points of the triangle into the array points().  Notice that (100,100)
+' is given as the last point to close the figure.
+points(0).x = 200: points(0).y = 150  ' point #0: (200,150)
+points(1).x = 0: points(1).y = 150  ' point #1: (0,150)
+points(2).x = 100: points(2).y = 100  ' point #2: (100,100)
+
+Form1.ForeColor = RGB(255, 0, 0)  ' set Form1's drawing color to red
+retval = <B>PolylineTo</B>(Form1.hDC, points(0), 3)  ' draw the lines</CODE></PRE>
+
+<P><B>See Also:</B> <A href="lineto.html" tppabs="http://www.vbapi.com/ref/l/lineto.html">LineTo</A>, <A href="polyline.html" tppabs="http://www.vbapi.com/ref/p/polyline.html">Polyline</A>, <A href="polypolyline.html" tppabs="http://www.vbapi.com/ref/p/polypolyline.html">PolyPolyline</A><BR>
+<B>Category:</B> <A href="index.html#linescurves" tppabs="http://www.vbapi.com/ref/index.html#linescurves">Lines &amp; Curves</A></P>
+
+<P><A href="funca.html" tppabs="http://www.vbapi.com/ref/funca.html">Go back to the alphabetical Function listing.</A><BR>
+<A href="index.html" tppabs="http://www.vbapi.com/ref/index.html">Go back to the Reference section index.</A></P>
+
+<HR>
+
+<P>This page is copyright &copy; 2000 Paul Kuliniewicz.  <A href="copyrite.html" tppabs="http://www.vbapi.com/copyrite.html" rel="copyright">Copyright Information.</A><BR>
+<A href="index-1.html" tppabs="http://www.vbapi.com/index.html">Go back to the Windows API Guide home page.</A><BR>
+E-mail: <A href="javascript:if(confirm('http://www.vbapi.com/email.html  \n\nThis file was not retrieved by Teleport Pro, because it is addressed on a domain or path outside the boundaries set for its Starting Address.  \n\nDo you want to open it from the server?'))window.location='http://www.vbapi.com/email.html'" tppabs="http://www.vbapi.com/email.html">vbapi@vbapi.com</A>  <A href="javascript:if(confirm('http://www.vbapi.com/email.html  \n\nThis file was not retrieved by Teleport Pro, because it is addressed on a domain or path outside the boundaries set for its Starting Address.  \n\nDo you want to open it from the server?'))window.location='http://www.vbapi.com/email.html#secure'" tppabs="http://www.vbapi.com/email.html#secure">Send Encrypted E-Mail</A><BR>
+This page is at <A href="polylineto.html" tppabs="http://www.vbapi.com/ref/p/polylineto.html">http://www.vbapi.com/ref/p/polylineto.html</A>
+
+</BODY>
+</HTML>

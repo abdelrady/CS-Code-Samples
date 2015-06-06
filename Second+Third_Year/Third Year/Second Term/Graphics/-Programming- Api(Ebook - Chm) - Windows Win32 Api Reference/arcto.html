@@ -1,0 +1,111 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+<HTML lang="en-us">
+<HEAD>
+<TITLE>Windows API Guide: ArcTo Function</TITLE>
+<META content="vbapi@vbapi.com" name="author">
+<META content="Information about the ArcTo function in the Windows API, geared towards the Visual Basic user." name="description">
+<META content="Kuliniewicz,Windows,Windows 95,Windows NT,Windows 98,Windows CE,Windows 2000,API,Application Programming Interface,Programming,Visual Basic,Basic,VB,ArcTo" name="keywords">
+<META content="Omicron HTML Editor" name="generator">
+<META content="Tue, 27 Jul 1999 21:57:00 GMT" http-equiv="Last-Modified">
+<LINK href="default.css" tppabs="http://www.vbapi.com/css/default.css" rel="stylesheet" type="text/css">
+<LINK href="index-1.html" tppabs="http://www.vbapi.com/index.html" rel="home">
+
+<LINK href="glossary.html" tppabs="http://www.vbapi.com/ref/glossary.html" rel="glossary">
+<LINK href="copyrite.html" tppabs="http://www.vbapi.com/copyrite.html" rel="copyright">
+</HEAD>
+<BODY>
+
+<!-- Begin Adslot1 -->
+<CENTER>
+<SCRIPT language="JAVASCRIPT">
+<!-- hide from older browsers
+now = new Date();
+my_random = now.getTime();
+document.write('<A href="http://adex3.flycast.com/server/socket/127.0.0.1:2800/click/VBWorldnet/VBAPI/' + my_random + '">');
+document.write('<IMG width="468" height="60" border="1" src="http://adex3.flycast.com/server/socket/127.0.0.1:2800/ad/VBWorldnet/VBAPI/' + my_random + '"></A>');
+// -->
+</SCRIPT>
+</CENTER>
+<!-- End Adslot1 -->
+
+<HR>
+
+<H1>ArcTo Function</H1>
+
+<P><CODE class="declare">Declare Function ArcTo Lib "gdi32.dll" (ByVal hdc As Long, ByVal nLeftRect As Long, ByVal nTopRect As Long, ByVal nRightRect As Long, ByVal nBottomRect As Long, ByVal nXRadial1 As Long, ByVal nYRadial1 As Long, ByVal nXRadial2 As Long, ByVal nYRadial2 As Long) As Long</CODE></P>
+
+<H2>Platforms</H2>
+<P><UL>
+<LI><B>Windows 95:</B> Not Supported
+<LI><B>Windows 98:</B> Not Supported
+<LI><B>Windows NT:</B> Requires Windows NT 3.1 or later
+<LI><B>Windows 2000:</B> Supported
+<LI><B>Windows CE:</B> Not Supported
+</UL></P>
+
+<H2>Description &amp; Usage</H2>
+<P><B>ArcTo</B> draws an elliptical arc on a <A class="def" href="glossary.html#device" tppabs="http://www.vbapi.com/ref/glossary.html#device" rel="glossary">device</A> using the device's current <A class="def" href="glossary.html#pen" tppabs="http://www.vbapi.com/ref/glossary.html#pen" rel="glossary">pen</A>.  After drawing the arc, the device's <A class="def" href="glossary.html#currentpoint" tppabs="http://www.vbapi.com/ref/glossary.html#currentpoint" rel="glossary">current point</A> is set to the end point of the arc.  The ellipse which the arc lies on is inscribed within the bounding rectangle coordinates passed to the function.  The start and end points are determined by two radials.  The radials begin at the center of the ellipse and extend through the given radial point (either the start or end one); where they intersect the ellipse is where the start and end points of the arc are.  The direction the arc is drawn in depends on the device's current setting.</P>
+
+<H2>Return Value</H2>
+<P>If an error occured while attempting to draw the arc, the function returns 0 (call <A href="getlasterror.html" tppabs="http://www.vbapi.com/ref/g/getlasterror.html">GetLastError</A> to get the error code).  If the function completed successfully, it returns a non-zero value.</P>
+
+<H2>Visual Basic-Specific Issues</H2>
+<P>None.</P>
+
+
+<H2>Parameters</H2>
+<P><DL>
+<DT><VAR>hdc</VAR><DD>A <A class="rel" href="glossary.html#handle" tppabs="http://www.vbapi.com/ref/glossary.html#handle" rel="glossary">handle</A> to a <A class="def" href="glossary.html#devicecontext" tppabs="http://www.vbapi.com/ref/glossary.html#devicecontext" rel="glossary">device context</A> of the device to draw the arc on.
+<DT><VAR>nLeftRect</VAR><DD>The x coordinate of the upper-left point of the ellipse's bounding rectangle.
+<DT><VAR>nTopRect</VAR><DD>The y coordinate of the upper-left point of the ellipse's bounding rectangle.
+<DT><VAR>nRightRect</VAR><DD>The x coordinate of the lower-right point of the ellipse's bounding rectangle.
+<DT><VAR>nBottomRect</VAR><DD>The y coordinate of the lower-right point of the ellipse's bounding rectangle.
+<DT><VAR>nXRadial1</VAR><DD>The x coordinate of the radial point that determines the arc's starting point.
+<DT><VAR>nYRadial1</VAR><DD>The y coordinate of the radial point that determines the arc's starting point.
+<DT><VAR>nXRadial2</VAR><DD>The x coordinate of the radial point that determines the arc's ending point.
+<DT><VAR>nYRadial2</VAR><DD>The y coordinate of the radial point that determines the arc's ending point.
+</DL></P>
+
+<H2>Example</H2>
+<P><PRE><CODE class="example"><SPAN class="com">' This code is licensed according to the terms and conditions listed <A href="copyrite.html#license" tppabs="http://www.vbapi.com/copyrite.html#license" rel="copyright">here</A>.</SPAN>
+
+' Draw the arc that forms the top half of an ellipse.  The ellipse
+' is centered at (100, 100), has a width of 200, and has a height of 100.  The arc is drawn
+' on window Form1 using the black solid stock pen.
+Dim hpen As Long  ' handle to the black solid pen
+Dim holdpen As Long  ' handle to window Form1's previously selected pen
+Dim retval As Long  ' return value
+
+' Get a handle to the solid black pen and set it as Form1's drawing pen.
+hpen = <A href="getstockobject.html" tppabs="http://www.vbapi.com/ref/g/getstockobject.html">GetStockObject</A>(BLACK_PEN)  ' get a handle to the pen
+holdpen = <A href="selectobject.html" tppabs="http://www.vbapi.com/ref/s/selectobject.html">SelectObject</A>(Form1.hDC, hpen)  ' set it as Form1's current pen
+
+' The ellipse is determined by the bounding rectangle (0,50)-(200,150).
+' The radial to (200, 100) is due right; the radial to (0, 100) is due left.
+retval = <B>ArcTo</B>(Form1.hDC, 0, 50, 200, 150, 200, 100, 0, 100)
+
+' Restore Form1's previous pen selection.
+retval = <A href="selectobject.html" tppabs="http://www.vbapi.com/ref/s/selectobject.html">SelectObject</A>(Form1.hDC, holdpen)  ' set the old pen back</CODE></PRE></P>
+
+<H2>See Also</H2>
+<P><A href="anglearc.html" tppabs="http://www.vbapi.com/ref/a/anglearc.html">AngleArc</A>, <A href="arc.html" tppabs="http://www.vbapi.com/ref/a/arc.html">Arc</A>, <A href="ellipse.html" tppabs="http://www.vbapi.com/ref/e/ellipse.html">Ellipse</A>, <A href="getarcdirection.html" tppabs="http://www.vbapi.com/ref/g/getarcdirection.html">GetArcDirection</A>, <A href="setarcdirection.html" tppabs="http://www.vbapi.com/ref/s/setarcdirection.html">SetArcDirection</A></P>
+
+<H2>Category</H2>
+<P><A href="funcc.html#linescurves" tppabs="http://www.vbapi.com/ref/funcc.html#linescurves">Lines &amp; Curves</A></P>
+
+<P><A href="funca.html" tppabs="http://www.vbapi.com/ref/funca.html">Go back to the alphabetical Function listing.</A><BR>
+<A href="index.html" tppabs="http://www.vbapi.com/ref/index.html">Go back to the Reference section index.</A></P>
+
+<HR>
+
+<P>
+<B>Last Modified:</B> July 27, 1999<BR>
+This page is copyright &copy; 1999 Paul Kuliniewicz.  
+<A href="copyrite.html" tppabs="http://www.vbapi.com/copyrite.html" rel="copyright">Copyright Information</A>  <B>Revised October 29, 2000</B><BR>
+
+<A href="index-1.html" tppabs="http://www.vbapi.com/index.html">Go back to the Windows API Guide home page.</A><BR>
+E-mail: <A href="javascript:if(confirm('http://www.vbapi.com/email.html  \n\nThis file was not retrieved by Teleport Pro, because it is addressed on a domain or path outside the boundaries set for its Starting Address.  \n\nDo you want to open it from the server?'))window.location='http://www.vbapi.com/email.html'" tppabs="http://www.vbapi.com/email.html">vbapi@vbapi.com</A>  <A href="javascript:if(confirm('http://www.vbapi.com/email.html  \n\nThis file was not retrieved by Teleport Pro, because it is addressed on a domain or path outside the boundaries set for its Starting Address.  \n\nDo you want to open it from the server?'))window.location='http://www.vbapi.com/email.html#secure'" tppabs="http://www.vbapi.com/email.html#secure">Send Encrypted E-Mail</A><BR>
+This page is at <A href="arcto.html" tppabs="http://www.vbapi.com/ref/a/arcto.html">http://www.vbapi.com/ref/a/arcto.html</A>
+</P>
+</BODY>
+</HTML>

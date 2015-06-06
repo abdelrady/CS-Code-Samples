@@ -1,0 +1,172 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+<HTML lang="en-us">
+<HEAD>
+<TITLE>Windows API Guide: RegisterClassEx Function</TITLE>
+<META content="vbapi@vbapi.com" name="author">
+<META content="Information about the RegisterClassEx function in the Windows API, geared towards the Visual Basic user." name="description">
+<META content="Kuliniewicz,Windows,Windows 95,Windows NT,Windows 98,Windows CE,Windows 2000,API,Application Programming Interface,Programming,Visual Basic,Basic,VB,RegisterClassEx" name="keywords">
+<META content="Omicron HTML Editor" name="generator">
+<LINK href="default.css" tppabs="http://www.vbapi.com/css/default.css" rel="stylesheet" type="text/css">
+<LINK href="index-1.html" tppabs="http://www.vbapi.com/index.html" rel="home">
+<LINK href="glossary.html" tppabs="http://www.vbapi.com/ref/glossary.html" rel="glossary">
+<LINK href="copyrite.html" tppabs="http://www.vbapi.com/copyrite.html" rel="copyright">
+</HEAD>
+<BODY>
+
+<!-- Begin Adslot1 -->
+<CENTER>
+<SCRIPT language="JAVASCRIPT">
+<!-- hide from older browsers
+now = new Date();
+my_random = now.getTime();
+document.write('<A href="http://adex3.flycast.com/server/socket/127.0.0.1:2800/click/VBWorldnet/VBAPI/' + my_random + '">');
+document.write('<IMG width="468" height="60" border="1" src="http://adex3.flycast.com/server/socket/127.0.0.1:2800/ad/VBWorldnet/VBAPI/' + my_random + '"></A>');
+// -->
+</SCRIPT>
+</CENTER>
+<!-- End Adslot1 -->
+
+<HR>
+
+<H1>RegisterClassEx Function</H1>
+
+<P><CODE class="declare"><SPAN class="kw">Declare Function</SPAN> RegisterClassEx <SPAN class="kw">Lib</SPAN> "user32.dll" <SPAN class="kw">Alias</SPAN> "RegisterClassExA" (lpwcx <SPAN class="kw">As</SPAN> <A href="wndclassex.html" tppabs="http://www.vbapi.com/ref/w/wndclassex.html">WNDCLASSEX</A>) <SPAN class="kw">As Long</SPAN></CODE></P>
+
+<H2>Platforms</H2>
+<P><UL>
+<LI><B>Windows 95:</B> Supported.
+<LI><B>Windows 98:</B> Supported.
+<LI><B>Windows NT:</B> Requires Windows NT 4.0 or later.
+<LI><B>Windows 2000:</B> Supported.
+<LI><B>Windows CE:</B> Not Supported.
+</UL></P>
+
+<H2>Description &amp; Usage</H2>
+<P><B>RegisterClassEx</B> registers a new <A class="def" href="glossary.html#windowclass" tppabs="http://www.vbapi.com/ref/glossary.html#windowclass" rel="glossary">window class</A> for use.  Only after registering the window class can it be used to create windows.  After the window class is completely finished being used, use <A href="unregisterclass.html" tppabs="http://www.vbapi.com/ref/u/unregisterclass.html">UnregisterClass</A> to unregister it.</P>
+
+<H2>Return Value</H2>
+<P>If an error occured, the function returns 0.  If successful, the function returns an <A class="def" href="glossary.html#atom" tppabs="http://www.vbapi.com/ref/glossary.html#atom" rel="glossary">atom</A> identifying the class.</P>
+
+<H2>Visual Basic-Specific Issues</H2>
+<P>None.</P>
+
+<H2>Parameters</H2>
+<P><DL>
+<DT><VAR>lpwcx</VAR><DD>Information about the window class being registered.
+</DL></P>
+
+<H2>Example</H2>
+<P>Register a new window class for later use.  Although this example doesn't actually use the newly created class, it shows how this class would be made and, later, destroyed.  The code executes in the Load and Unload logic of a form window Form1.</P>
+
+<P><PRE><CODE class="example"><SPAN class="com">' This code is licensed according to the terms and conditions listed <A href="copyrite.html#license" tppabs="http://www.vbapi.com/copyrite.html#license" rel="copyright">here</A>.</SPAN>
+
+<SPAN class="com">' Declarations and such needed for the example:
+' (Copy them to the (declarations) section of a module.)</SPAN>
+<SPAN class="kw">Public Type</SPAN> <A href="wndclassex.html" tppabs="http://www.vbapi.com/ref/w/wndclassex.html">WNDCLASSEX</A>
+	cbSize <SPAN class="kw">As Long</SPAN>
+	style <SPAN class="kw">As Long</SPAN>
+	lpfnWndProc <SPAN class="kw">As Long</SPAN>
+	cbClsExtra <SPAN class="kw">As Long</SPAN>
+	cbWndExtra <SPAN class="kw">As Long</SPAN>
+	hInstance <SPAN class="kw">As Long</SPAN>
+	hIcon <SPAN class="kw">As Long</SPAN>
+	hCursor <SPAN class="kw">As Long</SPAN>
+	hbrBackground <SPAN class="kw">As Long</SPAN>
+	lpszMenuName <SPAN class="kw">As String</SPAN>
+	lpszClassName <SPAN class="kw">As String</SPAN>
+	hIconSm <SPAN class="kw">As Long</SPAN>
+<SPAN class="kw">End Type</SPAN>
+<SPAN class="kw">Public Const</SPAN> CS_OWNDC = &amp;H20
+<SPAN class="kw">Public Const</SPAN> CS_HREDRAW = &amp;H2
+<SPAN class="kw">Public Const</SPAN> CS_VREDRAW = &amp;H1
+<SPAN class="kw">Public Const</SPAN> COLOR_APPWORKSPACE = 12
+<SPAN class="kw">Public Declare Function</SPAN> <B>RegisterClassEx</B> <SPAN class="kw">Lib</SPAN> "user32.dll" <SPAN class="kw">Alias</SPAN> "RegisterClassExA" _
+	(lpwcx <SPAN class="kw">As</SPAN> <A href="wndclassex.html" tppabs="http://www.vbapi.com/ref/w/wndclassex.html">WNDCLASSEX</A>) <SPAN class="kw">As Long</SPAN>
+<SPAN class="kw">Public Declare Function</SPAN> <A href="unregisterclass.html" tppabs="http://www.vbapi.com/ref/u/unregisterclass.html">UnregisterClass</A> <SPAN class="kw">Lib</SPAN> "user32.dll" <SPAN class="kw">Alias</SPAN> "UnregisterClassA" _
+	(<SPAN class="kw">ByVal</SPAN> lpClassName <SPAN class="kw">As Any</SPAN>, <SPAN class="kw">ByVal</SPAN> hInstance <SPAN class="kw">As Long</SPAN>) <SPAN class="kw">As Long</SPAN>
+<SPAN class="kw">Public Declare Function</SPAN> <A href="loadcursorfromfile.html" tppabs="http://www.vbapi.com/ref/l/loadcursorfromfile.html">LoadCursorFromFile</A> <SPAN class="kw">Lib</SPAN> "user32.dll" <SPAN class="kw">Alias</SPAN> "LoadCursorFromFileA" _
+	(<SPAN class="kw">ByVal</SPAN> lpFileName <SPAN class="kw">As String</SPAN>) <SPAN class="kw">As Long</SPAN>
+<SPAN class="kw">Public Declare Function</SPAN> <A href="extracticon.html" tppabs="http://www.vbapi.com/ref/e/extracticon.html">ExtractIcon</A> <SPAN class="kw">Lib</SPAN> "shell32.dll" <SPAN class="kw">Alias</SPAN> "ExtractIconA" (<SPAN class="kw">ByVal</SPAN> hInst _
+	<SPAN class="kw">As Long</SPAN>, <SPAN class="kw">ByVal</SPAN> lpszExeFileName <SPAN class="kw">As String</SPAN>, <SPAN class="kw">ByVal</SPAN> nIconIndex <SPAN class="kw">As Long</SPAN>) <SPAN class="kw">As Long</SPAN>
+
+<SPAN class="com">' *** Place the following code in a module. ***</SPAN>
+
+<SPAN class="com">' Define the window procedure to use for the class.  Here, we'll
+' just make a wrapper for the default window procedure.</SPAN>
+<SPAN class="kw">Public Function</SPAN> <A href="windowproc.html" tppabs="http://www.vbapi.com/ref/w/windowproc.html">WindowProc</A> (<SPAN class="kw">ByVal</SPAN> hWnd <SPAN class="kw">As Long</SPAN>, <SPAN class="kw">ByVal</SPAN> uMsg <SPAN class="kw">As Long</SPAN>, <SPAN class="kw">ByVal</SPAN> wParam <SPAN class="kw">As Long</SPAN>, _
+		<SPAN class="kw">ByVal</SPAN> lParam <SPAN class="kw">As Long</SPAN>) <SPAN class="kw">As Long</SPAN>
+  <SPAN class="com">' Return whatever the default window procedure returns.</SPAN>
+  WindowProc = <A href="defwindowproc.html" tppabs="http://www.vbapi.com/ref/d/defwindowproc.html">DefWindowProc</A>(hWnd, uMsg, wParam, lParam)
+<SPAN class="kw">End Function</SPAN>
+
+<SPAN class="com">' The following function returns the value passed to it.  This allows the
+' example to use the AddressOf operator to set a value in the structure.</SPAN>
+<SPAN class="kw">Public Function</SPAN> DummyFunc (<SPAN class="kw">ByVal</SPAN> dwValue <SPAN class="kw">As Long</SPAN>) <SPAN class="kw">As Long</SPAN>
+	DummyFunc = dwValue
+<SPAN class="kw">End Function</SPAN>
+
+<SPAN class="com">' *** Place the following code inside window Form1. ***</SPAN>
+
+<SPAN class="kw">Private Sub</SPAN> Form_Load()
+	<SPAN class="kw">Dim</SPAN> classinfo <SPAN class="kw">As</SPAN> <A href="wndclassex.html" tppabs="http://www.vbapi.com/ref/w/wndclassex.html">WNDCLASSEX</A>  <SPAN class="com">' holds info about the class</SPAN>
+	<SPAN class="kw">Dim</SPAN> classatom <SPAN class="kw">As Long</SPAN>        <SPAN class="com">' receives an atom to the class just registered</SPAN>
+
+	<SPAN class="com">' Load a decription of the new class into the strucure.</SPAN>
+	<SPAN class="kw">With</SPAN> classinfo
+		<SPAN class="com">' Of course, set the size of the structure.</SPAN>
+		.cbSize = Len(classinfo)
+		<SPAN class="com">' Class style: give each window its own DC; redraw when resized.</SPAN>
+		.style = CS_OWNDC <SPAN class="kw">Or</SPAN> CS_HREDRAW <SPAN class="kw">Or</SPAN> CS_VREDRAW
+		<SPAN class="com">' Use the window procedure above to process messages.</SPAN>
+		.lpfnWndProc = DummyFunc(<SPAN class="kw">AddressOf</SPAN> <A href="windowproc.html" tppabs="http://www.vbapi.com/ref/w/windowproc.html">WindowProc</A>)
+		<SPAN class="com">' We aren't using any extra information.</SPAN>
+		.cbClsExtra = 0
+		.cbWndExtra = 0
+		<SPAN class="com">' Handle to the instance of this application.</SPAN>
+		.hInstance = App.hInstance
+		<SPAN class="com">' Use the icon stored in C:\MyApp\deficon.ico.</SPAN>
+		.hIcon = <A href="extracticon.html" tppabs="http://www.vbapi.com/ref/e/extracticon.html">ExtractIcon</A>(App.hInstance, "C:\MyApp\deficon.ico", 0)
+		<SPAN class="com">' Use the cursor stored in C:\MyApp\mouse.cur.</SPAN>
+		.hCursor = <A href="loadcursorfromfile.html" tppabs="http://www.vbapi.com/ref/l/loadcursorfromfile.html">LoadCursorFromFile</A>("C:\MyApp\mouse.cur")
+		<SPAN class="com">' Fill the background with the system color for an application's workspace.</SPAN>
+		.hbrBackground = COLOR_APPWORKSPACE
+		<SPAN class="com">' No menu resource to use.</SPAN>
+		.lpszMenuName = ""
+		<SPAN class="com">' Give the class a name.</SPAN>
+		.lpszClassName = "CustomClass"
+		<SPAN class="com">' Use the small icon stored in C:\MyApp\deficonsm.ico.</SPAN>
+		.hIconSm = <A href="extracticon.html" tppabs="http://www.vbapi.com/ref/e/extracticon.html">ExtractIcon</A>(App.hInstance, "C:\MyApp\deficonsm.ico", 0)
+	<SPAN class="kw">End With</SPAN>
+
+	<SPAN class="com">' Finally, register the class.</SPAN>
+	classatom = <B>RegisterClassEx</B>(classinfo)
+	<SPAN class="com">' Now the class CustomClass can be used to create windows.</SPAN>
+<SPAN class="kw">End Sub</SPAN>
+
+<SPAN class="kw">Private Sub</SPAN> Form_Unload(Cancel <SPAN class="kw">As Integer</SPAN>)
+	<SPAN class="kw">Dim</SPAN> retval <SPAN class="kw">As Long</SPAN>  <SPAN class="com">' return value</SPAN>
+	
+	<SPAN class="com">' Unregister the window class when the form closes.</SPAN>
+	retval = <A href="unregisterclass.html" tppabs="http://www.vbapi.com/ref/u/unregisterclass.html">UnregisterClass</A>("CustomClass", App.hInstance)
+<SPAN class="kw">End Sub</SPAN></CODE></PRE></P>
+
+<H2>See Also</H2>
+<P><A href="registerclass.html" tppabs="http://www.vbapi.com/ref/r/registerclass.html">RegisterClass</A>, 
+<A href="unregisterclass.html" tppabs="http://www.vbapi.com/ref/u/unregisterclass.html">UnregisterClass</A></P>
+
+<H2>Category</H2>
+<P><A href="funcc.html#windowclasses" tppabs="http://www.vbapi.com/ref/funcc.html#windowclasses">Window Classes</A></P>
+
+<P><A href="funca.html" tppabs="http://www.vbapi.com/ref/funca.html">Go back to the Function listing.</A><BR>
+<A href="index.html" tppabs="http://www.vbapi.com/ref/index.html">Go back to the Reference section index.</A></P>
+
+<HR>
+
+<P><B>Last Modified:</B> July 30, 2000<BR>
+This page is copyright &copy; 2000 Paul Kuliniewicz.  
+<A href="copyrite.html" tppabs="http://www.vbapi.com/copyrite.html" rel="copyright">Copyright Information</A>  <B>Revised October 29, 2000</B><BR>
+<A href="index-1.html" tppabs="http://www.vbapi.com/index.html">Go back to the Windows API Guide home page.</A><BR>
+E-mail: <A href="javascript:if(confirm('http://www.vbapi.com/email.html  \n\nThis file was not retrieved by Teleport Pro, because it is addressed on a domain or path outside the boundaries set for its Starting Address.  \n\nDo you want to open it from the server?'))window.location='http://www.vbapi.com/email.html'" tppabs="http://www.vbapi.com/email.html">vbapi@vbapi.com</A>  <A href="javascript:if(confirm('http://www.vbapi.com/email.html  \n\nThis file was not retrieved by Teleport Pro, because it is addressed on a domain or path outside the boundaries set for its Starting Address.  \n\nDo you want to open it from the server?'))window.location='http://www.vbapi.com/email.html#secure'" tppabs="http://www.vbapi.com/email.html#secure">Send Encrypted E-Mail</A><BR>
+This page is at <A href="registerclassex.html" tppabs="http://www.vbapi.com/ref/r/registerclassex.html">http://www.vbapi.com/ref/r/registerclassex.html</A></P>
+</BODY>
+</HTML>

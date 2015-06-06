@@ -1,0 +1,107 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+<HTML lang="en-us">
+<HEAD>
+<TITLE>Windows API Guide: FillMemory Function</TITLE>
+<META content="vbapi@vbapi.com" name="author">
+<META content="Information about the FillMemory function in the Windows API, geared towards the Visual Basic user." name="description">
+<META content="Kuliniewicz,Windows,Windows 95,Windows NT,Windows 98,Windows CE,Windows 2000,API,Application Programming Interface,Programming,Visual Basic,Basic,VB,FillMemory" name="keywords">
+<META content="Omicron HTML Editor" name="generator">
+<META content="Mon, 26 Jul 1999 01:19:00 GMT" http-equiv="Last-Modified">
+<LINK href="default.css" tppabs="http://www.vbapi.com/css/default.css" rel="stylesheet" type="text/css">
+<LINK href="index-1.html" tppabs="http://www.vbapi.com/index.html" rel="home">
+
+<LINK href="glossary.html" tppabs="http://www.vbapi.com/ref/glossary.html" rel="glossary">
+<LINK href="copyrite.html" tppabs="http://www.vbapi.com/copyrite.html" rel="copyright">
+</HEAD>
+<BODY>
+
+<!-- Begin Adslot1 -->
+<CENTER>
+<SCRIPT language="JAVASCRIPT">
+<!-- hide from older browsers
+now = new Date();
+my_random = now.getTime();
+document.write('<A href="http://adex3.flycast.com/server/socket/127.0.0.1:2800/click/VBWorldnet/VBAPI/' + my_random + '">');
+document.write('<IMG width="468" height="60" border="1" src="http://adex3.flycast.com/server/socket/127.0.0.1:2800/ad/VBWorldnet/VBAPI/' + my_random + '"></A>');
+// -->
+</SCRIPT>
+</CENTER>
+<!-- End Adslot1 -->
+
+<HR>
+
+<H1>FillMemory Function</H1>
+
+<P><CODE>Declare Sub FillMemory Lib "kernel32.dll" Alias "RtlFillMemory" (Destination As Any, ByVal Length As Long, ByVal Fill As Byte)</CODE></P>
+
+<H2>Platforms</H2>
+<P><UL>
+<LI><B>Windows 95:</B> Supported.
+<LI><B>Windows 98:</B> Supported.
+<LI><B>Windows NT:</B> Requires Windows NT 3.1 or later.
+<LI><B>Windows 2000:</B> Supported.
+<LI><B>Windows CE:</B> Not Supported.
+</UL></P>
+
+<H2>Description &amp; Usage</H2>
+<P><B>FillMemory</B> fills a location in memory with a certain value.  The function does this by setting each byte starting at the given memory location to the desired value.  The memory location is identified by a <A class="def" href="glossary.html#pointer" tppabs="http://www.vbapi.com/ref/glossary.html#pointer" rel="glossary">pointer</A> to the memory address.</P>
+
+<H2>Return Value</H2>
+<P><B>FillMemory</B> does not return a value.</P>
+
+<H2>Visual Basic-Specific Issues</H2>
+<P>A pointer to any variable can be automatically generated merely by passing that variable as <VAR>Destination</VAR>.  However, if either a String or a Long holding the desired memory address is passed, the ByVal keyword must preceed it.  See the example below for a demonstration.</P>
+
+<H2>Parameters</H2>
+<P><DL>
+<DT><VAR>Destination</VAR><DD>A pointer to the location in memory (often the memory address of a variable) to begin filling with a certain value.
+<DT><VAR>Length</VAR><DD>The number of memory bytes, beginning with the address identified by <VAR>Destination</VAR>, to fill.
+<DT><VAR>Fill</VAR><DD>The byte value to set each byte in the desired memory location to.
+</DL></P>
+
+<H2>Example</H2>
+<P><PRE><CODE class="example"><SPAN class="com">' This code is licensed according to the terms and conditions listed <A href="copyrite.html#license" tppabs="http://www.vbapi.com/copyrite.html#license" rel="copyright">here</A>.</SPAN>
+
+' Initialize all the elements in an array of bytes to the value 76.  Also
+' set each character in a 20-character string to the character "X".
+Dim bytearray(0 To 9) As Byte  ' array of 10 bytes
+Dim bytestring As String  ' string to fill
+Dim c As Integer  ' counter variable
+
+' Fill the memory at bytearray() in order to initialize its members to 76.  Note that, to
+' identify the pointer to bytearray()'s memory, it is passed as normal.
+<B>FillMemory</B> bytearray(0), 10, 76  ' fill 10 bytes to the byte value 76
+' Display the results to verify that it worked.
+For c = 0 To 9  ' loop through each element
+  Debug.Print bytearray(c);  ' each value displayed will be 76
+Next c
+
+' Now fill a 20-character string with "X" (using its ASCII code).  Note how, in Visual
+' Basic, the ByVal keyword must preceed the string in this case.
+bytestring = Space(20)  ' make the string 20 characters long
+<B>FillMemory</B> ByVal bytestring, 20, Asc("X")  ' set the contents to a bunch of "X"'s
+' Display the results to verify that it worked.
+Debug.Print bytestring  ' will be twenty X's</CODE></PRE></P>
+
+<H2>See Also</H2>
+<P><A href="zeromemory.html" tppabs="http://www.vbapi.com/ref/z/zeromemory.html">ZeroMemory</A></P>
+
+<H2>Category</H2>
+<P><A href="funcc.html#memory" tppabs="http://www.vbapi.com/ref/funcc.html#memory">Memory</A></P>
+
+<P><A href="funca.html" tppabs="http://www.vbapi.com/ref/funca.html">Go back to the alphabetical Function listing.</A><BR>
+<A href="index.html" tppabs="http://www.vbapi.com/ref/index.html">Go back to the Reference section index.</A></P>
+
+<HR>
+
+<P>
+<B>Last Modified:</B> July 25, 1999<BR>
+This page is copyright &copy; 1999 Paul Kuliniewicz.  
+<A href="copyrite.html" tppabs="http://www.vbapi.com/copyrite.html" rel="copyright">Copyright Information</A>  <B>Revised October 29, 2000</B><BR>
+
+<A href="index-1.html" tppabs="http://www.vbapi.com/index.html">Go back to the Windows API Guide home page.</A><BR>
+E-mail: <A href="javascript:if(confirm('http://www.vbapi.com/email.html  \n\nThis file was not retrieved by Teleport Pro, because it is addressed on a domain or path outside the boundaries set for its Starting Address.  \n\nDo you want to open it from the server?'))window.location='http://www.vbapi.com/email.html'" tppabs="http://www.vbapi.com/email.html">vbapi@vbapi.com</A>  <A href="javascript:if(confirm('http://www.vbapi.com/email.html  \n\nThis file was not retrieved by Teleport Pro, because it is addressed on a domain or path outside the boundaries set for its Starting Address.  \n\nDo you want to open it from the server?'))window.location='http://www.vbapi.com/email.html#secure'" tppabs="http://www.vbapi.com/email.html#secure">Send Encrypted E-Mail</A><BR>
+This page is at <A href="fillmemory.html" tppabs="http://www.vbapi.com/ref/f/fillmemory.html">http://www.vbapi.com/ref/f/fillmemory.html</A>
+</P>
+</BODY>
+</HTML>

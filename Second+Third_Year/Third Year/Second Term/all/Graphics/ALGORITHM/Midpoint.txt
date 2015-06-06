@@ -1,0 +1,26 @@
+void MidPoint(HDC hdc,int cx,int cy,int r,COLORREF col)
+{
+	int d=1-r;
+	int x=0,y=r;
+ 	SetPixel(hdc,cx,cy,col);
+	while(x<=y)
+	{
+	//   SetPixel(hdc,x,y,col);	
+		if(d<0)
+			d=d+2*x+3;
+		else
+		{
+			d=d+2*(x-y)+5;
+			y--;
+		}
+		x++;
+		SetPixel(hdc,x+cx,y+cy,col);
+		SetPixel(hdc,y+cy,x+cx,col);
+		SetPixel(hdc,-y+cy,x+cx,col);
+		SetPixel(hdc,-x+cx,y+cy,col);
+		SetPixel(hdc,-x+cx,-y+cy,col);
+		SetPixel(hdc,x+cx,-y+cy,col);
+		SetPixel(hdc,y+cy,-x+cx,col);
+		SetPixel(hdc,-y+cy,-x+cx,col);	
+	}
+}

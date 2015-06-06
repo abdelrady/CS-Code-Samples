@@ -1,0 +1,90 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+<HTML lang="en-us">
+<HEAD>
+<TITLE>Windows API Guide: PtInRegion Function</TITLE>
+<META content="vbapi@vbapi.com" name="author">
+<META content="Information about the PtInRegion function in the Windows API, geared towards the Visual Basic user." name="description">
+<META content="Kuliniewicz,Windows,Windows 95,Windows NT,Windows 98,Windows 32s,32s,API,Application Programming Interface,Programming,Visual Basic,Basic,VB,PtInRegion" name="keywords">
+<META content="Omicron HTML Editor" name="generator">
+<LINK href="default.css" tppabs="http://www.vbapi.com/css/default.css" rel="stylesheet" type="text/css">
+<LINK href="index-1.html" tppabs="http://www.vbapi.com/index.html" rel="home">
+</HEAD>
+<BODY>
+
+<!-- Begin Adslot1 -->
+<CENTER>
+<SCRIPT language="JAVASCRIPT">
+<!-- hide from older browsers
+now = new Date();
+my_random = now.getTime();
+document.write('<A href="http://adex3.flycast.com/server/socket/127.0.0.1:2800/click/VBWorldnet/VBAPI/' + my_random + '">');
+document.write('<IMG width="468" height="60" border="1" src="http://adex3.flycast.com/server/socket/127.0.0.1:2800/ad/VBWorldnet/VBAPI/' + my_random + '"></A>');
+// -->
+</SCRIPT>
+</CENTER>
+<!-- End Adslot1 -->
+
+<HR>
+
+<H1>PtInRegion Function</H1>
+
+<P><CODE class="declare">Declare Function PtInRegion Lib "gdi32.dll" (ByVal hRgn As Long, ByVal x As Long, ByVal y As Long) As Long</CODE>
+
+<P><B>Platforms:</B> Win 32s, Win 95/98, Win NT
+
+<P><B>PtInRegion</B> determines if a given point lies within a region.  The point is considered to be inside the region if it is within the area bounded by the region.  The function returns 0 if the point is not inside the region, or a non-zero value if the point is in the region.
+
+<DL>
+<DT><VAR>hRgn</VAR><DD>A handle to the region to determine if a given point lies within.
+<DT><VAR>x</VAR><DD>The x-coordinate of the point to determine if it lies within the region.
+<DT><VAR>y</VAR><DD>The y-coordinate of the point to determine if it lies within the region.
+</DL>
+
+<P><B>Example:</B>
+<PRE><CODE class="example">' Consider a line connecting the upper-right and lower-left corners of the
+' screen, and consider the region made of the upper-left side of this line.  Determine
+' if the mouse cursor lies within this region or not.
+Dim swidth As Long, sheight As Long  ' width and height of the screen
+Dim hRgn As Long  ' handle to the triangular region explained above
+Dim curpos As <A href="point_type.html" tppabs="http://www.vbapi.com/ref/p/point_type.html">POINT_TYPE</A>  ' receives location of mouse cursor
+Dim vertices(0 To 2) As <A href="point_type.html" tppabs="http://www.vbapi.com/ref/p/point_type.html">POINT_TYPE</A>  ' vertices of region to create
+Dim isinside As Long  ' receives 0 if not inside, non-zero otherwise
+Dim retval As Long  ' generic return value
+
+' Get the screen's width and height.  Use this information to create the region.
+swidth = <A href="getsystemmetrics.html" tppabs="http://www.vbapi.com/ref/g/getsystemmetrics.html">GetSystemMetrics</A>(SM_CXSCREEN)  ' screen width
+sheight = <A href="getsystemmetrics.html" tppabs="http://www.vbapi.com/ref/g/getsystemmetrics.html">GetSystemMetrics</A>(SM_CYSCREEN)   ' screen height
+' Load region's vertices into the array and create it.
+vertices(0).x = 0: vertices(0).y = 0  ' vertex #1: upper-left corner of screen
+vertices(1).x = swidth: vertices(1).y = 0  ' vertex #2: upper-right corner of screen
+vertices(2).x = 0: vertices(2).y = sheight  ' vertex #3: lower-left corner of screen
+hRgn = <A href="createpolygonrgn.html" tppabs="http://www.vbapi.com/ref/c/createpolygonrgn.html">CreatePolygonRgn</A>(vertices(0), 3, ALTERNATE)  ' create the region
+
+' Get the current position of the mouse cursor.
+retval = <A href="getcursorpos.html" tppabs="http://www.vbapi.com/ref/g/getcursorpos.html">GetCursorPos</A>(curpos)
+' Determine if the cursor location lies within the region.
+isinside = <B>PtInRegion</B>(hRgn, curpos.x, curpos.y)  ' is the point in the region?
+If isinside = 0 Then  ' not inside
+  Debug.Print "The cursor is not inside the region."
+Else
+  Debug.Print "The cursor is inside the region."
+End If
+
+' Delete the region to free up resources.
+retval = <A href="deleteobject.html" tppabs="http://www.vbapi.com/ref/d/deleteobject.html">DeleteObject</A>(hRgn)</CODE></PRE>
+
+<P><B>See Also:</B> <A href="rectinregion.html" tppabs="http://www.vbapi.com/ref/r/rectinregion.html">RectInRegion</A><BR>
+<B>Category:</B> <A href="index.html#regions" tppabs="http://www.vbapi.com/ref/index.html#regions">Regions</A></P>
+
+<P><A href="funca.html" tppabs="http://www.vbapi.com/ref/funca.html">Go back to the alphabetical Function listing.</A><BR>
+<A href="index.html" tppabs="http://www.vbapi.com/ref/index.html">Go back to the Reference section index.</A></P>
+
+<HR>
+
+<P>This page is copyright &copy; 2000 Paul Kuliniewicz.  <A href="copyrite.html" tppabs="http://www.vbapi.com/copyrite.html" rel="copyright">Copyright Information.</A><BR>
+<A href="index-1.html" tppabs="http://www.vbapi.com/index.html">Go back to the Windows API Guide home page.</A><BR>
+E-mail: <A href="javascript:if(confirm('http://www.vbapi.com/email.html  \n\nThis file was not retrieved by Teleport Pro, because it is addressed on a domain or path outside the boundaries set for its Starting Address.  \n\nDo you want to open it from the server?'))window.location='http://www.vbapi.com/email.html'" tppabs="http://www.vbapi.com/email.html">vbapi@vbapi.com</A>  <A href="javascript:if(confirm('http://www.vbapi.com/email.html  \n\nThis file was not retrieved by Teleport Pro, because it is addressed on a domain or path outside the boundaries set for its Starting Address.  \n\nDo you want to open it from the server?'))window.location='http://www.vbapi.com/email.html#secure'" tppabs="http://www.vbapi.com/email.html#secure">Send Encrypted E-Mail</A><BR>
+This page is at <A href="ptinregion.html" tppabs="http://www.vbapi.com/ref/p/ptinregion.html">http://www.vbapi.com/ref/p/ptinregion.html</A>
+
+</BODY>
+</HTML>

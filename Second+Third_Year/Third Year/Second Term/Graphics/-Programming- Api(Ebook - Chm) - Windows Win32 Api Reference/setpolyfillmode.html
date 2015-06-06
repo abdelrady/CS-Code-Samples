@@ -1,0 +1,79 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+<HTML lang="en-us">
+<HEAD>
+<TITLE>Windows API Guide: SetPolyFillMode Function</TITLE>
+<META content="vbapi@vbapi.com" name="author">
+<META content="Information about the SetPolyFillMode function in the Windows API, geared towards the Visual Basic user." name="description">
+<META content="Kuliniewicz,Windows,Windows 95,Windows NT,Windows 98,Windows 32s,32s,API,Application Programming Interface,Programming,Visual Basic,Basic,VB,SetPolyFillMode" name="keywords">
+<META content="Omicron HTML Editor" name="generator">
+<LINK href="default.css" tppabs="http://www.vbapi.com/css/default.css" rel="stylesheet" type="text/css">
+<LINK href="index-1.html" tppabs="http://www.vbapi.com/index.html" rel="home">
+</HEAD>
+<BODY>
+
+<!-- Begin Adslot1 -->
+<CENTER>
+<SCRIPT language="JAVASCRIPT">
+<!-- hide from older browsers
+now = new Date();
+my_random = now.getTime();
+document.write('<A href="http://adex3.flycast.com/server/socket/127.0.0.1:2800/click/VBWorldnet/VBAPI/' + my_random + '">');
+document.write('<IMG width="468" height="60" border="1" src="http://adex3.flycast.com/server/socket/127.0.0.1:2800/ad/VBWorldnet/VBAPI/' + my_random + '"></A>');
+// -->
+</SCRIPT>
+</CENTER>
+<!-- End Adslot1 -->
+
+<HR>
+
+<H1>SetPolyFillMode Function</H1>
+
+<P><CODE class="declare">Declare Function SetPolyFillMode Lib "gdi32.dll" (ByVal hdc As Long, ByVal nPolyFillMode As Long) As Long</CODE>
+
+<P><B>Platforms:</B> Win 32s, Win 95/98, Win NT
+
+<P><B>SetPolyFillMode</B> sets the method used by a device to fill polygonal areas and shapes.  The two modes differ only over complex overlapping polygons, where the edges of the polygon criss-cross each other inside the interior (see the example for an example of a complex overlapping polygon).  The function returns 0 if an error occured, or exactly one of the polygon fill mode flags specifying the filling mode the device had previously been set to.
+
+<DL>
+<DT><VAR>hdc</VAR><DD>A device context to the device to set the polygon filling mode of.
+<DT><VAR>nPolyFillMode</VAR><DD>Exactly one of the following flags specifying the polygon filling mode to use:
+<DL>
+<DT>ALTERNATE = 1<DD>The device alternates between filling and not filling contiguous sections whose boundaries are determined by the edge(s) of the polygon crossing through the polygon's interior.
+<DT>WINDING = 2<DD>Any section inside the polygon is filled, regardless of any intra-polygonal boundaries and edges.
+</DL>
+</DL>
+
+<P><B>Example:</B>
+<PRE><CODE class="example">' Use the alternating fill mode to fill that five-pointed star that everyone
+' knows so well.  Alternating filling tells window Form1 not to fill in the pentagonal interior
+' of the star.  It's hard to describe, so just run the example!
+Dim points(0 to 4) As <A href="point_type.html" tppabs="http://www.vbapi.com/ref/p/point_type.html">POINT_TYPE</A>  ' points of the star
+Dim retval As Long  ' return value
+
+' Load the coordinates of a somewhat distorted five-pointed "pentagram" star
+' design into the array.
+points(0).x = 200: points(0).y = 400  ' 1st point: (200,400)
+points(1).x = 300: points(1).y = 200  ' 2nd point: (300,200)
+points(2).x = 400: points(2).y = 400  ' 3rd point: (400,400)
+points(3).x = 150: points(3).y = 300  ' 4th point: (150,300)
+points(4).x = 450: points(4).y = 300  ' 5th point: (450,300)
+
+' Draw the polygon using alternating fill mode
+retval = <B>SetPolyFillMode</B>(Form1.hDC, ALTERNATE)  ' set the fill mode
+retval = <A href="polygon.html" tppabs="http://www.vbapi.com/ref/p/polygon.html">Polygon</A>(Form1.hDC, points(0), 5)  ' draw the polygon</CODE></PRE>
+
+<P><B>See Also:</B> <A href="getpolyfillmode.html" tppabs="http://www.vbapi.com/ref/g/getpolyfillmode.html">GetPolyFillMode</A><BR>
+<B>Category:</B> <A href="index.html#regions" tppabs="http://www.vbapi.com/ref/index.html#regions">Regions</A></P>
+
+<P><A href="funca.html" tppabs="http://www.vbapi.com/ref/funca.html">Go back to the alphabetical Function listing.</A><BR>
+<A href="index.html" tppabs="http://www.vbapi.com/ref/index.html">Go back to the Reference section index.</A></P>
+
+<HR>
+
+<P>This page is copyright &copy; 2000 Paul Kuliniewicz.  <A href="copyrite.html" tppabs="http://www.vbapi.com/copyrite.html" rel="copyright">Copyright Information.</A><BR>
+<A href="index-1.html" tppabs="http://www.vbapi.com/index.html">Go back to the Windows API Guide home page.</A><BR>
+E-mail: <A href="javascript:if(confirm('http://www.vbapi.com/email.html  \n\nThis file was not retrieved by Teleport Pro, because it is addressed on a domain or path outside the boundaries set for its Starting Address.  \n\nDo you want to open it from the server?'))window.location='http://www.vbapi.com/email.html'" tppabs="http://www.vbapi.com/email.html">vbapi@vbapi.com</A>  <A href="javascript:if(confirm('http://www.vbapi.com/email.html  \n\nThis file was not retrieved by Teleport Pro, because it is addressed on a domain or path outside the boundaries set for its Starting Address.  \n\nDo you want to open it from the server?'))window.location='http://www.vbapi.com/email.html#secure'" tppabs="http://www.vbapi.com/email.html#secure">Send Encrypted E-Mail</A><BR>
+This page is at <A href="setpolyfillmode.html" tppabs="http://www.vbapi.com/ref/s/setpolyfillmode.html">http://www.vbapi.com/ref/s/setpolyfillmode.html</A>
+
+</BODY>
+</HTML>

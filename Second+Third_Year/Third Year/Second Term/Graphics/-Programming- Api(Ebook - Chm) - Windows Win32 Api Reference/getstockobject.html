@@ -1,0 +1,94 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+<HTML lang="en-us">
+<HEAD>
+<TITLE>Windows API Guide: GetStockObject Function</TITLE>
+<META content="vbapi@vbapi.com" name="author">
+<META content="Information about the GetStockObject function in the Windows API, geared towards the Visual Basic user." name="description">
+<META content="Kuliniewicz,Windows,Windows 95,Windows NT,Windows 98,Windows 32s,32s,API,Application Programming Interface,Programming,Visual Basic,Basic,VB,GetStockObject" name="keywords">
+<META content="Omicron HTML Editor" name="generator">
+<LINK href="default.css" tppabs="http://www.vbapi.com/css/default.css" rel="stylesheet" type="text/css">
+<LINK href="index-1.html" tppabs="http://www.vbapi.com/index.html" rel="home">
+</HEAD>
+<BODY>
+
+<!-- Begin Adslot1 -->
+<CENTER>
+<SCRIPT language="JAVASCRIPT">
+<!-- hide from older browsers
+now = new Date();
+my_random = now.getTime();
+document.write('<A href="http://adex3.flycast.com/server/socket/127.0.0.1:2800/click/VBWorldnet/VBAPI/' + my_random + '">');
+document.write('<IMG width="468" height="60" border="1" src="http://adex3.flycast.com/server/socket/127.0.0.1:2800/ad/VBWorldnet/VBAPI/' + my_random + '"></A>');
+// -->
+</SCRIPT>
+</CENTER>
+<!-- End Adslot1 -->
+
+<HR>
+
+<H1>GetStockObject Function</H1>
+
+<P><CODE class="declare">Declare Function GetStockObject Lib "gdi32.dll" (ByVal nIndex As Long) As Long</CODE>
+
+<P><B>Platforms:</B> Win 32s, Win 95/98, Win NT
+
+<P><B>GetStockObject</B> accesses one of Windows's stock pens, brushes, fonts, or palettes.  This function provides fast access to these commonly used objects, instead of having to use more complicated functions.  The function returns a handle to the pen, brush, font, or palette which the function accesses.  Although the program isn't required to delete the handle using <A href="deleteobject.html" tppabs="http://www.vbapi.com/ref/d/deleteobject.html">DeleteObject</A>, doing so doesn't have any adverse effects.
+
+<DL>
+<DT><VAR>nIndex</VAR><DD>Exactly one of the following flags specifying which of the stock objects to create a handle to:
+<DL>
+<DT>ANSI_FIXED_FONT = 11<DD>The system's normal monospaced font.
+<DT>ANSI_VAR_FONT = 12<DD>The system's normal proportional-width font.
+<DT>BLACK_BRUSH = 4<DD>A solid black brush.
+<DT>BLACK_PEN = 7<DD>A solid black pen.
+<DT>DEFAULT_GUI_FONT = 17<DD><B>Win 95/98 only:</B> The default font for user objects under Windows.
+<DT>DEFAULT_PALETTE = 15<DD>The default system palette.
+<DT>DEVICE_DEFAULT_FONT = 14<DD><B>Win NT only:</B> a device-dependent font.
+<DT>DKGRAY_BRUSH = 3<DD>A solid dark gray brush.
+<DT>GRAY_BRUSH = 2<DD>A solid gray brush.
+<DT>HOLLOW_BRUSH = 5<DD>Same as NULL_BRUSH.
+<DT>LTGRAY_BRUSH = 1<DD>A solid light gray brush.
+<DT>NULL_BRUSH = 5<DD>A null brush; i.e., a brush that does not draw anything on the device.
+<DT>NULL_PEN = 8<DD>A null pen; i.e., a pen that does not draw anything on the device.
+<DT>OEM_FIXED_FONT = 10<DD>The Original Equipment Manufacturer's default monospaced font.
+<DT>SYSTEM_FIXED_FONT = 16<DD>The system monospaced font under pre-3.x versions of Windows.
+<DT>SYSTEM_FONT = 13<DD>The system font (used for most system objects under Windows).
+<DT>WHITE_BRUSH = 0<DD>A solid white brush.
+<DT>WHITE_PEN = 6<DD>A solid white pen.
+</DL>
+</DL>
+
+<P><B>Example:</B>
+<PRE><CODE class="example">' Draw a rectangle with a black border and light gray filled interior
+' on window Form1.  Use stock pens and brushes to do this.
+Dim hbrush As Long, holdbrush As Long  ' handles to stock brush &amp; default brush
+Dim hpen As Long, holdpen As Long  ' handles to stock pen &amp; default pen
+Dim retval As Long  ' return value
+
+' Load the stock pen and brush needed for this operation
+hpen = <B>GetStockObject</B>(BLACK_PEN)  ' load the black solid pen
+hbrush = <B>GetStockObject</B>(LTGRAY_BRUSH)  ' load the light gray solid brush
+' Select the two objects in Form1 and save the defaults
+holdpen = <A href="selectobject.html" tppabs="http://www.vbapi.com/ref/s/selectobject.html">SelectObject</A>(Form1.hDC, hpen)  ' select the pen
+holdbrush = <A href="selectobject.html" tppabs="http://www.vbapi.com/ref/s/selectobject.html">SelectObject</A>(Form1.hDC, hbrush)  ' select the brush
+' Draw the rectangle using the pen and brush.  The rectangle has corners (20,25)-(200,175)
+retval = <A href="rectangle.html" tppabs="http://www.vbapi.com/ref/r/rectangle.html">Rectangle</A>(Form1.hDC, 20, 25, 200, 175)
+' Restore Form1's previously selected pen and brush
+retval = <A href="selectobject.html" tppabs="http://www.vbapi.com/ref/s/selectobject.html">SelectObject</A>(Form1.hDC, holdpen)  ' reselect old pen
+retval = <A href="selectobject.html" tppabs="http://www.vbapi.com/ref/s/selectobject.html">SelectObject</A>(Form1.hDC, holdbrush)  ' reselect old brush
+' Note that it is not necessary to delete hpen and hbrush, but we could if we wanted.</CODE></PRE>
+
+<P><B>Category:</B> <A href="index.html#devices" tppabs="http://www.vbapi.com/ref/index.html#devices">Devices</A></P>
+
+<P><A href="funca.html" tppabs="http://www.vbapi.com/ref/funca.html">Go back to the alphabetical Function listing.</A><BR>
+<A href="index.html" tppabs="http://www.vbapi.com/ref/index.html">Go back to the Reference section index.</A></P>
+
+<HR>
+
+<P>This page is copyright &copy; 2000 Paul Kuliniewicz.  <A href="copyrite.html" tppabs="http://www.vbapi.com/copyrite.html" rel="copyright">Copyright Information.</A><BR>
+<A href="index-1.html" tppabs="http://www.vbapi.com/index.html">Go back to the Windows API Guide home page.</A><BR>
+E-mail: <A href="javascript:if(confirm('http://www.vbapi.com/email.html  \n\nThis file was not retrieved by Teleport Pro, because it is addressed on a domain or path outside the boundaries set for its Starting Address.  \n\nDo you want to open it from the server?'))window.location='http://www.vbapi.com/email.html'" tppabs="http://www.vbapi.com/email.html">vbapi@vbapi.com</A>  <A href="javascript:if(confirm('http://www.vbapi.com/email.html  \n\nThis file was not retrieved by Teleport Pro, because it is addressed on a domain or path outside the boundaries set for its Starting Address.  \n\nDo you want to open it from the server?'))window.location='http://www.vbapi.com/email.html#secure'" tppabs="http://www.vbapi.com/email.html#secure">Send Encrypted E-Mail</A><BR>
+This page is at <A href="getstockobject.html" tppabs="http://www.vbapi.com/ref/g/getstockobject.html">http://www.vbapi.com/ref/g/getstockobject.html</A>
+
+</BODY>
+</HTML>

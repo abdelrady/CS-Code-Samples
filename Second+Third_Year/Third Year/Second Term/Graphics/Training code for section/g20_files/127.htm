@@ -1,0 +1,838 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!-- saved from url=(0039)http://www2.webng.com/amrlearn/127.html -->
+<HTML><HEAD><TITLE>Paint Program Like MS Paint</TITLE><LINK 
+href="127_files/stylesheet.css" type=text/css rel=stylesheet>
+<META http-equiv=Content-Type content="text/html; charset=UTF-8">
+<META content="Computer Graphics, Paint Program Like MS Paint " 
+name=description>
+<META 
+content="Free, Source, codes, Computer Graphics, Computer,free source code of MS Paint, Graphics,free, Paint, Program, Like, MS Paint " 
+name=keywords>
+<META content="Copyright 2007 Amr Saber" name=copyright>
+<META content="MSHTML 6.00.2900.2180" name=GENERATOR></HEAD>
+<BODY>
+<CENTER>
+<DIV id=header>
+<SCRIPT type=text/javascript><!--
+google_ad_client = "pub-9653171024150495";
+google_alternate_color = "C3D9FF";
+google_ad_width = 728;
+google_ad_height = 90;
+google_ad_format = "728x90_as";
+google_ad_type = "text";
+//2007-02-02: header
+google_ad_channel = "7161698987";
+//--></SCRIPT>
+
+<SCRIPT src="127_files/show_ads.js" type=text/javascript>
+</SCRIPT>
+</DIV></CENTER>
+<DIV id=index>
+<H3>Goooooooogle</H3>
+<SCRIPT type=text/javascript><!--
+google_ad_client = "pub-9653171024150495";
+google_alternate_color = "C3D9FF";
+google_ad_width = 120;
+google_ad_height = 600;
+google_ad_format = "120x600_as";
+google_ad_type = "text";
+//2007-02-02: header, right
+google_ad_channel = "7161698987+2593520185";
+//--></SCRIPT>
+
+<SCRIPT src="127_files/show_ads.js" type=text/javascript>
+</SCRIPT>
+</DIV>
+<DIV id=index2>
+<H3>Goooooooogle</H3>
+<SCRIPT type=text/javascript><!--
+google_ad_client = "pub-9653171024150495";
+google_alternate_color = "C3D9FF";
+google_ad_width = 120;
+google_ad_height = 600;
+google_ad_format = "120x600_as";
+google_ad_type = "text";
+google_ad_channel = "";
+//--></SCRIPT>
+
+<SCRIPT src="127_files/show_ads.js" type=text/javascript>
+</SCRIPT>
+</DIV>
+<DIV id=content>
+<H3>Paint Program Like MS Paint</H3><TEXTAREA>
+Paint.cpp
+------------
+////////////
+------------
+
+
+#include &lt;windows.h&gt;
+#include &lt;math.h&gt;
+#include &lt;stdio.h&gt;
+#include "commdlg.h"
+#include "resource.h"
+#include&lt;fstream.h&gt;
+void openDialog(HDC hdc);
+void saveDialog(HDC hdc);
+void openFile(HDC hdc,char * ch);
+void saveFile(HDC hdc,char * ch); 
+void chooseColor(HDC hdc);
+void DDA(int xs,int ys,int xe,int ye,HDC hdc,COLORREF color);
+void Circle(int x,int y,int r,HDC hdc);
+void ellipse(int a,int b,HDC hdc);
+void Square(HDC hdc);
+void Rect(HDC hdc);
+void boundary(HDC hdc,int x,int y);
+LRESULT CALLBACK WindowFunc(HWND,UINT,WPARAM,LPARAM);
+bool CALLBACK DialogFunc(HWND ,UINT,WPARAM,LPARAM);
+HWND hwnd,hdlg;
+HDC hdc;
+HDC memdc;
+HBITMAP hbit;
+HBRUSH hBrush,hBrush1;
+char d='l';
+POINT point1;
+POINT point2;
+COLORREF GColor;
+HACCEL hAccel;
+int maxX,maxY;
+HMENU hMenu;
+bool change=false,visible=true,restore=true;
+char szWinName[]="PAINT";
+HINSTANCE hThisInst1,Inst;
+int WINAPI WinMain(HINSTANCE hThisInst,HINSTANCE hPevInst,LPSTR lpszArgs,int nWinMode)
+{
+	
+	MSG msg;
+	WNDCLASSEX wcl;
+	wcl.cbSize=sizeof(WNDCLASSEX);
+	wcl.hInstance=hThisInst=hThisInst; 
+	wcl.lpszClassName=szWinName;
+	wcl.lpfnWndProc=WindowFunc;
+	wcl.style=0;
+	wcl.hIcon=LoadIcon(hThisInst,"icon1");
+	wcl.hIconSm=LoadIcon(hThisInst,"icon1.ico");
+	wcl.hCursor=LoadCursor(hThisInst1,"cursor1.cur");
+	wcl.hCursor=LoadCursor(NULL,IDC_CROSS);
+	wcl.lpszMenuName="MyMenu";
+	wcl.cbWndExtra=0;
+	wcl.cbClsExtra=0;
+	wcl.hbrBackground=(HBRUSH) GetStockObject(LTGRAY_BRUSH);
+	if(!RegisterClassEx(&amp;wcl))return 0;
+	hwnd=CreateWindow(szWinName,
+		"Paint Brush",
+		WS_OVERLAPPEDWINDOW,
+		CW_USEDEFAULT,
+		CW_USEDEFAULT,
+		CW_USEDEFAULT,
+		CW_USEDEFAULT,
+		HWND_DESKTOP,
+		NULL,
+		hThisInst,
+		NULL);
+	Inst=hThisInst;
+	hAccel=LoadAccelerators(hThisInst,"MYMENU");
+	ShowWindow(hwnd,nWinMode);
+	UpdateWindow(hwnd);
+	hdlg=CreateDialog(Inst,"MYDIALOG",hwnd,(DLGPROC)DialogFunc);
+	while(GetMessage(&amp;msg,NULL,0,0))
+	{
+		if(!TranslateAccelerator(hwnd,hAccel,&amp;msg))
+		{
+			TranslateMessage(&amp;msg);
+			DispatchMessage(&amp;msg);
+		}
+	}
+	return msg.wParam;
+}
+LRESULT CALLBACK WindowFunc(HWND hwnd,UINT message,WPARAM wParam,LPARAM lParam)
+{
+	HDC hdc;
+	PAINTSTRUCT paintstruct;
+	hMenu=GetMenu(hwnd);
+	static char fn[256];
+	int response=0;
+	hdc=GetDC(hwnd);
+	switch(message)
+	{
+	case WM_CREATE:
+		maxX=GetSystemMetrics(SM_CXSCREEN);
+		maxY=GetSystemMetrics(SM_CYSCREEN);
+		hdc=GetDC(hwnd);
+		memdc=CreateCompatibleDC(hdc);
+		hbit=CreateCompatibleBitmap(hdc,maxX,maxY);
+		SelectObject(memdc,hbit);
+		hBrush=(HBRUSH)GetStockObject(WHITE_BRUSH);
+		PatBlt(memdc,0,0,maxX,maxY,PATCOPY);
+		CheckMenuRadioItem(hMenu,IDM_COLOR_RED,IDM_COLOR_CHOOSE,IDM_COLOR_BLACK,MF_BYCOMMAND);
+		CheckMenuRadioItem(hMenu,IDM_DRAW_LINE,IDM_DRAW_FILL,IDM_DRAW_LINE,MF_BYCOMMAND);
+		CheckMenuItem(hMenu,IDM_VIEW_TOOLBOX,MF_BYCOMMAND|MF_CHECKED);
+		ReleaseDC(hwnd,hdc);
+		break;
+	case WM_COMMAND:
+		switch(LOWORD(wParam))
+		{
+			case IDM_FILE_NEW:
+				if(change)
+				{
+					change=false;
+					response=MessageBox(hwnd,"Do You Want To Save Changes","SAVE",MB_ICONEXCLAMATION | MB_YESNO);
+						if(response==IDYES)
+							saveDialog(hdc);
+				
+					PatBlt(memdc,0,0,maxX,maxY,PATCOPY);		
+					InvalidateRect(hwnd,NULL,1);	
+				}
+				break;
+			case IDM_FILE_OPEN:
+					//HDC hdc=GetDC(hwnd);
+					openDialog(hdc);
+					//ReleaseDC(hwnd,hdc);
+				break;
+			case IDM_FILE_SAVE:
+					//HDC hdc=GetDC(hwnd);
+					saveDialog(hdc);
+					//ReleaseDC(hwnd,hdc);
+				break;
+			case IDM_FILE_EXIT:
+				//response=MessageBox(hwnd,"Quit the program?","Exit",MB_YESNO);
+				//if(response==IDYES)	
+				if(change)
+					{
+						response=MessageBox(hwnd,"Do You Want Save Changes ?","PAINT BRUSH",MB_ICONEXCLAMATION|MB_YESNOCANCEL);
+						if(response==IDYES)
+						{
+							PostQuitMessage(0);
+							saveDialog(hdc);
+						}
+						else if(response==IDNO)
+							PostQuitMessage(0);
+					}
+				break;
+//////////////////////////////////////////////////////////////////////
+			case IDM_COLOR_CHOOSE:
+				GetDC(hwnd);
+				CheckMenuRadioItem(hMenu,IDM_COLOR_RED,IDM_COLOR_CHOOSE,IDM_COLOR_CHOOSE,MF_BYCOMMAND);
+				chooseColor(hdc);
+				ReleaseDC(hwnd,hdc);
+				break;
+			case IDM_COLOR_RED:
+				CheckMenuRadioItem(hMenu,IDM_COLOR_RED,IDM_COLOR_CHOOSE,IDM_COLOR_RED,MF_BYCOMMAND);
+				GColor=RGB(255,0,0);
+				break;
+			case IDM_COLOR_GREEN:
+				CheckMenuRadioItem(hMenu,IDM_COLOR_RED,IDM_COLOR_CHOOSE,IDM_COLOR_GREEN,MF_BYCOMMAND);
+				GColor=RGB(0,255,0);
+				break;
+			case IDM_COLOR_BLUE:
+				CheckMenuRadioItem(hMenu,IDM_COLOR_RED,IDM_COLOR_CHOOSE,IDM_COLOR_BLUE,MF_BYCOMMAND);
+				GColor=RGB(0,0,255);
+				break;
+			case IDM_COLOR_BLACK:
+				CheckMenuRadioItem(hMenu,IDM_COLOR_RED,IDM_COLOR_CHOOSE,IDM_COLOR_BLACK,MF_BYCOMMAND);
+				GColor=RGB(0,0,0);
+				break;
+///////////////////////////////////////////////////////////////////////////
+			case IDM_DRAW_LINE:
+				CheckMenuRadioItem(hMenu,IDM_DRAW_LINE,IDM_DRAW_FILL,IDM_DRAW_LINE,MF_BYCOMMAND);
+				d='l';
+				break;
+			case IDM_DRAW_CIRCLE:
+				CheckMenuRadioItem(hMenu,IDM_DRAW_LINE,IDM_DRAW_FILL,IDM_DRAW_CIRCLE,MF_BYCOMMAND);
+				d='c';
+				break;
+			case IDM_DRAW_ELLIPSE:
+				CheckMenuRadioItem(hMenu,IDM_DRAW_LINE,IDM_DRAW_FILL,IDM_DRAW_ELLIPSE,MF_BYCOMMAND);
+				d='e';
+				break;
+			case IDM_DRAW_SQUARE:
+				CheckMenuRadioItem(hMenu,IDM_DRAW_LINE,IDM_DRAW_FILL,IDM_DRAW_SQUARE,MF_BYCOMMAND);
+				d='s';
+				break;
+			case IDM_DRAW_RECTANGLE:
+				CheckMenuRadioItem(hMenu,IDM_DRAW_LINE,IDM_DRAW_FILL,IDM_DRAW_RECTANGLE,MF_BYCOMMAND);
+				d='r';
+				break;
+			case IDM_DRAW_FILL:
+				LoadCursor(NULL,"cursor1.cur");
+				CheckMenuRadioItem(hMenu,IDM_DRAW_LINE,IDM_DRAW_FILL,IDM_DRAW_FILL,MF_BYCOMMAND);
+				d='f';
+				break;
+///////////////////////////////////////////////////////////////////////////
+			case IDM_VIEW_TOOLBOX:
+				if(visible)
+				{
+					CheckMenuItem(hMenu,IDM_VIEW_TOOLBOX,MF_BYCOMMAND|MF_UNCHECKED);
+					DestroyWindow(hdlg);
+					visible=false;
+				}
+				else
+				{
+					CheckMenuItem(hMenu,IDM_VIEW_TOOLBOX,MF_BYCOMMAND|MF_CHECKED);
+					hdlg=CreateDialog(Inst,"MYDIALOG",hwnd,(DLGPROC)DialogFunc);
+					visible=true;
+				}
+				break;
+////////////////////////////////////////////////////////////////
+			case IDM_HELP_ABOUT:
+				MessageBox(hwnd,"Paint Program \n\nVersion 1.0","About",MB_ICONINFORMATION|MB_OK);
+				break;
+			case IDM_HELP_CONTENT:
+				WinHelp(hwnd,"PAINTHELP.hlp",HELP_CONTENTS,0);
+				break;
+		}
+		break;
+//////////////////////////////////////////////////////////////////
+	case WM_SIZE:
+		//DestroyWindow(hdlg);
+		//hdlg=CreateDialog(Inst,"MYDIALOG",hwnd,(DLGPROC)DialogFunc);
+		break;
+	case WM_MOVE:
+		//DestroyWindow(hdlg);
+		//hdlg=CreateDialog(Inst,"MYDIALOG",hwnd,(DLGPROC)DialogFunc);
+		break;
+///////////////////////////////////////////////////////////////////
+	case WM_LBUTTONDOWN:
+		point1.x=LOWORD(lParam);
+		point1.y=HIWORD(lParam);
+		break;
+	case WM_LBUTTONUP:
+		{
+			change=true;
+			GetDC(hwnd);
+			point2.x=LOWORD(lParam);
+			point2.y=HIWORD(lParam);
+			switch(d)
+			{
+			case 'l':
+				DDA(point1.x,point1.y,point2.x,point2.y,memdc,GColor); 
+				InvalidateRect(hwnd,NULL,1);	
+				break;
+			case 's':
+				Square(memdc);
+				InvalidateRect(hwnd,NULL,1);	
+				break;
+			case 'r':
+				Rect(memdc); 
+				InvalidateRect(hwnd,NULL,1);	
+				break;
+			case 'c':
+				{
+					int XMin,YMin,dx,dy,r;
+					dx=(int)fabs(point2.x-point1.x);
+					dy=(int)fabs(point2.y-point1.y);
+					if(dx&gt;dy)
+						r=dx;
+					else 
+						r=dy;
+					if(point1.x &gt;=point2.x)
+						XMin=point2.x;
+					else 
+						XMin=point1.x;
+					if(point1.y &gt;=point2.y)
+						YMin=point2.y;
+					else
+						YMin=point1.y;
+					Circle(dx/2+XMin,dy/2+YMin,r/2,memdc);
+					InvalidateRect(hwnd,NULL,1);
+					break;
+				}
+			case 'e':
+				{
+				int a=(int)(fabs(point2.x-point1.x)/2);
+				int b=(int)(fabs(point2.y-point1.y)/2);
+				ellipse(a,b,memdc); 
+				InvalidateRect(hwnd,NULL,1);	
+				break;
+				}
+			case 'f':
+				boundary(memdc,point2.x,point2.y);
+				InvalidateRect(hwnd,NULL,1);	
+				break;
+			}
+			ReleaseDC(hwnd,hdc);
+			break;
+		}
+	case WM_PAINT:
+		hdc=BeginPaint(hwnd,&amp;paintstruct);
+		BitBlt(hdc,0,0,maxX,maxY,memdc,0,0,SRCCOPY);
+		EndPaint(hwnd,&amp;paintstruct);
+		break;
+	case WM_DESTROY:
+		PostQuitMessage(0);
+		break;
+	default:
+		return DefWindowProc(hwnd,message,wParam,lParam);
+	}
+	return 0;
+}
+//*************************************************************//
+////////////////////////////////////////////////////////////
+void openDialog(HDC hdc)
+{
+	OPENFILENAME fname;
+	char  filename[64];
+	static char fn[256];
+	fname.lStructSize=sizeof(OPENFILENAME);
+	fname.hwndOwner=hwnd;
+	fname.lpstrFilter="Image \0*.img";
+	fname.nFilterIndex=1;
+	fname.lpstrFile=fn;
+	fname.nMaxFile=sizeof(fn);
+	fname.lpstrFileTitle=filename;
+	fname.nMaxFileTitle=sizeof(filename)-1;
+	fname.Flags=OFN_HIDEREADONLY;
+	fname.lpstrCustomFilter=NULL;
+	fname.lpstrInitialDir=NULL;
+	fname.lpstrTitle=NULL;
+	fname.lpstrDefExt=NULL;
+	fname.lCustData=0;
+	int result=GetOpenFileName(&amp;fname);
+	if(!result)
+		MessageBox(hwnd,"Invalid File Name","Error",MB_ICONERROR|MB_OK);
+	else
+		openFile(memdc,fname.lpstrFile);
+	InvalidateRect(hwnd,NULL,1);
+}
+////////////////////////////////////////////////////////////////////
+void openFile(HDC hdc,char * fileName)
+{
+	RECT win;
+	unsigned long color=0;
+	GetClientRect(hwnd,&amp; win);
+	ifstream inFile(fileName);
+	for(int i=0;i&lt;win.right;i++)
+		for(int j=0;j&lt;win.bottom;j++)
+		{
+			inFile&gt;&gt;color;
+			inFile&gt;&gt;i;
+			inFile&gt;&gt;j;
+			if(!inFile.eof() )
+				color=SetPixel(hdc,i,j,color);
+			else break;
+		}
+
+}
+//////////////////////////////////////////////////////////////////
+void saveDialog(HDC hdc)
+{
+	OPENFILENAME fname;
+	char  filename[64];
+	static char fn[256];
+	fname.lStructSize=sizeof(OPENFILENAME);
+	fname.hwndOwner=hwnd;
+	fname.lpstrFilter="Image \0*.img";
+	fname.nFilterIndex=1;
+	fname.lpstrFile=fn;
+	fname.nMaxFile=sizeof(fn);
+	fname.lpstrFileTitle=filename;
+	fname.nMaxFileTitle=sizeof(filename)-1;
+	fname.Flags=OFN_HIDEREADONLY;
+	fname.lpstrCustomFilter=NULL;
+	fname.lpstrInitialDir=NULL;
+	fname.lpstrTitle=NULL;
+	fname.lpstrDefExt=NULL;
+	fname.lCustData=0;
+	int result=GetSaveFileName(&amp;fname);
+	if(!result)
+		MessageBox(hwnd,"Save File Cancelled","Error",MB_ICONERROR|MB_OK);
+	else
+		saveFile(memdc,fname.lpstrFile);
+}
+///////////////////////////////////////////////////////////////////
+void saveFile(HDC hdc,char * fileName)
+{
+	ofstream output(fileName);
+	RECT win;
+	unsigned long color=0;
+	GetClientRect(hwnd,&amp; win);
+	for(int i=0;i&lt;win.right;i++)
+		for(int j=0;j&lt;win.bottom;j++)
+		{
+			color=GetPixel(hdc,i,j);
+			if(color!=GetBkColor(hdc))
+			{	
+				output&lt;&lt;GetPixel(hdc,i,j);
+				output&lt;&lt;' ';
+				output&lt;&lt;i;
+				output&lt;&lt;' ';
+				output&lt;&lt;j;
+				output&lt;&lt;' ';
+			}
+		}
+
+		output.close();
+	ReleaseDC(hwnd,hdc);
+}
+//////////////////////////////////////////////////////////////////
+void chooseColor(HDC hdc)
+{
+	COLORREF clRef[256];
+	CHOOSECOLOR color;
+	color.hwndOwner=hwnd;
+	color.lStructSize=sizeof(CHOOSECOLOR);
+	color.rgbResult=0;
+	color.Flags=CC_RGBINIT;
+	color.lpCustColors=clRef;
+	int result=ChooseColor(&amp;color);
+	if(result)
+		GColor=color.rgbResult;
+}
+/////////////////////////////////////////////////////////////////
+void DDA(int xs,int ys,int xe,int ye,HDC hdc,COLORREF color)
+{
+	int in=1;
+	int x,y;
+	if(ye&lt;ys)
+	{
+		int temp;
+		temp=xs;
+		xs=xe;
+		xe=temp;
+		temp=ys;
+		ys=ye;
+		ye=temp;	
+	}
+	y=ys;x=xs;
+	int dx=xe-x;
+	int dy=ye-y;
+	if(dx&lt;0)
+		in=-1;
+	float d=(float)(dy-.5*dx);
+	if(fabs(dy)&lt;fabs(dx))
+	{
+				
+				while(fabs(x-xe)&gt;0)
+				{
+					SetPixel(hdc,x,y,color);
+					x+=in;
+					if(d&lt;0)d+=dy;
+					else{
+						d+=(float)(dy-fabs(dx));
+						y++;
+					}
+				}
+	}else
+	{
+			while(y&lt;=ye){
+				SetPixel(hdc,x,y,color);
+				++y;
+				if(d&lt;0)
+				{
+					d+=(float)(dy-fabs(dx));
+					x+=in;
+				}
+				else
+					d-=(float)fabs(dx);
+			}
+	}
+}
+/////////////////////////////////////////////////////////////////
+void Circle(int h,int v,int r,HDC hdc)
+{
+	int x =0;
+	int y= r;
+	int d= 3-2*r;
+	//SetPixel(hdc,h,v,GColor);	
+	while(x&lt;=y)
+	{
+		SetPixel(hdc,h+x,v-y,GColor);
+		SetPixel(hdc,h+x,v+y,GColor);
+		SetPixel(hdc,h-x,v+y,GColor);
+		SetPixel(hdc,h-x,v-y,GColor);
+		SetPixel(hdc,h+y,v-x,GColor);
+		SetPixel(hdc,h+y,v+x,GColor);
+		SetPixel(hdc,h-y,v-x,GColor);
+		SetPixel(hdc,h-y,v+x,GColor);
+		
+		if(d&lt;0)
+			d = d+4*x+6;
+		else{
+			d= d+4*(x-y)+10;
+			y--;
+		}
+		x++;
+	}
+}
+////////////////////////////////////////////////////////////////
+void ellipse(int a,int b,HDC hdc)
+{
+	int x=0,y=b;
+	int aa=a*a,bb=b*b,aa2=aa*2,bb2=bb*2;
+	int fx=0,fy=aa2*b;
+	int p=(int)(bb-aa*b+0.25*aa);
+	while(fx&lt;fy)
+	{
+		SetPixel(hdc,x+point1.x,y+point1.y,GColor);
+		x++;
+		fx=fx+bb2;
+		if(p&lt;0)
+			p=p+fx+bb;
+		else
+		{
+			y--;
+			fy=fy-aa2;
+			p=p+fx+bb-fy;
+		}
+	}
+	SetPixel(hdc,x+point1.x,y+point1.y,GColor);
+	p=(int)(bb*(x+0.5)*(x+0.5)+aa*(y-1)*(y-1)-aa*bb);
+	while(y&gt;0)
+	{
+		y--;
+		fy=fy-aa2;
+		if(p&gt;=0)
+			p=p-fy+aa;
+		else
+		{
+			x++;
+			fx=fx+bb2;
+			p=p+fx-fy+aa;
+		}
+		SetPixel(hdc,x+point1.x,y+point1.y,GColor);
+	}
+}
+//////////////////////////////////////////////////////////////////
+void Square(HDC hdc)
+{
+	DDA(point1.x,point1.y,point2.x,point1.y,hdc,GColor);
+	DDA(point1.x,point1.y,point1.x,(int)fabs(point2.x-point1.x)+point1.y,hdc,GColor);
+	DDA(point1.x,(int)fabs(point2.x-point1.x)+point1.y,point2.x,(int)fabs(point2.x-point1.x)+point1.y,hdc,GColor);
+	DDA(point2.x,(int)fabs(point2.x-point1.x)+point1.y,point2.x,point1.y,hdc,GColor);
+}
+///////////////////////////////////////////////////////////////////
+void Rect(HDC hdc)
+{
+	DDA(point1.x,point1.y,point2.x,point1.y,hdc,GColor);
+	DDA(point1.x,point1.y,point1.x,point2.y,hdc,GColor);
+	DDA(point2.x,point1.y,point2.x,point2.y,hdc,GColor);
+	DDA(point1.x,point2.y,point2.x,point2.y,hdc,GColor);
+}
+///////////////////////////////////////////////////////////////////
+void boundary(HDC hdc,int x,int y)
+{
+	COLORREF bc=GetBkColor(hdc);
+	bc=RGB(255,255,255);
+	COLORREF fc=GColor;
+	COLORREF col=GetPixel(hdc,x,y);
+	if(col!=bc || col==fc)
+		return;
+	SetPixel(hdc,x,y,fc);
+	int xs=x;
+	int ys=y;
+	int i;
+	int count1=0;
+	int count2=0;
+	int count3=0;
+	int count4=0;
+	col=GetPixel(hdc,xs+1,y);
+	x++;
+	while(col==bc &amp;&amp; col!=fc)
+	{
+		SetPixel(hdc,x,y,fc);
+		++x;
+		col=GetPixel(hdc,x,y);
+	}
+	x--;
+	count1=x-xs;
+	x=xs;
+	col=GetPixel(hdc,xs-1,y);
+	x--;
+	while(col==bc &amp;&amp; col!=fc)
+	{
+		SetPixel(hdc,x,y,fc);
+		x--;
+		col=GetPixel(hdc,x,y);
+	}
+	x++;
+	count2=xs-x;
+	x=xs;
+	col=GetPixel(hdc,xs,ys+1);
+	y++;
+	while(col==bc &amp;&amp; col!=fc)
+	{
+		SetPixel(hdc,x,y,fc);
+		y++;
+		col=GetPixel(hdc,x,y);
+	}
+	y--;
+	count3=y-ys;
+	y=ys;
+	col=col=GetPixel(hdc,xs,ys-1);
+	y--;
+	while(col==bc &amp;&amp; col!=fc)
+	{
+		SetPixel(hdc,x,y,fc);
+		y--;
+		col=GetPixel(hdc,x,y);
+	}
+	y++;
+	count4=ys-y;
+
+	if(count1!=0 || count3!=0)
+		boundary(hdc,xs+1,ys+1);
+	for(i=2;i&lt;count1;i++)
+		boundary(hdc,xs+i,ys+1);
+	for(i=2;i&lt;count3;i++)
+		boundary(hdc,xs+1,ys+i);
+
+	if(count2!=0||count3!=0)
+		boundary(hdc,xs-1,ys+1);
+	for(i=2;i&lt;count2;i++)
+		boundary(hdc,xs-i,ys+1);
+	for(i=2;i&lt;count3;i++)
+		boundary(hdc,xs-1,ys+i);
+
+	if(count1!=0||count4!=0)
+		boundary(hdc,xs+1,ys-1);
+	for(i=2;i&lt;count1;i++)
+		boundary(hdc,xs+i,ys-1);
+	for(i=2;i&lt;count4;i++)
+		boundary(hdc,xs+1,ys-i);
+
+	if(count2!=0||count4!=0)
+		boundary(hdc,xs-1,ys-1);
+	for(i=2;i&lt;count2;i++)
+		boundary(hdc,xs-i,ys-1);
+	for(i=2;i&lt;count4;i++)
+		boundary(hdc,xs-1,ys-i);
+}
+/////////////////////////////////////////////////////////
+bool CALLBACK DialogFunc(HWND hwnd,UINT message,WPARAM wParam,LPARAM lParam)
+{
+	switch(message)
+	{
+	case WM_SIZE:
+		
+	case WM_COMMAND:
+		switch(LOWORD(wParam))
+		{
+		case IDC_LINE:
+			CheckMenuRadioItem(hMenu,IDM_DRAW_LINE,IDM_DRAW_FILL,IDM_DRAW_LINE,MF_BYCOMMAND);
+			d='l';
+			break;
+		case IDC_CIRCLE:
+			CheckMenuRadioItem(hMenu,IDM_DRAW_LINE,IDM_DRAW_FILL,IDM_DRAW_CIRCLE,MF_BYCOMMAND);
+			d='c';
+			break;
+		case IDC_SQUARE:
+			CheckMenuRadioItem(hMenu,IDM_DRAW_LINE,IDM_DRAW_FILL,IDM_DRAW_SQUARE,MF_BYCOMMAND);
+			d='s';
+			break;
+		case IDC_RECT:
+			CheckMenuRadioItem(hMenu,IDM_DRAW_LINE,IDM_DRAW_FILL,IDM_DRAW_RECTANGLE,MF_BYCOMMAND);
+			d='r';
+			break;
+		case IDC_ELLIPSE:
+			CheckMenuRadioItem(hMenu,IDM_DRAW_LINE,IDM_DRAW_FILL,IDM_DRAW_ELLIPSE,MF_BYCOMMAND);
+			d='e';
+			break;
+		case IDC_FILL:
+			CheckMenuRadioItem(hMenu,IDM_DRAW_LINE,IDM_DRAW_FILL,IDM_DRAW_FILL,MF_BYCOMMAND);
+			d='f';
+			break;
+		case IDC_COLOR:
+			CheckMenuRadioItem(hMenu,IDM_COLOR_RED,IDM_COLOR_CHOOSE,IDM_COLOR_CHOOSE,MF_BYCOMMAND);
+			chooseColor(hdc);
+			break;
+
+		}
+	}
+	return 0;
+}
+
+
+===================================================================================
+
+RESOURCE.H
+-----------
+//////////////
+------------
+
+//{{NO_DEPENDENCIES}}
+// Microsoft Developer Studio generated include file.
+// Used by MyMenu.rc
+//
+#define IDM_FILE_OPEN                   100
+#define IDR_MENU1                       101
+#define IDM_FILE_SAVE                   101
+#define IDM_FILE_EXIT                   102
+#define IDB_BITMAP1                     102
+#define IDM_DRAW_LINE                   103
+#define IDI_ICON1                       103
+#define IDM_DRAW_CIRCLE                 104
+#define IDM_DRAW_ELLIPSE                105
+#define IDM_DRAW_RECTANGLE              106
+#define IDC_NODROP                      106
+#define IDM_COLOR_RED                   107
+#define IDM_COLOR_GREEN                 108
+#define IDC_CURSOR1                     108
+#define IDM_COLOR_BLACK                 109
+#define IDI_ICON2                       109
+#define IDM_COLOR_CHOOSE                110
+#define IDM_HELP_ABOUT                  111
+#define IDI_ICON3                       111
+#define IDM_HELP_CONTENT                112
+#define IDM_FILE_NEW                    113
+#define IDM_DRAW_FILL                   114
+#define IDM_COLOR_BLUE                  115
+#define IDM_DRAW_SQUARE                 116
+#define IDM_VIEW_TOOLBOX                117
+#define IDC_BUTTON1                     1000
+#define IDC_LINE                        1000
+#define IDC_BUTTON2                     1001
+#define IDC_CIRCLE                      1001
+#define IDC_BUTTON3                     1002
+#define IDC_RECT                        1002
+#define IDC_BUTTON4                     1003
+#define IDC_ELLIPSE                     1003
+#define IDC_BUTTON5                     1004
+#define IDC_SQUARE                      1004
+#define IDC_BUTTON6                     1005
+#define IDC_COLOR                       1005
+#define IDC_BUTTON7                     1006
+#define IDC_FILL                        1006
+#define IDC_BUTTON8                     1007
+#define IDC_BUTTON9                     1008
+#define IDC_BUTTON10                    1009
+#define IDC_BUTTON11                    1010
+#define IDC_BUTTON12                    1011
+#define IDD_DIALOGBAR                   1110
+
+// Next default values for new objects
+// 
+#ifdef APSTUDIO_INVOKED
+#ifndef APSTUDIO_READONLY_SYMBOLS
+#define _APS_NEXT_RESOURCE_VALUE        113
+#define _APS_NEXT_COMMAND_VALUE         40001
+#define _APS_NEXT_CONTROL_VALUE         1006
+#define _APS_NEXT_SYMED_VALUE           101
+#endif
+#endif
+
+</TEXTAREA> <BR>
+<CENTER><IMG 
+style="BORDER-RIGHT: #0066cf 1px solid; BORDER-TOP: #0066cf 1px solid; BORDER-LEFT: #0066cf 1px solid; WIDTH: 350px; BORDER-BOTTOM: #0066cf 1px solid; HEIGHT: 300px" 
+src="127_files/paint.gif" width=600> </CENTER><!-- Search Google -->
+<CENTER>
+<FORM action=http://www.google.com/custom method=get target=_top>
+<TABLE bgColor=#ffffff>
+  <TBODY>
+  <TR>
+    <TD vAlign=top noWrap align=left height=32><A 
+      href="http://www.google.com/"><IMG alt=Google 
+      src="127_files/Logo_25wht.gif" align=middle border=0></IMG></A> <LABEL 
+      style="DISPLAY: none" for=sbi>Enter your search terms</LABEL> <INPUT 
+      id=sbi maxLength=255 size=40 name=q></INPUT> <LABEL style="DISPLAY: none" 
+      for=sbb>Submit search form</LABEL> <INPUT id=sbb type=submit value=Search name=sa></INPUT> <INPUT type=hidden 
+      value=pub-9653171024150495 name=client></INPUT> <INPUT type=hidden value=1 
+      name=forid></INPUT> <INPUT type=hidden value=ISO-8859-1 name=ie></INPUT> 
+      <INPUT type=hidden value=ISO-8859-1 name=oe></INPUT> <INPUT type=hidden 
+      value=active name=safe></INPUT> <INPUT type=hidden 
+      value=GALT:#008000;GL:1;DIV:#336699;VLC:663399;AH:center;BGC:FFFFFF;LBGC:336699;ALC:0000FF;LC:0000FF;T:000000;GFNT:0000FF;GIMP:0000FF;FORID:1 
+      name=cof></INPUT> <INPUT type=hidden value=en name=hl></INPUT> 
+  </TD></TR></TBODY></TABLE></FORM></CENTER><!-- Search Google -->
+<H3><A 
+href="http://www2.webng.com/amrlearn/Index.html">Home</A>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A 
+href="http://www2.webng.com/amrlearn/120.html">Previous</A>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A 
+href="http://www2.webng.com/amrlearn/130.html">Next</A></H3></DIV></BODY></HTML>

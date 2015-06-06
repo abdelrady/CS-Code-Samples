@@ -1,0 +1,215 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+<HTML lang="en-us">
+<HEAD>
+<TITLE>Windows API Guide: RegEnumValue Function</TITLE>
+<META content="vbapi@vbapi.com" name="author">
+<META content="Information about the RegEnumValue function in the Windows API, geared towards the Visual Basic user." name="description">
+<META content="Kuliniewicz,Windows,Windows 95,Windows NT,Windows 98,Windows CE,Windows 2000,API,Application Programming Interface,Programming,Visual Basic,Basic,VB,RegEnumValue" name="keywords">
+<META content="Omicron HTML Editor" name="generator">
+<LINK href="default.css" tppabs="http://www.vbapi.com/css/default.css" rel="stylesheet" type="text/css">
+<LINK href="index-1.html" tppabs="http://www.vbapi.com/index.html" rel="home">
+<LINK href="glossary.html" tppabs="http://www.vbapi.com/ref/glossary.html" rel="glossary">
+<LINK href="copyrite.html" tppabs="http://www.vbapi.com/copyrite.html" rel="copyright">
+</HEAD>
+<BODY>
+
+<!-- Begin Adslot1 -->
+<CENTER>
+<SCRIPT language="JAVASCRIPT">
+<!-- hide from older browsers
+now = new Date();
+my_random = now.getTime();
+document.write('<A href="http://adex3.flycast.com/server/socket/127.0.0.1:2800/click/VBWorldnet/VBAPI/' + my_random + '">');
+document.write('<IMG width="468" height="60" border="1" src="http://adex3.flycast.com/server/socket/127.0.0.1:2800/ad/VBWorldnet/VBAPI/' + my_random + '"></A>');
+// -->
+</SCRIPT>
+</CENTER>
+<!-- End Adslot1 -->
+
+<HR>
+
+<H1>RegEnumValue Function</H1>
+
+<P><CODE class="declare"><SPAN class="kw">Declare Function</SPAN> RegEnumValue <SPAN class="kw">Lib</SPAN> "advapi32.dll" <SPAN class="kw">Alias</SPAN> "RegEnumValueA" (<SPAN class="kw">ByVal</SPAN> hKey <SPAN class="kw">As Long</SPAN>, <SPAN class="kw">ByVal</SPAN> dwIndex <SPAN class="kw">As Long</SPAN>, <SPAN class="kw">ByVal</SPAN> lpValueName <SPAN class="kw">As String</SPAN>, lpcbValueName <SPAN class="kw">As Long</SPAN>, <SPAN class="kw">ByVal</SPAN> lpReserved <SPAN class="kw">As Long</SPAN>, lpType <SPAN class="kw">As Long</SPAN>, lpData <SPAN class="kw">As Byte</SPAN>, lpcbData <SPAN class="kw">As Long</SPAN>) <SPAN class="kw">As Long</SPAN></CODE></P>
+
+<H2>Platforms</H2>
+<P><UL>
+<LI><B>Windows 95:</B> Supported.
+<LI><B>Windows 98:</B> Supported.
+<LI><B>Windows NT:</B> Requires Windows NT 3.1 or later.
+<LI><B>Windows 2000:</B> Supported.
+<LI><B>Windows CE:</B> Requires Windows CE 1.0 or later.
+</UL></P>
+
+<H2>Description &amp; Usage</H2>
+<P><B>RegEnumValues</B> enumerates all of the values under a given registry key.  The function must be used in a loop because each call only retrieves information about the value identified by the given index.  Besides merely listing the names of each value, the function can also retrieve the data associated with each value.  This data, which could be in any vaid registry data format, is placed in an array of bytes passed as <VAR>lpData</VAR>.  It is the program's responsibility to correctly interpret the information.  The key whose values are enumerated must have been opened with query-level access.  The values which are enumerated are not retrived in any obvious order.</P>
+
+<H2>Return Value</H2>
+<P>If successful, the function returns 0.  If an error occured, the function returns a non-zero error code.</P>
+
+<H2>Visual Basic-Specific Issues</H2>
+<P>When passing 0 for <VAR>lpData</VAR> or <VAR>lpcbData</VAR>, the ByVal keyword must be placed in front if the 0 (i.e., use ByVal 0 instead of just 0).</P>
+
+<H2>Parameters</H2>
+<P><DL>
+<DT><VAR>hKey</VAR><DD>A <A class="def" href="glossary.html#handle" tppabs="http://www.vbapi.com/ref/glossary.html#handle" rel="glossary">handle</A> to the opened registry key containing the values to enumerate (having been opened with query-level access).  This could also be exactly one of the following base keys (identified by identicially named flags):
+<DL>
+<DT>HKEY_CLASSES_ROOT
+<DT>HKEY_CURRENT_CONFIG
+<DT>HKEY_CURRENT_USER
+<DT>HKEY_DYN_DATA <B>(Windows 95, 98 only)</B>
+<DT>HKEY_LOCAL_MACHINE
+<DT>HKEY_PERFORMANCE_DATA <B>(Windows NT, 2000 only)</B>
+<DT>HKEY_USERS
+</DL>
+<DT><VAR>dwIndex</VAR><DD>The index of the particular value to retrieve information about.  Valid indices range from 0 to one less than the total number of values.
+<DT><VAR>lpValueName</VAR><DD>String which receives the name of the value whose information is being retrieved.  This must be initialized to a sufficient size to receive the string.
+<DT><VAR>lpcbValueName</VAR><DD>The size of the string passed as <VAR>lpValueName</VAR>.  This also receives the size of the string the function places inside of it.
+<DT><VAR>lpReserved</VAR><DD>Reserved -- set to 0.
+<DT><VAR>lpType</VAR><DD>Receives exactly one of the following flags identifying the data type of the value:
+<DL>
+<DT>REG_BINARY<DD>A non-text sequence of bytes.
+<DT>REG_DWORD<DD>Same as REG_DWORD_LITTLE_ENDIAN.
+<DT>REG_DWORD_BIG_ENDIAN<DD>A 32-bit integer stored in big-endian format.  This is the opposite of the way Intel-based computers normally store numbers -- the byte order is reversed, putting the most significant byte first in memory.
+<DT>REG_DWORD_LITTLE_ENDIAN<DD>A 32-bit integer stored in little-endian format.  This is the way Intel-based computers store numbers, putting the least significant byte first in memory.
+<DT>REG_EXPAND_SZ<DD>A null-terminated string which contains unexpanded environment variables.
+<DT>REG_LINK<DD>A Unicode symbolic link.
+<DT>REG_MULTI_SZ<DD>A series of strings, each separated by a null character and the entire set terminated by a two null characters.
+<DT>REG_NONE<DD>No data type.
+<DT>REG_RESOURCE_LIST<DD>A list of resources in the resource map.
+<DT>REG_SZ <DD>A string terminated by a null character.
+</DL>
+<DT><VAR>lpData</VAR><DD>A byte array receiving the data stored in the value.  If you do not want to retrieve the data, set this parameter to 0.
+<DT><VAR>lpcbData</VAR><DD>The size in bytes of the array passed as <VAR>lpData</VAR>.  This also receives the size in bytes of the data placed into the array.  If you do not want to retrieve any data, set this parameter to 0.
+</DL></P>
+
+<H2>Constant Definitions</H2>
+<P><PRE><CODE class="const"><SPAN class="kw">Const</SPAN> HKEY_CLASSES_ROOT = &amp;H80000000
+<SPAN class="kw">Const</SPAN> HKEY_CURRENT_CONFIG = &amp;H80000005
+<SPAN class="kw">Const</SPAN> HKEY_CURRENT_USER = &amp;H80000001
+<SPAN class="kw">Const</SPAN> HKEY_DYN_DATA = &amp;H80000006
+<SPAN class="kw">Const</SPAN> HKEY_LOCAL_MACHINE = &amp;H80000002
+<SPAN class="kw">Const</SPAN> HKEY_PERFORMANCE_DATA = &amp;H80000004
+<SPAN class="kw">Const</SPAN> HKEY_USERS = &amp;H80000003
+<SPAN class="kw">Const</SPAN> REG_BINARY = 3
+<SPAN class="kw">Const</SPAN> REG_DWORD = 4
+<SPAN class="kw">Const</SPAN> REG_DWORD_BIG_ENDIAN = 5
+<SPAN class="kw">Const</SPAN> REG_DWORD_LITTLE_ENDIAN = 4
+<SPAN class="kw">Const</SPAN> REG_EXPAND_SZ = 2
+<SPAN class="kw">Const</SPAN> REG_LINK = 6
+<SPAN class="kw">Const</SPAN> REG_MULTI_SZ = 7
+<SPAN class="kw">Const</SPAN> REG_NONE = 0
+<SPAN class="kw">Const</SPAN> REG_RESOURCE_LIST = 8
+<SPAN class="kw">Const</SPAN> REG_SZ = 1</CODE></PRE></P>
+
+<H2>Example</H2>
+<P>List the values under the registry key HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion.  Display the names of all values under the key.  Also display the values' data if they are either null-terminated strings or binary data.  (This example could be extended to include the rest of the registry data types, but it doesn't to save space).  Note how the byte array is used to buffer the data before it might be copied to the string.</P>
+
+<P>The example runs when the user clicks button Command1.  To use this example, then, you must first place a command button named Command1 on a form window.
+
+<P><PRE><CODE class="example"><SPAN class="com">' This code is licensed according to the terms and conditions listed <A href="copyrite.html#license" tppabs="http://www.vbapi.com/copyrite.html#license" rel="copyright">here</A>.</SPAN>
+
+<SPAN class="com">' Declarations and such needed for the example:
+' (Copy them to the (declarations) section of a module.)</SPAN>
+<SPAN class="kw">Public Declare Function</SPAN> <B>RegEnumValue</B> <SPAN class="kw">Lib</SPAN> "advapi32.dll" <SPAN class="kw">Alias</SPAN> "RegEnumValueA" (<SPAN class="kw">ByVal</SPAN> hKey _
+	<SPAN class="kw">As Long</SPAN>, <SPAN class="kw">ByVal</SPAN> dwIndex <SPAN class="kw">As Long</SPAN>, <SPAN class="kw">ByVal</SPAN> lpValueName <SPAN class="kw">As String</SPAN>, lpcbValueName <SPAN class="kw">As Long</SPAN>, _
+	<SPAN class="kw">ByVal</SPAN> lpReserved <SPAN class="kw">As Long</SPAN>, lpType <SPAN class="kw">As Long</SPAN>, lpData <SPAN class="kw">As Byte</SPAN>, lpcbData <SPAN class="kw">As Long</SPAN>) <SPAN class="kw">As Long</SPAN>
+<SPAN class="kw">Public Declare Function</SPAN> <A href="regopenkeyex.html" tppabs="http://www.vbapi.com/ref/r/regopenkeyex.html">RegOpenKeyEx</A> <SPAN class="kw">Lib</SPAN> "advapi32.dll" <SPAN class="kw">Alias</SPAN> "RegOpenKeyExA" (<SPAN class="kw">ByVal</SPAN> hKey _
+	<SPAN class="kw">As Long</SPAN>, <SPAN class="kw">ByVal</SPAN> lpSubKey <SPAN class="kw">As String</SPAN>, <SPAN class="kw">ByVal</SPAN> ulOptions <SPAN class="kw">As Long</SPAN>, <SPAN class="kw">ByVal</SPAN> samDesired _
+	<SPAN class="kw">As Long</SPAN>, phkResult <SPAN class="kw">As Long</SPAN>) <SPAN class="kw">As Long</SPAN>
+<SPAN class="kw">Public Declare Function</SPAN> <A href="regclosekey.html" tppabs="http://www.vbapi.com/ref/r/regclosekey.html">RegCloseKey</A> <SPAN class="kw">Lib</SPAN> "advapi32.dll" (<SPAN class="kw">ByVal</SPAN> hKey <SPAN class="kw">As Long</SPAN>) <SPAN class="kw">As Long</SPAN>
+<SPAN class="kw">Public Declare Sub</SPAN> <A href="copymemory.html" tppabs="http://www.vbapi.com/ref/c/copymemory.html">CopyMemory</A> <SPAN class="kw">Lib</SPAN> "kernel32.dll" <SPAN class="kw">Alias</SPAN> "RtlMoveMemory" (Destination <SPAN class="kw">As Any</SPAN>, _
+	Source <SPAN class="kw">As Any</SPAN>, <SPAN class="kw">ByVal</SPAN> Length <SPAN class="kw">As Long</SPAN>)
+<SPAN class="kw">Public Const</SPAN> HKEY_LOCAL_MACHINE = &H80000002
+<SPAN class="kw">Public Const</SPAN> KEY_QUERY_VALUE = &H1
+<SPAN class="kw">Public Const</SPAN> REG_SZ = 1
+<SPAN class="kw">Public Const</SPAN> REG_BINARY = 3
+
+<SPAN class="com">' *** Place the following code inside a form window. ***</SPAN>
+
+<SPAN class="kw">Private Sub</SPAN> Command1_Click()
+	<SPAN class="kw">Dim</SPAN> valuename <SPAN class="kw">As String</SPAN>     <SPAN class="com">' name of the value being retrieved</SPAN>
+	<SPAN class="kw">Dim</SPAN> valuelen <SPAN class="kw">As Long</SPAN>        <SPAN class="com">' length of valuename</SPAN>
+	<SPAN class="kw">Dim</SPAN> datatype <SPAN class="kw">As Long</SPAN>        <SPAN class="com">' receives data type of value</SPAN>
+	<SPAN class="kw">Dim</SPAN> data(0 To 254) <SPAN class="kw">As Byte</SPAN>  <SPAN class="com">' 255-byte data buffer for read information</SPAN>
+	<SPAN class="kw">Dim</SPAN> datalen <SPAN class="kw">As Long</SPAN>         <SPAN class="com">' size of data buffer information</SPAN>
+	<SPAN class="kw">Dim</SPAN> datastring <SPAN class="kw">As String</SPAN>    <SPAN class="com">' will receive data converted to a string, if necessary</SPAN>
+	<SPAN class="kw">Dim</SPAN> hkey <SPAN class="kw">As Long</SPAN>            <SPAN class="com">' handle to the registry key to enumerate the values of</SPAN>
+	<SPAN class="kw">Dim</SPAN> index <SPAN class="kw">As Long</SPAN>           <SPAN class="com">' counter for the index of the value to enumerate</SPAN>
+	<SPAN class="kw">Dim</SPAN> c <SPAN class="kw">As Long</SPAN>               <SPAN class="com">' counter variable</SPAN>
+	<SPAN class="kw">Dim</SPAN> retval <SPAN class="kw">As Long</SPAN>          <SPAN class="com">' functions' return value</SPAN>
+	
+	<SPAN class="com">' Open the registry key to enumerate the values of.</SPAN>
+	retval = <A href="regopenkeyex.html" tppabs="http://www.vbapi.com/ref/r/regopenkeyex.html">RegOpenKeyEx</A>(HKEY_LOCAL_MACHINE, "Software\Microsoft\Windows\CurrentVersion", _
+		0, KEY_QUERY_VALUE, hkey)
+	<SPAN class="com">' Check to see if an error occured.</SPAN>
+	<SPAN class="kw">If</SPAN> retval &lt;&gt; 0 <SPAN class="kw">Then</SPAN>
+		<SPAN class="kw">Debug</SPAN>.<SPAN class="kw">Print</SPAN> "Registry key could not be opened -- aborting."
+		<SPAN class="kw">End</SPAN>  ' abort the program
+	<SPAN class="kw">End If</SPAN>
+	
+	<SPAN class="com">' Begin enumerating the values.  Get each one, displaying its name.  If it's a null-
+	' terminated string or binary data, display it.  If not, say so.</SPAN>
+	index = 0  <SPAN class="com">' initialize the counter</SPAN>
+	<SPAN class="kw">While</SPAN> retval = 0  <SPAN class="com">' loop while successful</SPAN>
+		<SPAN class="com">' Initialize the value name buffer.</SPAN>
+		valuename = <SPAN class="kw">Space(</SPAN>255<SPAN class="kw">)</SPAN>  <SPAN class="com">' 255-space buffer</SPAN>
+		valuelen = 255  <SPAN class="com">' length of the string</SPAN>
+		datalen = 255  <SPAN class="com">' size of data buffer</SPAN>
+		<SPAN class="com">' Get the next value to be enumerated</SPAN>
+		retval = <B>RegEnumValue</B>(hkey, index, valuename, valuelen, 0, datatype, data(0), datalen) 
+		<SPAN class="kw">If</SPAN> retval = 0 <SPAN class="kw">Then</SPAN>  <SPAN class="com">' if successful, display information</SPAN>
+			<SPAN class="com">' Extract the useful information from the value name buffer and display it.</SPAN>
+			valuename = <SPAN class="kw">Left(</SPAN>valuename, valuelen<SPAN class="kw">)</SPAN>
+			<SPAN class="kw">Debug</SPAN>.<SPAN class="kw">Print</SPAN> "Value Name: "; valuename
+			<SPAN class="com">' Determine the data type of the value and display it.</SPAN>
+			<SPAN class="kw">Select Case</SPAN> datatype
+			<SPAN class="kw">Case</SPAN> REG_SZ  <SPAN class="com">' null-terminated string</SPAN>
+				<SPAN class="com">' Copy the information from the byte array into the string.
+				' We subtract one because we don't want the trailing null.</SPAN>
+				datastring = <SPAN class="kw">Space(</SPAN>datalen - 1<SPAN class="kw">)</SPAN>  <SPAN class="com">' make just enough room in the string</SPAN>
+				<A href="copymemory.html" tppabs="http://www.vbapi.com/ref/c/copymemory.html">CopyMemory</A> <SPAN class="kw">ByVal</SPAN> datastring, data(0), datalen - 1  <SPAN class="com">' copy useful data</SPAN>
+				<SPAN class="kw">Debug</SPAN>.<SPAN class="kw">Print</SPAN> "  Data (string): "; datastring
+			<SPAN class="kw">Case</SPAN> REG_BINARY  <SPAN class="com">' binary data</SPAN>
+				<SPAN class="com">' Display the hexadecimal values of each byte of data, separated by 
+				' sapces.  Use the datastring buffer to allow us to assure each byte
+				' is represented by a two-character string.</SPAN>
+				<SPAN class="kw">Debug</SPAN>.<SPAN class="kw">Print</SPAN> "  Data (binary):";
+				<SPAN class="kw">For</SPAN> c = 0 <SPAN class="kw">To</SPAN> datalen - 1  <SPAN class="com">' loop through returned information</SPAN>
+					datastring = <SPAN class="kw">Hex(</SPAN>data(c)<SPAN class="kw">)</SPAN>  <SPAN class="com">' convert value into hex</SPAN>
+					<SPAN class="com">' If needed, add leading zero(s).</SPAN>
+					<SPAN class="kw">If Len(</SPAN>datastring<SPAN class="kw">)</SPAN> &lt; 2 <SPAN class="kw">Then</SPAN> datastring = _
+						<SPAN class="kw">String(</SPAN>2 - <SPAN class="kw">Len(</SPAN>datastring<SPAN class="kw">)</SPAN>, "0"<SPAN class="kw">)</SPAN> &amp; datastring
+					<SPAN class="kw">Debug</SPAN>.<SPAN class="kw">Print</SPAN> " "; datastring;
+				<SPAN class="kw">Next</SPAN> c
+				<SPAN class="kw">Debug</SPAN>.<SPAN class="kw">Print</SPAN>  ' end the line
+			<SPAN class="kw">Case Else</SPAN>  <SPAN class="com">' a data type this example doesn't handle</SPAN>
+				<SPAN class="kw">Debug</SPAN>.<SPAN class="kw">Print</SPAN> "This example doesn't know how to read that kind of data."
+			<SPAN class="kw">End Select</SPAN>
+		<SPAN class="kw">End If</SPAN>
+		index = index + 1  <SPAN class="com">' increment the index counter</SPAN>
+	<SPAN class="kw">Wend</SPAN>  <SPAN class="com">' end the loop</SPAN>
+	
+	<SPAN class="com">' Close the registry key.</SPAN>
+	retval = <A href="regclosekey.html" tppabs="http://www.vbapi.com/ref/r/regclosekey.html">RegCloseKey</A>(hkey)
+<SPAN class="kw">End Sub</SPAN></CODE></PRE></P>
+
+<H2>See Also</H2>
+<P><A href="regenumkeyex.html" tppabs="http://www.vbapi.com/ref/r/regenumkeyex.html">RegEnumKeyEx</A></P>
+
+<H2>Category</H2>
+<P><A href="funcc.html#registry" tppabs="http://www.vbapi.com/ref/funcc.html#registry">Registry</A></P>
+
+<P><A href="funca.html" tppabs="http://www.vbapi.com/ref/funca.html">Go back to the alphabetical Function listing.</A><BR>
+<A href="index.html" tppabs="http://www.vbapi.com/ref/index.html">Go back to the Reference section index.</A></P>
+
+<HR>
+
+<P><B>Last Modified:</B> September 24, 2000<BR>
+This page is copyright &copy; 2000 Paul Kuliniewicz.  
+<A href="copyrite.html" tppabs="http://www.vbapi.com/copyrite.html" rel="copyright">Copyright Information</A>  <B>Revised October 29, 2000</B><BR>
+<A href="index-1.html" tppabs="http://www.vbapi.com/index.html" rel="home">Go back to the Windows API Guide home page.</A><BR>
+E-mail: <A href="javascript:if(confirm('http://www.vbapi.com/email.html  \n\nThis file was not retrieved by Teleport Pro, because it is addressed on a domain or path outside the boundaries set for its Starting Address.  \n\nDo you want to open it from the server?'))window.location='http://www.vbapi.com/email.html'" tppabs="http://www.vbapi.com/email.html">vbapi@vbapi.com</A>  <A href="javascript:if(confirm('http://www.vbapi.com/email.html  \n\nThis file was not retrieved by Teleport Pro, because it is addressed on a domain or path outside the boundaries set for its Starting Address.  \n\nDo you want to open it from the server?'))window.location='http://www.vbapi.com/email.html#secure'" tppabs="http://www.vbapi.com/email.html#secure">Send Encrypted E-Mail</A><BR>
+This page is at <A href="regenumvalue.html" tppabs="http://www.vbapi.com/ref/r/regenumvalue.html">http://www.vbapi.com/ref/regenumvalue.html</A></P>
+</BODY>
+</HTML>

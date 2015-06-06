@@ -1,0 +1,99 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+<HTML lang="en-us">
+<HEAD>
+<TITLE>Windows API Guide: WM_GETTEXTLENGTH Message</TITLE>
+<META content="vbapi@vbapi.com" name="author">
+<META content="Information about the WM_GETTEXTLENGTH message in the Windows API, geared towards the Visual Basic user." name="description">
+<META content="Kuliniewicz,Windows,Windows 95,Windows NT,Windows 98,Windows CE,Windows 2000,API,Application Programming Interface,Programming,Visual Basic,Basic,VB,WM_GETTEXTLENGTH" name="keywords">
+<META content="Omicron HTML Editor" name="generator">
+<LINK href="default.css" tppabs="http://www.vbapi.com/css/default.css" rel="stylesheet" type="text/css">
+<LINK href="index-1.html" tppabs="http://www.vbapi.com/index.html" rel="home">
+<LINK href="glossary.html" tppabs="http://www.vbapi.com/ref/glossary.html" rel="glossary">
+<LINK href="copyrite.html" tppabs="http://www.vbapi.com/copyrite.html" rel="copyright">
+</HEAD>
+<BODY>
+
+<!-- Begin Adslot1 -->
+<CENTER>
+<SCRIPT language="JAVASCRIPT">
+<!-- hide from older browsers
+now = new Date();
+my_random = now.getTime();
+document.write('<A href="http://adex3.flycast.com/server/socket/127.0.0.1:2800/click/VBWorldnet/VBAPI/' + my_random + '">');
+document.write('<IMG width="468" height="60" border="1" src="http://adex3.flycast.com/server/socket/127.0.0.1:2800/ad/VBWorldnet/VBAPI/' + my_random + '"></A>');
+// -->
+</SCRIPT>
+</CENTER>
+<!-- End Adslot1 -->
+
+<HR>
+
+<H1>WM_GETTEXTLENGTH Message</H1>
+
+<H2>Platforms</H2>
+<P><UL>
+<LI><B>Windows 95:</B> Supported.
+<LI><B>Windows 98:</B> Supported.
+<LI><B>Windows NT:</B> Requires Windows NT 3.1 or later.
+<LI><B>Windows 2000:</B> Supported.
+<LI><B>Windows CE:</B> Requires Windows CE 1.0 or later.
+</UL></P>
+
+<H2>Description &amp; Usage</H2>
+<P>Send the <B>WM_GETTEXTLENGTH</B> message to a window to discover the number of characters in that window's text.  This character count does not include the terminating null character.  In some cases, this message will report a larger number of characters than what actually exists; however, the count obtained by this message will always be no less than the actual number of characters.  The <B>WM_GETTEXTLENGTH</B> message is handled by the target window's default window procedure.</P>
+
+<H2>Return Value</H2>
+<P>The message returns the number of characters in the target window's text, not including the terminating null.</P>
+
+<H2>Visual Basic-Specific Issues</H2>
+<P>When using <A href="sendmessage.html" tppabs="http://www.vbapi.com/ref/s/sendmessage.html">SendMessage</A> to send the <B>WM_GETTEXTLENGTH</B> message, both the <VAR>wParam</VAR> and <VAR>lParam</VAR> parameters must be set using the expression ByVal CLng(0).</P>
+
+<H2>Parameters</H2>
+<P><DL>
+<DT><VAR>wParam</VAR><DD>Not used -- set to 0.
+<DT><VAR>lParam</VAR><DD>Not used -- set to 0.
+</DL></P>
+
+<H2>Constant Definitions</H2>
+<P><PRE><CODE class="const">Const WM_GETTEXTLENGTH = &amp;HE</CODE></PRE></P>
+
+<H2>Example</H2>
+<P><PRE><CODE class="example"><SPAN class="com">' This code is licensed according to the terms and conditions listed <A href="copyrite.html#license" tppabs="http://www.vbapi.com/copyrite.html#license" rel="copyright">here</A>.</SPAN>
+
+' Display the title bar text of window Form1 by sending the
+' appropriate messages to it.
+Dim wintext As String  ' receives the copied text from the target window
+Dim slength As Long  ' length of the window text
+Dim retval As Long  ' return value of message
+
+' First, determine how much space is necessary for the buffer.
+' (1 is added for the terminating null character.)
+slength = <A href="sendmessage.html" tppabs="http://www.vbapi.com/ref/s/sendmessage.html">SendMessage</A>(Form1.hWnd, <B>WM_GETTEXTLENGTH</B>, ByVal CLng(0), ByVal CLng(0)) + 1
+' Make enough room in the buffer to receive the text.
+wintext = Space(slength)
+' Copy the target window's text into the buffer.
+retval = <A href="sendmessage.html" tppabs="http://www.vbapi.com/ref/s/sendmessage.html">SendMessage</A>(Form1.hWnd, WM_GETTEXT, ByVal slength, ByVal wintext)
+' Remove the terminating null and extra space from the buffer.
+wintext = Left(wintext, retval)
+' Display the result.
+Debug.Print "Form1's title bar text is: "; wintext</CODE></PRE></P>
+
+<H2>See Also</H2>
+<P><A href="getwindowtextlength.html" tppabs="http://www.vbapi.com/ref/g/getwindowtextlength.html">GetWindowTextLength</A>, <A href="wm_gettext.html" tppabs="http://www.vbapi.com/ref/w/wm_gettext.html">WM_GETTEXT</A></P>
+
+<H2>Category</H2>
+<P><A href="msgc.html#windows" tppabs="http://www.vbapi.com/ref/msgc.html#windows">Windows</A></P>
+
+<P><A href="msga.html" tppabs="http://www.vbapi.com/ref/msga.html">Back to the Message list.</A><BR>
+<A href="index.html" tppabs="http://www.vbapi.com/ref/index.html" rel="index">Back to the Reference section.</A></P>
+
+<HR>
+
+<P><B>Last Modified:</B> January 27, 2000<BR>
+This page is copyright &copy; 2000 Paul Kuliniewicz.  
+<A href="copyrite.html" tppabs="http://www.vbapi.com/copyrite.html" rel="copyright">Copyright Information</A>  <B>Revised October 29, 2000</B><BR>
+<A href="index-1.html" tppabs="http://www.vbapi.com/index.html" rel="home">Go back to the Windows API Guide home page.</A><BR>
+E-mail: <A href="javascript:if(confirm('http://www.vbapi.com/email.html  \n\nThis file was not retrieved by Teleport Pro, because it is addressed on a domain or path outside the boundaries set for its Starting Address.  \n\nDo you want to open it from the server?'))window.location='http://www.vbapi.com/email.html'" tppabs="http://www.vbapi.com/email.html">vbapi@vbapi.com</A>  <A href="javascript:if(confirm('http://www.vbapi.com/email.html  \n\nThis file was not retrieved by Teleport Pro, because it is addressed on a domain or path outside the boundaries set for its Starting Address.  \n\nDo you want to open it from the server?'))window.location='http://www.vbapi.com/email.html#secure'" tppabs="http://www.vbapi.com/email.html#secure">Send Encrypted E-Mail</A><BR>
+This page is at <A href="wm_gettextlength.html" tppabs="http://www.vbapi.com/ref/w/wm_gettextlength.html">http://www.vbapi.com/ref/w/wm_gettextlength.html</A></P>
+</BODY>
+</HTML>

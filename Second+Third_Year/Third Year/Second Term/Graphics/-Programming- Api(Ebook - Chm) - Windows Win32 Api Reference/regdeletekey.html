@@ -1,0 +1,117 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+<HTML lang="en-us">
+<HEAD>
+<TITLE>Windows API Guide: RegDeleteKey Function</TITLE>
+<META content="vbapi@vbapi.com" name="author">
+<META content="Information about the RegDeleteKey function in the Windows API, geared towards the Visual Basic user." name="description">
+<META content="Kuliniewicz,Windows,Windows 95,Windows NT,Windows 98,Windows CE,Windows 2000,API,Application Programming Interface,Programming,Visual Basic,Basic,VB,RegDeleteKey" name="keywords">
+<META content="Omicron HTML Editor" name="generator">
+<LINK href="default.css" tppabs="http://www.vbapi.com/css/default.css" rel="stylesheet" type="text/css">
+<LINK href="index-1.html" tppabs="http://www.vbapi.com/index.html" rel="home">
+</HEAD>
+<BODY>
+
+<!-- Begin Adslot1 -->
+<CENTER>
+<SCRIPT language="JAVASCRIPT">
+<!-- hide from older browsers
+now = new Date();
+my_random = now.getTime();
+document.write('<A href="http://adex3.flycast.com/server/socket/127.0.0.1:2800/click/VBWorldnet/VBAPI/' + my_random + '">');
+document.write('<IMG width="468" height="60" border="1" src="http://adex3.flycast.com/server/socket/127.0.0.1:2800/ad/VBWorldnet/VBAPI/' + my_random + '"></A>');
+// -->
+</SCRIPT>
+</CENTER>
+<!-- End Adslot1 -->
+
+<HR>
+
+<H1>RegDeleteKey Function</H1>
+
+<P><CODE class="declare"><SPAN class="kw">Declare Function</SPAN> RegDeleteKey <SPAN class="kw">Lib</SPAN> "advapi32.dll" <SPAN class="kw">Alias</SPAN> "RegDeleteKeyA" (<SPAN class="kw">ByVal</SPAN> hKey <SPAN class="kw">As Long</SPAN>, <SPAN class="kw">ByVal</SPAN> lpSubKey <SPAN class="kw">As String</SPAN>) <SPAN class="kw">As Long</SPAN></CODE></P>
+
+<H2>Platforms</H2>
+<P><UL>
+<LI><B>Windows 95:</B> Supported.
+<LI><B>Windows 98:</B> Supported.
+<LI><B>Windows NT:</B> Requires Windows NT 3.1 or later.
+<LI><B>Windows 2000:</B> Supported.
+<LI><B>Windows CE:</B> Requires Windows CE 1.0 or later.
+</UL></P>
+
+<H2>Description &amp; Usage</H2>
+<P><B>RegDeleteKey</B> deletes a key from the registry, along with any values it may contain.  <B>Windows NT, 2000:</B> The function will fail if there are any subkeys under the key to delete.  <B>Windows 95, 98:</B> The function will delete any subkeys under the key to be deleted, instead of failing.</P>
+
+<H2>Return Value</H2>
+<P>If successful, the function returns zero.  If an error occured, the function returns a nonzero error code.</P>
+
+<H2>Visual Basic-Specific Issues</H2>
+<P>None.</P>
+
+<H2>Parameters</H2>
+<P><DL>
+<DT><VAR>hKey</VAR><DD>Specifies an existing registry key that the key to delete is under.  This is either a handle to an open registry key or one of the following flags that identify a registry base key.  (The base key flags are named identically to the base keys they specify.)
+<DL>
+<DT>HKEY_CLASSES_ROOT
+<DT>HKEY_CURRENT_CONFIG
+<DT>HKEY_CURRENT_USER
+<DT>HKEY_DYN_DATA <B>(Windows 95, 98 only)</B>
+<DT>HKEY_LOCAL_MACHINE
+<DT>HKEY_PERFORMANCE_DATA <B>(Windows NT, 2000 only)</B>
+<DT>HKEY_USERS
+</DL>
+<DT><VAR>lpSubKey</VAR><DD>The name of the subkey under <VAR>hKey</VAR> to delete.
+</DL></P>
+
+<H2>Constant Definitions</H2>
+<P><PRE><CODE class="const"><SPAN class="kw">Const</SPAN> HKEY_CLASSES_ROOT = &amp;H80000000
+<SPAN class="kw">Const</SPAN> HKEY_CURRENT_CONFIG = &amp;H80000005
+<SPAN class="kw">Const</SPAN> HKEY_CURRENT_USER = &amp;H80000001
+<SPAN class="kw">Const</SPAN> HKEY_DYN_DATA = &amp;H80000006
+<SPAN class="kw">Const</SPAN> HKEY_LOCAL_MACHINE = &amp;H80000002
+<SPAN class="kw">Const</SPAN> HKEY_PERFORMANCE_DATA = &amp;H80000004
+<SPAN class="kw">Const</SPAN> HKEY_USERS = &amp;H80000003</CODE></PRE></P>
+
+<P><B>Example:</B>
+<P>Attempt to delete the registry key "HKEY_LOCAL_MACHINE\Software\MyProgram\Config" when the user clicks button Command1.  (Of course, typically you would never give the user an option like this, but this is just a simple example.)  Depending on your Windows platform, this function may fail if there are any subkeys under this key.  To run this example, you first need to place a command button named Command1 on a form window.</P>
+
+<P><PRE><CODE class="example"><SPAN class="com">' This code is licensed according to the terms and conditions listed <A href="copyrite.html#license" tppabs="http://www.vbapi.com/copyrite.html#license" rel="copyright">here</A>.</SPAN>
+
+<SPAN class="com">' Declarations and such needed for the example:
+' (Copy them to the (declarations) section of a module.)</SPAN>
+<SPAN class="kw">Public Declare Function</SPAN> <B>RegDeleteKey</B> <SPAN class="kw">Lib</SPAN> "advapi32.dll" <SPAN class="kw">Alias</SPAN> "RegDeleteKeyA" (<SPAN class="kw">ByVal</SPAN> hKey <SPAN class="kw">As Long</SPAN>, _
+	<SPAN class="kw">ByVal</SPAN> lpSubKey <SPAN class="kw">As String</SPAN>) <SPAN class="kw">As Long</SPAN>
+<SPAN class="kw">Public Const</SPAN> HKEY_LOCAL_MACHINE = &amp;H80000002
+
+<SPAN class="kw">Private Sub</SPAN> Command1_Click()
+	<SPAN class="kw">Dim</SPAN> retval <SPAN class="kw">As Long</SPAN>  <SPAN class="com">' return value</SPAN>
+	
+	<SPAN class="com">' Attempt to delete the desired registry key.</SPAN>
+	retval = <B>RegDeleteKey</B>(HKEY_LOCAL_MACHINE, "Software\MyProgram\Config")
+	<SPAN class="kw">If</SPAN> retval &lt;&gt; 0 <SPAN class="kw">Then</SPAN>
+		<SPAN class="kw">Debug</SPAN>.<SPAN class="kw">Print</SPAN> "Delete operation failed.  The key may have subkeys and/or values under it."
+		<SPAN class="kw">Debug</SPAN>.<SPAN class="kw">Print</SPAN> "Of course, the key might just not exist at all."
+	<SPAN class="kw">Else</SPAN>
+		<SPAN class="kw">Debug</SPAN>.<SPAN class="kw">Print</SPAN> "Deletion successful."
+	<SPAN class="kw">End If</SPAN>
+<SPAN class="kw">End Sub</SPAN></CODE></PRE></P>
+
+<H2>See Also</H2>
+<P><A href="regcreatekeyex.html" tppabs="http://www.vbapi.com/ref/r/regcreatekeyex.html">RegCreateKeyEx</A>, 
+<A href="regdeletevalue.html" tppabs="http://www.vbapi.com/ref/r/regdeletevalue.html">RegDeleteValue</A></P>
+
+<H2>Category</H2>
+<P><A href="funcc.html#registry" tppabs="http://www.vbapi.com/ref/funcc.html#registry">Registry</A></P>
+
+<P><A href="funca.html" tppabs="http://www.vbapi.com/ref/funca.html">Go back to the Function listing.</A><BR>
+<A href="index.html" tppabs="http://www.vbapi.com/ref/index.html">Go back to the Reference section index.</A></P>
+
+<HR>
+
+<P><B>Last Modified:</B> September 24, 2000<BR>
+This page is copyright &copy; 2000 Paul Kuliniewicz.  <A href="copyrite.html" tppabs="http://www.vbapi.com/copyrite.html" rel="copyright">Copyright Information.</A><BR>
+<A href="index-1.html" tppabs="http://www.vbapi.com/index.html">Go back to the Windows API Guide home page.</A><BR>
+E-mail: <A href="javascript:if(confirm('http://www.vbapi.com/email.html  \n\nThis file was not retrieved by Teleport Pro, because it is addressed on a domain or path outside the boundaries set for its Starting Address.  \n\nDo you want to open it from the server?'))window.location='http://www.vbapi.com/email.html'" tppabs="http://www.vbapi.com/email.html">vbapi@vbapi.com</A>  <A href="javascript:if(confirm('http://www.vbapi.com/email.html  \n\nThis file was not retrieved by Teleport Pro, because it is addressed on a domain or path outside the boundaries set for its Starting Address.  \n\nDo you want to open it from the server?'))window.location='http://www.vbapi.com/email.html#secure'" tppabs="http://www.vbapi.com/email.html#secure">Send Encrypted E-Mail</A><BR>
+This page is at <A href="regdeletekey.html" tppabs="http://www.vbapi.com/ref/r/regdeletekey.html">http://www.vbapi.com/ref/r/regdeletekey.html</A></P>
+</BODY>
+</HTML>

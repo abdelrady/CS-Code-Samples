@@ -1,0 +1,110 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+<HTML lang="en-us">
+<HEAD>
+<TITLE>Windows API Guide: BM_SETCHECK Message</TITLE>
+<META content="vbapi@vbapi.com" name="author">
+<META content="Information about the BM_SETCHECK message in the Windows API, geared towards the Visual Basic user." name="description">
+<META content="Kuliniewicz,Windows,Windows 95,Windows NT,Windows 98,Windows CE,Windows 2000,API,Application Programming Interface,Programming,Visual Basic,Basic,VB,BM_SETCHECK" name="keywords">
+<META content="Omicron HTML Editor" name="generator">
+<LINK href="default.css" tppabs="http://www.vbapi.com/css/default.css" rel="stylesheet" type="text/css">
+<LINK href="index-1.html" tppabs="http://www.vbapi.com/index.html" rel="home">
+<LINK href="glossary.html" tppabs="http://www.vbapi.com/ref/glossary.html" rel="glossary">
+<LINK href="copyrite.html" tppabs="http://www.vbapi.com/copyrite.html" rel="copyright">
+</HEAD>
+<BODY>
+
+<!-- Begin Adslot1 -->
+<CENTER>
+<SCRIPT language="JAVASCRIPT">
+<!-- hide from older browsers
+now = new Date();
+my_random = now.getTime();
+document.write('<A href="http://adex3.flycast.com/server/socket/127.0.0.1:2800/click/VBWorldnet/VBAPI/' + my_random + '">');
+document.write('<IMG width="468" height="60" border="1" src="http://adex3.flycast.com/server/socket/127.0.0.1:2800/ad/VBWorldnet/VBAPI/' + my_random + '"></A>');
+// -->
+</SCRIPT>
+</CENTER>
+<!-- End Adslot1 -->
+
+<HR>
+
+<H1>BM_SETCHECK Message</H1>
+
+<H2>Platforms</H2>
+<P><UL>
+<LI><B>Windows 95:</B> Supported.
+<LI><B>Windows 98:</B> Supported.
+<LI><B>Windows NT:</B> Requires Windows NT 3.1 or later.
+<LI><B>Windows 2000:</B> Supported.
+<LI><B>Windows CE:</B> Requires Windows CE 1.0 or later.
+</UL></P>
+
+<H2>Description &amp; Usage</H2>
+<P>Sending the <B>BM_SETCHECK</B> message to a button changes the checked state of a button.  Naturally, the button has to be either a check box or a radio button for the message to work.  The message can check or uncheck the button.  If the button is a three-state check box, the message can also put the button into its third, grayed state.</P>
+
+<H2>Return Value</H2>
+<P>The <B>BM_SETCHECK</B> message always returns 0.</P>
+
+<H2>Visual Basic-Specific Issues</H2>
+<P>None.</P>
+
+<H2>Parameters</H2>
+<P><DL>
+<DT><VAR>wParam</VAR><DD>One of the following flags specifying how to set the button's checked state:
+<DL>
+<DT>BST_CHECKED<DD>Check the button.
+<DT>BST_INDETERMINATE<DD>Put the button into its third, grayed state.  This only works for three-state check boxes.
+<DT>BST_UNCHECKED<DD>Uncheck the button.
+</DL>
+<DT><VAR>lParam</VAR><DD>Not used -- set to 0.
+</DL></P>
+
+<H2>Constant Definitions</H2>
+<P><PRE><CODE class="const"><SPAN class="kw">Const</SPAN> BM_SETCHECK = &amp;HF1
+<SPAN class="kw">Const</SPAN> BST_CHECKED = &amp;1
+<SPAN class="kw">Const</SPAN> BST_INDETERMINATE = &amp;2
+<SPAN class="kw">Const</SPAN> BST_UNCHECKED = &amp;0</CODE></PRE></P>
+
+<H2>Example</H2>
+<P>Use the <B>BM_SETCHECK</B> message to place a check mark inside of Check1.  Do this when a button is pressed.  To run this example, place a check box control named Check1 and a command button named Command1 inside a form window.</P>
+
+<P><PRE><CODE class="example"><SPAN class="com">' This code is licensed according to the terms and conditions listed <A href="copyrite.html#license" tppabs="http://www.vbapi.com/copyrite.html#license" rel="copyright">here</A>.</SPAN>
+
+<SPAN class="com">' Declarations and such needed for the example:
+' (Copy them to the (declarations) section of a module.)</SPAN>
+<SPAN class="kw">Public Declare Function</SPAN> <A href="sendmessage.html" tppabs="http://www.vbapi.com/ref/s/sendmessage.html">SendMessage</A> <SPAN class="kw">Lib</SPAN> "user32.dll" <SPAN class="kw">Alias</SPAN> "SendMessageA" (<SPAN class="kw">ByVal</SPAN> hWnd _
+	<SPAN class="kw">As Long</SPAN>, <SPAN class="kw">ByVal</SPAN> Msg <SPAN class="kw">As Long</SPAN>, wParam <SPAN class="kw">As Any</SPAN>, lParam <SPAN class="kw">As Any</SPAN>) <SPAN class="kw">As Long</SPAN>
+<SPAN class="kw">Public Const</SPAN> BM_SETCHECK = &amp;HF1
+<SPAN class="kw">Public Const</SPAN> BST_CHECKED = &amp;1
+<SPAN class="kw">Public Const</SPAN> BST_INDETERMINATE = &amp;2
+<SPAN class="kw">Public Const</SPAN> BST_UNCHECKED = &amp;0
+
+<SPAN class="com">' *** Place the following code inside the form window. ***</SPAN>
+<SPAN class="kw">Private Sub</SPAN> Command1_Click()
+	<SPAN class="kw">Dim</SPAN> retval <SPAN class="kw">As Long</SPAN>  <SPAN class="com">' return value</SPAN>
+	
+	<SPAN class="com">' Place a check mark inside Check1.</SPAN>
+	retval = <A href="sendmessage.html" tppabs="http://www.vbapi.com/ref/s/sendmessage.html">SendMessage</A>(Check1.hWnd, <B>BM_SETCHECK</B>, <SPAN class="kw">ByVal CLng(</SPAN>BST_CHECKED<SPAN class="kw">)</SPAN>, <SPAN class="kw">ByVal CLng(</SPAN>0<SPAN class="kw">)</SPAN>)
+	<SPAN class="com">' That's it!</SPAN>
+<SPAN class="kw">End Sub</SPAN></CODE></PRE></P>
+
+<H2>See Also</H2>
+<P><A href="bm_getcheck.html" tppabs="http://www.vbapi.com/ref/b/bm_getcheck.html">BM_GETCHECK</A>, 
+<A href="bm_setstate.html" tppabs="http://www.vbapi.com/ref/b/bm_setstate.html">BM_SETSTATE</A></P>
+
+<H2>Category</H2>
+<P><A href="funcc.html#buttons" tppabs="http://www.vbapi.com/ref/funcc.html#buttons">Buttons</A></P>
+
+<P><A href="funca.html" tppabs="http://www.vbapi.com/ref/funca.html">Back to the Function list.</A><BR>
+<A href="index.html" tppabs="http://www.vbapi.com/ref/index.html" rel="index">Back to the Reference section.</A></P>
+
+<HR>
+
+<P><B>Last Modified:</B> July 30, 2000<BR>
+This page is copyright &copy; 2000 Paul Kuliniewicz.  
+<A href="copyrite.html" tppabs="http://www.vbapi.com/copyrite.html" rel="copyright">Copyright Information</A>  <B>Revised October 29, 2000</B><BR>
+<A href="index-1.html" tppabs="http://www.vbapi.com/index.html" rel="home">Go back to the Windows API Guide home page.</A><BR>
+E-mail: <A href="javascript:if(confirm('http://www.vbapi.com/email.html  \n\nThis file was not retrieved by Teleport Pro, because it is addressed on a domain or path outside the boundaries set for its Starting Address.  \n\nDo you want to open it from the server?'))window.location='http://www.vbapi.com/email.html'" tppabs="http://www.vbapi.com/email.html">vbapi@vbapi.com</A>  <A href="javascript:if(confirm('http://www.vbapi.com/email.html  \n\nThis file was not retrieved by Teleport Pro, because it is addressed on a domain or path outside the boundaries set for its Starting Address.  \n\nDo you want to open it from the server?'))window.location='http://www.vbapi.com/email.html#secure'" tppabs="http://www.vbapi.com/email.html#secure">Send Encrypted E-Mail</A><BR>
+This page is at <A href="bm_setcheck.html" tppabs="http://www.vbapi.com/ref/b/bm_setcheck.html">http://www.vbapi.com/ref/b/bm_setcheck.html</A></P>
+</BODY>
+</HTML>

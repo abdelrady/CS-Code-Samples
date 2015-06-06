@@ -1,0 +1,110 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+<HTML lang="en-us">
+<HEAD>
+<TITLE>Windows API Guide: CloseHandle Function</TITLE>
+<META content="vbapi@vbapi.com" name="author">
+<META content="Information about the CloseHandle function in the Windows API, geared towards the Visual Basic user." name="description">
+<META content="Kuliniewicz,Windows,Windows 95,Windows NT,Windows 98,Windows CE,Windows 2000,API,Application Programming Interface,Programming,Visual Basic,Basic,VB,CloseHandle" name="keywords">
+<META content="Omicron HTML Editor" name="generator">
+<META content="Fri, 01 Oct 1999 21:30:00 GMT" http-equiv="Last-Modified">
+<LINK href="default.css" tppabs="http://www.vbapi.com/css/default.css" rel="stylesheet" type="text/css">
+<LINK href="index-1.html" tppabs="http://www.vbapi.com/index.html" rel="home">
+
+<LINK href="glossary.html" tppabs="http://www.vbapi.com/ref/glossary.html" rel="glossary">
+<LINK href="copyrite.html" tppabs="http://www.vbapi.com/copyrite.html" rel="copyright">
+</HEAD>
+<BODY>
+
+<!-- Begin Adslot1 -->
+<CENTER>
+<SCRIPT language="JAVASCRIPT">
+<!-- hide from older browsers
+now = new Date();
+my_random = now.getTime();
+document.write('<A href="http://adex3.flycast.com/server/socket/127.0.0.1:2800/click/VBWorldnet/VBAPI/' + my_random + '">');
+document.write('<IMG width="468" height="60" border="1" src="http://adex3.flycast.com/server/socket/127.0.0.1:2800/ad/VBWorldnet/VBAPI/' + my_random + '"></A>');
+// -->
+</SCRIPT>
+</CENTER>
+<!-- End Adslot1 -->
+
+<HR>
+
+<H1>CloseHandle Function</H1>
+
+<P><CODE class="declare">Declare Function CloseHandle Lib "kernel32.dll" (ByVal hObject As Long) As Long</CODE></P>
+
+<H2>Platforms</H2>
+<P><UL>
+<LI><B>Windows 95:</B> Supported.
+<LI><B>Windows 98:</B> Supported.
+<LI><B>Windows NT:</B> Requires Windows NT 3.1 or later.
+<LI><B>Windows 2000:</B> Supported.
+<LI><B>Windows CE:</B> Requires Windows CE 1.0 or later.
+</UL></P>
+
+<H2>Description &amp; Usage</H2>
+<P><B>CloseHandle</B> closes a <A class="def" href="glossary.html#handle" tppabs="http://www.vbapi.com/ref/glossary.html#handle" rel="glossary">handle</A> and the object associated with that handle.  After being closed, the handle is of course no longer valid.  This function closes handles associated with access tokens, communications devices, console inputs, console screen buffers, events, files, file mappings, jobs, mailslots, mutexes, named pipes, processes, semaphores, sockets, and threads.</P>
+
+<H2>Return Value</H2>
+<P>If an error occured, the function returns 0 (use <A href="getlasterror.html" tppabs="http://www.vbapi.com/ref/g/getlasterror.html">GetLastError</A> to get the error code).  If successful, the function returns a non-zero value.</P>
+
+<H2>Visual Basic-Specific Issues</H2>
+<P>None.</P>
+
+<H2>Parameters</H2>
+<P><DL>
+<DT><VAR>hObject</VAR><DD>A handle to the object to close.
+</DL></P>
+
+<H2>Example</H2>
+<P><PRE><CODE class="example"><SPAN class="com">' This code is licensed according to the terms and conditions listed <A href="copyrite.html#license" tppabs="http://www.vbapi.com/copyrite.html#license" rel="copyright">here</A>.</SPAN>
+
+' Display the date on which the file C:\MyApp\test.txt was
+' created.  Note how the time zone conversion is necessary.
+Dim hFile As Long  ' handle to the opened file
+Dim ctime As <A href="filetime.html" tppabs="http://www.vbapi.com/ref/f/filetime.html">FILETIME</A>  ' receives time of creation
+Dim atime As <A href="filetime.html" tppabs="http://www.vbapi.com/ref/f/filetime.html">FILETIME</A>  ' receives time of last access
+Dim mtime As <A href="filetime.html" tppabs="http://www.vbapi.com/ref/f/filetime.html">FILETIME</A>  ' receives time of last modification
+Dim thetime As <A href="systemtime.html" tppabs="http://www.vbapi.com/ref/s/systemtime.html">SYSTEMTIME</A>  ' used to manipulate the time
+Dim retval As Long  ' return value
+
+' First, open the file C:\MyApp\test.txt for read-level access.  Note the
+' expression necessary to pass 0 as lpSecurityAttributes.
+hFile = <A href="createfile.html" tppabs="http://www.vbapi.com/ref/c/createfile.html">CreateFile</A>("C:\MyApp\test.txt", GENERIC_READ, FILE_SHARE_READ, ByVal CLng(0), OPEN_EXISTING, FILE_ATTRIBUTE_ARCHIVE, 0)
+If hFile = -1 Then
+  Debug.Print "Could not open the file successfully -- aborting."
+  End  ' terminate the program
+End If
+
+' Next, get the creation, last-access, and last-modification times.
+retval = <A href="getfiletime.html" tppabs="http://www.vbapi.com/ref/g/getfiletime.html">GetFileTime</A>(hFile, ctime, atime, mtime)
+' Convert the creation time to the local time zone.
+retval = <A href="filetimetolocalfiletime.html" tppabs="http://www.vbapi.com/ref/f/filetimetolocalfiletime.html">FileTimeToLocalFileTime</A>(ctime, ctime)
+' Convert the FILETIME format to the SYSTEMTIME format.
+retval = <A href="filetimetosystemtime.html" tppabs="http://www.vbapi.com/ref/f/filetimetosystemtime.html">FileTimeToSystemTime</A>(ctime, thetime)
+
+' Display the date of creation of the file to the user.
+Debug.Print "The file was created on "; thetime.wMonth; "-"; thetime.wDay; "-"; thetime.wYear
+
+' Close the file to free up resources.
+retval = <B>CloseHandle</B>(hFile)</CODE></PRE></P>
+
+<H2>Category</H2>
+<P><A href="funcc.html#handles" tppabs="http://www.vbapi.com/ref/funcc.html#handles">Handles</A></P>
+
+<P><A href="funca.html" tppabs="http://www.vbapi.com/ref/funca.html">Go back to the alphabetical Function listing.</A><BR>
+<A href="index.html" tppabs="http://www.vbapi.com/ref/index.html">Go back to the Reference section index.</A></P>
+
+<HR>
+
+<P><B>Last Modified:</B> October 1, 1999<BR>
+This page is copyright &copy; 1999 Paul Kuliniewicz.  
+<A href="copyrite.html" tppabs="http://www.vbapi.com/copyrite.html" rel="copyright">Copyright Information</A>  <B>Revised October 29, 2000</B><BR>
+
+<A href="index-1.html" tppabs="http://www.vbapi.com/index.html">Go back to the Windows API Guide home page.</A><BR>
+E-mail: <A href="javascript:if(confirm('http://www.vbapi.com/email.html  \n\nThis file was not retrieved by Teleport Pro, because it is addressed on a domain or path outside the boundaries set for its Starting Address.  \n\nDo you want to open it from the server?'))window.location='http://www.vbapi.com/email.html'" tppabs="http://www.vbapi.com/email.html">vbapi@vbapi.com</A>  <A href="javascript:if(confirm('http://www.vbapi.com/email.html  \n\nThis file was not retrieved by Teleport Pro, because it is addressed on a domain or path outside the boundaries set for its Starting Address.  \n\nDo you want to open it from the server?'))window.location='http://www.vbapi.com/email.html#secure'" tppabs="http://www.vbapi.com/email.html#secure">Send Encrypted E-Mail</A><BR>
+This page is at <A href="closehandle.html" tppabs="http://www.vbapi.com/ref/c/closehandle.html">http://www.vbapi.com/ref/c/closehandle.html</A>
+</P>
+</BODY>
+</HTML>

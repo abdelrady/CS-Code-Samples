@@ -1,0 +1,1236 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!-- saved from url=(0039)http://www2.webng.com/amrlearn/116.html -->
+<HTML><HEAD><TITLE>All Algorithms In One Program</TITLE><LINK 
+href="116_files/stylesheet.css" type=text/css rel=stylesheet>
+<META http-equiv=Content-Type content="text/html; charset=UTF-8">
+<META content="All Algorithms In One Program All Algorithms In One Program " 
+name=description>
+<META 
+content="C++, All Algorithms In One Program, All, Algorithms, In, One, Program " 
+name=keywords>
+<META content="Copyright 2007 Amr Saber" name=copyright>
+<META content="MSHTML 6.00.2900.2180" name=GENERATOR></HEAD>
+<BODY>
+<CENTER>
+<DIV id=header>
+<SCRIPT type=text/javascript><!--
+google_ad_client = "pub-9653171024150495";
+google_alternate_color = "C3D9FF";
+google_ad_width = 728;
+google_ad_height = 90;
+google_ad_format = "728x90_as";
+google_ad_type = "text";
+//2007-02-02: header
+google_ad_channel = "7161698987";
+//--></SCRIPT>
+
+<SCRIPT src="116_files/show_ads.js" type=text/javascript>
+</SCRIPT>
+</DIV></CENTER>
+<DIV id=index>
+<H3>Goooooooogle</H3>
+<SCRIPT type=text/javascript><!--
+google_ad_client = "pub-9653171024150495";
+google_alternate_color = "C3D9FF";
+google_ad_width = 120;
+google_ad_height = 600;
+google_ad_format = "120x600_as";
+google_ad_type = "text";
+//2007-02-02: header, right
+google_ad_channel = "7161698987+2593520185";
+//--></SCRIPT>
+
+<SCRIPT src="116_files/show_ads.js" type=text/javascript>
+</SCRIPT>
+</DIV>
+<DIV id=index2>
+<H3>Goooooooogle</H3>
+<SCRIPT type=text/javascript><!--
+google_ad_client = "pub-9653171024150495";
+google_alternate_color = "C3D9FF";
+google_ad_width = 120;
+google_ad_height = 600;
+google_ad_format = "120x600_as";
+google_ad_type = "text";
+google_ad_channel = "";
+//--></SCRIPT>
+
+<SCRIPT src="116_files/show_ads.js" type=text/javascript>
+</SCRIPT>
+</DIV>
+<DIV id=content>
+<H3>All Algorithms In One Program</H3>
+<P></P><TEXTAREA>
+#include&lt;iostream.h&gt;
+#include&lt;fstream.h&gt;
+#include&lt;process.h&gt;
+#include&lt;math.h&gt;
+const int max = 100;
+typedef float  keytype;
+float distance[max];
+int fromnode[max];
+const int xm=4;
+const int ym=3;
+float inf=100000;
+bool up=0,left=0,right=0,down=0;
+const int element=9;
+const int m=3;
+//int a[element];
+struct el_type
+{
+	int x[element];
+	//int y;
+	//_____________
+	el_type()
+	{
+		for (int i=0;i&lt;element;i++)
+		x[i]=0; 
+
+	}
+	//_______________
+	el_type(int a[] )
+	{
+		for (int i=0;i&lt;element;i++)
+		x[i]=a[i]; 
+	}
+	//__________________
+	void show_data1()
+	{
+		if(left ==1)
+		{
+			cout&lt;&lt;"Move Left   :"&lt;&lt;endl;
+			left=0;
+		}
+		else if(right == 1)
+		{
+			cout&lt;&lt;"Move Right  :"&lt;&lt;endl;
+			right=0;
+
+		}
+
+		else if(down==1)
+		{
+			cout&lt;&lt;"Move Down   :"&lt;&lt;endl;
+			down=0;
+		}
+		else if(up == 1)
+		{
+			cout&lt;&lt; "Move Up    :"&lt;&lt;endl;
+			up=0;		
+		}
+
+		cout&lt;&lt;"[";
+		for (int i=0;i&lt;element;i++)
+		cout&lt;&lt;x[i]&lt;&lt;"   "; 
+		cout&lt;&lt;"]"&lt;&lt;endl;
+	}
+};
+//___________________________________________________________________
+//                     stack1 function
+class stack1
+{
+	int top;
+	el_type data[max];
+public:
+	stack1()
+	{
+		top=-1;
+	}
+//____________________
+	~stack1()
+	{
+		top=-1;
+	}
+//____________________
+	bool stack1_is_empty()
+	{
+		if(top==-1)
+		return true;
+		return false;
+	}
+//____________________
+	bool stack1_is_full()
+	{
+		if(top==max-1)
+			return true;
+		else 
+			return false;
+	}
+//____________________
+	void push1(el_type e)
+	{
+		if(stack1_is_full())
+		{
+			cout&lt;&lt;"error:stack1 is full"&lt;&lt;endl;
+			exit(0);
+		}
+		else
+		{
+			top++;
+			data[top]=e;
+		}
+	}
+//_____________________
+	el_type pop1()
+	{
+		el_type e;
+		if(stack1_is_empty())
+		{
+			cout&lt;&lt;"error stack1 is empty"&lt;&lt;endl;
+			exit(0);
+		}
+		else
+		{
+			e=data[top];
+			top--;
+			return e;
+		}
+	}
+//____________________
+	void print_stack1()
+	{
+		el_type e;
+		stack1 temp;
+		while(!stack1_is_empty())
+		{
+			e=pop1();
+			e.show_data1();
+			cout&lt;&lt;endl;
+			temp.push1(e);
+		}
+		cout&lt;&lt;endl&lt;&lt;"***____________________________________________***"&lt;&lt;endl;
+		while(!temp.stack1_is_empty())
+		{
+			e=temp.pop1();
+			push1(e);
+		}
+	}
+//_____________________
+	void print_stack1_up()
+	{
+		el_type e;
+		stack1 temp;
+		while(!stack1_is_empty())
+		{
+			e=pop1();
+			temp.push1(e);
+		}
+		while(!temp.stack1_is_empty())
+		{
+			e=temp.pop1();
+			push1(e);
+			e.show_data1();
+		}
+	}
+};
+//____________________
+stack1 operators(el_type state)
+{
+	stack1 s;
+	el_type nextstate;
+	for(int j=0;j&lt;element;j++)
+	{
+		if(state.x[j]==0)
+			break;
+	}
+	int i;
+	//int j=i;
+	//move up
+	if(j &gt; 2 )
+	{
+		nextstate.x[j]=state.x[j-m];
+		nextstate.x[j-m]=0;
+		for( i=0;i&lt;element;)
+		{
+			if (i!= j &amp;&amp; i != j-m )
+				nextstate.x [i] =state.x [i];
+			i++;
+		}
+		up=1;
+		s.push1(nextstate);
+	}
+	//move down
+	if(j &lt; 6 )
+	{
+//		a[1]=1;
+		nextstate.x[j]=state.x[j+m];
+		nextstate.x[j+m]=0;
+		for( i=0;i&lt;element;)
+		{
+			if (i!= j &amp;&amp; i != j+m )
+				nextstate.x [i] =state.x [i];
+				i++;
+		//	}
+			
+		}
+		down=1;
+		s.push1(nextstate);
+
+	}
+//move right
+	if((j+1) % m != 0 )
+	{
+//		a[2]=1;
+		nextstate.x[j]=state.x[j+1];
+		nextstate.x[j+1]=0;
+		for( i=0;i&lt;element;)
+		{
+			if (i!= j &amp;&amp; i != j+1 )
+				nextstate.x [i] =state.x [i];
+			i++;
+		}
+		right=1;
+		s.push1(nextstate);
+	}
+	//move left
+	if(j % m !=0)
+	{
+//		a[3]=1;
+		nextstate.x[j]=state.x[j-1];
+		nextstate.x[j-1]=0;
+		for( i=0;i&lt;element;)
+		{
+			if (i!= j &amp;&amp; i != j-1 )
+				nextstate.x [i] =state.x [i];
+			i++;
+		}
+		left=1;
+		s.push1(nextstate);
+	}
+	return s;
+}
+/////////////////////////STACK///////////////////////////////
+struct eltype
+{
+	char name;
+	keytype key;
+	bool flag;
+	void showdata()
+	{
+		cout&lt;&lt;name&lt;&lt;"\t"&lt;&lt;key &lt;&lt; endl;
+	}
+};
+struct eletype
+{
+	int x;
+	int y;
+//------------------------------------
+eletype()
+{
+	x=0;
+	y=0;
+}
+//-----------------------------
+eletype(int a,int b)
+{
+	x=a;
+	y=b;
+}
+//---------------------------------
+void show_data1()
+{
+	cout&lt;&lt;"("&lt;&lt;x&lt;&lt;","&lt;&lt;y&lt;&lt;")"&lt;&lt;endl;
+}
+};
+//-------------------------------
+class mystack
+{
+	int top;
+	eletype data[max];
+public:
+
+		mystack(){
+		top=-1;
+		}
+
+//------------------------------------------
+	bool mystack_is_empty()
+	{
+		if(top==-1)
+			return true;
+		else
+			return false;
+	}
+	//---------------------------------------------
+	bool mystack_is_full()
+	{
+		if(top==max-1)
+			return true;
+		return false;
+	}
+	//------------------------------------------
+	void push(eletype e)
+	{
+		if(mystack_is_full())
+		{
+			cout&lt;&lt;"error the mystack is full"&lt;&lt;endl;
+			exit(0);
+		}
+		data[++top]=e;
+	}
+//------------------------------------------------
+eletype pop()
+{
+	if(mystack_is_full())
+		{
+			cout&lt;&lt;"error the mystack is full"&lt;&lt;endl;
+			exit(0);
+	}
+	eletype e=data[top];
+	top--;
+	return e;
+}
+//---------------------------------------------------------
+void print_mystack()
+{
+	eletype e;
+	mystack temp;
+	while(!mystack_is_empty())
+	{
+		e=pop();
+		e.show_data1();
+		temp.push(e);
+	}
+	while(!temp.mystack_is_empty())
+	{
+		e=temp.pop();
+		push(e);
+	}
+}
+//-----------------------------------------------------
+void print_mystack_up()
+{
+	eletype e;
+	mystack temp;
+	while(!mystack_is_empty())
+	{
+		e=pop();
+				temp.push(e);
+	}
+	while(!temp.mystack_is_empty())
+	{
+		e=temp.pop();
+		e.show_data1();								
+		push(e);
+	}
+}
+};
+
+//--------------------STack Operations---------------------------------
+mystack mystack_operation(eletype state)
+{
+	mystack s;
+	eletype nstate;
+	//////////////File X////////////////
+	if(state.x&lt;xm)
+	{
+		nstate.x=xm;
+		nstate.y=state.y;
+		s.push(nstate);
+	}
+	//////////////Fill Y/////////////////////
+	if(state.y&lt;ym)
+	{
+		nstate.y=ym;
+		nstate.x=state.x;
+		s.push(nstate);
+	}
+	/////////////////Empty X///////////////////////////
+	if(state.x&gt;0)
+	{
+		nstate.x=0;
+		nstate.y=state.y;
+		s.push(nstate);
+	}
+	/////////////////Empty Y///////////////////////////
+	if(state.y&gt;0)
+	{
+		nstate.y=0;
+		nstate.x=state.x;
+		s.push(nstate);
+	}
+	/////////////////Fill X From Y///////////////////////////
+	if(state.x&lt;xm&amp;&amp;(xm-state.x&lt;state.y))
+	{
+		nstate.x=xm;
+		nstate.y=state.y-(xm-state.x);
+		s.push(nstate);
+	}
+	/////////////////Fill Y From X///////////////////////////
+	if(state.y&lt;ym&amp;&amp;(ym-state.y&lt;state.y))
+	{
+		nstate.y=ym;
+		nstate.x=state.x-(ym-state.y);
+		s.push(nstate);
+	}
+	/////////////////Pour All X To Y///////////////////////////
+	if(state.y&lt;ym&amp;&amp;state.x&gt;0&amp;&amp;(ym-state.y&gt;=state.x))
+	{
+		nstate.x=0;
+		nstate.y=state.y+state.x;
+		s.push(nstate);
+	}
+	/////////////////Pour All Y To X///////////////////////////
+	if(state.x&lt;xm&amp;&amp;state.y&gt;0&amp;&amp;(xm-state.x&gt;=state.y))
+	{
+		nstate.x=state.x+state.y;
+		nstate.y=0;
+		s.push(nstate);
+	}
+	return s;
+}
+//-------------------------------------------------------------
+
+//---------------------QUEU----------
+class queue
+{
+	int count;
+	eltype data[max];
+	int front;
+	int rear;
+public:
+		queue(){
+		count=0;
+		front=0;
+		rear=-1;
+		}
+
+//------------------------------------------
+	bool queue_is_empty()
+	{
+		if(count==0)
+			return true;
+		else
+			return false;
+	}
+	//---------------------------------------------
+	bool queue_is_full()
+	{
+		if(count==max)
+			return true;
+		return false;
+	}
+	//------------------------------------------
+	void enqueue(eltype e)
+	{
+		if(queue_is_full())
+		{
+			cout&lt;&lt;"error the queue is full"&lt;&lt;endl;
+			exit(0);
+		}
+		rear=(rear+1)%max;
+		data[rear]=e;
+		count++;
+	}
+//------------------------------------------------
+eltype dequeue()
+{
+	if(queue_is_empty())
+		{
+			cout&lt;&lt;"error the queue is empty"&lt;&lt;endl;
+			exit(0);
+	}
+	eltype e=data[rear];
+	rear=(rear+1)%max;
+	return e;
+}
+eltype retrieve()
+{
+	eltype e=dequeue();
+	enqueue(e);
+	return e;
+}
+//---------------------------------------------------------
+void print_queue()
+{
+	eltype e;
+	queue temp;
+	while(!queue_is_empty())
+	{
+		e=dequeue();
+		e.showdata();
+		temp.enqueue(e);
+	}
+	while(!temp.queue_is_empty())
+	{
+		e=temp.dequeue();
+		enqueue(e);
+	}
+}
+//-----------------------------------------------------
+void print_queue_up()
+{
+	eltype e;
+	queue temp;
+	while(!queue_is_empty())
+	{
+		e=dequeue();
+		temp.enqueue(e);
+	}
+	while(!temp.queue_is_empty())
+	{
+		e=temp.dequeue();
+		e.showdata();								
+		enqueue(e);
+	}
+}
+};
+//-----------------------------------------------------
+class stack
+{
+	int top;
+	eltype data[max];
+public:
+
+		stack(){
+		top=-1;
+		}
+
+//------------------------------------------
+	bool stack_is_empty()
+	{
+		if(top==-1)
+			return true;
+		else
+			return false;
+	}
+	//---------------------------------------------
+	bool stack_is_full()
+	{
+		if(top==max-1)
+			return true;
+		return false;
+	}
+	//------------------------------------------
+	void push(eltype e)
+	{
+		if(stack_is_full())
+		{
+			cout&lt;&lt;"error the stack is full"&lt;&lt;endl;
+			exit(0);
+		}
+		top++;
+		data[top]=e;
+	}
+//------------------------------------------------
+eltype pop()
+{
+	if(stack_is_empty())
+		{
+			cout&lt;&lt;"error the stack is empty"&lt;&lt;endl;
+			exit(0);
+	}
+	eltype e=data[top];
+	top--;
+	return e;
+}
+eltype retrieve()
+{
+	eltype e=pop();
+	push(e);
+	return e;
+}
+//---------------------------------------------------------
+void print_stack()
+{
+	eltype e;
+	stack temp;
+	while(!stack_is_empty())
+	{
+		e=pop();
+		e.showdata();
+		temp.push(e);
+	}
+	while(!temp.stack_is_empty())
+	{
+		e=temp.pop();
+		push(e);
+	}
+}
+//-----------------------------------------------------
+void print_stack_up()
+{
+	eltype e;
+	stack temp;
+	while(!stack_is_empty())
+	{
+		e=pop();
+		temp.push(e);
+	}
+	while(!temp.stack_is_empty())
+	{
+		e=temp.pop();
+		e.showdata();								
+		push(e);
+	}
+}
+};
+//-----------------------------------------------------
+
+//------------- graph class ------------------------
+
+	/***  class graph*************/
+class graph
+{
+   private:
+	   int count;
+	   eltype nodes[max];
+	   float edges[max][max];
+   public:
+	   bool unprocessed1(keytype k);
+	   bool processed(keytype k);
+	   void unprocessed();
+	   //the constructor
+	   graph()
+	   {
+		   count=0;
+		   for(int i=0;i&lt;count;i++)
+			   for(int j=0;j&lt;count;j++)
+				   edges[i][j]=0;
+	   }
+	   //return count
+	   int getcount()
+	   {
+		   return count;
+	   }
+	   keytype getkey(int i)
+	   {
+		   return nodes[i].key;
+	   }
+	   //graph full
+	   bool graph_is_full()
+	   {
+		   return (count==max)?true:false;
+	   }
+	   //graph empety
+	   bool graph_is_empety()
+	   {
+		   return (count==0)?true:false;
+	   }
+	   //key found
+	   bool keyfound(keytype k)
+	   {
+		   int i;
+		   for(i=0;i&lt;=count;i++)
+		   if(nodes[i].key==k)
+			   return true;
+		   return false;
+	   }
+	   //find node
+	   int findnode(keytype k)
+	   {
+		   int i;
+		   for(i=0;i&lt;=count;i++)
+		   if(nodes[i].key==k)
+			   return i;
+		   return -1;
+	   }
+	   //insertnode
+	   void insertnode(eltype e)
+	   {
+		   
+		   if(graph_is_full())
+		   {
+			   cout&lt;&lt;"Error graph_is_full\n";
+			   return;
+		   }
+		   if(keyfound(e.key))
+		   { 
+		   	   cout&lt;&lt;"Error Duplicate key found\n";
+			   return;
+		   }
+		   nodes[count]=e;
+		   for(int i=0;i&lt;=count;i++)
+		   { 
+		       edges[i][count]=0;
+			   edges[count][i]=0;
+		   }
+		   count++;
+	   }
+	   //delete node
+	   void deletenode(eltype e)
+	   {
+		   if(graph_is_empety())
+		   {
+			   cout&lt;&lt;"Error graph_is_empety\n";
+			   return;
+		   }
+		   count--;
+		   int where=findnode(e.key);
+		   if(where==-1)
+		   {
+			   cout&lt;&lt;"Error key is found\n";
+			   return;
+		   }
+          
+		   for(int i=0;i&lt;=count;i++)
+		   { 
+		       edges[where][i]=edges[count][i];
+			   edges[i][where]=edges[i][count];
+		   }
+		   edges[where][where]=edges[count][count];
+		   
+	   }
+	   //updata node
+	   bool updatenode(eltype e)
+	   {
+		   int i=findnode(e.key);
+			   if(i==-1)
+			   {
+				cout&lt;&lt;"Error update missing key\n";
+			   return false;
+			   }
+			   nodes[i]=e;
+			   return true;
+	   }
+	   //insertedge
+	   bool insertedge(keytype k1,keytype k2,float dis)
+	   {
+		   int n1=findnode(k1);
+		   int n2=findnode(k2);
+		   if(n1==-1||n2==-1)
+		   {
+			   cout&lt;&lt;"Error the node that you want to connect is missing\n";
+			   return false;
+		   }
+		   edges[n1][n2]=dis;
+		   edges[n2][n1]=dis;
+		   return true;
+	   }
+	   //delete edge
+	   bool deleteedge(keytype k1,keytype k2)
+	   {
+		   int n1=findnode(k1);
+		   int n2=findnode(k2);
+		   if(n1==-1||n2==-1)
+		   {
+			   cout&lt;&lt;"\tError Remove Edge &lt;Node is Missing&gt;\n";
+			   return false;
+		   }
+		   edges[n1][n2]=0;
+		   edges[n2][n1]=0;
+		   return true;
+	   }
+	   // is adjesnt
+	   int isadjacent(keytype k1,keytype k2)
+	   {
+		   int n1=findnode(k1);
+		   int n2=findnode(k2);
+		   if(n1==-1||n2==-1)
+		   {
+			   cout&lt;&lt;"\tError Adjacent &lt;Node is Missing&gt;\n";
+			   return -1;
+		   }
+		   if(edges[n1][n2]==0&amp;&amp;edges[n2][n1]==0)
+			   return 0;
+		   return 1;
+	   }
+	   //-------------------------------------------
+	   //display graph
+	   void displaygraph()
+	   {
+		   for(int i=0;i&lt;count;i++)
+			   nodes[i].showdata();
+
+		   for(i=0;i&lt;count;i++)
+		   {
+			   for(int j=0;j&lt;count;j++)
+				   cout&lt;&lt;edges[i][j]&lt;&lt;"\t";
+				   cout&lt;&lt;endl;
+		   }
+	   }
+	   //---------------------------
+	   //********retriveedge*************
+	   float retriveedge(keytype k1,keytype k2)
+	   {
+		   int n1=findnode(k1);
+		   int n2=findnode(k2);
+		   if(n1==-1||n2==-1)
+		   {
+			   cout&lt;&lt;"\tError Retrieve Edge &lt;Node is Missing&gt;\n";
+			   return -1;
+		   }
+		   return edges[n1][n2];
+	   }
+
+};
+//---------------------------------------------------------
+///////////////***********build graph**************////////////////
+void build_graph(graph&amp;g)
+{
+	eltype e1,e2;
+	float dis;
+	char* filename="depthfirst.txt";
+	ifstream file(filename);
+	if(!file)
+	{
+		cout&lt;&lt;"Error file error\n";
+		return;
+	}
+	while(file&gt;&gt;e1.key)
+	{
+		file&gt;&gt;e1.name;
+		if(g.keyfound(e1.key))
+			g.updatenode(e1);
+		else
+			g.insertnode(e1);
+		char ch;
+		while(file.get(ch)&amp;&amp;ch!='\n')
+			{
+				file&gt;&gt;e2.key;
+				file&gt;&gt;dis;
+				if(!g.keyfound(e2.key))
+					g.insertnode(e2);
+				g.insertedge(e1.key,e2.key,dis);
+			}
+	}
+}
+/////----------------------------------------------------
+/**********showmenu**********/
+int showmenu()
+{
+	int i;
+	cout&lt;&lt;"-----------------------MENU--------------------------\n";
+	cout&lt;&lt;"\t1 Show Water Gar\n";
+	cout&lt;&lt;"\t2 Insert Node\n";
+	cout&lt;&lt;"\t3 Update Node\n";
+	cout&lt;&lt;"\t4 Insert Edge\n";
+	cout&lt;&lt;"\t5 Update Edge\n";
+	cout&lt;&lt;"\t6 Display bgraph\n";
+	cout&lt;&lt;"\t5 Shortest Path\n";  
+	cout&lt;&lt;"\t6 Depth First\n";
+	cout&lt;&lt;"\t7 Bridth First\n";
+	cout&lt;&lt;"\t8 8 Puzzel\n";
+	cout&lt;&lt;"\t9 Exit\n";
+	cout&lt;&lt;"------------------------------------------------------\n";
+	cout&lt;&lt;"                  Enter choice:  ";
+	cin&gt;&gt;i;
+	return i;
+}
+//-----------------------------------------------------------
+//************** get shortest path********//////////
+void shortestPath(graph g)
+{
+    int n=g.getcount();
+	distance[0]=0;
+	g.unprocessed();
+	g.processed(g.getkey(0));
+	fromnode[0]=-1;
+    /////********1- initialization*****************////////////////
+	for(int i=1;i&lt;n;i++)
+	{
+		fromnode[i]=-1;
+		distance[i]=inf;
+		if(g.isadjacent(g.getkey(0),g.getkey(i)))
+		{
+        distance[i]=g.retriveedge(g.getkey(0),g.getkey(i));
+		fromnode[i]=0;
+		}	
+	}     //******END OF INITIALIZE******************//
+	///********(2) function********//////////
+	int indexmin;
+	float sum=0.0f;
+	float mindis=inf;
+	  
+	for(i=0;i&lt;n-1;i++)
+	{       //Find Closest Node not Processed
+		for(int k=1;k&lt;n-1;k++)
+		{
+			if(g.unprocessed1(g.getkey(k)))
+			{
+				if(distance[k]&lt;mindis)
+				{
+					indexmin=k;
+					mindis=distance[k];
+				}
+			}
+		}//end iner loop
+		g.processed(g.getkey(indexmin));
+		mindis=inf;
+
+		for(int j=1;j&lt;n;j++)
+		{
+			if(g.unprocessed1(g.getkey(j)) &amp;&amp;
+				g.isadjacent(g.getkey(j),g.getkey(indexmin)))
+			{
+				sum=g.retriveedge(g.getkey(j),g.getkey(indexmin))+distance[indexmin];
+				if(sum&lt;distance[j])
+				{
+					distance[j]=sum;
+					fromnode[j]=indexmin;
+				}
+				
+			}
+			
+
+		}//end inner loop
+	}//end outer loop
+
+cout&lt;&lt;"the shortest path is   "&lt;&lt;distance[n-1]&lt;&lt;endl;	
+}//end shortestPath
+
+//------------------------------------------------
+///**************** DepthFirst *************************
+bool depthfirst(graph g,eltype start,eltype target,stack&amp;s)
+{
+	int   n=g.getcount();
+	eltype current,x;
+	if(g.findnode(start.key)&lt;0)
+		return false;
+	s.push(start);
+	g.unprocessed();
+	g.processed(start.key);
+	while(!s.stack_is_empty())
+	{
+		current=s.retrieve();
+		if(current.key==target.key)
+			return true;
+		bool y=false;
+		int z=0;
+		//for(int i=1;i&lt;n;i++)
+		int i=0;
+		while(i&lt;n&amp;&amp;!y)
+		{
+			x.key=g.getkey(i);
+
+			z=g.isadjacent(current.key,x.key);
+			if(z&gt;0 &amp;&amp;g.unprocessed1(x.key))
+			{
+				s.push(x);
+				g.processed(x.key);
+				y=true;
+			}
+			else i++;
+
+		}
+		if(!y)
+		s.pop();
+	}
+	return false;
+}
+///////************************************//////////////
+/**************////////////******************************
+bool bridthfirst(graph g,eltype start,eltype target,queue&amp;s)
+{
+	int   n=g.getcount();
+	eltype current,x;
+	if(g.findnode(start.key)&lt;0)
+		return false;
+	s.enqueue(start);
+	g.unprocessed();
+	g.processed(start.key);
+	while(!s.queue_is_empty())
+	{
+		current=s.dequeue();
+		if(current.key==target.key)
+			return true;
+		bool y=false;
+		int z=0;
+		//for(int i=1;i&lt;n;i++)
+		int i=0;
+		while(i&lt;n&amp;&amp;!y)
+		{
+			x.key=g.getkey(i);
+			z=g.isadjacent(current.key,x.key);
+			if(z&gt;0 &amp;&amp;g.unprocessed1(x.key))
+			{
+				s.enqueue(x);
+				g.processed(x.key);
+				y=true;
+			}
+			else i++;
+
+		}
+	}
+	return false;
+}
+//////////*********************************
+
+
+////////////MAIN//////////////////////////
+int main()
+{
+	graph g;
+	bool ss;
+	stack s;
+	stack1 s1;
+	queue q;
+	float dis;
+	eltype start,target,e;
+	int n;
+	build_graph(g);
+	start.key=0;
+	target.key=7;
+	do{
+		n=showmenu();
+		switch(n)
+		{
+		case 1:
+			{
+				eletype e1,e2;//e2(4,5),e3(4,4);
+				cout&lt;&lt;"\n\tenter First Element\t";
+				cin&gt;&gt;e2.x;
+				cout&lt;&lt;"\n\tenter Second Element\t";
+				cin&gt;&gt;e2.y;
+				mystack s1;
+				s1=mystack_operation(e2);
+				s1.print_mystack();
+				cout&lt;&lt;"---------------"&lt;&lt;endl;
+				s1.print_mystack_up();
+				cout&lt;&lt;endl;
+				break;
+			}
+		case 2:
+			cout&lt;&lt;"\tEnter the key:\t";
+			cin&gt;&gt;e.key;
+			if(g.keyfound(e.key))
+			{
+				cout&lt;&lt;"\tCanNot InsertNode &lt;Key Found&gt;\n";
+				break;break;
+			}
+			cout&lt;&lt;"\tEnter the name\t";
+			cin&gt;&gt;e.name;
+			g.insertnode(e);
+			cout&lt;&lt;"\nEnter the keys of the conected edges (1) if you want to connect or (0) otherwise ";
+			int i;
+			float x;
+			for(i=0;i&lt;g.getcount();i++)
+			{
+				cout&lt;&lt;"do you want to connect this node with node whose key is ";
+				cout&lt;&lt;g.getkey(i);
+				cin&gt;&gt;x;
+				if(x!=0)
+					g.insertedge(e.key,g.getkey(i),dis);
+				else
+					continue;
+
+			}
+			break;
+		case 3:
+			cout&lt;&lt;"\tEnter the key:\t";
+			cin&gt;&gt;e.key;
+			cout&lt;&lt;endl;
+			if(!g.keyfound(e.key))
+			{
+				cout&lt;&lt;"\tCanNot Update &lt;Key Not Found&gt;\n";
+				break;
+				break;
+			}
+			cout&lt;&lt;"\nEnter the name:\t";
+			cin&gt;&gt;e.name;
+			g.updatenode(e);
+			cout&lt;&lt;"------------Update Succesfually------------\n";
+			break;
+		case 4:
+			cout&lt;&lt;"\n";
+			g.displaygraph();
+			break;
+		case 5:
+			cout&lt;&lt;"\n";
+			shortestPath(g); 
+			break;
+		case 6:
+			{
+				cout&lt;&lt;"\n\tenter start key:\t";cin&gt;&gt;start.key;
+				cout&lt;&lt;"\n\tenter target key:\t"; cin&gt;&gt;target.key;
+				ss=depthfirst(g,start,target,s);
+				cout&lt;&lt;"\n\tThe aths are:\n";
+				if (ss==true)
+				{
+					while(!s.stack_is_empty())
+						cout&lt;&lt;"\t"&lt;&lt;s.pop().key;
+					 cout&lt;&lt;"\n";
+				}
+				else
+					cout&lt;&lt;"\t\tNO DEVICES"&lt;&lt;endl;
+				break;
+			}
+		case 7:
+			{
+				cout&lt;&lt;"\n\tenter start key:\t";cin&gt;&gt;start.key;
+				cout&lt;&lt;"\n\tenter target key:\t"; cin&gt;&gt;target.key;
+				ss=bridthfirst(g,start,target,q);
+				if (ss==true)
+					cout&lt;&lt;"\t\t\t TRUE PATH"&lt;&lt;"\n\n";
+				else
+					cout&lt;&lt;"\t\t\tNO DEVICES\n\n";
+				break;
+			}
+		case 8:
+			{
+				//--------------------//your initial state
+				int a[element]={3,2,4,1,0,7,8,5,6};   
+				//cout&lt;&lt;"please enter your buzzel Size :";
+				//cin&gt;&gt;element;
+				//cout&lt;&lt;"Enter your state Position ";
+				//for(int i=0;i&lt;element;i++)
+				//a[i]=i;
+				if(m*m == element )
+				{
+				el_type state(a);
+				stack1 s1;
+				s1=operators(a);
+				s1.print_stack1();
+				}
+				else 
+					cout&lt;&lt;"This buzzel can't construct ,because element don't have real root "&lt;&lt;endl;
+			break;
+			}
+			default:
+				{
+					cout&lt;&lt;"\t\t THANK YOU\n";	
+			exit(0);
+			}
+		}	
+		cout&lt;&lt;endl;
+	}while(1);
+	return 0;
+}	
+
+
+void graph::unprocessed()
+{
+	for(int i=0;i&lt;count;i++)
+		nodes[i].flag=false;
+}
+
+bool graph::processed(keytype k)
+{
+	int i=findnode(k);
+	if(nodes[i].flag==true)
+		return false;
+	nodes[i].flag=true;
+	return true;
+	
+}
+bool graph::unprocessed1(keytype k)
+{
+	int i=findnode(k);
+	if(nodes[i].flag==false)
+		return true;
+	return false;
+}
+
+
+</TEXTAREA> <!-- Search Google -->
+<CENTER>
+<FORM action=http://www.google.com/custom method=get target=_top>
+<TABLE bgColor=#ffffff>
+  <TBODY>
+  <TR>
+    <TD vAlign=top noWrap align=left height=32><A 
+      href="http://www.google.com/"><IMG alt=Google 
+      src="116_files/Logo_25wht.gif" align=middle border=0></IMG></A> <LABEL 
+      style="DISPLAY: none" for=sbi>Enter your search terms</LABEL> <INPUT 
+      id=sbi maxLength=255 size=40 name=q></INPUT> <LABEL style="DISPLAY: none" 
+      for=sbb>Submit search form</LABEL> <INPUT id=sbb type=submit value=Search name=sa></INPUT> <INPUT type=hidden 
+      value=pub-9653171024150495 name=client></INPUT> <INPUT type=hidden value=1 
+      name=forid></INPUT> <INPUT type=hidden value=ISO-8859-1 name=ie></INPUT> 
+      <INPUT type=hidden value=ISO-8859-1 name=oe></INPUT> <INPUT type=hidden 
+      value=active name=safe></INPUT> <INPUT type=hidden 
+      value=GALT:#008000;GL:1;DIV:#336699;VLC:663399;AH:center;BGC:FFFFFF;LBGC:336699;ALC:0000FF;LC:0000FF;T:000000;GFNT:0000FF;GIMP:0000FF;FORID:1 
+      name=cof></INPUT> <INPUT type=hidden value=en name=hl></INPUT> 
+  </TD></TR></TBODY></TABLE></FORM></CENTER><!-- Search Google -->
+<H3><A 
+href="http://www2.webng.com/amrlearn/Index.html">Home</A>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A 
+href="http://www2.webng.com/amrlearn/115.html">Previous</A></H3></DIV></BODY></HTML>

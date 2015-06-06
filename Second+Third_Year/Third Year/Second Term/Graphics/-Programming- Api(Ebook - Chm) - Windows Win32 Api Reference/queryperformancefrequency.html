@@ -1,0 +1,138 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+<HTML lang="en-us">
+<HEAD>
+<TITLE>Windows API Guide: QueryPerformanceFrequency Function</TITLE>
+<META content="vbapi@vbapi.com" name="author">
+<META content="Information about the QueryPerformanceFrequency function in the Windows API, geared towards the Visual Basic user." name="description">
+<META content="Kuliniewicz,Windows,Windows 95,Windows NT,Windows 98,Windows CE,Windows 2000,API,Application Programming Interface,Programming,Visual Basic,Basic,VB,QueryPerformanceFrequency" name="keywords">
+<META content="Omicron HTML Editor" name="generator">
+<LINK href="default.css" tppabs="http://www.vbapi.com/css/default.css" rel="stylesheet" type="text/css">
+<LINK href="index-1.html" tppabs="http://www.vbapi.com/index.html" rel="home">
+<LINK href="glossary.html" tppabs="http://www.vbapi.com/ref/glossary.html" rel="glossary">
+<LINK href="copyrite.html" tppabs="http://www.vbapi.com/copyrite.html" rel="copyright">
+</HEAD>
+<BODY>
+
+<!-- Begin Adslot1 -->
+<CENTER>
+<SCRIPT language="JAVASCRIPT">
+<!-- hide from older browsers
+now = new Date();
+my_random = now.getTime();
+document.write('<A href="http://adex3.flycast.com/server/socket/127.0.0.1:2800/click/VBWorldnet/VBAPI/' + my_random + '">');
+document.write('<IMG width="468" height="60" border="1" src="http://adex3.flycast.com/server/socket/127.0.0.1:2800/ad/VBWorldnet/VBAPI/' + my_random + '"></A>');
+// -->
+</SCRIPT>
+</CENTER>
+<!-- End Adslot1 -->
+
+<HR>
+
+<H1>QueryPerformanceFrequency Function</H1>
+
+<P><CODE class="declare"><SPAN class="kw">Declare Function</SPAN> QueryPerformanceFrequency <SPAN class="kw">Lib</SPAN> "kernel32.dll" (lpFrequency <SPAN class="kw">As</SPAN> <A href="large_integer.html" tppabs="http://www.vbapi.com/ref/l/large_integer.html">LARGE_INTEGER</A>) <SPAN class="kw">As Long</SPAN>
+</CODE></P>
+
+<H2>Platforms</H2>
+<P><UL>
+<LI><B>Windows 95:</B> Supported.
+<LI><B>Windows 98:</B> Supported.
+<LI><B>Windows NT:</B> Required Windows NT 3.1 or later.
+<LI><B>Windows 2000:</B> Supported.
+<LI><B>Windows CE:</B> Not Supported.
+</UL></P>
+
+<H2>Description &amp; Usage</H2>
+<P><B>QueryPerformanceFrequency</B> obtains the frequency of the system's high-performance timer.  This value indicates the number of times the high-performance timer increments itself every second.  Knowing this frequency, you can use <A href="queryperformancecounter.html" tppabs="http://www.vbapi.com/ref/q/queryperformancecounter.html">QueryPerformanceCounter</A> to measure precise time intervals.  However, not all systems support a high-performance timer.</P>
+
+<H2>Return Value</H2>
+<P>If the system contains a high-performance timer, the function returns a non-zero value.  If the system does not contain such a timer, the function returns zero.</P>
+
+<H2>Visual Basic-Specific Issues</H2>
+<P>None.</P>
+
+<H2>Parameters</H2>
+<P><DL>
+<DT><VAR>lpFrequency</VAR><DD>Receives the 64-bit frequency of the computer's high-performance timer, if one exists.
+</DL></P>
+
+<H2>Example</H2>
+<P>Use the high-performance timer to determine how long it takes to calculate the square roots of the first 100,000 positive integers.  Run this test when the user clicks on button Command1.  Obviously, to use this example, you need to place a command button named Command1 on a form window.</P>
+
+<P><PRE><CODE class="example"><SPAN class="com">' This code is licensed according to the terms and conditions listed <A href="copyrite.html#license" tppabs="http://www.vbapi.com/copyrite.html#license" rel="copyright">here</A>.</SPAN>
+
+<SPAN class="com">' Declarations and such needed for the example:
+' (Copy them to the (declarations) section of a module.)</SPAN>
+<SPAN class="kw">Public Type</SPAN> <A href="large_integer.html" tppabs="http://www.vbapi.com/ref/l/large_integer.html">LARGE_INTEGER</A>
+	LowPart <SPAN class="kw">As Long</SPAN>
+	HighPart <SPAN class="kw">As Long</SPAN>
+<SPAN class="kw">End Type</SPAN>
+<SPAN class="kw">Public Declare Function</SPAN> <B>QueryPerformanceFrequency</B> Lib "kernel32.dll" (lpFrequency <SPAN class="kw">As</SPAN> <A href="large_integer.html" tppabs="http://www.vbapi.com/ref/l/large_integer.html">LARGE_INTEGER</A>) <SPAN class="kw">As Long</SPAN>
+<SPAN class="kw">Public Declare Function</SPAN> <A href="queryperformancecounter.html" tppabs="http://www.vbapi.com/ref/q/queryperformancecounter.html">QueryPerformanceCounter</A> <SPAN class="kw">Lib</SPAN> "kernel32.dll" (lpPerformanceCount <SPAN class="kw">As</SPAN> <A href="large_integer.html" tppabs="http://www.vbapi.com/ref/l/large_integer.html">LARGE_INTEGER</A>) _
+	<SPAN class="kw">As Long</SPAN>
+<SPAN class="kw">Public Declare Sub</SPAN> <A href="copymemory.html" tppabs="http://www.vbapi.com/ref/c/copymemory.html">CopyMemory</A> <SPAN class="kw">Lib</SPAN> "kernel32.dll" <SPAN class="kw">Alias</SPAN> "RtlMoveMemory" (Destination <SPAN class="kw">As Any</SPAN>, Source _
+	<SPAN class="kw">As Any</SPAN>, <SPAN class="kw">ByVal</SPAN> Length <SPAN class="kw">As Long</SPAN>)
+
+<SPAN class="com">' This function converts the data in a <A href="large_integer.html" tppabs="http://www.vbapi.com/ref/l/large_integer.html">LARGE_INTEGER</A> structure into
+' the form of VB's 64-bit Currency data type.  For more information about how this works,
+' go to <A href="javascript:if(confirm('http://www.vbapi.com/articles/64bit/index.html  \n\nThis file was not retrieved by Teleport Pro, because it is addressed on a domain or path outside the boundaries set for its Starting Address.  \n\nDo you want to open it from the server?'))window.location='http://www.vbapi.com/articles/64bit/index.html'" tppabs="http://www.vbapi.com/articles/64bit/index.html">http://www.vbapi.com/articles/64bit/index.html</A>.</SPAN>
+<SPAN class="kw">Public Function</SPAN> LI2Curr (li <SPAN class="kw">As</SPAN> <A href="large_integer.html" tppabs="http://www.vbapi.com/ref/l/large_integer.html">LARGE_INTEGER</A>) <SPAN class="kw">As Currency</SPAN>
+	<SPAN class="kw">Dim</SPAN> temp <SPAN class="kw">As Currency</SPAN>
+	<A href="copymemory.html" tppabs="http://www.vbapi.com/ref/c/copymemory.html">CopyMemory</A> temp, li, 8
+	LI2Curr = temp * 10000
+<SPAN class="kw">End Function</SPAN>
+
+<SPAN class="com">' *** Place the following code inside the form. ***</SPAN>
+<SPAN class="kw">Private Sub</SPAN> Command1_Click()
+	<SPAN class="kw">Dim</SPAN> freq <SPAN class="kw">As Currency</SPAN>  <SPAN class="com">' high-performance timer frequency</SPAN>
+	<SPAN class="kw">Dim</SPAN> count1 <SPAN class="kw">As Currency</SPAN>  <SPAN class="com">' timer reading before calculation</SPAN>
+	<SPAN class="kw">Dim</SPAN> count2 <SPAN class="kw">As Currency</SPAN>  <SPAN class="com">' timer reading after calculation</SPAN>
+	<SPAN class="kw">Dim</SPAN> buffer1 <SPAN class="kw">As</SPAN> <A href="large_integer.html" tppabs="http://www.vbapi.com/ref/l/large_integer.html">LARGE_INTEGER</A>  <SPAN class="com">' data input buffer for...</SPAN>
+	<SPAN class="kw">Dim</SPAN> buffer2 <SPAN class="kw">As</SPAN> <A href="large_integer.html" tppabs="http://www.vbapi.com/ref/l/large_integer.html">LARGE_INTEGER</A>  <SPAN class="com">' ...timer functions</SPAN>
+	<SPAN class="kw">Dim</SPAN> c <SPAN class="kw">As Long</SPAN>  <SPAN class="com">' counter variable</SPAN>
+	<SPAN class="kw">Dim</SPAN> result <SPAN class="kw">As Double</SPAN>  <SPAN class="kw">' result of square root calculation</SPAN>
+	<SPAN class="kw">Dim</SPAN> retval <SPAN class="kw">As Long</SPAN>  <SPAN class="com">' generic return value</SPAN>
+	
+	<SPAN class="com">' Get the frequency of the high-performance timer and, in the process,
+	' determine if it actually exists or not.</SPAN>
+	retval = <B>QueryPerformanceFrequency</B>(buffer1)
+	<SPAN class="kw">If</SPAN> retval = 0 <SPAN class="kw">Then</SPAN>
+		<SPAN class="kw">Debug</SPAN>.<SPAN class="kw">Print</SPAN> "This computer does not have a high-performance timer."
+		<SPAN class="kw">Exit Sub</SPAN>
+	<SPAN class="kw">End If</SPAN>
+	freq = LI2Curr(buffer1)
+	
+	<SPAN class="com">' Time how long it takes to calculate the first 100,000 positive integer
+	' square roots.  Do this by comparing the high-performance timer reading before
+	' and after the series of calculations.</SPAN>
+	retval = <A href="queryperformancecounter.html" tppabs="http://www.vbapi.com/ref/q/queryperformancecounter.html">QueryPerformanceCounter</A>(buffer1)
+	<SPAN class="kw">For</SPAN> c = 1 <SPAN class="kw">To</SPAN> 100000
+		result = Sqr(c)
+	<SPAN class="kw">Next</SPAN> c
+	retval = <A href="queryperformancecounter.html" tppabs="http://www.vbapi.com/ref/q/queryperformancecounter.html">QueryPerformanceCounter</A>(buffer2)
+	
+	<SPAN class="com">' Calculate the time interval between measurements.</SPAN>
+	count1 = LI2Curr(buffer1)
+	count2 = LI2Curr(buffer2)
+	<SPAN class="kw">Debug</SPAN>.<SPAN class="kw">Print</SPAN> "The calculation took"; (count2 - count1) / freq; "seconds."
+<SPAN class="kw">End Sub</SPAN></CODE></PRE></P>
+
+<H2>See Also</H2>
+<P><A href="queryperformancecounter.html" tppabs="http://www.vbapi.com/ref/q/queryperformancecounter.html">QueryPerformanceCounter</A></P>
+
+<H2>Category</H2>
+<P><A href="funcc.html#timers" tppabs="http://www.vbapi.com/ref/funcc.html#timers">Timers</A></P>
+
+<P><A href="funca.html" tppabs="http://www.vbapi.com/ref/funca.html">Back to the Function list.</A><BR>
+<A href="index.html" tppabs="http://www.vbapi.com/ref/index.html" rel="index">Back to the Reference section.</A></P>
+
+<HR>
+
+<P><B>Last Modified:</B> August 26, 2000<BR>
+This page is copyright &copy; 2000 Paul Kuliniewicz.  
+<A href="copyrite.html" tppabs="http://www.vbapi.com/copyrite.html" rel="copyright">Copyright Information</A>  <B>Revised October 29, 2000</B><BR>
+<A href="index-1.html" tppabs="http://www.vbapi.com/index.html" rel="home">Go back to the Windows API Guide home page.</A><BR>
+E-mail: <A href="javascript:if(confirm('http://www.vbapi.com/email.html  \n\nThis file was not retrieved by Teleport Pro, because it is addressed on a domain or path outside the boundaries set for its Starting Address.  \n\nDo you want to open it from the server?'))window.location='http://www.vbapi.com/email.html'" tppabs="http://www.vbapi.com/email.html">vbapi@vbapi.com</A>  <A href="javascript:if(confirm('http://www.vbapi.com/email.html  \n\nThis file was not retrieved by Teleport Pro, because it is addressed on a domain or path outside the boundaries set for its Starting Address.  \n\nDo you want to open it from the server?'))window.location='http://www.vbapi.com/email.html#secure'" tppabs="http://www.vbapi.com/email.html#secure">Send Encrypted E-Mail</A><BR>
+This page is at <A href="queryperformancefrequency.html" tppabs="http://www.vbapi.com/ref/q/queryperformancefrequency.html">http://www.vbapi.com/ref/q/queryperformancefrequency.html</A></P>
+</BODY>
+</HTML>

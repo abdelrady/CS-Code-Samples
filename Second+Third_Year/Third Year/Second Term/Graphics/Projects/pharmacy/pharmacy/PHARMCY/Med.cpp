@@ -1,0 +1,23 @@
+
+#include "Med.h"
+
+//////////////////////////////////////////////////////////////////////
+// Construction/Destruction
+//////////////////////////////////////////////////////////////////////
+
+Med::Med()
+{
+	strcpy(m_Name,"");
+	m_Price=0.0;
+	m_Number=-1;
+	m_SNumber=-1;
+	 strcpy(m_Company_name,"");
+	 m_CompanyNum=-1;
+	
+    
+}
+
+Med::~Med()
+{
+
+}

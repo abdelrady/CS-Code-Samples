@@ -1,0 +1,115 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+<HTML lang="en-us">
+<HEAD>
+<TITLE>Windows API Guide: PRINTDLG_TYPE Structure</TITLE>
+<META content="vbapi@vbapi.com" name="author">
+<META content="Information about the PRINTDLG_TYPE structure in the Windows API, geared towards the Visual Basic user." name="description">
+<META content="Kuliniewicz,Windows,Windows 95,Windows NT,Windows 98,Windows 32s,32s,API,Application Programming Interface,Programming,Visual Basic,Basic,VB,PRINTDLG_TYPE,PRINTDLG" name="keywords">
+<META content="Omicron HTML Editor" name="generator">
+<LINK href="default.css" tppabs="http://www.vbapi.com/css/default.css" rel="stylesheet" type="text/css">
+<LINK href="index-1.html" tppabs="http://www.vbapi.com/index.html" rel="home">
+</HEAD>
+<BODY>
+
+<!-- Begin Adslot1 -->
+<CENTER>
+<SCRIPT language="JAVASCRIPT">
+<!-- hide from older browsers
+now = new Date();
+my_random = now.getTime();
+document.write('<A href="http://adex3.flycast.com/server/socket/127.0.0.1:2800/click/VBWorldnet/VBAPI/' + my_random + '">');
+document.write('<IMG width="468" height="60" border="1" src="http://adex3.flycast.com/server/socket/127.0.0.1:2800/ad/VBWorldnet/VBAPI/' + my_random + '"></A>');
+// -->
+</SCRIPT>
+</CENTER>
+<!-- End Adslot1 -->
+
+<HR>
+
+<H1>PRINTDLG_TYPE Structure</H1>
+
+<P><PRE><CODE class="tc">Type PRINTDLG_TYPE
+  lStructSize As Long
+  hwndOwner As Long
+  hDevMode As Long
+  hDevNames As Long
+  hdc As Long
+  flags As Long
+  nFromPage As Integer
+  nToPage As Integer
+  nMinPage As Integer
+  nMaxPage As Integer
+  nCopies As Integer
+  hInstance As Long
+  lCustData As Long
+  lpfnPrintHook As Long
+  lpfnSetupHook As Long
+  lpPrintTemplateName As String
+  lpSetupTemplateName As String
+  hPrintTemplate As Long
+  hSetupTemplate As Long
+End Type</CODE></PRE>
+
+<P><B>PRINTDLG_TYPE</B>-type variables store the necessary information to use a Print common dialog box or a Print Setup common dialog box.  This structure holds all information necessary to initialize the box and receives the data selected by the user.  Set the various members for the box's default selections -- they will be set by the called function to the selections of the user.  Note that two other structures, <A href="devmode.html" tppabs="http://www.vbapi.com/ref/d/devmode.html">DEVMODE</A> and <A href="devnames.html" tppabs="http://www.vbapi.com/ref/d/devnames.html">DEVNAMES</A>, are included by specifying handles to a memory block.  These memory blocks contain a copy of each structure's data.  See the example for <A href="printdlg.html" tppabs="http://www.vbapi.com/ref/p/printdlg.html">PrintDlg</A> for information on how to create, use, and free these memory blocks.
+
+<DL>
+<DT><VAR>lStructSize</VAR><DD>The size in bytes of this structure.
+<DT><VAR>hwndOwner</VAR><DD>A handle to the window opening the dialog box, if any.
+<DT><VAR>hDevMode</VAR><DD>A handle to the memory block holding the information contained in a <A href="devmode.html" tppabs="http://www.vbapi.com/ref/d/devmode.html">DEVMODE</A> structure.  This data specifies information about the printer.
+<DT><VAR>hDevNames</VAR><DD>A handle to the memory block holding the information contained in a <A href="devnames.html" tppabs="http://www.vbapi.com/ref/d/devnames.html">DEVNAMES</A> structure.  This data specifies the driver name, printer name, and port name(s) of the printer.
+<DT><VAR>hdc</VAR><DD>Receives either a device context or an information context (depending on the value set as <VAR>flags</VAR>) to the printer the user selected.
+<DT><VAR>flags</VAR><DD>Zero or more of the following flags specifying various options for creating the Print or Print Setup dialog.  Note that when <A href="printdlg.html" tppabs="http://www.vbapi.com/ref/p/printdlg.html">PrintDlg</A> returns, many of these flags will be set by the function to indicate selections by the user:
+<DL>
+<DT>PD_ALLPAGES = &amp;H0<DD>Select the All Pages radio button.
+<DT>PD_COLLATE = &amp;H10<DD>Check the Collate check box.  If this flag is set when the function returns, the user checked the box and the printer doesn't automatically support collation.  If the box is checked and the printer does support it, this flag will not be set.
+<DT>PD_DISABLEPRINTTOFILE = &amp;H80000<DD>Disable the Print to File check box.
+<DT>PD_ENABLEPRINTHOOK = &amp;H1000<DD>Use the hook function pointed to by <VAR>lpfnPrintHook</VAR> to process the Print dialog box's messages.
+<DT>PD_ENABLEPRINTTEMPLATE = &amp;H4000<DD>Use the Print dialog box template specified by <VAR>lpPrintTemplateName</VAR>.
+<DT>PD_ENABLEPRINTTEMPLATEHANDLE = &amp;H10000<DD>Use the preloaded Print dialog box template specified by <VAR>hPrintTemplate</VAR>.
+<DT>PD_ENABLESETUPHOOK = &amp;H2000<DD>Use the hook function pointed to by <VAR>lpfnSetupHook</VAR> to process the Print Setup dialog box's messages.
+<DT>PD_ENABLESETUPTEMPLATE = &amp;H8000<DD>Use the Print Setup dialog box template specified by <VAR>lpSetupTemplateName</VAR>.
+<DT>PD_ENABLESETUPTEMPLATEHANDLE = &amp;H20000<DD>Use the preloaded Print Setup dialog box template specified by <VAR>hSetupTemplate</VAR>.
+<DT>PD_HIDEPRINTTOFILE = &amp;H100000<DD>Hide the Print to File check box.
+<DT>PD_NONETWORKBUTTON = &amp;H200000<DD>Do not display any buttons associated with the network.
+<DT>PD_NOPAGENUMS = &amp;H8<DD>Disable the Page Range radio button and edit boxes.
+<DT>PD_NOSELECTION = &amp;H4<DD>Disable the Selection radio button.
+<DT>PD_NOWARNING = &amp;H80<DD>Do not warn the user if there is no default printer.
+<DT>PD_PAGENUMS = &amp;H2<DD>Select the Page Range radio button.
+<DT>PD_PRINTSETUP = &amp;H40<DD>Display the Print Setup dialog box instead of the Print dialog box.
+<DT>PD_PRINTTOFILE = &amp;H20<DD>Select the Print to File check box.
+<DT>PD_RETURNDC = &amp;H100<DD>Return a device context to the selected printer as <VAR>hdc</VAR>.
+<DT>PD_RETURNDEFAULT = &amp;H400<DD>Instead of displaying either dialog box, simply load information about the default printer into <VAR>hDevMode</VAR> and <VAR>hDevNames</VAR>.  For this to work, those two values must be set to 0 before calling the function.
+<DT>PD_RETURNIC = &amp;H200<DD>Return an information context to the selected printer as <VAR>hdc</VAR>.
+<DT>PD_SELECTION = &amp;H1<DD>Select the Selection radio button.
+<DT>PD_SHOWHELP = &amp;H800<DD>Display the Help button.
+<DT>PD_USEDEVMODECOPIES = &amp;H40000<DD>Same as PD_USEDEVMODECOPIESANDCOLLATE.
+<DT>PD_USEDEVMODECOPIESANDCOLLATE = &amp;H40000<DD>If the printer does not automatically support multiple copies or collation, disable the corresponding options in the dialog box.  The number of copies to print and the collation setting will be placed into <VAR>hDevMode</VAR>.  The information returned to this structure will specify the number of pages and the collation which the program must print with -- the printer will print the copies or collate itself.
+</DL>
+<DT><VAR>nFromPage</VAR><DD>The value entered in the From Page text box, specifying which page begin printing at.
+<DT><VAR>nToPage</VAR><DD>The value entered in the To Page text box, specifying which page to stop printing at.
+<DT><VAR>nMinPage</VAR><DD>The minimum allowable value for <VAR>nFromPage</VAR> and <VAR>nToPage</VAR>.
+<DT><VAR>nMaxPage</VAR><DD>The maximum allowable value for <VAR>nFromPage</VAR> and <VAR>nToPage</VAR>.
+<DT><VAR>nCopies</VAR><DD>The number of copies the program needs to print.
+<DT><VAR>hInstance</VAR><DD>A handle to the application instance which has the desired dialog box template.
+<DT><VAR>lCustData</VAR><DD>A program-defined value to pass to whichever hook function is used.
+<DT><VAR>lpfnPrintHook</VAR><DD>A handle to the program-defined hook function to use to process the Print dialog box's messages.
+<DT><VAR>lpfnSetupHook</VAR><DD>A handle to the program-defined hook function to use to process the Print Setup dialog box's messages.
+<DT><VAR>lpPrintTemplateName</VAR><DD>The name of the Print dialog box template to use from the application instance specified by <VAR>hInstance</VAR>.
+<DT><VAR>lpSetupTemplateName</VAR><DD>The name of the Print Setup dialog box template to use from the application instance specified by <VAR>hInstance</VAR>.
+<DT><VAR>hPrintTemplate</VAR><DD>A handle to the preloaded Print dialog box template to use.
+<DT><VAR>hSetupTemplate</VAR><DD>A handle to the preloaded Print Setup dialog box template to use.
+</DL>
+
+<P><B>Used by:</B> <A href="printdlg.html" tppabs="http://www.vbapi.com/ref/p/printdlg.html">PrintDlg</A>
+<P><A href="structa.html" tppabs="http://www.vbapi.com/ref/structa.html">Go back to the alphabetical Structure listing.</A><BR>
+<A href="index.html" tppabs="http://www.vbapi.com/ref/index.html">Go back to the Reference section index.</A></P>
+
+<HR>
+
+<P>This page is copyright &copy; 2000 Paul Kuliniewicz.  <A href="copyrite.html" tppabs="http://www.vbapi.com/copyrite.html" rel="copyright">Copyright Information.</A><BR>
+<A href="index-1.html" tppabs="http://www.vbapi.com/index.html">Go back to the Windows API Guide home page.</A><BR>
+E-mail: <A href="javascript:if(confirm('http://www.vbapi.com/email.html  \n\nThis file was not retrieved by Teleport Pro, because it is addressed on a domain or path outside the boundaries set for its Starting Address.  \n\nDo you want to open it from the server?'))window.location='http://www.vbapi.com/email.html'" tppabs="http://www.vbapi.com/email.html">vbapi@vbapi.com</A>  <A href="javascript:if(confirm('http://www.vbapi.com/email.html  \n\nThis file was not retrieved by Teleport Pro, because it is addressed on a domain or path outside the boundaries set for its Starting Address.  \n\nDo you want to open it from the server?'))window.location='http://www.vbapi.com/email.html#secure'" tppabs="http://www.vbapi.com/email.html#secure">Send Encrypted E-Mail</A><BR>
+This page is at <A href="printdlg_type.html" tppabs="http://www.vbapi.com/ref/p/printdlg_type.html">http://www.vbapi.com/ref/p/printdlg_type.html</A>
+
+</BODY>
+</HTML>

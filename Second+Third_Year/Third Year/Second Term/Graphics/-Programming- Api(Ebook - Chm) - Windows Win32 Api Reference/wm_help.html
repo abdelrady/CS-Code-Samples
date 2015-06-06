@@ -1,0 +1,152 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+<HTML lang="en-us">
+<HEAD>
+<TITLE>Windows API Guide: WM_HELP Message</TITLE>
+<META content="vbapi@vbapi.com" name="author">
+<META content="Information about the WM_HELP in the Windows API, geared towards the Visual Basic user." name="description">
+<META content="Kuliniewicz,Windows,Windows 95,Windows NT,Windows 98,Windows CE,Windows 2000,API,Application Programming Interface,Programming,Visual Basic,Basic,VB,WM_HELP" name="keywords">
+<META content="Omicron HTML Editor" name="generator">
+<LINK href="default.css" tppabs="http://www.vbapi.com/css/default.css" rel="stylesheet" type="text/css">
+<LINK href="index-1.html" tppabs="http://www.vbapi.com/index.html" rel="home">
+<LINK href="glossary.html" tppabs="http://www.vbapi.com/ref/glossary.html" rel="glossary">
+<LINK href="copyrite.html" tppabs="http://www.vbapi.com/copyrite.html" rel="copyright">
+</HEAD>
+<BODY>
+
+<!-- Begin Adslot1 -->
+<CENTER>
+<SCRIPT language="JAVASCRIPT">
+<!-- hide from older browsers
+now = new Date();
+my_random = now.getTime();
+document.write('<A href="http://adex3.flycast.com/server/socket/127.0.0.1:2800/click/VBWorldnet/VBAPI/' + my_random + '">');
+document.write('<IMG width="468" height="60" border="1" src="http://adex3.flycast.com/server/socket/127.0.0.1:2800/ad/VBWorldnet/VBAPI/' + my_random + '"></A>');
+// -->
+</SCRIPT>
+</CENTER>
+<!-- End Adslot1 -->
+
+<HR>
+
+<H1>WM_HELP Message</H1>
+
+<H2>Platforms</H2>
+<P><UL>
+<LI><B>Windows 95:</B> Supported.
+<LI><B>Windows 98:</B> Supported.
+<LI><B>Windows NT:</B> Requires Windows NT 3.51 or later.
+<LI><B>Windows 2000:</B> Supported.
+<LI><B>Windows CE:</B> Requires Windows CE 1.0 or later.
+</UL></P>
+
+<H2>Description &amp; Usage</H2>
+<P>The <B>WM_HELP</B> message instructs a window to display context-sensitive help.  This help could refer to the window itself, one of the controls on it, or a child window or dialog it created.  The message includes a structure identifying the object which generated the message.  While a window does not necessarily have to respond to the <B>WM_HELP</B> message by opening a WinHelp document, it ought to display help information of some kind.</P>
+
+<H2>Return Value</H2>
+<P>The <B>WM_HELP</B> message should always return a non-zero value.</P>
+
+<H2>Visual Basic-Specific Issues</H2>
+<P>None.</P>
+
+<H2>Parameters</H2>
+<P><DL>
+<DT><VAR>wParam</VAR><DD>Not used -- set to 0.
+<DT><VAR>lParam</VAR><DD>A <A class="def" href="glossary.html#pointer" tppabs="http://www.vbapi.com/ref/glossary.html#pointer" rel="glossary">pointer</A> to a <A href="helpinfo.html" tppabs="http://www.vbapi.com/ref/h/helpinfo.html">HELPINFO</A> structure identifying the control or other window which originated the message.
+</DL></P>
+
+<H2>Constant Definitions</H2>
+<P><PRE><CODE class="const">Const WM_HELP = &amp;H53</CODE></PRE></P>
+
+<H2>Example</H2>
+<P><PRE><CODE class="example"><SPAN class="com">' This code is licensed according to the terms and conditions listed <A href="copyrite.html#license" tppabs="http://www.vbapi.com/copyrite.html#license" rel="copyright">here</A>.</SPAN>
+
+' Display an HTML document to provide help when the
+' user clicks the "Help" button of a dialog box.  Notice how
+' the <B>WM_HELP</B> message must be handled explicitly in
+' this example, since Visual Basic does not allow you to create
+' a handler through the interface.  Pay careful attention to where each
+' piece of code must go.
+
+' *** Place the following code in a module. ***
+' This is a pointer to Form1's previous window procedure.
+Public pOldProc As Long
+
+' This is the handler for the <B>WM_HELP</B> message.
+Public Function <A href="windowproc.html" tppabs="http://www.vbapi.com/ref/w/windowproc.html">WindowProc</A>(ByVal hwnd As Long, ByVal uMsg As Long, ByVal wParam As Long, ByVal lParam As Long) As Long
+  Dim hi As <A href="helpinfo.html" tppabs="http://www.vbapi.com/ref/h/helpinfo.html">HELPINFO</A>  ' information about window requesting help
+  Dim slength As Long  ' length of string
+  Dim wintext As String  ' text of window calling for help
+  Dim retval As Long  ' return value
+
+  ' Decide which message has been received.
+  Select Case uMsg
+  Case <B>WM_HELP</B>
+    ' Determine if the message box, having text "Warning!", is
+    ' requesting help.  If so, display an HTML document for help.
+    ' NOTE: in a "real" program, you should use the
+    ' <A href="messageboxindirect.html" tppabs="http://www.vbapi.com/ref/m/messageboxindirect.html">MessageBoxIndirect</A> function because it
+    ' allows a Context ID for a WinHelp file to be specified.  But
+    ' since this is an example for WM_HELP, this inferior
+    ' method is presented.
+    
+    ' Copy the information about the help message into the structure.
+    <A href="copymemory.html" tppabs="http://www.vbapi.com/ref/c/copymemory.html">CopyMemory</A> hi, ByVal lParam, Len(hi)
+
+    ' Determine the text of the window for which help is requested.
+    slength = <A href="getwindowtextlength.html" tppabs="http://www.vbapi.com/ref/g/getwindowtextlength.html">GetWindowTextLength</A>(hi.hItemHandle) + 1
+    wintext = Space(slength)
+    retval = <A href="getwindowtext.html" tppabs="http://www.vbapi.com/ref/g/getwindowtext.html">GetWindowText</A>(hi.hItemHandle, wintext, slength)
+    wintext = Left(wintext, retval)
+    ' If it is "Warning!", open up the proper HTML document.
+    If wintext = "Warning!" Then
+      retval = <A href="shellexecute.html" tppabs="http://www.vbapi.com/ref/s/shellexecute.html">ShellExecute</A>(hwnd, "open", "C:\MyProg\mboxhelp.html", "", "", SM_RESTORE)
+    End If
+    
+    ' Return successfully.
+    WindowProc = 1
+  Case Else
+    ' Let the previous message handler process this message.
+    retval = <A href="callwindowproc.html" tppabs="http://www.vbapi.com/ref/c/callwindowproc.html">CallWindowProc</A>(pOldProc, hwnd, uMsg, wParam, lParam)
+    WindowProc = retval
+  End Select
+End Function
+
+' *** Place the following code in the Form1_Load procedure. ***
+' Set our custom window procedure as Form1's procedure.
+pOldProc = <A href="setwindowlong.html" tppabs="http://www.vbapi.com/ref/s/setwindowlong.html">SetWindowLong</A>(Form1.hWnd, GWL_WNDPROC, AddressOf <A href="windowproc.html" tppabs="http://www.vbapi.com/ref/w/windowproc.html">WindowProc</A>)
+
+' *** Place the following code in the Form1_Unload procedure. ***
+' Set the previous procedure as the one Form1 uses (to make VB happy).
+Dim retval As Long
+retval = <A href="setwindowlong.html" tppabs="http://www.vbapi.com/ref/s/setwindowlong.html">SetWindowLong</A>(Form1.hWnd, GWL_WNDPROC, pOldProc)
+
+' *** Place the following code wherever you want to invoke the message box.
+' Prompt the user for a selection, allowing him to get help
+' about his choice.
+Dim mbresult As Long  ' result of message box
+Dim flags As Long  ' message box's flags
+
+flags = MB_YESNO Or MB_HELP Or MB_ICONWARNING
+mbresult = <A href="messagebox.html" tppabs="http://www.vbapi.com/ref/m/messagebox.html">MessageBox</A>(Form1.hWnd, "Are you sure?", "Warning!", flags)
+If mbresult = IDYES Then
+  Debug.Print "You said 'Yes'"
+Else
+  Debug.Print "You said 'No'"
+End If</CODE></PRE></P>
+
+<H2>Category</H2>
+<P><A href="msgc.html#windows" tppabs="http://www.vbapi.com/ref/msgc.html#windows">Windows</A></P>
+
+<P><A href="msga.html" tppabs="http://www.vbapi.com/ref/msga.html">Back to the Message list.</A><BR>
+<A href="index.html" tppabs="http://www.vbapi.com/ref/index.html" rel="index">Back to the Reference section.</A></P>
+
+<HR>
+
+<P><B>Last Modified:</B> January 31, 2000<BR>
+This page is copyright &copy; 2000 Paul Kuliniewicz.  
+<A href="copyrite.html" tppabs="http://www.vbapi.com/copyrite.html" rel="copyright">Copyright Information</A>  <B>Revised October 29, 2000</B><BR>
+<A href="index-1.html" tppabs="http://www.vbapi.com/index.html" rel="home">Go back to the Windows API Guide home page.</A><BR>
+E-mail: <A href="javascript:if(confirm('http://www.vbapi.com/email.html  \n\nThis file was not retrieved by Teleport Pro, because it is addressed on a domain or path outside the boundaries set for its Starting Address.  \n\nDo you want to open it from the server?'))window.location='http://www.vbapi.com/email.html'" tppabs="http://www.vbapi.com/email.html">vbapi@vbapi.com</A>  <A href="javascript:if(confirm('http://www.vbapi.com/email.html  \n\nThis file was not retrieved by Teleport Pro, because it is addressed on a domain or path outside the boundaries set for its Starting Address.  \n\nDo you want to open it from the server?'))window.location='http://www.vbapi.com/email.html#secure'" tppabs="http://www.vbapi.com/email.html#secure">Send Encrypted E-Mail</A><BR>
+This page is at <A href="wm_help.html" tppabs="http://www.vbapi.com/ref/w/wm_help.html">http://www.vbapi.com/ref/w/wm_help.html</A></P>
+</BODY>
+</HTML>

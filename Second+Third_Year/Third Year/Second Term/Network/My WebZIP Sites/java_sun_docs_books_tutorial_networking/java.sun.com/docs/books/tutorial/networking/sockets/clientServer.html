@@ -1,0 +1,744 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<html>
+    <head>
+        <title>Writing the Server Side of a Socket (The Java&trade; Tutorials &gt; 
+            Custom Networking &gt; All About Sockets)
+</title>
+<style type="text/css">
+    .FigureCaption   { 
+        margin-left: 1in; 
+        margin-right: 1in; 
+        font-family: sans-serif; 
+        font-size: smaller; 
+        text-align: justify;
+    }
+    #TopBar_bl {
+        background: url(../../images/java_bar_bl.gif) 0 100% no-repeat;
+        width: 100%;
+        height: 60px;
+    }
+    #TopBar_br {
+        background: url(../../images/java_bar_br.gif) 100% 100% no-repeat;
+        width: 100%;
+        height: 60px;
+    }
+    #TopBar_tl {
+        background: url(../../images/java_bar_tl.gif) 0 0 no-repeat;
+        width: 100%;
+        height: 60px;
+    }
+    #TopBar_tr {
+        background: url(../../images/java_bar_tr.gif) 100% 0 no-repeat;
+        width: 100%;
+        height: 60px;
+    }
+    #TopBar {
+        background: #35556B url(../../images/java_bar.gif);
+        margin: 10px 10px 0 10px;
+        height:60px;
+        min-width:700px;
+        color: white;
+        font-family: sans-serif; 
+        font-weight: bold;
+    }
+    @media print {
+        #BreadCrumbs, #Download {
+            display: none;
+        }
+    }
+    #TopBar_right {
+        line-height: 14px;
+        float: right;
+        padding-top: 2px;
+        padding-right: 30px;
+        text-align: center;
+    }
+    @media print {
+        #TopBar_right {
+            display: none;
+        }
+    }
+    #TopBar_right a {
+        font-size: 12px;
+        margin: 3px;
+        padding: 0;
+    }
+    #TopBar a:visited, #TopBar a:link {
+        color: white;
+        text-decoration: none;
+    }
+    #TopBar a:hover, #TopBar a:active  {
+        background-color: white;
+        color: #35556B;
+    }
+    #BreadCrumbs {
+        padding: 4px 5px 0.5em 0;
+        font-family: sans-serif; 
+        float: right;
+    }
+    #BreadCrumbs a {
+        color: blue;
+    }
+    #BreadCrumbs a:visited, #BreadCrumbs a:link {
+        text-decoration: none;
+    }
+    #BreadCrumbs a:hover, #BreadCrumbs a:active {
+        text-decoration: underline;
+    }
+    #PageTitle {
+        margin: 0 5px 0.5em 0;
+        color: #E76F00;
+        font-family: sans-serif; 
+        font-weight: bold;
+        font-size: 20px;
+    }
+    .LeftBar_shown {
+        width: 13em;
+        float: left;
+        margin-left: 10px;
+        margin-top: 4px;
+        margin-bottom: 2em;
+    }
+    @media print {
+        .LeftBar_shown {
+            display: none;
+        }
+    }
+    .LeftBar_hidden {
+        display: none;
+    }
+    #Footer {
+        padding-top: 10px;
+        padding-left: 10px;
+        margin-right: 10px;
+    }
+    .NavBit  {
+        padding: 4px 5px 0.5em 0;
+        font-family: sans-serif; 
+    }
+    @media print {
+        .NavBit {
+            display: none;
+        }
+    }
+    #TagNotes {
+        text-align: right;
+        font-size: smaller;
+        font-family: sans-serif; 
+    }
+    @media print {
+        #TagNotes a:visited, #TagNotes a:link {
+            color: #35556B;
+            text-decoration: none;
+        }
+    }
+    #Contents a, .NavBit a, #TagNotes a {
+        color: blue
+    }
+    #TagNotes a:visited, #TagNotes a:link,
+    #Contents a:visited, #Contents a:link,
+    .NavBit a:visited, .NavBit a:link {
+        text-decoration: none;
+    }
+    #TagNotes a:hover, #TagNotes a:active,   
+    #Contents a:hover, #Contents a:active,   
+    .NavBit a:hover, .NavBit a:active {  
+        text-decoration: underline;
+    }
+    #Contents {
+        float: left;
+        font-family: sans-serif; 
+    }
+    @media print {
+        #Contents {
+            display: none;
+        }
+    }
+    @media screen {
+        div.PrintHeaders {
+            display: none;
+        }
+    }
+    .linkLESSON, .nolinkLESSON {
+        margin-left: 0.5em;
+        text-indent: -0.5em
+    }
+    .linkAHEAD, .nolinkAHEAD, .linkQUESTIONS, .nolinkQUESTIONS   {
+        margin-left: 1.5em; 
+        text-indent: -0.5em
+    }
+    .linkBHEAD, .nolinkBHEAD   {
+        margin-left: 2.5em;
+        text-indent: -0.5em
+    }
+    .linkCHEAD, .nolinkCHEAD   {
+        margin-left: 3.5em;
+        text-indent: -0.5em
+    }
+    .nolinkLESSON, .nolinkAHEAD, .nolinkBHEAD, .nolinkCHEAD,
+    .nolinkQUESTIONS {
+        font-weight: bold;
+        color: #E76F00;
+    }
+    .MainFlow_indented {
+        margin-right: 10px;
+        margin-left: 15em;
+        margin-bottom: 2em;
+
+    }
+    .MainFlow_wide {
+        margin-right: 10px;
+        margin-left: 10px;
+        margin-bottom: 2em;
+
+    }
+    @media print {
+        .MainFlow_indented, .MainFlow_wide {
+            padding-top: 0;
+            margin-top: 10px;
+            margin-right: 10px;
+            margin-left: 0;
+        }
+    }
+    h3, h4, h5 {
+        color: #E76F00;
+        font-family: sans-serif;
+    }
+    #ToggleLeft {
+        display: none;
+    }
+
+    /t
+
+</style>
+<script type="text/javascript">
+    function leftBar() {
+        var nameq = 'tutorial_showLeftBar='
+        var cookies = document.cookie.split(';');
+        for (var i = 0; i < cookies.length; i++) {
+            var cookieString = cookies[i];
+            while (cookieString.charAt(0) == ' ') {
+                cookieString = cookieString.substring(1, cookieString.length);
+            }
+            if (cookieString.indexOf(nameq) == 0) {
+                cookieValue =  cookieString.substring(nameq.length,
+                        cookieString.length);
+                return cookieValue == 'yes';
+            }
+        }
+        return true;
+    }
+
+    function showLeft(b) {
+        var contents = document.getElementById("LeftBar");
+        var main = document.getElementById("MainFlow");
+        var toggle = document.getElementById("ToggleLeft");
+        if (b) {
+            contents.className = "LeftBar_shown";
+            main.className = "MainFlow_indented";
+            toggle.innerHTML = "Hide the TOC";
+            document.cookie = 'tutorial_showLeftBar=yes; path=/';
+        } else {
+            contents.className = "LeftBar_hidden";
+            main.className = "MainFlow_wide";
+            toggle.innerHTML = "Show the TOC";
+            document.cookie = 'tutorial_showLeftBar=no; path=/';
+        }
+    }
+
+    function toggleLeft() {
+        showLeft(document.getElementById("LeftBar").className ==
+                "LeftBar_hidden");
+        document.getElementById("ToggleLeft").blur();
+    }
+
+    function load() {
+        showLeft(leftBar());
+        document.getElementById("ToggleLeft").style.display="inline";
+    }
+    
+</script>
+
+    </head>
+<body onload="load()">
+
+
+<!-- Copyright © 2005. Spidersoft Ltd -->
+<style>
+A.applink:hover {border: 2px dotted #DCE6F4;padding:2px;background-color:#ffff00;color:green;text-decoration:none}
+A.applink       {border: 2px dotted #DCE6F4;padding:2px;color:#2F5BFF;background:transparent;text-decoration:none}
+A.info          {color:#2F5BFF;background:transparent;text-decoration:none}
+A.info:hover    {color:green;background:transparent;text-decoration:underline}
+</style>
+<div style='BORDER: 1px solid #DCE6F4; MARGIN-TOP: 20px; MARGIN-BOTTOM: 20px; MARGIN-LEFT: 5px; MARGIN-RIGHT: 5px; PADDING: 5px; BACKGROUND-COLOR: #eef8ff;line-height:180%; COLOR: #000000; font-family: Arial; font-size: 8pt; width=100%; FILTER: progid:DXImageTransform.Microsoft.Gradient(GradientType=0, StartColorStr="#FFFFFFFF", EndColorStr="#F2F5FAFF");'>
+This page was saved using <a class="applink" href="http://www.spidersoft.com"><b>WebZIP 7.0.3.1030</b></a> <a class="applink" href="http://www.spidersoft.com"><b>offline browser</b></a>  (Unregistered) on  02/12/07 7:59:23 PM.<br>
+<b>Address:</b> <a class="info" href="http://java.sun.com/docs/books/tutorial/networking/sockets/clientServer.html">http://java.sun.com/docs/books/tutorial/networking/sockets/clientServer.html</a><br>
+<b>Title:</b> Writing the Server Side of a Socket (The Java&trade; Tutorials &gt;             Custom Networking &gt; All About Sockets) &nbsp;&bull;&nbsp; <b>Size:</b> 26473 &nbsp;&bull;&nbsp; <b>Last Modified:</b> Fri, 10 Nov 2006 00:58:21 GMT<br></div>
+<!-- /Copyright © 2005. Spidersoft Ltd -->
+
+
+    <div id=TopBar> <div id=TopBar_tr> <div id=TopBar_tl> <div id=TopBar_br> <div id=TopBar_bl> 
+                        <div id=TopBar_right> 
+                            <a target="_blank"
+                                href="http://java.sun.com/javase/6/download.jsp">Download
+                                the JDK</a>
+                            <br>
+                            <a href="http://java.sun.com/docs/books/tutorial/search.html" target="_blank">Search the
+                                Tutorials</a>
+                            <br>
+                            <a href="javascript:toggleLeft()"
+                                id="ToggleLeft">Hide the TOC</a>
+                        </div>
+                    </div> </div> </div> </div> </div>
+    <div class=PrintHeaders>
+        <b>Trail:</b> Custom Networking
+        <br><b>Lesson:</b> All About Sockets
+    </div>
+
+    <div id=LeftBar class=LeftBar_shown>
+        <div id=Contents>
+            <div class="linkLESSON"><a href="index.html">All About Sockets</a></div>
+<div class="linkAHEAD"><a href="definition.html">What Is a Socket?</a></div>
+<div class="linkAHEAD"><a href="readingWriting.html">Reading from and Writing to a Socket</a></div>
+<div class="nolinkAHEAD">Writing the Server Side of a Socket</div>
+</div>
+    </div>
+    <div id=MainFlow class=MainFlow_indented>
+            <span id=BreadCrumbs>
+                <a href=http://java.sun.com/docs/books/tutorial/index.html target=_top>Home Page</a>
+                &gt;
+                <a href=../index.html target=_top>Custom Networking</a>
+                &gt;
+                <a href=index.html target=_top>All About Sockets</a>
+            </span>
+            <div class=NavBit>
+                <a target=_top href=readingWriting.html>&laquo;&nbsp;Previous</a>&nbsp;&bull;&nbsp;<a target=_top href=../TOC.html>Trail</a>&nbsp;&bull;&nbsp;<a target=_top href=../datagrams/index.html>Next&nbsp;&raquo;</a>
+            </div>
+            <div id=PageTitle>Writing the Server Side of a Socket</div>
+            <blockquote>
+This section shows you how to write a server and the client that goes
+with it. The server in the client/server pair serves up Knock Knock
+jokes. Knock Knock jokes are favored by children and are usually
+vehicles for bad puns. They go like this:
+
+<p>
+<strong>Server</strong>: "Knock knock!"<br>
+<strong>Client</strong>: "Who's there?"<br>
+<strong>Server</strong>: "Dexter."<br>
+<strong>Client</strong>: "Dexter who?"<br>
+<strong>Server</strong>: "Dexter halls with boughs of holly."<br>
+<strong>Client</strong>: "Groan."
+<p>
+The example consists of two independently running Java programs: the
+client program and the server program. The client program is
+implemented by a single class, <code>KnockKnockClient</code>,
+and is very similar to the
+
+<a class="SourceLink" target="_blank" href="examples/EchoClient.java"><code>EchoClient</code></a>
+example from the previous section.
+The server
+program is implemented by two classes: <code>KnockKnockServer</code> and
+<code>KnockKnockProtocol</code>, <code>KnockKnockServer</code>
+contains the <code>main</code> method for the
+server program and performs the work of listening to the port,
+establishing connections, and reading from and writing to the socket.
+<code>KnockKnockProtocol</code> serves up the jokes. It keeps track of the current
+joke, the current state (sent knock knock, sent clue, and so on), and
+returns the various text pieces of the joke depending on the current
+state. This object implements the protocol-the language that the client
+and server have agreed to use to communicate.
+<p>
+The following section looks in detail at each class in both the client
+and the server and then shows you how to run them.
+
+</blockquote>
+<h3>The Knock Knock Server</h3>
+<blockquote>
+This section walks through the code that implements the Knock Knock
+server program. Here is the complete source for the
+
+<a class="SourceLink" target="_blank" href="examples/KnockKnockServer.java"><code>KnockKnockServer</code></a>
+class.
+<p>
+The server program begins by creating a new <code>ServerSocket</code> object to
+listen on a specific port (see the statement in bold in the following
+code segment). When writing a server, choose a port that is not already
+dedicated to some other service. <code>KnockKnockServer</code> listens on port 4444
+because 4 happens to be my favorite number and port 4444 is not being
+used for anything else in my environment:
+<blockquote><pre>
+try {
+    <strong>serverSocket = new ServerSocket(4444);</strong>
+} catch (IOException e) {
+    System.out.println("Could not listen on port: 4444");
+    System.exit(-1);
+}
+</pre></blockquote>
+<code>ServerSocket</code> is a <code>java.net</code> class that
+provides a system-independent implementation of the server side of a
+client/server socket connection. The constructor for <code>ServerSocket</code>
+throws an exception if it can't listen on the specified port (for
+example, the port is already being used). In this case, the
+<code>KnockKnockServer</code> has no choice but to exit.
+<p>
+If the server successfully binds to its port, then the <code>ServerSocket</code>
+object is successfully created and the server continues to the next
+step--accepting a connection from a client (shown in bold):
+<blockquote><pre>
+Socket clientSocket = null;
+try {
+    <strong>clientSocket = serverSocket.accept();</strong>
+} catch (IOException e) {
+    System.out.println("Accept failed: 4444");
+    System.exit(-1);
+}
+</pre></blockquote>
+The <code>accept</code> method waits until a client starts up and
+requests a connection on the host and port of this server (in this
+example, the server is running on the hypothetical machine taranis on
+port 4444). When a connection is requested and successfully
+established, the accept method returns a new <code>Socket</code> object
+which is bound to the same local port and has it's remote address and 
+remote port set to that of the client.
+The server can communicate with the
+client over this new <code>Socket</code> and continue to listen for
+client connection requests on the original <code>ServerSocket</code> 
+This particular version of the
+program doesn't listen for more client connection requests. However, a
+modified version of the program is provided in
+<a href="#later">Supporting Multiple Clients</a>.
+<p>
+After the server successfully establishes a connection with a client,
+it communicates with the client using this code:
+<blockquote><pre>
+PrintWriter out = new PrintWriter(
+                      clientSocket.getOutputStream(), true);
+BufferedReader in = new BufferedReader(
+                        new InputStreamReader(
+                            clientSocket.getInputStream()));
+String inputLine, outputLine;
+
+<strong>// initiate conversation with client
+KnockKnockProtocol kkp = new KnockKnockProtocol();
+outputLine = kkp.processInput(null);
+out.println(outputLine);</strong>
+
+while ((inputLine = in.readLine()) != null) {	
+    outputLine = kkp.processInput(inputLine);
+    out.println(outputLine);
+    if outputLine.equals("Bye."))
+        break;
+}
+</pre></blockquote>
+This code:
+<ol>
+<li>
+Gets the socket's input and output stream and opens readers and writers
+on them.
+<li>
+Initiates communication with the client by writing to the socket (shown
+in bold).
+<li>
+Communicates with the client by reading from and writing to the socket
+(the <code>while</code> loop).
+</ol>
+Step 1 is already familiar. Step 2 is shown in bold and is worth a few
+comments. The bold statements in the code segment above initiate the
+conversation with the client. The code creates a <code>KnockKnockProtocol</code>
+object-the object that keeps track of the current joke, the current
+state within the joke, and so on.
+<p>
+After the <code>KnockKnockProtocol</code> is created, the code calls
+<code>KnockKnockProtocol</code>'s <code>processInput</code> method to
+get the first message that the server sends to the client. For this
+example, the first thing that the server says is "Knock! Knock!" Next,
+the server writes the information to the <code>PrintWriter</code>
+connected to the client socket, thereby sending the message to the
+client.
+<p>
+Step 3 is encoded in the <code>while</code> loop. As long as the client and server
+still have something to say to each other, the server reads from and
+writes to the socket, sending messages back and forth between the
+client and the server.
+<p>
+The server initiated the conversation with a "Knock! Knock!" so
+afterwards the server must wait for the client to say "Who's there?" As
+a result, the while loop iterates on a read from the input stream. The
+readLine method waits until the client responds by writing something to
+its output stream (the server's input stream). When the client
+responds, the server passes the client's response to the
+<code>KnockKnockProtocol</code> object and asks the <code>KnockKnockProtocol</code>
+object for a
+suitable reply. The server immediately sends the reply to the client
+via the output stream connected to the socket, using a call to println.
+If the server's response generated from the <code>KnockKnockServer</code> object is
+"Bye." this indicates that the client doesn't want any more jokes and
+the loop quits.
+<p>
+The <code>KnockKnockServer</code> class is a well-behaved server, so
+the last several lines of this section of <code>KnockKnockServer</code>
+clean up by closing all of the input and output streams, the client
+socket, and the server socket:
+<blockquote><pre>
+out.close();
+in.close();
+clientSocket.close();
+serverSocket.close();
+</pre></blockquote>
+</blockquote>
+
+<h3>The Knock Knock Protocol</h3>
+<blockquote>
+The 
+<a class="SourceLink" target="_blank" href="examples/KnockKnockProtocol.java"><code>KnockKnockProtocol</code></a>
+class implements the protocol that the client and server use to
+communicate. This class keeps track of where the client and the server
+are in their conversation and serves up the server's response to the
+client's statements. The <code>KnockKnockServer</code> object contains the text of
+all the jokes and makes sure that the client gives the proper response
+to the server's statements. It wouldn't do to have the client say
+"Dexter who?" when the server says "Knock! Knock!"
+<p>
+All client/server pairs must have some protocol by which they speak to
+each other; otherwise, the data that passes back and forth would be
+meaningless. The protocol that your own clients and servers use depends
+entirely on the communication required by them to accomplish the task.
+</blockquote>
+
+<h3>The Knock Knock Client</h3>
+<blockquote>
+The 
+<a class="SourceLink" target="_blank" href="examples/KnockKnockClient.java"><code>KnockKnockClient</code></a>
+class implements the client program
+that speaks to the <code>KnockKnockServer</code>.
+<code>KnockKnockClient</code> is based on the
+<code>EchoClient</code> program in the previous section,
+<a href="readingWriting.html">Reading from and Writing to a Socket</a>
+and should be somewhat familiar to you.
+But we'll go over the program anyway
+and look at what's happening in the client
+in the context of what's going on in the server. 
+<p>
+When you start the client program, the server should already be running
+and listening to the port, waiting for a client to request a
+connection. So, the first thing the client program does is to open a
+socket that is connected to the server running on the hostname and port
+specified:
+<blockquote><pre>
+<strong>kkSocket = new Socket("taranis", 4444);</strong>
+out = new PrintWriter(kkSocket.getOutputStream(), true);
+in = new BufferedReader(new InputStreamReader(
+                            kkSocket.getInputStream()));
+</pre></blockquote>
+When creating its socket,
+<code>KnockKnockClient</code> uses the host name <code>taranis</code>,
+the name of a hypothetical machine on our network.
+When you type in and run this program,
+change the host name to the name of a machine on your network.
+This is the machine on which you will run the <code>KnockKnockServer</code>. 
+<p>
+The <code>KnockKnockClient</code> program also specifies the port
+number 4444 when creating its socket. This is a <em>remote port
+number</em>--the number of a port on the server machine--and is the
+port to which <code>KnockKnockServer</code> is listening. The client's
+socket is bound to any available <em>local port</em>--a port on the
+client machine. Remember that the server gets a new socket as well.
+That socket is bound to local port number 4444 on its
+machine. The server's socket and the client's socket are connected.
+<p>
+Next comes the while loop that implements the communication between the
+client and the server. The server speaks first, so the client must
+listen first. The client does this by reading from the input stream
+attached to the socket. If the server does speak, it says "Bye." and
+the client exits the loop. Otherwise, the client displays the text to
+the standard output and then reads the response from the user, who
+types into the standard input. After the user types a carriage return,
+the client sends the text to the server through the output stream
+attached to the socket.
+<blockquote><pre>
+while ((fromServer = in.readLine()) != null) {
+    System.out.println("Server: " + fromServer);
+    if (fromServer.equals("Bye."))
+        break;
+    fromUser = stdIn.readLine();
+    if (fromUser != null) {
+        System.out.println("Client: " + fromUser);
+        out.println(fromUser);
+    }
+}
+</pre></blockquote>
+The communication ends when the server asks if the client wishes to
+hear another joke, the client says no, and the server says "Bye."
+<p>
+In the interest of good housekeeping,
+the client closes its input and output streams and the socket: 
+<blockquote><pre>
+out.close();
+in.close();
+stdIn.close();
+kkSocket.close();
+</pre></blockquote>
+
+</blockquote>
+
+<h3>Running the Programs</h3>
+<blockquote>
+You must start the server program first. To do this, run the server
+program using the Java interpreter, just as you would any other Java
+application. Remember to run the server on the machine that the client
+program specifies when it creates the socket.
+<p>
+Next, run the client program. Note that you can run the client on any
+machine on your network; it does not have to run on the same machine as
+the server.
+<p>
+If you are too quick, you might start the client before the server has
+a chance to initialize itself and begin listening on the port. If this
+happens, you will see a stack trace from the client. If this happens,
+just restart the client.
+<p>
+If you forget to change the host name in the source code for the
+<code>KnockKnockClient</code> program, you will see the following error message:
+<blockquote><pre>
+Don't know about host: taranis
+</pre></blockquote>
+To fix this, modify the <code>KnockKnockClient</code> program and provide a valid
+host name for your network. Recompile the client program and try
+again.
+<p>
+If you try to start a second client while the first client is connected
+to the server, the second client just hangs. The next section,
+<a href=#later">Supporting Multiple Clients</a>,
+talks about supporting multiple clients.
+<p>
+When you successfully get a connection between the client and server,
+you will see the following text displayed on your screen:
+<blockquote><pre>
+Server: Knock! Knock!
+</pre></blockquote>
+Now, you must respond with:
+<blockquote><pre>
+<strong>Who's there?</strong>
+</pre></blockquote>
+The client echoes what you type and sends the text to the server. The
+server responds with the first line of one of the many Knock Knock
+jokes in its repertoire. Now your screen should contain this (the text
+you typed is in bold):
+<blockquote><pre>
+Server: Knock! Knock!
+<strong>Who's there?</strong>
+Client: Who's there?
+Server: Turnip
+</pre></blockquote>
+Now, you respond with:
+<blockquote><pre>
+Turnip who?"
+</pre></blockquote>
+Again, the client echoes what you type and sends the text to the
+server. The server responds with the punch line. Now your screen should
+contain this:
+<blockquote><pre>
+Server: Knock! Knock!
+<strong>Who's there?</strong>
+Client: Who's there?
+Server: Turnip
+<strong>Turnip who?</strong>
+Client: Turnip who?
+Server: Turnip the heat, it's cold in here! Want another? (y/n)
+</pre></blockquote>
+If you want to hear another joke, type <strong>y</strong>;
+if not, type <strong>n</strong>. If you type <strong>y</strong>,
+the server begins again with "Knock! Knock!" If you type <strong>n</strong>,
+the server says "Bye." thus causing both the client and the server to
+exit.
+<p>
+If at any point you make a typing mistake, the <code>KnockKnockServer</code>
+object catches it and the server responds with a message similar to this:
+<blockquote><pre>
+Server: You're supposed to say "Who's there?"!
+</pre></blockquote>
+The server then starts the joke over again:
+<blockquote><pre>
+Server: Try again. Knock! Knock!
+</pre></blockquote>
+Note that the <code>KnockKnockProtocol</code> object is particular
+about spelling and punctuation but not about capitalization.
+</blockquote>
+
+<a name=later>
+<h3>Supporting Multiple Clients</h3>
+</a>
+<blockquote>
+To keep the <code>KnockKnockServer</code> example simple,
+we designed it to listen for and handle a single connection request.
+However, multiple client requests can come into the same port and,
+consequently, into the same <code>ServerSocket</code>.
+Client connection requests are queued at the port, so the
+server must accept the connections sequentially. However, the server
+can service them simultaneously through the use of threads - one thread
+per each client connection.
+<p>
+The basic flow of logic in such a server is this: 
+<blockquote><pre>
+while (true) {
+    accept a connection ;
+    create a thread to deal with the client ;
+end while
+</pre></blockquote>
+The thread reads from and writes to the client connection as necessary. 
+<p>
+
+<blockquote><hr><strong>Try This:</strong>&nbsp;
+Modify the <code>KnockKnockServer</code> so that it can service multiple clients at
+the same time. Two classes compose our solution:
+
+<a class="SourceLink" target="_blank" href="examples/KKMultiServer.java"><code>KKMultiServer</code></a>
+and
+
+<a class="SourceLink" target="_blank" href="examples/KKMultiServerThread.java"><code>KKMultiServerThread</code></a>.
+
+<code>KKMultiServer</code> loops forever,
+listening for client connection requests on a <code>ServerSocket</code>.
+When a request comes in, <code>KKMultiServer</code> accepts the connection,
+creates a new <code>KKMultiServerThread</code> object to process it,
+hands it the socket returned from accept, and starts the thread.
+Then the server goes back to
+listening for connection requests. The <code>KKMultiServerThread</code> object
+communicates to the client by reading from and writing to the socket.
+Run the new Knock Knock server and then run several clients in
+succession.
+<hr></blockquote>
+
+
+
+        </blockquote>
+        <div class=NavBit>
+            <a target=_top href=readingWriting.html>&laquo; Previous</a>
+            &bull;
+            <a target=_top href=../TOC.html>Trail</a>
+            &bull;
+            <a target=_top href=../datagrams/index.html>Next &raquo;</a>
+        </div>
+    </div>
+    <div id=Footer>
+<div id=TagNotes>
+    Problems with the examples? Try <a target="_blank"
+        href=http://java.sun.com/docs/books/tutorial/information/run-examples.html>Compiling and Running
+        the Examples: FAQs</a>.
+    <br>
+    Complaints? Compliments? Suggestions? <a target="_blank"
+        href="http://developer.sun.com/contact/tutorial_feedback.jsp">Give
+    us your feedback</a>.
+<br><br>
+    <a target="_blank" href="http://java.sun.com/docs/books/tutorial/information/copyright.html">Copyright</a>
+    1995-2006 Sun Microsystems, Inc.  All rights reserved.
+    <span id=Download>
+</span></div> 
+
+    </div>
+    <div class=PrintHeaders>
+        <b>Previous page:</b> Reading from and Writing to a Socket
+        <br><b>Next page:</b> All About Datagrams
+    </div>
+    </body>
+<script language="JavaScript" src="../../../../../js/omi/jsc/s_code_remote.js"></script></html> 

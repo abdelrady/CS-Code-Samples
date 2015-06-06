@@ -1,0 +1,127 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+<HTML lang="en-us">
+<HEAD>
+<TITLE>Windows API Guide: SHGetPathFromIDList Function</TITLE>
+<META content="vbapi@vbapi.com" name="author">
+<META content="Information about the SHGetPathFromIDList function in the Windows API, geared towards the Visual Basic user." name="description">
+<META content="Kuliniewicz,Windows,Windows 95,Windows NT,Windows 98,Windows CE,Windows 2000,API,Application Programming Interface,Programming,Visual Basic,Basic,VB,SHGetPathFromIDList" name="keywords">
+<META content="Omicron HTML Editor" name="generator">
+<META content="Sat, 25 Sep 1999 20:53:00 GMT" http-equiv="Last-Modified">
+<LINK href="default.css" tppabs="http://www.vbapi.com/css/default.css" rel="stylesheet" type="text/css">
+<LINK href="index-1.html" tppabs="http://www.vbapi.com/index.html" rel="home">
+
+<LINK href="glossary.html" tppabs="http://www.vbapi.com/ref/glossary.html" rel="glossary">
+<LINK href="copyrite.html" tppabs="http://www.vbapi.com/copyrite.html" rel="copyright">
+</HEAD>
+<BODY>
+
+<!-- Begin Adslot1 -->
+<CENTER>
+<SCRIPT language="JAVASCRIPT">
+<!-- hide from older browsers
+now = new Date();
+my_random = now.getTime();
+document.write('<A href="http://adex3.flycast.com/server/socket/127.0.0.1:2800/click/VBWorldnet/VBAPI/' + my_random + '">');
+document.write('<IMG width="468" height="60" border="1" src="http://adex3.flycast.com/server/socket/127.0.0.1:2800/ad/VBWorldnet/VBAPI/' + my_random + '"></A>');
+// -->
+</SCRIPT>
+</CENTER>
+<!-- End Adslot1 -->
+
+<HR>
+
+<H1>SHGetPathFromIDList Function</H1>
+
+<P><CODE class="declare">Declare Function SHGetPathFromIDList Lib "shell32.dll" Alias "SHGetPathFromIDListA" (ByVal pidl As Long, ByVal pszPath As String) As Long</CODE></P>
+
+<H2>Platforms</H2>
+<P><UL>
+<LI><B>Windows 95:</B> Supported.
+<LI><B>Windows 98:</B> Supported.
+<LI><B>Windows NT:</B> Requires Windows NT 4.0 or later.
+<LI><B>Windows 2000:</B> Supported.
+<LI><B>Windows CE:</B> Not Supported.
+</UL></P>
+
+<H2>Description &amp; Usage</H2>
+<P><B>SHGetPathFromIDList</B> determines the path of the folder refered to by a <A class="def" href="glossary.html#pointer" tppabs="http://www.vbapi.com/ref/glossary.html#pointer" rel="glossary">pointer</A> to an <A href="itemidlist.html" tppabs="http://www.vbapi.com/ref/i/itemidlist.html">ITEMIDLIST</A> structure (a.k.a. a PIDL).  The function only works if the PIDL refers to a physical directory on the system; it cannot get the name of a <A class="def" href="glossary.html#virtualfolder" tppabs="http://www.vbapi.com/ref/glossary.html#virtualfolder" rel="glossary">virtual folder</A>.</P>
+
+<H2>Return Value</H2>
+<P>If an error occured or the PIDL refers to a virtual folder, the function returns 0.  If successful, the function returns a non-zero value.</P>
+
+<H2>Visual Basic-Specific Issues</H2>
+<P>None.</P>
+
+<H2>Parameters</H2>
+<P><DL>
+<DT><VAR>pidl</VAR><DD>The PIDL to determine the physical path of, if it is not a virtual folder.
+<DT><VAR>pszPath</VAR><DD>Receives a null-terminated string holding the path which the PIDL identifies.  The string passed initially to the function must be at least 260 characters long.
+</DL></P>
+
+<H2>Example</H2>
+<P><PRE><CODE class="example"><SPAN class="com">' This code is licensed according to the terms and conditions listed <A href="copyrite.html#license" tppabs="http://www.vbapi.com/copyrite.html#license" rel="copyright">here</A>.</SPAN>
+
+' Open the Browse for Folder dialog box and display both the display name and
+' the actual name of the folder (if it is not a virtual folder).  Any folder under My Computer
+' may be selected.
+Dim bi As <A href="browseinfo.html" tppabs="http://www.vbapi.com/ref/b/browseinfo.html">BROWSEINFO</A>  ' structure passed to the function
+Dim pidl As Long  ' PIDL to the user's selection
+Dim physpath As String  ' string used to temporarily hold the physical path
+Dim retval As Long  ' return value
+
+' Initialize the structure to be passed to the function.
+bi.hwndOwner = Form1.hWnd  ' window Form1 is the owner of the dialog box
+' Specify the My Computer virtual folder as the root
+retval = <A href="shgetspecialfolderlocation.html" tppabs="http://www.vbapi.com/ref/s/shgetspecialfolderlocation.html">SHGetSpecialFolderLocation</A>(Form1.hWnd, CSIDL_DRIVES, bi.pidlRoot)
+' Make room in the buffer to get the [virtual] folder's display name
+bi.pszDisplayName = Space(260)
+bi.lpszTitle = "Please choose a folder."  ' Message displayed to the user
+bi.ulFlags = 0  ' no flags are needed here
+bi.lpfn = 0  ' no callback function is being used
+bi.lParam = 0  ' not needed
+bi.iImage = 0  ' this will be set by the function
+
+' Open the Browse for Folder dialog box.
+pidl = <A href="shbrowseforfolder.html" tppabs="http://www.vbapi.com/ref/s/shbrowseforfolder.html">SHBrowseForFolder</A>(bi)
+' If the user selected something, display its display name
+' and its physical location on the system.
+If pidl &lt;&gt; 0 Then
+  ' Remove the empty space from the display name variable.
+  bi.pszDisplayName = Left(bi.pszDisplayName, InStr(bi.pszDisplayName, vbNullChar) - 1)
+  Debug.Print "The user selected: "; bi.pszDisplayName
+  ' If the folder is not a virtual folder, display its physical location.
+  physpath = Space(260)  ' make room in the buffer
+  retval = <B>SHGetPathFromIDList</B>(pidl, physpath)
+  If retval = 0 Then
+    Debug.Print "Physical Location: (virtual folder)"
+  Else
+    ' Remove the empty space and display the result.
+    physpath = Left(physpath, InStr(physpath, vbNullChar) - 1)
+    Debug.Print "Physical Location: "; physpath
+  End If
+  ' Free the pidl returned by the function.
+  <A href="cotaskmemfree.html" tppabs="http://www.vbapi.com/ref/c/cotaskmemfree.html">CoTaskMemFree</A> pidl
+End If
+
+' Whether successful or not, free the PIDL which was used to
+' identify the My Computer virtual folder.
+<A href="cotaskmemfree.html" tppabs="http://www.vbapi.com/ref/c/cotaskmemfree.html">CoTaskMemFree</A> bi.pidlRoot</CODE></PRE></P>
+
+<H2>Category</H2>
+<P><A href="funcc.html#shell" tppabs="http://www.vbapi.com/ref/funcc.html#shell">Shell</A></P>
+
+<P><A href="funca.html" tppabs="http://www.vbapi.com/ref/funca.html">Go back to the alphabetical Function listing.</A><BR>
+<A href="index.html" tppabs="http://www.vbapi.com/ref/index.html">Go back to the Reference section index.</A></P>
+
+<HR>
+
+<P><B>Last Modified:</B> September 25, 1999<BR>
+This page is copyright &copy; 1999 Paul Kuliniewicz.  
+<A href="copyrite.html" tppabs="http://www.vbapi.com/copyrite.html" rel="copyright">Copyright Information</A>  <B>Revised October 29, 2000</B><BR>
+
+<A href="index-1.html" tppabs="http://www.vbapi.com/index.html">Go back to the Windows API Guide home page.</A><BR>
+E-mail: <A href="javascript:if(confirm('http://www.vbapi.com/email.html  \n\nThis file was not retrieved by Teleport Pro, because it is addressed on a domain or path outside the boundaries set for its Starting Address.  \n\nDo you want to open it from the server?'))window.location='http://www.vbapi.com/email.html'" tppabs="http://www.vbapi.com/email.html">vbapi@vbapi.com</A>  <A href="javascript:if(confirm('http://www.vbapi.com/email.html  \n\nThis file was not retrieved by Teleport Pro, because it is addressed on a domain or path outside the boundaries set for its Starting Address.  \n\nDo you want to open it from the server?'))window.location='http://www.vbapi.com/email.html#secure'" tppabs="http://www.vbapi.com/email.html#secure">Send Encrypted E-Mail</A><BR>
+This page is at <A href="shgetpathfromidlist.html" tppabs="http://www.vbapi.com/ref/s/shgetpathfromidlist.html">http://www.vbapi.com/ref/s/shgetpathfromidlist.html</A>
+</P>
+</BODY>
+</HTML>

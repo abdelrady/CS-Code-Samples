@@ -1,0 +1,151 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+<HTML lang="en-us">
+<HEAD>
+<TITLE>Windows API Guide: ChooseFont Function</TITLE>
+<META content="vbapi@vbapi.com" name="author">
+<META content="Information about the ChooseFont function in the Windows API, geared towards the Visual Basic user." name="description">
+<META content="Kuliniewicz,Windows,Windows 95,Windows NT,Windows 98,Windows CE,Windows 2000,API,Application Programming Interface,Programming,Visual Basic,Basic,VB,ChooseFont" name="keywords">
+<META content="Omicron HTML Editor" name="generator">
+<META content="Thu, 19 Aug 1999 23:01:00 GMT" http-equiv="Last-Modified">
+<LINK href="default.css" tppabs="http://www.vbapi.com/css/default.css" rel="stylesheet" type="text/css">
+<LINK href="index-1.html" tppabs="http://www.vbapi.com/index.html" rel="home">
+
+<LINK href="glossary.html" tppabs="http://www.vbapi.com/ref/glossary.html" rel="glossary">
+<LINK href="copyrite.html" tppabs="http://www.vbapi.com/copyrite.html" rel="copyright">
+</HEAD>
+<BODY>
+
+<!-- Begin Adslot1 -->
+<CENTER>
+<SCRIPT language="JAVASCRIPT">
+<!-- hide from older browsers
+now = new Date();
+my_random = now.getTime();
+document.write('<A href="http://adex3.flycast.com/server/socket/127.0.0.1:2800/click/VBWorldnet/VBAPI/' + my_random + '">');
+document.write('<IMG width="468" height="60" border="1" src="http://adex3.flycast.com/server/socket/127.0.0.1:2800/ad/VBWorldnet/VBAPI/' + my_random + '"></A>');
+// -->
+</SCRIPT>
+</CENTER>
+<!-- End Adslot1 -->
+
+<HR>
+
+<H1>ChooseFont Function</H1>
+
+<P><CODE class="declare">Declare Function ChooseFont Lib "comdlg32.dll" Alias "ChooseFontA" (lpcf As <A href="choosefont_type.html" tppabs="http://www.vbapi.com/ref/c/choosefont_type.html">CHOOSEFONT_TYPE</A>) As Long</CODE></P>
+
+<H2>Platforms</H2>
+<P><UL>
+<LI><B>Windows 95:</B> Supported.
+<LI><B>Windows 98:</B> Supported.
+<LI><B>Windows NT:</B> Requires Windows NT 3.1 or later.
+<LI><B>Windows 2000:</B> Supported.
+<LI><B>Windows CE:</B> Not Supported.
+</UL></P>
+
+<H2>Description &amp; Usage</H2>
+<P><B>ChooseFont</B> opens the Choose Font <A class="def" href="glossary.html#commondialog" tppabs="http://www.vbapi.com/ref/glossary.html#commondialog" rel="glossary">common dialog</A> box.  All of the necessary information needed to create the dialog box, as well as all of the information returned from it, is stored in the structure passed as <VAR>pChooseFont</VAR>.  The <A class="def" href="glossary.html#logical" tppabs="http://www.vbapi.com/ref/glossary.html#logical" rel="glossary">logical</A> font information is mostly stored in a <A href="logfont.html" tppabs="http://www.vbapi.com/ref/l/logfont.html">LOGFONT</A> structure, which can be used to access that font.</P>
+
+<H2>Return Value</H2>
+<P>If an error occured or the user pressed Cancel, the function returns 0 (use <A href="commdlgextendederror.html" tppabs="http://www.vbapi.com/ref/c/commdlgextendederror.html">CommDlgExtendedError</A> to get the error code).  If the user successfully selected a font, the function returns a non-zero value.</P>
+
+<H2>Visual Basic-Specific Issues</H2>
+<P>None.</P>
+
+<H2>Parameters</H2>
+<P><DL>
+<DT><VAR>lpcf</VAR><DD>Passes information to and from the Choose Font dialog box.  Initialize this before calling the function, and read the necessary information from it afterwards.
+</DL></P>
+
+<H2>Example</H2>
+<P><PRE><CODE class="example"><SPAN class="com">' This code is licensed according to the terms and conditions listed <A href="copyrite.html#license" tppabs="http://www.vbapi.com/copyrite.html#license" rel="copyright">here</A>.</SPAN>
+
+' Display a Choose Font dialog box.  Print out the typeface name, point size,
+' and style of the selected font.  More detail about topics in this example can be found in
+' the pages for <A href="choosefont_type.html" tppabs="http://www.vbapi.com/ref/c/choosefont_type.html">CHOOSEFONT_TYPE</A> and <A href="logfont.html" tppabs="http://www.vbapi.com/ref/l/logfont.html">LOGFONT</A>.
+Dim cf As <A href="choosefont_type.html" tppabs="http://www.vbapi.com/ref/c/choosefont_type.html">CHOOSEFONT_TYPE</A>  ' data structure needed for function
+Dim lfont As <A href="logfont.html" tppabs="http://www.vbapi.com/ref/l/logfont.html">LOGFONT</A>  ' receives information about the chosen font
+Dim hMem As Long, pMem As Long  ' handle and pointer to memory buffer
+Dim fontname As String  ' receives name of font selected
+Dim retval As Long  ' return value
+
+' Initialize the default selected font: Times New Roman, regular, black, 12 point.
+' (Note that some of that information is in the CHOOSEFONT_TYPE structure instead.)
+lfont.lfHeight = 0  ' determine default height
+lfont.lfWidth = 0  ' determine default width
+lfont.lfEscapement = 0  ' angle between baseline and escapement vector
+lfont.lfOrientation = 0  ' angle between baseline and orientation vector
+lfont.lfWeight = FW_NORMAL  ' normal weight i.e. not bold
+lfont.lfItalic = 0  ' not italic
+lfont.lfUnderline = 0  ' not underline
+lfont.lfStrikeOut = 0  ' not strikeout
+lfont.lfCharSet = DEFAULT_CHARSET  ' use default character set
+lfont.lfOutPrecision = OUT_DEFAULT_PRECIS  ' default precision mapping
+lfont.lfClipPrecision = CLIP_DEFAULT_PRECIS  ' default clipping precision
+lfont.lfQuality = DEFAULT_QUALITY  ' default quality setting
+lfont.lfPitchAndFamily = DEFAULT_PITCH Or FF_ROMAN  ' default pitch, proportional with serifs
+lfont.lfFaceName = "Times New Roman" &amp; vbNullChar  ' string must be null-terminated
+
+' Create the memory block which will act as the LOGFONT structure buffer.
+hMem = <A href="globalalloc.html" tppabs="http://www.vbapi.com/ref/g/globalalloc.html">GlobalAlloc</A>(GMEM_MOVEABLE Or GMEM_ZEROINIT, Len(lfont))
+pMem = <A href="globallock.html" tppabs="http://www.vbapi.com/ref/g/globallock.html">GlobalLock</A>(hMem)  ' lock and get pointer
+<A href="copymemory.html" tppabs="http://www.vbapi.com/ref/c/copymemory.html">CopyMemory</A> ByVal pMem, lfont, Len(lfont)  ' copy structure's contents into block
+
+' Initialize dialog box: Screen and printer fonts, point size between 10 and 72.
+cf.lStructSize = Len(cf)  ' size of structure
+cf.hwndOwner = Form1.hWnd  ' window Form1 is opening this dialog box
+cf.hdc = Printer.hDC  ' device context of default printer (using VB's mechanism)
+cf.lfLogFont = pMem  ' pointer to LOGFONT memory block buffer
+cf.iPointSize = 120  ' 12 point font (in units of 1/10 point)
+cf.flags = CF_BOTH Or CF_EFFECTS Or CF_FORCEFONTEXIST Or CF_INITTOLOGFONTSTRUCT Or CF_LIMITSIZE
+cf.rgbColors = RGB(0, 0, 0)  ' black
+cf.lCustData = 0  ' we don't use this here...
+cf.lpfnHook = 0  ' ...or this...
+cf.lpTemplateName = ""  ' ...or this...
+cf.hInstance = 0  ' ...or this...
+cf.lpszStyle = ""  ' ...or this
+cf.nFontType = REGULAR_FONTTYPE  ' regular font type i.e. not bold or anything
+cf.nSizeMin = 10  ' minimum point size
+cf.nSizeMax = 72  ' maximum point size
+
+' Now, call the function.  If successful, copy the LOGFONT structure back into the structure
+' and then print out the attributes we mentioned earlier that the user selected.
+retval = <B>ChooseFont</B>(cf)  ' open the dialog box
+If retval &lt;&gt; 0 Then  ' success
+  <A href="copymemory.html" tppabs="http://www.vbapi.com/ref/c/copymemory.html">CopyMemory</A> lfont, ByVal pMem, Len(lfont)  ' copy memory back
+  ' Now make the fixed-length string holding the font name into a "normal" string.
+  fontname = Left(lfont.lfFaceName, InStr(lfont.lfFaceName, vbNullChar) - 1)
+  ' Display font name and a few attributes.
+  Debug.Print "FONT NAME: "; fontname
+  Debug.Print "FONT SIZE (points):"; cf.iPointSize / 10  ' in units of 1/10 point!
+  Debug.Print "FONT STYLE(S): ";
+  If lfont.lfWeight &gt;= FW_BOLD Then Debug.Print "Bold ";
+  If lfont.lfItalic &lt;&gt; 0 Then Debug.Print "Italic ";
+  If lfont.lfUnderline &lt;&gt; 0 Then Debug.Print "Underline ";
+  If lfont.lfStrikeOut &lt;&gt; 0 Then Debug.Print "Strikeout";
+  Debug.Print  ' end the line
+End If
+
+' Deallocate the memory block we created earlier.  Note that this must
+' be done whether the function succeeded or not.
+retval = <A href="globalunlock.html" tppabs="http://www.vbapi.com/ref/g/globalunlock.html">GlobalUnlock</A>(hMem)  ' destroy pointer, unlock block
+retval = <A href="globalfree.html" tppabs="http://www.vbapi.com/ref/g/globalfree.html">GlobalFree</A>(hMem)  ' free the allocated memory</CODE></PRE></P>
+
+<H2>Category</H2>
+<P><A href="funcc.html#commondialog" tppabs="http://www.vbapi.com/ref/funcc.html#commondialog">Common Dialog</A></P>
+
+<P><A href="funca.html" tppabs="http://www.vbapi.com/ref/funca.html">Go back to the alphabetical Function listing.</A><BR>
+<A href="index.html" tppabs="http://www.vbapi.com/ref/index.html">Go back to the Reference section index.</A></P>
+
+<HR>
+
+<P><B>Last Modified:</B> August 19, 1999<BR>
+This page is copyright &copy; 1999 Paul Kuliniewicz.  
+<A href="copyrite.html" tppabs="http://www.vbapi.com/copyrite.html" rel="copyright">Copyright Information</A>  <B>Revised October 29, 2000</B><BR>
+
+<A href="index-1.html" tppabs="http://www.vbapi.com/index.html">Go back to the Windows API Guide home page.</A><BR>
+E-mail: <A href="javascript:if(confirm('http://www.vbapi.com/email.html  \n\nThis file was not retrieved by Teleport Pro, because it is addressed on a domain or path outside the boundaries set for its Starting Address.  \n\nDo you want to open it from the server?'))window.location='http://www.vbapi.com/email.html'" tppabs="http://www.vbapi.com/email.html">vbapi@vbapi.com</A>  <A href="javascript:if(confirm('http://www.vbapi.com/email.html  \n\nThis file was not retrieved by Teleport Pro, because it is addressed on a domain or path outside the boundaries set for its Starting Address.  \n\nDo you want to open it from the server?'))window.location='http://www.vbapi.com/email.html#secure'" tppabs="http://www.vbapi.com/email.html#secure">Send Encrypted E-Mail</A><BR>
+This page is at <A href="choosefont.html" tppabs="http://www.vbapi.com/ref/c/choosefont.html">http://www.vbapi.com/ref/c/choosefont.html</A>
+</P>
+</BODY>
+</HTML>

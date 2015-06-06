@@ -1,0 +1,813 @@
+From: <Saved by Windows Internet Explorer 7>
+Subject: CS 188, Fall 2005, Assignment 2
+Date: Mon, 12 Feb 2007 20:15:29 +0200
+MIME-Version: 1.0
+Content-Type: text/html;
+	charset="windows-1256"
+Content-Transfer-Encoding: quoted-printable
+Content-Location: http://www.cs.berkeley.edu/~russell/classes/cs188/f05/assignments/a2/a2.html
+X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2900.2962
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD><TITLE>CS 188, Fall 2005, Assignment 2</TITLE>
+<META http-equiv=3DContent-Type content=3D"text/html; =
+charset=3Dwindows-1256">
+<META content=3D"MSHTML 6.00.5730.11" name=3DGENERATOR></HEAD>
+<BODY bgColor=3D#f7f5ea>
+<HR>
+
+<H2>CS 188, Fall 2005, Introduction to Artificial Intelligence =
+<BR>Assignment 2,=20
+due Oct 9, total value 8% of grade</H2>
+<HR>
+<BR><BR>
+<H3>This assignment should be done in pairs. <FONT color=3Dgreen>Working =
+in pairs=20
+does not mean that each does half. It means both work together on the =
+whole=20
+thing!</FONT> <FONT color=3Dred>Don't leave it to the last =
+minute!</FONT> The=20
+total amount of coding required is relatively small but it may take some =
+time to=20
+understand the code on which it builds.<BR><BR>100 points total</H3>
+<HR>
+When you are done with the assignment, you should use <TT>submit a2</TT> =
+to turn=20
+it in. This will pick up two files: a writeup (a2.txt or a2.pdf) =
+explaining what=20
+you did for each of the following steps (and incorporating transcripts =
+as=20
+needed), and an a2.lisp file with all your code.=20
+<HR>
+<BR><BR>In this assignment, you will work on two tasks:=20
+<UL>
+  <LI>Designing model railway tracks: this will be done using a =
+local-search=20
+  formulation in which all the pieces are present at the start and are =
+gradually=20
+  rearranged to form a proper track.=20
+  <LI>Sudoku puzzles: this will be done using CSP methods. </LI></UL>The =
+
+assignment is somewhat open-ended, in that the underlying goal is to =
+produce the=20
+most useful track-designing tool and sudoku solver. Extra credit will be =
+
+available for creative extensions of the assigned tasks.=20
+<H3>Solving problems using the AIMA code</H3>The first thing you need to =
+do is=20
+load all the AIMA code in the usual way: load <TT>aima.lisp</TT> and =
+then do=20
+<TT>(aima-load 'search)</TT>. <FONT color=3Dred>Be sure to use the =
+current=20
+version; there have been several recent additions, changes, and bug=20
+fixes.</FONT> The AIMA code includes a general facility for defining =
+search=20
+problems. You should look in particular at the following files in the =
+AIMA code=20
+directory:=20
+<UL>
+  <LI><A=20
+  =
+href=3D"http://www-inst.eecs.berkeley.edu/~cs188/code-2e-188/search/domai=
+ns/problems.lisp"><TT>search/domains/problems.lisp</TT></A>=20
+  (definitions of problems in general)=20
+  <LI><A=20
+  =
+href=3D"http://www-inst.eecs.berkeley.edu/~cs188/code-2e-188/search/domai=
+ns/nqueens-problem.lisp"><TT>search/domains/nqueens-problem.lisp</TT></A>=
+=20
+  (nqueens as both incremental-state and complete-state problems)=20
+  <LI><A=20
+  =
+href=3D"http://www-inst.eecs.berkeley.edu/~cs188/code-2e-188/search/domai=
+ns/sliding-block-puzzle.lisp"><TT>search/domains/sliding-block-puzzle.lis=
+p</TT></A>=20
+  (8-puzzle, 15-puzzle etc.)=20
+  <LI><A=20
+  =
+href=3D"http://www-inst.eecs.berkeley.edu/~cs188/code-2e-188/search/algor=
+ithms/tree-search.lisp"><TT>search/algorithms/tree-search.lisp</TT></A>=20
+
+  <LI><A=20
+  =
+href=3D"http://www-inst.eecs.berkeley.edu/~cs188/code-2e-188/search/algor=
+ithms/graph-search.lisp"><TT>search/algorithms/graph-search.lisp</TT></A>=
+=20
+
+  <LI><A=20
+  =
+href=3D"http://www-inst.eecs.berkeley.edu/~cs188/code-2e-188/search/algor=
+ithms/local-search.lisp"><TT>search/algorithms/local-search.lisp</TT></A>=
+=20
+  </LI></UL><FONT color=3Dred>These files differ from the standard WWW =
+AIMA code=20
+distribution, so make sure you use the <I>latest</I> CS188 versions, =
+either from=20
+the class web page or the ~cs188 directory on the instructional =
+machines</FONT>.
+<P>Note in particular the default definition (in =
+search/domains/problems.lisp)=20
+of the <TT>successors</TT> method in terms of an <TT>actions</TT> =
+method, which=20
+returns all possible actions in a given state, and a <TT>result</TT> =
+method,=20
+which computes the new state resulting from a given action in a given =
+state.=20
+(Examples of their use appear in search/domains/nqueens-problem.lisp and =
+
+search/domains/sliding-block-puzzle.lisp.) For local search algorithms, =
+the=20
+<TT>random-successor</TT> method, defined in terms of a =
+<TT>random-action</TT>=20
+method, is also useful. To construct and solve a problem, once the =
+methods for a=20
+particular problem type are defined, one first makes a problem instance. =
+Here,=20
+we make an 8-puzzle (3x3) and look at its initial state: <PRE>&gt; =
+(problem-initial-state (setq p (make-sliding-block-puzzle :n 3)))
+ 6 3 5
+ 7 2 1
+ 4 8 .
+</PRE>Then, one invokes one of the search algorithms to solve it. Here, =
+we apply=20
+A* graph search. This returns the solution sequence: <PRE>&gt; (pprint =
+(setq soln (a*-graph-search p)))
+(LEFT LEFT UP UP RIGHT DOWN RIGHT UP LEFT DOWN DOWN LEFT UP UP)
+</PRE>Just to be sure, we can look at the outcome of this sequence: =
+<PRE>&gt; (sequence-result p soln (problem-initial-state p))
+
+ . 1 2
+ 3 4 5
+ 6 7 8
+</PRE>There are many more examples of how to solve problems in=20
+search/test-search.lisp.=20
+<HR>
+
+<H3>Railway tracks</H3>The code for defining and displaying tracks is in =
+the=20
+following files:=20
+<UL>
+  <LI><A=20
+  =
+href=3D"http://www-inst.eecs.berkeley.edu/~cs188/a2/tracks.lisp"><TT>trac=
+ks.lisp</TT></A>=20
+  (definitions of track pieces and basic functions for making tracks,=20
+  saving/loading/printing tracks, and checking connections)=20
+  <LI><A=20
+  =
+href=3D"http://www-inst.eecs.berkeley.edu/~cs188/a2/track-display.lisp"><=
+TT>track-display.lisp</TT></A>=20
+  (graphical display of tracks; includes instructions for use; if your =
+Common=20
+  Lisp at home does not include CLIM, do not load this file!) =
+</LI></UL>I suggest=20
+copying these files into your own directory. You may want to add them to =
+the=20
+defsystem for search in your aima.lisp so that they compile and load=20
+automatically when you run <TT>(aima-compile 'search)</TT>.=20
+<H4>Track pieces, orientations, and connections</H4>In this assignment, =
+railway=20
+tracks are composed of square tiles that carry the track elements. There =
+is a=20
+<TT>defstruct</TT> for the general type <TT>track-piece</TT>, and there =
+are=20
+seven subtypes of usable pieces. Their ASCII appearances (with asterisks =
+added=20
+for visual separation) are as follows: <PRE>   cross     curve   =
+straight  twocurve    blank    lsplit    rsplit
+*    |    *    |    *    |    *    |    *         *    |    *    |    *
+*    |    *     \   *    |    *     \   *         *    |    *    |    *
+*----|----*      `--*    |    *--.   `--*         *--. |    *    | ,--*
+*    |    *         *    |    *   \     *         *   \|    *    |/   *
+*    |    *         *    |    *    |    *         *    |    *    |    *
+</PRE>In addition, there is a <TT>barrier-piece</TT> subtype that =
+surrounds the=20
+track (see below) and an <TT>unknown-piece</TT> subtype for parts of the =
+track=20
+that are not yet defined.=20
+<P>Any track piece <TT>p</TT> is an instance of one of these subtypes. =
+As such,=20
+it has an orientation <TT>(track-piece-orientation p)</TT> which is an =
+integer.=20
+Each orientation gives the piece a different appearance; the appearances =
+shown=20
+above are for orientation 0. In general, the possible orientations are =
+0, 1, 2,=20
+3, each rotated 90 degrees clockwise from the previous. Because of =
+symmetries,=20
+some pieces have fewer distinct orientations. For example, the blank and =
+cross=20
+pieces just have orientation 0 and the straight, curve, and two-curve =
+pieces=20
+have orientations 0 and 1. For any piece, the number of distinct =
+orientations is=20
+given by <TT>(track-piece-d p)</TT>. The track subtype definitions =
+include=20
+appearances for each distinct orientation, but you need not worry about =
+this=20
+because <TT>print-track</TT> takes care of them automatically (see =
+below).=20
+<P>The appearance of a track piece is purely cosmetic (i.e., it's just =
+for the=20
+purposes of printing out tracks so you can see them). What really =
+matters is the=20
+set of <I>connections</I>, i.e., the ways in which the tracks connect =
+the edges=20
+of the piece. The edges of any piece are called <TT>*top*</TT>,=20
+<TT>*right*</TT>, <TT>*bottom*</TT>, and <TT>*left*</TT>, which are =
+defined as=20
+global parameters with values 0, 1, 2, 3 respectively. (Hence, you can =
+enumerate=20
+over edges by looping from <TT>*top*</TT> to <TT>*left*</TT>.) Which =
+edges are=20
+connected to which depends on the orientation of the piece. Consider, =
+for=20
+example, the <TT>lsplit-piece</TT>, which is shown above in orientation =
+0:=20
+<UL>
+  <LI>Its <TT>*top*</TT> edge is connected directly to its =
+<TT>*bottom*</TT>=20
+  edge (i.e., a train entering at the top can exit at the bottom).=20
+  <LI>Its <TT>*right*</TT> edge is not connected to anything.=20
+  <LI>Its <TT>*bottom*</TT> edge is connected directly to its =
+<TT>*top*</TT> and=20
+  <TT>*left*</TT>edges.=20
+  <LI>Its <TT>*left*</TT> edge is connected directly to its =
+<TT>*bottom*</TT>=20
+  edge. </LI></UL>Notice that the <TT>*left*</TT> edge is not connected=20
+<I>directly</I> to the <TT>*top*</TT> edge, because trains cannot turn =
+sharp=20
+corners. (They can go into reverse, so there is an <I>indirect</I> =
+connection.)=20
+Similarly, the <TT>*left*</TT> edge of a cross-piece is not connected to =
+its=20
+<TT>*top*</TT> edge, and so on.=20
+<P>The connections for orientation 0 are recorded in the=20
+<TT>track-piece-connections</TT> field of each subtype. In general, you =
+won't=20
+want to mess with this field directly. Instead, you will use the =
+following=20
+access functions:=20
+<UL>
+  <LI><TT>(connections? piece edge)</TT> returns <TT>t</TT> iff the =
+piece, in=20
+  its current orientation, has connections at the given edge.=20
+  <LI><TT>(connections-to piece edge)</TT> returns the list of edges =
+connected=20
+  to the given edge for the piece in its current orientation. =
+</LI></UL>Notice=20
+that the barrier, blank, and unknown pieces have no connections. They =
+have=20
+different functions, however: barriers go around the outside of the =
+track; a=20
+blank piece is a real track piece with no track; an unknown piece simply =
+
+indicates that no real track piece has been chosen for this square.=20
+<H4>Tracks</H4>A track is an array whose elements are track pieces. An =
+MxN track=20
+is actually an (M+2)x(N+2) array whose outside squares are filled with =
+barrier=20
+pieces. This way, you can enumerate over the "real" squares of a track =
+by=20
+looping from 1 to M and 1 to N. Furthermore, every real square will have =
+
+neighbours on all four sides.=20
+<P>The <TT>print-track</TT> function prints out a track as plain text=20
+characters. The <TT>display-track</TT> function displays a track in a =
+separate=20
+window in a much nicer format. (See the <TT>track-display.lisp</TT> file =
+for=20
+further instructions.)=20
+<P><FONT color=3Dred>IMPORTANT</FONT>: As with all the arrays in AIMA, =
+we use the=20
+Cartesian convention: (1,1) is the bottom left corner, (M,1) is the =
+bottom right=20
+corner, (1,N) is the top left corner, (M,N) is the top right corner. =
+This=20
+convention also applies when calculating, for example, the square =
+adjacent to=20
+the top edge of another square.=20
+<P><FONT color=3Dred>IMPORTANT</FONT>: As a general rule it is best to =
+have each=20
+square of a track contain a <I>distinct</I> track piece instance. =
+Putting the=20
+same instance in more than one square causes obvious problems when the =
+piece=20
+orientation is modified!=20
+<P>The basic function for making a track is <TT>(make-full-track width =
+height=20
+pieces)</TT>, which makes a track with the given dimensions, adding =
+barriers=20
+around the outside, and fills the squares from the list of pieces, in =
+the given=20
+order. It returns the track (and a list of left-over pieces if any).=20
+<P><TT>make-empty-track</TT> calls <TT>make-full-track</TT> with a list =
+of=20
+unknown pieces: <PRE>&gt; (print-track (make-empty-track 4 4))
+  -----    -----    -----    -----    -----    ----- =20
+  |   |    |   |    |   |    |   |    |   |    |   | =20
+  -----    -----    -----    -----    -----    ----- =20
+                                                     =20
+         . . . . .. . . . .. . . . .. . . . .        =20
+  -----  . . . . .. . . . .. . . . .. . . . .  ----- =20
+  |   |  . . . . .. . . . .. . . . .. . . . .  |   | =20
+  -----  . . . . .. . . . .. . . . .. . . . .  ----- =20
+         : : : : :: : : : :: : : : :: : : : :        =20
+         . . . . .. . . . .. . . . .. . . . .        =20
+  -----  . . . . .. . . . .. . . . .. . . . .  ----- =20
+  |   |  . . . . .. . . . .. . . . .. . . . .  |   | =20
+  -----  . . . . .. . . . .. . . . .. . . . .  ----- =20
+         : : : : :: : : : :: : : : :: : : : :        =20
+         . . . . .. . . . .. . . . .. . . . .        =20
+  -----  . . . . .. . . . .. . . . .. . . . .  ----- =20
+  |   |  . . . . .. . . . .. . . . .. . . . .  |   | =20
+  -----  . . . . .. . . . .. . . . .. . . . .  ----- =20
+         : : : : :: : : : :: : : : :: : : : :        =20
+         . . . . .. . . . .. . . . .. . . . .        =20
+  -----  . . . . .. . . . .. . . . .. . . . .  ----- =20
+  |   |  . . . . .. . . . .. . . . .. . . . .  |   | =20
+  -----  . . . . .. . . . .. . . . .. . . . .  ----- =20
+         : : : : :: : : : :: : : : :: : : : :        =20
+                                                     =20
+  -----    -----    -----    -----    -----    ----- =20
+  |   |    |   |    |   |    |   |    |   |    |   | =20
+  -----    -----    -----    -----    -----    ----- =20
+</PRE>
+<P><TT>make-random-track-unlimited</TT> calls <TT>make-full-track</TT> =
+with a=20
+list of pieces generated randomly according to the =
+<TT>*piece-probs*</TT>=20
+distribution (as if there were an unlimited supply of each piece type): =
+<PRE>&gt; (print-track (setq random44 (make-random-track-unlimited 4 =
+4)))
+  -----    -----    -----    -----    -----    ----- =20
+  |   |    |   |    |   |    |   |    |   |    |   | =20
+  -----    -----    -----    -----    -----    ----- =20
+                                                     =20
+             |                 |        |            =20
+  -----      |                 |       /       ----- =20
+  |   |      | ,----.------    |    --'   ,--  |   | =20
+  -----      |/      \         |         /     ----- =20
+             |        |        |        |            =20
+                      |        |        |            =20
+  -----              /         |         \     ----- =20
+  |   |  --.      --'   ,------|------.   `--  |   | =20
+  -----     \          /       |       \       ----- =20
+             |        |        |        |            =20
+                               |        |            =20
+  -----                       /|         \     ----- =20
+  |   |  --.      --.--------' |          `--  |   | =20
+  -----     \        \         |               ----- =20
+             |        |        |                     =20
+             |        |                 |            =20
+  -----       \      /                   \     ----- =20
+  |   |  ------`----'------------,--------`--  |   | =20
+  -----                         /              ----- =20
+                               |                     =20
+                                                     =20
+  -----    -----    -----    -----    -----    ----- =20
+  |   |    |   |    |   |    |   |    |   |    |   | =20
+  -----    -----    -----    -----    -----    ----- =20
+                                                     =20
+</PRE>
+<P>One useful function for accessing track squares is =
+<TT>(adjacent-square x y=20
+edge)</TT>, which returns the square adjacent to the given edge of =
+square (x,y)=20
+in the track. For example, <PRE>&gt; (adjacent-square 1 1 *right*)
+(2 1)
+</PRE>The function <TT>(adjacent-piece track x y edge)</TT> extracts the =
+
+corresponding piece in the given track. Thus, if <TT>random44</TT> is =
+bound to=20
+the track above: <PRE>&gt; (adjacent-piece random44 1 1 *right*)
+#.(make 'LSPLIT-PIECE :orientation 1)
+</PRE>Notice the somewhat odd way we print out pieces: this makes it =
+possible to=20
+print out a track to a file and read it back in again: <PRE>&gt; =
+(save-track random44 "~cs188/a2/random44.track")
+NIL
+&gt; (setq random44copy (read-track "~cs188/a2/random44.track"))
+#2A((#.(make 'BARRIER-PIECE :orientation 0)
+     #.(make 'BARRIER-PIECE :orientation 0)
+     etc., etc.
+</PRE>
+<H4>Well-formed tracks</H4>The randomly generated track shown above is=20
+ill-formed: it has various disconnected stretches of track and many =
+loose ends,=20
+some of which run off the edge. Define a <I>weakly connected =
+component</I> (WCC)=20
+as a maximal set of track elements such that from every point in the WCC =
+it is=20
+possible to reach every other point. (Notice that an individual=20
+<TT>twocurve-piece</TT> or <TT>cross-piece</TT> by itself has two WCCs.) =
+For=20
+example, <TT>random44</TT> above has 6 WCCs. (Not 5 - remember that =
+tracks=20
+crossing at a cross-piece are not joined!) We would prefer tracks with =
+no loose=20
+ends and just one WCC. Here is an example of such a track: <PRE>&gt; =
+(print-track (setq weak44 (read-track "~cs188/a2/weak44.track")))
+
+  -----    -----    -----    -----    -----    ----- =20
+  |   |    |   |    |   |    |   |    |   |    |   | =20
+  -----    -----    -----    -----    -----    ----- =20
+                                                     =20
+                                                     =20
+  -----                                        ----- =20
+  |   |        ,----.            ,----.        |   | =20
+  -----       /      \          /      \       ----- =20
+             |        |        |        |            =20
+             |        |        |        |            =20
+  -----       \      /|        |        |      ----- =20
+  |   |        `----' |        |        |      |   | =20
+  -----               |        |        |      ----- =20
+                      |        |        |            =20
+                      |        |        |            =20
+  -----               |\      /        /|      ----- =20
+  |   |               | `----'   ,----' |      |   | =20
+  -----               |         /       |      ----- =20
+                      |        |        |            =20
+                      |        |        |            =20
+  -----                \      /        /       ----- =20
+  |   |                 `----'--------'        |   | =20
+  -----                                        ----- =20
+                                                     =20
+                                                     =20
+  -----    -----    -----    -----    -----    ----- =20
+  |   |    |   |    |   |    |   |    |   |    |   | =20
+  -----    -----    -----    -----    -----    ----- =20
+</PRE>Later we will see a more stringent definition of <I>strongly =
+connected=20
+component</I>.=20
+<H3>Your mission</H3>
+<P>Now go through the following steps:=20
+<P><B>1.</B> (5) First, to help you become familiar with tracks and =
+pieces,=20
+write a function <TT>(count-loose-ends track)</TT>, which should return =
+the=20
+number of loose ends in the track. For <TT>random44</TT> you should get =
+20; for=20
+<TT>weak44</TT> you should get 0.=20
+<P><B>2.</B> (2) If a track has no loose ends, what does that imply =
+about the=20
+numbers of lsplit and rsplit pieces? Explain.=20
+<P><B>3.</B> (20) Now, write a function <TT>(count-wccs track)</TT>, =
+which=20
+should return the number of WCCs in the track. For <TT>random44</TT> you =
+should=20
+get 6; for <TT>weak44</TT> you should get 1. [Hint: your first instinct =
+may be=20
+to view WCCs in terms of collections of squares; but this won't work =
+because of=20
+the twocurve and cross pieces, each of which can be part of two distinct =
+WCCs.=20
+Instead, consider a WCC as a set of edges. For an MxN track, there are =
+MxNx4=20
+edges. To find a WCC, start from any non-empty edge not already noted as =
+
+belonging to a WCC, note it as belonging to a new WCC, then recursively =
+explore=20
+and note all edges connected to it (including the adjacent edge of the=20
+neighboring square). Start with a small track for debugging purposes and =
+print=20
+out useful debugging information as the exploration proceeds.]=20
+<P><B>4.</B> (25) Now, formulate and solve the local search problem =
+type,=20
+<TT>unlimited-track-local-problem</TT>, where the goal is to construct a =
+track=20
+with as few loose ends and WCCs as possible. In such problems, we start =
+with a=20
+randomly filled track and make changes to improve it, with no =
+limitations on the=20
+pieces that can be used. You will need to define the <TT>actions</TT> or =
+
+<TT>random-action</TT> method and the <TT>result</TT>, <TT>h-cost</TT> =
+and=20
+<TT>goal-test</TT> methods. Then construct a suitable problem instance =
+with a=20
+random initial state and apply a suitable algorithm from=20
+<TT>local-search.lisp</TT>. (Note: for most of the algorithms, you will =
+need to=20
+play with the parameters, such as number of restarts, temperature =
+schedule,=20
+etc., to get good results.) Measure the run time as a function of track =
+size, up=20
+to the largest track you can construct in a reasonable amount of time =
+(say, a=20
+minute or two). While experimenting with the algorithms, you may find it =
+helpful=20
+to insert code that displays the current track at each iteration.=20
+<P><B>5.</B> (10 extra credit, optional) Formulate and solve the=20
+<TT>fixed-track-local-problem</TT>, where the track must be constructed =
+from a=20
+fixed set of pieces that exactly fills the track. (Hence, actions can =
+rotate or=20
+swap pieces, but cannot introduce new ones.) The fixed set can be =
+specified as=20
+an association list, e.g., for a 4x4 track one might specify =
+<PRE>((blank-piece . 1) (cross-piece . 1) (straight-piece . 3) =
+(curve-piece . 6)=20
+ (twocurve-piece . 1) (lsplit-piece . 2) (rsplit-piece . 2))
+</PRE>Experiment with various different track sizes and sets of pieces. =
+Is this=20
+problem harder or easier than the unlimited problem? Why? Which kinds of =
+pieces=20
+seem to cause difficulties?=20
+<P><B>6.</B> (8) Explain (in words) what variables, domains, and =
+constraints you=20
+would need to formulate the track design problem as a CSP. Do this for =
+(a) the=20
+<TT>unlimited-track-local-problem</TT>, where there are no constraints =
+on the=20
+pieces used, and (b) the <TT>fixed-track-local-problem</TT>, where the =
+set of=20
+pieces is fixed.=20
+<P><B>7.</B> (10 extra credit, optional) The notion of WCC doesn't quite =
+capture=20
+the full requirements of running trains on tracks. In the =
+<TT>weak44</TT> track=20
+given earlier, a train running north at (2,2) runs into the loop in the =
+upper=20
+left corner and never escapes unless it reverses. A simple circular =
+track is=20
+even worse: a train running forwards in the clockwise direction can =
+never run=20
+forwards in the anticlockwise direction unless it is picked up bodily =
+and placed=20
+facing the other way. According to Gordon (age 7), a track is only good =
+if the=20
+train can traverse every part of it <I>in both directions</I> without =
+stopping=20
+or reversing. Here is an example of such a <I>strongly connected</I> =
+track: <PRE>&gt; (print-track (setq strong44 (read-track =
+"~cs188/a2/strong44.track")))
+
+  -----    -----    -----    -----    -----    ----- =20
+  |   |    |   |    |   |    |   |    |   |    |   | =20
+  -----    -----    -----    -----    -----    ----- =20
+                                                     =20
+                                                     =20
+  -----                                        ----- =20
+  |   |        ,----.------------,----.        |   | =20
+  -----       /      \          /      \       ----- =20
+             |        |        |        |            =20
+             |        |        |        |            =20
+  -----      |\       |        |        |      ----- =20
+  |   |      | `----. |        |        |      |   | =20
+  -----      |       \|        |        |      ----- =20
+             |        |        |        |            =20
+             |        |        |        |            =20
+  -----      |        |\      /        /|      ----- =20
+  |   |      |        | `----'   ,----' |      |   | =20
+  -----      |        |         /       |      ----- =20
+             |        |        |        |            =20
+             |        |        |        |            =20
+  -----       \        \      /        /       ----- =20
+  |   |        `--------`----'--------'        |   | =20
+  -----                                        ----- =20
+                                                     =20
+                                                     =20
+  -----    -----    -----    -----    -----    ----- =20
+  |   |    |   |    |   |    |   |    |   |    |   | =20
+  -----    -----    -----    -----    -----    ----- =20
+</PRE>Write a predicate <TT>(strongly-connected? track)</TT>, which =
+should=20
+return <TT>t</TT> iff the track is strongly connected, and use it with =
+any of=20
+your track design methods to make some large, strongly connected tracks. =
+
+<P><B>8.</B> (Not part of the assignment, but 199 credit is available; =
+due last=20
+day of classes. You might be able to make a startup company out of =
+this.) Tracks=20
+made from square tiles are hardly the real thing. Look into the problems =
+
+involved in designing real Brio and/or Scalextric tracks. Propose a =
+solution=20
+approach, implement and test the approach, and do a short write-up.=20
+<HR>
+
+<H3>Formulating and solving CSPs</H3>For the next part of the =
+assignment, we=20
+will be using the AIMA CSP code:=20
+<UL>
+  <LI><A=20
+  =
+href=3D"http://www-inst.eecs.berkeley.edu/~cs188/code-2e-188/csps/domains=
+/csps.lisp"><TT>csps/domains/csps.lisp</TT></A>=20
+  (CSPs in general, and enumerated CSPs, which have explicit lists of =
+variable=20
+  domains and constraints)=20
+  <LI><A=20
+  =
+href=3D"http://www-inst.eecs.berkeley.edu/~cs188/code-2e-188/csps/domains=
+/australia-csp.lisp"><TT>csps/domains/australia-csp.lisp</TT></A>=20
+
+  <LI><A=20
+  =
+href=3D"http://www-inst.eecs.berkeley.edu/~cs188/code-2e-188/csps/domains=
+/nqueens-csp.lisp"><TT>csps/domains/nqueens-csp.lisp</TT></A>=20
+
+  <LI><A=20
+  =
+href=3D"http://www-inst.eecs.berkeley.edu/~cs188/code-2e-188/csps/algorit=
+hms/backtracking-search.lisp"><TT>csps/algorithms/backtracking-search.lis=
+p</TT></A>=20
+  (mainly backtracking, plus the definitions for states used in solving =
+CSPs)=20
+  <LI><A=20
+  =
+href=3D"http://www-inst.eecs.berkeley.edu/~cs188/code-2e-188/csps/algorit=
+hms/csp-local-search.lisp"><TT>csps/algorithms/csp-local-search.lisp</TT>=
+</A>=20
+  (mapping from CSPs to local search problems, so that CSPs can be =
+solved by=20
+  standard local search algorithms) </LI></UL>In reading the code, you =
+will see=20
+two basic ways to describe constraints. First, a constraint may be =
+defined as an=20
+enumerated-constraint, in which case the allowed tuples of values for =
+the=20
+variables are listed explicitly and a generic "allowed?" method used to =
+check=20
+any particular set of values for consistency (e.g., in =
+australia-csp.lisp).=20
+Second, a constraint may be defined by an "allowed?" method for that =
+type of=20
+constraint that checks consistency using lisp code (e.g., =
+neq-constraints in=20
+nqueens-csp.lisp).=20
+<P>To solve a CSP, first make one and then apply backtracking to it: =
+<PRE>&gt; (setq p (make-nqueens-csp :n 8))
+#S(NQUEENS-CSP :VARIABLES (1 2 3 4 5 6 7 8)
+               :DOMAINS
+               ((1 1 2 3 4 5 6 7 8) (2 1 2 3 4 5 6 7 8)
+                (3 1 2 3 4 5 6 7 8) (4 1 2 3 4 5 6 7 8)
+                (5 1 2 3 4 5 6 7 8) (6 1 2 3 4 5 6 7 8)
+                (7 1 2 3 4 5 6 7 8) (8 1 2 3 4 5 6 7 8))
+               :CONSTRAINTS
+               (#S(NQUEENS-CONSTRAINT :VARIABLES #)
+                #S(NQUEENS-CONSTRAINT :VARIABLES #)
+                #S(NQUEENS-CONSTRAINT :VARIABLES #) #S(...) ...)
+               :N 8)
+&gt; (print-nqueens-assignment (backtracking-search p))
+
+. . Q . . . . .=20
+. . . . . Q . .=20
+. . . Q . . . .=20
+. Q . . . . . .=20
+. . . . . . . Q=20
+. . . . Q . . .=20
+. . . . . . Q .=20
+Q . . . . . . .=20
+((8 . 4) (7 . 2) (6 . 7) (5 . 3) (4 . 6) (3 . 8) (2 . 5) (1 . 1))
+</PRE>You can get the backtracking algorithm to use variable and value =
+ordering=20
+heuristics by supplying keyword arguments: <PRE>&gt; =
+(backtracking-search p :select-unassigned-variable =
+#'minimum-remaining-values)
+((8 . 4) (6 . 7) (5 . 3) (7 . 2) (4 . 6) (3 . 8) (2 . 5) (1 . 1))
+</PRE>
+<HR>
+
+<H3>Sudoku</H3>
+<P>Sudoku is a fairly old puzzle that is now a worldwide phenomenon. You =
+can=20
+type "sudoku" into Google, or go to <A=20
+href=3D"http://www.sudoku.org/">http://www.sudoku.org/</A> for the =
+basics (see=20
+"How to Solve") and the <A =
+href=3D"http://en.wikipedia.org/wiki/Sudoku">Wikipedia=20
+article</A> to get more information than you could possibly imagine. Key =
+facts=20
+about standard Sudoku puzzles:=20
+<UL>
+  <LI>Every puzzle has a unique solution.=20
+  <LI>Every puzzle is solvable without trial-and-error, given suitable =
+inference=20
+  methods.=20
+  <LI>The designated difficulty of a puzzle is usually determined by the =
+
+  difficulty of the inference methods required to solve it. </LI></UL>In =
+addition=20
+to the rules, many web sites offer extensive discussion of methods that =
+humans=20
+can use to solve Sudoku without using trial-and-error search.=20
+<P>We supply some useful code and examples:=20
+<UL>
+  <LI><A=20
+  =
+href=3D"http://www-inst.eecs.berkeley.edu/~cs188/a2/sudoku-puzzles.lisp">=
+<TT>sudoku-puzzles.lisp</TT></A>=20
+  (10 examples at each of four difficulty levels)=20
+  <LI><A=20
+  =
+href=3D"http://www-inst.eecs.berkeley.edu/~cs188/a2/print-sudoku.lisp"><T=
+T>print-sudoku.lisp</TT></A>=20
+  (ASCII printout of current grid state, given an assignment) </LI></UL>
+<H3>Your mission</H3>
+<P>Now go through the following steps:=20
+<P><B>9.</B> (10) Write code defining Sudoku as a CSP, such that the =
+call=20
+<TT>(make-sudoku-csp)</TT> returns a Sudoku CSP for the case where no =
+initial=20
+digits are supplied. Your CSP should have (9+9+9)*(9*8/2) =3D 972 binary =
+
+constraints. Notice that the initial-state constructor=20
+<TT>initial-csp-state</TT> lets you supply an initial assignment. This =
+is by far=20
+the easiest way to handle the initial digits that define any particular =
+Sudoku=20
+puzzle. For example, you will be able to do the following: <PRE>&gt; =
+(setq p (make-sudoku-csp))
+[no peeking!!]
+&gt; (print-sudoku (backtracking-search p (initial-csp-state p =
+*easy-sudoku-01*)))
++=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D+
+| 6 7 1 | 4 5 3 | 8 9 2 |
+| 4 5 8 | 7 9 2 | 1 6 3 |
+| 2 9 3 | 6 1 8 | 5 4 7 |
+| =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D |
+| 9 3 5 | 2 8 4 | 7 1 6 |
+| 8 4 6 | 1 7 5 | 2 3 9 |
+| 1 2 7 | 3 6 9 | 4 5 8 |
+| =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D |
+| 3 1 9 | 5 2 7 | 6 8 4 |
+| 7 6 4 | 8 3 1 | 9 2 5 |
+| 5 8 2 | 9 4 6 | 3 7 1 |
++=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D+
+(((9 9) . 2) ((9 8) . 3) ((9 6) . 6) ((9 5) . 9) ((9 2) . 5)
+ ((9 1) . 1) ((8 9) . 9) ((8 7) . 4) ((8 4) . 5) ((8 3) . 8) ...)
+</PRE>
+<P>You will need to decide what the variables should be, what their =
+domains are,=20
+and what the constraints are. The code in <TT>nqueens-csp.lisp</TT> is a =
+good=20
+guide for what's needed. Apply plain backtracking to your CSP and show =
+that it=20
+works.=20
+<P><B>10.</B> (5) Now instrument <TT>backtracking-search</TT> so that it =
+counts=20
+the total number of <I>guesses</I> made. Whenever the backtracking =
+algorithm=20
+prepares to loop through a list of <I>k</I>&gt;0 possible values, we =
+will say=20
+that <I>k</I>-1 guesses are made. (This way, the algorithm is still =
+charged for=20
+guessing even if it is lucky and its first value choice succeeds.) Show =
+the=20
+numbers of guesses made for each of the 40 instances in=20
+<TT>sudoku-puzzles.lisp</TT> (use <TT>*all-sudokus*</TT>), using plain=20
+backtracking and backtracking with MRV.=20
+<UL></UL>
+<P><B>11.</B> (25) We would like our solver never to resort to guessing. =
+For=20
+this to happen, we will need better inference methods. In this context, =
+an=20
+<I>inference method</I> is a function that examines the current state of =
+the CSP=20
+and deduces additional facts about the remaining unassigned variables -- =
+either=20
+ruling out one or more values for a variable or asserting a particular =
+value.=20
+The method can then modify the current state accordingly. Notice that =
+every time=20
+a method modifies the current state, other methods (or indeed the method =
+itself)=20
+may become applicable again. A <I>waterfall</I> is a set of methods that =
+is=20
+applied repeatedly, until all the methods fail to do anything useful.=20
+<P>Modify <TT>backtracking-search</TT> so that it applies a waterfall to =
+modify=20
+the current state right after the <TT>assignment-complete?</TT> check. =
+(Be sure=20
+to have the program keep track of what the waterfall does so that it can =
+be=20
+undone!)=20
+<P>Initially, your waterfall list contains no inference methods, so =
+nothing will=20
+change. Now, find some Sudoku inference methods on the web (ones written =
+in=20
+English, of course, not programs!). For each, describe how it works with =
+an=20
+example; explain whether it is already covered by the standard operation =
+of=20
+keeping track of legal values as in <TT>delete-inconsistent-values</TT> =
+and=20
+using MRV; and, if it is not covered, implement it and add it to your =
+waterfall.=20
+After each addition, check the number of guesses for each of the 40 =
+puzzles.=20
+Ideally, you will be able to get the numbers to zero for all puzzles. If =
+not, it=20
+may be possible to define your own inference methods by examining the =
+current=20
+state at each point where a guess is made, to see what a smart human =
+would do at=20
+that point (if one happens to be available).=20
+<P><B>12.</B> (10 extra credit, optional) Design, implement, and test a =
+Sudoku=20
+puzzle generator. For extra fun, ho ho, pass the puzzles to your friends =
+to see=20
+if their solvers can solve them without guessing. </P></BODY></HTML>

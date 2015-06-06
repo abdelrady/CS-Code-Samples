@@ -1,0 +1,119 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+<HTML lang="en-us">
+<HEAD>
+<TITLE>Windows API Guide: SetClassLong Function</TITLE>
+<META content="vbapi@vbapi.com" name="author">
+<META content="Information about the SetClassLong function in the Windows API, geared towards the Visual Basic user." name="description">
+<META content="Kuliniewicz,Windows,Windows 95,Windows NT,Windows 98,Windows CE,Windows 2000,API,Application Programming Interface,Programming,Visual Basic,Basic,VB,SetClassLong" name="keywords">
+<META content="Omicron HTML Editor" name="generator">
+<META content="Sat, 28 Aug 1999 17:10:00 GMT" http-equiv="Last-Modified">
+<LINK href="default.css" tppabs="http://www.vbapi.com/css/default.css" rel="stylesheet" type="text/css">
+<LINK href="index-1.html" tppabs="http://www.vbapi.com/index.html" rel="home">
+
+<LINK href="glossary.html" tppabs="http://www.vbapi.com/ref/glossary.html" rel="glossary">
+<LINK href="copyrite.html" tppabs="http://www.vbapi.com/copyrite.html" rel="copyright">
+</HEAD>
+<BODY>
+
+<!-- Begin Adslot1 -->
+<CENTER>
+<SCRIPT language="JAVASCRIPT">
+<!-- hide from older browsers
+now = new Date();
+my_random = now.getTime();
+document.write('<A href="http://adex3.flycast.com/server/socket/127.0.0.1:2800/click/VBWorldnet/VBAPI/' + my_random + '">');
+document.write('<IMG width="468" height="60" border="1" src="http://adex3.flycast.com/server/socket/127.0.0.1:2800/ad/VBWorldnet/VBAPI/' + my_random + '"></A>');
+// -->
+</SCRIPT>
+</CENTER>
+<!-- End Adslot1 -->
+
+<HR>
+
+<H1>SetClassLong Function</H1>
+
+<P><CODE class="declare">Declare Function SetClassLong Lib "user32.dll" Alias "SetClassLongA" (ByVal hWnd As Long, ByVal nIndex As Long, ByVal dwNewLong As Long) As Long</CODE></P>
+
+<H2>Platforms</H2>
+<P><UL>
+<LI><B>Windows 95:</B> Supported.
+<LI><B>Windows 98:</B> Supported.
+<LI><B>Windows NT:</B> Requires Windows NT 3.1 or later.
+<LI><B>Windows 2000:</B> Supported.
+<LI><B>Windows CE:</B> Requires Windows CE 1.0 or later.
+</UL></P>
+
+<H2>Description &amp; Usage</H2>
+<P><B>SetClassLong</B> sets a single 32-bit value from the information about the <A class="def" href="glossary.html#windowclass" tppabs="http://www.vbapi.com/ref/glossary.html#windowclass" rel="glossary">window class</A> to which the specified window belongs.  This function can also set a 32-bit value within the extra memory area associated with the window class.</P>
+
+<H2>Return Value</H2>
+<P>If an error occured, the function returns 0 (use <A href="getlasterror.html" tppabs="http://www.vbapi.com/ref/g/getlasterror.html">GetLastError</A> to get the error code).  If successful, the function returns the previous setting of the 32-bit value which was changed.</P>
+
+<H2>Visual Basic-Specific Issues</H2>
+<P>None.</P>
+
+<H2>Parameters</H2>
+<P><DL>
+<DT><VAR>hWnd</VAR><DD>A <A class="def" href="glossary.html#handle" tppabs="http://www.vbapi.com/ref/glossary.html#handle" rel="glossary">handle</A> to a window which belongs to the class to set a property of.
+<DT><VAR>nIndex</VAR><DD>To set a 32-bit value within the class's extra memory, set this to the zero-based offset of the first byte in the 32-bit block to set.  Valid values are 0 to the number of bytes of extra memory minus 4, inclusive.  To set a 32-bit property of the class, set this to one of the following flags specifying which 32-bit value to set from the window class:
+<DL>
+<DT>GCL_CBCLSEXTRA<DD>Set the size in bytes of the extra memory associated with the window class.  <VAR>dwNewLong</VAR><DD> is the new size of the block.
+<DT>GCL_CBWNDEXTRA<DD>Set the size in bytes of the extra memory associated with each window belonging to the window class.  <VAR>dwNewLong</VAR> is the new size of the block.
+<DT>GCL_HBRBACKGROUND<DD>Set the <A class="def" href="glossary.html#brush" tppabs="http://www.vbapi.com/ref/glossary.html#brush" rel="glossary">brush</A> used to paint the backgrounds of windows belonging to the class.  <VAR>dwNewLong</VAR> is a handle to the brush to use.
+<DT>GCL_HCURSOR<DD>Set the cursor associated with the class.  <VAR>dwNewLong</VAR> is a handle to the cursor to use.
+<DT>GCL_HICON<DD>Set the icon associated with the class.  <VAR>dwNewLong</VAR> is a handle to the icon to use.
+<DT>GCL_HICONSM<DD>Set the small icon associated with the class.  <VAR>dwNewLong</VAR> is a handle to the small icon to use.
+<DT>GCL_HMODULE<DD>Change the module which registered the class.  <VAR>dwNewLong</VAR> is a handle to the module to identify as the creator of the class.
+<DT>GCL_MENUNAME<DD>Set the string identifying the name of the menu resource associated with the class.  <VAR>dwNewLong</VAR> is a <A class="def" href="glossary.html#pointer" tppabs="http://www.vbapi.com/ref/glossary.html#pointer" rel="glossary">pointer</A> to the new string.
+<DT>GCL_STYLE<DD>Set the <A href="windowstyles.html" tppabs="http://www.vbapi.com/ref/other/windowstyles.html">window styles</A> associated with the class.  <VAR>dwNewLong</VAR> is the new value.
+<DT>GCL_WNDPROC<DD>Set the <A href="windowproc.html" tppabs="http://www.vbapi.com/ref/w/windowproc.html">WindowProc</A> <A class="def" href="glossary.html#hookfunction" tppabs="http://www.vbapi.com/ref/glossary.html#hookfunction" rel="glossary">hook function</A> to use as the window procedure for windows belonging to the window class.  <VAR>dwNewLong</VAR> is a pointer to the function to use.
+</DL><VAR>dwNewLong</VAR><DD>The 32-bit value to set as something.
+</DL></P>
+
+<H2>Constant Definitions</H2>
+<P><PRE><CODE class="const">Const GCL_CBCLSEXTRA = -20
+Const GCL_CBWNDEXTRA = -18
+Const GCL_HBRBACKGROUND = -10
+Const GCL_HCURSOR = -12
+Const GCL_HICON = -14
+Const GCL_HMODULE = -16
+Const GCL_MENUNAME = -8
+Const GCL_STYLE = -26
+Const GCL_WNDPROC = -24</CODE></PRE></P>
+
+<H2>Example</H2>
+<P><PRE><CODE class="example"><SPAN class="com">' This code is licensed according to the terms and conditions listed <A href="copyrite.html#license" tppabs="http://www.vbapi.com/copyrite.html#license" rel="copyright">here</A>.</SPAN>
+
+' Change the icon associated with whatever class window
+' Form1 belongs to.
+Dim hIcon As Long  ' handle to the new icon to use
+Dim retval As Long  ' return value
+
+' The icon to use is in C:\MyApp\newicon.ico.
+hIcon = <A href="extracticon.html" tppabs="http://www.vbapi.com/ref/e/extracticon.html">ExtractIcon</A>(App.hInstance, "C:\MyApp\newicon.ico", 0)
+' Set this icon as the new class icon.
+retval = <B>SetClassLong</B>(Form1.hWnd, GWL_HICON, hIcon)  ' set the class's icon, not the window's
+' Note that here we can't destroy the icon we extracted because it
+' is still in use by the class.</CODE></PRE></P>
+
+<H2>See Also</H2>
+<P><A href="getclasslong.html" tppabs="http://www.vbapi.com/ref/g/getclasslong.html">GetClassLong</A>, <A href="setwindowlong.html" tppabs="http://www.vbapi.com/ref/s/setwindowlong.html">SetWindowLong</A></P>
+
+<H2>Category</H2>
+<P><A href="funcc.html#windowclasses" tppabs="http://www.vbapi.com/ref/funcc.html#windowclasses">Window Classes</A></P>
+
+<P><A href="funca.html" tppabs="http://www.vbapi.com/ref/funca.html">Go back to the alphabetical Function listing.</A><BR>
+<A href="index.html" tppabs="http://www.vbapi.com/ref/index.html">Go back to the Reference section index.</A></P>
+
+<HR>
+
+<P><B>Last Modified:</B> August 28, 1999<BR>
+This page is copyright &copy; 1999 Paul Kuliniewicz.  
+<A href="copyrite.html" tppabs="http://www.vbapi.com/copyrite.html" rel="copyright">Copyright Information</A>  <B>Revised October 29, 2000</B><BR>
+
+<A href="index-1.html" tppabs="http://www.vbapi.com/index.html">Go back to the Windows API Guide home page.</A><BR>
+E-mail: <A href="javascript:if(confirm('http://www.vbapi.com/email.html  \n\nThis file was not retrieved by Teleport Pro, because it is addressed on a domain or path outside the boundaries set for its Starting Address.  \n\nDo you want to open it from the server?'))window.location='http://www.vbapi.com/email.html'" tppabs="http://www.vbapi.com/email.html">vbapi@vbapi.com</A>  <A href="javascript:if(confirm('http://www.vbapi.com/email.html  \n\nThis file was not retrieved by Teleport Pro, because it is addressed on a domain or path outside the boundaries set for its Starting Address.  \n\nDo you want to open it from the server?'))window.location='http://www.vbapi.com/email.html#secure'" tppabs="http://www.vbapi.com/email.html#secure">Send Encrypted E-Mail</A><BR>
+This page is at <A href="setclasslong.html" tppabs="http://www.vbapi.com/ref/s/setclasslong.html">http://www.vbapi.com/ref/s/setclasslong.html</A>
+</P>
+</BODY>
+</HTML>

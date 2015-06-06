@@ -1,0 +1,109 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+<HTML lang="en-us">
+<HEAD>
+<TITLE>Windows API Guide: LB_RESETCONTENT Message</TITLE>
+<META content="vbapi@vbapi.com" name="author">
+<META content="Information about the LB_RESETCONTENT message in the Windows API, geared towards the Visual Basic user." name="description">
+<META content="Kuliniewicz,Windows,Windows 95,Windows NT,Windows 98,Windows CE,Windows 2000,API,Application Programming Interface,Programming,Visual Basic,Basic,VB,LB_RESETCONTENT" name="keywords">
+<META content="Omicron HTML Editor" name="generator">
+<LINK href="default.css" tppabs="http://www.vbapi.com/css/default.css" rel="stylesheet" type="text/css">
+<LINK href="index-1.html" tppabs="http://www.vbapi.com/index.html" rel="home">
+<LINK href="glossary.html" tppabs="http://www.vbapi.com/ref/glossary.html" rel="glossary">
+<LINK href="copyrite.html" tppabs="http://www.vbapi.com/copyrite.html" rel="copyright">
+</HEAD>
+<BODY>
+
+<!-- Begin Adslot1 -->
+<CENTER>
+<SCRIPT language="JAVASCRIPT">
+<!-- hide from older browsers
+now = new Date();
+my_random = now.getTime();
+document.write('<A href="http://adex3.flycast.com/server/socket/127.0.0.1:2800/click/VBWorldnet/VBAPI/' + my_random + '">');
+document.write('<IMG width="468" height="60" border="1" src="http://adex3.flycast.com/server/socket/127.0.0.1:2800/ad/VBWorldnet/VBAPI/' + my_random + '"></A>');
+// -->
+</SCRIPT>
+</CENTER>
+<!-- End Adslot1 -->
+
+<HR>
+
+<H1>LB_RESETCONTENT Message</H1>
+
+<H2>Platforms</H2>
+<P><UL>
+<LI><B>Windows 95:</B> Supported.
+<LI><B>Windows 98:</B> Supported.
+<LI><B>Windows NT:</B> Requires Windows NT 3.1 or later.
+<LI><B>Windows 2000:</B> Supported.
+<LI><B>Windows CE:</B> Requires Windows CE 1.0 or later.
+</UL></P>
+
+<H2>Description &amp; Usage</H2>
+<P>Sending the <B>LB_RESETCONTENT</B> message to a list box removes all items from it.</P>
+
+<H2>Return Value</H2>
+<P>This message always returns zero.</P>
+
+<H2>Visual Basic-Specific Issues</H2>
+<P>None.</P>
+
+<H2>Parameters</H2>
+<P><DL>
+<DT><VAR>wParam</VAR><DD>Not used -- set to 0.
+<DT><VAR>lParam</VAR><DD>Not used -- set to 0.
+</DL></P>
+
+<H2>Constant Definitions</H2>
+<P><PRE><CODE class="const"><SPAN class="kw">Const</SPAN> LB_RESETCONTENT = &H184</CODE></PRE></P>
+
+<H2>Example</H2>
+<P>When the user clicks button Command1, empty the list box List1, and then add three strings to it.  The order in which the strings appear will depend on whether the list box is sorted or not.</P>
+
+<P>To use this example, place a list box named List1 and a command button named Command1 on a form window.  To verify that the list box's list is being emptied, you may wish to add some items to it before running the example.</P>
+
+<P><PRE><CODE class="example"><SPAN class="com">' This code is licensed according to the terms and conditions listed <A href="copyrite.html#license" tppabs="http://www.vbapi.com/copyrite.html#license" rel="copyright">here</A>.</SPAN>
+
+<SPAN class="com">' Declarations and such needed for the example:
+' (Copy them to the (declarations) section of a module.)</SPAN>
+<SPAN class="kw">Public Declare Function</SPAN> <A href="sendmessage.html" tppabs="http://www.vbapi.com/ref/s/sendmessage.html">SendMessage</A> <SPAN class="kw">Lib</SPAN> "user32.dll" <SPAN class="kw">Alias</SPAN> "SendMessageA" (<SPAN class="kw">ByVal</SPAN> hWnd <SPAN class="kw">As Long</SPAN>, <SPAN class="kw">ByVal</SPAN> Msg _
+	<SPAN class="kw">As Long</SPAN>, wParam <SPAN class="kw">As Any</SPAN>, lParam <SPAN class="kw">As Any</SPAN>) <SPAN class="kw">As Long</SPAN>
+<SPAN class="kw">Public Const</SPAN> <A href="lb_addstring.html" tppabs="http://www.vbapi.com/ref/l/lb_addstring.html">LB_ADDSTRING</A> = &amp;H180
+<SPAN class="kw">Public Const</SPAN> <B>LB_RESETCONTENT</B> = &amp;H184
+
+<SPAN class="com">' *** Place the following code inside a form window. ***</SPAN>
+
+<SPAN class="kw">Private Sub</SPAN> Command1_Click()
+	<SPAN class="kw">Dim</SPAN> retval <SPAN class="kw">As Long</SPAN>  <SPAN class="com">' return value</SPAN>
+	
+	<SPAN class="com">' Empty the list box List1.</SPAN>
+	retval = <A href="sendmessage.html" tppabs="http://www.vbapi.com/ref/s/sendmessage.html">SendMessage</A>(List1.hWnd, <B>LB_RESETCONTENT</B>, <SPAN class="kw">ByVal CLng(</SPAN>0<SPAN class="kw">)</SPAN>, <SPAN class="lw">ByVal CLng(</SPAN>0<SPAN class="kw">)</SPAN>)
+	
+	<SPAN class="com">' Now add three strings to List.  Their exact placement will
+	' depend on whether List1 is sorted or not.</SPAN>
+	retval = <A href="sendmessage.html" tppabs="http://www.vbapi.com/ref/s/sendmessage.html">SendMessage</A>(List1.hWnd, <A href="lb_addstring.html" tppabs="http://www.vbapi.com/ref/l/lb_addstring.html">LB_ADDSTRING</A>, <SPAN class="kw">ByVal CLng(</SPAN>0<SPAN class="kw">)</SPAN>, <SPAN class="kw">ByVal</SPAN> "First Item Added")
+	retval = <A href="sendmessage.html" tppabs="http://www.vbapi.com/ref/s/sendmessage.html">SendMessage</A>(List1.hWnd, <A href="lb_addstring.html" tppabs="http://www.vbapi.com/ref/l/lb_addstring.html">LB_ADDSTRING</A>, <SPAN class="kw">ByVal CLng(</SPAN>0<SPAN class="kw">)</SPAN>, <SPAN class="kw">ByVal</SPAN> "Second Item Added")
+	retval = <A href="sendmessage.html" tppabs="http://www.vbapi.com/ref/s/sendmessage.html">SendMessage</A>(List1.hWnd, <A href="lb_addstring.html" tppabs="http://www.vbapi.com/ref/l/lb_addstring.html">LB_ADDSTRING</A>, <SPAN class="kw">ByVal CLng(</SPAN>0<SPAN class="kw">)</SPAN>, <SPAN class="kw">ByVal</SPAN> "Last Item Added")
+<SPAN class="kw">End Sub</SPAN></CODE></PRE></P>
+
+<H2>See Also</H2>
+<P><A href="lb_addstring.html" tppabs="http://www.vbapi.com/ref/l/lb_addstring.html">LB_ADDSTRING</A>, 
+<A href="lb_deletestring.html" tppabs="http://www.vbapi.com/ref/l/lb_deletestring.html">LB_DELETESTRING</A>, 
+<A href="lb_insertstring.html" tppabs="http://www.vbapi.com/ref/l/lb_insertstring.html">LB_INSERTSTRING</A></P>
+
+<H2>Category</H2>
+<P><A href="msgc.html#listboxes" tppabs="http://www.vbapi.com/ref/msgc.html#listboxes">List Boxes</A></P>
+
+<P><A href="msga.html" tppabs="http://www.vbapi.com/ref/msga.html">Back to the Message list.</A><BR>
+<A href="index.html" tppabs="http://www.vbapi.com/ref/index.html" rel="index">Back to the Reference section.</A></P>
+
+<HR>
+
+<P><B>Last Modified:</B> December 17, 2000<BR>
+This page is copyright &copy; 2000 Paul Kuliniewicz.  
+<A href="copyrite.html" tppabs="http://www.vbapi.com/copyrite.html" rel="copyright">Copyright Information</A>  <B>Revised October 29, 2000</B><BR>
+<A href="index-1.html" tppabs="http://www.vbapi.com/index.html" rel="home">Go back to the Windows API Guide home page.</A><BR>
+E-mail: <A href="javascript:if(confirm('http://www.vbapi.com/email.html  \n\nThis file was not retrieved by Teleport Pro, because it is addressed on a domain or path outside the boundaries set for its Starting Address.  \n\nDo you want to open it from the server?'))window.location='http://www.vbapi.com/email.html'" tppabs="http://www.vbapi.com/email.html">vbapi@vbapi.com</A>  <A href="javascript:if(confirm('http://www.vbapi.com/email.html  \n\nThis file was not retrieved by Teleport Pro, because it is addressed on a domain or path outside the boundaries set for its Starting Address.  \n\nDo you want to open it from the server?'))window.location='http://www.vbapi.com/email.html#secure'" tppabs="http://www.vbapi.com/email.html#secure">Send Encrypted E-Mail</A><BR>
+This page is at <A href="lb_resetcontent.html" tppabs="http://www.vbapi.com/ref/l/lb_resetcontent.html">http://www.vbapi.com/ref/l/lb_resetcontent.html</A></P>
+</BODY>
+</HTML>

@@ -1,0 +1,82 @@
+<%@ Page Language="VB" AutoEventWireup="false" CodeFile="ProfileSelection.aspx.vb" Inherits="ProfileSelection" %>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" dir="rtl">
+<head id="Head1" runat="server">
+    <title>Õ›Ÿ „⁄·Ê„« ﬂ</title>
+</head>
+<body>
+    <form id="form1" runat="server">
+    <div>
+        &nbsp; &nbsp;
+        <br />
+        <table>
+            <tr>
+                <td>
+                    ”Ì«— ﬂ «·„›÷·…</td>
+                <td>
+                    ·Ê‰ﬂ «·„›÷·</td>
+            </tr>
+            <tr>
+                <td style="width: 100px">
+                    <asp:ListBox ID="ddlCar" runat="server" >
+                        <asp:ListItem Selected="True">’‰«⁄Â „’—ÌÂ</asp:ListItem>
+                        <asp:ListItem>’‰«⁄Â ”Ê—ÌÂ</asp:ListItem>
+                        <asp:ListItem>’‰«⁄Â Œ·ÌÃÌÂ</asp:ListItem>
+                        <asp:ListItem>’‰«⁄Â ”⁄ÊœÌÂ</asp:ListItem>
+                        <asp:ListItem>’‰«⁄Â Ã“«∆—ÌÂ</asp:ListItem>
+                    </asp:ListBox></td>
+                <td style="width: 100px">
+                    <asp:ListBox ID="ddlColor" runat="server">
+                        <asp:ListItem Selected="True">√Œ÷—</asp:ListItem>
+                        <asp:ListItem>√Õ„—</asp:ListItem>
+                        <asp:ListItem>√’›—</asp:ListItem>
+                        <asp:ListItem>›Õ·ÊﬁÌ</asp:ListItem>
+                        <asp:ListItem>»‰œﬁÌ</asp:ListItem>
+                    </asp:ListBox></td>
+            </tr>
+            <tr>
+                <td>
+                    ‰Ê⁄ ‰Ÿ«—«  «·‘„”</td>
+                <td>
+                    ﬂ «»ﬂ «·„›÷·</td>
+            </tr>
+            <tr>
+                <td >
+                    <asp:ListBox ID="ddlSunGlasses" runat="server">
+                        <asp:ListItem Selected="True">’‰«⁄Â „’—ÌÂ</asp:ListItem>
+                        <asp:ListItem>’‰«⁄Â ”Ê—ÌÂ</asp:ListItem>
+                        <asp:ListItem>’‰«⁄Â Œ·ÌÃÌÂ</asp:ListItem>
+                        <asp:ListItem>’‰«⁄Â ”⁄ÊœÌÂ</asp:ListItem>
+                        <asp:ListItem>’‰«⁄Â Ã“«∆—ÌÂ</asp:ListItem>
+                    </asp:ListBox></td>
+                <td >
+                    <asp:ListBox ID="ddlBook" runat="server">
+                        <asp:ListItem Selected="True">ﬂ «» «··Â</asp:ListItem>
+                        <asp:ListItem>”‰… —”Ê· «··Â</asp:ListItem>
+                        <asp:ListItem>–ﬂ— «··Â</asp:ListItem>
+                        <asp:ListItem>Õ» —»ﬂ</asp:ListItem>
+                        <asp:ListItem>Õ» —”Ê·ﬂ </asp:ListItem>
+                        <asp:ListItem>Õ» œÌ‰ﬂ</asp:ListItem>
+                        <asp:ListItem>«·⁄„· ·œÌ‰ﬂ</asp:ListItem>
+                    </asp:ListBox></td>
+            </tr>
+            <tr>
+                <td colspan="2" style="text-align: center">
+                    <asp:Button ID="Button1" runat="server" OnClick="Button1_Click" Text="Õ›Ÿ «·ŒÌ«—« " /></td>
+            </tr>
+        </table>
+    
+    </div>
+        <br />
+        <asp:Login ID="Login1" runat="server" BackColor="#F7F6F3" BorderColor="#E6E2D8" BorderPadding="4" BorderStyle="Solid" BorderWidth="1px" DestinationPageUrl="~/ViewData.aspx" FailureText="œŒÊ· Œ«ÿ∆ Õ«Ê· „—… √Œ—Ï" Font-Names="Verdana" Font-Size="0.8em" ForeColor="#333333" LoginButtonText="œŒÊ·" Orientation="Horizontal" PasswordLabelText="ﬂ·„… «·”—" RememberMeText=" –ﬂ—‰Ì" TitleText="œŒÊ·" UserNameLabelText="√”„ «·„” Œœ„">
+            <TitleTextStyle BackColor="#5D7B9D" Font-Bold="True" Font-Size="0.9em" ForeColor="White" />
+            <InstructionTextStyle Font-Italic="True" ForeColor="Black" />
+            <TextBoxStyle Font-Size="0.8em" />
+            <LoginButtonStyle BackColor="#FFFBFF" BorderColor="#CCCCCC" BorderStyle="Solid" BorderWidth="1px"
+                Font-Names="Verdana" Font-Size="0.8em" ForeColor="#284775" />
+        </asp:Login>
+    </form>
+</body>
+</html>

@@ -1,0 +1,620 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!-- saved from url=(0054)http://www.cs.wisc.edu/~dyer/cs540/notes/learning.html -->
+<HTML><HEAD><TITLE>CS 540 Lecture Notes: Machine Learning</TITLE>
+<META http-equiv=Content-Type content="text/html; charset=iso-8859-1">
+<META content="MSHTML 6.00.2900.2180" name=GENERATOR></HEAD>
+<BODY vLink=#0060f0 link=#ff3300 bgColor=#ffffff>
+<TABLE width="100%">
+  <TBODY>
+  <TR>
+    <TD align=left>University of Wisconsin - Madison</TD>
+    <TD align=middle>CS 540 Lecture Notes</TD>
+    <TD align=right>C. R. Dyer</TD></TR></TBODY></TABLE>
+<P>
+<P>
+<CENTER><FONT size=6>Machine Learning</FONT> (Chapter 18.1 - 18.3)</CENTER>
+<P>
+<HR>
+
+<P>
+<H3>What is Learning?</H3>
+<UL>
+  <LI>"Learning denotes changes in a system that ... enable a system to do the 
+  same task more efficiently the next time." --Herbert Simon 
+  <LI>"Learning is constructing or modifying representations of what is being 
+  experienced." --Ryszard Michalski 
+  <LI>"Learning is making useful changes in our minds." --Marvin Minsky </LI></UL>
+<P>
+<H3>Why do Machine Learning?</H3>
+<UL>
+  <LI>Understand and improve efficiency of human learning<BR>For example, use to 
+  improve methods for teaching and tutoring people, as done in CAI -- 
+  Computer-aided instruction 
+  <LI>Discover new things or structure that is unknown to humans<BR>Example: 
+  Data mining 
+  <LI>Fill in skeletal or incomplete specifications about a domain<BR>Large, 
+  complex AI systems cannot be completely derived by hand and require dynamic 
+  updating to incorporate new information. Learning new characteristics expands 
+  the domain or expertise and lessens the "brittleness" of the system </LI></UL>
+<P>
+<H3>Components of a Learning System</H3><PRE>Critic &lt;---------------- Sensors
+ |                          |
+ |                          |
+ |                          |
+ v                          v
+Learning Element &lt;-----&gt; Performance Element -----&gt; Effectors
+ |                          ^
+ |                          |
+ |              /-----------|
+ v             /
+Problem Generator
+</PRE>
+<UL>
+  <LI>Learning Element makes changes to the system based on how it's doing 
+  <LI>Performance Element is the agent itself that acts in the world 
+  <LI>Critic tells the Learning Element how it is doing (e.g., success or 
+  failure) by comparing with a fixed standard of performance 
+  <LI>Problem Generator suggests "problems" or actions that will generate new 
+  examples or experiences that will aid in training the system further </LI></UL>
+<P>We will concentrate on the Learning Element 
+<P>
+<H3>Evaluating Performance</H3>Several possible criteria for evaluating a 
+learning algorithm: 
+<UL>
+  <LI>Predictive accuracy of classifier 
+  <LI>Speed of learner 
+  <LI>Speed of classifier 
+  <LI>Space requirements </LI></UL>
+<P>Most common criterion is <B>predictive accuracy</B> 
+<P>
+<H3>Major Paradigms of Machine Learning</H3>
+<UL>
+  <LI><B>Rote Learning</B><BR>One-to-one mapping from inputs to stored 
+  representation. "Learning by memorization." Association-based storage and 
+  retrieval. 
+  <LI><B>Induction</B><BR>Use specific examples to reach general conclusions 
+  <LI><B>Clustering</B><BR>
+  <LI><B>Analogy</B><BR>Determine correspondence between two different 
+  representations 
+  <LI><B>Discovery</B><BR>Unsupervised, specific goal not given 
+  <LI><B>Genetic Algorithms</B><BR>
+  <LI><B>Reinforcement</B><BR>Only feedback (positive or negative reward) given 
+  at end of a sequence of steps. Requires assigning reward to steps by solving 
+  the credit assignment problem--which steps should receive credit or blame for 
+  a final result? </LI></UL>
+<P>
+<H3>The Inductive Learning Problem</H3>
+<UL>
+  <LI>Extrapolate from a given set of examples so that we can make accurate 
+  predictions about future examples. 
+  <LI><B>Supervised versus Unsupervised learning</B><BR>Want to learn an unknown 
+  function <I>f</I>(<B>x</B>) = <B>y</B>, where <B>x</B> is an input example and 
+  <B>y</B> is the desired output. Supervised learning implies we are given a set 
+  of (<B>x, y</B>) pairs by a "teacher." Unsupervised learning means we are only 
+  given the <B>x</B>s. In either case, the goal is to estimate <I>f</I>. 
+  <LI><B>Concept learning</B><BR>Given a set of examples of some 
+  concept/class/category, determine if a given example is an instance of the 
+  concept or not. If it is an instance, we call it a <B>positive example</B>. If 
+  it is not, it is called a <B>negative example</B>. 
+  <LI><B>Problem: Supervised Concept Learning by Induction</B><BR>Given a 
+  <B>training set</B> of positive and negative examples of a concept, construct 
+  a description that will accurately classify whether future examples are 
+  positive or negative. That is, learn some good estimate of function <I>f</I> 
+  given a training set {<B>(x1, y1), (x2, y2), ..., (xn, yn)</B>} where each 
+  <B>yi</B> is either + (positive) or - (negative). </LI></UL>
+<P>
+<H3>Inductive Bias</H3>
+<UL>
+  <LI>Inductive learning is an inherently conjectural process because any 
+  knowledge created by generalization from specific facts cannot be proven true; 
+  it can only be proven false. Hence, inductive inference is <B>falsity 
+  preserving</B>, not truth preserving. 
+  <LI>To generalize beyond the specific training examples, we need constraints 
+  or <B>biases</B> on what <I>f</I> is best. That is, learning can be viewed as 
+  searching the <B>Hypothesis Space</B> H of possible <I>f</I> functions. 
+  <LI>A bias allows us to choose one <I>f</I> over another one 
+  <LI>A completely unbiased inductive algorithm could only memorize the training 
+  examples and could not say anything more about other unseen examples. 
+  <LI>Two types of biases are commonly used in machine learning: 
+  <UL>
+    <LI><B>Restricted Hypothesis Space Bias</B><BR>Allow only certain types of 
+    <I>f</I> functions, not arbitrary ones 
+    <LI><B>Preference Bias</B><BR>Define a metric for comparing <I>f</I>s so as 
+    to determine whether one is better than another </LI></UL></LI></UL>
+<P>
+<H3>Inductive Learning Framework</H3>
+<UL>
+  <LI>Raw input data from sensors are preprocessed to obtain a <B>feature 
+  vector</B>, <B>x</B>, that adequately describes all of the relevant features 
+  for classifying examples. 
+  <LI>Each <B>x</B> is a list of (attribute, value) pairs. For example, 
+  <CENTER><B>x</B> = <TT>(Person = Sue, Eye-Color = Brown, Age = Young, Sex = 
+  Female)</TT> </CENTER>
+  <P>The number of attributes (also called features) is fixed (positive, 
+  finite). Each attribute has a fixed, finite number of possible values. </P>
+  <LI>Each example can be interpreted as a <I>point</I> in an 
+  <I>n</I>-dimensional <B>feature space</B>, where <I>n</I> is the number of 
+  attributes. </LI></UL>
+<P>
+<H3>Inductive Learning by Nearest-Neighbor Classification</H3>One simple 
+approach to inductive learning is to save each training example as a point in 
+Feature Space, and then classify a new example by giving it the same 
+classification (+ or -) as its <B>nearest neighbor in Feature Space</B>.
+<P>The problem with this approach is that it doesn't necessarily generalize well 
+if the examples are not "clustered." 
+<P>
+<H3>Inductive Concept Learning by Learning Decision Trees</H3>
+<UL>
+  <LI>Goal: Build a decision tree for classifying examples as positive or 
+  negative instances of a concept 
+  <LI>Supervised learning, batch processing of training examples, using a 
+  preference bias 
+  <LI>A <B>decision tree</B> is a tree in which each non-leaf node has 
+  associated with it an attribute (feature), each leaf node has associated with 
+  it a classification (+ or -), and each arc has associated with it one of the 
+  possible values of the attribute at the node where the arc is directed from. 
+  For example, <PRE>		  Color
+		  / | \
+                 /  |  \
+           green/  red  \blue
+               /    |    \
+            Size    +    Shape
+            /  \         /   \
+           /    \       /     \
+       big/   small  round     \square
+         /        \   /         \
+        -         +  Size        -
+		     /  \
+                    /    \
+                big/      \small
+                  /        \
+                 -          +
+</PRE>
+  <LI>Preference Bias: <B>Ockham's Razor</B>: The simplest explanation that is 
+  consistent with all observations is the best. Here, that means the smallest 
+  decision tree that correctly classifies all of the training examples is best. 
+  <LI>Finding the provably smallest decision tree is an NP-Hard problem, so 
+  instead of constructing the absolute smallest tree that is consistent with all 
+  of the training examples, construct one that is pretty small. 
+  <LI>Decision Tree Construction using a Greedy Algorithm 
+  <UL>
+    <LI>Algorithm called ID3 or C5.0, originally developed by Quinlan (1987) 
+    <LI>Top-down construction of the decision tree by recursively selecting the 
+    "best attribute" to use at the current node in the tree. Once the attribute 
+    is selected for the current node, generate children nodes, one for each 
+    possible value of the selected attribute. Partition the examples using the 
+    possible values of this attribute, and assign these subsets of the examples 
+    to the appropriate child node. Repeat for each child node until all examples 
+    associated with a node are either all positive or all negative. 
+</LI></UL></LI></UL>
+<P>
+<H3>Algorithm</H3><PRE>function decision-tree-learning(examples, attributes, default)
+  ;; examples is a list of training examples
+  ;; attributes is a list of candidate attributes for the
+  ;;    current node
+  ;; default is the default value for a leaf node if there
+  ;;    are no examples left
+  if empty(examples) then return(default)
+  if same-classification(examples) then return(class(examples))
+  if empty(attributes) then return(majority-classification(examples))
+  best = choose-attribute(attributes, examples)
+  tree = new node with attribute best
+  foreach value v of attribute best do
+    v-examples = subset of examples with attribute best = v
+    subtree = decision-tree-learning(v-examples, attributes - best, 
+        	   majority-classification(examples))
+    add a branch from tree to subtree with arc labeled v
+  return(tree)
+</PRE>
+<P>
+<LI>How to Choose the Best Attribute for a Node?
+<P>Some possibilities:<BR>
+<UL>
+  <LI>Random: Select any attribute at random 
+  <LI>Least-Values: Choose the attribute with the smallest number of possible 
+  values 
+  <LI>Most-Values: Choose the attribute with the largest number of possible 
+  values 
+  <LI>Max-Gain: Choose the attribute that has the largest expected information 
+  gain. In other words, try to select the attribute that will result in the 
+  smallest expected size of the subtrees rooted at its children. </LI></UL>
+<P>The C5.0 algorithm uses the Max-Gain method of selecting the best attribute. 
+<P>
+<H3>Information Gain Method for Selecting the Best Attribute</H3>Use 
+<B>information theory</B> to estimate the size of the subtrees rooted at each 
+child, for each possible attribute. That is, try each attribute, evaluate and 
+pick the best one. 
+<UL>
+  <LI>How much (expected) work is required to guess which element I am thinking 
+  of in a set S of size |S|?
+  <P>
+  <CENTER><TT>log<SUB>2</SUB>|S|</TT> </CENTER><BR>That is, at each step we can 
+  ask a yes/no question that eliminates at most 1/2 of the elements remaining. 
+  Call this value the <I>information value</I> of being told which element it is 
+  without having to guess it. 
+  <P></P>
+  <LI>Given S = P union N, where P and N are two disjoint sets, how hard is it 
+  to guess which element I am thinking of in S?
+  <P>if x in P, then log<SUB>2</SUB>|P| = log<SUB>2</SUB>p questions needed, 
+  where p = |P|<BR>if x in N, then log<SUB>2</SUB>|N| = log<SUB>2</SUB>n 
+  questions needed, where n = |N|
+  <P>So, the expected number of questions that have to be asked is:
+  <P>
+  <CENTER><TT>(Pr(x in P) * log<SUB>2</SUB>p) + (Pr(x in N) * 
+  log<SUB>2</SUB>n)</TT> </CENTER>
+  <P>or, equivalently,
+  <P>
+  <CENTER><TT>(p/(p+n)) log<SUB>2</SUB>p + (n/(p+n)) log<SUB>2</SUB>n</TT> 
+  </CENTER>
+  <P></P>
+  <LI>So, how much expected work is required to guess which element I am 
+  thinking of in a set S after I am told whether the element is in P or N?
+  <P>
+  <CENTER><TT>I(P,N) = log<SUB>2</SUB>|S| - (|P|/|S| log<SUB>2</SUB>|P|) - 
+  (|N|/|S| log<SUB>2</SUB>|N|)</TT> </CENTER>
+  <P>or, equivalently,
+  <P>
+  <CENTER><TT>I(%P, %N) = -(%P log<SUB>2</SUB>%P) - (%N log<SUB>2</SUB>%N)</TT> 
+  </CENTER>
+  <P>where %P = |P|/|S| = p/(p+n) (fraction of examples in S are positive), and 
+  %N = |N|/|S| = n/(p+n) (fraction of examples in S are negative).
+  <P><TT>I</TT> measures the <B>information content</B> or <B>entropy</B> in 
+  bits (i.e., number of yes/no questions that must be asked) associated with a 
+  set <TT>S</TT> of examples, which consists of the subset <TT>P</TT> of 
+  positive examples and subset <TT>N</TT> of negative examples.
+  <P>Note: 0 &lt;= I(P,N) &lt;= 1, where 0 =&gt; no information, and 1 =&gt; 
+  maximum information.
+  <P></P>
+  <LI>Example: Perfect Balance (Maximum Disorder) in S:
+  <P>Half the examples in S are positive and half are negative. Hence, %P = %N = 
+  1/2. So,
+  <P><PRE>I(1/2, 1/2)  =  -1/2 log<SUB>2</SUB> 1/2 - 1/2 log<SUB>2</SUB> 1/2
+	     =  -1/2 (log<SUB>2</SUB>1 - log<SUB>2</SUB>2) - 1/2 (log<SUB>2</SUB>1 - log<SUB>2</SUB>2)
+	     =  -1/2 (0 - 1) - 1/2 (0 -1)
+             =  1/2 + 1/2
+             =  1  =&gt; information content is large
+</PRE>
+  <P></P>
+  <LI>Example: Perfect Homogeneity in S:
+  <P>Say all of the examples in S are positive and none are negative. Then, %P = 
+  1, and %N = 0. So,
+  <P><PRE>I(1,0)  =  -1 log<SUB>2</SUB>1 - 0 log<SUB>2</SUB>0
+	=  -0 - 0
+	=  0  =&gt; information content is low
+</PRE>Low information content is desirable in order to make the smallest tree 
+  because low information content means that most of examples are classified the 
+  SAME, and therefore we would expect that the rest of the tree rooted at this 
+  node will be quite small to differentiate between the two classifications.
+  <P>Now, measure the <B>information gained</B> by using a given attribute. That 
+  is, measure the difference in the information content of a node and the 
+  information content after a node splits up the examples based on a selected 
+  attribute's possible values. To do this, we need a measure of the information 
+  content after "splitting" a node's examples into its children based on a 
+  hypothesized attribute.
+  <P>Given a node with a set of examples S = P union N, and an hypothesized 
+  attribute A that has m possible values, define <B>Remainder(A)</B> as the 
+  weighted sum of the information content of each subset of the examples that 
+  are associated with each child node as imposed by possible values of the 
+  attribute. More specifically, let
+  <P><PRE>S<SUB>i</SUB> = subset of S with value i, i=1,...,m
+P<SUB>i</SUB> = subset of S<SUB>i</SUB> that are positive examples
+N<SUB>i</SUB> = subset of S<SUB>i</SUB> that are negative examples
+q<SUB>i</SUB> = |S<SUB>i</SUB>|/|S| = % of examples on branch i
+%P<SUB>i</SUB> = |P<SUB>i</SUB>|/|S<SUB>i</SUB>| = fraction of positive examples on branch i
+%N<SUB>i</SUB> = |N<SUB>i</SUB>|/|S<SUB>i</SUB>| = fraction of negative examples on branch i
+
+		m
+	      -----
+	      \
+               \
+Remainder(A) = /   q<SUB>i</SUB> I(%P<SUB>i</SUB>, %N<SUB>i</SUB>)
+              /
+	      -----
+	       i=1
+</PRE>
+  <P>So, Remainder(A) is a weighted sum of the information content (aka entropy) 
+  at each child node generated by that attribute. It measures the total 
+  "disorder" or "inhomogeneity" of the children nodes.<BR>0.0 &lt;= Remainder(A) 
+  &lt;= 1.0
+  <P>Now, measure the <B>gain</B> from using the attribute test at the current 
+  node, defined by:
+  <P>
+  <CENTER><TT>Gain(A) = I(%P, %N) - Remainder(A)</TT> </CENTER>
+  <P>The best attribute at a node is now defined as the attribute A with maximum 
+  Gain(A) of all the possible attributes that can be used at the node. Since at 
+  a given node I(%P, %N) is constant, this is equivalent to selecting the 
+  attribute A with minimum Remainder(A). </P></LI></UL>
+<P>
+<H3>Example</H3>Consider the following six training examples, where each example 
+has three attributes: color, shape and size. Color has three possible values: 
+red, green and blue. Shape has two possible values: square and round. Size has 
+two possible values: big and small.
+<P>
+<CENTER>
+<TABLE cellPadding=10 border=1>
+  <TBODY>
+  <TR>
+    <TH>Example</TH>
+    <TH>Color</TH>
+    <TH>Shape</TH>
+    <TH>Size</TH>
+    <TH>Class</TH></TR>
+  <TR>
+    <TD>1</TD>
+    <TD>red</TD>
+    <TD>square</TD>
+    <TD>big</TD>
+    <TD>+</TD></TR>
+  <TR>
+    <TD>2</TD>
+    <TD>blue</TD>
+    <TD>square</TD>
+    <TD>big</TD>
+    <TD>+</TD></TR>
+  <TR>
+    <TD>3</TD>
+    <TD>red</TD>
+    <TD>round</TD>
+    <TD>small</TD>
+    <TD>-</TD></TR>
+  <TR>
+    <TD>4</TD>
+    <TD>green</TD>
+    <TD>square</TD>
+    <TD>small</TD>
+    <TD>-</TD></TR>
+  <TR>
+    <TD>5</TD>
+    <TD>red</TD>
+    <TD>round</TD>
+    <TD>big</TD>
+    <TD>+</TD></TR>
+  <TR>
+    <TD>6</TD>
+    <TD>green</TD>
+    <TD>square</TD>
+    <TD>big</TD>
+    <TD>-</TD></TR></TBODY></TABLE></CENTER>
+<P>
+<UL>
+  <LI><B>Which is best attribute for the root node of decision tree?</B>
+  <P><PRE>Remainder(color) = 3/6 I(2/3,1/3) + 1/6 I(1/1,0/1) + 2/6 I(0/2,2/2)
+                    |     |   |      |                |
+	            |     |   |      1 of 6 is blue   2 of 6 are green
+                    |     |   |
+                    |     |   1 of the red is negative
+                    |     |
+                    |     2 of the red are positive
+		    |
+                    |
+                    3 out of 6 are red
+                 = 1/2 * (-2/3 log<SUB>2</SUB> 2/3  - 1/3 log<SUB>2</SUB> 1/3)
+		     + 1/6 * (-1 log<SUB>2</SUB>1 - 0 log<SUB>2</SUB>0)
+		     + 2/6 * (-0 log<SUB>2</SUB>0 - 1 log<SUB>2</SUB>1)
+                 = 1/2 * (-2/3(log<SUB>2</SUB>2 - log<SUB>2</SUB>3) - 1/3(log<SUB>2</SUB>1 - log<SUB>2</SUB>3))
+                     + 1/6 * 0
+		     + 2/6 * 0
+                 = 1/2 * (-2/3(1 - 1.58) - 1/3(0 - 1.58))
+		 = 1/2 * 0.914
+		 = 0.457
+
+Gain(color) = I(3/6, 3/6) - Remainder(color)
+            = 1.0 - 0.457
+            = 0.543
+
+Remainder(shape) = 4/6 I(2/4, 2/4) + 2/6 I(1/2, 1/2)
+		 = 4/6 * 1.0 + 2/6 * 1.0
+		 = 1.0
+
+Gain(shape) = I(3/6, 3/6) - Remainder(shape)
+	    = 1.0 - 1.0
+	    = 0.0
+
+Remainder(size)  = 4/6 I(3/4, 1/4) + 2/6 I(0/2, 2/2)
+		 = 0.541
+
+Gain(size)  = I(3/6, 3/6) - Remainder(size)
+	    = 1.0 - 0.541
+	    = 0.459
+</PRE>
+  <P>Max(0.543, 0.0, 0.459) = 0.543, so color is best. Make the root node's 
+  attribute color and partition the examples for the resulting children nodes as 
+  shown:
+  <P><PRE>                     color
+                     / | \
+                    /  |  \
+                 R / G | B \
+      
+            [1,3,5] [4,6]  [2]
+             +,-,+   -,-    + 
+</PRE>The children associated with values green and blue are uniform, 
+  containing only - and + examples, respectively. So make these children leaves 
+  with classifications - and +, respectively.
+  <P></P>
+  <LI><B>What is the best attribute for the red child node?</B>
+  <P>Now recurse on red child node, containing three examples, [1,3,5], and two 
+  remaining attributes, [shape, size].
+  <P><PRE>Remainder(shape) = 1/3 I(1/1, 0/1) + 2/3 I(1/2, 1/2)
+		 = 1/3 * 0 + 2/3 * 1
+		 = 0.667
+
+Gain(shape) = I(2/3, 1/3) - .667
+	    = .914 - .667
+	    = 0.247
+
+Remainder(size) = 2/3 I(2/2, 0/2) + 1/3 I(0/1, 1/1)
+		= 2/3 * 0 + 1/3 * 0
+		= 0
+
+Gain(size) = I(2/3, 1/3) - 0
+	   = 0.914
+</PRE>
+  <P>Max(.247, .914) = .914, so make size the attribute at this node. It's 
+  children are uniform in their classifications, so the final decision tree is:
+  <P><PRE>                  color
+		  / | \
+                 /  |  \
+               R/  G|  B\
+               /    |    \
+             size   -     +
+	     /  \
+            /    \
+        big/      \small
+          /        \
+         +          -
+</PRE></LI></UL>
+<P>
+<H3>Case Studies</H3>Many case studies have shown that decision trees are at 
+least as accurate as human experts. For example, one study for diagnosing breast 
+cancer had humans correctly classifying the examples 65% of the time, and the 
+decision tree classified 72% correct.
+<P>British Petroleum designed a decision tree for gas-oil separation for 
+offshore oil platforms. Replaced a rule-based expert system.
+<P>Cessna designed an airplane flight controller using 90,000 examples and 20 
+attributes per example. 
+<P>
+<H3>Extensions of the Decision Tree Learning Algorithm</H3>
+<UL>
+  <LI><B>K Class Problems, where k &gt; 2</B><BR>Let k be the number of classes 
+  and C1, ..., Ck are the names of the classes. Let Nm be the number of training 
+  examples at node m. Let Nm,c be the number of training examples at node m that 
+  are in class c. Define Pm,c = Nm,c / Nm which is the fraction of examples at 
+  node m that are in class c. Then, the information content (aka entropy), I, at 
+  node m is computed by 
+  <P><PRE>                        -----
+                        \
+I(Pm,C1, ..., Pm,Ck) = - \     Pm,c log<SUB>2</SUB> Pm,c
+                         /
+                        /
+			-----
+			c=C1, ..., Ck
+</PRE>
+  <P>Note: When k=2, 0.0 &lt;= I &lt;= 1.0 but, in general, 0.0 &lt;= I &lt;= 
+  log2 k. The logarithm is always base 2 because entropy is a measure of the 
+  expected encoding length in bits. 
+  <P>Given an attribute A, let the number of possible values of A be d, with 
+  possible values v1, ..., vd. Let Nm,v be the number of examples at node m with 
+  attribute A's value = v. Let Nm,v,c be the number of examples at node m with 
+  attribute A's value = v and class = c. Define Pm,v = Nm,v / Nm and define 
+  Pm,v,c = Nm,v,c / Nm,v Then, we can finally define 
+  <P><PRE>		 -----         -----
+                 \             \
+Remainder(A) =  - \    Pm,v     \    Pm,v,c log<SUB>2</SUB> Pm,v,c
+                  /             /
+                 /             /
+		 -----         -----
+		 v=v1, ..., vd  c=C1, ..., Ck
+</PRE>
+  <P>Gain(A) = I(Pm,C1, ..., Pm,Ck) - Remainder(A) 
+  <P></P>
+  <LI><B>Real-valued data</B><BR>Select a set of thresholds defining intervals; 
+  each interval becomes a discrete value of the attribute 
+  <P></P>
+  <LI><B>Noisy data and Overfitting</B><BR>There are many kinds of "noise" that 
+  could occur in the examples:<BR>
+  <UL>
+    <LI>Two examples have the same attribute, value pairs, but different 
+    classifications 
+    <LI>Some values of attributes are incorrect because of errors in the data 
+    acquisition process or the preprocessing phase 
+    <LI>The classification is wrong (e.g., + instead of -) because of some error 
+
+    <LI>Some attributes are irrelevant to the decision-making process. For 
+    example, the color of a die is irrelevant to its outcome. </LI></UL>
+  <P>The last problem, irrelevant attributes, can result in <B>overfitting</B> 
+  the training example data. For example if the hypothesis space has many 
+  dimensions because there are a large number of attributes, then we may find 
+  meaningless regularity in the data that is irrelevant to the true, important, 
+  distinguishing features. Fix by pruning lower nodes in the decision tree. For 
+  example, if Gain of the best attribute at a node is below a threshold, stop 
+  and make this node a leaf rather than generating children nodes. 
+  <P>One way to address the overfitting problem in decision-tree induction is to 
+  use a tuning set in conjunction with a <B>pruning algorithm</B>. The following 
+  is a greedy algorithm for doing this. 
+  <P><PRE width=80>  Let <EM>bestTree</EM> = the tree produced by C5.0 on the TRAINING set
+  Let <EM>bestAccuracy</EM> = the accuracy of <EM>bestTree</EM> on the TUNING set
+  Let <EM>progressMade</EM> = true
+
+  while (<EM>progressMade</EM>) // Continue as long as improvement on TUNING SET
+  {
+      Set <EM>progressMade</EM> = false
+      Let <EM>currentTree</EM> = <EM>bestTree</EM>
+
+      For each <EM>interiorNode N</EM> (including the root) in <EM>currentTree</EM>
+      {   // Consider various pruned versions of the current tree
+          // and see if any are better than the best tree found so far
+
+          Let <EM>prunedTree</EM> be a copy of <EM>currentTree</EM>,
+          <STRONG>except</STRONG> replace <EM>N</EM> by a leaf node
+          whose label equals the majority class among TRAINING set
+          examples that reached node <EM>N</EM> (break ties in favor of '-')
+
+          Let <EM>newAccuracy</EM> = accuracy of <EM>prunedTree</EM> on the TUNING set
+
+          // Is this pruned tree an improvement, based on the TUNE set?
+          // When a tie, go with the smaller tree (Occam's Razor).
+          If (<EM>newAccuracy</EM> &gt;= <EM>bestAccuracy</EM>)
+          {
+            <EM>bestAccuracy</EM> = <EM>newAccuracy</EM>
+            <EM>bestTree</EM> = <EM>prunedTree</EM>
+            <EM>progressMade</EM> = true
+          }
+       }
+   }
+   return <EM>bestTree</EM>
+</PRE>
+  <LI><B>Generation of rules</B><BR>Each path, from the root to a leaf, 
+  corresponds to a rule where all of the decisions leading to the leaf define 
+  the antecedent to the rule, and the consequent is the classification at the 
+  leaf node. For example, from the tree above we could generate the rule: 
+  <P>
+  <CENTER><TT>if color = red and size = big then +</TT> </CENTER>
+  <P>By constructing a rule for each path to a leaf yields an interpretation of 
+  what the tree means. 
+  <P></P>
+  <LI><B>Setting Parameters</B><BR>Some learning algorithms require setting 
+  learning parameters. Parameters must be set without looking at the test data! 
+  One method: Tuning Sets. 
+  <P><B>Using Tuning Sets for Parameter Setting</B><BR>
+  <OL>
+    <LI>Partition data in Training set and Test set. Then partition Training set 
+    into Train set and Tune set. 
+    <LI>For each candidate parameter value, generate decision tree using the 
+    Train set 
+    <LI>Use Tune set to evaluate error rates and determine which parameter value 
+    is best 
+    <LI>Compute new decision tree using selected parameter values and entire 
+    Training set </LI></OL>
+  <P></P>
+  <LI><B>Cross-Validation for Experimental Validation of Performance</B><BR>
+  <OL>
+    <LI>Divide all examples into N disjoint subsets, E = E<SUB>1</SUB>, 
+    E<SUB>2</SUB>, ..., E<SUB>N</SUB> 
+    <LI>For each i = 1, ..., N do 
+    <UL>
+      <LI>Test set = E<SUB>i</SUB> 
+      <LI>Training set = E - E<SUB>i</SUB> 
+      <LI>Compute decision tree using Training set 
+      <LI>Determine performance accuracy P<SUB>i</SUB> using Test set </LI></UL>
+    <LI>Compute N-fold cross-validation estimate of performance = (P<SUB>1</SUB> 
+    + P<SUB>2</SUB> + ... + P<SUB>N</SUB>)/N </LI></OL>
+  <P>One special case of interest called <B>Leave-1-Out</B> where N-fold 
+  cross-validation uses N = number of examples. Good when the number of examples 
+  available is small (less than about 100) </P></LI></UL>
+<P>
+<H3>Summary</H3>
+<UL>
+  <LI>One of the most widely used learning methods in practice 
+  <LI>Can out-perform human experts in many problems 
+  <LI>Strengths: Fast; simple to implement; can convert result to a set of 
+  easily interpretable rules; empirically valid in many commercial products; 
+  handles noisy data 
+  <LI>Weaknesses: "Univariate" splits/partitioning using only one attribute at a 
+  time so limits types of possible trees; large decision trees may be hard to 
+  understand; requires fixed-length feature vectors; non-incremental (i.e., 
+  batch method). </LI></UL>
+<P>
+<HR>
+
+<P>Copyright © 2001-2003 by Charles R. Dyer. All rights reserved. 
+</P></LI></BODY></HTML>

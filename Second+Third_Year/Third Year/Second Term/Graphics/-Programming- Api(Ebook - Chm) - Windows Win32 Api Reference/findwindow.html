@@ -1,0 +1,109 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+<HTML lang="en-us">
+<HEAD>
+<TITLE>Windows API Guide: FindWindow Function</TITLE>
+<META content="vbapi@vbapi.com" name="author">
+<META content="Information about the FindWindow function in the Windows API, geared towards the Visual Basic user." name="description">
+<META content="Kuliniewicz,Windows,Windows 95,Windows NT,Windows 98,Windows CE,Windows 2000,API,Application Programming Interface,Programming,Visual Basic,Basic,VB,FindWindow" name="keywords">
+<META content="Omicron HTML Editor" name="generator">
+<LINK href="default.css" tppabs="http://www.vbapi.com/css/default.css" rel="stylesheet" type="text/css">
+<LINK href="index-1.html" tppabs="http://www.vbapi.com/index.html" rel="home">
+<LINK href="glossary.html" tppabs="http://www.vbapi.com/ref/glossary.html" rel="glossary">
+<LINK href="copyrite.html" tppabs="http://www.vbapi.com/copyrite.html" rel="copyright">
+</HEAD>
+<BODY>
+
+<!-- Begin Adslot1 -->
+<CENTER>
+<SCRIPT language="JAVASCRIPT">
+<!-- hide from older browsers
+now = new Date();
+my_random = now.getTime();
+document.write('<A href="http://adex3.flycast.com/server/socket/127.0.0.1:2800/click/VBWorldnet/VBAPI/' + my_random + '">');
+document.write('<IMG width="468" height="60" border="1" src="http://adex3.flycast.com/server/socket/127.0.0.1:2800/ad/VBWorldnet/VBAPI/' + my_random + '"></A>');
+// -->
+</SCRIPT>
+</CENTER>
+<!-- End Adslot1 -->
+
+<HR>
+
+<H1>FindWindow Function</H1>
+
+<P><CODE class="declare"><SPAN class="kw">Declare Function</SPAN> FindWindow <SPAN class="kw">Lib</SPAN> "user32.dll" <SPAN class="kw">Alias</SPAN> "FindWindowA" (<SPAN class="kw">ByVal</SPAN> lpClassName <SPAN class="kw">As String</SPAN>, <SPAN class="kw">ByVal</SPAN> lpWindowName <SPAN class="kw">As String</SPAN>) <SPAN class="kw">As Long</SPAN></CODE></P>
+
+<H2>Platforms</H2>
+<P><UL>
+<LI><B>Windows 95:</B> Supported.
+<LI><B>Windows 98:</B> Supported.
+<LI><B>Windows NT:</B> Requires Windows NT 3.1 or later.
+<LI><B>Windows 2000:</B> Supported.
+<LI><B>Windows CE:</B> Requires Windows CE 1.0 or later.
+</UL></P>
+
+<H2>Description &amp; Usage</H2>
+<P><B>FindWindow</B> searches all windows for one which matches the <A class="def" href="glossary.html#windowclass" tppabs="http://www.vbapi.com/ref/glossary.html#windowclass" rel="glossary">window class</A> name and/or window name.  The function's searching mechanism is not case-sensitive.  If you do not wish to specify one of the parameters, pass a null string for it.</P>
+
+<H2>Return Value</H2>
+<P>If successful, the function returns a <A class="def" href="glossary.html#handle" tppabs="http://www.vbapi.com/ref/glossary.html#handle" rel="glossary">handle</A> to the window that was found.  If no matching window could be found, or if an error occured, the function returns zero (use <A href="getlasterror.html" tppabs="http://www.vbapi.com/ref/g/getlasterror.html">GetLastError</A> to get the error code).</P>
+
+<H2>Visual Basic-Specific Issues</H2>
+<P>To pass a null string as one of the function's parameters, use the vbNullString constant.</P>
+
+<H2>Parameters</H2>
+<P><DL>
+<DT><VAR>lpClassName</VAR><DD>The name of the window class of the window to find.  To ignore the window's class, specify a null string.
+<DT><VAR>lpWindowName</VAR><DD>The name of the title bar text of the window to find.  To ignore the window's text, specify a null string.
+</DL></P>
+
+<H2>Example</H2>
+<P>Search for a window called Minesweeper and flash its title bar once.  We don't need to know the name of the window's class to find it, since most likely there won't be any unless Windows's Minesweeper game is running.  This is all done when the user clicks button cmdFind, so to use this example, you naturally must place a command button named cmdFind on a form window.</P>
+
+<P><PRE><CODE class="example"><SPAN class="com">' This code is licensed according to the terms and conditions listed <A href="copyrite.html#license" tppabs="http://www.vbapi.com/copyrite.html#license" rel="copyright">here</A>.</SPAN>
+
+<SPAN class="com">' Declarations and such needed for the example:
+' (Copy them to the (declarations) section of a module.)</SPAN>
+<SPAN class="kw">Public Declare Function</SPAN> <B>FindWindow</B> <SPAN class="kw">Lib</SPAN> "user32.dll" <SPAN class="kw">Alias</SPAN> "FindWindowA" (<SPAN class="kw">ByVal</SPAN> lpClassName <SPAN class="kw">As String</SPAN>, _
+	<SPAN class="kw">ByVal</SPAN> lpWindowName <SPAN class="kw">As String</SPAN>) <SPAN class="kw">As Long</SPAN>
+<SPAN class="kw">Public Declare Function</SPAN> <A href="flashwindow.html" tppabs="http://www.vbapi.com/ref/f/flashwindow.html">FlashWindow</A> <SPAN class="kw">Lib</SPAN> "user32.dll" (<SPAN class="kw">ByVal</SPAN> hWnd <SPAN class="kw">As Long</SPAN>, <SPAN class="kw">ByVal</SPAN> bInvert <SPAN class="kw">As Long</SPAN>) <SPAN class="kw">As Long</SPAN>
+<SPAN class="kw">Public Declare Sub</SPAN> <A href="sleep.html" tppabs="http://www.vbapi.com/ref/s/sleep.html">Sleep</A> <SPAN class="kw">Lib</SPAN> "kernel32.dll" (<SPAN class="kw">ByVal</SPAN> dwMilliseconds <SPAN class="kw">As Long</SPAN>)
+
+<SPAN class="com">' *** Place the following code inside a form. ***</SPAN>
+
+<SPAN class="kw">Private Sub</SPAN> cmdFind_Click()
+	<SPAN class="kw">Dim</SPAN> hWnd <SPAN class="kw">As Long</SPAN>    <SPAN class="com">' receives handle to the found window</SPAN>
+	<SPAN class="kw">Dim</SPAN> retval <SPAN class="kw">As Long</SPAN>  <SPAN class="com">' generic return value</SPAN>
+	
+	<SPAN class="com">' Attempt to locate a window titled Minesweeper.</SPAN>
+	hWnd = <B>FindWindow</B>(vbNullString, "Minesweeper")
+	<SPAN class="kw">If</SPAN> hWnd = 0 <SPAN class="kw">Then</SPAN>
+		<SPAN class="kw">Debug</SPAN>.<SPAN class="kw">Print</SPAN> "Minesweeper is not currently running."
+	<SPAN class="kw">Else</SPAN>
+		<SPAN class="com">' Flash the window's title bar on and off once.</SPAN>
+		retval = <A href="flashwindow.html" tppabs="http://www.vbapi.com/ref/f/flashwindow.html">FlashWindow</A>(hWnd, 1)
+		<A href="sleep.html" tppabs="http://www.vbapi.com/ref/s/sleep.html">Sleep</A> 500  <SPAN class="com">' pause for half a second</SPAN>
+		retval = <A href="flashwindow.html" tppabs="http://www.vbapi.com/ref/f/flashwindow.html">FlashWindow</A>(hWnd, 0)
+	<SPAN class="kw">End If</SPAN>
+<SPAN class="kw">End Sub</SPAN></CODE></PRE></P>
+
+<H2>See Also</H2>
+<P><A href="findwindowex.html" tppabs="http://www.vbapi.com/ref/f/findwindowex.html">FindWindowEx</A></P>
+
+<H2>Category</H2>
+<P><A href="funcc.html#windows" tppabs="http://www.vbapi.com/ref/funcc.html#windows">Windows</A></P>
+
+<P><A href="funca.html" tppabs="http://www.vbapi.com/ref/funca.html">Go back to the alphabetical Function listing.</A><BR>
+<A href="index.html" tppabs="http://www.vbapi.com/ref/index.html">Go back to the Reference section index.</A></P>
+
+<HR>
+
+<P>
+<B>Last Modified:</B> December 17, 2000<BR>
+This page is copyright &copy; 2000 Paul Kuliniewicz.  
+<A href="copyrite.html" tppabs="http://www.vbapi.com/copyrite.html" rel="copyright">Copyright Information</A>  <B>Revised October 29, 2000</B><BR>
+<A href="index-1.html" tppabs="http://www.vbapi.com/index.html">Go back to the Windows API Guide home page.</A><BR>
+E-mail: <A href="javascript:if(confirm('http://www.vbapi.com/email.html  \n\nThis file was not retrieved by Teleport Pro, because it is addressed on a domain or path outside the boundaries set for its Starting Address.  \n\nDo you want to open it from the server?'))window.location='http://www.vbapi.com/email.html'" tppabs="http://www.vbapi.com/email.html">vbapi@vbapi.com</A>  <A href="javascript:if(confirm('http://www.vbapi.com/email.html  \n\nThis file was not retrieved by Teleport Pro, because it is addressed on a domain or path outside the boundaries set for its Starting Address.  \n\nDo you want to open it from the server?'))window.location='http://www.vbapi.com/email.html#secure'" tppabs="http://www.vbapi.com/email.html#secure">Send Encrypted E-Mail</A><BR>
+This page is at <A href="findwindow.html" tppabs="http://www.vbapi.com/ref/f/findwindow.html">http://www.vbapi.com/ref/f/findwindow.html</A>
+</P>
+</BODY>
+</HTML>

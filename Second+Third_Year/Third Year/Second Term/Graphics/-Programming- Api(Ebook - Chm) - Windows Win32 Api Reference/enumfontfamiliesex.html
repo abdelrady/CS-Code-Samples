@@ -1,0 +1,153 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+<HTML lang="en-us">
+<HEAD>
+<TITLE>Windows API Guide: EnumFontFamiliesEx Function</TITLE>
+<META content="vbapi@vbapi.com" name="author">
+<META content="Information about the EnumFontFamiliesEx function in the Windows API, geared towards the Visual Basic user." name="description">
+<META content="Kuliniewicz,Windows,Windows 95,Windows NT,Windows 98,Windows CE,Windows 2000,API,Application Programming Interface,Programming,Visual Basic,Basic,VB,EnumFontFamiliesEx" name="keywords">
+<META content="Omicron HTML Editor" name="generator">
+<META content="Sat, 23 Oct 1999 22:52:00 GMT" http-equiv="Last-Modified">
+<LINK href="default.css" tppabs="http://www.vbapi.com/css/default.css" rel="stylesheet" type="text/css">
+<LINK href="index-1.html" tppabs="http://www.vbapi.com/index.html" rel="home">
+
+<LINK href="glossary.html" tppabs="http://www.vbapi.com/ref/glossary.html" rel="glossary">
+<LINK href="copyrite.html" tppabs="http://www.vbapi.com/copyrite.html" rel="copyright">
+</HEAD>
+<BODY>
+
+<!-- Begin Adslot1 -->
+<CENTER>
+<SCRIPT language="JAVASCRIPT">
+<!-- hide from older browsers
+now = new Date();
+my_random = now.getTime();
+document.write('<A href="http://adex3.flycast.com/server/socket/127.0.0.1:2800/click/VBWorldnet/VBAPI/' + my_random + '">');
+document.write('<IMG width="468" height="60" border="1" src="http://adex3.flycast.com/server/socket/127.0.0.1:2800/ad/VBWorldnet/VBAPI/' + my_random + '"></A>');
+// -->
+</SCRIPT>
+</CENTER>
+<!-- End Adslot1 -->
+
+<HR>
+
+<H1>EnumFontFamiliesEx Function</H1>
+
+<P><CODE class="declare">Declare Function EnumFontFamiliesEx Lib "gdi32.dll" Alias "EnumFontFamiliesExA" (ByVal hdc As Long, lpLogfont As <A href="logfont.html" tppabs="http://www.vbapi.com/ref/l/logfont.html">LOGFONT</A>, ByVal lpEnumFontFamExProc As Long, ByVal lParam As Long, ByVal dwFlags As Long) As Long</CODE></P>
+
+<H2>Platforms</H2>
+<P><UL>
+<LI><B>Windows 95:</B> Supported.
+<LI><B>Windows 98:</B> Supported.
+<LI><B>Windows NT:</B> Requires Windows NT 4.0 or later.
+<LI><B>Windows 2000:</B> Supported.
+<LI><B>Windows CE:</B> Not Supported.
+</UL></P>
+
+<H2>Description &amp; Usage</H2>
+<P><B>EnumFontFamiliesEx</B> enumerates all of the fonts available for use on a <A class="def" href="glossary.html#device" tppabs="http://www.vbapi.com/ref/glossary.html#device" rel="glossary">device</A> which match a basic description.  The function enumerates fonts based on their character sets and/or typeface styles (or simply all fonts).  The function treats identical fonts with different character sets as two different fonts (for example, Times New Roman with the ANSI character set is considered a different font than Times New Roman with the Cyrillic character set).  The fonts are not enumerated in any obvious order.</P>
+
+<H2>Return Value</H2>
+<P>The function returns whatever the final call to the <A class="def" href="glossary.html#callbackfunction" tppabs="http://www.vbapi.com/ref/glossary.html#callbackfunction" rel="glossary">callback function</A> returned.</P>
+
+<H2>Visual Basic-Specific Issues</H2>
+<P>None.</P>
+
+<H2>Parameters</H2>
+<P><DL>
+<DT><VAR>hdc</VAR><DD>A <A class="def" href="glossary.html#handle" tppabs="http://www.vbapi.com/ref/glossary.html#handle" rel="glossary">handle</A> to a <A class="def" href="glossary.html#devicecontext" tppabs="http://www.vbapi.com/ref/glossary.html#devicecontext" rel="glossary">device context</A> to the device to enumerate the available fonts of.
+<DT><VAR>lpLogfont</VAR><DD>Identifies the character set and/or typeface name (or neither) of the fonts to enumerate.  The <VAR>.lfCharset</VAR> member identifies the character set of the fonts to enumerate, or DEFAULT_CHARSET to ignore the character set.  The <VAR>.lfFaceName</VAR> member identifies the typeface name of the fonts to enumerate, or an empty string to ignore the typeface name.  The <VAR>.lfPitchAndFamily</VAR> member is not used but must be zero.  All other members are ignored.
+<DT><VAR>lpEnumFontFamExProc</VAR><DD>A <A class="def" href="glossary.html#pointer" tppabs="http://www.vbapi.com/ref/glossary.html#pointer" rel="glossary">pointer</A> to the <A href="enumfontfamexproc.html" tppabs="http://www.vbapi.com/ref/e/enumfontfamexproc.html">EnumFontFamExProc</A> callback function which processes the information about each font that is enumerated.
+<DT><VAR>lParam</VAR><DD>A value to pass to the function identified by <VAR>lpEnumFontFamExProc</VAR>.
+<DT><VAR>dwFlags</VAR><DD>Reserved -- set to 0.
+</DL></P>
+
+<H2>Example</H2>
+<P><PRE><CODE class="example"><SPAN class="com">' This code is licensed according to the terms and conditions listed <A href="copyrite.html#license" tppabs="http://www.vbapi.com/copyrite.html#license" rel="copyright">here</A>.</SPAN>
+
+' Enumerate some of the fonts available for window Form1.
+' These fonts must have the ANSI character set and have the
+' Times New Roman typeface.  Display some information about
+' each font as it is enumerated.
+
+' *** Place the following code in a module. ***
+' The following callback function processes the enumerated fonts.
+Public Function <A href="enumfontfamexproc.html" tppabs="http://www.vbapi.com/ref/e/enumfontfamexproc.html">EnumFontFamExProc</A> (ByVal lpelfe As Long, ByVal lpntme As Long, ByVal FontType As Long, ByVal lParam As Long) As Long
+  Dim elfx As <A href="enumlogfontex.html" tppabs="http://www.vbapi.com/ref/e/enumlogfontex.html">ENUMLOGFONTEX</A>  ' receives information about the font
+  Dim ntmx As <A href="newtextmetricex.html" tppabs="http://www.vbapi.com/ref/n/newtextmetricex.html">NEWTEXTMETRICEX</A>  ' receives text metrics for TrueType fonts
+  Dim tm As <A href="textmetric.html" tppabs="http://www.vbapi.com/ref/t/textmetric.html">TEXTMETRIC</A>  ' receives text metrics for non-TrueType fonts
+  
+  ' Copy the font information into the appropriate structure.
+  <A href="copymemory.html" tppabs="http://www.vbapi.com/ref/c/copymemory.html">CopyMemory</A> elfx, ByVal lpelfe, Len(elfx)
+
+  ' If the font is TrueType, use the following code.
+  If (FontType And TRUETYPE_FONTTYPE) = TRUETYPE_FONTTYPE Then
+    ' Copy the text metrics into the appropriate structure.
+    <A href="copymemory.html" tppabs="http://www.vbapi.com/ref/c/copymemory.html">CopyMemory</A> ntmx, ByVal lpntme, Len(ntmx)
+    ' Display the name of the font (removing empty space from it).
+    Debug.Print "Font Name: "; Left(elfx.elfFullName, InStr(elfx.elfFullName, vbNullChar) - 1);
+    Debug.Print "  (TrueType font)"
+    ' Display the style of the font (again removing empty space).
+    Debug.Print "Font Style: "; Left(elfx.elfStyle, InStr(elfx.elfStyle, vbNullChar) - 1)
+    ' Display the average character width.
+    Debug.Print "Average Character Width:"; ntmx.ntmTm.tmAveCharWidth
+    ' Display the maximum character width.
+    Debug.Print "Maximum Character Width:"; ntmx.ntmTm.tmMaxCharWidth
+
+  ' If the font is not TrueType, use the following code.
+  Else
+    ' Copy the text metrics into the appropriate structure.
+    <A href="copymemory.html" tppabs="http://www.vbapi.com/ref/c/copymemory.html">CopyMemory</A> tm, ByVal lpntme, Len(tm)
+    ' Display the name of the font (removing empty space from it).
+    Debug.Print "Font Name: ";
+    Debug.Print Left(elfx.elfLogFont.lfFaceName, InStr(elfx.elfLogFont.lfFaceName, vbNullChar) - 1);
+    ' Display whether the font is a device or a raster font.
+    If FontType = DEVICE_FONTTYPE Then
+      Debug.Print "  (Device font)"
+    ElseIf FontType = RASTER_FONTTYPE Then
+      Debug.Print "  (Raster font)"
+    End If
+    Debug.Print "Font Style does not apply for this font."
+    ' Display the average character width.
+    Debug.Print "Average Character Width:"; tm.tmAveCharWidth
+    ' Display the maximum character width.
+    Debug.Print "Maximum Character Width:"; tm.tmMaxCharWidth
+  End If
+
+  Debug.Print "***"  ' separator
+  ' Tell EnumFontFamiliesEx to continue enumeration.
+  EnumFontFamExProc = 1
+End Function
+
+' *** Place this code wherever you want the enumerate the fonts. ***
+Dim lf As <A href="logfont.html" tppabs="http://www.vbapi.com/ref/l/logfont.html">LOGFONT</A>  ' describes enumeration attributes
+Dim retval As Long  ' return value
+
+' Initialize the structure to describe the fonts we want.
+lf.lfCharset = ANSI_CHARSET  ' fonts with the ANSI character set
+lf.lfFaceName = "Times New Roman" &amp; vbNullChar  ' fonts with the Times New Roman typeface
+lf.lfPitchAndFamily = 0  ' this must be 0
+' Enumerate such fonts available on window Form1.
+retval = <B>EnumFontFamiliesEx</B>(Form1.hDC, lf, AddressOf <A href="enumfontfamexproc.html" tppabs="http://www.vbapi.com/ref/e/enumfontfamexproc.html">EnumFontFamExProc</A>, 0, 0)
+Debug.Print "Enumeration complete."</CODE></PRE></P>
+
+<H2>See Also</H2>
+<P><A href="enumfontfamilies.html" tppabs="http://www.vbapi.com/ref/e/enumfontfamilies.html">EnumFontFamilies</A></P>
+
+<H2>Category</H2>
+<P><A href="funcc.html#fontstext" tppabs="http://www.vbapi.com/ref/funcc.html#fontstext">Fonts &amp; Text</A></P>
+
+<P><A href="funca.html" tppabs="http://www.vbapi.com/ref/funca.html">Go back to the alphabetical Function listing.</A><BR>
+<A href="index.html" tppabs="http://www.vbapi.com/ref/index.html">Go back to the Reference section index.</A></P>
+
+<HR>
+
+<P><B>Last Modified:</B> October 23, 1999<BR>
+This page is copyright &copy; 1999 Paul Kuliniewicz.  
+<A href="copyrite.html" tppabs="http://www.vbapi.com/copyrite.html" rel="copyright">Copyright Information</A>  <B>Revised October 29, 2000</B><BR>
+
+<A href="index-1.html" tppabs="http://www.vbapi.com/index.html">Go back to the Windows API Guide home page.</A><BR>
+E-mail: <A href="javascript:if(confirm('http://www.vbapi.com/email.html  \n\nThis file was not retrieved by Teleport Pro, because it is addressed on a domain or path outside the boundaries set for its Starting Address.  \n\nDo you want to open it from the server?'))window.location='http://www.vbapi.com/email.html'" tppabs="http://www.vbapi.com/email.html">vbapi@vbapi.com</A>  <A href="javascript:if(confirm('http://www.vbapi.com/email.html  \n\nThis file was not retrieved by Teleport Pro, because it is addressed on a domain or path outside the boundaries set for its Starting Address.  \n\nDo you want to open it from the server?'))window.location='http://www.vbapi.com/email.html#secure'" tppabs="http://www.vbapi.com/email.html#secure">Send Encrypted E-Mail</A><BR>
+This page is at <A href="enumfontfamiliesex.html" tppabs="http://www.vbapi.com/ref/e/enumfontfamiliesex.html">http://www.vbapi.com/ref/e/enumfontfamiliesex.html</A>
+</P>
+</BODY>
+</HTML>

@@ -1,0 +1,123 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!-- saved from url=(0084)http://www.planetsourcecode.com/vb/scripts/ShowCodeAsText.asp?txtCodeId=301&lngWId=3 -->
+<HTML><HEAD>
+<META http-equiv=Content-Type content="text/html; charset=windows-1256">
+<META content="MSHTML 6.00.2900.2180" name=GENERATOR></HEAD>
+<BODY><XMP>
+//**************************************
+//INCLUDE files for :Maze
+//**************************************
+#include <iostream.h>
+#include <conio.h>
+#include "apstring.h"
+#include <fstream.h>
+#include "apmatrix.h"
+//**************************************
+// Name: Maze
+// Description:This code was created by me on March 1 of 2000.
+After a bit of experimenting I found out how to create a simple maze. This could be also known as "AI" how the computer has to "think" its way through the maze to the Finish [S = START ; F = FINISH]
+The *'s are the walls and edges that it cannot pass [In the first maze] and the .'s represent the shortest possible path it took to the S to F
+// By: Jeremy
+//
+//
+// Inputs:There are none except you editing the maze.
+//
+// Returns:Shortest possible way [As a diagram] 
+Als o the number of possibilities from S to F
+//
+//Assumes:Study it, It will come to you.
+//
+//Side Effects:Just watch out as it takes a bit of memory.
+//This code is copyrighted and has limited warranties.
+//Please see http://www.Planet-Source-Code.com/xq/ASP/txtCodeId.301/lngWId.3/qx/vb/scripts/ShowCode.htm
+//for details.
+//**************************************
+
+/*_Jeremy_kahanic_March_1_2000
+******************1
+*S==============**2
+*=******=******=**3
+*=***====*====****4
+*=====**===**F****5
+*=******=*********6
+*==========*******7
+******************8
+123456789012345678
+*/
+#include <iostream.h>
+#include <conio.h>
+#include <apstring.h>
+#include <fstream.h>
+#include <apmatrix.h>
+void mat(int i, int j, apmatrix <char> matrix, int count);
+apmatrix <char> final(100,100,'*');
+int mainsmall=9999, possible=0;
+int main()
+
+
+    {
+    apmatrix <char> matrix(100,100,'*');
+    ifstream fin("Maze.cpp");
+    cin=fin;
+    apstring nothing;
+    cin>>nothing;
+    for (int i=0; i<8; i++)
+    for (int j=0; j<19; j++)
+    cin>>matrix[i][j];
+    cout<<"'A maze can be solved if at least attempted at, I think.' - Jeremy"<<endl<<"Before: "<<endl;
+    for (int i=0; i<8; i++)
+
+
+        {
+        for (int j=0; j<18; j++)
+
+
+            {if (matrix[i][j]=='=') cout<<" "; else cout<<matrix[i][j];}
+            cout<<endl;
+        }
+        cout<<endl<<"After: "<<endl;
+        mat(1,1,matrix,0);
+        final[1][1]='S';
+        for (int i=0; i<8; i++)
+
+
+            {
+            for (int j=0; j<18; j++)
+
+
+                {if (final[i][j]=='=') cout<<" "; else cout<<final[i][j];}
+                cout<<endl;
+            }
+            cout<<endl<<"Steps: "<<mainsmall<<endl;
+            cout<<"Possibilities: "<<possible;
+            getch();
+            return 0;
+        }
+        void mat(int i, int j, apmatrix <char> matrix, int count)
+
+
+            {
+            if (matrix[i+1][j]=='F' || matrix[i-1][j]=='F' || matrix[i][j+1]=='F' || matrix[i][j-1]=='F')
+
+
+                {
+                possible++;
+                matrix[i][j]='+';
+                if (count<mainsmall)
+
+
+                    {
+                    mainsmall=count;
+                    final=matrix;
+                }
+            }
+
+
+                else{
+                matrix[i][j]='+';
+                if (matrix[i+1][j]=='=') mat(i+1, j, matrix, count+1);
+                if (matrix[i-1][j]=='=') mat(i-1, j, matrix, count+1);
+                if (matrix[i][j+1]=='=') mat(i, j+1, matrix, count+1);
+                if (matrix[i][j-1]=='=') mat(i, j-1, matrix, count+1);}
+            }
+		</XMP></BODY></HTML>

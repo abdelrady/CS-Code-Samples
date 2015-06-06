@@ -1,0 +1,198 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+<HTML lang="en-us">
+<HEAD>
+<TITLE>Windows API Guide: ChangeDisplaySettings Function</TITLE>
+<META content="vbapi@vbapi.com" name="author">
+<META content="Information about the ChangeDisplaySettings function in the Windows API, geared towards the Visual Basic user." name="description">
+<META content="Kuliniewicz,Windows,Windows 95,Windows NT,Windows 98,Windows CE,Windows 2000,API,Application Programming Interface,Programming,Visual Basic,Basic,VB,ChangeDisplaySettings" name="keywords">
+<META content="Omicron HTML Editor" name="generator">
+<LINK href="default.css" tppabs="http://www.vbapi.com/css/default.css" rel="stylesheet" type="text/css">
+<LINK href="index-1.html" tppabs="http://www.vbapi.com/index.html" rel="home">
+<LINK href="glossary.html" tppabs="http://www.vbapi.com/ref/glossary.html" rel="glossary">
+<LINK href="copyrite.html" tppabs="http://www.vbapi.com/copyrite.html" rel="copyright">
+</HEAD>
+<BODY>
+
+<!-- Begin Adslot1 -->
+<CENTER>
+<SCRIPT language="JAVASCRIPT">
+<!-- hide from older browsers
+now = new Date();
+my_random = now.getTime();
+document.write('<A href="http://adex3.flycast.com/server/socket/127.0.0.1:2800/click/VBWorldnet/VBAPI/' + my_random + '">');
+document.write('<IMG width="468" height="60" border="1" src="http://adex3.flycast.com/server/socket/127.0.0.1:2800/ad/VBWorldnet/VBAPI/' + my_random + '"></A>');
+// -->
+</SCRIPT>
+</CENTER>
+<!-- End Adslot1 -->
+
+<HR>
+
+<H1>ChangeDisplaySettings Function</H1>
+
+<P><CODE class="declare"><SPAN class="kw">Declare Function</SPAN> ChangeDisplaySettings <SPAN class="kw">Lib</SPAN> "user32.dll" <SPAN class="kw">Alias</SPAN> "ChangeDisplaySettingsA" (lpDevMode <SPAN class="kw">As Any</SPAN>, <SPAN class="kw">ByVal</SPAN> dwFlags <SPAN class="kw">As Long</SPAN>) <SPAN class="kw">As Long</SPAN></CODE></P>
+
+<H2>Platforms</H2>
+<P><UL>
+<LI><B>Windows 95:</B> Supported.
+<LI><B>Windows 98:</B> Supported.
+<LI><B>Windows NT:</B> Requires Windows NT 3.5 or later.
+<LI><B>Windows 2000:</B> Supported.
+<LI><B>Windows CE:</B> Not Supported.
+</UL></P>
+
+<H2>Description &amp; Usage</H2>
+<P><B>ChangeDisplaySettings</B> changes the current display settings.  This function can change the current screen resolution and color depth, among other things.  Typically, a call to <A href="enumdisplaysettings.html" tppabs="http://www.vbapi.com/ref/e/enumdisplaysettings.html">EnumDisplaySettings</A> should preceed this function, in order to adjust only the desired settings.</P>
+
+<H2>Return Value</H2>
+<P>The function returns one of the following flags:
+<DL>
+<DT>DISP_CHANGE_SUCCESSFUL<DD>The display settings were successfully changed.
+<DT>DISP_CHANGE_RESTART<DD>The computer must be restarted for the display changes to take effect.
+<DT>DISP_CHANGE_BADFLAGS<DD>An invalid set of flags was specified.
+<DT>DISP_CHANGE_BADPARAM<DD>An invalid parameter was specified.
+<DT>DISP_CHANGE_FAILED<DD>The display driver failed the specified graphics mode.
+<DT>DISP_CHANGE_BADMODE<DD>The specified graphics mode is not supported.
+<DT>DISP_CHANGE_NOTUPDATED<DD><B>Windows NT/2000:</B> The settings could not be written to the registry.
+</DL></P>
+
+<H2>Visual Basic-Specific Issues</H2>
+<P>When specifying zero for <VAR>lpDevMode</VAR>, use the expression ByVal CLng(0).</P>
+
+<H2>Parameters</H2>
+<P><DL>
+<DT><VAR>lpDevMode</VAR><DD>A <A href="devmode.html" tppabs="http://www.vbapi.com/ref/d/devmode.html">DEVMODE</A> structure that holds the new display settings.  Only the <VAR>dmBitsPerPixel</VAR>, <VAR>dmPelsWidth</VAR>, <VAR>dmPelsHeight</VAR>, <VAR>dmDisplayFlags</VAR>, and <VAR>dmDisplayFrequency</VAR> members are used.  (<B>Windows 98, NT/2000:</B> The <VAR>dmPosition</VAR> member can also be used.)  To restore the settings saved in the registry, set this parameter and <VAR>dwFlags</VAR> to zero.
+<DT><VAR>dwFlags</VAR><DD>A combination of the following flags specifying how to change the display mode.  If no flags are set (i.e., zero is specified), the graphics mode is changed dynamically.
+<DL>
+<DT>CDS_UPDATEREGISTRY<DD>Save the new settings to the registry and also change the settings dynamically.
+<DT>CDS_TEST<DD>Test to see if the new settings are supported by the hardware, without actually changing the settings.  The function's return value will indicate any problems that may have occured.
+<DT>CDS_FULLSCREEN<DD>Go into full-screen mode.  This setting cannot be saved.
+<DT>CDS_GLOBAL<DD>Save the new settings for all users.  The CDS_UPDATEREGISTRY flag must also be specified.
+<DT>CDS_SET_PRIMARY<DD>Make this device the primary display device.
+<DT>CDS_RESET<DD>Change the settings even if they are the same as the current settings.
+<DT>CDS_NORESET<DD>Save the settings to the registry, but do not make them take effect yet.  The CDS_UPDATEREGISTRY flag must also be specified.
+</DL>
+</DL></P>
+
+<H2>Constant Definitions</H2>
+<P><PRE><CODE class="const"><SPAN class="kw">Const</SPAN> CDS_UPDATEREGISTRY = &amp;H1
+<SPAN class="kw">Const</SPAN> CDS_TEST = &amp;H2
+<SPAN class="kw">Const</SPAN> CDS_FULLSCREEN = &amp;H4
+<SPAN class="kw">Const</SPAN> CDS_GLOBAL = &amp;H8
+<SPAN class="kw">Const</SPAN> CDS_SET_PRIMARY = &amp;H10
+<SPAN class="kw">Const</SPAN> CDS_RESET = &amp;H40000000
+<SPAN class="kw">Const</SPAN> CDS_SETRECT = &amp;H20000000
+<SPAN class="kw">Const</SPAN> CDS_NORESET = &amp;H10000000
+<SPAN class="kw">Const</SPAN> DISP_CHANGE_SUCCESSFUL = 0
+<SPAN class="kw">Const</SPAN> DISP_CHANGE_RESTART = 1
+<SPAN class="kw">Const</SPAN> DISP_CHANGE_FAILED = -1
+<SPAN class="kw">Const</SPAN> DISP_CHANGE_BADMODE = -2
+<SPAN class="kw">Const</SPAN> DISP_CHANGE_NOTUPDATED = -3
+<SPAN class="kw">Const</SPAN> DISP_CHANGE_BADFLAGS = -4
+<SPAN class="kw">Const</SPAN> DISP_CHANGE_BADPARAM = -5</CODE></PRE></P>
+
+<H2>Example</H2>
+<P>Change the current screen resolution to 800x600 without changing the color depth and save the changes to the registry.  First test to make sure that the hardware supports the new resolution.  If a reboot is necessary, inform the user.  To use this example, place a command button named Command1 of a form window.</P>
+
+<P><PRE><CODE class="example"><SPAN class="com">' This code is licensed according to the terms and conditions listed <A href="copyrite.html#license" tppabs="http://www.vbapi.com/copyrite.html#license" rel="copyright">here</A>.</SPAN>
+
+<SPAN class="com">' Declarations and such needed for the example:
+' (Copy them to the (declarations) section of a module.)</SPAN>
+<SPAN class="kw">Public Type</SPAN> <A href="devmode.html" tppabs="http://www.vbapi.com/ref/d/devmode.html">DEVMODE</A>
+	dmDeviceName <SPAN class="kw">As String</SPAN> * 32
+	dmSpecVersion <SPAN class="kw">As Integer</SPAN>
+	dmDriverVersion <SPAN class="kw">As Integer</SPAN>
+	dmSize <SPAN class="kw">As Integer</SPAN>
+	dmDriverExtra <SPAN class="kw">As Integer</SPAN>
+	dmFields <SPAN class="kw">As Long</SPAN>
+	dmOrientation <SPAN class="kw">As Integer</SPAN>
+	dmPaperSize <SPAN class="kw">As Integer</SPAN>
+	dmPaperLength <SPAN class="kw">As Integer</SPAN>
+	dmPaperWidth <SPAN class="kw">As Integer</SPAN>
+	dmScale <SPAN class="kw">As Integer</SPAN>
+	dmCopies <SPAN class="kw">As Integer</SPAN>
+	dmDefaultSource <SPAN class="kw">As Integer</SPAN>
+	dmPrintQuality <SPAN class="kw">As Integer</SPAN>
+	dmColor <SPAN class="kw">As Integer</SPAN>
+	dmDuplex <SPAN class="kw">As Integer</SPAN>
+	dmYResolution <SPAN class="kw">As Integer</SPAN>
+	dmTTOption <SPAN class="kw">As Integer</SPAN>
+	dmCollate <SPAN class="kw">As Integer</SPAN>
+	dmFormName <SPAN class="kw">As String</SPAN> * 32
+	dmUnusedPadding <SPAN class="kw">As Integer</SPAN>
+	dmBitsPerPixel <SPAN class="kw">As Integer</SPAN>
+	dmPelsWidth <SPAN class="kw">As Long</SPAN>
+	dmPelsHeight <SPAN class="kw">As Long</SPAN>
+	dmDisplayFlags <SPAN class="kw">As Long</SPAN>
+	dmDisplayFrequency <SPAN class="kw">As Long</SPAN>
+	<SPAN class="com">' The following only appear in Windows 95, 98, 2000</SPAN>
+	dmICMMethod <SPAN class="kw">As Long</SPAN>
+	dmICMIntent <SPAN class="kw">As Long</SPAN>
+	dmMediaType <SPAN class="kw">As Long</SPAN>
+	dmDitherType <SPAN class="kw">As Long</SPAN>
+	dmReserved1 <SPAN class="kw">As Long</SPAN>
+	dmReserved2 <SPAN class="kw">As Long</SPAN>
+	<SPAN class="com">' The following only appear in Windows 2000</SPAN>
+	dmPanningWidth <SPAN class="kw">As Long</SPAN>
+	dmPanningHeight <SPAN class="kw">As Long</SPAN>
+<SPAN class="kw">End Type</SPAN>
+<SPAN class="kw">Public Declare Function</SPAN> <A href="enumdisplaysettings.html" tppabs="http://www.vbapi.com/ref/e/enumdisplaysettings.html">EnumDisplaySettings</A> <SPAN class="kw">Lib</SPAN> "user32.dll" <SPAN class="kw">Alias</SPAN> "EnumDisplaySettingsA" (<SPAN class="kw">ByVal</SPAN> lpszDeviceName <SPAN class="kw">As String</SPAN>, _
+	<SPAN class="kw">ByVal</SPAN> iModeNum <SPAN class="kw">As Long</SPAN>, lpDevMode <SPAN class="kw">As</SPAN> <A href="devmode.html" tppabs="http://www.vbapi.com/ref/d/devmode.html">DEVMODE</A>) <SPAN class="kw">As Long</SPAN>
+<SPAN class="kw">Public Const</SPAN> ENUM_CURRENT_SETTINGS = -1
+<SPAN class="kw">Public Declare Function</SPAN> <B>ChangeDisplaySettings</B> <SPAN class="kw">Lib</SPAN> "user32.dll" <SPAN class="kw">Alias</SPAN> "ChangeDisplaySettingsA" (lpDevMode <SPAN class="kw">As Any</SPAN>, <SPAN class="kw">ByVal</SPAN> dwFlags _
+	<SPAN class="kw">As Long</SPAN>) <SPAN class="kw">As Long</SPAN>
+<SPAN class="kw">Public Const</SPAN> CDS_UPDATEREGISTRY = &amp;H1
+<SPAN class="kw">Public Const</SPAN> CDS_TEST = &amp;H2
+<SPAN class="kw">Public Const</SPAN> DISP_CHANGE_SUCCESSFUL = 0
+<SPAN class="kw">Public Const</SPAN> DISP_CHANGE_RESTART = 1
+
+<SPAN class="com">' *** Place the following code inside the form window.</SPAN>
+
+<SPAN class="kw">Private Sub</SPAN> Command1_Click()
+	<SPAN class="kw">Dim</SPAN> dm <SPAN class="kw">As</SPAN> <A href="devmode.html" tppabs="http://www.vbapi.com/ref/d/devmode.html">DEVMODE</A>   <SPAN class="com">' display settings</SPAN>
+	<SPAN class="kw">Dim</SPAN> retval <SPAN class="kw">As Long</SPAN>  <SPAN class="com">' return value</SPAN>
+	
+	<SPAN class="com">' Initialize the structure that will hold the settings.</SPAN>
+	dm.dmSize = Len(dm)
+	<SPAN class="com">' Get the current display settings.</SPAN>
+	retval = <A href="enumdisplaysettings.html" tppabs="http://www.vbapi.com/ref/e/enumdisplaysettings.html">EnumDisplaySettings</A>(vbNullString, ENUM_CURRENT_SETTINGS, dm)
+	<SPAN class="com">' Change the resolution settings to 800x600.</SPAN>
+	dm.dmPelsWidth = 800
+	dm.dmPelsHeight = 600
+	<SPAN class="com">' Test to make sure the changes are possible.</SPAN>
+	retval = <B>ChangeDisplaySettings</B>(dm, CDS_TEST)
+	<SPAN class="kw">If</SPAN> retval &lt;&gt; DISP_CHANGE_SUCCESSFUL <SPAN class="kw">Then</SPAN>
+		<SPAN class="kw">Debug</SPAN>.<SPAN class="kw">Print</SPAN> "Cannot change to that resolution!"
+	<SPAN class="kw">Else</SPAN>
+		<SPAN class="com">' Change and save to the new settings.</SPAN>
+		retval = <B>ChangeDisplaySettings</B>(dm, CDS_UPDATEREGISTRY)
+		<SPAN class="kw">Select Case</SPAN> retval
+		<SPAN class="kw">Case</SPAN> DISP_CHANGE_SUCCESSFUL
+			<SPAN class="kw">Debug</SPAN>.<SPAN class="kw">Print</SPAN> "Resolution successfully changed!"
+		<SPAN class="kw">Case</SPAN> DISP_CHANGE_RESTART
+			<SPAN class="kw">Debug</SPAN>.<SPAN class="kw">Print</SPAN> "A reboot is necessary before the changes will take effect."
+		<SPAN class="kw">Case Else</SPAN>
+			<SPAN class="kw">Debug</SPAN>.<SPAN class="kw">Print</SPAN> "Unable to change resolution!"
+		<SPAN class="kw">End Select</SPAN>
+	<SPAN class="kw">End If</SPAN>
+<SPAN class="kw">End Sub</SPAN></CODE></PRE></P>
+
+<H2>See Also</H2>
+<P><A href="enumdisplaysettings.html" tppabs="http://www.vbapi.com/ref/e/enumdisplaysettings.html">EnumDisplaySettings</A></P>
+
+<H2>Category</H2>
+<P><A href="funcc.html#devices" tppabs="http://www.vbapi.com/ref/funcc.html#devices">Devices</A></P>
+
+<P><A href="funca.html" tppabs="http://www.vbapi.com/ref/funca.html">Back to the Function list.</A><BR>
+<A href="index.html" tppabs="http://www.vbapi.com/ref/index.html" rel="index">Back to the Reference section.</A></P>
+
+<HR>
+
+<P><B>Last Modified:</B> January 21, 2001<BR>
+This page is copyright &copy; 2001 Paul Kuliniewicz.  
+<A href="copyrite.html" tppabs="http://www.vbapi.com/copyrite.html" rel="copyright">Copyright Information</A>  <B>Revised October 29, 2000</B><BR>
+<A href="index-1.html" tppabs="http://www.vbapi.com/index.html" rel="home">Go back to the Windows API Guide home page.</A><BR>
+E-mail: <A href="javascript:if(confirm('http://www.vbapi.com/email.html  \n\nThis file was not retrieved by Teleport Pro, because it is addressed on a domain or path outside the boundaries set for its Starting Address.  \n\nDo you want to open it from the server?'))window.location='http://www.vbapi.com/email.html'" tppabs="http://www.vbapi.com/email.html">vbapi@vbapi.com</A>  <A href="javascript:if(confirm('http://www.vbapi.com/email.html  \n\nThis file was not retrieved by Teleport Pro, because it is addressed on a domain or path outside the boundaries set for its Starting Address.  \n\nDo you want to open it from the server?'))window.location='http://www.vbapi.com/email.html#secure'" tppabs="http://www.vbapi.com/email.html#secure">Send Encrypted E-Mail</A><BR>
+This page is at <A href="changedisplaysettings.html" tppabs="http://www.vbapi.com/ref/c/changedisplaysettings.html">http://www.vbapi.com/ref/c/changedisplaysettings.html</A></P>
+</BODY>
+</HTML>

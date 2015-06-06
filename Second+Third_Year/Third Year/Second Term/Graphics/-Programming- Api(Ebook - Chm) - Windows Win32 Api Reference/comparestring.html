@@ -1,0 +1,161 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+<HTML lang="en-us">
+<HEAD>
+<TITLE>Windows API Guide: CompareString Function</TITLE>
+<META content="vbapi@vbapi.com" name="author">
+<META content="Information about the CompareString function in the Windows API, geared towards the Visual Basic user." name="description">
+<META content="Kuliniewicz,Windows,Windows 95,Windows NT,Windows 98,Windows CE,Windows 2000,API,Application Programming Interface,Programming,Visual Basic,Basic,VB,CompareString" name="keywords">
+<META content="Omicron HTML Editor" name="generator">
+<META content="Fri, 31 Dec 1999 03:56:00 GMT" http-equiv="Last-Modified">
+<LINK href="default.css" tppabs="http://www.vbapi.com/css/default.css" rel="stylesheet" type="text/css">
+<LINK href="index-1.html" tppabs="http://www.vbapi.com/index.html" rel="home">
+
+<LINK href="glossary.html" tppabs="http://www.vbapi.com/ref/glossary.html" rel="glossary">
+<LINK href="copyrite.html" tppabs="http://www.vbapi.com/copyrite.html" rel="copyright">
+</HEAD>
+<BODY>
+
+<!-- Begin Adslot1 -->
+<CENTER>
+<SCRIPT language="JAVASCRIPT">
+<!-- hide from older browsers
+now = new Date();
+my_random = now.getTime();
+document.write('<A href="http://adex3.flycast.com/server/socket/127.0.0.1:2800/click/VBWorldnet/VBAPI/' + my_random + '">');
+document.write('<IMG width="468" height="60" border="1" src="http://adex3.flycast.com/server/socket/127.0.0.1:2800/ad/VBWorldnet/VBAPI/' + my_random + '"></A>');
+// -->
+</SCRIPT>
+</CENTER>
+<!-- End Adslot1 -->
+
+<HR>
+
+<H1>CompareString Function</H1>
+
+<P><CODE class="declare">Declare Function CompareString Lib "kernel32.dll" Alias "CompareStringA" (ByVal Locale As Long, ByVal dwCmpFlags As Long, ByVal lpString1 As String, ByVal cchCount1 As Long, ByVal lpString2 As String, ByVal cchCount2 As Long) As Long</CODE></P>
+
+<H2>Platforms</H2>
+<P><UL>
+<LI><B>Windows 95:</B> Supported.
+<LI><B>Windows 98:</B> Supported.
+<LI><B>Windows NT:</B> Requires Windows NT 3.1 or later.
+<LI><B>Windows 2000:</B> Supported.
+<LI><B>Windows CE:</B> Requires Windows CE 1.0 or later.
+</UL></P>
+
+<H2>Description &amp; Usage</H2>
+<P><B>CompareString</B> compares two strings and determines which one would come first in an alphabetic sort.  Although this function can use a number of different comparisons, by default it conducts a case-sensitive word sort.  In a word sort, all symbols except hyphens and apostrophes come before the letter "a" (hyphens and apostrophes are treated differently).  The function compares strings by first comparing their first characters, then their second characters, etc. until an unequal pair of characters is found.</P>
+
+<H2>Return Value</H2>
+<P>If an error occured, the function returns 0 (use <A href="getlasterror.html" tppabs="http://www.vbapi.com/ref/g/getlasterror.html">GetLastError</A> to get the error code).  If successful, the function returns one of the following flags specifying the result of the comparison:
+<DL>
+<DT>CSTR_LESS_THAN<DD>The first string is less than the second string (i.e., the first string comes before the second string in alphabetical order).
+<DT>CSTR_EQUAL<DD>The first string is equal to (but not necessarily identical to) the second string.
+<DT>CSTR_GREATER_THAN<DD>The first string is greater than the second string.
+</DL></P>
+
+<H2>Visual Basic-Specific Issues</H2>
+<P>None.</P>
+
+<H2>Parameters</H2>
+<P><DL>
+<DT><VAR>Locale</VAR><DD>The <A class="def" href="glossary.html#locale" tppabs="http://www.vbapi.com/ref/glossary.html#locale" rel="glossary">locale</A> identifier of the locale to use to compare the strings.  This could also be one of the following flags:
+<DL>
+<DT>LOCALE_SYSTEM_DEFAULT<DD>The system's default locale.
+<DT>LOCALE_USER_DEFAULT<DD>The user's default locale.
+</DL>
+<DT><VAR>dwCmpFlags</VAR><DD>A combination of the following flags specifying options for the comparison.  To use the default comparison, set this parameter to 0.
+<DL>
+<DT>NORM_IGNORECASE<DD>Conduct a case-insensitive search.
+<DT>NORM_IGNOREKANATYPE<DD>For Japanese characters, do not differentiate between Hiragana and Katakana characters.
+<DT>NORM_IGNORENONSPACE<DD>Ignore nonspacing characters.
+<DT>NORM_IGNORESYMBOLS<DD>Ignore symbols.
+<DT>NORM_IGNOREWIDTH<DD>Do not differentiate between equivalent single-byte and double-byte characters.
+<DT>SORT_STRINGSORT<DD>Use a string sort instead of a word sort.  In a string sort, all symbols, including hyphens and apostrophes, come before the letter "a".
+</DL>
+<DT><VAR>lpString1</VAR><DD>The first string to compare.
+<DT><VAR>cchCount1</VAR><DD>The length of <VAR>lpString1</VAR>.  If this is -1, <VAR>lpString1</VAR> must end in a terminating null character.
+<DT><VAR>lpString2</VAR><DD>The second string to compare.
+<DT><VAR>cchCount2</VAR><DD>The length of <VAR>lpString2</VAR>.  If this is -1, <VAR>lpString2</VAR> must end in a terminating null character.
+</DL></P>
+
+<H2>Constant Definitions</H2>
+<P><PRE><CODE class="const">Const CSTR_LESS_THAN = 1
+Const CSTR_EQUAL = 2
+Const CSTR_GREATER_THAN = 3
+Const LOCALE_SYSTEM_DEFAULT = &amp;H400
+Const LOCALE_USER_DEFAULT = &amp;H800
+Const NORM_IGNORECASE = &amp;H1
+Const NORM_IGNOREKANATYPE = &amp;H10000
+Const NORM_IGNORENONSPACE = &amp;H2
+Const NORM_IGNORESYMBOLS = &amp;H4
+Const NORM_IGNOREWIDTH = &amp;H20000
+Const SORT_STRINGSORT = &amp;H1000</CODE></PRE></P>
+
+<H2>Example</H2>
+<P><PRE><CODE class="example"><SPAN class="com">' This code is licensed according to the terms and conditions listed <A href="copyrite.html#license" tppabs="http://www.vbapi.com/copyrite.html#license" rel="copyright">here</A>.</SPAN>
+
+' Use a case-senitive, string sort comparison method to alphabetically
+' sort nine words.  The sorting method simply compares each possible
+' pair of words; if a pair is out of alphabetical order, they are switched.
+' (Compare these results to those from using <A href="lstrcmp.html" tppabs="http://www.vbapi.com/ref/l/lstrcmp.html">lstrcmp</A> for the comparison.)
+Dim words(1 To 9) As String  ' the words to sort
+Dim tempstr As String  ' buffer used to swap strings
+Dim oc As Integer, ic As Integer  ' counter variables
+Dim compval As Long  ' result of comparison
+Dim threadlocale As Long  ' locale ID of this thread
+
+' Get the locale of this thread (i.e., of this program).
+threadlocale = <A href="getthreadlocale.html" tppabs="http://www.vbapi.com/ref/g/getthreadlocale.html">GetThreadLocale</A>()
+
+' Load the nine strings into the array.
+words(1) = "can't"
+words(2) = "cant"
+words(3) = "cannot"
+words(4) = "pants"
+words(5) = "co-op"
+words(6) = "coop"
+words(7) = "Denver"
+words(8) = "denver"
+words(9) = "denveR"
+
+' Sort the strings, swapping any pairs which are out of order.
+For oc = 1 To 8  ' first string of the pair
+  For ic = oc + 1 To 9  ' second string of the pair
+    ' Compare the two strings.
+    compval = <B>CompareString</B>(threadlocale, SORT_STRINGSORT, words(oc), Len(words(oc)), words(ic), Len(words(ic)))
+    ' If words(oc) is greater, swap them.
+    If compval = CSTR_GREATER_THAN Then
+      tempstr = words(oc)
+      words(oc) = words(ic)
+      words(ic) = tempstr
+    End If
+  Next ic
+Next oc
+
+' Display the list of sorted words.
+For oc = 1 To 9
+  Debug.Print words(oc)
+Next oc</CODE></PRE></P>
+
+<H2>See Also</H2>
+<P><A href="lstrcmp.html" tppabs="http://www.vbapi.com/ref/l/lstrcmp.html">lstrcmp</A>, <A href="lstrcmpi.html" tppabs="http://www.vbapi.com/ref/l/lstrcmpi.html">lstrcmpi</A></P>
+
+<H2>Category</H2>
+<P><A href="funcc.html#strings" tppabs="http://www.vbapi.com/ref/funcc.html#strings">Strings</A></P>
+
+<P><A href="funca.html" tppabs="http://www.vbapi.com/ref/funca.html">Go back to the alphabetical Function listing.</A><BR>
+<A href="index.html" tppabs="http://www.vbapi.com/ref/index.html">Go back to the Reference section index.</A></P>
+
+<HR>
+
+<P><B>Last Modified:</B> December 30, 1999<BR>
+This page is copyright &copy; 1999 Paul Kuliniewicz.  
+<A href="copyrite.html" tppabs="http://www.vbapi.com/copyrite.html" rel="copyright">Copyright Information</A>  <B>Revised October 29, 2000</B><BR>
+
+<A href="index-1.html" tppabs="http://www.vbapi.com/index.html">Go back to the Windows API Guide home page.</A><BR>
+E-mail: <A href="javascript:if(confirm('http://www.vbapi.com/email.html  \n\nThis file was not retrieved by Teleport Pro, because it is addressed on a domain or path outside the boundaries set for its Starting Address.  \n\nDo you want to open it from the server?'))window.location='http://www.vbapi.com/email.html'" tppabs="http://www.vbapi.com/email.html">vbapi@vbapi.com</A>  <A href="javascript:if(confirm('http://www.vbapi.com/email.html  \n\nThis file was not retrieved by Teleport Pro, because it is addressed on a domain or path outside the boundaries set for its Starting Address.  \n\nDo you want to open it from the server?'))window.location='http://www.vbapi.com/email.html#secure'" tppabs="http://www.vbapi.com/email.html#secure">Send Encrypted E-Mail</A><BR>
+This page is at <A href="comparestring.html" tppabs="http://www.vbapi.com/ref/c/comparestring.html">http://www.vbapi.com/ref/c/comparestring.html</A>
+</P>
+</BODY>
+</HTML>

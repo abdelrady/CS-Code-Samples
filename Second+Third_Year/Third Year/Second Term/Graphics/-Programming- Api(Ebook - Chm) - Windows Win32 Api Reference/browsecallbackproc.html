@@ -1,0 +1,91 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+<HTML lang="en-us">
+<HEAD>
+<TITLE>Windows API Guide: BrowseCallbackProc Callback Function</TITLE>
+<META content="vbapi@vbapi.com" name="author">
+<META content="Information about the BrowseCallbackProc callback function in the Windows API, geared towards the Visual Basic user." name="description">
+<META content="Kuliniewicz,Windows,Windows 95,Windows NT,Windows 98,Windows CE,Windows 2000,API,Application Programming Interface,Programming,Visual Basic,Basic,VB,BrowseCallbackProc" name="keywords">
+<META content="Omicron HTML Editor" name="generator">
+<META content="Fri, 24 Sep 1999 22:34:00 GMT" http-equiv="Last-Modified">
+<LINK href="default.css" tppabs="http://www.vbapi.com/css/default.css" rel="stylesheet" type="text/css">
+<LINK href="index-1.html" tppabs="http://www.vbapi.com/index.html" rel="home">
+
+<LINK href="glossary.html" tppabs="http://www.vbapi.com/ref/glossary.html" rel="glossary">
+<LINK href="copyrite.html" tppabs="http://www.vbapi.com/copyrite.html" rel="copyright">
+</HEAD>
+<BODY>
+
+<!-- Begin Adslot1 -->
+<CENTER>
+<SCRIPT language="JAVASCRIPT">
+<!-- hide from older browsers
+now = new Date();
+my_random = now.getTime();
+document.write('<A href="http://adex3.flycast.com/server/socket/127.0.0.1:2800/click/VBWorldnet/VBAPI/' + my_random + '">');
+document.write('<IMG width="468" height="60" border="1" src="http://adex3.flycast.com/server/socket/127.0.0.1:2800/ad/VBWorldnet/VBAPI/' + my_random + '"></A>');
+// -->
+</SCRIPT>
+</CENTER>
+<!-- End Adslot1 -->
+
+<HR>
+
+<H1>BrowseCallbackProc Callback Function</H1>
+
+<P><PRE><CODE class="declare">Public Function BrowseCallbackProc(ByVal hwnd As Long, ByVal uMsg As Long, ByVal lParam As Long, ByVal lpData As Long) As Long
+  ' application-defined code goes here
+End Function</CODE></PRE></P>
+
+<H2>Description &amp; Usage</H2>
+<P>The <B>BrowseCallbackProc</B> <A class="def" href="glossary.html#callbackfunction" tppabs="http://www.vbapi.com/ref/glossary.html#callbackfunction" rel="glossary">callback function</A> process the <A class="def" href="glossary.html#message" tppabs="http://www.vbapi.com/ref/glossary.html#message" rel="glossary">messages</A> of a Browse for Folder dialog box.  Specifically, this function responds to the messages notifying when the dialog box is being initialized and when the user as changed the current selection.  This function does not necessarily have to be called <B>BrowseCallbackProc</B>; that is merely the name given to it in discussions about the API.  The callback function can work with the dialog box by sending it one of the following messages via <A href="sendmessage.html" tppabs="http://www.vbapi.com/ref/s/sendmessage.html">SendMessage</A>:
+<DL>
+<DT>BFFM_ENABLEOK<DD>Enable or disable the dialog box's OK button.  To enable the OK button, set the <VAR>lParam</VAR> message parameter to a non-zero value.  To disable the OK button, set the <VAR>lParam</VAR> message parameter to 0.
+<DT>BFFM_SETSELECTION<DD>Set the current selection in the dialog box.  To specify the desired path using a string, set the <VAR>lParam</VAR> message parameter to the string and the <VAR>wParam</VAR> message parameter to a non-zero value.  To specify the desired path using a <A class="def" href="glossary.html#pointer" tppabs="http://www.vbapi.com/ref/glossary.html#pointer" rel="glossary">pointer</A> to an <A href="itemidlist.html" tppabs="http://www.vbapi.com/ref/i/itemidlist.html">ITEMIDLIST</A> structure (a.k.a. a PIDL), set the <VAR>lParam</VAR> message parameter to the PIDL and the <VAR>wParam</VAR> message parameter to 0.
+<DT>BFFM_SETSTATUSTEXT<DD>Set the status text displayed by the dialog box, if it exists.  Set the <VAR>lParam</VAR> message parameter to the string holding the desired text.
+</DL></P>
+
+<H2>Return Value</H2>
+<P>The function always returns 0, unless the dialog box is processing the BFFM_VALIDATEFAILED message (see that message's description below for details).</P>
+
+<H2>Visual Basic-Specific Issues</H2>
+<P>Like all callback functions, <B>BrowseCallbackProc</B> must be declared Public within a module.</P>
+
+<H2>Parameters</H2>
+<P><DL>
+<DT><VAR>hwnd</VAR><DD>A <A class="def" href="glossary.html#handle" tppabs="http://www.vbapi.com/ref/glossary.html#handle" rel="glossary">handle</A> to the Browse for Folder dialog box calling this function.  This handle is necessary to send messages back to the dialog box.
+<DT><VAR>uMsg</VAR><DD>One of the following flags specifying the event:
+<DL>
+<DT>BFFM_INITIALIZED<DD>The dialog box has just finished initializing.  <VAR>lParam</VAR> is 0.
+<DT>BFFM_SELCHANGED<DD>The user has changed the current selection.  <VAR>lParam</VAR> is a PIDL to the current selection.
+<DT>BFFM_VALIDATEFAILED<DD><B>With Internet Explorer 4.0 or later:</B> The user has typed an invalid path into the edit box.  <VAR>lParam</VAR> is a pointer to a null-terminated string holding the invalid path name.  The function should return 0 to close the dialog box, or a non-zero value to keep it displayed.
+</DL>
+<DT><VAR>lParam</VAR><DD>Depends on the value of <VAR>uMsg</VAR>.
+<DT><VAR>lpData</VAR><DD>The application-defined value given in the <A href="browseinfo.html" tppabs="http://www.vbapi.com/ref/b/browseinfo.html">BROWSEINFO</A> structure used to create the dialog box.
+</DL></P>
+
+<H2>Constant Definitions</H2>
+<P><PRE><CODE class="const">Const BFFM_ENABLEOK = &amp;H465
+Const BFFM_SETSELECTION = &amp;H466
+Const BFFM_SETSTATUSTEXT = &amp;H464
+Const BFFM_INITIALIZED = 1
+Const BFFM_SELCHANGED = 2
+Const BFFM_VALIDATEFAILED = 3</CODE></PRE></P>
+
+<H2>Used By</H2>
+<P><A href="browseinfo.html" tppabs="http://www.vbapi.com/ref/b/browseinfo.html">BROWSEINFO</A></P>
+
+<P><A href="calla.html" tppabs="http://www.vbapi.com/ref/calla.html">Go back to the Callback Function listing.</A><BR>
+<A href="index.html" tppabs="http://www.vbapi.com/ref/index.html">Go back to the Reference section index.</A></P>
+
+<HR>
+
+<P><B>Last Modified:</B> September 24, 1999<BR>
+This page is copyright &copy; 1999 Paul Kuliniewicz.  
+<A href="copyrite.html" tppabs="http://www.vbapi.com/copyrite.html" rel="copyright">Copyright Information</A>  <B>Revised October 29, 2000</B><BR>
+
+<A href="index-1.html" tppabs="http://www.vbapi.com/index.html">Go back to the Windows API Guide home page.</A><BR>
+E-mail: <A href="javascript:if(confirm('http://www.vbapi.com/email.html  \n\nThis file was not retrieved by Teleport Pro, because it is addressed on a domain or path outside the boundaries set for its Starting Address.  \n\nDo you want to open it from the server?'))window.location='http://www.vbapi.com/email.html'" tppabs="http://www.vbapi.com/email.html">vbapi@vbapi.com</A>  <A href="javascript:if(confirm('http://www.vbapi.com/email.html  \n\nThis file was not retrieved by Teleport Pro, because it is addressed on a domain or path outside the boundaries set for its Starting Address.  \n\nDo you want to open it from the server?'))window.location='http://www.vbapi.com/email.html#secure'" tppabs="http://www.vbapi.com/email.html#secure">Send Encrypted E-Mail</A><BR>
+This page is at <A href="browsecallbackproc.html" tppabs="http://www.vbapi.com/ref/b/browsecallbackproc.html">http://www.vbapi.com/ref/b/browsecallbackproc.html</A>
+</P>
+</BODY>
+</HTML>

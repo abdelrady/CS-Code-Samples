@@ -1,0 +1,78 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+<HTML lang="en-us">
+<HEAD>
+<TITLE>Windows API Guide: WindowFromPoint Function</TITLE>
+<META content="vbapi@vbapi.com" name="author">
+<META content="Information about the WindowFromPoint function in the Windows API, geared towards the Visual Basic user." name="description">
+<META content="Kuliniewicz,Windows,Windows 95,Windows NT,Windows 98,Windows 32s,32s,API,Application Programming Interface,Programming,Visual Basic,Basic,VB,WindowFromPoint" name="keywords">
+<META content="Omicron HTML Editor" name="generator">
+<LINK href="default.css" tppabs="http://www.vbapi.com/css/default.css" rel="stylesheet" type="text/css">
+<LINK href="index-1.html" tppabs="http://www.vbapi.com/index.html" rel="home">
+</HEAD>
+<BODY>
+
+<!-- Begin Adslot1 -->
+<CENTER>
+<SCRIPT language="JAVASCRIPT">
+<!-- hide from older browsers
+now = new Date();
+my_random = now.getTime();
+document.write('<A href="http://adex3.flycast.com/server/socket/127.0.0.1:2800/click/VBWorldnet/VBAPI/' + my_random + '">');
+document.write('<IMG width="468" height="60" border="1" src="http://adex3.flycast.com/server/socket/127.0.0.1:2800/ad/VBWorldnet/VBAPI/' + my_random + '"></A>');
+// -->
+</SCRIPT>
+</CENTER>
+<!-- End Adslot1 -->
+
+<HR>
+
+<H1>WindowFromPoint Function</H1>
+
+<P><CODE class="declare">Declare Function WindowFromPoint Lib "user32.dll" (ByVal xPoint As Long, ByVal yPoint As Long) As Long</CODE>
+
+<P><B>Platforms:</B> Win 32s, Win 95/98, Win NT
+
+<P><B>WindowFromPoint</B> determines the handle of the window located at a specific point on the screen.  Note that the active window could be a text box, list box, button, or some other object sitting inside a program window.  In this case, the handle returned will be to this control and not the program window.  If successful, the function returns the handle to the window at that point.  If there is no window at that point, or if an error occured, the function instead returns 0.
+
+<DL>
+<DT><VAR>xPoint</VAR><DD>The x-coordinate of the point to look for a window at.
+<DT><VAR>yPoint</VAR><DD>The y-coordinate of the point to look for a window at.
+</DL>
+
+<P><B>Example:</B>
+<PRE><CODE class="example">' Display the title bar text of whatever window the mouse
+' cursor is currently over.  Note that this could be a control on a program window.
+Dim mousepos As <A href="point_type.html" tppabs="http://www.vbapi.com/ref/p/point_type.html">POINT_TYPE</A>  ' coordinates of the mouse cursor
+Dim wintext As String, slength As Long  ' receive title bar text and its length
+Dim hwnd As Long  ' handle to the window found at the point
+Dim retval As Long  ' return value
+
+' Determine the window the mouse cursor is over.
+retval = <A href="getcursorpos.html" tppabs="http://www.vbapi.com/ref/g/getcursorpos.html">GetCursorPos</A>(mousepos)  ' get the location of the mouse
+hwnd = <B>WindowFromPoint</B>(mousepos.x, mousepos.y)  ' determine the window that's there
+If hwnd = 0 Then  ' error or no window at that point
+  Debug.Print "No window exists at that location."
+  End
+End If
+
+' Display that window's title bar text
+slength = <A href="getwindowtextlength.html" tppabs="http://www.vbapi.com/ref/g/getwindowtextlength.html">GetWindowTextLength</A>(hwnd)  ' get length of title bar text
+wintext = Space(slength + 1)  ' make room in the buffer to receive the string
+slength = <A href="getwindowtext.html" tppabs="http://www.vbapi.com/ref/g/getwindowtext.html">GetWindowText</A>(hwnd, wintext, slength + 1)  ' get the text
+wintext = Left(wintext, slength)  ' extract the returned string from the buffer
+Debug.Print "Title bar text of the window: "; wintext</CODE></PRE>
+
+<P><B>Category:</B> <A href="index.html#windows" tppabs="http://www.vbapi.com/ref/index.html#windows">Windows</A></P>
+
+<P><A href="funca.html" tppabs="http://www.vbapi.com/ref/funca.html">Go back to the alphabetical Function listing.</A><BR>
+<A href="index.html" tppabs="http://www.vbapi.com/ref/index.html">Go back to the Reference section index.</A></P>
+
+<HR>
+
+<P>This page is copyright &copy; 2000 Paul Kuliniewicz.  <A href="copyrite.html" tppabs="http://www.vbapi.com/copyrite.html" rel="copyright">Copyright Information.</A><BR>
+<A href="index-1.html" tppabs="http://www.vbapi.com/index.html">Go back to the Windows API Guide home page.</A><BR>
+E-mail: <A href="javascript:if(confirm('http://www.vbapi.com/email.html  \n\nThis file was not retrieved by Teleport Pro, because it is addressed on a domain or path outside the boundaries set for its Starting Address.  \n\nDo you want to open it from the server?'))window.location='http://www.vbapi.com/email.html'" tppabs="http://www.vbapi.com/email.html">vbapi@vbapi.com</A>  <A href="javascript:if(confirm('http://www.vbapi.com/email.html  \n\nThis file was not retrieved by Teleport Pro, because it is addressed on a domain or path outside the boundaries set for its Starting Address.  \n\nDo you want to open it from the server?'))window.location='http://www.vbapi.com/email.html#secure'" tppabs="http://www.vbapi.com/email.html#secure">Send Encrypted E-Mail</A><BR>
+This page is at <A href="windowfrompoint.html" tppabs="http://www.vbapi.com/ref/w/windowfrompoint.html">http://www.vbapi.com/ref/w/windowfrompoint.html</A>
+
+</BODY>
+</HTML>

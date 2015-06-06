@@ -1,0 +1,110 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+<HTML lang="en-us">
+<HEAD>
+<TITLE>Windows API Guide: CreateCursor Function</TITLE>
+<META content="vbapi@vbapi.com" name="author">
+<META content="Information about the CreateCursor function in the Windows API, geared towards the Visual Basic user." name="description">
+<META content="Kuliniewicz,Windows,Windows 95,Windows NT,Windows 98,Windows 32s,32s,API,Application Programming Interface,Programming,Visual Basic,Basic,VB,CreateCursor" name="keywords">
+<META content="Omicron HTML Editor" name="generator">
+<LINK href="default.css" tppabs="http://www.vbapi.com/css/default.css" rel="stylesheet" type="text/css">
+<LINK href="index-1.html" tppabs="http://www.vbapi.com/index.html" rel="home">
+</HEAD>
+<BODY>
+
+<!-- Begin Adslot1 -->
+<CENTER>
+<SCRIPT language="JAVASCRIPT">
+<!-- hide from older browsers
+now = new Date();
+my_random = now.getTime();
+document.write('<A href="http://adex3.flycast.com/server/socket/127.0.0.1:2800/click/VBWorldnet/VBAPI/' + my_random + '">');
+document.write('<IMG width="468" height="60" border="1" src="http://adex3.flycast.com/server/socket/127.0.0.1:2800/ad/VBWorldnet/VBAPI/' + my_random + '"></A>');
+// -->
+</SCRIPT>
+</CENTER>
+<!-- End Adslot1 -->
+
+<HR>
+
+<H1>CreateCursor Function</H1>
+
+<P><CODE class="declare">Declare Function CreateCursor Lib "user32.dll" (ByVal hInstance As Long, ByVal nXhotspot As Long, ByVal nYhotspot As Long, ByVal nWidth As Long, ByVal nHeight As Long, lpANDbitPlane As Any, lpXORbitPlane As Any) As Long</CODE>
+
+<P><B>Platforms:</B> Win 32s, Win 95/98, Win NT
+
+<P><B>CreateCursor</B> creates a new cursor.  Its image is formed by using an AND mask and a XOR mask provided by the function, which are used to place the cursor's image wherever it appears.  The AND and XOR masks can be provided using any numeric array, such as a Byte array (as the example below uses).  The function also specifies the cursor's hotspot, the exact pixel which is considered to be the location of the cursor (such as the exact tip of the arrow cursor).  Note that it is usually a better idea to put cursors into some sort of resource or separate file and load them instead of hard-wiring the cursors into the application code via this function.  (This is because this function relies on creating a cursor compatible with the display device, instead of generating one from a file or resource which is.)  Of course, the cursor size must be one supported by the system; use <A href="getsystemmetrics.html" tppabs="http://www.vbapi.com/ref/g/getsystemmetrics.html">GetSystemMetrics</A> to check.  The cursor created by this function must later be destroyed by using <A href="destroycursor.html" tppabs="http://www.vbapi.com/ref/d/destroycursor.html">DestroyCursor</A>.  The function returns 0 if an error occured, or a handle to the newly created cursor if successful.
+
+<DL>
+<DT><VAR>hInstance</VAR><DD>The instance handle of the application which is calling the function.
+<DT><VAR>nXhotspot</VAR><DD>The x-coordinate of the cursor's hotspot, relative to the cursor's upper-left corner.
+<DT><VAR>nYhotspot</VAR><DD>The y-coordinate of the cursor's hotspot, relative to the cursor's upper-left corner.
+<DT><VAR>nWidth</VAR><DD>The width in pixels of the cursor.
+<DT><VAR>nHeight</VAR><DD>The height in pixels of the cursor.
+<DT><VAR>lpANDbitPlane</VAR><DD>An array holding the AND mask for the cursor's image.
+<DT><VAR>lpXORbitPlane</VAR><DD>An array holding the XOR mask for the cursor's image.
+</DL>
+
+<P><B>Example:</B>
+<PRE><CODE class="example">' Create a 32x32 color cursor shaped somewhat like a yin-yang symbol.
+' (The bit masks come from Microsoft's documentation on the API cursors function, just to
+' give them their due credit.)  Note how the masks are loaded into the arrays.  The new
+' cursor is then set to be the cursor for 10 seconds.
+Dim hnewcursor As Long  ' newly created cursor
+Dim holdcursor As Long  ' receives handle of default cursor
+Dim andbuffer As String, xorbuffer As String  ' buffers for masks
+Dim andbits(0 To 127) As Byte  ' stores the AND mask
+Dim xorbits(0 To 127) As Byte  ' stores the XOR mask
+Dim c As Integer, retval As Long  ' counter and return value
+
+' Unfortunately, VB does not provide a nice way to load lots of information into an array.
+' To load the AND and XOR masks, we put the raw hex values into the string buffers
+' and use a loop to convert the hex values into numeric values and load them into
+' the elements of the array.  Yes, it's ugly, but there's no better way.  Note the
+' use of the line-continuation character here.  Each sequence of eight hex
+' characters represents one line in the 32x32 cursor.
+andbuffer = "FFFC3FFF" &amp; "FFC01FFF" &amp; "FF003FFF" &amp; "FE00FFFF" &amp; _
+            "F701FFFF" &amp; "F003FFFF" &amp; "F003FFFF" &amp; "E007FFFF" &amp; _
+            "C007FFFF" &amp; "C00FFFFF" &amp; "800FFFFF" &amp; "800FFFFF" &amp; _
+            "8007FFFF" &amp; "8007FFFF" &amp; "0003FFFF" &amp; "0000FFFF" &amp; _
+            "00007FFF" &amp; "00001FFF" &amp; "00000FFF" &amp; "80000FFF" &amp; _
+            "800007FF" &amp; "800007FF" &amp; "C00007FF" &amp; "C0000FFF" &amp; _
+            "E0000FFF" &amp; "F0001FFF" &amp; "F0001FFF" &amp; "F8003FFF" &amp; _
+            "FE007FFF" &amp; "FF00FFFF" &amp; "FFC3FFFF" &amp; "FFFFFFFF"
+xorbuffer = "00000000" &amp; "0003C000" &amp; "003F0000" &amp; "00FE0000" &amp; _
+            "0EFC0000" &amp; "07F80000" &amp; "07F80000" &amp; "0FF00000" &amp; _
+            "1FF00000" &amp; "1FE00000" &amp; "3FE00000" &amp; "3FE00000" &amp; _
+            "3FF00000" &amp; "7FF00000" &amp; "7FF80000" &amp; "7FFC0000" &amp; _
+            "7FFF0000" &amp; "7FFF8000" &amp; "7FFFE000" &amp; "3FFFE000" &amp; _
+            "3FC7F000" &amp; "3F83F000" &amp; "1F83F000" &amp; "1F83E000" &amp; _
+            "0FC7E000" &amp; "07FFC000" &amp; "07FFC000" &amp; "01FF8000" &amp; _
+            "00FF0000" &amp; "003C0000" &amp; "00000000" &amp; "00000000"
+' Now load these hex values into the proper arrays.
+For c = 0 To 127
+  andbits(c) = "&amp;H" &amp; Mid(andbuffer, 2 * c + 1)
+  xorbits(c) = "&amp;H" &amp; Mid(xorbuffer, 2 * c + 1)
+Next c
+
+' Finally, create this cursor!  The hotspot is at (19,2) on the cursor.
+hnewcursor = <B>CreateCursor</B>(App.hInstance, 19, 2, 32, 32, andbits(0), xorbits(0))
+' Set the new cursor as the current cursor for 10 seconds and then switch back.
+holdcursor = <A href="setcursor.html" tppabs="http://www.vbapi.com/ref/s/setcursor.html">SetCursor</A>(hnewcursor)  ' change cursor
+<A href="sleep.html" tppabs="http://www.vbapi.com/ref/s/sleep.html">Sleep</A> 10000  ' wait for 10 seconds
+retval = <A href="setcursor.html" tppabs="http://www.vbapi.com/ref/s/setcursor.html">SetCursor</A>(holdcursor)  ' change cursor back
+' Destroy the new cursor.
+retval = <A href="destroycursor.html" tppabs="http://www.vbapi.com/ref/d/destroycursor.html">DestroyCursor</A>(hnewcursor)</CODE></PRE>
+
+<P><B>See Also:</B> <A href="destroycursor.html" tppabs="http://www.vbapi.com/ref/d/destroycursor.html">DestroyCursor</A><BR>
+<B>Category:</B> <A href="index.html#cursor" tppabs="http://www.vbapi.com/ref/index.html#cursor">Cursor</A></P>
+
+<P><A href="funca.html" tppabs="http://www.vbapi.com/ref/funca.html">Go back to the alphabetical Function listing.</A><BR>
+<A href="index.html" tppabs="http://www.vbapi.com/ref/index.html">Go back to the Reference section index.</A></P>
+
+<HR>
+
+<P>This page is copyright &copy; 2000 Paul Kuliniewicz.  <A href="copyrite.html" tppabs="http://www.vbapi.com/copyrite.html" rel="copyright">Copyright Information.</A><BR>
+<A href="index-1.html" tppabs="http://www.vbapi.com/index.html">Go back to the Windows API Guide home page.</A><BR>
+E-mail: <A href="javascript:if(confirm('http://www.vbapi.com/email.html  \n\nThis file was not retrieved by Teleport Pro, because it is addressed on a domain or path outside the boundaries set for its Starting Address.  \n\nDo you want to open it from the server?'))window.location='http://www.vbapi.com/email.html'" tppabs="http://www.vbapi.com/email.html">vbapi@vbapi.com</A>  <A href="javascript:if(confirm('http://www.vbapi.com/email.html  \n\nThis file was not retrieved by Teleport Pro, because it is addressed on a domain or path outside the boundaries set for its Starting Address.  \n\nDo you want to open it from the server?'))window.location='http://www.vbapi.com/email.html#secure'" tppabs="http://www.vbapi.com/email.html#secure">Send Encrypted E-Mail</A><BR>
+This page is at <A href="createcursor.html" tppabs="http://www.vbapi.com/ref/c/createcursor.html">http://www.vbapi.com/ref/c/createcursor.html</A>
+
+</BODY>
+</HTML>

@@ -1,0 +1,288 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!-- saved from url=(0039)http://www2.webng.com/amrlearn/115.html -->
+<HTML><HEAD><TITLE>Water Jar Problem</TITLE><LINK 
+href="115_files/stylesheet.css" type=text/css rel=stylesheet>
+<META http-equiv=Content-Type content="text/html; charset=UTF-8">
+<META content="Water Jar Problem Water Jar Problem " name=description>
+<META 
+content="C++, Water Jar Problem, Water, Jar, Problem, Water, Jar, Problem " 
+name=keywords>
+<META content="Copyright 2007 Amr Saber" name=copyright>
+<META content="MSHTML 6.00.2900.2180" name=GENERATOR></HEAD>
+<BODY>
+<CENTER>
+<DIV id=header>
+<SCRIPT type=text/javascript><!--
+google_ad_client = "pub-9653171024150495";
+google_alternate_color = "C3D9FF";
+google_ad_width = 728;
+google_ad_height = 90;
+google_ad_format = "728x90_as";
+google_ad_type = "text";
+//2007-02-02: header
+google_ad_channel = "7161698987";
+//--></SCRIPT>
+
+<SCRIPT src="115_files/show_ads.js" type=text/javascript>
+</SCRIPT>
+</DIV></CENTER>
+<DIV id=index>
+<H3>Goooooooogle</H3>
+<SCRIPT type=text/javascript><!--
+google_ad_client = "pub-9653171024150495";
+google_alternate_color = "C3D9FF";
+google_ad_width = 120;
+google_ad_height = 600;
+google_ad_format = "120x600_as";
+google_ad_type = "text";
+//2007-02-02: header, right
+google_ad_channel = "7161698987+2593520185";
+//--></SCRIPT>
+
+<SCRIPT src="115_files/show_ads.js" type=text/javascript>
+</SCRIPT>
+</DIV>
+<DIV id=index2>
+<H3>Goooooooogle</H3>
+<SCRIPT type=text/javascript><!--
+google_ad_client = "pub-9653171024150495";
+google_alternate_color = "C3D9FF";
+google_ad_width = 120;
+google_ad_height = 600;
+google_ad_format = "120x600_as";
+google_ad_type = "text";
+google_ad_channel = "";
+//--></SCRIPT>
+
+<SCRIPT src="115_files/show_ads.js" type=text/javascript>
+</SCRIPT>
+</DIV>
+<DIV id=content>
+<H3>Water Jar Problem</H3>
+<P></P><TEXTAREA>
+#include&lt;iostream.h&gt;
+#include&lt;process.h&gt;
+const int Xmax=4;
+const int Ymax=3;
+struct eltype
+{
+	int x,y;
+	void showdata()
+	{
+		cout&lt;&lt;"("&lt;&lt;x&lt;&lt;","&lt;&lt;y&lt;&lt;")"&lt;&lt;endl;
+	}
+	eltype()
+	{
+		x=0;
+		y=0;
+	}
+	eltype(int a,int b)
+	{
+		x=a;
+		y=b;
+	}
+	/*bool operator ==(eltype e)
+	{
+		if(e.x==x &amp;&amp; e.y==y)
+			return true;
+		else
+			return false;
+	}*/
+
+};
+//---------------------------------------------------------
+const int max=100;
+class stack
+{
+private:
+	int top;
+	eltype data[max];
+public:
+	stack()
+	{
+		top = -1;
+	}
+	~ stack()
+	{
+		top = -1;
+	}
+	bool stack_is_empty()
+	{
+		if(top == -1)
+			return true;
+		else
+			return false;
+	}
+	/////////////////////////
+	bool stack_is_full()
+	{
+		if(top == max-1)
+			return true;
+		else
+			return false;
+	}
+	/////////////////////////
+	void push(eltype e)
+	{
+		if(stack_is_full())
+		{
+			cout&lt;&lt;"Error: stack is full"&lt;&lt;endl;
+			exit(0);
+		}
+		else
+			data[++top] = e;
+	}
+	/////////////////////////
+	eltype pop()
+	{
+		eltype e;
+		if(stack_is_empty())
+		{
+			cout&lt;&lt;"Error: stack is empty"&lt;&lt;endl;
+			exit(0);
+		}
+		else
+		{
+			e=data[top--];
+			return e;
+		}
+	}
+	/////////////////////////
+	void print_stack()
+	{
+		eltype e;
+		stack temp;
+		while(!stack_is_empty())
+		{
+			eltype e;
+			e = pop();
+			e.showdata();
+			temp.push(e);
+		}
+		while(!temp.stack_is_empty())
+		{
+			e = temp.pop();
+			push(e);
+		}
+	}
+	/////////////////////////
+	void print_stack_up()
+	{
+		eltype e;
+		stack temp;
+		while(!stack_is_empty())
+		{
+			eltype e;
+			e = pop();
+			temp.push(e);
+		}
+		while(!temp.stack_is_empty())
+		{
+			e = temp.pop();
+			e.showdata();
+			push(e);
+		}
+	}
+	/////////////////////////
+};
+//---------------------------------------------------------
+/////////////////////////
+stack operators(eltype state)
+{
+	eltype NextState;
+	stack s;
+	//fill x
+	if(state.x &lt; Xmax)
+	{
+		NextState.x = Xmax;
+		NextState.y = state.y;
+		s.push(NextState);
+	}
+	//fill y
+	if(state.y &lt; Ymax)
+	{
+		NextState.y = Ymax;
+		NextState.x = state.x;
+		s.push(NextState);
+	}
+	//empty x
+	if(state.x &gt; 0)
+	{
+		NextState.x = 0;
+		NextState.y = state.y;
+		s.push(NextState);
+	}
+	//empty y
+	if(state.y &gt; 0)
+	{
+		NextState.y = 0;
+		NextState.x = state.x;
+		s.push(NextState);
+	}
+	// fill x from y
+	if(state.y&gt;Xmax-state.x &amp;&amp; state.x&lt;Xmax)
+	{
+		NextState.x = Xmax;
+		NextState.y = state.y-(Xmax-state.x);
+		s.push(NextState);
+	}
+	// fill y from x
+	if(state.y&gt;Xmax-state.x &amp;&amp; state.x&lt;Xmax)
+	{
+		NextState.y = Ymax;
+		NextState.x = state.x-(Ymax-state.y);
+		s.push(NextState);
+	}
+	//pour all x in y
+	if(state.x&lt;=Ymax-state.y &amp;&amp; state.y&lt;Ymax &amp;&amp; state.x&gt;0)
+	{
+		NextState.x = 0;
+		NextState.y = state.x + state.y;
+		s.push(NextState);
+	}
+	//pour all y in x
+	if(state.y&lt;=Xmax-state.x &amp;&amp; state.x&lt;Xmax &amp;&amp; state.y&gt;0)
+	{
+		NextState.y = 0;
+		NextState.x = state.x + state.y;
+		s.push(NextState);
+	}
+	return s;
+}
+//---------------------------------------------------------
+int main()
+{
+	eltype state(1, 2);
+	stack s;
+	s = operators(state);
+	cout&lt;&lt;"\nFIFO Stack: "&lt;&lt;endl;
+	s.print_stack();
+	cout&lt;&lt;"\nReversed Stack: "&lt;&lt;endl;
+	s.print_stack_up();
+	return 0;
+}//end of the program
+
+
+</TEXTAREA> <!-- Search Google -->
+<CENTER>
+<FORM action=http://www.google.com/custom method=get target=_top>
+<TABLE bgColor=#ffffff>
+  <TBODY>
+  <TR>
+    <TD vAlign=top noWrap align=left height=32><A 
+      href="http://www.google.com/"><IMG alt=Google 
+      src="115_files/Logo_25wht.gif" align=middle border=0></IMG></A> <LABEL 
+      style="DISPLAY: none" for=sbi>Enter your search terms</LABEL> <INPUT 
+      id=sbi maxLength=255 size=40 name=q></INPUT> <LABEL style="DISPLAY: none" 
+      for=sbb>Submit search form</LABEL> <INPUT id=sbb type=submit value=Search name=sa></INPUT> <INPUT type=hidden 
+      value=pub-9653171024150495 name=client></INPUT> <INPUT type=hidden value=1 
+      name=forid></INPUT> <INPUT type=hidden value=ISO-8859-1 name=ie></INPUT> 
+      <INPUT type=hidden value=ISO-8859-1 name=oe></INPUT> <INPUT type=hidden 
+      value=active name=safe></INPUT> <INPUT type=hidden 
+      value=GALT:#008000;GL:1;DIV:#336699;VLC:663399;AH:center;BGC:FFFFFF;LBGC:336699;ALC:0000FF;LC:0000FF;T:000000;GFNT:0000FF;GIMP:0000FF;FORID:1 
+      name=cof></INPUT> <INPUT type=hidden value=en name=hl></INPUT> 
+  </TD></TR></TBODY></TABLE></FORM></CENTER><!-- Search Google -->
+<H3><A 
+href="http://www2.webng.com/amrlearn/Index.html">Home</A>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A 
+href="http://www2.webng.com/amrlearn/110.html">Previous</A>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A 
+href="http://www2.webng.com/amrlearn/116.html">Next</A></H3></DIV></BODY></HTML>

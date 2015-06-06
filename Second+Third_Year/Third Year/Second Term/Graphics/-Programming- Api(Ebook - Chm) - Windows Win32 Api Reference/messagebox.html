@@ -1,0 +1,193 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+<HTML lang="en-us">
+<HEAD>
+<TITLE>Windows API Guide: MessageBox Function</TITLE>
+<META content="vbapi@vbapi.com" name="author">
+<META content="Information about the MessageBox function in the Windows API, geared towards the Visual Basic user." name="description">
+<META content="Kuliniewicz,Windows,Windows 95,Windows NT,Windows 98,Windows CE,Windows 2000,API,Application Programming Interface,Programming,Visual Basic,Basic,VB,MessageBox" name="keywords">
+<META content="Omicron HTML Editor" name="generator">
+<LINK href="default.css" tppabs="http://www.vbapi.com/css/default.css" rel="stylesheet" type="text/css">
+<LINK href="index-1.html" tppabs="http://www.vbapi.com/index.html" rel="home">
+<LINK href="glossary.html" tppabs="http://www.vbapi.com/ref/glossary.html" rel="glossary">
+<LINK href="copyrite.html" tppabs="http://www.vbapi.com/copyrite.html" rel="copyright">
+</HEAD>
+<BODY>
+
+<!-- Begin Adslot1 -->
+<CENTER>
+<SCRIPT language="JAVASCRIPT">
+<!-- hide from older browsers
+now = new Date();
+my_random = now.getTime();
+document.write('<A href="http://adex3.flycast.com/server/socket/127.0.0.1:2800/click/VBWorldnet/VBAPI/' + my_random + '">');
+document.write('<IMG width="468" height="60" border="1" src="http://adex3.flycast.com/server/socket/127.0.0.1:2800/ad/VBWorldnet/VBAPI/' + my_random + '"></A>');
+// -->
+</SCRIPT>
+</CENTER>
+<!-- End Adslot1 -->
+
+<HR>
+
+<H1>MessageBox Function</H1>
+
+<P><CODE class="declare">Declare Function MessageBox Lib "user32.dll" Alias "MessageBoxA" (ByVal hWnd As Long, ByVal lpText As String, ByVal lpCaption As String, ByVal uType As Long) As Long</CODE></P>
+
+<H2>Platforms</H2>
+<P><UL>
+<LI><B>Windows 95:</B> Supported.
+<LI><B>Windows 98:</B> Supported.
+<LI><B>Windows NT:</B> Requires Windows NT 3.1 or later.
+<LI><B>Windows 2000:</B> Supported.
+<LI><B>Windows CE:</B> Requires Windows CE 1.0 or later.
+</UL></P>
+
+<H2>Description &amp; Usage</H2>
+<P><B>MessageBox</B> opens and operates a small message box on the screen.  Message boxes are typically used either to communicate important information (such as an error message) or to prompt the user.  The message box only closes when the user presses one of the buttons presented.</P>
+
+<H2>Return Value</H2>
+<P>If an error occured, the function returns 0 (use <A href="getlasterror.html" tppabs="http://www.vbapi.com/ref/g/getlasterror.html">GetLastError</A> to get the error code).  If successful, the function returns one of the following flags specifying the button the user clicked on:
+<DL>
+<DT>IDABORT<DD>The Abort button was clicked.
+<DT>IDCANCEL<DD>The Cancel button was clicked (or the user dismissed the message box using the Esc key).
+<DT>IDCONTINUE<DD><B>Windows 2000:</B> The Continue button was clicked.
+<DT>IDIGNORE<DD>The Ignore button was clicked.
+<DT>IDNO<DD>The No button was clicked.
+<DT>IDOK<DD>The OK button was clicked.
+<DT>IDRETRY<DD>The Retry button was clicked.
+<DT>IDTRYAGAIN<DD><B>Windows 2000:</B> The Try Again button was clicked.
+<DT>IDYES<DD>The Yes button was clicked.
+</DL></P>
+
+<H2>Visual Basic-Specific Issues</H2>
+<P>None.</P>
+
+<H2>Parameters</H2>
+<P><DL>
+<DT><VAR>hWnd</VAR><DD>A <A class="def" href="glossary.html#handle" tppabs="http://www.vbapi.com/ref/glossary.html#handle" rel="glossary">handle</A> to the window opening the message box.
+<DT><VAR>lpText</VAR><DD>The text to display inside the message box.
+<DT><VAR>lpCaption</VAR><DD>The text to display inside the caption area of the message box's title bar.
+<DT><VAR>uType</VAR><DD>A combination of various flags specifying the behavior and appearance of the message box.  The available flags are grouped according to function.  If no flags in a certain group are specified, the default is used.<BR><BR>
+Use one of the following flags to specify which buttons to display in the message box.  (Note that MB_HELP can be combined with any of the other flags.)
+<DL>
+<DT>MB_ABORTRETRYIGNORE<DD>The message box contains the Abort, Retry, and Ignore buttons.
+<DT>MB_CANCELTRYCONTINUE<DD><B>Windows 2000:</B> The message box contains the Cancel, Try Again, and Continue buttons.  This is meant to replace the MB_ABORTRETRYIGNORE flag.
+<DT>MB_HELP<DD><B>Windows 95, 98, NT 4.0 or later, 2000:</B> Add the Help button to the message box.  When the user clicks the Help button, the <A href="wm_help.html" tppabs="http://www.vbapi.com/ref/w/wm_help.html">WM_HELP</A> message is sent to the owner of the message box (specified by the <VAR>hWnd</VAR> parameter).  This flag can only be used by combining it with another button flag (i.e., the Help button cannot appear alone).
+<DT>MB_OK<DD>The message box contains the OK button.  This is the default.
+<DT>MB_OKCANCEL<DD>The message box contains the OK and Cancel buttons.
+<DT>MB_RETRYCANCEL<DD>The message box contains the Retry and Cancel buttons.
+<DT>MB_YESNO<DD>The message box contains the Yes and No buttons.
+<DT>MB_YESNOCANCEL<DD>The message box contains the Yes, No, and Cancel buttons.
+</DL><BR>
+Use one of the following flags to specify which icon to display in the message box:
+<DL>
+<DT>MB_ICONASTERISK, MB_ICONINFORMATION<DD>Display the information icon: a lowercase letter "i" inside a blue circle.
+<DT>MB_ICONERROR, MB_ICONHAND, MB_ICONSTOP<DD>Display the stop-sign icon in the message box.
+<DT>MB_ICONEXCLAMATION, MB_ICONWARNING<DD>Display the exclamation-point icon in the message box.
+<DT>MB_ICONQUESTION<DD>Display the question-mark icon in the message box.
+</DL><BR>
+Use one of the following flags to specify which button is selected by default:
+<DL>
+<DT>MB_DEFBUTTON1<DD>The first button is the default.  This is the default.
+<DT>MB_DEFBUTTON2<DD>The second button is the default.
+<DT>MB_DEFBUTTON3<DD>The third button is the default.
+<DT>MB_DEFBUTTON4<DD>The fourth button is the default.
+</DL><BR>
+Use one of the following flags to specify the modality of the message box:
+<DL>
+<DT>MB_APPLMODAL<DD>The message box is application-modal.  The user cannot switch to any other windows owned by the application until he or she first closes the message box.  This is the default.
+<DT>MB_SYSTEMMODAL<DD>The message box is system-modal.  The user cannot switch to any other windows until he or she first closes the message box.
+<DT>MB_TASKMODAL<DD>The message box is thread-modal.  The user cannot switch to any other windows owned by the calling <A class="def" href="glossary.html#thread" tppabs="http://www.vbapi.com/ref/glossary.html#thread" rel="glossary">thread</A> until he or she first closes the message box.
+</DL><BR>
+Use zero or more of the following flags to specify other options for the message box:
+<DL>
+<DT>MB_DEFAULT_DESKTOP_ONLY<DD><B>Windows NT, 2000:</B> Same as MB_SERVICE_NOTIFICATION, except that the system will display the message box only on the interactive window station's default desktop.
+<DT>MB_RIGHT<DD>The text in the message box is right-justified.
+<DT>MB_RTLREADING<DD>Display the message text and caption using right-to-left reading order if desired by the system language.
+<DT>MB_SETFOREGROUND<DD>Make the message box the foreground window.
+<DT>MB_TOPMOST<DD>Make the message box a topmost window.
+<DT>MB_SERVICE_NOTIFICATION<DD><B>Windows NT 4.0 or later, 2000:</B> The calling thread is a service notifying the user of an event.  The <VAR>hWnd</VAR> parameter must be 0.
+<DT>MB_SERVICE_NOTIFICATION_NT3X<DD><B>Windows NT 3.1 through 3.51:</B> Same as MB_SERVICE_NOTIFICATION.  The value of this flag changed with the release of NT 4.0.
+</DL>
+</DL></P>
+
+<H2>Constant Definitions</H2>
+<P><PRE><CODE class="const">Const IDABORT = 3
+Const IDCANCEL = 2
+Const IDCONTINUE = 5
+Const IDIGNORE = 5
+Const IDNO = 7
+Const IDOK = 1
+Const IDRETRY = 4
+Const IDTRYAGAIN = 4
+Const IDYES = 6
+Const MB_ABORTRETRYIGNORE = &amp;H2
+Const MB_CANCELTRYCONTINUE = &amp;H2
+Const MB_HELP = &amp;H4000
+Const MB_OK = &amp;H0
+Const MB_OKCANCEL = &amp;H1
+Const MB_RETRYCANCEL = &amp;H5
+Const MB_YESNO = &amp;H4
+Const MB_YESNOCANCEL = &amp;H3
+Const MB_ICONASTERISK = &amp;H40
+Const MB_ICONERROR = &amp;H10
+Const MB_ICONEXCLAMATION = &amp;H30
+Const MB_ICONHAND = &amp;H10
+Const MB_ICONINFORMATION = &amp;H40
+Const MB_ICONQUESTION = &amp;H20
+Const MB_ICONSTOP = &amp;H10
+Const MB_ICONWARNING = &amp;H30
+Const MB_DEFBUTTON1 = &amp;H0
+Const MB_DEFBUTTON2 = &amp;H100
+Const MB_DEFBUTTON3 = &amp;H200
+Const MB_DEFBUTTON4 = &amp;H300
+Const MB_APPLMODAL = &amp;H0
+Const MB_SYSTEMMODAL = &amp;H1000
+Const MB_TASKMODAL = &amp;H2000
+Const MB_DEFAULT_DESKTOP_ONLY = &amp;H20000
+Const MB_RIGHT = &amp;H80000
+Const MB_RTLREADING = &amp;H100000
+Const MB_SETFOREGROUND = &amp;H10000
+'Const MB_TOPMOST = ???
+'Const MB_SERVICE_NOTIFICATION = ???
+'Const MB_SERVICE_NOTIFICATION_NT3X = ???</CODE></PRE></P>
+
+<H2>Example</H2>
+<P><PRE><CODE class="example"><SPAN class="com">' This code is licensed according to the terms and conditions listed <A href="copyrite.html#license" tppabs="http://www.vbapi.com/copyrite.html#license" rel="copyright">here</A>.</SPAN>
+
+' Display a warning message box with the Yes and No option
+' owned by window Form1.  Make the message box system-modal to force the
+' user to reply immediately.  Have "No" selected by default.
+Dim mbresult As Long  ' result of message box
+Dim flags As Long  ' message box flags
+
+' For convenience, use a variable to represent the flag settings.
+flags = MB_YESNO Or MB_ICONWARNING Or MB_DEFBUTTON2 Or MB_SYSTEMMODAL
+' Display the message box.
+mbresult = <B>MessageBox</B>(Form1.hWnd, "Are you sure you want to do that?", "Warning!", flags)
+' Determine what the user pressed.
+If mbresult = IDYES Then
+  Debug.Print "OK, go ahead and do that."
+Elseif mbresult = IDNO Then
+  Debug.Print "Operation aborted."
+End If</CODE></PRE></P>
+
+<H2>See Also</H2>
+<P><A href="messageboxex.html" tppabs="http://www.vbapi.com/ref/m/messageboxex.html">MessageBoxEx</A>, 
+<A href="messageboxindirect.html" tppabs="http://www.vbapi.com/ref/m/messageboxindirect.html">MessageBoxIndirect</A></P>
+
+<H2>Category</H2>
+<P><A href="funcc.html#dialogboxes" tppabs="http://www.vbapi.com/ref/funcc.html#dialogboxes">Dialog Boxes</A></P>
+
+<P><A href="funca.html" tppabs="http://www.vbapi.com/ref/funca.html">Back to the Function list.</A><BR>
+<A href="index.html" tppabs="http://www.vbapi.com/ref/index.html" rel="index">Back to the Reference section.</A></P>
+
+<HR>
+
+<P><B>Last Modified:</B> January 29, 2000<BR>
+This page is copyright &copy; 2000 Paul Kuliniewicz.  
+<A href="copyrite.html" tppabs="http://www.vbapi.com/copyrite.html" rel="copyright">Copyright Information</A>  <B>Revised October 29, 2000</B><BR>
+<A href="index-1.html" tppabs="http://www.vbapi.com/index.html" rel="home">Go back to the Windows API Guide home page.</A><BR>
+E-mail: <A href="javascript:if(confirm('http://www.vbapi.com/email.html  \n\nThis file was not retrieved by Teleport Pro, because it is addressed on a domain or path outside the boundaries set for its Starting Address.  \n\nDo you want to open it from the server?'))window.location='http://www.vbapi.com/email.html'" tppabs="http://www.vbapi.com/email.html">vbapi@vbapi.com</A>  <A href="javascript:if(confirm('http://www.vbapi.com/email.html  \n\nThis file was not retrieved by Teleport Pro, because it is addressed on a domain or path outside the boundaries set for its Starting Address.  \n\nDo you want to open it from the server?'))window.location='http://www.vbapi.com/email.html#secure'" tppabs="http://www.vbapi.com/email.html#secure">Send Encrypted E-Mail</A><BR>
+This page is at <A href="messagebox.html" tppabs="http://www.vbapi.com/ref/m/messagebox.html">http://www.vbapi.com/ref/m/messagebox.html</A></P>
+</BODY>
+</HTML>

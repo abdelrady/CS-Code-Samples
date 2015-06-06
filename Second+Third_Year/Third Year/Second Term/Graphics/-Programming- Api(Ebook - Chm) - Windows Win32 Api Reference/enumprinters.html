@@ -1,0 +1,194 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+<HTML lang="en-us">
+<HEAD>
+<TITLE>Windows API Guide: EnumPrinters Function</TITLE>
+<META content="vbapi@vbapi.com" name="author">
+<META content="Information about the EnumPrinters function in the Windows API, geared towards the Visual Basic user." name="description">
+<META content="Kuliniewicz,Windows,Windows 95,Windows NT,Windows 98,Windows 32s,32s,API,Application Programming Interface,Programming,Visual Basic,Basic,VB,EnumPrinters" name="keywords">
+<META content="Omicron HTML Editor" name="generator">
+<LINK href="default.css" tppabs="http://www.vbapi.com/css/default.css" rel="stylesheet" type="text/css">
+<LINK href="index-1.html" tppabs="http://www.vbapi.com/index.html" rel="home">
+</HEAD>
+<BODY>
+
+<!-- Begin Adslot1 -->
+<CENTER>
+<SCRIPT language="JAVASCRIPT">
+<!-- hide from older browsers
+now = new Date();
+my_random = now.getTime();
+document.write('<A href="http://adex3.flycast.com/server/socket/127.0.0.1:2800/click/VBWorldnet/VBAPI/' + my_random + '">');
+document.write('<IMG width="468" height="60" border="1" src="http://adex3.flycast.com/server/socket/127.0.0.1:2800/ad/VBWorldnet/VBAPI/' + my_random + '"></A>');
+// -->
+</SCRIPT>
+</CENTER>
+<!-- End Adslot1 -->
+
+<HR>
+
+<H1>EnumPrinters Function</H1>
+
+<P><CODE class="declare">Declare Function EnumPrinters Lib "winspool.drv" Alias "EnumPrintersA" (ByVal flags As Long, ByVal name As String, ByVal Level As Long, pPrinterEnum As Long, ByVal cdBuf As Long, pcbNeeded As Long, pcReturned As Long) As Long</CODE>
+
+<P><B>Platforms:</B> Win 95/98, Win NT
+
+<P><B>EnumPrinters</B> finds and returns information about one or more printers which the computer has access to.  These include both local printers (physically connected to the machine) and network printers (accessible via the network).  Under Win 95/98, the information can be passed in a <A href="printer_info_1.html" tppabs="http://www.vbapi.com/ref/p/printer_info_1.html">PRINTER_INFO_1</A>, <A href="printer_info_2.html" tppabs="http://www.vbapi.com/ref/p/printer_info_2.html">PRINTER_INFO_2</A>, or <A href="printer_info_5.html" tppabs="http://www.vbapi.com/ref/p/printer_info_5.html">PRINTER_INFO_5</A> structure.  Under Win NT, the information can be passed in a <A href="printer_info_1.html" tppabs="http://www.vbapi.com/ref/p/printer_info_1.html">PRINTER_INFO_1</A>, <A href="printer_info_2.html" tppabs="http://www.vbapi.com/ref/p/printer_info_2.html">PRINTER_INFO_2</A>, or <A href="printer_info_4.html" tppabs="http://www.vbapi.com/ref/p/printer_info_4.html">PRINTER_INFO_4</A> structure.  Note that structures 4 and 5 are the quickest ones to use.  The attributes of the chosen structure determine what kinds of information about the printer(s) is returned.  The information itself is put into the array passed as <VAR>pPrinterEnum</VAR>, which can then be copied into an array of data structures.  The function returns 1 if successful, or 0 if an error occured.
+
+<P><B>Note for Visual Basic users:</B> Due to limitations in the Visual Basic language, it is impossible to pass an array of PRINTER_INFO_* structures as <VAR>pPrinterEnum</VAR> -- the array must be of Long-type elements.  Also, for some reason the <A href="copymemory.html" tppabs="http://www.vbapi.com/ref/c/copymemory.html">CopyMemory</A> function cannot be used to successfully transfer the array information into the structure.  Instead, each individual member of the data structure must be set manually.  Look at the two examples for details how.  In order to convert a Long-type string pointer (in the array) to a string, variants of the <A href="lstrcpy.html" tppabs="http://www.vbapi.com/ref/l/lstrcpy.html">lstrcpy</A> and <A href="lstrlen.html" tppabs="http://www.vbapi.com/ref/l/lstrlen.html">lstrlen</A> function must be used.  Again, see the examples.  <A href="copymemory.html" tppabs="http://www.vbapi.com/ref/c/copymemory.html">CopyMemory</A>, however, can be used to copy the data structures which make up parts of the <A href="printer_info_2.html" tppabs="http://www.vbapi.com/ref/p/printer_info_2.html">PRINTER_INFO_2</A> data structure.
+
+<DL>
+<DT><VAR>flags</VAR><DD>One or more of the following flags specifying which printers to find information about (note that PRINTER_ENUM_LOCAL and PRINTER_ENUM_CONNECTIONS are the only valid flags when using <A href="printer_info_4.html" tppabs="http://www.vbapi.com/ref/p/printer_info_4.html">PRINTER_INFO_4</A>):
+<DL>
+<DT>PRINTER_ENUM_CONNECTIONS = &amp;H4<DD><B>Win NT only:</B> Get information about the network printers which the computer has made connections to.
+<DT>PRINTER_ENUM_DEFAULT = &amp;H1<DD><B>Win 95/98 only:</B> Get information about the computer's default printer.
+<DT>PRINTER_ENUM_LOCAL = &amp;H2<DD>Get information about local printers (the ones directly connected to the system).  Win 95/98 for some reason also considers network printers to be local.
+<DT>PRINTER_ENUM_NAME = &amp;H8<DD>Get information about all the printers under the network domain specified by <VAR>name</VAR>.
+<DT>PRINTER_ENUM_NETWORK = &amp;H40<DD><B>Win NT only:</B> Get information about all the printers under the computer's domain in the network.  This only works with the <A href="printer_info_1.html" tppabs="http://www.vbapi.com/ref/p/printer_info_1.html">PRINTER_INFO_1</A> structure.
+<DT>PRINTER_ENUM_REMOTE = &amp;H10<DD><B>Win NT only:</B> Same as PRINTER_ENUM_NETWORK.
+<DT>PRINTER_ENUM_SHARED = &amp;H20<DD>Get information about all the printers with the shared attribute.
+</DL>
+<DT><VAR>name</VAR><DD>The name of the network domain to look under, if applicable.  See <VAR>flags</VAR> to see when this would be used.  If not used, set this parameter to an empty string.
+<DT><VAR>Level</VAR><DD>Specifies which PRINTER_INFO_* structure to use.  For Win 95/98, this can be 1, 2, or 5.  For Win NT, this can be 1, 2, or 4.
+<DT><VAR>pPrinterEnum</VAR><DD>An array which receives all of the information found by the function.  This needs to be copied manually into the PRINTER_INFO_* structure.
+<DT><VAR>cdBuf</VAR><DD>The size in bytes of the array passed as <VAR>pPrinterEnum</VAR>.
+<DT><VAR>pcbNeeded</VAR><DD>If successful, receives the number of bytes of information the function found.  If unsuccessful, receives the number of bytes that <VAR>pPrinterEnum</VAR> must have in order to receive all of the information.
+<DT><VAR>pcReturned</VAR><DD>Receives the number of printers found by the function.
+</DL>
+
+<P><B>Example #1:</B>
+<PRE><CODE class="example">' Get information about all of the local printers using structure 1.  Note how
+' the elements of the array are loaded into an array of data structures manually.  Also
+' note how the following special declares must be used to allow numeric string pointers
+' to be used in place of strings:
+Declare Function <A href="lstrcpy.html" tppabs="http://www.vbapi.com/ref/l/lstrcpy.html">lstrcpy</A> Lib "kernel32.dll" Alias "lstrcpyA" (ByVal lpString1 As String, ByVal lpString2 As Long) As Long
+Declare Function <A href="lstrlen.html" tppabs="http://www.vbapi.com/ref/l/lstrlen.html">lstrlen</A> Lib "kernel32.dll" Alias "lstrlenA" (ByVal lpString As Long) As Long
+
+Dim longbuffer() As Long  ' resizable array receives information from the function
+Dim printinfo() As <A href="printer_info_1.html" tppabs="http://www.vbapi.com/ref/p/printer_info_1.html">PRINTER_INFO_1</A>  ' values inside longbuffer() will be put into here
+Dim numbytes As Long  ' size in bytes of longbuffer()
+Dim numneeded As Long  ' receives number of bytes necessary if longbuffer() is too small
+Dim numprinters As Long  ' receives number of printers found
+Dim c As Integer, retval As Long  ' counter variable &amp; return value
+
+' Get information about the local printers
+numbytes = 3076  ' should be sufficiently big, but it may not be
+ReDim longbuffer(0 To numbytes / 4) As Long  ' resize array -- note how 1 Long = 4 bytes
+retval = <B>EnumPrinters</B>(PRINTER_ENUM_LOCAL, "", 1, longbuffer(0), numbytes, numneeded, numprinters)
+If retval = 0 Then  ' try enlarging longbuffer() to receive all necessary information
+  numbytes = numneeded
+  ReDim longbuffer(0 To numbytes / 4) As Long  ' make it large enough
+  retval = <B>EnumPrinters</B>(PRINTER_ENUM_LOCAL, "", 1, longbuffer(0), numbytes, numneeded, numprinters)
+  If retval = 0  ' failed again!
+    Debug.Print "Could not successfully enumerate the printes."
+    End  ' abort program
+  End If
+End If
+
+' Convert longbuffer() data into printinfo()
+ReDim printinfo(0 To numprinters - 1) As <A href="printer_info_1.html" tppabs="http://www.vbapi.com/ref/p/printer_info_1.html">PRINTER_INFO_1</A>  ' room for each printer
+For c = 0 To numprinters - 1  ' loop, putting each set of information into each element
+  ' longbuffer(4 * c) = .flags, longbuffer(4 * c + 1) = .pDescription, etc.
+  ' For each string, the string is first buffered to provide enough room, and then the string is copied.
+  printinfo(c).flags = longbuffer(4 * c)
+  printinfo(c).pDescription = Space(<A href="lstrlen.html" tppabs="http://www.vbapi.com/ref/l/lstrlen.html">lstrlen</A>(longbuffer(4 * c + 1)))
+  retval = <A href="lstrcpy.html" tppabs="http://www.vbapi.com/ref/l/lstrcpy.html">lstrcpy</A>(printinfo(c).pDescription, longbuffer(4 * c + 1))
+  printinfo(c).pName = Space(<A href="lstrlen.html" tppabs="http://www.vbapi.com/ref/l/lstrlen.html">lstrlen</A>(longbuffer(4 * c + 2)))
+  retval = <A href="lstrcpy.html" tppabs="http://www.vbapi.com/ref/l/lstrcpy.html">lstrcpy</A>(printinfo(c).pName, longbuffer(4 * c + 2))
+  printinfo(c).pComment = Space(<A href="lstrlen.html" tppabs="http://www.vbapi.com/ref/l/lstrlen.html">lstrlen</A>(longbuffer(4 * c + 3)))
+  retval = <A href="lstrcpy.html" tppabs="http://www.vbapi.com/ref/l/lstrcpy.html">lstrcpy</A>(printinfo(c).pComment, longbuffer(4 * c + 3))
+Next c
+
+' Display name of each printer
+For c = 0 To numprinters - 1
+  Debug.Print "Name of printer"; c + 1; " is: "; printinfo(c).pName
+Next c</CODE></PRE>
+
+<P><B>Example #2:</B>
+<PRE><CODE class="example">' Get information about all of the local printers using structure 2.  Note how
+' the elements of the array are loaded into an array of data structures manually.  Also
+' note how the following special declares must be used to allow numeric string pointers
+' to be used in place of strings:
+Declare Function <A href="lstrcpy.html" tppabs="http://www.vbapi.com/ref/l/lstrcpy.html">lstrcpy</A> Lib "kernel32.dll" Alias "lstrcpyA" (ByVal lpString1 As String, ByVal lpString2 As Long) As Long
+Declare Function <A href="lstrlen.html" tppabs="http://www.vbapi.com/ref/l/lstrlen.html">lstrlen</A> Lib "kernel32.dll" Alias "lstrlenA" (ByVal lpString As Long) As Long
+
+Dim longbuffer() As Long  ' resizable array receives information from the function
+Dim printinfo() As <A href="printer_info_2.html" tppabs="http://www.vbapi.com/ref/p/printer_info_2.html">PRINTER_INFO_2</A>  ' values inside longbuffer() will be put into here
+Dim numbytes As Long  ' size in bytes of longbuffer()
+Dim numneeded As Long  ' receives number of bytes necessary if longbuffer() is too small
+Dim numprinters As Long  ' receives number of printers found
+Dim c As Integer, retval As Long  ' counter variable &amp; return value
+
+' Get information about the local printers
+numbytes = 3076  ' should be sufficiently big, but it may not be
+ReDim longbuffer(0 To numbytes / 4) As Long  ' resize array -- note how 1 Long = 4 bytes
+retval = <B>EnumPrinters</B>(PRINTER_ENUM_LOCAL, "", 2, longbuffer(0), numbytes, numneeded, numprinters)
+If retval = 0 Then  ' try enlarging longbuffer() to receive all necessary information
+  numbytes = numneeded
+  ReDim longbuffer(0 To numbytes / 4) As Long  ' make it large enough
+  retval = <B>EnumPrinters</B>(PRINTER_ENUM_LOCAL, "", 2, longbuffer(0), numbytes, numneeded, numprinters)
+  If retval = 0  ' failed again!
+    Debug.Print "Could not successfully enumerate the printes."
+    End  ' abort program
+  End If
+End If
+
+' Convert longbuffer() data into printinfo()
+ReDim printinfo(0 To numprinters - 1) As <A href="printer_info_2.html" tppabs="http://www.vbapi.com/ref/p/printer_info_2.html">PRINTER_INFO_2</A>  ' room for each printer
+For c = 0 To numprinters - 1  ' loop, putting each set of information into each element
+  ' longbuffer(21 * c) = .pServerName, longbuffer(21 * c + 1) = .pPrinterName, etc.
+  ' For each string, the string is first buffered to provide enough room, and then the string is copied.
+  ' For each structure, the memory of it is directly copied via CopyMemory using the pointer.
+  printinfo(c).pServerName = Space(<A href="lstrlen.html" tppabs="http://www.vbapi.com/ref/l/lstrlen.html">lstrlen</A>(longbuffer(21 * c)))
+  retval = <A href="lstrcpy.html" tppabs="http://www.vbapi.com/ref/l/lstrcpy.html">lstrcpy</A>(printinfo(c).pServerName, longbuffer(21 * c))
+  printinfo(c).pPrinterName = Space(<A href="lstrlen.html" tppabs="http://www.vbapi.com/ref/l/lstrlen.html">lstrlen</A>(longbuffer(21 * c + 1)))
+  retval = <A href="lstrcpy.html" tppabs="http://www.vbapi.com/ref/l/lstrcpy.html">lstrcpy</A>(printinfo(c).pPrinterName, longbuffer(21 * c + 1))
+  printinfo(c).pShareName = Space(<A href="lstrlen.html" tppabs="http://www.vbapi.com/ref/l/lstrlen.html">lstrlen</A>(longbuffer(21 * c + 2)))
+  retval = <A href="lstrcpy.html" tppabs="http://www.vbapi.com/ref/l/lstrcpy.html">lstrcpy</A>(printinfo(c).pShareName, longbuffer(21 * c + 2))
+  printinfo(c).pPortName = Space(<A href="lstrlen.html" tppabs="http://www.vbapi.com/ref/l/lstrlen.html">lstrlen</A>(longbuffer(21 * c + 3)))
+  retval = <A href="lstrcpy.html" tppabs="http://www.vbapi.com/ref/l/lstrcpy.html">lstrcpy</A>(printinfo(c).pPortName, longbuffer(21 * c + 3))
+  printinfo(c).pDriverName = Space(<A href="lstrlen.html" tppabs="http://www.vbapi.com/ref/l/lstrlen.html">lstrlen</A>(longbuffer(21 * c + 4)))
+  retval = <A href="lstrcpy.html" tppabs="http://www.vbapi.com/ref/l/lstrcpy.html">lstrcpy</A>(printinfo(c).pDriverName, longbuffer(21 * c + 4))
+  printinfo(c).pComment = Space(<A href="lstrlen.html" tppabs="http://www.vbapi.com/ref/l/lstrlen.html">lstrlen</A>(longbuffer(21 * c + 5)))
+  retval = <A href="lstrcpy.html" tppabs="http://www.vbapi.com/ref/l/lstrcpy.html">lstrcpy</A>(printinfo(c).pComment, longbuffer(21 * c + 5))
+  printinfo(c).pLocation = Space(<A href="lstrlen.html" tppabs="http://www.vbapi.com/ref/l/lstrlen.html">lstrlen</A>(longbuffer(21 * c + 6)))
+  retval = <A href="lstrcpy.html" tppabs="http://www.vbapi.com/ref/l/lstrcpy.html">lstrcpy</A>(printinfo(c).pLocation, longbuffer(21 * c + 6))
+  <A href="copymemory.html" tppabs="http://www.vbapi.com/ref/c/copymemory.html">CopyMemory</A> printinfo(c).pDevMode, longbuffer(21 * c + 7), Len(printinfo(c).pDevMode)
+  printinfo(c).pSepFile = Space(<A href="lstrlen.html" tppabs="http://www.vbapi.com/ref/l/lstrlen.html">lstrlen</A>(longbuffer(21 * c + 8)))
+  retval = <A href="lstrcpy.html" tppabs="http://www.vbapi.com/ref/l/lstrcpy.html">lstrcpy</A>(printinfo(c).pSepFile, longbuffer(21 * c + 8))
+  printinfo(c).pPrintProcessor = Space(<A href="lstrlen.html" tppabs="http://www.vbapi.com/ref/l/lstrlen.html">lstrlen</A>(longbuffer(21 * c + 9)))
+  retval = <A href="lstrcpy.html" tppabs="http://www.vbapi.com/ref/l/lstrcpy.html">lstrcpy</A>(printinfo(c).pPrintProcessor, longbuffer(21 * c + 9))
+  printinfo(c).pDatatype = Space(<A href="lstrlen.html" tppabs="http://www.vbapi.com/ref/l/lstrlen.html">lstrlen</A>(longbuffer(21 * c + 10)))
+  retval = <A href="lstrcpy.html" tppabs="http://www.vbapi.com/ref/l/lstrcpy.html">lstrcpy</A>(printinfo(c).pDatatype, longbuffer(21 * c + 10))
+  printinfo(c).pParameters = Space(<A href="lstrlen.html" tppabs="http://www.vbapi.com/ref/l/lstrlen.html">lstrlen</A>(longbuffer(21 * c + 11)))
+  retval = <A href="lstrcpy.html" tppabs="http://www.vbapi.com/ref/l/lstrcpy.html">lstrcpy</A>(printinfo(c).pParameters, longbuffer(21 * c + 11))
+  <A href="copymemory.html" tppabs="http://www.vbapi.com/ref/c/copymemory.html">CopyMemory</A> printinfo(c).pSecurityDescriptor, longbuffer(21 * c + 12), Len(printinfo(c).pSecurityDescriptor)
+  printinfo(c).Attributes = longbuffer(21 * c + 13)
+  printinfo(c).Priority = longbuffer(21 * c + 14)
+  printinfo(c).DefaultPriority = longbuffer(21 * c + 15)
+  printinfo(c).StartTime = longbuffer(21 * c + 16)
+  printinfo(c).UntilTime = longbuffer(21 * c + 17)
+  printinfo(c).Status = longbuffer(21 * c + 18)
+  printinfo(c).cJobs = longbuffer(21 * c + 19)
+  printinfo(c).AveragePPM = longbuffer(21 * c + 20)
+Next c
+
+' Display the name of each printer and its average page per minute (ppm) rate
+For c = 0 To numprinters - 1
+  Debug.Print printinfo(c).pPrinterName; " prints an average of"; printinfo(c).AveragePPM; "pages per minute."
+Next c
+</CODE></PRE>
+
+<P><B>Category:</B> <A href="index.html#printers" tppabs="http://www.vbapi.com/ref/index.html#printers">Printers</A></P>
+
+<P><A href="funca.html" tppabs="http://www.vbapi.com/ref/funca.html">Go back to the alphabetical Function listing.</A><BR>
+<A href="index.html" tppabs="http://www.vbapi.com/ref/index.html">Go back to the Reference section index.</A></P>
+
+<HR>
+
+<P>This page is copyright &copy; 2000 Paul Kuliniewicz.  <A href="copyrite.html" tppabs="http://www.vbapi.com/copyrite.html" rel="copyright">Copyright Information.</A><BR>
+<A href="index-1.html" tppabs="http://www.vbapi.com/index.html">Go back to the Windows API Guide home page.</A><BR>
+E-mail: <A href="javascript:if(confirm('http://www.vbapi.com/email.html  \n\nThis file was not retrieved by Teleport Pro, because it is addressed on a domain or path outside the boundaries set for its Starting Address.  \n\nDo you want to open it from the server?'))window.location='http://www.vbapi.com/email.html'" tppabs="http://www.vbapi.com/email.html">vbapi@vbapi.com</A>  <A href="javascript:if(confirm('http://www.vbapi.com/email.html  \n\nThis file was not retrieved by Teleport Pro, because it is addressed on a domain or path outside the boundaries set for its Starting Address.  \n\nDo you want to open it from the server?'))window.location='http://www.vbapi.com/email.html#secure'" tppabs="http://www.vbapi.com/email.html#secure">Send Encrypted E-Mail</A><BR>
+This page is at <A href="enumprinters.html" tppabs="http://www.vbapi.com/ref/e/enumprinters.html">http://www.vbapi.com/ref/e/enumprinters.html</A>
+
+</BODY>
+</HTML>

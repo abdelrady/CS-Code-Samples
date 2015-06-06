@@ -1,0 +1,83 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+<HTML lang="en-us">
+<HEAD>
+<TITLE>Windows API Guide: EnumFontFamExProc Callback Function</TITLE>
+<META content="vbapi@vbapi.com" name="author">
+<META content="Information about the EnumFontFamExProc callback function in the Windows API, geared towards the Visual Basic user." name="description">
+<META content="Kuliniewicz,Windows,Windows 95,Windows NT,Windows 98,Windows CE,Windows 2000,API,Application Programming Interface,Programming,Visual Basic,Basic,VB,EnumFontFamExProc" name="keywords">
+<META content="Omicron HTML Editor" name="generator">
+<META content="Sun, 24 Oct 1999 00:10:00 GMT" http-equiv="Last-Modified">
+<LINK href="default.css" tppabs="http://www.vbapi.com/css/default.css" rel="stylesheet" type="text/css">
+<LINK href="index-1.html" tppabs="http://www.vbapi.com/index.html" rel="home">
+
+<LINK href="glossary.html" tppabs="http://www.vbapi.com/ref/glossary.html" rel="glossary">
+<LINK href="copyrite.html" tppabs="http://www.vbapi.com/copyrite.html" rel="copyright">
+</HEAD>
+<BODY>
+
+<!-- Begin Adslot1 -->
+<CENTER>
+<SCRIPT language="JAVASCRIPT">
+<!-- hide from older browsers
+now = new Date();
+my_random = now.getTime();
+document.write('<A href="http://adex3.flycast.com/server/socket/127.0.0.1:2800/click/VBWorldnet/VBAPI/' + my_random + '">');
+document.write('<IMG width="468" height="60" border="1" src="http://adex3.flycast.com/server/socket/127.0.0.1:2800/ad/VBWorldnet/VBAPI/' + my_random + '"></A>');
+// -->
+</SCRIPT>
+</CENTER>
+<!-- End Adslot1 -->
+
+<HR>
+
+<H1>EnumFontFamExProc Callback Function</H1>
+
+<P><PRE><CODE class="declare">Public Function EnumFontFamExProc (ByVal lpelfe As Long, ByVal lpntme As Long, ByVal FontType As Long, ByVal lParam As Long) As Long
+  ' application-specific code goes here
+End Function</CODE></PRE></P>
+
+<H2>Description &amp; Usage</H2>
+<P>The <B>EnumFontFamExProc</B> <A class="def" href="glossary.html#callbackfunction" tppabs="http://www.vbapi.com/ref/glossary.html#callbackfunction" rel="glossary">callback function</A> processes each font enumerated by <A href="enumfontfamiliesex.html" tppabs="http://www.vbapi.com/ref/e/enumfontfamiliesex.html">EnumFontFamiliesEx</A>.  The function receives a large amount of information describing both the <A class="def" href="glossary.html#logical" tppabs="http://www.vbapi.com/ref/glossary.html#logical" rel="glossary">logical</A> font attributes as well as its metrics.  Information describing TrueType fonts is received by the function in a slightly different format than non-TrueType font information.  This function does not necessarily have to be named <B>EnumFontFamExProc</B> -- that is simply the name given to it in discussions about the Windows API.</P>
+
+<H2>Return Value</H2>
+<P>If the function returns 0, <A href="enumfontfamiliesex.html" tppabs="http://www.vbapi.com/ref/e/enumfontfamiliesex.html">EnumFontFamiliesEx</A> immediately stops enumerating fonts.  If the function returns a non-zero value, <A href="enumfontfamiliesex.html" tppabs="http://www.vbapi.com/ref/e/enumfontfamiliesex.html">EnumFontFamiliesEx</A> continues enumerating fonts as long as another one can be found.</P>
+
+<H2>Visual Basic-Specific Issues</H2>
+<P>Like all callback functions, <B>EnumFontFamExProc</B> must be declared Public and be defined in a module.</P>
+
+<H2>Parameters</H2>
+<P><DL>
+<DT><VAR>lpelfe</VAR><DD>A <A class="def" href="glossary.html#pointer" tppabs="http://www.vbapi.com/ref/glossary.html#pointer" rel="glossary">pointer</A> to an <A href="enumlogfontex.html" tppabs="http://www.vbapi.com/ref/e/enumlogfontex.html">ENUMLOGFONTEX</A> structure describing the logical attributes of the font.
+<DT><VAR>lpntme</VAR><DD>If the font is a TrueType font, this is a pointer to a <A href="newtextmetricex.html" tppabs="http://www.vbapi.com/ref/n/newtextmetricex.html">NEWTEXTMETRICEX</A> structure.  If the font is not a TrueType font, this is a pointer to a <A href="textmetric.html" tppabs="http://www.vbapi.com/ref/t/textmetric.html">TEXTMETRIC</A> structure.  Either structure describes the text metrics of the font.
+<DT><VAR>FontType</VAR><DD>A combination of the following flags (although usually only one is used) identifying the type of font:
+<DL>
+<DT>DEVICE_FONTTYPE<DD>The font is a device font.
+<DT>RASTER_FONTTYPE<DD>The font is a raster font.
+<DT>TRUETYPE_FONTTYPE<DD>The font is a TrueType font.
+</DL>
+<DT><VAR>lParam</VAR><DD>Additional data specified by <A href="enumfontfamiliesex.html" tppabs="http://www.vbapi.com/ref/e/enumfontfamiliesex.html">EnumFontFamiliesEx</A>.
+</DL></P>
+
+<H2>Constant Definitions</H2>
+<P><PRE><CODE class="const">Const DEVICE_FONTTYPE = &amp;H2
+Const RASTER_FONTTYPE = &amp;H1
+Const TRUETYPE_FONTTYPE = &amp;H4</CODE></PRE></P>
+
+<H2>Used By</H2>
+<P><A href="enumfontfamiliesex.html" tppabs="http://www.vbapi.com/ref/e/enumfontfamiliesex.html">EnumFontFamiliesEx</A></P>
+
+<P><A href="calla.html" tppabs="http://www.vbapi.com/ref/calla.html">Go back to the Callback Function listing.</A><BR>
+<A href="index.html" tppabs="http://www.vbapi.com/ref/index.html">Go back to the Reference section index.</A></P>
+
+<HR>
+
+<P><B>Last Modified:</B> October 23, 1999<BR>
+This page is copyright &copy; 1999 Paul Kuliniewicz.  
+<A href="copyrite.html" tppabs="http://www.vbapi.com/copyrite.html" rel="copyright">Copyright Information</A>  <B>Revised October 29, 2000</B><BR>
+
+<A href="index-1.html" tppabs="http://www.vbapi.com/index.html">Go back to the Windows API Guide home page.</A><BR>
+E-mail: <A href="javascript:if(confirm('http://www.vbapi.com/email.html  \n\nThis file was not retrieved by Teleport Pro, because it is addressed on a domain or path outside the boundaries set for its Starting Address.  \n\nDo you want to open it from the server?'))window.location='http://www.vbapi.com/email.html'" tppabs="http://www.vbapi.com/email.html">vbapi@vbapi.com</A>  <A href="javascript:if(confirm('http://www.vbapi.com/email.html  \n\nThis file was not retrieved by Teleport Pro, because it is addressed on a domain or path outside the boundaries set for its Starting Address.  \n\nDo you want to open it from the server?'))window.location='http://www.vbapi.com/email.html#secure'" tppabs="http://www.vbapi.com/email.html#secure">Send Encrypted E-Mail</A><BR>
+This page is at <A href="enumfontfamexproc.html" tppabs="http://www.vbapi.com/ref/e/enumfontfamexproc.html">http://www.vbapi.com/ref/e/enumfontfamexproc.html</A>
+</P>
+</BODY>
+</HTML>

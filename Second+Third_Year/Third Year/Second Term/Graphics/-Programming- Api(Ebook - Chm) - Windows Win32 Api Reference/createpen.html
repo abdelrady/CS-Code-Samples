@@ -1,0 +1,122 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+<HTML lang="en-us">
+<HEAD>
+<TITLE>Windows API Guide: CreatePen Function</TITLE>
+<META content="vbapi@vbapi.com" name="author">
+<META content="Information about the CreatePen function in the Windows API, geared towards the Visual Basic user." name="description">
+<META content="Kuliniewicz,Windows,Windows 95,Windows NT,Windows 98,Windows CE,Windows 2000,API,Application Programming Interface,Programming,Visual Basic,Basic,VB,CreatePen" name="keywords">
+<META content="Omicron HTML Editor" name="generator">
+<META content="Sat, 16 Oct 1999 17:43:00 GMT" http-equiv="Last-Modified">
+<LINK href="default.css" tppabs="http://www.vbapi.com/css/default.css" rel="stylesheet" type="text/css">
+<LINK href="index-1.html" tppabs="http://www.vbapi.com/index.html" rel="home">
+
+<LINK href="glossary.html" tppabs="http://www.vbapi.com/ref/glossary.html" rel="glossary">
+<LINK href="copyrite.html" tppabs="http://www.vbapi.com/copyrite.html" rel="copyright">
+</HEAD>
+<BODY>
+
+<!-- Begin Adslot1 -->
+<CENTER>
+<SCRIPT language="JAVASCRIPT">
+<!-- hide from older browsers
+now = new Date();
+my_random = now.getTime();
+document.write('<A href="http://adex3.flycast.com/server/socket/127.0.0.1:2800/click/VBWorldnet/VBAPI/' + my_random + '">');
+document.write('<IMG width="468" height="60" border="1" src="http://adex3.flycast.com/server/socket/127.0.0.1:2800/ad/VBWorldnet/VBAPI/' + my_random + '"></A>');
+// -->
+</SCRIPT>
+</CENTER>
+<!-- End Adslot1 -->
+
+<HR>
+
+<H1>CreatePen Function</H1>
+
+<P><CODE class="declare">Declare Function CreatePen Lib "gdi32.dll" (ByVal fnPenStyle As Long, ByVal nWidth As Long, ByVal crColor As Long) As Long</CODE></P>
+
+<H2>Platforms</H2>
+<P><UL>
+<LI><B>Windows 95:</B> Supported.
+<LI><B>Windows 98:</B> Supported.
+<LI><B>Windows NT:</B> Requires Windows NT 3.1 or later.
+<LI><B>Windows 2000:</B> Supported.
+<LI><B>Windows CE:</B> Requires Windows CE 2.0 or later.
+</UL></P>
+
+<H2>Description &amp; Usage</H2>
+<P><B>CreatePen</B> creates a <A class="def" href="glossary.html#pen" tppabs="http://www.vbapi.com/ref/glossary.html#pen" rel="glossary">pen</A> object.  The shape of the pen created by the function is always a square having a side length equal to <VAR>nWidth</VAR>.  After your program is finished using the pen, it must be deleted via the <A href="deleteobject.html" tppabs="http://www.vbapi.com/ref/d/deleteobject.html">DeleteObject</A> function.</P>
+
+<H2>Return Value</H2>
+<P>If an error occured, the function returns 0 (<B>Windows NT, 2000:</B> use <A href="getlasterror.html" tppabs="http://www.vbapi.com/ref/g/getlasterror.html">GetLastError</A> to get the error code).  If successful, the function returns a <A class="def" href="glossary.html#handle" tppabs="http://www.vbapi.com/ref/glossary.html#handle" rel="glossary">handle</A> to the newly created pen.</P>
+
+<H2>Visual Basic-Specific Issues</H2>
+<P>None.</P>
+
+<H2>Parameters</H2>
+<P><DL>
+<DT><VAR>fnPenStyle</VAR><DD>One of the following flags specifying the style of the pen to create:
+<DL>
+<DT>PS_SOLID<DD>The pen is solid.
+<DT>PS_DASH<DD>The pen is dashed.  <VAR>nWidth</VAR> must be less than or equal to one.
+<DT>PS_DOT<DD>The pen is dotted.  <VAR>nWidth</VAR> must be less than or equal to one.
+<DT>PS_DASHDOT<DD>The pen has alternating dashes and dots.  <VAR>nWidth</VAR> must be less than or equal to one.
+<DT>PS_DASHDOTDOT<DD>The pen has alternating dashes followed by two dots.  <VAR>nWidth</VAR> must be less than or equal to one.
+<DT>PS_NULL<DD>The pen is invisible.
+<DT>PS_INSIDEFRAME<DD>The pen is solid.  Whenever a drawing function draws a figure inside a bounding rectangle, the dimensions of the figure are shrunk so that the entire figure, including the width of the pen, fits entirely within the bounding rectangle.
+</DL>
+<DT><VAR>nWidth</VAR><DD>The width of the pen.  If this is 0, the pen is always exactly one pixel wide no matter what.
+<DT><VAR>crColor</VAR><DD>The RGB value of the color to give the pen.
+</DL></P>
+
+<H2>Constant Definitions</H2>
+<P><PRE><CODE class="const">Const PS_SOLID = 0
+Const PS_DASH = 1
+Const PS_DOT = 2
+Const PS_DASHDOT = 3
+Const PS_DASHDOTDOT = 4
+Const PS_NULL = 5
+Const PS_INSIDEFRAME = 6</CODE></PRE></P>
+
+<H2>Example</H2>
+<P><PRE><CODE class="example"><SPAN class="com">' This code is licensed according to the terms and conditions listed <A href="copyrite.html#license" tppabs="http://www.vbapi.com/copyrite.html#license" rel="copyright">here</A>.</SPAN>
+
+' Draw an ellipse on window Form1 using a one-pixel-wide
+' square dashed green pen.
+Dim hPen As Long  ' handle to the pen created
+Dim hOldPen As Long  ' handle to Form1's previously selected pen
+Dim retval As Long  ' return value
+
+' Create the square dashed green pen with a width of zero (always one pixel).
+hPen = <B>CreatePen</B>(PS_DASH, 0, RGB(0, 255, 0))
+' Select the pen for use by window Form1.
+hOldPen = <A href="selectobject.html" tppabs="http://www.vbapi.com/ref/s/selectobject.html">SelectObject</A>(Form1.hDC, hPen)
+
+' Draw an ellipse with bounding rectangle (100,150)-(350,300).
+retval = <A href="ellipse.html" tppabs="http://www.vbapi.com/ref/e/ellipse.html">Ellipse</A>(Form1.hDC, 100, 150, 350, 300)
+
+' Select the old pen for use by Form1.
+retval = <A href="selectobject.html" tppabs="http://www.vbapi.com/ref/s/selectobject.html">SelectObject</A>(Form1.hDC, hOldPen)
+' Delete the pen we created to free up resources.
+retval = <A href="deleteobject.html" tppabs="http://www.vbapi.com/ref/d/deleteobject.html">DeleteObject</A>(hPen)</CODE></PRE></P>
+
+<H2>See Also</H2>
+<P><A href="createpenindirect.html" tppabs="http://www.vbapi.com/ref/c/createpenindirect.html">CreatePenIndirect</A></P>
+
+<H2>Category</H2>
+<P><A href="funcc.html#pens" tppabs="http://www.vbapi.com/ref/funcc.html#pens">Pens</A></P>
+
+<P><A href="funca.html" tppabs="http://www.vbapi.com/ref/funca.html">Go back to the alphabetical Function listing.</A><BR>
+<A href="index.html" tppabs="http://www.vbapi.com/ref/index.html">Go back to the Reference section index.</A></P>
+
+<HR>
+
+<P><B>Last Modified:</B> October 16, 1999<BR>
+This page is copyright &copy; 1999 Paul Kuliniewicz.  
+<A href="copyrite.html" tppabs="http://www.vbapi.com/copyrite.html" rel="copyright">Copyright Information</A>  <B>Revised October 29, 2000</B><BR>
+
+<A href="index-1.html" tppabs="http://www.vbapi.com/index.html">Go back to the Windows API Guide home page.</A><BR>
+E-mail: <A href="javascript:if(confirm('http://www.vbapi.com/email.html  \n\nThis file was not retrieved by Teleport Pro, because it is addressed on a domain or path outside the boundaries set for its Starting Address.  \n\nDo you want to open it from the server?'))window.location='http://www.vbapi.com/email.html'" tppabs="http://www.vbapi.com/email.html">vbapi@vbapi.com</A>  <A href="javascript:if(confirm('http://www.vbapi.com/email.html  \n\nThis file was not retrieved by Teleport Pro, because it is addressed on a domain or path outside the boundaries set for its Starting Address.  \n\nDo you want to open it from the server?'))window.location='http://www.vbapi.com/email.html#secure'" tppabs="http://www.vbapi.com/email.html#secure">Send Encrypted E-Mail</A><BR>
+This page is at <A href="createpen.html" tppabs="http://www.vbapi.com/ref/c/createpen.html">http://www.vbapi.com/ref/c/createpen.html</A>
+</P>
+</BODY>
+</HTML>

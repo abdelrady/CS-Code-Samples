@@ -1,0 +1,1 @@
+"%programfiles%\Internet Explorer\iexplore.exe" %1

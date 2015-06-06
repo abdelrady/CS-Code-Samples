@@ -1,0 +1,112 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+<HTML lang="en-us">
+<HEAD>
+<TITLE>Windows API Guide: CB_GETLBTEXT Message</TITLE>
+<META content="vbapi@vbapi.com" name="author">
+<META content="Information about the CB_GETLBTEXT message in the Windows API, geared towards the Visual Basic user." name="description">
+<META content="Kuliniewicz,Windows,Windows 95,Windows NT,Windows 98,Windows CE,Windows 2000,API,Application Programming Interface,Programming,Visual Basic,Basic,VB,CB_GETLBTEXT" name="keywords">
+<META content="Omicron HTML Editor" name="generator">
+<LINK href="default.css" tppabs="http://www.vbapi.com/css/default.css" rel="stylesheet" type="text/css">
+<LINK href="index-1.html" tppabs="http://www.vbapi.com/index.html" rel="home">
+<LINK href="glossary.html" tppabs="http://www.vbapi.com/ref/glossary.html" rel="glossary">
+<LINK href="copyrite.html" tppabs="http://www.vbapi.com/copyrite.html" rel="copyright">
+</HEAD>
+<BODY>
+
+<!-- Begin Adslot1 -->
+<CENTER>
+<SCRIPT language="JAVASCRIPT">
+<!-- hide from older browsers
+now = new Date();
+my_random = now.getTime();
+document.write('<A href="http://adex3.flycast.com/server/socket/127.0.0.1:2800/click/VBWorldnet/VBAPI/' + my_random + '">');
+document.write('<IMG width="468" height="60" border="1" src="http://adex3.flycast.com/server/socket/127.0.0.1:2800/ad/VBWorldnet/VBAPI/' + my_random + '"></A>');
+// -->
+</SCRIPT>
+</CENTER>
+<!-- End Adslot1 -->
+
+<HR>
+
+<H1>CB_GETLBTEXT Message</H1>
+
+<H2>Platforms</H2>
+<P><UL>
+<LI><B>Windows 95:</B> Supported.
+<LI><B>Windows 98:</B> Supported.
+<LI><B>Windows NT:</B> Requires Windows NT 3.1 or later.
+<LI><B>Windows 2000:</B> Supported.
+<LI><B>Windows CE:</B> Requires Windows CE 1.0 or later.
+</UL></P>
+
+<H2>Description &amp; Usage</H2>
+<P>The <B>CB_GETLBTEXT</B> message retrieves the text of one of the items in the list box portion of a combo box control.</P>
+
+<H2>Return Value</H2>
+<P>If successful, the message returns the length of the string copied into the string passed as <VAR>lParam</VAR>, not including the terminating null character.  If an error occured, the message returns -1.</P>
+
+<H2>Visual Basic-Specific Issues</H2>
+<P>None.</P>
+
+<H2>Parameters</H2>
+<P><DL>
+<DT><VAR>wParam</VAR><DD>The zero-based index of the list box item to retrieve the text of.  (The first item has an index of 0, etc.)
+<DT><VAR>lParam</VAR><DD>The string to copy the list box item text into.  The string must have enough room to receive the entire string along with a terminating null character.
+</DL></P>
+
+<H2>Constant Definitions</H2>
+<P><PRE><CODE class="const"><SPAN class="kw">Const</SPAN> CB_GETLBTEXT = &amp;H148</CODE></PRE></P>
+
+<H2>Example</H2>
+<P><PRE><CODE class="example"><SPAN class="com">' This code is licensed according to the terms and conditions listed <A href="copyrite.html#license" tppabs="http://www.vbapi.com/copyrite.html#license" rel="copyright">here</A>.</SPAN>
+
+<SPAN class="com">' Declarations and such needed for the example:
+' (Copy them to the (declarations) section of a module.)</SPAN>
+<SPAN class="kw">Public Declare Function</SPAN> <A href="sendmessage.html" tppabs="http://www.vbapi.com/ref/s/sendmessage.html">SendMessage</A> <SPAN class="kw">Lib</SPAN> "user32.dll" <SPAN class="kw">Alias</SPAN> "SendMessageA" (<SPAN class="kw">ByVal</SPAN> hWnd  _
+	<SPAN class="kw">As Long</SPAN>, <SPAN class="kw">ByVal</SPAN> Msg <SPAN class="kw">As Long</SPAN>, wParam <SPAN class="kw">As Any</SPAN>, lParam <SPAN class="kw">As Any</SPAN>) <SPAN class="kw">As Long</SPAN>
+<SPAN class="kw">Public Const</SPAN> <A href="cb_getcursel.html" tppabs="http://www.vbapi.com/ref/c/cb_getcursel.html">CB_GETCURSEL</A> = &amp;H147
+<SPAN class="kw">Public Const</SPAN> <B>CB_GETLBTEXT</B> = &amp;H148
+<SPAN class="kw">Public Const</SPAN> <A href="cb_getlbtextlen.html" tppabs="http://www.vbapi.com/ref/c/cb_getlbtextlen.html">CB_GETLBTEXTLEN</A> = &amp;H149
+
+<SPAN class="com">' Display the text of whatever item in combo box Combo1
+' is currently selected.  If no list box item is selected, say so.</SPAN>
+<SPAN class="kw">Dim</SPAN> index <SPAN class="kw">As Long</SPAN>       <SPAN class="com">' index to the selected item</SPAN>
+<SPAN class="kw">Dim</SPAN> itemtext <SPAN class="kw">As String</SPAN>  <SPAN class="com">' the text of the selected item</SPAN>
+<SPAN class="kw">Dim</SPAN> textlen <SPAN class="kw">As Long</SPAN>     <SPAN class="com">' the length of the selected item's text</SPAN>
+
+<SPAN class="com">' Determine the index of the selected item.</SPAN>
+index = <A href="sendmessage.html" tppabs="http://www.vbapi.com/ref/s/sendmessage.html">SendMessage</A>(Combo1.<SPAN class="kw">hWnd</SPAN>, <A href="cb_getcursel.html" tppabs="http://www.vbapi.com/ref/c/cb_getcursel.html">CB_GETCURSEL</A>, <SPAN class="kw">ByVal CLng(</SPAN>0<SPAN class="kw">)</SPAN>, <SPAN class="kw">ByVal CLng(</SPAN>0<SPAN class="kw">)</SPAN>)
+<SPAN class="com">' Decide what to do based on that.</SPAN>
+<SPAN class="kw">Select Case</SPAN> index
+<SPAN class="kw">Case -1</SPAN>    <SPAN class="com">' No list box item was selected.</SPAN>
+	<SPAN class="kw">Debug</SPAN>.<SPAN class="kw">Print</SPAN> "No list box item in the combo box is selected."
+<SPAN class="kw">Case Else</SPAN>  <SPAN class="com">' Some item is selected.</SPAN>
+	<SPAN class="com">' Determine how long the item's text is.</SPAN>
+	textlen = <A href="sendmessage.html" tppabs="http://www.vbapi.com/ref/s/sendmessage.html">SendMessage</A>(Combo1.<SPAN class="kw">hWnd</SPAN>, <A href="cb_getlbtextlen.html" tppabs="http://www.vbapi.com/ref/c/cb_getlbtextlen.html">CB_GETLBTEXTLEN</A>, <SPAN class="kw">ByVal CLng(</SPAN>index<SPAN class="kw">)</SPAN>, <SPAN class="kw">ByVal CLng(</SPAN>0<SPAN class="kw">)</SPAN>)
+	<SPAN class="com">' Make enough room in the string to receive the text, including the terminating null.</SPAN>
+	itemtext = <SPAN class="kw">Space(</SPAN>textlen<SPAN class="kw">)</SPAN> &amp; vbNullChar
+	<SPAN class="com">' Retrieve that item's text and display it.</SPAN>
+	textlen = <A href="sendmessage.html" tppabs="http://www.vbapi.com/ref/s/sendmessage.html">SendMessage</A>(Combo1.<SPAN class="kw">hWnd</SPAN>, <B>CB_GETLBTEXT</B>, <SPAN class="kw">ByVal CLng(</SPAN>index<SPAN class="kw">)</SPAN>, <SPAN class="kw">ByVal</SPAN> itemtext)
+	itemtext = <SPAN class="kw">Left(</SPAN>itemtext, textlen<SPAN class="kw">)</SPAN>
+	<SPAN class="kw">Debug</SPAN>.<SPAN class="kw">Print</SPAN> "Selected item: "; itemtext
+<SPAN class="kw">End Select</SPAN></CODE></PRE></P>
+
+<H2>See Also</H2>
+<P><A href="cb_getlbtextlen.html" tppabs="http://www.vbapi.com/ref/c/cb_getlbtextlen.html">CB_GETLBTEXTLEN</A></P>
+
+<H2>Category</H2>
+<P><A href="msgc.html#comboboxes" tppabs="http://www.vbapi.com/ref/msgc.html#comboboxes">Combo Boxes</A></P>
+
+<P><A href="msga.html" tppabs="http://www.vbapi.com/ref/msga.html">Back to the Message list.</A><BR>
+<A href="index.html" tppabs="http://www.vbapi.com/ref/index.html" rel="index">Back to the Reference section.</A></P>
+
+<HR>
+
+<P><B>Last Modified:</B> April 16, 2000<BR>
+This page is copyright &copy; 2000 Paul Kuliniewicz.  
+<A href="copyrite.html" tppabs="http://www.vbapi.com/copyrite.html" rel="copyright">Copyright Information</A>  <B>Revised October 29, 2000</B><BR>
+<A href="index-1.html" tppabs="http://www.vbapi.com/index.html" rel="home">Go back to the Windows API Guide home page.</A><BR>
+E-mail: <A href="javascript:if(confirm('http://www.vbapi.com/email.html  \n\nThis file was not retrieved by Teleport Pro, because it is addressed on a domain or path outside the boundaries set for its Starting Address.  \n\nDo you want to open it from the server?'))window.location='http://www.vbapi.com/email.html'" tppabs="http://www.vbapi.com/email.html">vbapi@vbapi.com</A>  <A href="javascript:if(confirm('http://www.vbapi.com/email.html  \n\nThis file was not retrieved by Teleport Pro, because it is addressed on a domain or path outside the boundaries set for its Starting Address.  \n\nDo you want to open it from the server?'))window.location='http://www.vbapi.com/email.html#secure'" tppabs="http://www.vbapi.com/email.html#secure">Send Encrypted E-Mail</A><BR>
+This page is at <A href="cb_getlbtext.html" tppabs="http://www.vbapi.com/ref/c/cb_getlbtext.html">http://www.vbapi.com/ref/c/cb_getlbtext.html</A></P>
+</BODY>
+</HTML>

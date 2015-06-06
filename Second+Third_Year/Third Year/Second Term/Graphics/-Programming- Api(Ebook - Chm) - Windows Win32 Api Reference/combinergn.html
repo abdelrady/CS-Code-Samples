@@ -1,0 +1,138 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+<HTML lang="en-us">
+<HEAD>
+<TITLE>Windows API Guide: CombineRgn Function</TITLE>
+<META content="vbapi@vbapi.com" name="author">
+<META content="Information about the CombineRgn function in the Windows API, geared towards the Visual Basic user." name="description">
+<META content="Kuliniewicz,Windows,Windows 95,Windows NT,Windows 98,Windows CE,Windows 2000,API,Application Programming Interface,Programming,Visual Basic,Basic,VB,CombineRgn" name="keywords">
+<META content="Omicron HTML Editor" name="generator">
+<META content="Wed, 22 Dec 1999 17:34:00 GMT" http-equiv="Last-Modified">
+<LINK href="default.css" tppabs="http://www.vbapi.com/css/default.css" rel="stylesheet" type="text/css">
+<LINK href="index-1.html" tppabs="http://www.vbapi.com/index.html" rel="home">
+
+<LINK href="glossary.html" tppabs="http://www.vbapi.com/ref/glossary.html" rel="glossary">
+<LINK href="copyrite.html" tppabs="http://www.vbapi.com/copyrite.html" rel="copyright">
+</HEAD>
+<BODY>
+
+<!-- Begin Adslot1 -->
+<CENTER>
+<SCRIPT language="JAVASCRIPT">
+<!-- hide from older browsers
+now = new Date();
+my_random = now.getTime();
+document.write('<A href="http://adex3.flycast.com/server/socket/127.0.0.1:2800/click/VBWorldnet/VBAPI/' + my_random + '">');
+document.write('<IMG width="468" height="60" border="1" src="http://adex3.flycast.com/server/socket/127.0.0.1:2800/ad/VBWorldnet/VBAPI/' + my_random + '"></A>');
+// -->
+</SCRIPT>
+</CENTER>
+<!-- End Adslot1 -->
+
+<HR>
+
+<H1>CombineRgn Function</H1>
+
+<P><CODE class="declare">Declare Function CombineRgn Lib "gdi32.dll" (ByVal hDestRgn As Long, ByVal hSrcRgn1 As Long, ByVal hSrcRgn2 As Long, ByVal nCombineMode As Long) As Long</CODE>
+
+<H2>Platforms</H2>
+<P><UL>
+<LI><B>Windows 95:</B> Supported.
+<LI><B>Windows 98:</B> Supported.
+<LI><B>Windows NT:</B> Requires Windows NT 3.1 or later.
+<LI><B>Windows 2000:</B> Supported.
+<LI><B>Windows CE:</B> Requires Windows CE 1.0 or later.
+</UL></P>
+
+<H2>Description &amp; Usage</H2>
+<P><B>CombineRgn</B> combines two <A class="def" href="glossary.html#region" tppabs="http://www.vbapi.com/ref/glossary.html#region" rel="glossary">regions</A> to form a third region.  The two regions can be combined using a variety of logical operators.  Note that the region that receives the combined regions must already be a region -- the function cannot create a new one but can change an existing one.</P>
+
+<H2>Return Value</H2>
+<P>The function returns one of the following flags specifying the result of the region combination operation:
+<DL>
+<DT>ERROR<DD>An error occured while trying to combine the regions.
+<DT>NULLREGION<DD>The combined region is empty, i.e., null.
+<DT>SIMPLEREGION<DD>The combined region forms a rectangle.
+<DT>COMPLEXREGION<DD>The combined region is not empty but is also not a rectangle.
+</DL></P>
+
+<H2>Visual Basic-Specific Issues</H2>
+<P>None.</P>
+
+<H2>Parameters</H2>
+<P><DL>
+<DT><VAR>hDestRgn</VAR><DD>A <A class="def" href="glossary.html#handle" tppabs="http://www.vbapi.com/ref/glossary.html#handle" rel="glossary">handle</A> to the region to be set to the combination of the two source regions.  This region must already have been created, although its contents when passed to the function is irrelevant.
+<DT><VAR>hSrcRgn1</VAR><DD>The first of the two source regions.
+<DT><VAR>hSrcRgn2</VAR><DD>The second of the two source regions.
+<DT><VAR>nCombineMode</VAR><DD>One of the following flags specifying the logical operation to use to combine the two regions:
+<DL>
+<DT>RGN_AND<DD>The combined region is the overlapping area of the two source regions.
+<DT>RGN_OR<DD>The combined region is all the area contained in either of the two source regions, including any overlap.
+<DT>RGN_XOR<DD>The combined region is all of the area contained in either of the two source regions, excluding any overlap.
+<DT>RGN_DIFF<DD>The combined region is all the area of the first source region except for the portion also included in the second source region.
+<DT>RGN_COPY<DD>The combined region is identical to the first source region.  The second source region is ignored.
+</DL>
+</DL></P>
+
+<H2>Constant Definitions</H2>
+<P><PRE><CODE class="const">Const ERROR = 0
+Const NULLREGION = 1
+Const SIMPLEREGION = 2
+Const COMPLEXREGION = 3
+Const RGN_AND = 1
+Const RGN_OR = 2
+Const RGN_XOR = 3
+Const RGN_DIFF = 4
+Const RGN_COPY = 5</CODE></PRE></P>
+
+<H2>Example</H2>
+<P><PRE><CODE class="example"><SPAN class="com">' This code is licensed according to the terms and conditions listed <A href="copyrite.html#license" tppabs="http://www.vbapi.com/copyrite.html#license" rel="copyright">here</A>.</SPAN>
+
+' On window Form1, create overlapping elliptical and rectangular regions.
+' Fill the overlapped area with a dark gray brush; fill the nonoverlapping areas with
+' a light gray brush.
+Dim hRgn1 As Long, hRgn2 As Long  ' elliptical and rectangular source regions.
+Dim hXorRgn As Long, hAndRgn As Long  ' regions set to the non-intersection and intersection
+Dim hLightBrush As Long, hDarkBrush As Long  ' handles to light gray and dark gray brushes
+Dim retval As Long  ' return value
+
+' Create the four regions.  The initial settings of hXorRgn and hAndRgn are irrelevant.
+hRgn1 = <A href="createellipticrgn.html" tppabs="http://www.vbapi.com/ref/c/createellipticrgn.html">CreateEllipticRgn</A>(100, 50, 200, 100)  ' bounding rect (100,50)-(200,100)
+hRgn2 = <A href="createrectrgn.html" tppabs="http://www.vbapi.com/ref/c/createrectrgn.html">CreateRectRgn</A>(150, 75, 300, 200)  ' rectangle (150,75)-(300,200)
+hXorRgn = <A href="createrectrgn.html" tppabs="http://www.vbapi.com/ref/c/createrectrgn.html">CreateRectRgn</A>(0, 0, 0, 0)  ' meaningless initialization
+hAndRgn = <A href="createrectrgn.html" tppabs="http://www.vbapi.com/ref/c/createrectrgn.html">CreateRectRgn</A>(0, 0, 0, 0)  ' meaningless initialization
+
+' Now set hAndRgn to the intersection of the two source regions and hXorRgn to
+' the non-intersection of the two source regions.
+retval = <B>CombineRgn</B>(hXorRgn, hRgn1, hRgn2, RGN_XOR)  ' non-intersection
+retval = <B>CombineRgn</B>(hAndRgn, hRgn1, hRgn2, RGN_AND)  ' intersection
+
+' Now get the necessary stock brushes and fill in the two combined regions.
+hLightBrush = <A href="getstockobject.html" tppabs="http://www.vbapi.com/ref/g/getstockobject.html">GetStockObject</A>(LTGRAY_BRUSH)  ' light gray solid brush
+hDarkBrush = <A href="getstockobject.html" tppabs="http://www.vbapi.com/ref/g/getstockobject.html">GetStockObject</A>(DKGRAY_BRUSH)  ' dark gray solid brush
+retval = <A href="fillrgn.html" tppabs="http://www.vbapi.com/ref/f/fillrgn.html">FillRgn</A>(Form1.hDC, hXorRgn, hLightBrush)  ' fill non-intersection
+retval = <A href="fillrgn.html" tppabs="http://www.vbapi.com/ref/f/fillrgn.html">FillRgn</A>(Form1.hDC, hAndRgn, hDarkBrush)  ' fill intersection
+
+' Delete the four regions to free up resources.
+retval = <A href="deleteobject.html" tppabs="http://www.vbapi.com/ref/d/deleteobject.html">DeleteObject</A>(hRgn1)
+retval = <A href="deleteobject.html" tppabs="http://www.vbapi.com/ref/d/deleteobject.html">DeleteObject</A>(hRgn2)
+retval = <A href="deleteobject.html" tppabs="http://www.vbapi.com/ref/d/deleteobject.html">DeleteObject</A>(hXorRgn)
+retval = <A href="deleteobject.html" tppabs="http://www.vbapi.com/ref/d/deleteobject.html">DeleteObject</A>(hAndRgn)</CODE></PRE></P>
+
+<H2>Category</H2>
+<P><A href="funcc.html#regions" tppabs="http://www.vbapi.com/ref/funcc.html#regions">Regions</A></P>
+
+<P><A href="funca.html" tppabs="http://www.vbapi.com/ref/funca.html">Go back to the alphabetical Function listing.</A><BR>
+<A href="index.html" tppabs="http://www.vbapi.com/ref/index.html">Go back to the Reference section index.</A></P>
+
+<HR>
+
+<P><B>Last Modified:</B> December 22, 1999<BR>
+This page is copyright &copy; 1999 Paul Kuliniewicz.  
+<A href="copyrite.html" tppabs="http://www.vbapi.com/copyrite.html" rel="copyright">Copyright Information</A>  <B>Revised October 29, 2000</B><BR>
+
+<A href="index-1.html" tppabs="http://www.vbapi.com/index.html">Go back to the Windows API Guide home page.</A><BR>
+E-mail: <A href="javascript:if(confirm('http://www.vbapi.com/email.html  \n\nThis file was not retrieved by Teleport Pro, because it is addressed on a domain or path outside the boundaries set for its Starting Address.  \n\nDo you want to open it from the server?'))window.location='http://www.vbapi.com/email.html'" tppabs="http://www.vbapi.com/email.html">vbapi@vbapi.com</A>  <A href="javascript:if(confirm('http://www.vbapi.com/email.html  \n\nThis file was not retrieved by Teleport Pro, because it is addressed on a domain or path outside the boundaries set for its Starting Address.  \n\nDo you want to open it from the server?'))window.location='http://www.vbapi.com/email.html#secure'" tppabs="http://www.vbapi.com/email.html#secure">Send Encrypted E-Mail</A><BR>
+This page is at <A href="combinergn.html" tppabs="http://www.vbapi.com/ref/c/combinergn.html">http://www.vbapi.com/ref/c/combinergn.html</A>
+</P>
+</BODY>
+</HTML>

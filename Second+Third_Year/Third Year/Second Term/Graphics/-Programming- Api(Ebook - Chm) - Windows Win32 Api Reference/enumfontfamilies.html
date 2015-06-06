@@ -1,0 +1,147 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+<HTML lang="en-us">
+<HEAD>
+<TITLE>Windows API Guide: EnumFontFamilies Function</TITLE>
+<META content="vbapi@vbapi.com" name="author">
+<META content="Information about the EnumFontFamilies function in the Windows API, geared towards the Visual Basic user." name="description">
+<META content="Kuliniewicz,Windows,Windows 95,Windows NT,Windows 98,Windows CE,Windows 2000,API,Application Programming Interface,Programming,Visual Basic,Basic,VB,EnumFontFamilies" name="keywords">
+<META content="Omicron HTML Editor" name="generator">
+<META content="Sat, 30 Oct 1999 02:19:00 GMT" http-equiv="Last-Modified">
+<LINK href="default.css" tppabs="http://www.vbapi.com/css/default.css" rel="stylesheet" type="text/css">
+<LINK href="index-1.html" tppabs="http://www.vbapi.com/index.html" rel="home">
+
+<LINK href="glossary.html" tppabs="http://www.vbapi.com/ref/glossary.html" rel="glossary">
+<LINK href="copyrite.html" tppabs="http://www.vbapi.com/copyrite.html" rel="copyright">
+</HEAD>
+<BODY>
+
+<!-- Begin Adslot1 -->
+<CENTER>
+<SCRIPT language="JAVASCRIPT">
+<!-- hide from older browsers
+now = new Date();
+my_random = now.getTime();
+document.write('<A href="http://adex3.flycast.com/server/socket/127.0.0.1:2800/click/VBWorldnet/VBAPI/' + my_random + '">');
+document.write('<IMG width="468" height="60" border="1" src="http://adex3.flycast.com/server/socket/127.0.0.1:2800/ad/VBWorldnet/VBAPI/' + my_random + '"></A>');
+// -->
+</SCRIPT>
+</CENTER>
+<!-- End Adslot1 -->
+
+<HR>
+
+<H1>EnumFontFamilies Function</H1>
+
+<P><CODE class="declare">Declare Function EnumFontFamilies Lib "gdi32.dll" Alias "EnumFontFamiliesA" (ByVal hdc As Long, ByVal lpszFamily As Any, ByVal lpEnumFontFamProc As Long, ByVal lParam As Long) As Long</CODE></P>
+
+<H2>Platforms</H2>
+<P><UL>
+<LI><B>Windows 95:</B> Supported but Obsolete; use <A href="enumfontfamiliesex.html" tppabs="http://www.vbapi.com/ref/e/enumfontfamiliesex.html">EnumFontFamiliesEx</A> instead.
+<LI><B>Windows 98:</B> Supported but Obsolete; use <A href="enumfontfamiliesex.html" tppabs="http://www.vbapi.com/ref/e/enumfontfamiliesex.html">EnumFontFamiliesEx</A> instead.
+<LI><B>Windows NT:</B> Requires Windows NT 3.1 or later but Obsolete under Windows NT 4.0 or later; use <A href="enumfontfamiliesex.html" tppabs="http://www.vbapi.com/ref/e/enumfontfamiliesex.html">EnumFontFamiliesEx</A> instead.
+<LI><B>Windows 2000:</B> Supported but Obsolete; use <A href="enumfontfamiliesex.html" tppabs="http://www.vbapi.com/ref/e/enumfontfamiliesex.html">EnumFontFamiliesEx</A> instead.
+<LI><B>Windows CE:</B> Not Supported.
+</UL></P>
+
+<H2>Description &amp; Usage</H2>
+<P><B>EnumFontFamilies</B> enumerates all of the fonts available for use on a <A class="def" href="glossary.html#device" tppabs="http://www.vbapi.com/ref/glossary.html#device" rel="glossary">device</A> which use a certain typeface.  The only trait that the function looks for in the enumerated fonts is that it uses the specified typeface.  The enumerated fonts are individually passed to a <A class="def" href="glossary.html#callbackfunction" tppabs="http://www.vbapi.com/ref/glossary.html#callbackfunction" rel="glossary">callback function</A> for processing.</P>
+
+<H2>Return Value</H2>
+<P>The function returns whatever the final call to the callback function returned.</P>
+
+<H2>Visual Basic-Specific Issues</H2>
+<P>When passing 0 as <VAR>lpszFamily</VAR>, the expression CLng(0) must be used.</P>
+
+<H2>Parameters</H2>
+<P><DL>
+<DT><VAR>hdc</VAR><DD>A <A class="def" href="glossary.html#handle" tppabs="http://www.vbapi.com/ref/glossary.html#handle" rel="glossary">handle</A> to a <A class="def" href="glossary.html#devicecontext" tppabs="http://www.vbapi.com/ref/glossary.html#devicecontext" rel="glossary">device context</A> to the device to enumerate the fonts of.
+<DT><VAR>lpszFamily</VAR><DD>The name of the font typeface which the enumerated fonts must use.  To instead enumerate a single font from each possible typeface, pass 0 for this parameter (not an empty string!).
+<DT><VAR>lpEnumFontFamProc</VAR><DD>A <A class="def" href="glossary.html#pointer" tppabs="http://www.vbapi.com/ref/glossary.html#pointer" rel="glossary">pointer</A> to the <A href="enumfontfamproc.html" tppabs="http://www.vbapi.com/ref/e/enumfontfamproc.html">EnumFontFamProc</A> callback function which processes the information about each font that is enumerated.
+<DT><VAR>lParam</VAR><DD>A value to pass to the function specified by <VAR>lpEnumFontFamProc</VAR>.
+</DL></P>
+
+<H2>Example</H2>
+<P><PRE><CODE class="example"><SPAN class="com">' This code is licensed according to the terms and conditions listed <A href="copyrite.html#license" tppabs="http://www.vbapi.com/copyrite.html#license" rel="copyright">here</A>.</SPAN>
+
+' Enumerate some of the fonts available for window Form1.
+' These fonts must have the Times New Roman typeface.
+' Display some information about each font as it is enumerated.
+
+' *** Place the following code in a module. ***
+' The following callback function processes the enumerated fonts.
+Public Function <A href="enumfontfamproc.html" tppabs="http://www.vbapi.com/ref/e/enumfontfamproc.html">EnumFontFamProc</A> (ByVal lpelf As Long, ByVal lpntm As Long, ByVal FontType As Long, ByVal lParam As Long) As Long
+  Dim elf As <A href="enumlogfont.html" tppabs="http://www.vbapi.com/ref/e/enumlogfont.html">ENUMLOGFONT</A>  ' receives information about the font
+  Dim ntm As <A href="newtextmetric.html" tppabs="http://www.vbapi.com/ref/n/newtextmetric.html">NEWTEXTMETRIC</A>  ' receives text metrics for TrueType fonts
+  Dim tm As <A href="textmetric.html" tppabs="http://www.vbapi.com/ref/t/textmetric.html">TEXTMETRIC</A>  ' receives text metrics for non-TrueType fonts
+  
+  ' Copy the font information into the appropriate structure.
+  <A href="copymemory.html" tppabs="http://www.vbapi.com/ref/c/copymemory.html">CopyMemory</A> elf, ByVal lpelf, Len(elf)
+
+  ' If the font is TrueType, use the following code.
+  If (FontType And TRUETYPE_FONTTYPE) = TRUETYPE_FONTTYPE Then
+    ' Copy the text metrics into the appropriate structure.
+    <A href="copymemory.html" tppabs="http://www.vbapi.com/ref/c/copymemory.html">CopyMemory</A> ntm, ByVal lpntm, Len(ntm)
+    ' Display the name of the font (removing empty space from it).
+    Debug.Print "Font Name: "; Left(elf.elfFullName, InStr(elf.elfFullName, vbNullChar) - 1);
+    Debug.Print "  (TrueType font)"
+    ' Display the style of the font (again removing empty space).
+    Debug.Print "Font Style: "; Left(elf.elfStyle, InStr(elf.elfStyle, vbNullChar) - 1)
+    ' Display the average character width.
+    Debug.Print "Average Character Width:"; ntm.tmAveCharWidth
+    ' Display the maximum character width.
+    Debug.Print "Maximum Character Width:"; ntm.tmMaxCharWidth
+
+  ' If the font is not TrueType, use the following code.
+  Else
+    ' Copy the text metrics into the appropriate structure.
+    <A href="copymemory.html" tppabs="http://www.vbapi.com/ref/c/copymemory.html">CopyMemory</A> tm, ByVal lpntm, Len(tm)
+    ' Display the name of the font (removing empty space from it).
+    Debug.Print "Font Name: ";
+    Debug.Print Left(elf.elfLogFont.lfFaceName, InStr(elf.elfLogFont.lfFaceName, vbNullChar) - 1);
+    ' Display whether the font is a device or a raster font.
+    If FontType = DEVICE_FONTTYPE Then
+      Debug.Print "  (Device font)"
+    ElseIf FontType = RASTER_FONTTYPE Then
+      Debug.Print "  (Raster font)"
+    End If
+    Debug.Print "Font Style does not apply for this font."
+    ' Display the average character width.
+    Debug.Print "Average Character Width:"; tm.tmAveCharWidth
+    ' Display the maximum character width.
+    Debug.Print "Maximum Character Width:"; tm.tmMaxCharWidth
+  End If
+
+  Debug.Print "***"  ' separator
+  ' Tell EnumFontFamilies to continue enumeration.
+  EnumFontFamProc = 1
+End Function
+
+' *** Place this code wherever you want the enumerate the fonts. ***
+Dim retval As Long  ' return value
+
+' Enumerate all the fonts with the Times New Roman
+' typeface which are available on Form1.
+retval = <B>EnumFontFamilies</B>(Form1.hDC, "Times New Roman", AddressOf <A href="enumfontfamproc.html" tppabs="http://www.vbapi.com/ref/e/enumfontfamproc.html">EnumFontFamProc</A>, 0)
+Debug.Print "Enumeration complete."</CODE></PRE></P>
+
+<H2>See Also</H2>
+<P><A href="enumfontfamiliesex.html" tppabs="http://www.vbapi.com/ref/e/enumfontfamiliesex.html">EnumFontFamiliesEx</A></P>
+
+<H2>Category</H2>
+<P><A href="funcc.html#fontstext" tppabs="http://www.vbapi.com/ref/funcc.html#fontstext">Fonts &amp; Text</A></P>
+
+<P><A href="funca.html" tppabs="http://www.vbapi.com/ref/funca.html">Go back to the alphabetical Function listing.</A><BR>
+<A href="index.html" tppabs="http://www.vbapi.com/ref/index.html">Go back to the Reference section index.</A></P>
+
+<HR>
+
+<P><B>Last Modified:</B> October 29, 1999<BR>
+This page is copyright &copy; 1999 Paul Kuliniewicz.  
+<A href="copyrite.html" tppabs="http://www.vbapi.com/copyrite.html" rel="copyright">Copyright Information</A>  <B>Revised October 29, 2000</B><BR>
+
+<A href="index-1.html" tppabs="http://www.vbapi.com/index.html">Go back to the Windows API Guide home page.</A><BR>
+E-mail: <A href="javascript:if(confirm('http://www.vbapi.com/email.html  \n\nThis file was not retrieved by Teleport Pro, because it is addressed on a domain or path outside the boundaries set for its Starting Address.  \n\nDo you want to open it from the server?'))window.location='http://www.vbapi.com/email.html'" tppabs="http://www.vbapi.com/email.html">vbapi@vbapi.com</A>  <A href="javascript:if(confirm('http://www.vbapi.com/email.html  \n\nThis file was not retrieved by Teleport Pro, because it is addressed on a domain or path outside the boundaries set for its Starting Address.  \n\nDo you want to open it from the server?'))window.location='http://www.vbapi.com/email.html#secure'" tppabs="http://www.vbapi.com/email.html#secure">Send Encrypted E-Mail</A><BR>
+This page is at <A href="enumfontfamilies.html" tppabs="http://www.vbapi.com/ref/e/enumfontfamilies.html">http://www.vbapi.com/ref/e/enumfontfamilies.html</A>
+</P>
+</BODY>
+</HTML>

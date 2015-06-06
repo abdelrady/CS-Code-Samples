@@ -1,0 +1,91 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+<HTML lang="en-us">
+<HEAD>
+<TITLE>Windows API Guide: CompareFileTime Function</TITLE>
+<META content="vbapi@vbapi.com" name="author">
+<META content="Information about the CompareFileTime function in the Windows API, geared towards the Visual Basic user." name="description">
+<META content="Kuliniewicz,Windows,Windows 95,Windows NT,Windows 98,Windows 32s,32s,API,Application Programming Interface,Programming,Visual Basic,Basic,VB,CompareFileTime" name="keywords">
+<META content="Omicron HTML Editor" name="generator">
+<LINK href="default.css" tppabs="http://www.vbapi.com/css/default.css" rel="stylesheet" type="text/css">
+<LINK href="index-1.html" tppabs="http://www.vbapi.com/index.html" rel="home">
+</HEAD>
+<BODY>
+
+<!-- Begin Adslot1 -->
+<CENTER>
+<SCRIPT language="JAVASCRIPT">
+<!-- hide from older browsers
+now = new Date();
+my_random = now.getTime();
+document.write('<A href="http://adex3.flycast.com/server/socket/127.0.0.1:2800/click/VBWorldnet/VBAPI/' + my_random + '">');
+document.write('<IMG width="468" height="60" border="1" src="http://adex3.flycast.com/server/socket/127.0.0.1:2800/ad/VBWorldnet/VBAPI/' + my_random + '"></A>');
+// -->
+</SCRIPT>
+</CENTER>
+<!-- End Adslot1 -->
+
+<HR>
+
+<H1>CompareFileTime Function</H1>
+
+<P><CODE class="declare">Declare Function CompareFileTime Lib "kernel32.dll" (lpFileTime1 As <A href="filetime.html" tppabs="http://www.vbapi.com/ref/f/filetime.html">FILETIME</A>, lpFileTime2 As <A href="filetime.html" tppabs="http://www.vbapi.com/ref/f/filetime.html">FILETIME</A>) As Long</CODE>
+
+<P><B>Platforms:</B> Win 32s, Win 95/98, Win NT
+
+<P><B>CompareFileTime</B> compares two times stored in <A href="filetime.html" tppabs="http://www.vbapi.com/ref/f/filetime.html">FILETIME</A> format.  The function determines which of the two times, if any, comes before the other chronologically.  If the first time is earlier than the second time, the function returns -1.  If the two times are equal, the function returns 0.  If the first time is later than the second time, the function returns 1.
+
+<DL>
+<DT><VAR>lpFileTime1</VAR><DD>The first of the two times to compare.
+<DT><VAR>lpFileTime2</VAR><DD>The second of the two times to compare.
+</DL>
+
+<P><B>Example:</B>
+<PRE><CODE class="example">' Determine if file C:\MyProgram\datafile.txt was created before
+' Jan 5, 1999.  Note how CreateFile's alternate declare must be used under Win 95/98 --
+' see that function's page for more information.
+Dim hfile As Long  ' receives the handle to the file
+Dim ctime As <A href="filetime.html" tppabs="http://www.vbapi.com/ref/f/filetime.html">FILETIME</A>  ' receives creation date and time of the file
+Dim atime As <A href="filetime.html" tppabs="http://www.vbapi.com/ref/f/filetime.html">FILETIME</A>  ' receives last access date and time of the file
+Dim wtime As <A href="filetime.html" tppabs="http://www.vbapi.com/ref/f/filetime.html">FILETIME</A>  ' receives last write-to date and time of the file
+Dim jantime As <A href="systemtime.html" tppabs="http://www.vbapi.com/ref/s/systemtime.html">SYSTEMTIME</A>  ' will be set to Jan 5, 1999
+Dim janfiletime As <A href="filetime.html" tppabs="http://www.vbapi.com/ref/f/filetime.html">FILETIME</A>  ' will receive analogous time as jantime
+Dim comptimes As Long  ' receives comparison of ctime and janfiletime
+Dim retval As Long  ' return value
+
+' Get a handle to the file (note how the alternate declare is used):
+hfile = <A href="createfile.html" tppabs="http://www.vbapi.com/ref/c/createfile.html">CreateFileNS</A>("C:\MyProgram\datafile.txt", GENERIC_READ, FILE_SHARE_READ, 0, OPEN_EXISTING, FILE_ATTRIBUTE_ARCHIVE, 0)
+If hfile = -1 Then  ' if the file could not be opened
+  Debug.Print "Could not open the file C:\MyProgram\datafile.txt."
+  End  ' abort the program
+End If
+
+' Get the various times and dates associated with the file:
+retval = <A href="getfiletime.html" tppabs="http://www.vbapi.com/ref/g/getfiletime.html">GetFileTime</A>(hfile, ctime, atime, wtime)
+' Load jantime with the date January 5, 1999 at midnight:
+jantime.wMonth = 1: jantime.wDay = 5: jantime.wYear = 1999
+jantime.wHour = 0: jantime.wMinute = 0: jantime.wSecond = 0
+' Convert jantime into FILETIME format so it can be compared with ctime:
+retval = <A href="systemtimetofiletime.html" tppabs="http://www.vbapi.com/ref/s/systemtimetofiletime.html">SystemTimeToFileTime</A>(jantime, janfiletime)
+' Compare the two times and display the relation:
+comptimes = <B>CompareFileTime</B>(ctime, janfiletime)
+If comptimes = -1 Then Debug.Print "File was created before midnight, January 5, 1999."
+If comptimes = 0 Then Debug.Print "File was created at midnight, January 5, 1999."
+If comptimes = 1 Then Debug.Print "File was created after midnight, January 5, 1999."
+
+' Close the file
+retval = <A href="closehandle.html" tppabs="http://www.vbapi.com/ref/c/closehandle.html">CloseHandle</A>(hfile)</CODE></PRE>
+
+<P><B>Category:</B> <A href="index.html#time" tppabs="http://www.vbapi.com/ref/index.html#time">Time</A></P>
+
+<P><A href="funca.html" tppabs="http://www.vbapi.com/ref/funca.html">Go back to the alphabetical Function listing.</A><BR>
+<A href="index.html" tppabs="http://www.vbapi.com/ref/index.html">Go back to the Reference section index.</A></P>
+
+<HR>
+
+<P>This page is copyright &copy; 2000 Paul Kuliniewicz.  <A href="copyrite.html" tppabs="http://www.vbapi.com/copyrite.html" rel="copyright">Copyright Information.</A><BR>
+<A href="index-1.html" tppabs="http://www.vbapi.com/index.html">Go back to the Windows API Guide home page.</A><BR>
+E-mail: <A href="javascript:if(confirm('http://www.vbapi.com/email.html  \n\nThis file was not retrieved by Teleport Pro, because it is addressed on a domain or path outside the boundaries set for its Starting Address.  \n\nDo you want to open it from the server?'))window.location='http://www.vbapi.com/email.html'" tppabs="http://www.vbapi.com/email.html">vbapi@vbapi.com</A>  <A href="javascript:if(confirm('http://www.vbapi.com/email.html  \n\nThis file was not retrieved by Teleport Pro, because it is addressed on a domain or path outside the boundaries set for its Starting Address.  \n\nDo you want to open it from the server?'))window.location='http://www.vbapi.com/email.html#secure'" tppabs="http://www.vbapi.com/email.html#secure">Send Encrypted E-Mail</A><BR>
+This page is at <A href="comparefiletime.html" tppabs="http://www.vbapi.com/ref/c/comparefiletime.html">http://www.vbapi.com/ref/c/comparefiletime.html</A>
+
+</BODY>
+</HTML>

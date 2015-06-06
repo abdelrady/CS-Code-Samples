@@ -1,0 +1,168 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+<HTML lang="en-us">
+<HEAD>
+<TITLE>Windows API Guide: SendMessage Function</TITLE>
+<META content="vbapi@vbapi.com" name="author">
+<META content="Information about the SendMessage function in the Windows API, geared towards the Visual Basic user." name="description">
+<META content="Kuliniewicz,Windows,Windows 95,Windows NT,Windows 98,Windows CE,Windows 2000,API,Application Programming Interface,Programming,Visual Basic,Basic,VB,SendMessage" name="keywords">
+<META content="Omicron HTML Editor" name="generator">
+<META content="Sun, 26 Sep 1999 17:20:00 GMT" http-equiv="Last-Modified">
+<LINK href="default.css" tppabs="http://www.vbapi.com/css/default.css" rel="stylesheet" type="text/css">
+<LINK href="index-1.html" tppabs="http://www.vbapi.com/index.html" rel="home">
+
+<LINK href="glossary.html" tppabs="http://www.vbapi.com/ref/glossary.html" rel="glossary">
+<LINK href="copyrite.html" tppabs="http://www.vbapi.com/copyrite.html" rel="copyright">
+</HEAD>
+<BODY>
+
+<!-- Begin Adslot1 -->
+<CENTER>
+<SCRIPT language="JAVASCRIPT">
+<!-- hide from older browsers
+now = new Date();
+my_random = now.getTime();
+document.write('<A href="http://adex3.flycast.com/server/socket/127.0.0.1:2800/click/VBWorldnet/VBAPI/' + my_random + '">');
+document.write('<IMG width="468" height="60" border="1" src="http://adex3.flycast.com/server/socket/127.0.0.1:2800/ad/VBWorldnet/VBAPI/' + my_random + '"></A>');
+// -->
+</SCRIPT>
+</CENTER>
+<!-- End Adslot1 -->
+
+<HR>
+
+<H1>SendMessage Function</H1>
+
+<P><CODE class="declare">Declare Function SendMessage Lib "user32.dll" Alias "SendMessageA" (ByVal hWnd As Long, ByVal Msg As Long, wParam As Any, lParam As Any) As Long</CODE></P>
+
+<H2>Platforms</H2>
+<P><UL>
+<LI><B>Windows 95:</B> Supported.
+<LI><B>Windows 98:</B> Supported.
+<LI><B>Windows NT:</B> Requires Windows NT 3.1 or later.
+<LI><B>Windows 2000:</B> Supported.
+<LI><B>Windows CE:</B> Requires Windows CE 1.0 or later.
+</UL></P>
+
+<H2>Description &amp; Usage</H2>
+<P><B>SendMessage</B> sends a <A class="def" href="glossary.html#message" tppabs="http://www.vbapi.com/ref/glossary.html#message" rel="glossary">message</A> to a window.  Specifically, the function calls that window's procedure to handle to message.  This function does not return until the window has completed processing the message.</P>
+
+<H2>Return Value</H2>
+<P>The function returns the return value of the message which was sent.</P>
+
+<H2>Visual Basic-Specific Issues</H2>
+<P>Whenever passing a string or a Long integer as <VAR>wParam</VAR> or <VAR>lParam</VAR>, the ByVal keyword must appear in front of the parameter.  ByVal is not needed if a structure or a <A class="def" href="glossary.html#pointer" tppabs="http://www.vbapi.com/ref/glossary.html#pointer" rel="glossary">pointer</A> is being passed.  Additionally, if a literal number (i.e., one that is not stored in a variable) is passed, it must be encased in the CLng() Visual Basic function to force its data type to Long.  See the example for a demonstration of ByVal usage.</P>
+
+<H2>Parameters</H2>
+<P><DL>
+<DT><VAR>hWnd</VAR><DD>A <A class="def" href="glossary.html#handle" tppabs="http://www.vbapi.com/ref/glossary.html#handle" rel="glossary">handle</A> to the window to send the message to.  If this is HWND_BROADCAST, the message is sent to all open top-level windows.
+<DT><VAR>Msg</VAR><DD>The identifier of the message to send.
+<DT><VAR>wParam</VAR><DD>Additional message-specific data.
+<DT><VAR>lParam</VAR><DD>Additional message-specific data.
+</DL></P>
+
+<H2>Constant Definitions</H2>
+<P><PRE><CODE class="const">Const HWND_BROADCAST = &amp;HFFFF</CODE></PRE></P>
+
+<H2>Example</H2>
+<P><PRE><CODE class="example"><SPAN class="com">' This code is licensed according to the terms and conditions listed <A href="copyrite.html#license" tppabs="http://www.vbapi.com/copyrite.html#license" rel="copyright">here</A>.</SPAN>
+
+' Open the Browse for Folder dialog box and display both the display name and
+' the actual name of the folder (if it is not a virtual folder).  Although any
+' folders under My Computer can be selected, have the directory
+' C:\StartHere selected by default.
+
+' *** Place the following code in a module. ***
+
+' This function compensates for the fact that the AddressOf operator
+' can only be used in a function call.  It returns the parameter
+' passed to it.
+Public Function DummyFunc(ByVal param As Long) As Long
+  DummyFunc = param
+End Function
+
+' This function is the callback function for the dialog box.  It sets
+' the selected folder to C:\StartHere when the box is initialized.
+Public Function <A href="browsecallbackproc.html" tppabs="http://www.vbapi.com/ref/b/browsecallbackproc.html">BrowseCallbackProc</A>(ByVal hwnd As Long, ByVal uMsg As Long, ByVal lParam As Long, ByVal lpData As Long) As Long
+  Dim pathstring As String  ' name of path to set by default
+  Dim retval As Long  ' return value
+
+  ' If the BFFM_INITIALIZED message is received, set the
+  ' default selection to C:\StartHere.
+  Select Case uMsg
+  Case BFFM_INITIALIZED
+    pathstring = "C:\StartHere"  ' the path to make the default selection
+    ' Send a message to the dialog box telling it to select this path.
+    ' Note the use of ByVal and the CLng function here.
+    retval = <B>SendMessage</B>(hwnd, BFFM_SETSELECTION, ByVal CLng(1), ByVal pathstring)
+  End Select
+  BrowseCallbackProc = 0  ' the function should always return 0
+End Function
+
+' *** Place the following code where you want to open the ***
+' *** Browse for Folder dialog box. ***
+Dim bi As <A href="browseinfo.html" tppabs="http://www.vbapi.com/ref/b/browseinfo.html">BROWSEINFO</A>  ' structure passed to the function
+Dim pidl As Long  ' PIDL to the user's selection
+Dim physpath As String  ' string used to temporarily hold the physical path
+Dim retval As Long  ' return value
+
+' Initialize the structure to be passed to the function.
+bi.hwndOwner = Form1.hWnd  ' window Form1 is the owner of the dialog box
+' Specify the My Computer virtual folder as the root
+retval = <A href="shgetspecialfolderlocation.html" tppabs="http://www.vbapi.com/ref/s/shgetspecialfolderlocation.html">SHGetSpecialFolderLocation</A>(Form1.hWnd, CSIDL_DRIVES, bi.pidlRoot)
+' Make room in the buffer to get the [virtual] folder's display name
+bi.pszDisplayName = Space(260)
+bi.lpszTitle = "Please choose a folder."  ' Message displayed to the user
+bi.ulFlags = 0  ' no flags are needed here
+' Identify the callback function to use for the dialog box.  Note
+' how our DummyFunc is needed because AddressOf only works
+' inside a function call.
+bi.lpfn = DummyFunc(AddressOf <A href="browsecallbackproc.html" tppabs="http://www.vbapi.com/ref/b/browsecallbackproc.html">BrowseCallbackProc</A>)
+bi.lParam = 0  ' the callback function here doesn't need this
+bi.iImage = 0  ' this will be set by the function
+
+' Open the Browse for Folder dialog box.
+pidl = <A href="shbrowseforfolder.html" tppabs="http://www.vbapi.com/ref/s/shbrowseforfolder.html">SHBrowseForFolder</A>(bi)
+' If the user selected something, display its display name
+' and its physical location on the system.
+If pidl &lt;&gt; 0 Then
+  ' Remove the empty space from the display name variable.
+  bi.pszDisplayName = Left(bi.pszDisplayName, InStr(bi.pszDisplayName, vbNullChar) - 1)
+  Debug.Print "The user selected: "; bi.pszDisplayName
+  ' If the folder is not a virtual folder, display its physical location.
+  physpath = Space(260)  ' make room in the buffer
+  retval = <A href="shgetpathfromidlist.html" tppabs="http://www.vbapi.com/ref/s/shgetpathfromidlist.html">SHGetPathFromIDList</A>(pidl, physpath)
+  If retval = 0 Then
+    Debug.Print "Physical Location: (virtual folder)"
+  Else
+    ' Remove the empty space and display the result.
+    physpath = Left(physpath, InStr(physpath, vbNullChar) - 1)
+    Debug.Print "Physical Location: "; physpath
+  End If
+  ' Free the pidl returned by the function.
+  <A href="cotaskmemfree.html" tppabs="http://www.vbapi.com/ref/c/cotaskmemfree.html">CoTaskMemFree</A> pidl
+End If
+
+' Whether successful or not, free the PIDL which was used to
+' identify the My Computer virtual folder.
+<A href="cotaskmemfree.html" tppabs="http://www.vbapi.com/ref/c/cotaskmemfree.html">CoTaskMemFree</A> bi.pidlRoot</CODE></PRE></P>
+
+<H2>Category</H2>
+<P><A href="funcc.html#messages" tppabs="http://www.vbapi.com/ref/funcc.html#messages">Messages</A></P>
+
+<P><A href="funca.html" tppabs="http://www.vbapi.com/ref/funca.html">Go back to the alphabetical Function listing.</A><BR>
+<A href="index.html" tppabs="http://www.vbapi.com/ref/index.html">Go back to the Reference section index.</A></P>
+
+<HR>
+
+<P><B>Last Modified:</B> September 26, 1999<BR>
+This page is copyright &copy; 1999 Paul Kuliniewicz.  
+
+<A href="copyrite.html" tppabs="http://www.vbapi.com/copyrite.html" rel="copyright">Copyright Information</A>  <B>Revised October 29, 2000</B>
+  <B>Revised October 29, 2000</B><BR>
+
+<A href="index-1.html" tppabs="http://www.vbapi.com/index.html">Go back to the Windows API Guide home page.</A><BR>
+E-mail: <A href="javascript:if(confirm('http://www.vbapi.com/email.html  \n\nThis file was not retrieved by Teleport Pro, because it is addressed on a domain or path outside the boundaries set for its Starting Address.  \n\nDo you want to open it from the server?'))window.location='http://www.vbapi.com/email.html'" tppabs="http://www.vbapi.com/email.html">vbapi@vbapi.com</A>  <A href="javascript:if(confirm('http://www.vbapi.com/email.html  \n\nThis file was not retrieved by Teleport Pro, because it is addressed on a domain or path outside the boundaries set for its Starting Address.  \n\nDo you want to open it from the server?'))window.location='http://www.vbapi.com/email.html#secure'" tppabs="http://www.vbapi.com/email.html#secure">Send Encrypted E-Mail</A><BR>
+This page is at <A href="sendmessage.html" tppabs="http://www.vbapi.com/ref/s/sendmessage.html">http://www.vbapi.com/ref/s/sendmessage.html</A>
+</P>
+</BODY>
+</HTML>

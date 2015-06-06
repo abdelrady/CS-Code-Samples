@@ -1,0 +1,468 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!-- saved from url=(0039)http://www2.webng.com/amrlearn/129.html -->
+<HTML><HEAD><TITLE>Clipping: The Liagn Barsky Algorithm</TITLE><LINK 
+href="129_files/stylesheet.css" type=text/css rel=stylesheet>
+<META http-equiv=Content-Type content="text/html; charset=UTF-8">
+<META content="Computer, Graphics, Clipping: The Liagn Barsky Algorithm " 
+name=description>
+<META 
+content="Computer, Graphics, Clipping The Liagn Barsky Algorithm, Clipping, The Liagn, Barsky, Algorithm " 
+name=keywords>
+<META content="Copyright 2007 Amr Saber" name=copyright>
+<META content="MSHTML 6.00.2900.2180" name=GENERATOR></HEAD>
+<BODY>
+<CENTER>
+<DIV id=header>
+<SCRIPT type=text/javascript><!--
+google_ad_client = "pub-9653171024150495";
+google_alternate_color = "C3D9FF";
+google_ad_width = 728;
+google_ad_height = 90;
+google_ad_format = "728x90_as";
+google_ad_type = "text";
+//2007-02-02: header
+google_ad_channel = "7161698987";
+//--></SCRIPT>
+
+<SCRIPT src="129_files/show_ads.js" type=text/javascript>
+</SCRIPT>
+</DIV></CENTER>
+<DIV id=index>
+<H3>Goooooooogle</H3>
+<SCRIPT type=text/javascript><!--
+google_ad_client = "pub-9653171024150495";
+google_alternate_color = "C3D9FF";
+google_ad_width = 120;
+google_ad_height = 600;
+google_ad_format = "120x600_as";
+google_ad_type = "text";
+//2007-02-02: header, right
+google_ad_channel = "7161698987+2593520185";
+//--></SCRIPT>
+
+<SCRIPT src="129_files/show_ads.js" type=text/javascript>
+</SCRIPT>
+</DIV>
+<DIV id=index2>
+<H3>Goooooooogle</H3>
+<SCRIPT type=text/javascript><!--
+google_ad_client = "pub-9653171024150495";
+google_alternate_color = "C3D9FF";
+google_ad_width = 120;
+google_ad_height = 600;
+google_ad_format = "120x600_as";
+google_ad_type = "text";
+google_ad_channel = "";
+//--></SCRIPT>
+
+<SCRIPT src="129_files/show_ads.js" type=text/javascript>
+</SCRIPT>
+</DIV>
+<DIV id=content>
+<H3>Clipping: The Liagn Barsky Algorithm</H3><TEXTAREA>/*			Ch5 _3 Polgon Clipping With Liang Barsky    			*/
+#include&lt;windows.h&gt;
+#include&lt;math.h&gt;
+LRESULT CALLBACK WndProc(HWND , UINT , WPARAM ,LPARAM);
+static char gszClassName[] = "MyWindowClass";
+static HINSTANCE ghInstance = NULL;
+void DDA(float , float , float , float , COLORREF ,HDC );
+float X_min=210, X_max=500,Y_min=150, Y_max=430;
+			float	xx1=100   ,yy1=500,
+					xx2=390   ,yy2=400,
+					xx3=300   ,yy3=310,
+					xx4=170   ,yy4=200,
+					xx5=270	  ,yy5=250;
+struct Interserct
+{
+	float Xi,Yi;
+	Interserct()
+	{}
+	Interserct(float a,float b)
+	{
+		Xi=a;Yi=b;
+	}
+};
+
+struct Point
+{
+	float X,Y;
+	Point()
+	{}
+	Point(float x,float y)
+	{
+		X=x;Y=y;
+	}
+};
+Point Result[9];
+/*void init(Point List[9])
+{
+		List[0]=Point(100,500);			List[1]=Point(390,500);
+		List[2]=Point(390,400);			List[3]=Point(300,310);
+		List[4]=Point(170,310);			List[5]=Point(170,200);
+		List[6]=Point(270,250);			List[7]=Point(270,100);
+						List[8]=Point(100,100);
+}*/
+void init(Point List[9])
+{
+		List[0]=Point(xx1,yy1);			List[1]=Point(xx2,yy1);
+		List[2]=Point(xx2,yy2);			List[3]=Point(xx3,yy3);
+		List[4]=Point(xx4,yy3);			List[5]=Point(xx4,yy4);
+		List[6]=Point(xx5,yy5);			List[7]=Point(xx5,xx1);
+						List[8]=Point(xx1,xx1);
+}
+int WINAPI WinMain(HINSTANCE hInstance , HINSTANCE hprevInstance , LPSTR lpCmdLine ,int nCmdShow)
+{
+	WNDCLASSEX WndClass;
+	HWND hwnd;
+	MSG Msg;
+	ghInstance = hInstance ;
+	WndClass.cbSize = sizeof(WNDCLASSEX);
+	WndClass.style = NULL;
+	WndClass.lpfnWndProc = WndProc ;
+	WndClass.cbClsExtra =0;
+	WndClass.cbWndExtra = 0;
+	WndClass.hInstance =ghInstance ;
+	WndClass.hIcon = LoadIcon(NULL,IDI_APPLICATION);
+	WndClass.hCursor =LoadCursor(NULL ,IDC_ARROW);
+    WndClass.hbrBackground = (HBRUSH)(COLOR_WINDOW+21);
+    WndClass.lpszMenuName = NULL ;
+	WndClass.lpszClassName = gszClassName ;
+	WndClass.hIconSm = LoadIcon(NULL , IDI_APPLICATION);
+	if(!RegisterClassEx(&amp;WndClass))
+	{
+		MessageBox(0, "window registeration failed!!","error",MB_ICONSTOP|MB_OK);
+		return 0;
+	}
+
+	hwnd =CreateWindowEx(WS_EX_STATICEDGE , gszClassName ," Polygon Clipping",WS_OVERLAPPEDWINDOW ,
+		CW_USEDEFAULT ,CW_USEDEFAULT,1320,1240,NULL,NULL,ghInstance,NULL);
+	if(hwnd == NULL)
+	{
+		MessageBox(0,"windows greated failed!!","Error" ,MB_ICONSTOP|MB_OK);
+         return 0;
+	}
+	ShowWindow(hwnd,nCmdShow);
+	UpdateWindow(hwnd);
+	while(GetMessage(&amp;Msg ,NULL ,0,0))
+	{
+		TranslateMessage(&amp;Msg);
+		DispatchMessage(&amp;Msg);
+	}
+	return Msg.wParam;
+}
+/*//\\//\\\////\\//\\\////\\//\\\////\\//\\\////\\//\\\////\\//\\\//*/
+void Draw_Window(float x1, float y1, float x2, float y2,COLORREF col,HDC hdc)
+{
+	DDA(x1,y1,x1,y2,col,hdc);
+	DDA(x1,y1,x2,y1,col,hdc);
+	DDA(x2,y2,x1,y2,col,hdc);
+	DDA(x2,y2,x2,y1,col,hdc);
+}
+float MAX(float x,float y)
+{
+	return x&gt;y?x:y;
+}
+
+float MIN(float x,float y)
+{
+	return x&lt;y?x:y;
+}
+//====================  Liagn Barsky		==============================
+//========================================================================
+Interserct Liagn_Barsky(float x1, float y1, float x2, float y2)
+{
+	float dx=x2-x1,dy=y2-y1;
+	float P[4],Q[4];
+	float R[4],U1=0,U2=1;
+	Interserct  end_P1 , end_P2;//tow intersected points
+	//intialize all variables
+	
+	P[0]=-dx;		Q[0]=x1-X_min;
+	P[1]=dx	;		Q[1]=X_max-x1;
+	P[2]=-dy;		Q[2]=y1-Y_min;
+	P[3]=dy ;		Q[3]=Y_max-y1;
+
+	for(int i=0;i&lt;4;i++)
+	{
+		if( P[i]&lt;0 )
+		{
+			R[i]=Q[i]/P[i];
+			U1=MAX(R[i],MAX(0,U1));
+		}
+
+		else if( P[i]&gt;=0 )
+		{
+			R[i]=Q[i]/P[i];
+			U2=MIN(R[i],MIN(1,U2));
+		}
+	}//end for
+
+	end_P1.Xi=x1+dx*U1;				end_P1.Yi=y1+dy*U1;
+	end_P2.Xi=x1+dx*U2;				end_P2.Yi=y1+dy*U2;
+	
+	if( end_P1.Xi==x1&amp;&amp;end_P1.Yi==y1||
+			end_P1.Xi==x2&amp;&amp;end_P1.Xi==y2 )
+			return Interserct( end_P2.Xi,end_P2.Yi  );
+
+return Interserct(  end_P1.Xi, end_P1.Yi);
+
+}
+//============================================================
+/*void Draw_Polgon( Point List[9], HDC hdc,COLORREF C )
+{
+	DDA(390,500,390,400,C,hdc);		DDA(390,500,100,500,C,hdc);
+	DDA(100,500,100,100,C,hdc);		DDA(100,100,270,100,C,hdc);
+	DDA(270,100,270,250,C,hdc);		DDA(270,250,170,200,C,hdc);
+	DDA(170,200,170,310,C,hdc);		DDA(170,310,300,310,C,hdc);
+					DDA(300,310,390,400,C,hdc);
+}*/
+void Draw_Polgon( Point List[9], HDC hdc,COLORREF C )
+{
+
+	DDA(xx2,yy1,xx2,yy2,C,hdc);		DDA(xx2,yy1,xx1,yy1,C,hdc);
+	DDA(xx1,yy1,xx1,xx1,C,hdc);		DDA(xx1,xx1,xx5,xx1,C,hdc);
+	DDA(xx5,xx1,xx5,yy5,C,hdc);		DDA(xx5,yy5,xx4,yy4,C,hdc);
+	DDA(xx4,yy4,xx4,yy3,C,hdc);		DDA(xx4,yy3,xx3,yy3,C,hdc);
+					DDA(xx3,yy3,xx2,yy2,C,hdc);
+}
+bool In(Point P)
+{
+	return( P.X&gt;=X_min&amp;&amp;P.X&lt;=X_max 
+		&amp;&amp; P.Y&gt;=Y_min&amp;&amp;P.Y&lt;=Y_max )?
+		true:false;
+}
+bool Out(Point P)
+{
+	return( P.X&gt;=X_min&amp;&amp;P.X&lt;=X_max 
+		&amp;&amp; P.Y&gt;=Y_min&amp;&amp;P.Y&lt;=Y_max )?
+		false:true;
+}
+void Draw_Result(Interserct L[9],COLORREF C,HDC hdc,int count)
+{
+	for(int i=0;i&lt;count;i++)
+	DDA(L[i].Xi,L[i].Yi,L[i+1].Xi,L[i+1].Yi,C,hdc);
+}
+//====================================================================
+void PolygonCliping( Point List[9],COLORREF C,HDC hdc)
+{
+	int count=-1;
+	Interserct Current,Result[9];
+//___________________________________________________________________
+	for(int i=0;i&lt;8;i++)
+	{
+		//tow point are out
+		if( !In(List[i])&amp;&amp;!In(List[i+1]) )
+			continue;//Get Next two points
+
+		if( In(List[i])&amp;&amp;In(List[i+1]) )
+		{
+			count++;//store current point and get next
+			Result[count].Xi=List[i].X;
+			Result[count].Yi=List[i].Y;
+			continue;
+		}
+//___________________________________________________________________
+if( In(List[i])&amp;&amp;!In(List[i+1]) )//error here ??? Liagn_Barsky(Out ,In)
+		{
+			count++;//Store In Point
+			Result[count].Xi=List[i].X;
+			Result[count].Yi=List[i].Y;
+			//Get Intersect point
+Current=Liagn_Barsky( List[i+1].X,List[i+1].Y,
+					  List[i].X,List[i].Y );
+			//store it
+			count++;
+			Result[count].Xi=Current.Xi;
+			Result[count].Yi=Current.Yi;
+			continue;
+		}
+//___________________________________________________________________
+if( !In(List[i])&amp;&amp;In(List[i+1]) )//!In() = Out()
+		{
+	Current=Liagn_Barsky( List[i].X,List[i].Y,
+						  List[i+1].X,List[i+1].Y );
+			count++;
+			Result[count].Xi=Current.Xi;
+			Result[count].Yi=Current.Yi;
+/*
+			count++;
+			Result[count].Xi=List[i+1].X;
+			Result[count].Yi=List[i+1].Y;*/
+			continue;
+		}
+//___________________________________________________________________
+
+	}//end for
+
+	DDA( Result[2].Xi,Result[2].Yi,
+			   Result[3].Xi,Result[3].Yi,C,hdc);
+	
+	Draw_Result(Result,C,hdc,count);
+}
+//====================================================================
+LRESULT CALLBACK WndProc(HWND hwnd ,UINT Message ,WPARAM wparam ,LPARAM
+						 lparam)
+{
+	COLORREF C0=RGB(0,0,250),C1=RGB(250,0,0),C2=RGB(255,255,0);
+	COLORREF GRND;
+	HDC      hdc;
+	hdc=GetDC( hwnd );
+//	Draw_Window(X_min,Y_min,X_max,Y_max,C2,hdc);
+	Point List[9];
+	init(List);
+	switch(Message)
+	{
+	case WM_CLOSE :
+		DestroyWindow(hwnd);
+	break ;
+	
+	case WM_DESTROY:
+		PostQuitMessage(0);
+	break ;
+
+	case WM_RBUTTONDOWN:
+		hdc=GetDC(hwnd);
+			DestroyWindow(hwnd);
+			//PolygonCliping(List,C0,hdc);
+		ReleaseDC(hwnd,hdc);
+	break;
+	case WM_LBUTTONDOWN:
+		hdc=GetDC(hwnd);
+		GRND=GetPixel(hdc,0,0);
+		Draw_Window(X_min,Y_min,X_max,Y_max,C2,hdc);
+		Sleep(1500);
+		Draw_Polgon(List,hdc,C1);
+		Sleep(2500);
+		Draw_Polgon(List,hdc,GRND);
+		PolygonCliping(List,C0,hdc);
+		ReleaseDC(hwnd,hdc);
+		break;
+		case WM_CHAR:
+			{
+				switch (char(wparam))
+				case('r'):
+					MessageBox(0, "you  pressed  r    ","key  ",0);
+				case('q'):
+					DestroyWindow(hwnd);
+			}
+	default:
+		return DefWindowProc(hwnd,Message,wparam,lparam);
+	}
+	return 0;
+}
+/*====================================================================*/
+void DDA(float x1, float y1, float x2, float y2, COLORREF col,HDC hdc)
+{
+	float xBegin  =  x1;
+	float xFinal  =  x2;
+	float yBegin  =  y1;
+	float yFinal  =  y2;
+	float slope = (y2 - y1) / (x2 - x1);
+	float slopeInverse  =  1 / slope;
+
+	if(x1&gt;x2 &amp;&amp; y1&gt;y2)
+	{
+		xBegin  =  x2;
+	    xFinal  =  x1;
+		yBegin  =  y2;
+	    yFinal  =  y1;
+	}
+	int x = int(xBegin);
+	int y = int(yBegin);
+
+	// if the line is parallel to the y coordinate
+	if((xBegin - xFinal) == 0)
+		if(yBegin &lt; yFinal)	// and y starting point greater than y end
+			while(y &lt;= yFinal)
+			{
+				SetPixel(hdc, x, y, col);
+				y ++;	// increment y
+			}
+		else
+			while(y &gt;= yFinal)
+			{
+				SetPixel(hdc, x, y, col);
+				y --;	// decrement y
+			}
+	// if the line is parallel to the x coordinate
+	else
+		if((yBegin - yFinal) == 0)
+			if(xBegin &lt; xFinal) // and x starting point greater than x end
+				while(x &lt;= xFinal)
+				{
+					SetPixel(hdc, x, y, col);
+					x ++;
+				}
+			else
+				while(x &gt;= xFinal)
+				{
+					SetPixel(hdc, x, y, col);
+					x --;
+				}
+	else
+		if(slope &gt;= 1 || slope &lt;= -1) // new case
+		{
+			if(yFinal &gt; yBegin) // from begin to end
+				while(y &lt;= yFinal)
+				{
+					x = int(xBegin + 0.5);
+					xBegin = xBegin + slopeInverse;
+					SetPixel(hdc, x, y, col);
+					y ++;
+				}
+			else		// from end to begin
+				while(y &gt;= yFinal)
+				{
+					x = int(xBegin + 0.5);
+					xBegin = xBegin - slopeInverse;
+					SetPixel(hdc, x, y, col);
+					y --;
+				}
+		}
+	else
+		if(slopeInverse &gt;= 1 || slopeInverse &lt;= -1) // new case
+		{
+			if(xFinal &gt; xBegin)	// from begin to end
+				while(x &lt;= xFinal)
+				{
+					y = int(yBegin + 0.5);
+					yBegin = yBegin + slope;
+					SetPixel(hdc, x, y, col);
+					x ++;
+				}
+			else		// from end to begin
+				while(x &gt;= xFinal)
+				{
+					y = int(yBegin + 0.5);
+					yBegin = yBegin - slope;
+					SetPixel(hdc, x, y, col);
+					x --;
+				}
+		}//if
+}
+</TEXTAREA> <BR>
+<CENTER><IMG 
+style="BORDER-RIGHT: #0066cf 1px solid; BORDER-TOP: #0066cf 1px solid; BORDER-LEFT: #0066cf 1px solid; WIDTH: 350px; BORDER-BOTTOM: #0066cf 1px solid; HEIGHT: 300px" 
+src="129_files/polygon.gif"> </CENTER><!-- Search Google -->
+<CENTER>
+<FORM action=http://www.google.com/custom method=get target=_top>
+<TABLE bgColor=#ffffff>
+  <TBODY>
+  <TR>
+    <TD vAlign=top noWrap align=left height=32><A 
+      href="http://www.google.com/"><IMG alt=Google 
+      src="129_files/Logo_25wht.gif" align=middle border=0></IMG></A> <LABEL 
+      style="DISPLAY: none" for=sbi>Enter your search terms</LABEL> <INPUT 
+      id=sbi maxLength=255 size=40 name=q></INPUT> <LABEL style="DISPLAY: none" 
+      for=sbb>Submit search form</LABEL> <INPUT id=sbb type=submit value=Search name=sa></INPUT> <INPUT type=hidden 
+      value=pub-9653171024150495 name=client></INPUT> <INPUT type=hidden value=1 
+      name=forid></INPUT> <INPUT type=hidden value=ISO-8859-1 name=ie></INPUT> 
+      <INPUT type=hidden value=ISO-8859-1 name=oe></INPUT> <INPUT type=hidden 
+      value=active name=safe></INPUT> <INPUT type=hidden 
+      value=GALT:#008000;GL:1;DIV:#336699;VLC:663399;AH:center;BGC:FFFFFF;LBGC:336699;ALC:0000FF;LC:0000FF;T:000000;GFNT:0000FF;GIMP:0000FF;FORID:1 
+      name=cof></INPUT> <INPUT type=hidden value=en name=hl></INPUT> 
+  </TD></TR></TBODY></TABLE></FORM></CENTER><!-- Search Google -->
+<H3><A 
+href="http://www2.webng.com/amrlearn/Index.html">Home</A>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A 
+href="http://www2.webng.com/amrlearn/134.html">Previous</A>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A 
+href="http://www2.webng.com/amrlearn/125.html">Next</A></H3></DIV></BODY></HTML>

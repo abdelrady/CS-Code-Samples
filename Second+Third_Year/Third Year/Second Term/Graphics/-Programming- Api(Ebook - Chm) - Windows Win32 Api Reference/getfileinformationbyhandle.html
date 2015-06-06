@@ -1,0 +1,84 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+<HTML lang="en-us">
+<HEAD>
+<TITLE>Windows API Guide: GetFileInformationByHandle Function</TITLE>
+<META content="vbapi@vbapi.com" name="author">
+<META content="Information about the GetFileInformationByHandle function in the Windows API, geared towards the Visual Basic user." name="description">
+<META content="Kuliniewicz,Windows,Windows 95,Windows NT,Windows 98,Windows 32s,32s,API,Application Programming Interface,Programming,Visual Basic,Basic,VB,GetFileInformationByHandle" name="keywords">
+<META content="Omicron HTML Editor" name="generator">
+<LINK href="default.css" tppabs="http://www.vbapi.com/css/default.css" rel="stylesheet" type="text/css">
+<LINK href="index-1.html" tppabs="http://www.vbapi.com/index.html" rel="home">
+</HEAD>
+<BODY>
+
+<!-- Begin Adslot1 -->
+<CENTER>
+<SCRIPT language="JAVASCRIPT">
+<!-- hide from older browsers
+now = new Date();
+my_random = now.getTime();
+document.write('<A href="http://adex3.flycast.com/server/socket/127.0.0.1:2800/click/VBWorldnet/VBAPI/' + my_random + '">');
+document.write('<IMG width="468" height="60" border="1" src="http://adex3.flycast.com/server/socket/127.0.0.1:2800/ad/VBWorldnet/VBAPI/' + my_random + '"></A>');
+// -->
+</SCRIPT>
+</CENTER>
+<!-- End Adslot1 -->
+
+<HR>
+
+<H1>GetFileInformationByHandle Function</H1>
+
+<P><CODE class="declare">Declare Function GetFileInformationByHandle Lib "kernel32.dll" (ByVal hFile As Long, lpFileInformation As <A href="by_handle_file_information.html" tppabs="http://www.vbapi.com/ref/b/by_handle_file_information.html">BY_HANDLE_FILE_INFORMATION</A>) As Long</CODE>
+
+<P><B>Platforms:</B> Win 32s, Win 95/98, Win NT
+
+<P><B>GetFileInformationByHandle</B> determines various information about a file.  This information includes the file's attributes; its creation, last-access, and last-modified dates and times; the serial number of the disk the file is on; the size of the file; the number of links to it in the file system; and the its unique numeric identifier.  All of this information is put into the structure passed as <VAR>lpFileInformation</VAR>.  The function returns 0 if an error occured, or 1 if successful.
+
+<DL>
+<DT><VAR>hFile</VAR><DD>A handle to the file to get the information of.
+<DT><VAR>lpFileInformation</VAR><DD>Receives the information (specified above) relating to the file.
+</DL> 
+
+<P><B>Example:</B>
+<PRE><CODE class="example">' Display the serial number of the disk that file C:\MyProgram\datafile.txt
+' is on -- in other words, we are finding the serial number of drive C:.  Note that here we
+' aren't interested in the other information we receive.  Also note that the alternate declare
+' of CreateFile must be used here since we're using Win 95/98 -- see its page for details.
+Dim hfile As Long  ' receives the handle to the file
+Dim fileinfo As <A href="by_handle_file_information.html" tppabs="http://www.vbapi.com/ref/b/by_handle_file_information.html">BY_HANDLE_FILE_INFORMATION</A>  ' receives info about the file
+Dim hexstring As String  ' will receive the hexadecimal form of the serial number
+Dim retval As Long  ' return value
+
+' Get a handle to the file (note how the alternate declare is used):
+hfile = <A href="createfile.html" tppabs="http://www.vbapi.com/ref/c/createfile.html">CreateFileNS</A>("C:\MyProgram\datafile.txt", GENERIC_READ, FILE_SHARE_READ, 0, OPEN_EXISTING, FILE_ATTRIBUTE_ARCHIVE, 0)
+If hfile = -1 Then  ' if the file could not be opened
+  Debug.Print "Could not open the file C:\MyProgram\datafile.txt."
+  End  ' abort the program
+End If
+
+' Display the serial number, using hexadecimal:
+retval = <B>GetFileInformationByHandle</B>(hfile, fileinfo)  ' read the information
+hexstring = Hex(fileinfo.dwVolumeSerialNumber)  ' get the hexadecimal value of the serial number
+If Len(hexstring) < 8 Then  ' if the string is less than 8 characters,
+  hexstring = String("0", 8 - Len(hexstring)) &amp; hexstring  ' then right-pad it with "0"s
+End If
+Debug.Print "The serial number of C: is "; hexstring
+
+' Close the file:
+retval = <A href="closehandle.html" tppabs="http://www.vbapi.com/ref/c/closehandle.html">CloseHandle</A></CODE></PRE>
+
+<P><B>See Also:</B> <A href="getfileattributes.html" tppabs="http://www.vbapi.com/ref/g/getfileattributes.html">GetFileAttributes</A>, <A href="getfilesize.html" tppabs="http://www.vbapi.com/ref/g/getfilesize.html">GetFileSize</A>, <A href="getfiletime.html" tppabs="http://www.vbapi.com/ref/g/getfiletime.html">GetFileTime</A><BR>
+<B>Category:</B> <A href="index.html#files" tppabs="http://www.vbapi.com/ref/index.html#files">Files</A></P>
+
+<P><A href="funca.html" tppabs="http://www.vbapi.com/ref/funca.html">Go back to the alphabetical Function listing.</A><BR>
+<A href="index.html" tppabs="http://www.vbapi.com/ref/index.html">Go back to the Reference section index.</A></P>
+
+<HR>
+
+<P>This page is copyright &copy; 2000 Paul Kuliniewicz.  <A href="copyrite.html" tppabs="http://www.vbapi.com/copyrite.html" rel="copyright">Copyright Information.</A><BR>
+<A href="index-1.html" tppabs="http://www.vbapi.com/index.html">Go back to the Windows API Guide home page.</A><BR>
+E-mail: <A href="javascript:if(confirm('http://www.vbapi.com/email.html  \n\nThis file was not retrieved by Teleport Pro, because it is addressed on a domain or path outside the boundaries set for its Starting Address.  \n\nDo you want to open it from the server?'))window.location='http://www.vbapi.com/email.html'" tppabs="http://www.vbapi.com/email.html">vbapi@vbapi.com</A>  <A href="javascript:if(confirm('http://www.vbapi.com/email.html  \n\nThis file was not retrieved by Teleport Pro, because it is addressed on a domain or path outside the boundaries set for its Starting Address.  \n\nDo you want to open it from the server?'))window.location='http://www.vbapi.com/email.html#secure'" tppabs="http://www.vbapi.com/email.html#secure">Send Encrypted E-Mail</A><BR>
+This page is at <A href="getfileinformationbyhandle.html" tppabs="http://www.vbapi.com/ref/g/getfileinformationbyhandle.html">http://www.vbapi.com/ref/g/getfileinformationbyhandle.html</A>
+
+</BODY>
+</HTML>

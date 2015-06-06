@@ -1,0 +1,71 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+<HTML lang="en-us">
+<HEAD>
+<TITLE>Windows API Guide: joyGetDevCaps Function</TITLE>
+<META content="vbapi@vbapi.com" name="author">
+<META content="Information about the joyGetDevCaps function in the Windows API, geared towards the Visual Basic user." name="description">
+<META content="Kuliniewicz,Windows,Windows 95,Windows NT,Windows 98,Windows 32s,32s,API,Application Programming Interface,Programming,Visual Basic,Basic,VB,joyGetDevCaps" name="keywords">
+<META content="Omicron HTML Editor" name="generator">
+<LINK href="default.css" tppabs="http://www.vbapi.com/css/default.css" rel="stylesheet" type="text/css">
+<LINK href="index-1.html" tppabs="http://www.vbapi.com/index.html" rel="home">
+</HEAD>
+<BODY>
+
+<!-- Begin Adslot1 -->
+<CENTER>
+<SCRIPT language="JAVASCRIPT">
+<!-- hide from older browsers
+now = new Date();
+my_random = now.getTime();
+document.write('<A href="http://adex3.flycast.com/server/socket/127.0.0.1:2800/click/VBWorldnet/VBAPI/' + my_random + '">');
+document.write('<IMG width="468" height="60" border="1" src="http://adex3.flycast.com/server/socket/127.0.0.1:2800/ad/VBWorldnet/VBAPI/' + my_random + '"></A>');
+// -->
+</SCRIPT>
+</CENTER>
+<!-- End Adslot1 -->
+
+<HR>
+
+<H1>joyGetDevCaps Function</H1>
+
+<P><CODE class="declare">Declare Function joyGetDevCaps Lib "winmm.dll" Alias "joyGetDevCapsA" (ByVal id As Long, lpCaps As <A href="joycaps.html" tppabs="http://www.vbapi.com/ref/j/joycaps.html">JOYCAPS</A>, ByVal uSize As Long) As Long</CODE>
+
+<P><B>Platforms:</B> Win 95/98
+
+<P><B>joyGetDevCaps</B> reads various information about a joystick.  This information is put into the variable passed as <VAR>lpCaps</VAR>.  This function does not, however, give you the current position of the joystick.  The function returns 0 if the joystick is connected and working and a non-zero error code if it isn't.
+
+<DL>
+<DT><VAR>id</VAR><DD>The ID number of the joystick to read, starting with 0.
+<DT><VAR>lpCaps</VAR><DD>Variable that receives the information about the joystick.
+<DT><VAR>uSize</VAR><DD>The length in bytes of <VAR>lpCaps</VAR>.
+</DL>
+
+<P><B>Example:</B>
+<PRE><CODE class="example">' Display the name of the joystick driver for Joystick #1
+' Note that the ID of Joystick #1 is 0.
+Dim joyinfo As <A href="joycaps.html" tppabs="http://www.vbapi.com/ref/j/joycaps.html">JOYCAPS</A>  ' receives joystick information
+Dim joydriver As String  ' will be set to the joystick's driver name
+Dim retval As Long  ' return value
+
+retval = <B>joyGetDevCaps</B>(0, joyinfo, Len(joyinfo))  ' read joystick information
+If retval = 0 Then  ' there is a functioning Joystick #1
+  joydriver = Left(joyinfo.szPname, InStr(joyinfo.szPname, vbNullChar) - 1)  ' extract data from the fixed-length string
+  Debug.Print "The joystick driver is: "; joydriver
+Else
+  Debug.Print "There is no joystick connected to Joystick Port #1."
+End If</CODE></PRE>
+
+<P><B>Category:</B> <A href="index.html#joysticks" tppabs="http://www.vbapi.com/ref/index.html#joysticks">Joysticks</A></P>
+
+<P><A href="funca.html" tppabs="http://www.vbapi.com/ref/funca.html">Go back to the alphabetical Function listing.</A><BR>
+<A href="index.html" tppabs="http://www.vbapi.com/ref/index.html">Go back to the Reference section index.</A></P>
+
+<HR>
+
+<P>This page is copyright &copy; 2000 Paul Kuliniewicz.  <A href="copyrite.html" tppabs="http://www.vbapi.com/copyrite.html" rel="copyright">Copyright Information.</A><BR>
+<A href="index-1.html" tppabs="http://www.vbapi.com/index.html">Go back to the Windows API Guide home page.</A><BR>
+E-mail: <A href="javascript:if(confirm('http://www.vbapi.com/email.html  \n\nThis file was not retrieved by Teleport Pro, because it is addressed on a domain or path outside the boundaries set for its Starting Address.  \n\nDo you want to open it from the server?'))window.location='http://www.vbapi.com/email.html'" tppabs="http://www.vbapi.com/email.html">vbapi@vbapi.com</A>  <A href="javascript:if(confirm('http://www.vbapi.com/email.html  \n\nThis file was not retrieved by Teleport Pro, because it is addressed on a domain or path outside the boundaries set for its Starting Address.  \n\nDo you want to open it from the server?'))window.location='http://www.vbapi.com/email.html#secure'" tppabs="http://www.vbapi.com/email.html#secure">Send Encrypted E-Mail</A><BR>
+This page is at <A href="joygetdevcaps.html" tppabs="http://www.vbapi.com/ref/j/joygetdevcaps.html">http://www.vbapi.com/ref/j/joygetdevcaps.html</A>
+
+</BODY>
+</HTML>

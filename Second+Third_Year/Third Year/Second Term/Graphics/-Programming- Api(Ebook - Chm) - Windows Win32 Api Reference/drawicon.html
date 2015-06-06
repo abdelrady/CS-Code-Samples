@@ -1,0 +1,107 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+<HTML lang="en-us">
+<HEAD>
+<TITLE>Windows API Guide: DrawIcon Function</TITLE>
+<META content="vbapi@vbapi.com" name="author">
+<META content="Information about the DrawIcon function in the Windows API, geared towards the Visual Basic user." name="description">
+<META content="Kuliniewicz,Windows,Windows 95,Windows NT,Windows 98,Windows CE,Windows 2000,API,Application Programming Interface,Programming,Visual Basic,Basic,VB,DrawIcon" name="keywords">
+<META content="Omicron HTML Editor" name="generator">
+<META content="Thu, 05 Aug 1999 03:09:00 GMT" http-equiv="Last-Modified">
+<LINK href="default.css" tppabs="http://www.vbapi.com/css/default.css" rel="stylesheet" type="text/css">
+<LINK href="index-1.html" tppabs="http://www.vbapi.com/index.html" rel="home">
+
+<LINK href="glossary.html" tppabs="http://www.vbapi.com/ref/glossary.html" rel="glossary">
+<LINK href="copyrite.html" tppabs="http://www.vbapi.com/copyrite.html" rel="copyright">
+</HEAD>
+<BODY>
+
+<!-- Begin Adslot1 -->
+<CENTER>
+<SCRIPT language="JAVASCRIPT">
+<!-- hide from older browsers
+now = new Date();
+my_random = now.getTime();
+document.write('<A href="http://adex3.flycast.com/server/socket/127.0.0.1:2800/click/VBWorldnet/VBAPI/' + my_random + '">');
+document.write('<IMG width="468" height="60" border="1" src="http://adex3.flycast.com/server/socket/127.0.0.1:2800/ad/VBWorldnet/VBAPI/' + my_random + '"></A>');
+// -->
+</SCRIPT>
+</CENTER>
+<!-- End Adslot1 -->
+
+<HR>
+
+<H1>DrawIcon Function</H1>
+
+<P><CODE class="declare">Declare Function DrawIcon Lib "user32.dll" (ByVal hDC As Long, ByVal x As Long, ByVal y As Long, ByVal hIcon As Long) As Long</CODE></P>
+
+<H2>Platforms</H2>
+<P><UL>
+<LI><B>Windows 95:</B> Supported.
+<LI><B>Windows 98:</B> Supported.
+<LI><B>Windows NT:</B> Requires Windows NT 3.1 or later.
+<LI><B>Windows 2000:</B> Supported.
+<LI><B>Windows CE:</B> Requires Windows CE 1.0 or later.
+</UL></P>
+
+<H2>Description &amp; Usage</H2>
+<P><B>DrawIcon</B> displays an icon on a <A class="def" href="glossary.html#device" tppabs="http://www.vbapi.com/ref/glossary.html#device" rel="glossary">device</A>.  The icon's position is determined by a coordinate pair passed to the function identifying the coordinates of the upper-left corner of the icon.  The icon is always drawn in its normal dimensions.</P>
+
+<H2>Return Value</H2>
+<P>If an error occured, the function returns 0 (use <A href="getlasterror.html" tppabs="http://www.vbapi.com/ref/g/getlasterror.html">GetLastError</A> to get the error code).  If successful, the function returns a non-zero value.</P>
+
+<H2>Visual Basic-Specific Issues</H2>
+<P>None.</P>
+
+<H2>Parameters</H2>
+<P><DL>
+<DT><VAR>hDC</VAR><DD>A <A class="def" href="glossary.html#handle" tppabs="http://www.vbapi.com/ref/glossary.html#handle" rel="glossary">handle</A> to a <A class="def" href="glossary.html#devicecontext" tppabs="http://www.vbapi.com/ref/glossary.html#devicecontext" rel="glossary">device context</A> to the device to draw the icon on.
+<DT><VAR>x</VAR><DD>The x-coordinate of the point to position the upper-left corner of the icon's image at.
+<DT><VAR>y</VAR><DD>The y-coordinate of the point to position the upper-left corner of the icon's image at.
+<DT><VAR>hIcon</VAR><DD>A handle to the icon to display.
+</DL></P>
+
+<H2>Example</H2>
+<P><PRE><CODE class="example"><SPAN class="com">' This code is licensed according to the terms and conditions listed <A href="copyrite.html#license" tppabs="http://www.vbapi.com/copyrite.html#license" rel="copyright">here</A>.</SPAN>
+
+' Display the first icon (index 0) stored in the executable file
+' C:\MyApp\Prog.exe on window Form1.  The icon must be destroyed after the
+' program finishes using it.
+Dim hIcon As Long  ' handle to the function gotten from the executable file
+Dim retval As Long  ' return value
+
+' Extract the first icon stored in the aforementioned executable file.
+hIcon = <A href="extracticon.html" tppabs="http://www.vbapi.com/ref/e/extracticon.html">ExtractIcon</A>(App.hInstance, "C:\MyApp\Prog.exe", 0)
+' Only attempt to display the icon if we successfully extracted it.
+If hIcon = 0 Then
+  Debug.Print "Failed to extract the icon -- aborting."
+  End  ' terminate the program
+Else
+  ' Display the icon at coordinates (100, 75) on window Form1.
+  retval = <B>DrawIcon</B>(Form1.hDC, 100, 75, hIcon)
+  ' Although the icon's image is still visible, the icon itself is not in use.
+  ' Therefore we destroy it to free up resources.
+  retval = <A href="destroyicon.html" tppabs="http://www.vbapi.com/ref/d/destroyicon.html">DestroyIcon</A>(hIcon)
+End If</CODE></PRE></P>
+
+<H2>See Also</H2>
+<P><A href="drawiconex.html" tppabs="http://www.vbapi.com/ref/d/drawiconex.html">DrawIconEx</A></P>
+
+<H2>Category</H2>
+<P><A href="funcc.html#icons" tppabs="http://www.vbapi.com/ref/funcc.html#icons">Icons</A></P>
+
+<P><A href="funca.html" tppabs="http://www.vbapi.com/ref/funca.html">Go back to the alphabetical Function listing.</A><BR>
+<A href="index.html" tppabs="http://www.vbapi.com/ref/index.html">Go back to the Reference section index.</A></P>
+
+<HR>
+
+<P>
+<B>Last Modified:</B> August 4, 1999<BR>
+This page is copyright &copy; 1999 Paul Kuliniewicz.  
+<A href="copyrite.html" tppabs="http://www.vbapi.com/copyrite.html" rel="copyright">Copyright Information</A>  <B>Revised October 29, 2000</B><BR>
+
+<A href="index-1.html" tppabs="http://www.vbapi.com/index.html">Go back to the Windows API Guide home page.</A><BR>
+E-mail: <A href="javascript:if(confirm('http://www.vbapi.com/email.html  \n\nThis file was not retrieved by Teleport Pro, because it is addressed on a domain or path outside the boundaries set for its Starting Address.  \n\nDo you want to open it from the server?'))window.location='http://www.vbapi.com/email.html'" tppabs="http://www.vbapi.com/email.html">vbapi@vbapi.com</A>  <A href="javascript:if(confirm('http://www.vbapi.com/email.html  \n\nThis file was not retrieved by Teleport Pro, because it is addressed on a domain or path outside the boundaries set for its Starting Address.  \n\nDo you want to open it from the server?'))window.location='http://www.vbapi.com/email.html#secure'" tppabs="http://www.vbapi.com/email.html#secure">Send Encrypted E-Mail</A><BR>
+This page is at <A href="drawicon.html" tppabs="http://www.vbapi.com/ref/d/drawicon.html">http://www.vbapi.com/ref/d/drawicon.html</A>
+</P>
+</BODY>
+</HTML>

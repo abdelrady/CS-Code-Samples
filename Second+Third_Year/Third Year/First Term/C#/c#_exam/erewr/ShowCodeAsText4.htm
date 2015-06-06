@@ -1,0 +1,145 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!-- saved from url=(0085)http://www.planetsourcecode.com/vb/scripts/ShowCodeAsText.asp?txtCodeId=3740&lngWId=3 -->
+<HTML><HEAD>
+<META http-equiv=Content-Type content="text/html; charset=windows-1256">
+<META content="MSHTML 6.00.2900.2180" name=GENERATOR></HEAD>
+<BODY><XMP>//**************************************
+// Name: Maze Traversal
+// Description:This simple Algorithm traverses a hard coded maze. Using recursive techniques, it guarentees a succesful exit (provided there is one).
+// By: Gibran Akram
+//
+//
+// Inputs:None
+//
+// Returns:None
+//
+//Assumes:None
+//
+//Side Effects:None
+//This code is copyrighted and has limited warranties.
+//Please see http://www.Planet-Source-Code.com/xq/ASP/txtCodeId.3740/lngWId.3/qx/vb/scripts/ShowCode.htm
+//for details.
+//**************************************
+
+//Maze Traversal
+#include "iostream.h"
+#include "stdlib.h"
+void Traverse( char[][12], int, int, int);
+void Maze(const char[][12]);
+bool validmove(const char[][12],int,int);
+bool Edge (int,int);
+enum direction {DOWN,RIGHT,UP,LEFT};
+const int x = 2;
+const int y = 0;
+////****Main****////
+int main()
+
+
+    {
+    char maze[12][12] ={{'*','*','*','*','*','*','*','*','*','*','*','*'},{'*','.','.','.','*','.','.','.','.','.','.','*'},{'.','.','*','.','*','.','*','*','*','*','.','*'},{'*','*','*','.','*','.','.','.','.','*','.','*'},{'*','.','.','.','.','*','*','*','.','*','.','.'},{'*','*','*','*','.','*','.','*','.','*','.','*'},{'*','.','.','*','.','*','.','*','.','*','.','*'},{'*','*','.','*','.','*','.','*','.','*','.','*'},{'*','.','.','.','.','.','.','.','.','*','.','*'},{'*','*','*','*','*','*','.','*','*','*','.','*'},{'*','.','.','.','.','.','.','*','.','.','.', '*'},{'*','*','*','*','*','*','*','*','*','*','*','*'}};
+    Traverse(maze,x,y,RIGHT);
+    return 0;
+}
+///////////////////////////////////Functions/////////////////////////////////
+void Traverse(char maze[][12], int xlocation, int ylocation, int direction)
+
+
+    {
+    	maze[xlocation][ylocation]='x';
+    	Maze(maze);
+    if (Edge(xlocation,ylocation)&&xlocation!=x&&ylocation!=y)
+
+
+        {
+        	cout<<" Phew i got out !!!! I Know the righteous Way";
+        return;
+    }
+    else if (xlocation==x&&ylocation==x)
+
+
+        	{
+        		cout<<" Back to Square one !!!!"<<endl;
+        		return;
+        	}
+        else
+
+
+            	{
+            		for (int move =direction,count=0;count<4;count++,move++,move%=4)
+            switch (move)
+
+
+                	{
+                	case DOWN:
+                		if (validmove(maze,xlocation+1,ylocation))
+
+
+                    {
+                    		Traverse(maze,xlocation+1,ylocation,LEFT);
+                    	 return;
+                }
+                	break;
+                	case RIGHT:
+                		if (validmove(maze,xlocation,ylocation+1))
+
+
+                    {
+                    		Traverse(maze,xlocation,ylocation+1,DOWN);
+                    return;
+                }
+                	break;
+                	case UP:
+                		if (validmove(maze,xlocation-1,ylocation))
+
+
+                    {
+                    		Traverse(maze,xlocation-1,ylocation,RIGHT);
+                    	return;
+                }
+                	break;
+                	case LEFT:
+                		if (validmove(maze,xlocation,ylocation-1))
+
+
+                    {
+                    		Traverse(maze,xlocation,ylocation-1,UP);
+                    return;
+                }
+                		break;
+                		}
+                	}
+            }
+            bool validmove(const char maze[][12],int r, int c)
+
+
+                {
+                return (r>=0&&r<=11&&c>=0&&c<=11&&maze[r][c]!='*');
+            }
+            bool Edge(int x,int y)
+
+
+                {
+                if ((x==0||x==11)&&(y>=0&&y<=11))
+                return true;
+                else if ((y==0||y==11)&&(x>=0&&x<=11))
+                return true;
+                else
+                return false;
+            }
+            void Maze(const char maze[][12])
+
+
+                {
+                for (int x=0;x<12;x++)
+
+
+                    {
+                    for (int y=0;y<12;y++)
+                    cout<<maze[x][y]<<' ';
+                    cout<<'\n';
+                }
+                cout<<"Press Enter for the next move\n";
+                cin.get();
+            }
+
+		</XMP></BODY></HTML>

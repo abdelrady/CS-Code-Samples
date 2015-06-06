@@ -1,0 +1,135 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+<HTML lang="en-us">
+<HEAD>
+<TITLE>Windows API Guide: PrintDlg Function</TITLE>
+<META content="vbapi@vbapi.com" name="author">
+<META content="Information about the PrintDlg function in the Windows API, geared towards the Visual Basic user." name="description">
+<META content="Kuliniewicz,Windows,Windows 95,Windows NT,Windows 98,Windows 32s,32s,API,Application Programming Interface,Programming,Visual Basic,Basic,VB,PrintDlg" name="keywords">
+<META content="Omicron HTML Editor" name="generator">
+<LINK href="default.css" tppabs="http://www.vbapi.com/css/default.css" rel="stylesheet" type="text/css">
+<LINK href="index-1.html" tppabs="http://www.vbapi.com/index.html" rel="home">
+</HEAD>
+<BODY>
+
+<!-- Begin Adslot1 -->
+<CENTER>
+<SCRIPT language="JAVASCRIPT">
+<!-- hide from older browsers
+now = new Date();
+my_random = now.getTime();
+document.write('<A href="http://adex3.flycast.com/server/socket/127.0.0.1:2800/click/VBWorldnet/VBAPI/' + my_random + '">');
+document.write('<IMG width="468" height="60" border="1" src="http://adex3.flycast.com/server/socket/127.0.0.1:2800/ad/VBWorldnet/VBAPI/' + my_random + '"></A>');
+// -->
+</SCRIPT>
+</CENTER>
+<!-- End Adslot1 -->
+
+<HR>
+
+<H1>PrintDlg Function</H1>
+
+<P><CODE class="declare">Declare Function PrintDlg Lib "comdlg32.dll" Alias "PrintDlgA" (pPrintdlg As <A href="printdlg_type.html" tppabs="http://www.vbapi.com/ref/p/printdlg_type.html">PRINTDLG_TYPE</A>) As Long</CODE>
+
+<P><B>Platforms:</B> Win 32s, Win 95/98, Win NT
+
+<P><B>PrintDlg</B> displays either the Print common dialog box or the Print Setup dialog box.  Either box can be used to allow the user to select a printer and other settings, such as the number of copies and the page range, desired for a print operation.  Information for initializing the dialog box as well as information returned from it is stored in the structure passed as <VAR>pPrintdlg</VAR>.  See the pages for the <A href="printdlg_type.html" tppabs="http://www.vbapi.com/ref/p/printdlg_type.html">PRINTDLG_TYPE</A>, <A href="devmode.html" tppabs="http://www.vbapi.com/ref/d/devmode.html">DEVMODE</A>, and <A href="devnames.html" tppabs="http://www.vbapi.com/ref/d/devnames.html">DEVNAMES</A> structures for more details about using this function.  Note that instead of using the latter two structures explicitly, handles to the memory blocks holding their data are required by the function; see the example below.  The function returns 0 if either an error occured or the user pressed Cancel, or a non-zero value if the user successfully pressed OK.
+
+<DL>
+<DT><VAR>pPrintdlg</VAR><DD>Stores both the dialog box's initialization settings and the information returned from the dialog box.
+</DL>
+
+<P><B>Example:</B>
+<PRE><CODE class="example">' Open a Print common dialog box.  Then display certain selections the user made,
+' such as the printer name, number of copies, and orientation.  Carefully note how memory
+' blocks are allocated to hold the two data structures containing information about the
+' printer device.  To save space, Visual Basic's Printer object, referring to the default
+' printer, is used to provide the defaults.  Of course, API functions could also be used
+' to get these defaults.
+Dim pd As <A href="printdlg_type.html" tppabs="http://www.vbapi.com/ref/p/printdlg_type.html">PRINTDLG_TYPE</A> ' holds information to make the dialog box
+Dim printmode As <A href="devmode.html" tppabs="http://www.vbapi.com/ref/d/devmode.html">DEVMODE</A> ' holds settings for the printer device
+Dim printnames As <A href="devnames.html" tppabs="http://www.vbapi.com/ref/d/devnames.html">DEVNAMES</A> ' holds device, driver, and port names
+Dim pMode As Long, pNames As Long  ' pointers to the memory blocks for the two DEV* structures
+Dim retval As Long  ' return value of function
+
+' First, load default settings into printmode.  Note that we only fill relevant information.
+printmode.dmDeviceName = Printer.DeviceName  ' name of the printer
+printmode.dmSize = Len(printmode)  ' size of the data structure
+printmode.dmFields = DM_ORIENTATION  ' identify which other members have information
+printmode.dmOrientation = DMORIENT_PORTRAIT  ' default to Portrait orientation
+
+' Next, load strings for default printer into printnames.  Note the unusual way in which such
+' information is stored.  This is explained on the <A href="devnames.html" tppabs="http://www.vbapi.com/ref/d/devnames.html">DEVNAMES</A> page.
+devnames.wDriverOffset = 8  ' offset of driver name string
+devnames.wDeviceOffset = devnames.wDriverOffset + 1 + Len(Printer.DriverName)  ' offset of printer name string
+devnames.wOutputOffset = devnames.wDeviceOffset + 1 + Len(Printer.Port)  ' offset to output port string
+devnames.wDefault = 0  ' maybe this isn't the default selected printer
+' Load the three strings into the buffer, separated by null characters.
+devnames.extra = Printer.DriverName &amp; vbNullChar &amp; Printer.DeviceName &amp; vbNullChar &amp; Printer.Port &amp; vbNullChar
+
+' Finally, load the initialization settings into pd, which is passed to the function.  We'll
+' set the pointers to the structures after this.
+pd.lStructSize = Len(pd)  ' size of structure
+pd.hwndOwner = Form1.hWnd  ' window Form1 is opening the Print dialog box
+' Flags: All Pages default, disable Print to File option, return device context:
+pd.flags = PD_ALLPAGES Or PD_DISABLEPRINTTOFILE Or PD_RETURNDC
+pd.nMinPage = 1  ' allow user to select first page of "document"
+pd.nMaxPage = 15  ' let's say there are 15 pages of the "document"
+' Note how we can ignore those members which will be set or are not used here.
+
+' Copy the data in printmode and printnames into the memory blocks we allocate.
+pd.hDevMode = <A href="globalalloc.html" tppabs="http://www.vbapi.com/ref/g/globalalloc.html">GlobalAlloc</A>(GMEM_MOVEABLE Or GMEM_ZEROINIT, Len(printmode)  ' allocate memory block
+pMode = <A href="globallock.html" tppabs="http://www.vbapi.com/ref/g/globallock.html">GlobalLock</A>(pd.hDevMode)  ' get a pointer to the block
+<A href="copymemory.html" tppabs="http://www.vbapi.com/ref/c/copymemory.html">CopyMemory</A> ByVal pMode, printmode, Len(printmode)  ' copy structure to memory block
+retval = <A href="globalunlock.html" tppabs="http://www.vbapi.com/ref/g/globalunlock.html">GlobalUnlock</A>(pd.hDevMode)  ' unlock the block
+' Now do the same for printnames.
+pd.hDevNames = <A href="globalalloc.html" tppabs="http://www.vbapi.com/ref/g/globalalloc.html">GlobalAlloc</A>(GMEM_MOVEABLE Or GMEM_ZEROINIT, Len(printnames)  ' allocate memory block
+pNames = <A href="globallock.html" tppabs="http://www.vbapi.com/ref/g/globallock.html">GlobalLock</A>(pd.hDevNames)  ' get a pointer to the block
+<A href="copymemory.html" tppabs="http://www.vbapi.com/ref/c/copymemory.html">CopyMemory</A> ByVal pNames, printnames, Len(printnames)  ' copy structure to memory block
+retval = <A href="globalunlock.html" tppabs="http://www.vbapi.com/ref/g/globalunlock.html">GlobalUnlock</A>(pd.hDevNames)  ' unlock the block
+
+' Finally, open the dialog box!
+retval = <B>PrintDlg</B>(pd)  ' looks so simple, doesn't it?
+
+' If the user hit OK, display some information about the selection.
+If retval &lt;&gt; 0 Then
+  ' First, we must copy the memory block data back into the structures.  This is almost identical
+  ' to the code above where we did the reverse.  Comments here are omitted for brevity.
+  pMode = <A href="globallock.html" tppabs="http://www.vbapi.com/ref/g/globallock.html">GlobalLock</A>(pd.hDevMode)
+  <A href="copymemory.html" tppabs="http://www.vbapi.com/ref/c/copymemory.html">CopyMemory</A> printmode, ByVal pMode, Len(printmode)
+  retval = <A href="globalunlock.html" tppabs="http://www.vbapi.com/ref/g/globalunlock.html">GlobalUnlock</A>(pd.hDevMode)
+  pNames = <A href="globallock.html" tppabs="http://www.vbapi.com/ref/g/globallock.html">GlobalLock</A>(pd.hDevNames)
+  <A href="copymemory.html" tppabs="http://www.vbapi.com/ref/c/copymemory.html">CopyMemory</A> printnames, ByVal pNames, Len(printnames)
+  retval = <A href="globalunlock.html" tppabs="http://www.vbapi.com/ref/g/globalunlock.html">GlobalUnlock</A>(pd.hDevNames)
+
+  ' Now, display the information we want.  We could instead use this info to print something.
+  Debug.Print "Printer Name: "; printmode.dmDeviceName
+  Debug.Print "Number of Copies:"; pd.nCopies
+  Debug.Print "Orientation: ";
+  If printmode.dmOrientation = DMORIENT_PORTRAIT Then Debug.Print "Portrait" Else Debug.Print "Landscape"
+  If (pd.flags And PD_SELECTION) = PD_SELECTION Then  ' user chose "Selection"
+    Debug.Print "Print the current selection."
+  Elseif (pd.flags And PD_PAGENUMS) = PD_PAGENUMS Then  ' user chose a page range
+    Debug.Print "Print pages"; pd.nFromPage; "to"; pd.nToPage
+  Else  ' only one left is "All"
+    Debug.Print "Print all pages."
+  End If
+End If
+
+' No matter what, we have to deallocate the memory blocks from before.
+retval = <A href="globalfree.html" tppabs="http://www.vbapi.com/ref/g/globalfree.html">GlobalFree</A>(pd.hDevMode)
+retval = <A href="globalfree.html" tppabs="http://www.vbapi.com/ref/g/globalfree.html">GlobalFree</A>(pd.hDevNames)</CODE></PRE>
+
+<P><B>Category:</B> <A href="index.html#commondialog" tppabs="http://www.vbapi.com/ref/index.html#commondialog">Common Dialog</A></P>
+
+<P><A href="funca.html" tppabs="http://www.vbapi.com/ref/funca.html">Go back to the alphabetical Function listing.</A><BR>
+<A href="index.html" tppabs="http://www.vbapi.com/ref/index.html">Go back to the Reference section index.</A></P>
+
+<HR>
+
+<P>This page is copyright &copy; 2000 Paul Kuliniewicz.  <A href="copyrite.html" tppabs="http://www.vbapi.com/copyrite.html" rel="copyright">Copyright Information.</A><BR>
+<A href="index-1.html" tppabs="http://www.vbapi.com/index.html">Go back to the Windows API Guide home page.</A><BR>
+E-mail: <A href="javascript:if(confirm('http://www.vbapi.com/email.html  \n\nThis file was not retrieved by Teleport Pro, because it is addressed on a domain or path outside the boundaries set for its Starting Address.  \n\nDo you want to open it from the server?'))window.location='http://www.vbapi.com/email.html'" tppabs="http://www.vbapi.com/email.html">vbapi@vbapi.com</A>  <A href="javascript:if(confirm('http://www.vbapi.com/email.html  \n\nThis file was not retrieved by Teleport Pro, because it is addressed on a domain or path outside the boundaries set for its Starting Address.  \n\nDo you want to open it from the server?'))window.location='http://www.vbapi.com/email.html#secure'" tppabs="http://www.vbapi.com/email.html#secure">Send Encrypted E-Mail</A><BR>
+This page is at <A href="printdlg.html" tppabs="http://www.vbapi.com/ref/p/printdlg.html">http://www.vbapi.com/ref/p/printdlg.html</A>
+
+</BODY>
+</HTML>

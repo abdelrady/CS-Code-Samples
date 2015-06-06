@@ -1,0 +1,431 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!-- saved from url=(0039)http://www2.webng.com/amrlearn/126.html -->
+<HTML><HEAD><TITLE>Bresenham's Line Algorithm</TITLE><LINK 
+href="126_files/stylesheet.css" type=text/css rel=stylesheet>
+<META http-equiv=Content-Type content="text/html; charset=UTF-8">
+<META 
+content="Computer Graphics, Bresenham's Line Algorithm Bresenham's Line Algorithm " 
+name=description>
+<META 
+content="Computer Graphics, Computer, Graphics, Bresenham's, Line, Algorithm, Bresenham's Line Algorithm " 
+name=keywords>
+<META content="Copyright 2007 Amr Saber" name=copyright>
+<META content="MSHTML 6.00.2900.2180" name=GENERATOR></HEAD>
+<BODY>
+<CENTER>
+<DIV id=header>
+<SCRIPT type=text/javascript><!--
+google_ad_client = "pub-9653171024150495";
+google_alternate_color = "C3D9FF";
+google_ad_width = 728;
+google_ad_height = 90;
+google_ad_format = "728x90_as";
+google_ad_type = "text";
+//2007-02-02: header
+google_ad_channel = "7161698987";
+//--></SCRIPT>
+
+<SCRIPT src="126_files/show_ads.js" type=text/javascript>
+</SCRIPT>
+</DIV></CENTER>
+<DIV id=index>
+<H3>Goooooooogle</H3>
+<SCRIPT type=text/javascript><!--
+google_ad_client = "pub-9653171024150495";
+google_alternate_color = "C3D9FF";
+google_ad_width = 120;
+google_ad_height = 600;
+google_ad_format = "120x600_as";
+google_ad_type = "text";
+//2007-02-02: header, right
+google_ad_channel = "7161698987+2593520185";
+//--></SCRIPT>
+
+<SCRIPT src="126_files/show_ads.js" type=text/javascript>
+</SCRIPT>
+</DIV>
+<DIV id=index2>
+<H3>Goooooooogle</H3>
+<SCRIPT type=text/javascript><!--
+google_ad_client = "pub-9653171024150495";
+google_alternate_color = "C3D9FF";
+google_ad_width = 120;
+google_ad_height = 600;
+google_ad_format = "120x600_as";
+google_ad_type = "text";
+google_ad_channel = "";
+//--></SCRIPT>
+
+<SCRIPT src="126_files/show_ads.js" type=text/javascript>
+</SCRIPT>
+</DIV>
+<DIV id=content>
+<H3>Bresenham's Line Algorithm</H3><TEXTAREA>#include&lt;windows.h&gt;
+///////////////////
+LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
+static char gszClassName[]  =  "MyWindowClass";
+static HINSTANCE ghInstance  =  NULL;
+int WINAPI WinMain(HINSTANCE hInstance , HINSTANCE hprevInstance , LPSTR lpCmdLine ,int nCmdShow)
+{
+	WNDCLASSEX WndClass;
+	HWND hwnd;
+	MSG Msg;
+	ghInstance  =  hInstance ;
+	WndClass.cbSize  =  sizeof(WNDCLASSEX);
+	WndClass.style  =  NULL;
+	WndClass.lpfnWndProc  =  WndProc ;
+	WndClass.cbClsExtra  = 0;
+	WndClass.cbWndExtra  =  0;
+	WndClass.hInstance  = ghInstance ;
+	WndClass.hIcon  =  LoadIcon(NULL,IDI_APPLICATION);
+	WndClass.hCursor  = LoadCursor(NULL ,IDC_ARROW);
+    WndClass.hbrBackground  =  (HBRUSH)(COLOR_WINDOW+1);
+    WndClass.lpszMenuName  =  NULL ;
+	WndClass.lpszClassName  =  gszClassName ;
+	WndClass.hIconSm  =  LoadIcon(NULL , IDI_APPLICATION);
+	if(!RegisterClassEx(&amp;WndClass))
+	{
+		MessageBox(0, "window registeration failed!!","error",MB_ICONSTOP|MB_OK);
+		return 0;
+	}
+
+	hwnd  = CreateWindowEx(WS_EX_STATICEDGE , gszClassName ," Drawing a Line by DDA and BHA_ALGORITHM",WS_OVERLAPPEDWINDOW ,
+		CW_USEDEFAULT ,CW_USEDEFAULT,320,240,NULL,NULL,ghInstance,NULL);
+	if(hwnd == NULL)
+	{
+		MessageBox(0,"windows greated failed!!","Error" ,MB_ICONSTOP|MB_OK);
+         return 0;
+	}
+	ShowWindow(hwnd,nCmdShow);
+	UpdateWindow(hwnd);
+	while(GetMessage(&amp;Msg ,NULL ,0,0))
+	{
+		TranslateMessage(&amp;Msg);
+		DispatchMessage(&amp;Msg);
+	}
+	return Msg.wParam;
+}
+/*******************************************************************/
+///////////////////////// BHA_ALGORITHM Algorithm /////////////////////////////
+/*******************************************************************/
+//function to drow line with BresenHam's method
+void BHA_ALGORITHM(HDC hdc, int xPoint1, int yPoint1, int xPoint2, int yPoint2, COLORREF col)
+{
+	int x = xPoint1;
+	int y = yPoint1;
+	int xBegin = xPoint1;
+	int yBegin = yPoint1;
+	int yFinal = yPoint2;
+	int xFinal = xPoint2;
+	
+	// exchange the start and the end points according to values of x
+	if(xBegin &gt; xFinal)
+	{
+		x = xPoint2;
+		y = yPoint2;
+		xBegin = xPoint2;
+		yBegin = yPoint2;
+		yFinal = yPoint1;
+		xFinal = xPoint1;
+	}
+	
+	int dx = xFinal - xBegin;	//calculate dx
+	int dy = yFinal - yBegin;	//calculate dy
+	int inc1 = 2 * dy;		//calculate inc1
+	int inc2 = 2 * (dy - dx);	//calculate inc2
+	int d = inc1 - dx;		//calculate d1
+
+	float slope;
+	if(dx != 0)
+		slope = float(dy / dx);
+
+	SetPixel(hdc, x, y, col);
+	if(dx == 0)	// start and final points of x refelected
+		if(yBegin &lt; yFinal)
+			while(y &lt;= yFinal)
+			{
+				SetPixel(hdc, x, y, col);
+				y ++;
+			}
+			else
+				while(y &gt;= yFinal)
+				{
+					SetPixel(hdc, x, y, col);
+					y --;
+				}
+	else
+		if(dy == 0) // start and final points of y refelected
+		if(xBegin &lt; xFinal)
+			while(x &lt;= xFinal)
+			{
+				SetPixel(hdc, x, y, col);
+				x ++;
+			}
+			else
+				while(x &gt;= xFinal)
+				{
+					SetPixel(hdc, x, y, col);
+					x --;
+				}
+   else	
+	   if(dy &gt; 0 &amp;&amp; slope &lt;= 1)	//between (0 and 1)
+		   while(x &lt; xFinal)
+		   {
+			   x ++;
+			   if(d &lt; 0)
+				   d = d + inc1;
+			   else
+			   {
+				   d = d + inc2;
+				   y ++;
+			   }
+			   SetPixel(hdc, x, y, col);
+		   }
+	else
+	   if(dy &lt; 0 &amp;&amp; slope &gt;= -1) //between (-1 and 0)
+	   {
+		   inc2 = 2 * (dy + dx);
+		   inc1 = 2 * dy;
+	       d = inc1 + dx;
+
+		   while(x &lt; xFinal)
+		   {
+			   x ++;
+			   if(d &gt; 0)
+				   d = d + inc1;
+			   else
+			   {
+				   d = d + inc2;
+				   y --;
+			   }
+			   SetPixel(hdc, x, y, col);
+		   }
+	   }
+
+	else
+		if(slope &lt; -1)	// slope less than -1
+		{
+			inc1 = -2 * dx;
+			inc2 = -2 * (dy + dx);
+		    d = inc1 - dy;
+
+			while(y &gt; yFinal)
+			{
+				y --;
+				if(d &lt; 0)
+					d = d - inc1;
+				else
+				{
+					d = d - inc2;
+					x ++;
+				}
+				SetPixel(hdc, x, y, col);
+			}
+		}
+
+	else
+		if(slope &gt; 1)	// slope greater than 1
+		{
+		   inc1 = 2 * dx;
+		   inc2 = 2 * (dx - dy);
+	       d = inc1 - dy;
+		   while(y &lt; yFinal)
+		   {
+			   y ++;
+			   if(d &lt; 0)
+				   d = d + inc1;
+			   else
+			   {
+				   d = d + inc2;
+				   x ++;
+			   }//else
+			   SetPixel(hdc, x, y, col);
+		   }//while
+	   }//else
+}
+/*******************************************************************/
+////////////////////////// DDA Algorithm ////////////////////////////
+/*******************************************************************/
+int num = 0;
+////////////
+void DDA_ALGORITHM(HDC hdc, float xPoint1, float yPoint1, float xPoint2, float yPoint2, COLORREF col)
+{
+	float xBegin  =  xPoint1;
+	float xFinal  =  xPoint2;
+	float yBegin  =  yPoint1;
+	float yFinal  =  yPoint2;
+	float slope = (yPoint2 - yPoint1) / (xPoint2 - xPoint1);
+	float slopeInverse  =  1 / slope;
+
+	if(xPoint1&gt;xPoint2 &amp;&amp; yPoint1&gt;yPoint2)
+	{
+		xBegin  =  xPoint2;
+	    xFinal  =  xPoint1;
+		yBegin  =  yPoint2;
+	    yFinal  =  yPoint1;
+	}
+	int x = int(xBegin);
+	int y = int(yBegin);
+
+	// if the line is parallel to the y coordinate
+	if((xBegin - xFinal) == 0)
+		if(yBegin &lt; yFinal)	// and y starting point greater than y end
+			while(y &lt;= yFinal)
+			{
+				SetPixel(hdc, x, y, col);
+				y ++;	// increment y
+			}
+		else
+			while(y &gt;= yFinal)
+			{
+				SetPixel(hdc, x, y, col);
+				y --;	// decrement y
+			}
+	// if the line is parallel to the x coordinate
+	else
+		if((yBegin - yFinal) == 0)
+			if(xBegin &lt; xFinal) // and x starting point greater than x end
+				while(x &lt;= xFinal)
+				{
+					SetPixel(hdc, x, y, col);
+					x ++;
+				}
+			else
+				while(x &gt;= xFinal)
+				{
+					SetPixel(hdc, x, y, col);
+					x --;
+				}
+	else
+		if(slope &gt;= 1 || slope &lt;= -1) // new case
+		{
+			if(yFinal &gt; yBegin) // from begin to end
+				while(y &lt;= yFinal)
+				{
+					x = int(xBegin + 0.5);
+					xBegin = xBegin + slopeInverse;
+					SetPixel(hdc, x, y, col);
+					y ++;
+				}
+			else		// from end to begin
+				while(y &gt;= yFinal)
+				{
+					x = int(xBegin + 0.5);
+					xBegin = xBegin - slopeInverse;
+					SetPixel(hdc, x, y, col);
+					y --;
+				}
+		}
+	else
+		if(slopeInverse &gt;= 1 || slopeInverse &lt;= -1) // new case
+		{
+			if(xFinal &gt; xBegin)	// from begin to end
+				while(x &lt;= xFinal)
+				{
+					y = int(yBegin + 0.5);
+					yBegin = yBegin + slope;
+					SetPixel(hdc, x, y, col);
+					x ++;
+				}
+			else		// from end to begin
+				while(x &gt;= xFinal)
+				{
+					y = int(yBegin + 0.5);
+					yBegin = yBegin - slope;
+					SetPixel(hdc, x, y, col);
+					x --;
+				}
+		}//if
+}
+/*************************************/
+void Boundary_Filling(HDC hdc, int x, int y, COLORREF fillColor, COLORREF boundaryColor)
+{
+	COLORREF color = GetPixel(hdc, x, y);
+	if(color == boundaryColor || color == fillColor)
+		return;
+	else
+	{
+		SetPixel(hdc, x, y, fillColor);
+		Boundary_Filling(hdc, x-1, y, fillColor, boundaryColor);
+		Boundary_Filling(hdc, x, y-1, fillColor, boundaryColor);
+		Boundary_Filling(hdc, x+1, y, fillColor, boundaryColor);
+		Boundary_Filling(hdc, x, y+1, fillColor, boundaryColor);
+	}
+}
+/******************** function to draw a line **********************/
+void drawLine(HDC hdc, COLORREF color1, COLORREF color2)
+{
+	if(num == 0)	// draw by DDA Algorithm
+	{
+		//DDA_ALGORITHM(hdc, float(xPoint1), float(yPoint1), float(xPoint2), float(yPoint2), color1);
+		DDA_ALGORITHM(hdc, 10, 100, 200, 100, color1);
+		//DDA_ALGORITHM(hdc, 10, 150, 200, 150, color1);
+		//DDA_ALGORITHM(hdc, 10, 100, 10, 150, color1);
+		//DDA_ALGORITHM(hdc, 200, 100, 200, 150, color1);
+		//DDA_ALGORITHM(hdc, 10, 100, 200, 150, color1);
+		//DDA_ALGORITHM(hdc, 200, 100, 10, 150, color1);
+		//Boundary_Filling(hdc, 15, 115, RGB(255, 0, 0),color1);
+		num = 1;
+	}
+	else			// draw by BHA_ALGORITHM Algorithm
+	{
+		BHA_ALGORITHM(hdc, 10, 100, 200, 100, color2);
+		//BHA_ALGORITHM(hdc, 10, 150, 200, 150, color2);
+		//BHA_ALGORITHM(hdc, 10, 100, 10, 150, color2);
+		//BHA_ALGORITHM(hdc, 200, 100, 200, 150, color2);
+		//BHA_ALGORITHM(hdc, 10, 100, 200, 150, color2);
+		//BHA_ALGORITHM(hdc, 200, 100, 10, 150, color2);
+		//Boundary_Filling(hdc, 15, 115, RGB(0, 0, 255),color2);
+		num = 0;
+	}
+}
+/*************************************/
+LRESULT CALLBACK WndProc(HWND hwnd ,UINT Message ,WPARAM wparam ,LPARAM
+						 lparam)
+{
+	COLORREF color1 = RGB(0, 255, 0);
+	COLORREF color2 = RGB(0, 0, 0);
+	HDC hdc;
+	switch(Message)
+	{
+	case WM_CLOSE:
+		DestroyWindow(hwnd);
+		break;
+	case WM_DESTROY:
+		PostQuitMessage(0);
+		break;
+	case WM_LBUTTONDOWN:
+		hdc = GetDC(hwnd);
+		drawLine(hdc, color1, color2);
+		break;
+	default:
+		return DefWindowProc(hwnd, Message, wparam, lparam);
+	}
+	return 0;
+}//end of the program
+</TEXTAREA> <BR>
+<CENTER><IMG 
+style="BORDER-RIGHT: #0066cf 1px solid; BORDER-TOP: #0066cf 1px solid; BORDER-LEFT: #0066cf 1px solid; BORDER-BOTTOM: #0066cf 1px solid" 
+src="126_files/line.gif"> </CENTER><!-- Search Google -->
+<CENTER>
+<FORM action=http://www.google.com/custom method=get target=_top>
+<TABLE bgColor=#ffffff>
+  <TBODY>
+  <TR>
+    <TD vAlign=top noWrap align=left height=32><A 
+      href="http://www.google.com/"><IMG alt=Google 
+      src="126_files/Logo_25wht.gif" align=middle border=0></IMG></A> <LABEL 
+      style="DISPLAY: none" for=sbi>Enter your search terms</LABEL> <INPUT 
+      id=sbi maxLength=255 size=40 name=q></INPUT> <LABEL style="DISPLAY: none" 
+      for=sbb>Submit search form</LABEL> <INPUT id=sbb type=submit value=Search name=sa></INPUT> <INPUT type=hidden 
+      value=pub-9653171024150495 name=client></INPUT> <INPUT type=hidden value=1 
+      name=forid></INPUT> <INPUT type=hidden value=ISO-8859-1 name=ie></INPUT> 
+      <INPUT type=hidden value=ISO-8859-1 name=oe></INPUT> <INPUT type=hidden 
+      value=active name=safe></INPUT> <INPUT type=hidden 
+      value=GALT:#008000;GL:1;DIV:#336699;VLC:663399;AH:center;BGC:FFFFFF;LBGC:336699;ALC:0000FF;LC:0000FF;T:000000;GFNT:0000FF;GIMP:0000FF;FORID:1 
+      name=cof></INPUT> <INPUT type=hidden value=en name=hl></INPUT> 
+  </TD></TR></TBODY></TABLE></FORM></CENTER><!-- Search Google -->
+<H3><A 
+href="http://www2.webng.com/amrlearn/Index.html">Home</A>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A 
+href="http://www2.webng.com/amrlearn/135.html">Previous</A>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A 
+href="http://www2.webng.com/amrlearn/123.html">Next</A></H3></DIV></BODY></HTML>

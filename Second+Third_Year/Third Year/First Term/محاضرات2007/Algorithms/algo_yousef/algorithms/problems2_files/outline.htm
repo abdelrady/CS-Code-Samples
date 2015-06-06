@@ -1,0 +1,1247 @@
+<html>
+
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=windows-1256">
+<meta name=ProgId content=PowerPoint.Slide>
+<meta name=Generator content="Microsoft PowerPoint 11">
+<link id=Main-File rel=Main-File href="../problems2.htm">
+<link rel=Preview href=preview.wmf>
+<meta name=Robots content=NoIndex>
+<script src=script.js></script><script><!--
+
+if( !(IsWin("PPTOtl")||IsWin("PPTNav")||IsWin("PPTOtlNav")) )
+{
+	obj = GetObj("Main-File")
+	parent.location.href=obj.href
+}
+
+var gOtlHiliteClr="#ffffff",gOtlNormalClr="#000000",gOtlActiveClr="#ffff00",gSelected="",gTxtState=false,gChildEntryTable=new Array()
+
+function Load()
+{
+	if( IsWin("PPTOtl" ) ){ LoadOtl(); parent.gOtlLoaded=true; return }
+	if( g_supportsPPTHTML ) {
+		if( IsWin("PPTNav" ) ){ LoadNav("NavObj",UpdNav); parent.gNavLoaded=true; return }
+		if( IsWin("PPTOtlNav" ) ){ LoadNav("OtlNavObj",UpdOtlNav); parent.gOtlNavLoaded=true; return }
+	}
+}
+function Upd(){ if( IsWin("PPTNav") ) LoadNav("NavObj",UpdNav) }
+function LoadNav( oId,UpdFunc )
+{
+	document.ondragstart=CancelDrag
+	document.onselectstart=CancelDrag
+	document.body.style.margin=2
+	UpdFunc()
+	obj=document.all.item(oId)
+	obj.style.display="block"
+	obj.style.visibility="visible"
+	document.bgColor="threedface"
+
+	if( parent.frames["PPTNts"] )
+		notesBtn.style.display = ""
+	if( parent.gHasNarration )
+		nb_voiceBorder.style.display = ""
+}
+function LoadOtl()
+{
+	var otl=GetObj("OtlObj")
+	otl.style.display="block"
+	otl.style.visibility="visible"
+	if( gOtlActiveClr == "" ) gOtlActiveClr=document.linkColor
+	if( gOtlHiliteClr == "" ) gOtlHiliteClr=document.fgColor
+	if( gOtlNormalClr == "" )
+		gOtlNormalClr=document.bgColor
+	else
+		document.bgColor=gOtlNormalClr  
+
+	InitArray()
+
+	if( ObjExists( parent.gCurSld ) ) {
+		ChangeState( parent.gCurSld,gOtlNormalClr,gOtlHiliteClr )
+		gSelected=parent.gCurSld
+	}
+	else gSelected = -1
+
+	UpdOtl()
+}
+function UpdOtl(){ UpdIdx(parent.gCurSld) }
+function UpdIdx( idx )
+{
+	if( gSelected != idx ) {
+		if( gSelected > 0 )
+			ChangeState( gSelected,gOtlHiliteClr,gOtlNormalClr )
+
+		if( ObjExists( idx ) ) {
+			gSelected = idx
+			ChangeState( gSelected,gOtlNormalClr,gOtlHiliteClr )
+		}
+		else gSelected = -1
+	}
+
+	if( gTxtState != parent.gOtlTxtExp ) {
+		state = "block"
+		if( !parent.gOtlTxtExp )
+			state="none"
+
+		for(ii=0; ii<gChildEntryTable.length; ii++) {
+			obj=gChildEntryTable[ii];
+			if( obj.id == null ) continue;
+
+			if( obj.id.indexOf("PPTC") >= 0 )
+				obj.style.display=state;
+		} 
+		gTxtState=parent.gOtlTxtExp
+		if( ObjExists( gSelected ) )
+			ChangeState( gSelected,gOtlNormalClr,gOtlHiliteClr )
+	}
+}
+function InitArray()
+{
+	count=0
+	var list=GetTags(document,"DIV");
+	for(ii=0; ii<list.length; ii++) {
+		obj=list.item(ii)
+		if( obj.id == null ) continue
+
+		if( obj.id.indexOf("PPTC") >= 0 )  
+			gChildEntryTable[count++]=obj
+	}
+}
+function ChangeState( idx,fgColor,bgColor )
+{
+	obj=GetObj("PPTL"+idx)
+	obj.style.color=fgColor
+
+	obj=GetObj("PPTP"+idx)
+	obj.style.backgroundColor=bgColor
+}
+function ChgClr( o,clr ){ if( o.id != "PPTL"+gSelected ) o.style.color=clr }
+function Over( src ){ ChgClr(GetLink(src),gOtlActiveClr) }
+function Out( src ){ ChgClr(GetLink(src),gOtlHiliteClr) }
+function Follow(src){ window.location.href = GetLink(src).href; }
+function ObjExists( ii ) { obj=GetObj("PPTP"+ii ); return( obj ) }
+function GoToSld( href ){ UpdIdx(parent.GetSldNum(href)); parent.GoToSld( href ) }
+function CancelDrag(){ window.event.cancelBubble=true;window.event.returnValue=false}
+function GetLink(src)
+{
+   if(src.tagName=="A") return src
+   else return GetTags(src,"A").item(0)
+}
+
+function UpdNav()
+{
+	txt = "<center>";
+	if( parent.GetHrefObj( parent.gCurSld ).mOrigVis == 1 )
+		txt += "Slide " + parent.GetCurSldNum() + " of " + parent.GetNumSlds()
+	else
+		txt += "Hidden Slide"
+	txt += "</center>";
+	nav_text.innerHTML = txt;
+
+	if( !parent.HasPrevSld() )
+		gBtnArr["nb_prev"].Enabled(0)
+	else
+		gBtnArr["nb_prev"].Enabled(1)
+
+	if( !parent.HasNextSld() )
+		gBtnArr["nb_next"].Enabled(0)
+	else
+		gBtnArr["nb_next"].Enabled(1)
+	gBtnArr["nb_nts"].Enabled(1)
+	gBtnArr["nb_ntsBorder"].SetFlag( parent.gHasNts )
+
+	gBtnArr["nb_sldshw"].Enabled(1)
+	gBtnArr["nb_voice"].Enabled(1)
+}
+
+function ExecBtn()
+{
+	if (event.keyCode == 13)
+	{
+		BtnOnDown();
+		BtnOnUp();
+	}
+}
+function UpdOtlNav()
+{
+	gBtnArr["nb_otl"].SetEnabled();
+
+	if( parent.gOtlOpen )
+		gBtnArr["nb_otlTxt"].Enabled( true );
+	else
+		document.all.item("nb_otlTxtBorder").style.visibility = "hidden";
+}
+
+
+
+
+//--></script>
+<style>
+<!--.PTxt
+	{position:relative;
+	width:100%;
+	margin-top:5px;
+	padding-left:2px;
+	font-weight:bold;}
+.CTxt
+	{position:relative;
+	width:100%;
+	margin-top:5px;}
+a
+	{color:white;
+	text-decoration:none;}
+ul
+	{color:white;
+	margin-bottom:0px;
+	margin-left:20px;}
+.sldNum
+	{margin-top:5px;
+	color:white;}
+.button
+	{position:absolute;
+	width:32px;
+	height:20px;
+	border-style:solid;
+	border-width:1px;
+	border-color:threedface;}
+-->
+</style>
+</head>
+
+<body onload="Load()" style='margin:2px'>
+
+<div id=NavObj onload="Load()" onmouseover="BtnOnOver()"
+onmousedown="BtnOnDown()" onmouseout="BtnOnOut()" onmouseup="BtnOnUp()"
+onkeypress="ExecBtn()" style='display:none;visibility:hidden'>
+<table id="notesBtn" style='display:none;position:relative;width:55px' align=left cellpadding=0
+ cellspacing=0>
+ <td nowrap>
+ <div id="nb_ntsElem" title="Show/Hide
+Notes" align=center style='position:relative;margin-left:5px;margin-right:5px;padding:3px;
+ font-family:Arial;color:buttontext;font-size:9pt; cursor:default'>
+ <img src="notes_flag.gif" id="nb_nts" style='display:none'> &nbsp;Notes</div>
+ <div id="nb_ntsBorder" title ="Show/Hide
+Notes" onfocus="BtnOnOver()" onblur="BtnOnOut()" TABINDEX=1 style='position:absolute;top:0%;left:0%;width:100%;height:20px'>
+
+ </div>
+ </td>
+</table>
+
+
+<table style='position:relative;width:70px' align=right cellpadding=0 cellspacing=0>
+ <td nowrap>
+ <div id="nb_sldshwText" title="Full Screen Slide Show" align=center style='position:relative;margin-left:20px;padding:3px;
+ font-family:Arial;color:buttontext;font-size:9pt;cursor:default'>Slide
+Show</div>
+ <div id="nb_sldshwBorder" title="Full Screen Slide Show" onfocus="BtnOnOver()" onblur="BtnOnOut()" TABINDEX=5 style='position:absolute;top:0%;left:0%;width:100%;height:20px'>
+ <div style='position:absolute;clip:rect(0px, 18px, 18px, 0px)'><img
+ src="buttons.gif" id="nb_sldshw" style='position:relative;left:-254px'></div>
+ </div>
+ </td>
+ <td>
+ <div id="nb_voiceBorder" style='display:none;position:absolute;top:0;left:-40px;
+ width:20px;height:20px' onfocus="BtnOnOver()" onblur="BtnOnOut()" TABINDEX=4 class=button>
+ <div style='position:absolute;clip:rect(0px, 18px, 18px, 0px)'><img
+ src="buttons.gif" id="nb_voice" title="Pause/Play Narration" style='position:
+ relative;left:-290px'></div>
+ </div>
+ </td>
+</table>
+
+<table style='position:relative' align=center cellpadding=0 cellspacing=0>
+ <td nowrap>
+ <div id="nb_prevBorder" onfocus="BtnOnOver()" onblur="BtnOnOut()" TABINDEX=2 class=button style='left:-30px'>
+ <div style='position:absolute;clip:rect(0px, 30px, 18px, 0px)'><img
+ src="buttons.gif" id="nb_prev" title="Previous Slide" style='position:relative;
+ left:0px'></div>
+ </div>
+ <span id="nav_text" style='position:relative;top:3px;width:100px;font-family:
+ Arial;color:buttontext;font-size:9pt'></span>
+ <div id="nb_nextBorder" onfocus="BtnOnOver()" onblur="BtnOnOut()" TABINDEX=3 class=button>
+ <div style='position:absolute;clip:rect(0px, 30px, 18px, 0px)'><img
+ src="buttons.gif" id="nb_next" title="Next Slide" style='position:relative;
+ left:-90px'></div>
+ </div>
+ </td>
+</table>
+</div>
+
+<div id=OtlNavObj onload="Load()" onmouseover="BtnOnOver()"
+onmousedown="BtnOnDown()" onmouseout="BtnOnOut()" onmouseup="BtnOnUp()"
+onkeypress="ExecBtn()" style='display:none;visibility:hidden'>
+
+<table style='position:relative;width:70px' align=left cellpadding=0 cellspacing=0>
+ <td nowrap><div title="Show/Hide
+Outline" id="nb_otl" onfocus="BtnOnOver()" onblur="BtnOnOut()" TABINDEX=11
+ style='position:absolute;top:0%;left:0%;width:100%;height:100%;cursor:default'>
+ <div id="nb_otlElem" align=center style='position:relative;padding:3px;font-family:Arial;
+ color:buttontext;font-size:9pt'>Outline</div></div>
+ </td>
+</table>
+
+<table style='position:relative' align=center cellpadding=0 cellspacing=0>
+ <td>
+ <div style='position:absolute;left:-18px;width:24px;height:20px;border-style:
+ solid;border-width:1px;border-color:threedface' onfocus="BtnOnOver()" onblur="BtnOnOut()" TABINDEX=12 id="nb_otlTxtBorder">
+ <div style='position:absolute;clip:rect(0px, 22px, 18px, 0px)'><img
+ src=buttons.gif id="nb_otlTxt" title="Expand/Collapse Outline"
+ style='position:relative;left:-157px'></div>
+ </div>
+ </td>
+</table>
+
+</div>
+
+<div id=OtlObj style='display:none;visibility:hidden;'>
+
+
+<table width="100%" style='font-family:Arial;font-size:9pt'>
+ <tr onmouseover="Over(this)" onmouseout="Out(this)" onclick="Follow(this)"
+  style='cursor:hand'>
+  <td align=right valign=top>
+  <div class=sldNum><font size=2>1</font></div>
+  </td>
+  <td width="100%">
+  <div id=PPTP1 class=PTxt><font size=2><a
+  href="javascript:GoToSld('slide0186.htm');" id=PPTL1>Problems 6,7,8,9,12,22</a></font></div>
+  </td>
+ </tr>
+ <tr onmouseover="Over(this)" onmouseout="Out(this)" onclick="Follow(this)"
+  style='cursor:hand'>
+  <td align=right valign=top>
+  <div class=sldNum><font size=2>2</font></div>
+  </td>
+  <td>
+  <div id=PPTP2 class=PTxt><font size=2><a
+  href="javascript:GoToSld('slide0187.htm');" id=PPTL2>Chapter 7 -1-2</a></font></div>
+  <div id=PPTC2 class=CTxt style='display:none'><font size=2>
+  <ul>
+   <li>When all the elements in A are the same, notice that the comparison in
+       line 4 of PARTITION is always satisfied and i therefore is incremented
+       in each iteration. Since initially i <font face=Wingdings>&szlig;</font><font
+       face="Times New Roman"> p - 1 and i + 1 is returned, the returned value
+       is r - 1.</font></li>
+   <li>To make PARTITION return (p + r)=2 when all elements are the same,
+       simply modify the algorithm to check for this case explicitly.</li>
+  </ul>
+  </font></div>
+  </td>
+ </tr>
+ <tr onmouseover="Over(this)" onmouseout="Out(this)" onclick="Follow(this)"
+  style='cursor:hand'>
+  <td align=right valign=top>
+  <div class=sldNum><font size=2>3</font></div>
+  </td>
+  <td>
+  <div id=PPTP3 class=PTxt><font size=2><a
+  href="javascript:GoToSld('slide0188.htm');" id=PPTL3>7.1.3 &amp; 7.1.4</a></font></div>
+  <div id=PPTC3 class=CTxt style='display:none'><font size=2>
+  <ul>
+   <li>The running time of PARTITION is (n) since each iteration of the for loop
+       involves a constant number of operations and there is (n) iterations in
+       total.</li>
+   <li>To make QUICKSORT sort in nonincreasing order replace the &lt;=
+       comparison in<span style='mso-spacerun:yes'>  </span>PARTITION line 4
+       with &gt;=.</li>
+   <br>
+   <br>
+   <br>
+  </ul>
+  </font></div>
+  </td>
+ </tr>
+ <tr onmouseover="Over(this)" onmouseout="Out(this)" onclick="Follow(this)"
+  style='cursor:hand'>
+  <td align=right valign=top>
+  <div class=sldNum><font size=2>4</font></div>
+  </td>
+  <td>
+  <div id=PPTP4 class=PTxt><font size=2><a
+  href="javascript:GoToSld('slide0189.htm');" id=PPTL4>7.2.2</a></font></div>
+  <div id=PPTC4 class=CTxt style='display:none'><font size=2>
+  <ul>
+   <li>If the elements in A are the same, then by exercise 7-1 - 2 the returned
+       element from each call to PARTITION(A, p, r) is r - 1 thus yielding the
+       worst-case partitioning. The total running time is easily seen to be (n<sup>2</sup>).</li>
+   <li>The recurrence in this case is</li>
+   <li>T(n) = T(n – 1) + <font face=Symbol>Q</font><font face="Times New Roman">(n)</font></li>
+   <li><span style='mso-spacerun:yes'>        </span>= T(n – 2) + <font
+       face=Symbol>Q</font><font face="Times New Roman">(n – 1) + </font><font
+       face=Symbol>Q</font><font face="Times New Roman">(n)</font></li>
+   <li><span style='mso-spacerun:yes'>        </span>= T(n – 3) + <font
+       face=Symbol>Q</font><font face="Times New Roman">(n – 2) + </font><font
+       face=Symbol>Q</font><font face="Times New Roman">(n – 1) + </font><font
+       face=Symbol>Q</font><font face="Times New Roman">(n)<span
+       style='mso-spacerun:yes'>   </span>…</font></li>
+   <li><span style='mso-spacerun:yes'>        </span>= <font face=Symbol>Q</font><font
+       face="Times New Roman">(n) + </font><font face=Symbol>Q</font><font
+       face="Times New Roman">( n<sup>2</sup>) = </font><font face=Symbol>Q</font><font
+       face="Times New Roman">(n<sup>2</sup>)</font></li>
+   <br>
+   <br>
+  </ul>
+  </font></div>
+  </td>
+ </tr>
+ <tr onmouseover="Over(this)" onmouseout="Out(this)" onclick="Follow(this)"
+  style='cursor:hand'>
+  <td align=right valign=top>
+  <div class=sldNum><font size=2>5</font></div>
+  </td>
+  <td>
+  <div id=PPTP5 class=PTxt><font size=2><a
+  href="javascript:GoToSld('slide0190.htm');" id=PPTL5>7.2.3 &amp; 7.2.4</a></font></div>
+  <div id=PPTC5 class=CTxt style='display:none'><font size=2>
+  <ul>
+   <li>(3)If the elements in A are distinct and sorted in decreasing order
+       then, as in the previous exercise,we have worst-case partitioning. The
+       running time is again (n2).</li>
+   <li>(4) As the data being sorted becomes closer to sorted, insertion sort
+       gets closer to <font face=Symbol>Q</font><font face="Times New Roman">(n)
+       and quicksort gets closer to </font><font face=Symbol>Q</font><font
+       face="Times New Roman">(n2).<span style='mso-spacerun:yes'> 
+       </span>Therefore,<span style='mso-spacerun:yes'>  </span>there comes a
+       point at which insertion sort performs better than quicksort.<span
+       style='mso-spacerun:yes'>  </span>Further, while quicksort is still </font><font
+       face=Symbol>Q</font><font face="Times New Roman">(n lg n) the constant
+       multiple continues to grow as the data is more sorted.<span
+       style='mso-spacerun:yes'>  </span>And with insertion sort, the constant
+       multiple continues to shrink.</font></li>
+  </ul>
+  </font></div>
+  </td>
+ </tr>
+ <tr onmouseover="Over(this)" onmouseout="Out(this)" onclick="Follow(this)"
+  style='cursor:hand'>
+  <td align=right valign=top>
+  <div class=sldNum><font size=2>6</font></div>
+  </td>
+  <td>
+  <div id=PPTP6 class=PTxt><font size=2><a
+  href="javascript:GoToSld('slide0191.htm');" id=PPTL6>7.2.5</a></font></div>
+  <div id=PPTC6 class=CTxt style='display:none'><font size=2>
+  <ul>
+   <li>log<sub>1/</sub><font face=Symbol><sub>a</sub></font><font
+       face="Times New Roman">n = (log<sub>b</sub>n)/(log<sub>b</sub>1/</font><font
+       face=Symbol>a</font><font face="Times New Roman">) =<span
+       style='mso-spacerun:yes'>  </span>–(log<sub>b</sub>n)/(log<sub>b</sub></font><font
+       face=Symbol>a</font><font face="Times New Roman">) =<span
+       style='mso-spacerun:yes'>  </span>–(lgn)/(lg</font><font face=Symbol>a</font><font
+       face="Times New Roman">)</font></li>
+   <li>log1/(1-<font face=Symbol>a</font><font face="Times New Roman">)n = (logbn)/(logb1/(1-</font><font
+       face=Symbol>a</font><font face="Times New Roman">)) =<span
+       style='mso-spacerun:yes'>  </span>–(logbn)/(logb(1-</font><font
+       face=Symbol>a</font><font face="Times New Roman">)) =<span
+       style='mso-spacerun:yes'>  </span>–(lgn)/(lg(1-</font><font face=Symbol>a</font><font
+       face="Times New Roman">))</font></li>
+  </ul>
+  </font></div>
+  </td>
+ </tr>
+ <tr onmouseover="Over(this)" onmouseout="Out(this)" onclick="Follow(this)"
+  style='cursor:hand'>
+  <td align=right valign=top>
+  <div class=sldNum><font size=2>7</font></div>
+  </td>
+  <td>
+  <div id=PPTP7 class=PTxt><font size=2><a
+  href="javascript:GoToSld('slide0192.htm');" id=PPTL7>7.1</a></font></div>
+  <div id=PPTC7 class=CTxt style='display:none'><font size=2>
+  <ul>
+   <li>A =</li>
+   <li>13<span style='mso-spacerun:yes'>    </span>19<span
+       style='mso-spacerun:yes'>     </span>9<span
+       style='mso-spacerun:yes'>     </span>5<span style='mso-spacerun:yes'>   
+       </span>12<span style='mso-spacerun:yes'>     </span>8<span
+       style='mso-spacerun:yes'>     </span>7<span
+       style='mso-spacerun:yes'>     </span>4<span style='mso-spacerun:yes'>   
+       </span>11<span style='mso-spacerun:yes'>     </span>2<span
+       style='mso-spacerun:yes'>     </span>6<span style='mso-spacerun:yes'>   
+       </span>21</li>
+   <li><span style='mso-spacerun:yes'> </span>i<span
+       style='mso-spacerun:yes'>                                                                        
+       </span>j <font face=Symbol>&Uuml;</font><font face="Times New Roman"> j</font></li>
+   <li>6<span style='mso-spacerun:yes'>     </span>19<span
+       style='mso-spacerun:yes'>     </span>9<span
+       style='mso-spacerun:yes'>     </span>5<span style='mso-spacerun:yes'>   
+       </span>12<span style='mso-spacerun:yes'>     </span>8<span
+       style='mso-spacerun:yes'>     </span>7<span
+       style='mso-spacerun:yes'>     </span>4<span style='mso-spacerun:yes'>   
+       </span>11<span style='mso-spacerun:yes'>     </span>2<span
+       style='mso-spacerun:yes'>     </span>13<span
+       style='mso-spacerun:yes'>    </span>21</li>
+   <li><span style='mso-spacerun:yes'> </span>i<span style='mso-spacerun:yes'> 
+       </span><font face=Symbol>&THORN;</font><font face="Times New Roman"> i<span
+       style='mso-spacerun:yes'>                                                        
+       </span>j </font><font face=Symbol>&Uuml;</font><font
+       face="Times New Roman"><span style='mso-spacerun:yes'>  </span>j</font></li>
+   <li><span style='mso-spacerun:yes'> </span>6<span
+       style='mso-spacerun:yes'>      </span>2<span
+       style='mso-spacerun:yes'>     </span>9<span
+       style='mso-spacerun:yes'>     </span>5<span style='mso-spacerun:yes'>   
+       </span>12<span style='mso-spacerun:yes'>     </span>8<span
+       style='mso-spacerun:yes'>     </span>7<span
+       style='mso-spacerun:yes'>     </span>4<span style='mso-spacerun:yes'>   
+       </span>11<span style='mso-spacerun:yes'>    </span>19<span
+       style='mso-spacerun:yes'>    </span>13<span style='mso-spacerun:yes'>   
+       </span>21</li>
+   <li><span style='mso-spacerun:yes'>         </span>i <font face=Symbol>&THORN;</font><font
+       face="Times New Roman"> …………………………</font><font face=Symbol>&THORN;</font><font
+       face="Times New Roman"> </font><font face=Symbol>&Uuml;</font><font
+       face="Times New Roman"><span style='mso-spacerun:yes'>   </span>j</font></li>
+   <li>return 11,	SPLIT =<span
+       style='mso-spacerun:yes'>                           </span>and</li>
+  </ul>
+  </font></div>
+  </td>
+ </tr>
+ <tr onmouseover="Over(this)" onmouseout="Out(this)" onclick="Follow(this)"
+  style='cursor:hand'>
+  <td align=right valign=top>
+  <div class=sldNum><font size=2>8</font></div>
+  </td>
+  <td>
+  <div id=PPTP8 class=PTxt><font size=2><a
+  href="javascript:GoToSld('slide0193.htm');" id=PPTL8>7.1</a></font></div>
+  <div id=PPTC8 class=CTxt style='display:none'><font size=2>
+  <ul>
+   <li>i cannot go past j more than 1 index.</li>
+   <li>j cannot go off the end of the array, because …</li>
+   <li>	(case 1)<span style='mso-spacerun:yes'>  </span>it will stop at the
+       pivot at the end of the array, or</li>
+   <li>	(case 2)<span style='mso-spacerun:yes'>  </span>it will stop when it
+       reaches i.</li>
+   <li>i cannot go past j if j is at its first element.</li>
+   <br>
+   <br>
+   <li>j will have at least two chances to move before i can get to j, since i
+       stops at the first index (where the pivot element is).</li>
+  </ul>
+  </font></div>
+  </td>
+ </tr>
+ <tr onmouseover="Over(this)" onmouseout="Out(this)" onclick="Follow(this)"
+  style='cursor:hand'>
+  <td align=right valign=top>
+  <div class=sldNum><font size=2>9</font></div>
+  </td>
+  <td>
+  <div id=PPTP9 class=PTxt><font size=2><a
+  href="javascript:GoToSld('slide0194.htm');" id=PPTL9>7.3</a></font></div>
+  <div id=PPTC9 class=CTxt style='display:none'><font size=2>
+  <ul>
+   <li>The array is sorted in place and the size of the array being sorted is
+       always brought down to two elements (recursively).<span
+       style='mso-spacerun:yes'>  </span>Each set of two elements in a row is
+       recursively compared and swapped if necessary.<span
+       style='mso-spacerun:yes'>  </span>Therefore the array will be sorted.</li>
+   <br>
+   <br>
+  </ul>
+  </font></div>
+  </td>
+ </tr>
+ <tr onmouseover="Over(this)" onmouseout="Out(this)" onclick="Follow(this)"
+  style='cursor:hand'>
+  <td align=right valign=top>
+  <div class=sldNum><font size=2>10</font></div>
+  </td>
+  <td>
+  <div id=PPTP10 class=PTxt><font size=2><a
+  href="javascript:GoToSld('slide0195.htm');" id=PPTL10>7.4</a></font></div>
+  <div id=PPTC10 class=CTxt style='display:none'><font size=2>
+  <ul>
+   <li>a. Clearly, the QUICKSORT' does exactly the same as the original
+       QUICKSORT and therefore works correctly.</li>
+   <li>Worst-case partitioning can cause the stack depth of QUICKSORT' to be <font
+       face=Symbol>Q</font><font face="Times New Roman">(n) . Because the array
+       is already ordered.</font></li>
+   <li>If we recursively call QUICKSORT' on the smallest subarray returned by
+       PARTITION we will avoid the problem and retain a O(lg n) bound on the
+       stack depth.</li>
+   <br>
+   <br>
+   <br>
+  </ul>
+  </font></div>
+  </td>
+ </tr>
+ <tr onmouseover="Over(this)" onmouseout="Out(this)" onclick="Follow(this)"
+  style='cursor:hand'>
+  <td align=right valign=top>
+  <div class=sldNum><font size=2>11</font></div>
+  </td>
+  <td>
+  <div id=PPTP11 class=PTxt><font size=2><a
+  href="javascript:GoToSld('slide0196.htm');" id=PPTL11>8.1.1 &amp; 8.1.2</a></font></div>
+  <div id=PPTC11 class=CTxt style='display:none'><font size=2>
+  <ul>
+   <li>n – 1</li>
+   <br>
+   <br>
+  </ul>
+  </font></div>
+  </td>
+ </tr>
+ <tr onmouseover="Over(this)" onmouseout="Out(this)" onclick="Follow(this)"
+  style='cursor:hand'>
+  <td align=right valign=top>
+  <div class=sldNum><font size=2>12</font></div>
+  </td>
+  <td>
+  <div id=PPTP12 class=PTxt><font size=2><a
+  href="javascript:GoToSld('slide0197.htm');" id=PPTL12>9.1.3</a></font></div>
+  <div id=PPTC12 class=CTxt style='display:none'><font size=2>
+  <ul>
+   <li>Since the depth of a decision tree is lg n!, it takes at least that many
+       comparisons.</li>
+   <li>lg n!/2 = lg n! – lg 2 = lg n! – 1 = <font face=Symbol>Q</font><font
+       face="Times New Roman">(n lg n)</font></li>
+   <li>Therefore, there is no comparison sort whose running time is linear on
+       at least ½ of n! inputs of length n.</li>
+   <li>lg n!/2n = lg n! – lg 2n = lg n! – n = <font face=Symbol>Q</font><font
+       face="Times New Roman">(n lg n) – </font><font face=Symbol>Q</font><font
+       face="Times New Roman">(n) = </font><font face=Symbol>Q</font><font
+       face="Times New Roman">(n lg n)</font></li>
+   <li>Therefore, there is no comparison sort whose running time is linear on
+       at least 1/2n of n! inputs of length n.</li>
+  </ul>
+  </font></div>
+  </td>
+ </tr>
+ <tr onmouseover="Over(this)" onmouseout="Out(this)" onclick="Follow(this)"
+  style='cursor:hand'>
+  <td align=right valign=top>
+  <div class=sldNum><font size=2>13</font></div>
+  </td>
+  <td>
+  <div id=PPTP13 class=PTxt><font size=2><a
+  href="javascript:GoToSld('slide0198.htm');" id=PPTL13>Example</a></font></div>
+  <div id=PPTC13 class=CTxt style='display:none'><font size=2>
+  <ul>
+   <li>Prove that 2n – 1 comparisons are necessary in the worst case to merge
+       two sorted lists containing n elements each.</li>
+   <li>Since the arrays are sorted, once the highest element of array A is
+       found to be lower than an element of array B, all the following elements
+       of B can be directly inserted into array C.<span
+       style='mso-spacerun:yes'>  </span>So the worst case is when all elements
+       are compared.<span style='mso-spacerun:yes'>  </span>This happens when
+       the values A[i] <font face=Symbol>£</font><font face="Times New Roman"> B[i]
+       </font><font face=Symbol>£</font><font face="Times New Roman"> A[i + 1] </font><font
+       face=Symbol>£</font><font face="Times New Roman"> B[i + 1] </font><font
+       face=Symbol>£</font><font face="Times New Roman"> … </font><font
+       face=Symbol>£</font><font face="Times New Roman"> B[n].<span
+       style='mso-spacerun:yes'>  </span>In this case, each element (except the
+       first and last) is compared to two other elements.</font></li>
+  </ul>
+  </font></div>
+  </td>
+ </tr>
+ <tr onmouseover="Over(this)" onmouseout="Out(this)" onclick="Follow(this)"
+  style='cursor:hand'>
+  <td align=right valign=top>
+  <div class=sldNum><font size=2>14</font></div>
+  </td>
+  <td>
+  <div id=PPTP14 class=PTxt><font size=2><a
+  href="javascript:GoToSld('slide0199.htm');" id=PPTL14>Example</a></font></div>
+  <div id=PPTC14 class=CTxt style='display:none'><font size=2>
+  <ul>
+   <li>Professor Solomon claims that the <font face=Symbol>W</font><font
+       face="Times New Roman">(n lg n) lower bound for sorting n numbers does
+       not apply to his computer environment, in which the control flow of a
+       program can split three ways after a single comparison ai : aj,
+       according to whether ai </font><font face=Symbol>&lt;</font><font
+       face="Times New Roman"> aj, ai </font><font face=Symbol>=</font><font
+       face="Times New Roman"> aj, or ai </font><font face=Symbol>&gt;</font><font
+       face="Times New Roman"> aj.<span style='mso-spacerun:yes'>  </span>Show
+       that the professor is wrong by proving that the number of three-way
+       comparisons required to sort n element is still </font><font
+       face=Symbol>W</font><font face="Times New Roman">(n lg n).</font></li>
+   <br>
+   <br>
+   <li>The minimum height of a decision tree split three ways is<span
+       style='mso-spacerun:yes'>       </span>log3 n!</li>
+   <li>log3 n! = lg n! – lg 3 = c lg n! = <font face=Symbol>Q</font><font
+       face="Times New Roman">(n lg n)</font></li>
+   <li>Lower bound = <font face=Symbol>W</font><font face="Times New Roman">(n
+       lg n)</font></li>
+  </ul>
+  </font></div>
+  </td>
+ </tr>
+ <tr onmouseover="Over(this)" onmouseout="Out(this)" onclick="Follow(this)"
+  style='cursor:hand'>
+  <td align=right valign=top>
+  <div class=sldNum><font size=2>15</font></div>
+  </td>
+  <td>
+  <div id=PPTP15 class=PTxt><font size=2><a
+  href="javascript:GoToSld('slide0200.htm');" id=PPTL15>8.1.4</a></font></div>
+  </td>
+ </tr>
+ <tr onmouseover="Over(this)" onmouseout="Out(this)" onclick="Follow(this)"
+  style='cursor:hand'>
+  <td align=right valign=top>
+  <div class=sldNum><font size=2>16</font></div>
+  </td>
+  <td>
+  <div id=PPTP16 class=PTxt><font size=2><a
+  href="javascript:GoToSld('slide0201.htm');" id=PPTL16>8.2.3 &amp; 8.2.4</a></font></div>
+  <div id=PPTC16 class=CTxt style='display:none'><font size=2>
+  <ul>
+   <li>COUNTING-SORT will work correctly no matter what order A is processed
+       in, however it is not stable. The modification to the for loop actually
+       causes numbers with the same value to appear in reverse order in the
+       output. This can seen by running a few examples.</li>
+   <li>Given n integers from 1 to k show how to count the number of elements
+       from a to b in O(1) time with O(n + k) pre-processing time. As shown in
+       COUNTING-SORT we can produce an array C such that C[i] contains the
+       number of elements less than or equal to i. Clearly, C[b] - C[a] gives
+       the desired answer.</li>
+   <br>
+   <br>
+  </ul>
+  </font></div>
+  </td>
+ </tr>
+ <tr onmouseover="Over(this)" onmouseout="Out(this)" onclick="Follow(this)"
+  style='cursor:hand'>
+  <td align=right valign=top>
+  <div class=sldNum><font size=2>17</font></div>
+  </td>
+  <td>
+  <div id=PPTP17 class=PTxt><font size=2><a
+  href="javascript:GoToSld('slide0202.htm');" id=PPTL17>8.3.2</a></font></div>
+  <div id=PPTC17 class=CTxt style='display:none'><font size=2>
+  <ul>
+   <li>Insertion sort is stable.</li>
+   <li>Quicksort is not stable.</li>
+   <li>Merge sort is stable.</li>
+   <li>If two elements are equal, then sort them based on their previous order.</li>
+  </ul>
+  </font></div>
+  </td>
+ </tr>
+ <tr onmouseover="Over(this)" onmouseout="Out(this)" onclick="Follow(this)"
+  style='cursor:hand'>
+  <td align=right valign=top>
+  <div class=sldNum><font size=2>18</font></div>
+  </td>
+  <td>
+  <div id=PPTP18 class=PTxt><font size=2><a
+  href="javascript:GoToSld('slide0203.htm');" id=PPTL18>8.3.3</a></font></div>
+  <div id=PPTC18 class=CTxt style='display:none'><font size=2>
+  <ul>
+   <li>Base case:</li>
+   <li>	In a single column of elements, the column will be sorted.</li>
+   <li>Inductive Hypothesis:</li>
+   <li>	Assume that each column up to column d – 1 in a d-column set is sorted.</li>
+   <li>	Prove for column d:</li>
+   <li>	Let c = d – 1</li>
+   <li>	By the inductive hypothesis, a c-column set will be sorted.<span
+       style='mso-spacerun:yes'>  </span>Since c and d are simply variables, a d-column
+       set will also be sorted.</li>
+   <li>	The assumption of a stable sort is made in the inductive hypothesis.</li>
+  </ul>
+  </font></div>
+  </td>
+ </tr>
+ <tr onmouseover="Over(this)" onmouseout="Out(this)" onclick="Follow(this)"
+  style='cursor:hand'>
+  <td align=right valign=top>
+  <div class=sldNum><font size=2>19</font></div>
+  </td>
+  <td>
+  <div id=PPTP19 class=PTxt><font size=2><a
+  href="javascript:GoToSld('slide0204.htm');" id=PPTL19>8.3.4</a></font></div>
+  <div id=PPTC19 class=CTxt style='display:none'><font size=2>
+  <ul>
+   <li>Put the integers into the range of [0, 1) by dividing each by (n<sup>2</sup>
+       + 1). Then use bucket-sort to sort the set. Then multiply each number by
+       (n<sup>2</sup> + 1) to get back to the original integer values.</li>
+   <li>Show how to sort n integers in the range 0 to n<sup>2</sup> - 1 in O(n)
+       time. Notice that the number of digits used to represent an n<sup>2</sup>
+       different numbers in a k-ary number system is d = log<sub>k</sub>(n<sup>2</sup>).
+       Thus considering the n<sup>2</sup> numbers as radix n numbers gives us
+       that:</li>
+   <li>		d = log<sub>n</sub>(n<sup>2</sup>) = 2 log<sub>n</sub>(n) = 2</li>
+   <li>Radix sort will then have a running time of<span
+       style='mso-spacerun:yes'>  </span><font face=Symbol>Q</font><font
+       face="Times New Roman"> (n + k) = </font><font face=Symbol>Q</font><font
+       face="Times New Roman">(2(n + n)) = </font><font face=Symbol>Q</font><font
+       face="Times New Roman">(n).</font></li>
+   <br>
+   <br>
+   <br>
+  </ul>
+  </font></div>
+  </td>
+ </tr>
+ <tr onmouseover="Over(this)" onmouseout="Out(this)" onclick="Follow(this)"
+  style='cursor:hand'>
+  <td align=right valign=top>
+  <div class=sldNum><font size=2>20</font></div>
+  </td>
+  <td>
+  <div id=PPTP20 class=PTxt><font size=2><a
+  href="javascript:GoToSld('slide0205.htm');" id=PPTL20>8.4.2</a></font></div>
+  <div id=PPTC20 class=CTxt style='display:none'><font size=2>
+  <ul>
+   <li>The worst-case running time for bucket-sort is O(n<sup>2</sup>).<span
+       style='mso-spacerun:yes'>  </span>This will happen if all elements
+       happen to be placed in the same bucket and any O(n<sup>2</sup>) sort
+       (such as insertion sort) is used to sort the buckets.</li>
+   <li>By using Merge sort to sort the buckets the worst-case becomes O(n lg
+       n).</li>
+  </ul>
+  </font></div>
+  </td>
+ </tr>
+ <tr onmouseover="Over(this)" onmouseout="Out(this)" onclick="Follow(this)"
+  style='cursor:hand'>
+  <td align=right valign=top>
+  <div class=sldNum><font size=2>21</font></div>
+  </td>
+  <td>
+  <div id=PPTP21 class=PTxt><font size=2><a
+  href="javascript:GoToSld('slide0206.htm');" id=PPTL21>9.1.1</a></font></div>
+  <div id=PPTC21 class=CTxt style='display:none'><font size=2>
+  <ul>
+   <li>To find the smallest element construct a tournament as follows: Compare
+       all the numbers in pairs.</li>
+   <li>Only the smallest number of each pair is potentially the smallest of all
+       so the problem is reduced to size n/2 . Continuing in this fashion until
+       there is only one left clearly solves the problem.</li>
+   <li>Exactly n - 1 comparisons are needed since the tournament can be drawn
+       as an n-leaf binary tree which has n - 1 internal nodes (show by
+       induction on n). Each of these nodes correspond to a comparison.</li>
+   <li>We can use this binary tree to also locate the second smallest number.
+       The path from the root to the smallest element (of height lg n) must
+       contain the second smallest element. Conducting a tournament among these
+       uses lg n - 1 comparisons.</li>
+   <li>The total number of comparisons are: n - 1 + lg n - 1 = n + lg n - 2.</li>
+   <br>
+   <br>
+  </ul>
+  </font></div>
+  </td>
+ </tr>
+ <tr onmouseover="Over(this)" onmouseout="Out(this)" onclick="Follow(this)"
+  style='cursor:hand'>
+  <td align=right valign=top>
+  <div class=sldNum><font size=2>22</font></div>
+  </td>
+  <td>
+  <div id=PPTP22 class=PTxt><font size=2><a
+  href="javascript:GoToSld('slide0207.htm');" id=PPTL22>9.1.2</a></font></div>
+  </td>
+ </tr>
+ <tr onmouseover="Over(this)" onmouseout="Out(this)" onclick="Follow(this)"
+  style='cursor:hand'>
+  <td align=right valign=top>
+  <div class=sldNum><font size=2>23</font></div>
+  </td>
+  <td>
+  <div id=PPTP23 class=PTxt><font size=2><a
+  href="javascript:GoToSld('slide0208.htm');" id=PPTL23>9.2.4</a></font></div>
+  </td>
+ </tr>
+ <tr onmouseover="Over(this)" onmouseout="Out(this)" onclick="Follow(this)"
+  style='cursor:hand'>
+  <td align=right valign=top>
+  <div class=sldNum><font size=2>24</font></div>
+  </td>
+  <td>
+  <div id=PPTP24 class=PTxt><font size=2><a
+  href="javascript:GoToSld('slide0209.htm');" id=PPTL24>9.3.1</a></font></div>
+  </td>
+ </tr>
+ <tr onmouseover="Over(this)" onmouseout="Out(this)" onclick="Follow(this)"
+  style='cursor:hand'>
+  <td align=right valign=top>
+  <div class=sldNum><font size=2>25</font></div>
+  </td>
+  <td>
+  <div id=PPTP25 class=PTxt><font size=2><a
+  href="javascript:GoToSld('slide0210.htm');" id=PPTL25>9.3.1</a></font></div>
+  </td>
+ </tr>
+ <tr onmouseover="Over(this)" onmouseout="Out(this)" onclick="Follow(this)"
+  style='cursor:hand'>
+  <td align=right valign=top>
+  <div class=sldNum><font size=2>26</font></div>
+  </td>
+  <td>
+  <div id=PPTP26 class=PTxt><font size=2><a
+  href="javascript:GoToSld('slide0211.htm');" id=PPTL26>9.3.3</a></font></div>
+  <div id=PPTC26 class=CTxt style='display:none'><font size=2>
+  <ul>
+   <li>Quicksort can be made to run in O(n lg n) time worst-case by noticing
+       that we can perform perfect partitioning: Simply use the linear time
+       select to nd the median and perform the partitioning around it. This
+       clearly achieves the bound.</li>
+   <li>Use the SELECT procedure to find the median-of-medians and use this
+       element as the partitioning element.<span style='mso-spacerun:yes'> 
+       </span>This will ensure that the split is always good enough to avoid
+       the possibility of a O(n2) worst-case split.</li>
+   <br>
+   <br>
+   <br>
+  </ul>
+  </font></div>
+  </td>
+ </tr>
+ <tr onmouseover="Over(this)" onmouseout="Out(this)" onclick="Follow(this)"
+  style='cursor:hand'>
+  <td align=right valign=top>
+  <div class=sldNum><font size=2>27</font></div>
+  </td>
+  <td>
+  <div id=PPTP27 class=PTxt><font size=2><a
+  href="javascript:GoToSld('slide0212.htm');" id=PPTL27>9.3.4</a></font></div>
+  <div id=PPTC27 class=CTxt style='display:none'><font size=2>
+  <ul>
+   <li>Since the SELECT procedure partitions the array around the ith smallest
+       element, the entire array has already been divided such that all
+       elements that are greater than the ith element are in one sub array and
+       all others are in a sub array with the ith smallest element.<span
+       style='mso-spacerun:yes'>  </span>Further, the ith smallest element will
+       be the first element in its sub array, because it was the partitioning
+       element.</li>
+   <br>
+   <br>
+  </ul>
+  </font></div>
+  </td>
+ </tr>
+ <tr onmouseover="Over(this)" onmouseout="Out(this)" onclick="Follow(this)"
+  style='cursor:hand'>
+  <td align=right valign=top>
+  <div class=sldNum><font size=2>28</font></div>
+  </td>
+  <td>
+  <div id=PPTP28 class=PTxt><font size=2><a
+  href="javascript:GoToSld('slide0213.htm');" id=PPTL28>9.3.5</a></font></div>
+  </td>
+ </tr>
+ <tr onmouseover="Over(this)" onmouseout="Out(this)" onclick="Follow(this)"
+  style='cursor:hand'>
+  <td align=right valign=top>
+  <div class=sldNum><font size=2>29</font></div>
+  </td>
+  <td>
+  <div id=PPTP29 class=PTxt><font size=2><a
+  href="javascript:GoToSld('slide0214.htm');" id=PPTL29>10.1</a></font></div>
+  <div id=PPTC29 class=CTxt style='display:none'><font size=2>
+  <ul>
+   <li>a.	Sort the numbers and list the i largest.</li>
+   <li>Use Merge sort to sort the elements, then list the last i elements in
+       the sorted array: <font face=Symbol>Q</font><font face="Times New Roman">(n
+       lg n) + i = </font><font face=Symbol>Q</font><font face="Times New Roman">(n
+       lg n)</font></li>
+   <br>
+   <br>
+  </ul>
+  </font></div>
+  </td>
+ </tr>
+ <tr onmouseover="Over(this)" onmouseout="Out(this)" onclick="Follow(this)"
+  style='cursor:hand'>
+  <td align=right valign=top>
+  <div class=sldNum><font size=2>30</font></div>
+  </td>
+  <td>
+  <div id=PPTP30 class=PTxt><font size=2><a
+  href="javascript:GoToSld('slide0215.htm');" id=PPTL30>12.1.2</a></font></div>
+  <div id=PPTC30 class=CTxt style='display:none'><font size=2>
+  <ul>
+   <li>The definitions clearly differ. If the heap property allowed the
+       elements to be printed in sorted order in time O(n) we would have an
+       O(n) time comparison sorting algorithm since BUILD-HEAP takes O(n) time.
+       This, however, is impossible since we know (n lg n) is a lower bound for
+       sorting.</li>
+   <br>
+   <br>
+   <br>
+  </ul>
+  </font></div>
+  </td>
+ </tr>
+ <tr onmouseover="Over(this)" onmouseout="Out(this)" onclick="Follow(this)"
+  style='cursor:hand'>
+  <td align=right valign=top>
+  <div class=sldNum><font size=2>31</font></div>
+  </td>
+  <td>
+  <div id=PPTP31 class=PTxt><font size=2><a
+  href="javascript:GoToSld('slide0216.htm');" id=PPTL31>12.1.3</a></font></div>
+  <div id=PPTC31 class=CTxt style='display:none'><font size=2>
+  <ul>
+   <li>ptr = root</li>
+   <li>push ptr-&gt;element</li>
+   <li>while ptr-&gt;left <font face=Symbol>¹</font><font face="Times New Roman">
+       NIL</font></li>
+   <li><span style='mso-spacerun:yes'>      </span>ptr = ptr-&gt;left</li>
+   <li><span style='mso-spacerun:yes'>      </span>push ptr-&gt;element</li>
+   <li>pop element</li>
+   <li>if stack is not empty</li>
+   <li><span style='mso-spacerun:yes'>      </span>ptr = top_of_stack</li>
+   <li><span style='mso-spacerun:yes'>      </span>pop element</li>
+   <li>else if ptr-&gt;right <font face=Symbol>¹</font><font
+       face="Times New Roman"> NIL</font></li>
+   <li><span style='mso-spacerun:yes'>      </span>ptr = ptr-&gt;right</li>
+   <li><span style='mso-spacerun:yes'>      </span>push ptr-&gt;element</li>
+   <li>else</li>
+   <li><span style='mso-spacerun:yes'>      </span>return</li>
+   <li>repeat</li>
+  </ul>
+  </font></div>
+  </td>
+ </tr>
+ <tr onmouseover="Over(this)" onmouseout="Out(this)" onclick="Follow(this)"
+  style='cursor:hand'>
+  <td align=right valign=top>
+  <div class=sldNum><font size=2>32</font></div>
+  </td>
+  <td>
+  <div id=PPTP32 class=PTxt><font size=2><a
+  href="javascript:GoToSld('slide0217.htm');" id=PPTL32>12.1.4</a></font></div>
+  <div id=PPTC32 class=CTxt style='display:none'><font size=2>
+  <ul>
+   <li>PREORDER–TREE–WALK(x)</li>
+   <li><span style='mso-spacerun:yes'>      </span>if x <font face=Symbol>¹</font><font
+       face="Times New Roman"> NIL</font></li>
+   <li><span style='mso-spacerun:yes'>            </span>then print key[x]</li>
+   <li><span style='mso-spacerun:yes'>                   
+       </span>PREORDER–TREE–WALK(left[x])</li>
+   <li><span style='mso-spacerun:yes'>                   
+       </span>PREORDER–TREE–WALK(right[x])</li>
+   <li>POSTORDER–TREE–WALK(x)</li>
+   <li><span style='mso-spacerun:yes'>      </span>if x <font face=Symbol>¹</font><font
+       face="Times New Roman"> NIL</font></li>
+   <li><span style='mso-spacerun:yes'>            </span>then
+       POSTORDER–TREE–WALK(left[x])</li>
+   <li><span style='mso-spacerun:yes'>                   
+       </span>POSTORDER–TREE–WALK(right[x])</li>
+   <li><span style='mso-spacerun:yes'>                    </span>print key[x]</li>
+  </ul>
+  </font></div>
+  </td>
+ </tr>
+ <tr onmouseover="Over(this)" onmouseout="Out(this)" onclick="Follow(this)"
+  style='cursor:hand'>
+  <td align=right valign=top>
+  <div class=sldNum><font size=2>33</font></div>
+  </td>
+  <td>
+  <div id=PPTP33 class=PTxt><font size=2><a
+  href="javascript:GoToSld('slide0218.htm');" id=PPTL33>12.1.5</a></font></div>
+  <div id=PPTC33 class=CTxt style='display:none'><font size=2>
+  <ul>
+   <li>Since each element must be compared down one branch of the tree whose
+       height is <font face=Symbol>³</font><font face="Times New Roman"> </font><font
+       face=Symbol>W</font><font face="Times New Roman">(lg n), the time to
+       construct the tree is </font><font face=Symbol>³</font><font
+       face="Times New Roman"> n * </font><font face=Symbol>W</font><font
+       face="Times New Roman">(lg n) = </font><font face=Symbol>W</font><font
+       face="Times New Roman">(n lg n).</font></li>
+  </ul>
+  </font></div>
+  </td>
+ </tr>
+ <tr onmouseover="Over(this)" onmouseout="Out(this)" onclick="Follow(this)"
+  style='cursor:hand'>
+  <td align=right valign=top>
+  <div class=sldNum><font size=2>34</font></div>
+  </td>
+  <td>
+  <div id=PPTP34 class=PTxt><font size=2><a
+  href="javascript:GoToSld('slide0219.htm');" id=PPTL34>12.2.4</a></font></div>
+  </td>
+ </tr>
+ <tr onmouseover="Over(this)" onmouseout="Out(this)" onclick="Follow(this)"
+  style='cursor:hand'>
+  <td align=right valign=top>
+  <div class=sldNum><font size=2>35</font></div>
+  </td>
+  <td>
+  <div id=PPTP35 class=PTxt><font size=2><a
+  href="javascript:GoToSld('slide0221.htm');" id=PPTL35>12.2.5</a></font></div>
+  <div id=PPTC35 class=CTxt style='display:none'><font size=2>
+  <ul>
+   <li>Show that if a node in a binary search tree has two children then its
+       successor has no left child and its predecessor has no right child.</li>
+   <li>Let v be a node with two children. The nodes that immidiately precede v
+       must be in the left subtree and the nodes that immidiately follow v must
+       be in the right subtree. Thus the successor s must be in the right
+       subtree and s will be the next node from v in an inorder walk. Therefore
+       s cannot have a left child since this child since this would come before
+       s in the inorder walk. Similarly, the predecessor has no right child.</li>
+   <br>
+   <br>
+  </ul>
+  </font></div>
+  </td>
+ </tr>
+ <tr onmouseover="Over(this)" onmouseout="Out(this)" onclick="Follow(this)"
+  style='cursor:hand'>
+  <td align=right valign=top>
+  <div class=sldNum><font size=2>36</font></div>
+  </td>
+  <td>
+  <div id=PPTP36 class=PTxt><font size=2><a
+  href="javascript:GoToSld('slide0220.htm');" id=PPTL36>12.2.7</a></font></div>
+  <div id=PPTC36 class=CTxt style='display:none'><font size=2>
+  <ul>
+   <li>Since the minimum element in a tree is then left-most node, the
+       worst-case is if the tree is built by inserting elements in decreasing
+       order so that it is a left-going list.<span style='mso-spacerun:yes'> 
+       </span>In this situation TREE-MINIMUM must traverse the entire tree,
+       which happens in <font face=Symbol>Q</font><font face="Times New Roman">(n)-time.<span
+       style='mso-spacerun:yes'>  </span>However, in the average (and best)
+       case the height of the tree is </font><font face=Symbol>Q</font><font
+       face="Times New Roman">(lg n), so TREE-MINIMUM will run in </font><font
+       face=Symbol>Q</font><font face="Times New Roman">(lg n)-time.</font></li>
+   <li>TREESUCCESSOR processes each subtree before proceeding to the next
+       subtree outside the current one.<span style='mso-spacerun:yes'> 
+       </span>Therefore, it has to traverse each edge no more than twice.</li>
+   <li>2n = O(n)</li>
+   <li>O(n) + O(n) = O(n)</li>
+  </ul>
+  </font></div>
+  </td>
+ </tr>
+ <tr onmouseover="Over(this)" onmouseout="Out(this)" onclick="Follow(this)"
+  style='cursor:hand'>
+  <td align=right valign=top>
+  <div class=sldNum><font size=2>37</font></div>
+  </td>
+  <td>
+  <div id=PPTP37 class=PTxt><font size=2><a
+  href="javascript:GoToSld('slide0222.htm');" id=PPTL37>12.2.9</a></font></div>
+  <div id=PPTC37 class=CTxt style='display:none'><font size=2>
+  <ul>
+   <li>If x is a leaf node, then if p[x] = y and x is the left child then
+       running TREE-SUCCESSOR yields y. Similarly if x is the right child then
+       running TREE-PREDECESSOR yields y.</li>
+   <br>
+   <br>
+  </ul>
+  </font></div>
+  </td>
+ </tr>
+ <tr onmouseover="Over(this)" onmouseout="Out(this)" onclick="Follow(this)"
+  style='cursor:hand'>
+  <td align=right valign=top>
+  <div class=sldNum><font size=2>38</font></div>
+  </td>
+  <td>
+  <div id=PPTP38 class=PTxt><font size=2><a
+  href="javascript:GoToSld('slide0223.htm');" id=PPTL38>12.3.1</a></font></div>
+  </td>
+ </tr>
+ <tr onmouseover="Over(this)" onmouseout="Out(this)" onclick="Follow(this)"
+  style='cursor:hand'>
+  <td align=right valign=top>
+  <div class=sldNum><font size=2>39</font></div>
+  </td>
+  <td>
+  <div id=PPTP39 class=PTxt><font size=2><a
+  href="javascript:GoToSld('slide0224.htm');" id=PPTL39>12.3.5</a></font></div>
+  </td>
+ </tr>
+ <tr onmouseover="Over(this)" onmouseout="Out(this)" onclick="Follow(this)"
+  style='cursor:hand'>
+  <td align=right valign=top>
+  <div class=sldNum><font size=2>40</font></div>
+  </td>
+  <td>
+  <div id=PPTP40 class=PTxt><font size=2><a
+  href="javascript:GoToSld('slide0225.htm');" id=PPTL40>12.3.6</a></font></div>
+  <div id=PPTC40 class=CTxt style='display:none'><font size=2>
+  <ul>
+   <li>Keep a flag in the delete function that tells it whether it swapped the
+       successor of predecessor in the last deletion involving either, and the
+       next time delete is called on a deletion involving either of these, use
+       the opposite one and change the flag.</li>
+  </ul>
+  </font></div>
+  </td>
+ </tr>
+ <tr onmouseover="Over(this)" onmouseout="Out(this)" onclick="Follow(this)"
+  style='cursor:hand'>
+  <td align=right valign=top>
+  <div class=sldNum><font size=2>41</font></div>
+  </td>
+  <td>
+  <div id=PPTP41 class=PTxt><font size=2><a
+  href="javascript:GoToSld('slide0226.htm');" id=PPTL41>22.1.1 &amp; 22.1.2</a></font></div>
+  <div id=PPTC41 class=CTxt style='display:none'><font size=2>
+  <ul>
+   <li>O( V+E )</li>
+   <br>
+   <br>
+  </ul>
+  </font></div>
+  </td>
+ </tr>
+ <tr onmouseover="Over(this)" onmouseout="Out(this)" onclick="Follow(this)"
+  style='cursor:hand'>
+  <td align=right valign=top>
+  <div class=sldNum><font size=2>42</font></div>
+  </td>
+  <td>
+  <div id=PPTP42 class=PTxt><font size=2><a
+  href="javascript:GoToSld('slide0227.htm');" id=PPTL42>22.1.3</a></font></div>
+  <div id=PPTC42 class=CTxt style='display:none'><font size=2>
+  <ul>
+   <li>The transpose of a directed graph G<sup>T</sup> can be computed as
+       follows: If the graph is represented by an adjacency-matrix A simply
+       compute the transpose of the matrix AT in time O(V<sup>2</sup>). If the
+       graph is represented by an adjacency-list a single scan through this
+       list is sufcient to construct the transpose. The time used is O(E + V).</li>
+   <li>The square of a graph can be computed as follows: If the graph is
+       represented as an adjacency matrix: A simply compute the product A<sup>2</sup>
+       where multiplication and addition is exchanged by anding and oring.
+       Using the trivial algorithm yields a running time of O(n<sup>3</sup>).
+       Using Strassens algorithm improves the bound to O(nlg 7) = O(n<sup>2.81</sup>).</li>
+   <li>If we are using the adjacency-list representation we can simply append
+       lists eliminating duplicates. Assuming the lists are sorted we can
+       proceed as follows: For each node v in some list replace the v with
+       Adj[v] and merge this into the list. Each list can be at most V long and
+       therefore each merge operation takes at most O(V) time. Thus the total
+       running time is O((E+V)V) = O(E+V<sup>2</sup>).</li>
+   <br>
+   <br>
+   <br>
+   <br>
+  </ul>
+  </font></div>
+  </td>
+ </tr>
+ <tr onmouseover="Over(this)" onmouseout="Out(this)" onclick="Follow(this)"
+  style='cursor:hand'>
+  <td align=right valign=top>
+  <div class=sldNum><font size=2>43</font></div>
+  </td>
+  <td>
+  <div id=PPTP43 class=PTxt><font size=2><a
+  href="javascript:GoToSld('slide0228.htm');" id=PPTL43>22.1.6</a></font></div>
+  <div id=PPTC43 class=CTxt style='display:none'><font size=2>
+  <ul>
+   <li>Keep auxiliary data for each vertex, which is in-degree and
+       out-degree.<span style='mso-spacerun:yes'>  </span>Then search each
+       vertex for n – 1 and 0, respectively. O(V)</li>
+  </ul>
+  </font></div>
+  </td>
+ </tr>
+</table>
+
+
+
+</div>
+</body>
+
+</html>

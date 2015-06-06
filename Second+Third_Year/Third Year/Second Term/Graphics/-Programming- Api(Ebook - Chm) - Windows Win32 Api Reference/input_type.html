@@ -1,0 +1,82 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+<HTML lang="en-us">
+<HEAD>
+<TITLE>Windows API Guide: INPUT_TYPE Structure</TITLE>
+<META content="vbapi@vbapi.com" name="author">
+<META content="Information about the INPUTstructure (a.k.a. INPUT_TYPE) in the Windows API, geared towards the Visual Basic user." name="description">
+<META content="Kuliniewicz,Windows,Windows 95,Windows NT,Windows 98,Windows CE,Windows 2000,API,Application Programming Interface,Programming,Visual Basic,Basic,VB,INPUT_TYPE,INPUT" name="keywords">
+<META content="Omicron HTML Editor" name="generator">
+<META content="Sat, 09 Oct 1999 22:25:00 GMT" http-equiv="Last-Modified">
+<LINK href="default.css" tppabs="http://www.vbapi.com/css/default.css" rel="stylesheet" type="text/css">
+<LINK href="index-1.html" tppabs="http://www.vbapi.com/index.html" rel="home">
+
+<LINK href="glossary.html" tppabs="http://www.vbapi.com/ref/glossary.html" rel="glossary">
+<LINK href="copyrite.html" tppabs="http://www.vbapi.com/copyrite.html" rel="copyright">
+</HEAD>
+<BODY>
+
+<!-- Begin Adslot1 -->
+<CENTER>
+<SCRIPT language="JAVASCRIPT">
+<!-- hide from older browsers
+now = new Date();
+my_random = now.getTime();
+document.write('<A href="http://adex3.flycast.com/server/socket/127.0.0.1:2800/click/VBWorldnet/VBAPI/' + my_random + '">');
+document.write('<IMG width="468" height="60" border="1" src="http://adex3.flycast.com/server/socket/127.0.0.1:2800/ad/VBWorldnet/VBAPI/' + my_random + '"></A>');
+// -->
+</SCRIPT>
+</CENTER>
+<!-- End Adslot1 -->
+
+<HR>
+
+<H1>INPUT_TYPE Structure</H1>
+
+<P><PRE><CODE class="type">Type INPUT_TYPE
+  dwType As Long
+  xi(0 To 23) As Byte
+End Type</CODE></PRE></P>
+
+<H2>Description &amp; Usage</H2>
+<P>The <B>INPUT_TYPE</B> structure holds information about an input event to be placed in the input stream.  The input can be from the keyboard, the mouse, or some other hardware.  Essentially, this structure merely identifies the source of an input event.</P>
+
+<H2>Visual Basic-Specific Issues</H2>
+<P>Officially, this structure is called <B>INPUT</B>.  However, that violates the case-sensitive name spacing of Visual Basic because Visual Basic contains an intrinsic Input command.  The Windows API Guide calls this structure <B>INPUT_TYPE</B> to avoid the naming collision.</P>
+
+<P>Also, this structure does not officially have a data member called <VAR>xi</VAR>.  That space in the structure is actually a "union" of three members: <VAR>mi</VAR>, <VAR>ki</VAR>, and <VAR>hi</VAR>, all of which occupy the same physical space in the structure and of which only one can be used at any one time.  Each of those actual members are the contents of one of the three structures discussed below physically embedded in the structure.  Because, unlike C++, Visual Basic does not have any analogous construct, a workaround must be reached.  Therefore, as far as Visual Basic is concerned, a byte array called <VAR>xi</VAR> occupies that space, into which the contents of one of the possible structures must be copied.  See the example for <A href="sendinput.html" tppabs="http://www.vbapi.com/ref/s/sendinput.html">SendInput</A> for a demonstration.</P>
+
+<H2>Data Members</H2>
+<P><DL>
+<DT><VAR>dwType</VAR><DD>Exactly one of the following flags specifying which type of input event this structure contains:
+<DL>
+<DT>INPUT_MOUSE<DD>The structure identifies a mouse input event.
+<DT>INPUT_KEYBOARD<DD>The structure identifies a keyboard input event.
+<DT>INPUT_HARDWARE<DD><B>Windows 98:</B> The structure identifies some other hardware input event.
+</DL>
+<DT><VAR>xi</VAR><DD>Buffer which holds the contents of a data structure, depending on the value of <VAR>dwType</VAR>.  A <A href="mouseinput.html" tppabs="http://www.vbapi.com/ref/m/mouseinput.html">MOUSEINPUT</A> structure is used for mouse events, a <A href="keybdinput.html" tppabs="http://www.vbapi.com/ref/k/keybdinput.html">KEYBDINPUT</A> structure for keyboard events, and a <A href="hardwareinput.html" tppabs="http://www.vbapi.com/ref/h/hardwareinput.html">HARDWAREINPUT</A> structure for other hardware events.  (See the <A href="sendinput.html" tppabs="http://www.vbapi.com/ref/s/sendinput.html">SendInput</A> example for a demonstration of using this parameter.)
+</DL></P>
+
+<H2>Constant Definitions</H2>
+<P><PRE><CODE class="const">Const INPUT_MOUSE = 0
+Const INPUT_KEYBOARD = 1
+Const INPUT_HARDWARE = 2</CODE></PRE></P>
+
+<H2>Used By</H2>
+<P><A href="sendinput.html" tppabs="http://www.vbapi.com/ref/s/sendinput.html">SendInput</A></P>
+
+<P><A href="structa.html" tppabs="http://www.vbapi.com/ref/structa.html">Go back to the alphabetical Structure listing.</A><BR>
+<A href="index.html" tppabs="http://www.vbapi.com/ref/index.html">Go back to the Reference section index.</A></P>
+
+<HR>
+
+<P>
+<B>Last Modified:</B> October 9, 1999<BR>
+This page is copyright &copy; 1999 Paul Kuliniewicz.  
+<A href="copyrite.html" tppabs="http://www.vbapi.com/copyrite.html" rel="copyright">Copyright Information</A>  <B>Revised October 29, 2000</B><BR>
+
+<A href="index-1.html" tppabs="http://www.vbapi.com/index.html">Go back to the Windows API Guide home page.</A><BR>
+E-mail: <A href="javascript:if(confirm('http://www.vbapi.com/email.html  \n\nThis file was not retrieved by Teleport Pro, because it is addressed on a domain or path outside the boundaries set for its Starting Address.  \n\nDo you want to open it from the server?'))window.location='http://www.vbapi.com/email.html'" tppabs="http://www.vbapi.com/email.html">vbapi@vbapi.com</A>  <A href="javascript:if(confirm('http://www.vbapi.com/email.html  \n\nThis file was not retrieved by Teleport Pro, because it is addressed on a domain or path outside the boundaries set for its Starting Address.  \n\nDo you want to open it from the server?'))window.location='http://www.vbapi.com/email.html#secure'" tppabs="http://www.vbapi.com/email.html#secure">Send Encrypted E-Mail</A><BR>
+This page is at <A href="input_type.html" tppabs="http://www.vbapi.com/ref/i/input_type.html">http://www.vbapi.com/ref/i/input_type.html</A>
+</P>
+</BODY>
+</HTML>

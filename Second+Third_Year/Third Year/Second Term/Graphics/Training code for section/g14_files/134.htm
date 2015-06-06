@@ -1,0 +1,474 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!-- saved from url=(0039)http://www2.webng.com/amrlearn/134.html -->
+<HTML><HEAD><TITLE>Drawing And Rotating A Triangle</TITLE><LINK 
+href="134_files/stylesheet.css" type=text/css rel=stylesheet>
+<META http-equiv=Content-Type content="text/html; charset=UTF-8">
+<META content="Computer Graphics, Drawing And Rotating A Triangle " 
+name=description>
+<META 
+content="Computer Graphics, Computer, Graphics, Drawing, And, Rotating, A Triangle, Drawing And Rotating A Triangle " 
+name=keywords>
+<META content="Copyright 2007 Amr Saber" name=copyright>
+<META content="MSHTML 6.00.2900.2180" name=GENERATOR></HEAD>
+<BODY>
+<CENTER>
+<DIV id=header>
+<SCRIPT type=text/javascript><!--
+google_ad_client = "pub-9653171024150495";
+google_alternate_color = "C3D9FF";
+google_ad_width = 728;
+google_ad_height = 90;
+google_ad_format = "728x90_as";
+google_ad_type = "text";
+//2007-02-02: header
+google_ad_channel = "7161698987";
+//--></SCRIPT>
+
+<SCRIPT src="134_files/show_ads.js" type=text/javascript>
+</SCRIPT>
+</DIV></CENTER>
+<DIV id=index>
+<H3>Goooooooogle</H3>
+<SCRIPT type=text/javascript><!--
+google_ad_client = "pub-9653171024150495";
+google_alternate_color = "C3D9FF";
+google_ad_width = 120;
+google_ad_height = 600;
+google_ad_format = "120x600_as";
+google_ad_type = "text";
+//2007-02-02: header, right
+google_ad_channel = "7161698987+2593520185";
+//--></SCRIPT>
+
+<SCRIPT src="134_files/show_ads.js" type=text/javascript>
+</SCRIPT>
+</DIV>
+<DIV id=index2>
+<H3>Goooooooogle</H3>
+<SCRIPT type=text/javascript><!--
+google_ad_client = "pub-9653171024150495";
+google_alternate_color = "C3D9FF";
+google_ad_width = 120;
+google_ad_height = 600;
+google_ad_format = "120x600_as";
+google_ad_type = "text";
+google_ad_channel = "";
+//--></SCRIPT>
+
+<SCRIPT src="134_files/show_ads.js" type=text/javascript>
+</SCRIPT>
+</DIV>
+<DIV id=content>
+<H3>Drawing And Rotating A Triangle </H3><TEXTAREA>#include&lt;windows.h&gt;
+#include&lt;math.h&gt;
+#include &lt;iostream.h&gt;
+LRESULT CALLBACK WndProc(HWND , UINT , WPARAM ,LPARAM);
+static char gszClassName[] = "MyWindowClass";
+static HINSTANCE ghInstance = NULL;
+void DDA(float , float , float , float , COLORREF c,HDC );
+int WINAPI WinMain(HINSTANCE hInstance , HINSTANCE hprevInstance , LPSTR lpCmdLine ,int nCmdShow)
+{
+		WNDCLASSEX WndClass;
+		HWND hwnd;
+		MSG Msg;
+		ghInstance = hInstance ;
+		WndClass.cbSize = sizeof(WNDCLASSEX);
+		WndClass.style = NULL;
+		WndClass.lpfnWndProc = WndProc ;
+		WndClass.cbClsExtra =0;
+		WndClass.cbWndExtra = 0;
+		WndClass.hInstance =ghInstance ;
+		WndClass.hIcon = LoadIcon(NULL,IDI_APPLICATION);
+		WndClass.hCursor =LoadCursor(NULL ,IDC_ARROW);
+		WndClass.hbrBackground = (HBRUSH)(COLOR_WINDOW+5);
+		WndClass.lpszMenuName = NULL ;
+		WndClass.lpszClassName = gszClassName ;
+		WndClass.hIconSm = LoadIcon(NULL , IDI_APPLICATION);
+	if(!RegisterClassEx(&amp;WndClass))
+	{
+		MessageBox(0, "window registeration failed!!","error",MB_ICONSTOP|MB_OK);
+		return 0;
+	}
+
+	hwnd =CreateWindowEx(WS_EX_STATICEDGE , gszClassName ," Ch4-Transformation",WS_OVERLAPPEDWINDOW ,
+		CW_USEDEFAULT ,CW_USEDEFAULT,1320,1240,NULL,NULL,ghInstance,NULL);
+	if(hwnd == NULL)
+	{
+		MessageBox(0,"windows greated failed!!","Error" ,MB_ICONSTOP|MB_OK);
+         return 0;
+	}
+	ShowWindow(hwnd,nCmdShow);
+	UpdateWindow(hwnd);
+	while(GetMessage(&amp;Msg ,NULL ,0,0))
+	{
+		TranslateMessage(&amp;Msg);
+		DispatchMessage(&amp;Msg);
+	}
+	return Msg.wParam;
+}
+/*//\\//\\\////\\//\\\////\\//\\\////\\//\\\////\\//\\\////\\//\\\//*/
+struct Matrix
+{
+	float elm[3][3];
+};
+struct Vector
+{
+	float elm[3];	
+
+};
+//----------------
+struct Scal_Matrix
+{
+	float elm[2][2];
+};
+
+struct Scal_Vector
+{
+	float elm[2];
+};
+
+void identy(Matrix &amp;M)
+{
+	for(int i=0;i&lt;3;i++)
+		for(int j=0;j&lt;3;j++)
+			M.elm[i][j]=(i==j);
+}
+/*==================================*/
+Matrix trans_matrix(float dx,float dy)
+{
+	Matrix mat;
+	identy(mat);
+	mat.elm[0][2]=dx;
+	mat.elm[1][2]=dy;
+	return mat;
+}
+//**************************
+Vector MUL(Matrix M,Vector GV)
+{
+	Vector RV;
+	for(int i=0;i&lt;3;i++)
+	{
+		RV.elm[i]=0;
+		for(int j=0;j&lt;3;j++)
+			RV.elm[i]+=M.elm[i][j]*GV.elm[j];
+	}
+	return RV;
+}
+Vector translat(float X,float Y,float dx,float dy)
+{
+		Vector V;
+		V.elm[0]=X, V.elm[1]=Y, V.elm[2]=1;
+		Matrix M=trans_matrix(dx,dy);
+		return Vector(MUL(M,V));
+}
+//===================================
+Vector Rotate(float O,float x,float y)
+{
+	Matrix Rm;
+	float h=200,k=200;
+	identy(Rm);
+	Rm.elm[0][0]=cos( O );
+	Rm.elm[0][1]=-sin( O );
+	Rm.elm[0][2]=(-h*cos(O)+k*sin(O)+h);
+	Rm.elm[1][1]=cos(O);
+	Rm.elm[1][0]=sin(O);
+	Rm.elm[1][2]=(-h*sin(O)-k*cos(O)+k);
+	
+	Vector vec;
+	vec.elm[0]=x;
+	vec.elm[1]=y;
+	vec.elm[2]=1;
+    return	Vector (MUL(Rm,vec) );
+}
+Scal_Vector  MUl_scal(Scal_Matrix  SM,Scal_Vector SV)
+{
+	Scal_Vector RV;
+	RV.elm[0]=SM.elm[0][0]*SV.elm[0];
+	RV.elm[1]=SM.elm[1][1]*SV.elm[1];
+	return RV;
+}
+Scal_Vector scaling(float X,float Y,float Sx,float Sy)
+{
+	Scal_Matrix M;
+	Scal_Vector V;
+	M.elm[0][0]=Sx;		M.elm[0][1]=0;
+	M.elm[0][1]=0;		M.elm[1][1]=Sy;
+	V.elm[0]=X;			V.elm[1]=Y;
+	return Scal_Vector( MUl_scal(M,V) );
+}
+struct Point
+{
+	float x,y;
+	Point()
+	{}
+	Point(float a,float b)
+	{
+		x=a;y=b;
+	}
+};
+//===============================================================
+void Boundary_Filling(HDC hdc, int x, int y, COLORREF fillColor, COLORREF boundaryColor)
+{
+	COLORREF color = GetPixel(hdc, x, y);
+	if(color == boundaryColor || color == fillColor /*|| x&lt;0 || y&lt;0*/)
+	return;
+	else
+	{
+			SetPixel(hdc, x, y, fillColor);
+			Boundary_Filling(hdc, x-1, y, fillColor, boundaryColor);
+			Boundary_Filling(hdc, x, y-1, fillColor, boundaryColor);
+			Boundary_Filling(hdc, x+1, y, fillColor, boundaryColor);
+			Boundary_Filling(hdc, x, y+1, fillColor, boundaryColor);
+	}
+}
+//--------------------
+void Draw_Rec(Point a,Point b,Point c,HDC hdc,COLORREF C)
+{
+		DDA(a.x,a.y,b.x,b.y,C,hdc);
+		DDA(b.x,b.y,c.x,c.y,C,hdc);
+		DDA(a.x,a.y,c.x,c.y,C,hdc);
+}
+void Fan(HDC hdc,COLORREF C2)
+{
+	float O=10*3.14/180;//rotate angle
+	float O2=120*3.14/180;//angle between
+	float h=200,k=200;
+	Point top(h,k);
+	//Triangle  1
+	Point P1(h+20,k+100);
+	Point P2(h,k+100);
+	Vector V1,V2;
+	Draw_Rec(top,P1,P2,hdc,C2);
+	//Boundary_Filling(hdc,P2.x+100,P2.y+30,RGB(255,0,0),C2 );
+	//Triangle  2
+	Vector V3=Rotate(O2,P1.x,P1.y);
+	Vector V4=Rotate(O2,P2.x,P2.y);
+	Point P3(V3.elm[0],V3.elm[1]);
+	Point P4(V4.elm[0],V4.elm[1]);
+	Draw_Rec(top,P3,P4,hdc,C2);
+	
+	//Triangle  3
+	Vector V5=Rotate(O2,P3.x,P3.y);
+	Vector V6=Rotate(O2,P4.x,P4.y);
+	Point P5(V5.elm[0],V5.elm[1]);
+	Point P6(V6.elm[0],V6.elm[1]);
+	Draw_Rec(top,P5,P6,hdc,C2);
+
+	//_____________________________
+	int i=1;
+	COLORREF GRND=GetPixel(hdc,0,0);
+	//while(i&lt;50)
+	char Key=NULL;
+		while(i&lt;50)
+		{
+
+			Sleep(100);
+			//draw with ground
+			Draw_Rec(top,P1,P2,hdc,GRND);
+			Draw_Rec(top,P3,P4,hdc,GRND);
+			Draw_Rec(top,P5,P6,hdc,GRND);
+			//tri 1
+			V1=Rotate(O,P1.x,P1.y);
+			V2=Rotate(O,P2.x,P2.y);
+			P1.x=V1.elm[0];P1.y=V1.elm[1];
+			P2.x=V2.elm[0];P2.y=V2.elm[1];
+			//tri 2
+			V3=Rotate(O,P3.x,P3.y);
+			V4=Rotate(O,P4.x,P4.y);
+			P3.x=V3.elm[0];P3.y=V3.elm[1];
+			P4.x=V4.elm[0];P4.y=V4.elm[1];
+			//tri 3
+			V5=Rotate(O,P5.x,P5.y);
+			V6=Rotate(O,P6.x,P6.y);
+			P5.x=V5.elm[0];P5.y=V5.elm[1];
+			P6.x=V6.elm[0];P6.y=V6.elm[1];
+			//draw next triangles
+			Draw_Rec(top,P1,P2,hdc,RGB( P1.x+P2.y,0,0 ) );
+			Draw_Rec(top,P3,P4,hdc,RGB( 0,P3.y+P4.x,0 ) );
+			Draw_Rec(top,P5,P6,hdc,RGB( 0,0,P5.x+P6.y ) );
+
+			i++;
+
+		}
+}
+//====================================================================
+LRESULT CALLBACK WndProc(HWND hwnd ,UINT Message ,WPARAM wparam ,LPARAM
+						 lparam)
+{
+	COLORREF C1=RGB(0,0,250),C4=RGB(255,255,255);
+	COLORREF C2=RGB(250,0,0),C3=RGB(0,0,0);
+	HDC      hdc;
+	float dx=0,dy=50,x1=30,y1=40,x2=90,y2=110;
+	Vector V1,V2,V3,VR;
+	Scal_Vector SV;
+	float Sx=2,Sy=1.5;
+	float O=1*3.14/180;
+	float X2=400,Y2=200;
+	float i=1;
+		
+	switch(Message)
+	{
+	case WM_CLOSE :
+		DestroyWindow(hwnd);
+		break ;
+	case WM_DESTROY:
+		PostQuitMessage(0);
+		break ;
+	case WM_LBUTTONDOWN:
+		hdc=GetDC( hwnd );
+		Fan(hdc,C1 );
+		/*DDA(x1,y1,x2,y2,color,hdc);
+		V1=translat(x1,y1,dx,dy);
+		V2=translat(x2,y2,dx,dy);
+		DDA(V1.elm[0],V1.elm[1],V2.elm[0],V2.elm[1],color,hdc);
+		*/ReleaseDC(hwnd,hdc);
+		break ;
+		case WM_RBUTTONDOWN:
+			hdc=GetDC( hwnd );
+		/*		DDA(x1,y1,x2,y2,color,hdc);
+				V3=Rotate(O,x2,y2);
+				DDA(x1,y1,V3.elm[0],V3.elm[1],color,hdc);
+		*/
+		
+		/*
+				DDA(x1,y1,x2,y2,color,hdc);
+				SV=scaling(x2,y2,Sx,Sy);
+				DDA(x1,y1,SV.elm[0],SV.elm[1],color,hdc);
+		*/
+			//	Animation
+			
+		/*	while(i&lt;200)
+			{
+				//DDA(500,500,X2,Y2,C1,hdc);
+
+				DDA(200,200,X2,Y2,C1,hdc);
+				VR=Rotate(O,X2,Y2);
+				Sleep(60);
+				DDA(200,200,X2,Y2,C4,hdc);
+				DDA(200,200,VR.elm[0],VR.elm[1],C1,hdc);
+				X2=VR.elm[0];
+				Y2=VR.elm[1];
+				i++;
+			}*/
+			ReleaseDC(hwnd,hdc);
+	default:
+		return DefWindowProc(hwnd,Message,wparam,lparam);
+	}
+	return 0;
+}
+/*====================================================================*/
+void DDA(float xPoint1, float yPoint1, float xPoint2, float yPoint2, COLORREF col,HDC hdc)
+{
+	float xBegin  =  xPoint1;
+	float xFinal  =  xPoint2;
+	float yBegin  =  yPoint1;
+	float yFinal  =  yPoint2;
+	float slope = (yPoint2 - yPoint1) / (xPoint2 - xPoint1);
+	float slopeInverse  =  1 / slope;
+
+	if(xPoint1&gt;xPoint2 &amp;&amp; yPoint1&gt;yPoint2)
+	{
+		xBegin  =  xPoint2;
+	    xFinal  =  xPoint1;
+		yBegin  =  yPoint2;
+	    yFinal  =  yPoint1;
+	}
+	int x = int(xBegin);
+	int y = int(yBegin);
+
+	// if the line is parallel to the y coordinate
+	if((xBegin - xFinal) == 0)
+		if(yBegin &lt; yFinal)	// and y starting point greater than y end
+			while(y &lt;= yFinal)
+			{
+				SetPixel(hdc, x, y, col);
+				y ++;	// increment y
+			}
+		else
+			while(y &gt;= yFinal)
+			{
+				SetPixel(hdc, x, y, col);
+				y --;	// decrement y
+			}
+	// if the line is parallel to the x coordinate
+	else
+		if((yBegin - yFinal) == 0)
+			if(xBegin &lt; xFinal) // and x starting point greater than x end
+				while(x &lt;= xFinal)
+				{
+					SetPixel(hdc, x, y, col);
+					x ++;
+				}
+			else
+				while(x &gt;= xFinal)
+				{
+					SetPixel(hdc, x, y, col);
+					x --;
+				}
+	else
+		if(slope &gt;= 1 || slope &lt;= -1) // new case
+		{
+			if(yFinal &gt; yBegin) // from begin to end
+				while(y &lt;= yFinal)
+				{
+					x = int(xBegin + 0.5);
+					xBegin = xBegin + slopeInverse;
+					SetPixel(hdc, x, y, col);
+					y ++;
+				}
+			else		// from end to begin
+				while(y &gt;= yFinal)
+				{
+					x = int(xBegin + 0.5);
+					xBegin = xBegin - slopeInverse;
+					SetPixel(hdc, x, y, col);
+					y --;
+				}
+		}
+	else
+		if(slopeInverse &gt;= 1 || slopeInverse &lt;= -1) // new case
+		{
+			if(xFinal &gt; xBegin)	// from begin to end
+				while(x &lt;= xFinal)
+				{
+					y = int(yBegin + 0.5);
+					yBegin = yBegin + slope;
+					SetPixel(hdc, x, y, col);
+					x ++;
+				}
+			else		// from end to begin
+				while(x &gt;= xFinal)
+				{
+					y = int(yBegin + 0.5);
+					yBegin = yBegin - slope;
+					SetPixel(hdc, x, y, col);
+					x --;
+				}
+		}//if
+}
+</TEXTAREA> <BR>
+<CENTER><IMG 
+style="BORDER-RIGHT: #0066cf 1px solid; BORDER-TOP: #0066cf 1px solid; BORDER-LEFT: #0066cf 1px solid; BORDER-BOTTOM: #0066cf 1px solid" 
+src="134_files/rotriangle.jpg"> </CENTER><!-- Search Google -->
+<CENTER>
+<FORM action=http://www.google.com/custom method=get target=_top>
+<TABLE bgColor=#ffffff>
+  <TBODY>
+  <TR>
+    <TD vAlign=top noWrap align=left height=32><A 
+      href="http://www.google.com/"><IMG alt=Google 
+      src="134_files/Logo_25wht.gif" align=middle border=0></IMG></A> <LABEL 
+      style="DISPLAY: none" for=sbi>Enter your search terms</LABEL> <INPUT 
+      id=sbi maxLength=255 size=40 name=q></INPUT> <LABEL style="DISPLAY: none" 
+      for=sbb>Submit search form</LABEL> <INPUT id=sbb type=submit value=Search name=sa></INPUT> <INPUT type=hidden 
+      value=pub-9653171024150495 name=client></INPUT> <INPUT type=hidden value=1 
+      name=forid></INPUT> <INPUT type=hidden value=ISO-8859-1 name=ie></INPUT> 
+      <INPUT type=hidden value=ISO-8859-1 name=oe></INPUT> <INPUT type=hidden 
+      value=active name=safe></INPUT> <INPUT type=hidden 
+      value=GALT:#008000;GL:1;DIV:#336699;VLC:663399;AH:center;BGC:FFFFFF;LBGC:336699;ALC:0000FF;LC:0000FF;T:000000;GFNT:0000FF;GIMP:0000FF;FORID:1 
+      name=cof></INPUT> <INPUT type=hidden value=en name=hl></INPUT> 
+  </TD></TR></TBODY></TABLE></FORM></CENTER><!-- Search Google -->
+<H3><A 
+href="http://www2.webng.com/amrlearn/Index.html">Home</A>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A 
+href="http://www2.webng.com/amrlearn/131.html">Previous</A>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A 
+href="http://www2.webng.com/amrlearn/129.html">Next</A></H3></DIV></BODY></HTML>

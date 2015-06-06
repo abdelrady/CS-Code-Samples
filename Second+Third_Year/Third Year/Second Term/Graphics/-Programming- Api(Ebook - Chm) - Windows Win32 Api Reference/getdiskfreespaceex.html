@@ -1,0 +1,116 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+<HTML lang="en-us">
+<HEAD>
+<TITLE>Windows API Guide: GetDiskFreeSpaceEx Function</TITLE>
+<META content="vbapi@vbapi.com" name="author">
+<META content="Information about the GetDiskFreeSpaceEx function in the Windows API, geared towards the Visual Basic user." name="description">
+<META content="Kuliniewicz,Windows,Windows 95,Windows NT,Windows 98,Windows CE,Windows 2000,API,Application Programming Interface,Programming,Visual Basic,Basic,VB,GetDiskFreeSpaceEx" name="keywords">
+<META content="Omicron HTML Editor" name="generator">
+<LINK href="default.css" tppabs="http://www.vbapi.com/css/default.css" rel="stylesheet" type="text/css">
+<LINK href="index-1.html" tppabs="http://www.vbapi.com/index.html" rel="home">
+<LINK href="glossary.html" tppabs="http://www.vbapi.com/ref/glossary.html" rel="glossary">
+<LINK href="copyrite.html" tppabs="http://www.vbapi.com/copyrite.html" rel="copyright">
+</HEAD>
+<BODY>
+
+<!-- Begin Adslot1 -->
+<CENTER>
+<SCRIPT language="JAVASCRIPT">
+<!-- hide from older browsers
+now = new Date();
+my_random = now.getTime();
+document.write('<A href="http://adex3.flycast.com/server/socket/127.0.0.1:2800/click/VBWorldnet/VBAPI/' + my_random + '">');
+document.write('<IMG width="468" height="60" border="1" src="http://adex3.flycast.com/server/socket/127.0.0.1:2800/ad/VBWorldnet/VBAPI/' + my_random + '"></A>');
+// -->
+</SCRIPT>
+</CENTER>
+<!-- End Adslot1 -->
+
+<HR>
+
+<H1>GetDiskFreeSpaceEx Function</H1>
+
+<P><CODE class="declare"><SPAN class="kw">Declare Function</SPAN> GetDiskFreeSpaceEx <SPAN class="kw">Lib</SPAN> "kernel32.dll" <SPAN class="kw">Alias</SPAN> "GetDiskFreeSpaceExA" (<SPAN class="kw">ByVal</SPAN> lpDirectoryName <SPAN class="kw">As String</SPAN>, lpFreeBytesAvailableToCaller <SPAN class="kw">As</SPAN> <A href="ularge_integer.html" tppabs="http://www.vbapi.com/ref/u/ularge_integer.html">ULARGE_INTEGER</A>, lpTotalNumberOfBytes <SPAN class="kw">As</SPAN> <A href="ularge_integer.html" tppabs="http://www.vbapi.com/ref/u/ularge_integer.html">ULARGE_INTEGER</A>, lpTotalNumberOfFreeBytes <SPAN class="kw">As</SPAN> <A href="ularge_integer.html" tppabs="http://www.vbapi.com/ref/u/ularge_integer.html">ULARGE_INTEGER</A>) <SPAN class="kw">As Long</SPAN></CODE></P>
+
+<H2>Platforms</H2>
+<P><UL>
+<LI><B>Windows 95:</B> Requires OEM Service Release 2 (OSR2) or later.
+<LI><B>Windows 98:</B> Supported.
+<LI><B>Windows NT:</B> Requires Windows NT 4.0 or later.
+<LI><B>Windows 2000:</B> Supported.
+<LI><B>Windows CE:</B> Not Supported.
+</UL></P>
+
+<H2>Description &amp; Usage</H2>
+<P><B>GetDiskFreeSpaceEx</B> determines information about the size of a disk.  It finds the free space available to the current user, the total disk space, and the amount of free space (all in bytes).  Each value is placed into a <A href="ularge_integer.html" tppabs="http://www.vbapi.com/ref/u/ularge_integer.html">ULARGE_INTEGER</A> structure which can hold the unsigned 64-bit integer values.  (If your programming language supplies an intrinsic unsigned 64-bit integer data type, that can be used instead.)</P>
+
+<H2>Return Value</H2>
+<P>If an error occured, the function returns 0 (use <A href="getlasterror.html" tppabs="http://www.vbapi.com/ref/g/getlasterror.html">GetLastError</A> to retrieve the error code).  If successful, the function returns a non-zero value.</P>
+
+<H2>Visual Basic-Specific Issues</H2>
+<P>None.</P>
+
+<H2>Parameters</H2>
+<P><DL>
+<DT><VAR>lpDirectoryName</VAR><DD>The name of a directory on the disk to retrieve the size information about.  While this can be the name of the disk's root directory, it doesn't have to be.
+<DT><VAR>lpFreeBytesAvailableToCaller</VAR><DD>Unsigned 64-bit integer variable which receives the amount of free disk space available, in bytes, to the user.  <B>Windows 2000:</B> This may be lower than the actual value if per-user disk space quotas are enabled.
+<DT><VAR>lpTotalNumberOfBytes</VAR><DD>Unsigned 64-bit integer variable which receives the amount of total disk space, in bytes.  <B>Windows 2000:</B> This may be lower than the actual value if per-user disk space quotas are enabled.
+<DT><VAR>lpTotalNumberOfFreeBytes</VAR><DD>Unsigned 64-bit integer variable which receives the amount of free disk space, in bytes.
+</DL></P>
+
+<H2>Example</H2>
+<P>Display the total free space available on drive C:.  Because Visual Basic doesn't have good support for the 64-bit integers needed for modern hard drive's free spaces, the workaround described on <A href="javascript:if(confirm('http://www.vbapi.com/articles/64bit/index.html  \n\nThis file was not retrieved by Teleport Pro, because it is addressed on a domain or path outside the boundaries set for its Starting Address.  \n\nDo you want to open it from the server?'))window.location='http://www.vbapi.com/articles/64bit/index.html'" tppabs="http://www.vbapi.com/articles/64bit/index.html">this page</A> is needed to display the values properly.  This example runs when the user click button Command1, so to use this example, you need to place a command button named Command1 on a form window.</P>
+
+<P><PRE><CODE class="example"><SPAN class="com">' This code is licensed according to the terms and conditions listed <A href="copyrite.html#license" tppabs="http://www.vbapi.com/copyrite.html#license" rel="copyright">here</A>.</SPAN>
+
+<SPAN class="com">' Declarations and such needed for the example:
+' (Copy them to the (declarations) section of a module.)</SPAN>
+<SPAN class="kw">Public Type</SPAN> <A href="ularge_integer.html" tppabs="http://www.vbapi.com/ref/u/ularge_integer.html">ULARGE_INTEGER</A>
+	LowPart <SPAN class="kw">As Long</SPAN>
+	HighPart <SPAN class="kw">As Long</SPAN>
+<SPAN class="kw">End Type</SPAN>
+<SPAN class="kw">Public Declare Function</SPAN> <B>GetDiskFreeSpaceEx</B> <SPAN class="kw">Lib</SPAN> "kernel32.dll" <SPAN class="kw">Alias</SPAN> "GetDiskFreeSpaceExA" (<SPAN class="kw">ByVal</SPAN> _
+	lpDirectoryName <SPAN class="kw">As String</SPAN>, lpFreeBytesAvailableToCaller <SPAN class="kw">As</SPAN> <A href="ularge_integer.html" tppabs="http://www.vbapi.com/ref/u/ularge_integer.html">ULARGE_INTEGER</A>, _
+	lpTotalNumberOfBytes <SPAN class="kw">As</SPAN> <A href="ularge_integer.html" tppabs="http://www.vbapi.com/ref/u/ularge_integer.html">ULARGE_INTEGER</A>, lpTotalNumberOfFreeBytes <SPAN class="kw">As</SPAN> <A href="ularge_integer.html" tppabs="http://www.vbapi.com/ref/u/ularge_integer.html">ULARGE_INTEGER</A>) <SPAN class="kw">As Long</SPAN>
+<SPAN class="kw">Public Declare Sub</SPAN> <A href="copymemory.html" tppabs="http://www.vbapi.com/ref/c/copymemory.html">CopyMemory</A> <SPAN class="kw">Lib</SPAN> "kernel32.dll" <SPAN class="kw">Alias</SPAN> "RtlMoveMemory" (Destination <SPAN class="kw">As Any</SPAN>, Source _
+	<SPAN class="kw">As Any</SPAN>, <SPAN class="kw">ByVal</SPAN> Length <SPAN class="kw">As Long</SPAN>)
+
+<SPAN class="com">' *** Place the following code inside the form window. ***</SPAN>
+
+<SPAN class="kw">Private Sub</SPAN> Command1_Click()
+	<SPAN class="kw">Dim</SPAN> userbytes <SPAN class="kw">As</SPAN> <A href="ularge_integer.html" tppabs="http://www.vbapi.com/ref/u/ularge_integer.html">ULARGE_INTEGER</A>   <SPAN class="com">' bytes free to user</SPAN>
+	<SPAN class="kw">Dim</SPAN> totalbytes <SPAN class="kw">As</SPAN> <A href="ularge_integer.html" tppabs="http://www.vbapi.com/ref/u/ularge_integer.html">ULARGE_INTEGER</A>  <SPAN class="com">' total bytes on disk</SPAN>
+	<SPAN class="kw">Dim</SPAN> freebytes <SPAN class="kw">As</SPAN> <A href="ularge_integer.html" tppabs="http://www.vbapi.com/ref/u/ularge_integer.html">ULARGE_INTEGER</A>   <SPAN class="com">' free bytes on disk</SPAN>
+	<SPAN class="kw">Dim</SPAN> tempval <SPAN class="kw">As Currency</SPAN>           <SPAN class="com">' display buffer for 64-bit values</SPAN>
+	<SPAN class="kw">Dim</SPAN> retval <SPAN class="kw">As Long</SPAN>                <SPAN class="com">' generic return value</SPAN>
+	
+	<SPAN class="com">' Get information about the C: drive.</SPAN>
+	retval = <B>GetDiskFreeSpaceEx</B>("C:\", userbytes, totalbytes, freebytes)
+	<SPAN class="com">' Copy freebytes into the Currency data type.</SPAN>
+	<A href="copymemory.html" tppabs="http://www.vbapi.com/ref/c/copymemory.html">CopyMemory</A> tempval, freebytes, 8
+	<SPAN class="com">' Multiply by 10,000 to move Visual Basic's decimal point to the end of the actual number.</SPAN>
+	tempval = tempval * 10000
+	<SPAN class="com">' Display the amount of free space on C:.</SPAN>
+	<SPAN class="kw">Debug</SPAN>.<SPAN class="kw">Print</SPAN> "Free Space on the C: drive:"; tempval; "bytes"
+<SPAN class="kw">End Sub</SPAN></CODE></PRE></P>
+
+<H2>See Also</H2>
+<P><A href="getdiskfreespace.html" tppabs="http://www.vbapi.com/ref/g/getdiskfreespace.html">GetDiskFreeSpace</A></P>
+
+<H2>Category</H2>
+<P><A href="funcc.html#files" tppabs="http://www.vbapi.com/ref/funcc.html#files">Files</A></P>
+
+<P><A href="funca.html" tppabs="http://www.vbapi.com/ref/funca.html">Go back to the Function listing.</A><BR>
+<A href="index.html" tppabs="http://www.vbapi.com/ref/index.html">Go back to the Reference section index.</A></P>
+
+<HR>
+
+<P>
+<B>Last Modified:</B> September 24, 2000<BR>
+This page is copyright &copy; 2000 Paul Kuliniewicz.  
+<A href="copyrite.html" tppabs="http://www.vbapi.com/copyrite.html" rel="copyright">Copyright Information</A>  <B>Revised October 29, 2000</B><BR>
+<A href="index-1.html" tppabs="http://www.vbapi.com/index.html">Go back to the Windows API Guide home page.</A><BR>
+E-mail: <A href="javascript:if(confirm('http://www.vbapi.com/email.html  \n\nThis file was not retrieved by Teleport Pro, because it is addressed on a domain or path outside the boundaries set for its Starting Address.  \n\nDo you want to open it from the server?'))window.location='http://www.vbapi.com/email.html'" tppabs="http://www.vbapi.com/email.html">vbapi@vbapi.com</A>  <A href="javascript:if(confirm('http://www.vbapi.com/email.html  \n\nThis file was not retrieved by Teleport Pro, because it is addressed on a domain or path outside the boundaries set for its Starting Address.  \n\nDo you want to open it from the server?'))window.location='http://www.vbapi.com/email.html#secure'" tppabs="http://www.vbapi.com/email.html#secure">Send Encrypted E-Mail</A><BR>
+This page is at <A href="getdiskfreespaceex.html" tppabs="http://www.vbapi.com/ref/g/getdiskfreespaceex.html">http://www.vbapi.com/ref/g/getdiskfreespaceex.html</A></P>
+</BODY>
+</HTML>

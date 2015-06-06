@@ -1,0 +1,128 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+<HTML lang="en-us">
+<HEAD>
+<TITLE>Windows API Guide: ChooseColor Function</TITLE>
+<META content="vbapi@vbapi.com" name="author">
+<META content="Information about the ChooseColor function in the Windows API, geared towards the Visual Basic user." name="description">
+<META content="Kuliniewicz,Windows,Windows 95,Windows NT,Windows 98,Windows CE,Windows 2000,API,Application Programming Interface,Programming,Visual Basic,Basic,VB,ChooseColor" name="keywords">
+<META content="Omicron HTML Editor" name="generator">
+<META content="Sat, 14 Aug 1999 16:51:00 GMT" http-equiv="Last-Modified">
+<LINK href="default.css" tppabs="http://www.vbapi.com/css/default.css" rel="stylesheet" type="text/css">
+<LINK href="index-1.html" tppabs="http://www.vbapi.com/index.html" rel="home">
+
+<LINK href="glossary.html" tppabs="http://www.vbapi.com/ref/glossary.html" rel="glossary">
+<LINK href="copyrite.html" tppabs="http://www.vbapi.com/copyrite.html" rel="copyright">
+</HEAD>
+<BODY>
+
+<!-- Begin Adslot1 -->
+<CENTER>
+<SCRIPT language="JAVASCRIPT">
+<!-- hide from older browsers
+now = new Date();
+my_random = now.getTime();
+document.write('<A href="http://adex3.flycast.com/server/socket/127.0.0.1:2800/click/VBWorldnet/VBAPI/' + my_random + '">');
+document.write('<IMG width="468" height="60" border="1" src="http://adex3.flycast.com/server/socket/127.0.0.1:2800/ad/VBWorldnet/VBAPI/' + my_random + '"></A>');
+// -->
+</SCRIPT>
+</CENTER>
+<!-- End Adslot1 -->
+
+<HR>
+
+<H1>ChooseColor Function</H1>
+
+<P><CODE class="declare">Declare Function ChooseColor Lib "comdlg32.dll" Alias "ChooseColorA" (lpcc As <A href="choosecolor_type.html" tppabs="http://www.vbapi.com/ref/c/choosecolor_type.html">CHOOSECOLOR_TYPE</A>) As Long</CODE></P>
+
+<H2>Platforms</H2>
+<P><UL>
+<LI><B>Windows 95:</B> Supported.
+<LI><B>Windows 98:</B> Supported.
+<LI><B>Windows NT:</B> Requires Windows NT 3.1 or later.
+<LI><B>Windows 2000:</B> Supported.
+<LI><B>Windows CE:</B> Requires Windows CE 2.0 or later.
+</UL></P>
+
+<H2>Description &amp; Usage</H2>
+<P><B>ChooseColor</B> opens a Choose Color <A class="def" href="glossary.html#commondialog" tppabs="http://www.vbapi.com/ref/glossary.html#commondialog" rel="glossary">common dialog</A> box.  All the information needed to create the dialog box, as well as the data returned from it, is stored in the structure passed as <VAR>lpcc</VAR>.</P>
+
+<H2>Return Value</H2>
+<P>If an error occured or the user pressed the Cancel button, the function returns 0 (use <A href="commdlgextendederror.html" tppabs="http://www.vbapi.com/ref/c/commdlgextendederror.html">CommDlgExtendedError</A> to get the error code).  If the user successfully selected a color, the function returns a non-zero value.</P>
+
+<H2>Visual Basic-Specific Issues</H2>
+<P>None.</P>
+
+<H2>Parameters</H2>
+<P><DL>
+<DT><VAR>lpcc</VAR><DD>All the information needed to create the Choose Color common dialog box.  If successful, the function then stores the user's color selection and list of custom colors into this structure as well.
+</DL></P>
+
+<H2>Example</H2>
+<P><PRE><CODE class="example"><SPAN class="com">' This code is licensed according to the terms and conditions listed <A href="copyrite.html#license" tppabs="http://www.vbapi.com/copyrite.html#license" rel="copyright">here</A>.</SPAN>
+
+' Display a Choose Color common dialog box.  The background
+' color of Form1 will be set to the color the user selects.  Although the entire
+' list of custom colors is initialized to black, this example stores the
+' colors into an array which can be used again to save the user's custom
+' color selections.
+Dim cc As <A href="choosecolor_type.html" tppabs="http://www.vbapi.com/ref/c/choosecolor_type.html">CHOOSECOLOR_TYPE</A> ' structure to pass data
+Dim hMem As Long  ' <A class="def" href="glossary.html#handle" tppabs="http://www.vbapi.com/ref/glossary.html#handle" rel="glossary">handle</A> to the memory block to store the custom color list
+Dim pMem As Long  ' <A class="def" href="glossary.html#pointer" tppabs="http://www.vbapi.com/ref/glossary.html#pointer" rel="glossary">pointer</A> to the memory block to store the custom color list
+Dim custcols(0 To 15) As Long  ' holds list of the 16 custom colors
+Dim c As Integer  ' counter variable
+Dim retval As Long  ' return value
+
+' Initialize the list of custom colors to black.
+For c = 0 To 15  ' loop through each element
+  custcols(c) = 0  ' set each element to RGB color 0 (black)
+Next c
+' Create a memory block and get a pointer to it.
+hMem = <A href="globalalloc.html" tppabs="http://www.vbapi.com/ref/g/globalalloc.html">GlobalAlloc</A>(GMEM_MOVEABLE Or GMEM_ZEROINIT, 64)  ' allocate sufficient memory block
+pMem = <A href="globallock.html" tppabs="http://www.vbapi.com/ref/g/globallock.html">GlobalLock</A>(hMem)  ' get a pointer to the block
+' Copy the data inside the array into the memory block.
+<A href="copymemory.html" tppabs="http://www.vbapi.com/ref/c/copymemory.html">CopyMemory</A> ByVal pMem, custcols(0), 64  ' 16 elements * 4 bytes
+
+' Store the initial settings of the Choose Color box.
+cc.lStructSize = Len(cc)  ' size of the structure
+cc.hwndOwner = Form1.hWnd  ' Form1 is opening the Choose Color box
+cc.hInstance = 0  ' not needed
+cc.rgbResult = Form1.BackColor  ' set default selected color to Form1's background color
+cc.lpCustColors = pMem  ' pointer to list of custom colors
+cc.Flags = CC_ANYCOLOR Or CC_RGBINIT  ' allow any color, use rgbResult as default selection
+cc.lCustData = 0  ' not needed
+cc.lpfnHook = 0  ' not needed
+cc.lpTemplateName = ""  ' not needed
+
+' Open the Choose Color box.  If the user chooses a color, set Form1's
+' background color to that color.
+retval = <B>ChooseColor</B>(cc)
+If retval &lt;&gt; 0 Then  ' success
+  ' Copy the possibly altered contents of the custom color list
+  ' back into the array.
+  <A href="copymemory.html" tppabs="http://www.vbapi.com/ref/c/copymemory.html">CopyMemory</A> custcols(0), ByVal pMem, 64
+  ' Set Form1's background color.
+  Form1.BackColor = cc.rgbResult
+End If
+
+' Deallocate the memory blocks to free up resources.
+retval = <A href="globalunlock.html" tppabs="http://www.vbapi.com/ref/g/globalunlock.html">GlobalUnlock</A>(hMem)
+retval = <A href="globalfree.html" tppabs="http://www.vbapi.com/ref/g/globalfree.html">GlobalFree</A>(pMem)</CODE></PRE></P>
+
+<H2>Category</H2>
+<P><A href="funcc.html#commondialog" tppabs="http://www.vbapi.com/ref/funcc.html#commondialog">Common Dialog</A></P>
+
+<P><A href="funca.html" tppabs="http://www.vbapi.com/ref/funca.html">Go back to the alphabetical Function listing.</A><BR>
+<A href="index.html" tppabs="http://www.vbapi.com/ref/index.html">Go back to the Reference section index.</A></P>
+
+<HR>
+
+<P><B>Last Modified:</B> August 14, 1999<BR>
+This page is copyright &copy; 1999 Paul Kuliniewicz.  
+<A href="copyrite.html" tppabs="http://www.vbapi.com/copyrite.html" rel="copyright">Copyright Information</A>  <B>Revised October 29, 2000</B><BR>
+
+<A href="index-1.html" tppabs="http://www.vbapi.com/index.html">Go back to the Windows API Guide home page.</A><BR>
+E-mail: <A href="javascript:if(confirm('http://www.vbapi.com/email.html  \n\nThis file was not retrieved by Teleport Pro, because it is addressed on a domain or path outside the boundaries set for its Starting Address.  \n\nDo you want to open it from the server?'))window.location='http://www.vbapi.com/email.html'" tppabs="http://www.vbapi.com/email.html">vbapi@vbapi.com</A>  <A href="javascript:if(confirm('http://www.vbapi.com/email.html  \n\nThis file was not retrieved by Teleport Pro, because it is addressed on a domain or path outside the boundaries set for its Starting Address.  \n\nDo you want to open it from the server?'))window.location='http://www.vbapi.com/email.html#secure'" tppabs="http://www.vbapi.com/email.html#secure">Send Encrypted E-Mail</A><BR>
+This page is at <A href="choosecolor.html" tppabs="http://www.vbapi.com/ref/c/choosecolor.html">http://www.vbapi.com/ref/c/choosecolor.html</A>
+</P>
+</BODY>
+</HTML>

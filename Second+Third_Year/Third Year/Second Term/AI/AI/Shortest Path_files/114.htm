@@ -1,0 +1,317 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!-- saved from url=(0039)http://www2.webng.com/amrlearn/114.html -->
+<HTML><HEAD><TITLE>Shortest Path</TITLE><LINK href="114_files/stylesheet.css" 
+type=text/css rel=stylesheet>
+<META http-equiv=Content-Type content="text/html; charset=UTF-8">
+<META content="Shortest Path Shortest Path Shortest Path " name=description>
+<META 
+content="C++, c++, Shortest Path, Shortest, Path, Shortest, Path, Shortest, Path " 
+name=keywords>
+<META content="Copyright 2007 Amr Saber" name=copyright>
+<META content="MSHTML 6.00.2900.2180" name=GENERATOR></HEAD>
+<BODY>
+<CENTER>
+<DIV id=header>
+<SCRIPT type=text/javascript><!--
+google_ad_client = "pub-9653171024150495";
+google_alternate_color = "C3D9FF";
+google_ad_width = 728;
+google_ad_height = 90;
+google_ad_format = "728x90_as";
+google_ad_type = "text";
+//2007-02-02: header
+google_ad_channel = "7161698987";
+//--></SCRIPT>
+
+<SCRIPT src="114_files/show_ads.js" type=text/javascript>
+</SCRIPT>
+</DIV></CENTER>
+<DIV id=index>
+<H3>Goooooooogle</H3>
+<SCRIPT type=text/javascript><!--
+google_ad_client = "pub-9653171024150495";
+google_alternate_color = "C3D9FF";
+google_ad_width = 120;
+google_ad_height = 600;
+google_ad_format = "120x600_as";
+google_ad_type = "text";
+//2007-02-02: header, right
+google_ad_channel = "7161698987+2593520185";
+//--></SCRIPT>
+
+<SCRIPT src="114_files/show_ads.js" type=text/javascript>
+</SCRIPT>
+</DIV>
+<DIV id=index2>
+<H3>Goooooooogle</H3>
+<SCRIPT type=text/javascript><!--
+google_ad_client = "pub-9653171024150495";
+google_alternate_color = "C3D9FF";
+google_ad_width = 120;
+google_ad_height = 600;
+google_ad_format = "120x600_as";
+google_ad_type = "text";
+google_ad_channel = "";
+//--></SCRIPT>
+
+<SCRIPT src="114_files/show_ads.js" type=text/javascript>
+</SCRIPT>
+</DIV>
+<DIV id=content>
+<H3>Shortest Path</H3>
+<P></P><TEXTAREA>
+#include&lt;iostream&gt;
+#include&lt;fstream&gt;
+using namespace std;
+///////////////////
+typedef int keyType;
+const float infinity = -1;
+const int MAX = 10;
+struct elType
+{
+	char name[30];
+	keyType key;
+	///////////////
+	void showData()
+	{
+		cout&lt;&lt;"Name: "&lt;&lt;name&lt;&lt;"\t"&lt;&lt;"Key: "&lt;&lt;key&lt;&lt;endl;
+	}
+};
+/*******************************************************************/
+class graph
+{
+private:
+	elType nodes[MAX];
+	bool edge[MAX][MAX];
+	float edges[MAX][MAX];
+	int count;
+public:
+	graph()
+	{count = 0;}
+	//---------------------------------------------------------------
+	~graph()
+	{count = 0;}
+	//---------------------------------------------------------------
+	bool graphIsEmpty()
+	{
+		return (count==0 ?true :false);
+	}
+	//---------------------------------------------------------------
+	bool graphIsFull()
+	{
+		return (count==MAX ?true :false);
+	}
+	//---------------------------------------------------------------
+	bool keyFound(keyType k)
+	{
+		for(int i=0; i&lt;count; i++)
+		{
+			if(nodes[i].key == k)
+				return true;
+		}
+		return false;
+	}
+	//---------------------------------------------------------------
+	int findNode(keyType k)
+	{
+		for(int i=0; i&lt;count; i++)
+		{
+			if(nodes[i].key == k)
+				return i;
+		}
+		return -1;
+	}
+	//---------------------------------------------------------------
+	void insertNode(elType e)
+	{
+		if(graphIsFull())
+		{
+			cout&lt;&lt;"Error: graph is full"&lt;&lt;endl;
+			exit(0);
+		}
+
+		if(keyFound(e.key))
+		{
+			cout&lt;&lt;"Error: dublicate key"&lt;&lt;endl;
+			exit(0);
+		}
+
+		nodes[count] = e;
+		for(int i=0; i&lt;count; i++)
+		{
+			edge[count][i] = false;
+			edge[i][count] = false;
+			edges[count][i] = infinity;
+			edges[i][count] = infinity;
+		}
+		count++;
+	}
+	//---------------------------------------------------------------
+	void deleteNode(elType e)
+	{
+		if(graphIsEmpty())
+		{
+			cout&lt;&lt;"Error: graph is empty"&lt;&lt;endl;
+			exit(0);
+		}
+
+		int where = findNode(e.key);
+		if(where == -1)
+		{
+			cout&lt;&lt;"Error: deleting node"&lt;&lt;endl;
+			exit(0);
+		}
+
+		count --;
+		if(where &lt; count)
+		{
+			nodes[where] = nodes[count];
+			for(int i=0; i&lt;count; i++)
+			{
+				edge[i][where] = edge[i][count];
+				edge[where][i] = edge[count][i];
+			}
+			edge[where][where] = edge[count][count];
+		}
+	}
+	//---------------------------------------------------------------
+	void insertEdge(keyType k1, keyType k2, float dis)
+	{
+		int n1 = findNode(k1);
+		int n2 = findNode(k2);
+
+		if(n1==-1 || n2==-1)
+		{
+			cout&lt;&lt;"Error: inserting error"&lt;&lt;endl;
+			exit(0);
+		}
+		edge[n1][n2] = true;
+		edge[n2][n1] = true;
+		edges[n1][n2] = dis;
+		edges[n2][n1] = dis;
+	}
+	//---------------------------------------------------------------
+	bool isAdjacent(keyType k1, keyType k2)
+	{
+		int n1 = findNode(k1);
+		int n2 = findNode(k2);
+
+		if(n1==-1 || n2==-1)
+		{
+			cout&lt;&lt;"Error: is adjucent error"&lt;&lt;endl;
+			return false;
+		}
+			return(edge[n1][n2]);
+	}
+	//---------------------------------------------------------------
+	float retrieveEdge(keyType k1, keyType k2, float dis)
+	{
+		int n1 = findNode(k1);
+		int n2 = findNode(k2);
+		return edges[n1][n2];
+	}
+	//---------------------------------------------------------------
+	void updateNode(elType e)
+	{
+		int n1 = findNode(e.key);
+		if(n1 == -1)
+		{
+			cout&lt;&lt;"Error: update error"&lt;&lt;endl;
+			exit(0);
+		}
+		nodes[n1] = e;
+	}
+	//---------------------------------------------------------------
+	void showGraph()
+	{
+		for(int i=0; i&lt;count; i++)
+			nodes[i].showData();
+
+		cout&lt;&lt;endl&lt;&lt;endl&lt;&lt;"\t";
+		for(i=0; i&lt;count; i++)
+		{
+			cout&lt;&lt;nodes[i].name&lt;&lt;"\t";
+		}
+		
+		cout&lt;&lt;endl&lt;&lt;endl&lt;&lt;endl&lt;&lt;endl;
+		for(i=0; i&lt;count; i++)
+		{	
+			cout&lt;&lt;nodes[i].name&lt;&lt;"\t";
+			for(int j=0; j&lt;count; j++)
+				cout&lt;&lt;edge[i][j]&lt;&lt;"\t";
+			cout&lt;&lt;endl&lt;&lt;endl;
+		}
+		cout&lt;&lt;endl&lt;&lt;endl&lt;&lt;endl;
+	}
+};
+//********************************************************************
+void buildGraph(graph&amp; g)
+{
+	elType e1, e2;
+	char* filename = "graph.txt";
+	char ch;
+	ifstream infile(filename);
+
+	if(!infile)
+	{
+		cout&lt;&lt;"Error: cannot open file"&lt;&lt;endl;
+		exit(0);
+	}
+
+	while(infile&gt;&gt;e1.key)
+	{
+		infile&gt;&gt;e1.name;
+		g.insertNode(e1);
+
+		while(infile.get(ch) &amp;&amp; ch != '\n')
+		{
+			infile&gt;&gt;e2.key;
+			if(g.keyFound(e2.key))
+				g.insertEdge(e1.key, e2.key);
+		}
+	}
+}
+/*******************************************************************/
+void main()
+{
+	graph g;
+	buildGraph(g);
+	g.showGraph();
+}//end of the program
+
+======================================================
+graph.txt
+-----------
+-----------
+
+1 a 2 5 6 7
+2 b 2 5 6 7
+3 c 2 5 6 7
+4 d 2 5 6
+5 e 3
+6 f 5 6
+7 g 1 3
+
+</TEXTAREA> <!-- Search Google -->
+<CENTER>
+<FORM action=http://www.google.com/custom method=get target=_top>
+<TABLE bgColor=#ffffff>
+  <TBODY>
+  <TR>
+    <TD vAlign=top noWrap align=left height=32><A 
+      href="http://www.google.com/"><IMG alt=Google 
+      src="114_files/Logo_25wht.gif" align=middle border=0></IMG></A> <LABEL 
+      style="DISPLAY: none" for=sbi>Enter your search terms</LABEL> <INPUT 
+      id=sbi maxLength=255 size=40 name=q></INPUT> <LABEL style="DISPLAY: none" 
+      for=sbb>Submit search form</LABEL> <INPUT id=sbb type=submit value=Search name=sa></INPUT> <INPUT type=hidden 
+      value=pub-9653171024150495 name=client></INPUT> <INPUT type=hidden value=1 
+      name=forid></INPUT> <INPUT type=hidden value=ISO-8859-1 name=ie></INPUT> 
+      <INPUT type=hidden value=ISO-8859-1 name=oe></INPUT> <INPUT type=hidden 
+      value=active name=safe></INPUT> <INPUT type=hidden 
+      value=GALT:#008000;GL:1;DIV:#336699;VLC:663399;AH:center;BGC:FFFFFF;LBGC:336699;ALC:0000FF;LC:0000FF;T:000000;GFNT:0000FF;GIMP:0000FF;FORID:1 
+      name=cof></INPUT> <INPUT type=hidden value=en name=hl></INPUT> 
+  </TD></TR></TBODY></TABLE></FORM></CENTER><!-- Search Google -->
+<H3><A 
+href="http://www2.webng.com/amrlearn/Index.html">Home</A>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A 
+href="http://www2.webng.com/amrlearn/114.html">Previous</A>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A 
+href="http://www2.webng.com/amrlearn/109.html">Next</A></H3></DIV></BODY></HTML>

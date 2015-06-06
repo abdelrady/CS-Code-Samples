@@ -1,0 +1,86 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+<HTML lang="en-us">
+<HEAD>
+<TITLE>Windows API Guide: GetFileSize Function</TITLE>
+<META content="vbapi@vbapi.com" name="author">
+<META content="Information about the GetFileSize function in the Windows API, geared towards the Visual Basic user." name="description">
+<META content="Kuliniewicz,Windows,Windows 95,Windows NT,Windows 98,Windows 32s,32s,API,Application Programming Interface,Programming,Visual Basic,Basic,VB,GetFileSize" name="keywords">
+<META content="Omicron HTML Editor" name="generator">
+<LINK href="default.css" tppabs="http://www.vbapi.com/css/default.css" rel="stylesheet" type="text/css">
+<LINK href="index-1.html" tppabs="http://www.vbapi.com/index.html" rel="home">
+</HEAD>
+<BODY>
+
+<!-- Begin Adslot1 -->
+<CENTER>
+<SCRIPT language="JAVASCRIPT">
+<!-- hide from older browsers
+now = new Date();
+my_random = now.getTime();
+document.write('<A href="http://adex3.flycast.com/server/socket/127.0.0.1:2800/click/VBWorldnet/VBAPI/' + my_random + '">');
+document.write('<IMG width="468" height="60" border="1" src="http://adex3.flycast.com/server/socket/127.0.0.1:2800/ad/VBWorldnet/VBAPI/' + my_random + '"></A>');
+// -->
+</SCRIPT>
+</CENTER>
+<!-- End Adslot1 -->
+
+<HR>
+
+<H1>GetFileSize Function</H1>
+
+<P><CODE class="declare">Declare Function GetFileSize Lib "kernel32.dll" (ByVal hFile As Long, lpFileSizeHigh As Long) As Long</CODE>
+
+<P><B>Platforms:</B> Win 32s, Win 95/98, Win NT
+
+<P><B>GetFileSize</B> determines the size of the file.  The file size is given in a 64-bit value that is split into two 32-bit values.  The high-order half is put into the variable passed as <VAR>lpFileSizeHigh</VAR>; the low-order half is returned by the function.  To get the size, you can either put the binary or hexadecimal values of the two variables side-by-side, or use the formula <VAR>filesize</VAR> = <VAR>lpFileSizeHigh</VAR> * 2^32 + <VAR>return value</VAR>.  If an error occurs, the function instead returns -1.
+
+<DL>
+<DT><VAR>hFile</VAR><DD>A handle to the file to determine the size of.  The file must be opened with at least either read-level or write-level access.
+<DT><VAR>lpFileSizeHigh</VAR><DD>Variable that receives the high-order half of the file size.
+</DL>
+
+<P><B>Example:</B>
+<PRE><CODE class="example">' Display the file size of "C:\MyProgram\datafile.txt".  Note how
+' the alternate declare of the CreateFile function (needed to get the file's handle)
+' must be used -- see that function's page for details.
+Dim hfile As Long  ' receives a handle to the file
+Dim loworder As Long, highorder As Long  ' receive the low- and high-order halves of the file size
+Dim retval As Long  ' return value
+
+' Get a handle to the file using CreateFile's alternate declare (necessary for non-Win NT).
+hfile = <A href="createfile.html" tppabs="http://www.vbapi.com/ref/c/createfile.html">CreateFileNS</A>("C:\MyProgram\datafile.txt", GENERIC_READ, FILE_SHARE_READ, 0, OPEN_EXISTING, FILE_ATTRIBUTE_ARCHIVE, 0)
+If hfile = -1 Then  ' error opening the file
+  Debug.Print "Could not open file C:\MyProgram\datafile.txt"
+  End  ' abort the program
+End If
+
+' Read and display that file's size in bytes.
+highorder = 0  ' initialize the value for high-order half
+loworder = <B>GetFileSize</B>(hfile, highorder)  ' read the file's size
+If highorder = 0 Then  ' if there is no high-order part
+  Debug.Print "File size:"; loworder; "bytes"  ' display the file size
+Else  ' if there is a high-order part (file size >= 4.29 GB!)
+  ' Visual Basic has no 64-bit variables, so we can't display the actual value:
+  Debug.Print "File size:"; highorder; "* 2^32 +"; loworder; "bytes (in base-10)"
+  ' But we can combine the two hex values to give the result in hexadecimal:
+  Debug.Print "File size: "; Hex(highorder); Hex(loworder); " bytes (in hexadecimal)"
+End If
+
+' Close the file
+retval = <A href="closehandle.html" tppabs="http://www.vbapi.com/ref/c/closehandle.html">CloseHandle</A>(hfile)  ' close the handle</CODE></PRE>
+
+<P><B>See Also:</B> <A href="getfileinformationbyhandle.html" tppabs="http://www.vbapi.com/ref/g/getfileinformationbyhandle.html">GetFileInformationByHandle</A><BR>
+<B>Category:</B> <A href="index.html#files" tppabs="http://www.vbapi.com/ref/index.html#files">Files</A></P>
+
+<P><A href="funca.html" tppabs="http://www.vbapi.com/ref/funca.html">Go back to the alphabetical Function listing.</A><BR>
+<A href="index.html" tppabs="http://www.vbapi.com/ref/index.html">Go back to the Reference section index.</A></P>
+
+<HR>
+
+<P>This page is copyright &copy; 2000 Paul Kuliniewicz.  <A href="copyrite.html" tppabs="http://www.vbapi.com/copyrite.html" rel="copyright">Copyright Information.</A><BR>
+<A href="index-1.html" tppabs="http://www.vbapi.com/index.html">Go back to the Windows API Guide home page.</A><BR>
+E-mail: <A href="javascript:if(confirm('http://www.vbapi.com/email.html  \n\nThis file was not retrieved by Teleport Pro, because it is addressed on a domain or path outside the boundaries set for its Starting Address.  \n\nDo you want to open it from the server?'))window.location='http://www.vbapi.com/email.html'" tppabs="http://www.vbapi.com/email.html">vbapi@vbapi.com</A>  <A href="javascript:if(confirm('http://www.vbapi.com/email.html  \n\nThis file was not retrieved by Teleport Pro, because it is addressed on a domain or path outside the boundaries set for its Starting Address.  \n\nDo you want to open it from the server?'))window.location='http://www.vbapi.com/email.html#secure'" tppabs="http://www.vbapi.com/email.html#secure">Send Encrypted E-Mail</A><BR>
+This page is at <A href="getfilesize.html" tppabs="http://www.vbapi.com/ref/g/getfilesize.html">http://www.vbapi.com/ref/g/getfilesize.html</A>
+
+</BODY>
+</HTML>

@@ -1,0 +1,356 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!-- saved from url=(0053)http://www.cs.wisc.edu/~dyer/cs540/notes/search2.html -->
+<HTML><HEAD><TITLE>CS 540 Lecture Notes: Informed Search</TITLE>
+<META http-equiv=Content-Type content="text/html; charset=iso-8859-1">
+<META content="MSHTML 6.00.2900.2180" name=GENERATOR></HEAD>
+<BODY vLink=#0060f0 link=#ff3300 bgColor=#ffffff>
+<TABLE width="100%">
+  <TBODY>
+  <TR>
+    <TD align=left>University of Wisconsin - Madison</TD>
+    <TD align=middle>CS 540 Lecture Notes</TD>
+    <TD align=right>C. R. Dyer</TD></TR></TBODY></TABLE>
+<P>
+<P>
+<CENTER><FONT size=6>Informed Search</FONT> (Chapter 4)</CENTER>
+<P>
+<HR>
+
+<P>
+<H3>Informed Methods Add Domain-Specific Information</H3>
+<UL>
+  <LI>Add domain-specific information to select what is the best path to 
+  continue searching along 
+  <LI>Define a <B>heuristic function</B>, <I>h(n)</I>, that estimates the 
+  "goodness" of a node <I>n</I>. Specifically, <I>h(n)</I> = estimated cost (or 
+  distance) of minimal cost path from <I>n</I> to a goal state. 
+  <LI>The term <I>heuristic</I> means "serving to aid discovery" and is an 
+  estimate, based on domain-specific information that is computable from the 
+  current state description, of how close we are to a goal 
+  <LI>Example heuristics: 
+  <UL>
+    <LI>Missionaries and Cannibals: Number of people on the starting bank of the 
+    river 
+    <LI>8-puzzle: Number of tiles out of place 
+    <LI>8-puzzle: Sum of distances each tile is from its goal position </LI></UL>
+  <LI><I>h(n)</I> &gt;= 0 for all nodes <I>n</I> 
+  <LI><I>h(n)</I> = 0 implies that <I>n</I> is a goal node 
+  <LI><I>h(n)</I> = infinity implies that <I>n</I> is a deadend from which a 
+  goal cannot be reached 
+  <LI>All domain knowledge used in the search is encoded in the heuristic 
+  function <I>h</I>. Consequently, this is an example of a "<I>weak method</I>" 
+  because of the limited way that domain-specific information is used to solve a 
+  problem. </LI></UL>
+<P>
+<H3>Informed Methods</H3>
+<UL>
+  <LI><B>Best-First Search</B><BR>Order nodes on the <I>nodes</I> list by 
+  increasing value of an evaluation function, <I>f</I>, that incorporates 
+  domain-specific information in some way. This is a generic way of referring to 
+  the class of informed methods.
+  <P></P>
+  <LI><B>Greedy Best-First Search</B><BR>Use as an evaluation function <I>f(n) = 
+  h(n)</I>, sorting nodes by increasing values of <I>f</I> 
+  <UL>
+    <LI>Selects node to expand that is believed to be closest (hence it's 
+    "greedy") to a goal node (i.e., smallest <I>f</I> value) 
+    <LI>Not complete 
+    <LI>Not admissible, as shown in the following example: <PRE>	       h=3
+		/\
+               /  \
+             h=2  h=4
+	      |    |
+	      |    |
+             h=1  h=1
+	      |    |
+	      |    |
+             h=1  goal
+	      |
+	      |
+             h=1
+	      |
+	      |
+             goal
+</PRE>Assuming all arc costs are 1, then Greedy Best-First search will find 
+    the left goal, which has a solution cost of 5, while the optimal solution is 
+    the path to the right goal, which has a cost of 3. </LI></UL>
+  <P></P>
+  <LI><B>Beam Search</B><BR>
+  <UL>
+    <LI>Use an evaluation function <I>f(n)</I> = <I>h(n)</I>, but the maximum 
+    size of the <I>nodes</I> list is <I>k</I>, a fixed constant 
+    <LI>Only keeps <I>k</I> best nodes as candidates for expansion, and throws 
+    the rest away 
+    <LI>More space efficient than Greedy Best-First Search, but may throw away a 
+    node that is on a solution path 
+    <LI>Not complete 
+    <LI>Not admissible </LI></UL>
+  <P></P>
+  <LI><B>Algorithm A</B><BR>Use as an evaluation function <I>f(n)</I> = 
+  <I>g(n)</I> + <I>h(n)</I>, where <I>g(n)</I> is as defined in Uniform-Cost 
+  search. That is, <I>g(n)</I> = minimal cost path from the start state to the 
+  current state <I>n</I>. 
+  <UL>
+    <LI>Adds a "breadth-first" component to the evaluation function by including 
+    the <I>g</I> term 
+    <LI>Ranks nodes on the search frontier by the estimated cost of a solution 
+    that goes from the start node through the given node to a goal node. That 
+    is, <I>g(n)</I> is the cost from the start node to node <I>n</I>, and 
+    <I>h(n)</I> is the estimated cost from node <I>n</I> to a goal. 
+    <LI>Not complete since if a node <I>n</I> is on the solution path but 
+    <I>h(n)</I> = infinity, then node <I>n</I> may never be expanded 
+    <LI>Not admissible </LI></UL>
+  <P></P>
+  <LI><B>Algorithm A*</B><BR>Use the same evaluation function as used by 
+  Algorithm A except add the constraint that for <I>all</I> nodes <I>n</I> in 
+  the search space, <I>h(n)</I> &lt;= <I>h*(n)</I>, where <I>h*(n)</I> = the 
+  <I>true cost</I> of the minimal cost path from <I>n</I> to a goal. 
+  <UL>
+    <LI>When the condition <I>h(n)</I> &lt;= <I>h*(n)</I> holds, we say that 
+    <I>h</I> is <B>admissible</B>. 
+    <LI>Using an admissible heuristic guarantees that a node on the optimal path 
+    can never look so bad that you bypass it forever 
+    <LI>A* is <B>complete</B> whenever the branching factor is finite, and every 
+    operator has a fixed positive cost 
+    <LI>A* is <B>admissible</B> 
+    <LI>If <I>h(n)</I> = <I>h*(n)</I> for all <I>n</I>, then <I>only</I> the 
+    nodes on the optimal solution path will be expanded. So, no extra work will 
+    be performed. 
+    <LI>If <I>h(n)</I> = 0 for all <I>n</I>, then this is an admissible 
+    heuristic and results in A* performing exactly as the Uniform-Cost Search 
+    does 
+    <LI>If <I>h1(n) &lt; h2(n) &lt;= h*(n)</I> for all <I>n</I> that are not 
+    goal nodes, then <I>h2</I> is a <B>better heuristic</B> than <I>h1</I> in 
+    the sense that if A1* is a version of the A* algorithm which uses <I>h1</I>, 
+    and A2* is a version of the A* algorithm which uses <I>h2</I>, then every 
+    node expanded by A2* is also expanded by A1*. In other words, A1* expands at 
+    least as many nodes as A2*. We say that A2* is <B>better informed</B> than 
+    A1*. 
+    <LI>The closer <I>h</I> is to <I>h*</I>, the fewer extra nodes that will be 
+    expanded </LI></UL></LI></UL>
+<P>
+<H3>A* Algorithm</H3>
+<P>
+<OL>
+  <LI>Put the start node <I>S</I> on the <I>nodes</I> list, called OPEN 
+  <LI>If OPEN is empty, exit with failure 
+  <LI>Remove from OPEN and place on CLOSED a node <I>n</I> for which <I>f(n)</I> 
+  is minimum 
+  <LI>If <I>n</I> is a goal node, exit (trace back pointers from <EM>n</EM> to 
+  <I>S</I>) 
+  <LI>Expand <I>n</I>, generating all its successors and attach to them pointers 
+  back to <I>n</I>. For each successor <I>n'</I> of <I>n</I> 
+  <OL>
+    <LI>If <I>n'</I> is not already on OPEN or CLOSED estimate 
+    <I>h(n'),g(n')=g(n)+ c(n,n'), f(n')=g(n')+h(n')</I>, and place it on OPEN. 
+    <LI>If <I>n'</I> is already on OPEN or CLOSED, then check if g(<I>n'</I>) is 
+    lower for the new version of n'. If so, then:<BR>(i) Redirect pointers 
+    backward from <I>n'</I> along path yielding lower g(<I>n'</I>).<BR>(ii) Put 
+    <I>n'</I> on OPEN. <BR>If g(<I>n'</I>) is not lower for the new version, do 
+    nothing. </LI></OL>
+  <P></P>
+  <LI>Goto 2 </LI></OL>
+<P>
+<H3>Example</H3>Consider the following search space where the start state is S 
+and the goal state is G. The left figure shows the arcs labeled with the costs 
+of the associated operators. The right figure shows the states labeled with the 
+value of the heuristic function, <I>h</I>, if it is ever applied at that state. 
+<P><PRE>             S ... Initial State                S 8
+            /|\                                /|\
+          1/ 5 \8                             / | \
+          /  |  \                            /  |  \
+         A   B   C                        8 A  B 4  C 3
+        /|\  |  /                          /|\  |  /
+      3/ 7 9 4 /5                         / | \ | /
+      /  |  \|/                          /  |  \|/
+     D   E   G .... Goal State          D   E   G  
+                                         *   *   0
+
+     Edge Costs                  Heuristic = Estimated Costs = h(n)
+    </PRE>Summary of <B>g(n)</B>, <B>h(n)</B>, <B>f(n)</B> = <B>g(n)</B> + 
+<B>h(n)</B>, as well as <B>h*(n)</B>, the hypothetical perfect heuristic: 
+<UL></UL><PRE>    n   g(n)      h(n)    f(n)    h*(n)
+    S    0         8       8	   9
+    A    1         8       9       9
+    B    5         4       9       4
+    C    8         3      11       5
+    D    4        inf     inf     inf
+    E    8        inf     inf     inf
+    G   10/9/13    0     10/9/13   0
+
+    Notice that since h(n) &lt;= h*(n) for all n, h is admissible
+    Optimal path = S B G
+    Cost of the optimal path = 9
+    </PRE>
+<UL>
+  <LI><B>Greedy Best-First Search</B>: <I>f(n)</I> = <I>h(n)</I> <LISTING>    node
+    expanded    nodes list
+    ----        ------------------
+                { S(8) }
+      S         { C(3) B(4) A(8) }
+      C		{ G(0) B(4) A(8) }
+      G		{ B(4) A(8) }
+
+    Solution path found is S C G.  #nodes expanded = 3.  </LISTING>
+  <UL>See how fast the search is!! But it is <B>NOT</B> optimal. 
+    <P></P></UL>
+  <LI><B>A* Search</B>: <I>f(n) = g(n) + h(n)</I> <LISTING>    node
+    expanded    nodes list
+    ----        ------------------
+                { S(8) }
+      S         { A(9) B(9) C(11) }
+      A		{ B(9) G(10) C(11) D(inf) E(inf) }
+      B		{ G(9) G(10) C(11) D(inf) E(inf) }     
+      G	 	{ C(11) D(inf) E(inf) }
+
+    Solution path found is S B G.  #nodes expanded = 4.  </LISTING>
+  <UL>Still pretty fast. And optimal too.
+    <P></P></UL></LI></UL>
+<P>
+<H3>Devising Heuristics</H3>
+<UL>
+  <LI>Good heuristics must be fast to compute, because if it takes so long to 
+  compute the value of a heuristic at a single node, it may have been preferable 
+  to have just expanded more nodes using a cheaper heuristic. For example, if 
+  the heuristic function is a breadth-first search to find a solution and its 
+  cost, then this is clearly too expensive to be useful.
+  <P></P>
+  <LI>Can often devise good heuristics by computing the cost of an exact 
+  solution to a <I>simplified</I> version of the problem. For example, in the 
+  8-puzzle, if we relax the assumption about how a tile can be moved so that any 
+  tile can be moved in a single step from any position to any other position, 
+  then this means that a solution costs only the number of misplaced tiles since 
+  each misplaced tile can now be moved in one step to its goal position. This 
+  heuristic is admissible because at each move just one tile moves one position, 
+  so this is the minimum number of steps to get each of the misplaced tiles to 
+  their goal position.
+  <P>Similarly, if we assume that tiles in the 8-puzzle are restricted to moving 
+  one square horizontally or vertically at a time, but we relax the assumption 
+  that only one tile can occur at a board position at a time, then each tile can 
+  be moved independently to its goal position, taking a number of steps equal to 
+  the Manhattan distance from its start position to its goal position. This 
+  leads to a heuristic which is the sum of the distances of the misplaced tiles 
+  to their goal positions. This heuristic is admissible.
+  <P></P>
+  <LI>The heuristic function <I>h</I> is an indicator of "adventurousness" in 
+  that in Algorithms A and A* a good heuristic allows successive nodes on a 
+  single path to be expanded in succession even when several "good" steps are 
+  intermixed with a few "bad" steps.
+  <P></P>
+  <LI>Unfortunately, A* often suffers because it cannot venture down a single 
+  path unless it is almost continuously having success (i.e., <I>h</I> is 
+  decreasing). Any failure to decrease <I>h</I> will almost immediately cause 
+  the search to switch to another path.
+  <P></P>
+  <LI>In order to devise an admissible heuristic, <I>h</I> must frequently be 
+  very simple and therefore resorts to (almost) uniform-cost search through 
+  parts of the search space.
+  <P></P>
+  <LI>If optimality is not required, i.e., a satisficing solution is enough, 
+  using a heuristic that occasionally overestimates the actual cost but is 
+  usually very close to the actual cost (over or under), will result in many 
+  fewer nodes being expanded to find a solution than using a provably admissible 
+  heuristic. </LI></UL>
+<P>
+<H3>Iterative Improvement Algorithms</H3>
+<UL>
+  <LI>Rather than searching for a solution path and then executing the steps 
+  associated with the solution path, iteratively pick a next best move, make 
+  that move, and then repeat. Hence, <B>irrevocably</B> make a decision about 
+  one step at each iteration. 
+  <LI>Best used in problems where all the information for a solution is 
+  contained in the node itself. For example, cryptarithmetic problems. 
+  <LI>Rather than trying to find a solution with minimum value of the evaluation 
+  function, <I>f</I>, for historical reasons, we instead will attempt to 
+  <B>maximize</B> the function. That is, the goal is to find a state, <I>n</I>, 
+  such that <I>f(n) &gt;= f(i)</I> for all states <I>i</I> in the state space. 
+  <P></P>
+  <LI><B>Hill-Climbing Search</B><BR>
+  <UL>
+    <LI>Look at all immediate successors of current state <I>m</I> 
+    <LI>If there exists a successor <I>n</I> such that <I>f(n) &gt; f(m)</I>, 
+    and <I>f(n) &gt;= f(t)</I> for all the successors <I>t</I> of <I>m</I>, then 
+    move from <I>m</I> to <I>n</I>. Otherwise, halt at <I>m</I>. (Note: This 
+    definition differs from the textbook in that we require <I>f(n)</I> to be 
+    strictly greater than <I>f(m)</I>; the textbook's algorithm states that 
+    <I>f(n)</I> must only be greater than or equal to <I>f(m)</I>. Their 
+    definition allows the algorithm to move through states that are equal in 
+    their values of <I>f</I>.) 
+    <LI>Looks one step ahead to determine if any successor is better than the 
+    current state; if there is, move to the best successor. 
+    <LI>Similar to Greedy Best-First search but Hill-Climbing does not allow 
+    backtracking or jumping to an alternative path since there is no 
+    <I>nodes</I> list of other candidate frontier nodes from which the search 
+    could be continued. Corresponds to Beam search with a beam width of 1 (i.e., 
+    the maximum size of the <I>nodes</I> list is 1). 
+    <LI>Not complete since the search will terminate at "local maxima," 
+    "plateaus," and "ridges." 
+    <LI>Algorithm visualized in terms of a surface in 3D: <PRE>    ^
+    |
+    |     y
+    |      
+  f |    /
+    |   /
+    |  /
+    | /
+    |/
+    +----------------&gt; x
+</PRE>Consider the state space to be the set of points in the x,y plane, and 
+    for each such point the height f is the value of the evaluation function for 
+    that state. This height function, <I>f = f(x,y)</I>, defines a surface. The 
+    initial state corresponds to a point on this surface and the goal is to find 
+    a state where the height is a global maximum.
+    <P>Hill-climbing (should be called Valley-Finding in this context where we 
+    are minimizing instead of maximizing a value) moves in the <B>direction of 
+    steepest ascent</B> since it moves to the successor (i.e., adjacent) node 
+    that increases <I>f</I> the most.
+    <P>Notice that by considering the state space as a continuous space of 
+    points in the x,y plane, if the height surface is continuous (i.e., smooth 
+    so that derivatives are well-defined everywhere), then the direction of 
+    steepest ascent corresponds to the <B>gradient direction</B> = [df(x,y)/dx, 
+    df(x,y)/dy], and the search is called <B>gradient ascent</B>. </P></LI></UL>
+  <P></P>
+  <LI><B>Simulated Annealing</B><BR>
+  <UL>
+    <LI>Named after a metal-casting technique called annealing where molten 
+    metal is heated and then gradually cooled resulting in an even distribution 
+    of the molecules and a desired crystalline structure 
+    <LI>Attempts to fix the problem with hill-climbing methods where the search 
+    gets stuck in a local maximum. 
+    <LI>Basic idea: Instead of picking the best move, pick a random move; if the 
+    successor state obtained by this move is an improvement over the current 
+    state, then do it. Otherwise, make the move with some probability &lt; 1. 
+    The probability decreases exponentially with the badness of the move. 
+    <LI>Define a temperature function that decreases over time. At each move, 
+    compute the current temperature T, and use T to determine the probability 
+    with which to allow a move to a worse state. In the limit, T goes to 0 at 
+    which point the method is doing hill-climbing. Hence the probability is 
+    proportional to T. 
+    <LI>If temperature is lowered slowly enough, simulated annealing is complete 
+    and admissible. Intuitively, this is the case because the temperature can be 
+    controlled so that it is large enough to move off a local maximum, but small 
+    enough to not move off a global maximum. 
+    <LI>Algorithm<BR>Assume we are trying to find a state where some evaluation 
+    function <I>f</I> is a global <I>maximum</I>: <PRE>current = Initial-State(problem)
+<B>for</B> t = 1 <B>to</B> infinity <B>do</B>
+   T = Schedule(t)   ; T is the current temperature, which
+		     ; is monotonically decreasing with t
+   <B>if</B> T=0 <B>then return</B> current  ; halt when temperature = 0
+   next = Select-Random-Successor-State(current)
+   deltaE = f(next) - f(current)  ; If positive, next is
+				  ; better than current.
+				  ; Otherwise, next is
+				  ; worse than current.
+   <B>if</B> deltaE &gt; 0 <B>then</B> current = next  ; always move to
+				      ; a better state
+   <B>else</B> current = next with probability p = e^(deltaE / T)
+			  ; as T -&gt; 0, p -&gt; 0
+			  ; as deltaE -&gt; -infinity, p -&gt; 0
+<B>end</B>
+</PRE></LI></UL></LI></UL>
+<P>
+<P>
+<HR>
+
+<P>Copyright © 1996-2003 by Charles R. Dyer. All rights reserved. 
+</P></BODY></HTML>

@@ -1,0 +1,88 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+<HTML lang="en-us">
+<HEAD>
+<TITLE>Windows API Guide: PlaySound Function</TITLE>
+<META content="vbapi@vbapi.com" name="author">
+<META content="Information about the PlaySound function in the Windows API, geared towards the Visual Basic user." name="description">
+<META content="Kuliniewicz,Windows,Windows 95,Windows NT,Windows 98,Windows 32s,32s,API,Application Programming Interface,Programming,Visual Basic,Basic,VB,PlaySound" name="keywords">
+<META content="Omicron HTML Editor" name="generator">
+<LINK href="default.css" tppabs="http://www.vbapi.com/css/default.css" rel="stylesheet" type="text/css">
+<LINK href="index-1.html" tppabs="http://www.vbapi.com/index.html" rel="home">
+</HEAD>
+<BODY>
+
+<!-- Begin Adslot1 -->
+<CENTER>
+<SCRIPT language="JAVASCRIPT">
+<!-- hide from older browsers
+now = new Date();
+my_random = now.getTime();
+document.write('<A href="http://adex3.flycast.com/server/socket/127.0.0.1:2800/click/VBWorldnet/VBAPI/' + my_random + '">');
+document.write('<IMG width="468" height="60" border="1" src="http://adex3.flycast.com/server/socket/127.0.0.1:2800/ad/VBWorldnet/VBAPI/' + my_random + '"></A>');
+// -->
+</SCRIPT>
+</CENTER>
+<!-- End Adslot1 -->
+
+<HR>
+
+<H1>PlaySound Function</H1>
+
+<P><CODE class="declare">Declare Function PlaySound Lib "winmm.dll" Alias "PlaySoundA" (ByVal lpszName As String, ByVal hModule As Long, ByVal dwFlags As Long) As Long</CODE>
+<P><I>Alternate Declare for when using a resource or memory location:</I><BR>
+<CODE class="declare">Declare Function PlaySound_Res Lib "winmm.dll" Alias "PlaySoundA" (ByVal lpszName As Long, ByVal hModule As Long, ByVal dwFlags As Long) As Long</CODE>
+
+<P><B>Platforms:</B> Win 32s, Win 95/98, Win NT
+
+<P><B>PlaySound</B> plays a waveform sound through the speakers.  This sound could be a .wav file, a system event sound (such as the system startup sound), or a sound resource stored in an application.  Note that when the function needs to play an application resource or a RAM-loaded sound, Visual Basic users must use the alternate declare of the function in order to pass the numeric identifier of the sound instead of a string.  The function returns 0 if an error occured, or a non-zero value if successful.
+
+<DL>
+<DT><VAR>lpszName</VAR><DD>The name or some other identifier of the sound.  Its exact format depends on the flags passed as <VAR>dwFlags</VAR>.
+<DT><VAR>hModule</VAR><DD>A handle to the application module containing the sound resource the play, if needed.  If the function does not need this information, pass 0 for this parameter.
+<DT><VAR>dwFlags</VAR><DD>Zero or more of the following flags specifying what <VAR>lpszName</VAR> refers to and how to play the sound:
+<DL>
+<DT>SND_ALIAS = &amp;H10000<DD><VAR>lpszName</VAR> is a string identifying the name of the system event sound to play.
+<DT>SND_ALIAS_ID = &amp;H110000<DD><VAR>lpszName</VAR> is a string identifying the name of the predefined sound identifier to play.
+<DT>SND_APPLICATION = &amp;H80<DD><VAR>lpszName</VAR> is a string identifying the application-specific event association sound to play.
+<DT>SND_ASYNC = &amp;H1<DD>Play the sound asynchronously -- return immediately after beginning to play the sound and have it play in the background.
+<DT>SND_FILENAME = &amp;H20000<DD><VAR>lpszName</VAR> is a string identifying the filename of the .wav file to play.
+<DT>SND_LOOP = &amp;H8<DD>Continue looping the sound until this function is called again ordering the looped playback to stop.  SND_ASYNC must also be specified.
+<DT>SND_MEMORY = &amp;H4<DD><VAR>lpszName</VAR> is a numeric pointer refering to the memory address of the image of the waveform sound loaded into RAM.
+<DT>SND_NODEFAULT = &amp;H2<DD>If the specified sound cannot be found, terminate the function with failure instead of playing the SystemDefault sound.  If this flag is not specified, the SystemDefault sound will play if the specified sound cannot be located and the function will return with success.
+<DT>SND_NOSTOP = &amp;H10<DD>If a sound is already playing, do not prematurely stop that sound from playing and instead return with failure.  If this flag is not specified, the playing sound will be terminated and the sound specified by the function will play instead.
+<DT>SND_NOWAIT = &amp;H2000<DD>If a sound is already playing, do not wait for the currently playing sound to stop and instead return with failure.
+<DT>SND_PURGE = &amp;H40<DD>Stop playback of any waveform sound.  <VAR>lpszName</VAR> must be an empty string.
+<DT>SND_RESOURCE = &amp;H4004<DD><VAR>lpszName</VAR> is the numeric resource identifier of the sound stored in an application.  <VAR>hModule</VAR> must be specified as that application's module handle.
+<DT>SND_SYNC = &amp;H0<DD>Play the sound synchronously -- do not return until the sound has finished playing.
+</DL>
+</DL>
+
+<P><B>Example:</B>
+<PRE><CODE class="example">' First play the SystemStart event sound synchronously.  Then loop
+' playing the file C:\Sounds\scream.wav for 5 seconds before stopping.
+Dim retval As Long  ' return value of the function
+
+' Synchronously play the SystemStart sound.  This function returns when the sound is done.
+retval = <B>PlaySound</B>("SystemStart", 0, SND_ALIAS Or SND_SYNC)
+
+' Now loop the .wav file for five seconds before purging its playback.  Note that
+' we don't want the default sound to play if the file is not found.
+retval = <B>PlaySound</B>("C:\Sounds\scream.wav", 0, SND_FILENAME Or SND_ASYNC Or SND_NODEFAULT Or SND_LOOP)
+<A href="sleep.html" tppabs="http://www.vbapi.com/ref/s/sleep.html">Sleep</A> 5000  ' wait for 5 seconds while sound loops
+retval = <B>PlaySound</B>("", 0, SND_PURGE Or SND_NODEFAULT)  ' stop playback </CODE></PRE>
+
+<P><B>See Also:</B> <A href="sndplaysound.html" tppabs="http://www.vbapi.com/ref/s/sndplaysound.html">sndPlaySound</A><BR>
+<B>Category:</B> <A href="index.html#audio" tppabs="http://www.vbapi.com/ref/index.html#audio">Audio</A></P>
+
+<P><A href="funca.html" tppabs="http://www.vbapi.com/ref/funca.html">Go back to the alphabetical Function listing.</A><BR>
+<A href="index.html" tppabs="http://www.vbapi.com/ref/index.html">Go back to the Reference section index.</A></P>
+
+<HR>
+
+<P>This page is copyright &copy; 2000 Paul Kuliniewicz.  <A href="copyrite.html" tppabs="http://www.vbapi.com/copyrite.html" rel="copyright">Copyright Information.</A><BR>
+<A href="index-1.html" tppabs="http://www.vbapi.com/index.html">Go back to the Windows API Guide home page.</A><BR>
+E-mail: <A href="javascript:if(confirm('http://www.vbapi.com/email.html  \n\nThis file was not retrieved by Teleport Pro, because it is addressed on a domain or path outside the boundaries set for its Starting Address.  \n\nDo you want to open it from the server?'))window.location='http://www.vbapi.com/email.html'" tppabs="http://www.vbapi.com/email.html">vbapi@vbapi.com</A>  <A href="javascript:if(confirm('http://www.vbapi.com/email.html  \n\nThis file was not retrieved by Teleport Pro, because it is addressed on a domain or path outside the boundaries set for its Starting Address.  \n\nDo you want to open it from the server?'))window.location='http://www.vbapi.com/email.html#secure'" tppabs="http://www.vbapi.com/email.html#secure">Send Encrypted E-Mail</A><BR>
+This page is at <A href="playsound.html" tppabs="http://www.vbapi.com/ref/p/playsound.html">http://www.vbapi.com/ref/p/playsound.html</A>
+
+</BODY>
+</HTML>

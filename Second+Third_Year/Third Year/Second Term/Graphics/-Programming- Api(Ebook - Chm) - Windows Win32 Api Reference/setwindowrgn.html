@@ -1,0 +1,167 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+<HTML lang="en-us">
+<HEAD>
+<TITLE>Windows API Guide: SetWindowRgn Function</TITLE>
+<META content="vbapi@vbapi.com" name="author">
+<META content="Information about the SetWindowRgn function in the Windows API, geared towards the Visual Basic user." name="description">
+<META content="Kuliniewicz,Windows,Windows 95,Windows NT,Windows 98,Windows CE,Windows 2000,API,Application Programming Interface,Programming,Visual Basic,Basic,VB,SetWindowRgn" name="keywords">
+<META content="Omicron HTML Editor" name="generator">
+<LINK href="default.css" tppabs="http://www.vbapi.com/css/default.css" rel="stylesheet" type="text/css">
+<LINK href="index-1.html" tppabs="http://www.vbapi.com/index.html" rel="home">
+<LINK href="glossary.html" tppabs="http://www.vbapi.com/ref/glossary.html" rel="glossary">
+<LINK href="copyrite.html" tppabs="http://www.vbapi.com/copyrite.html" rel="copyright">
+</HEAD>
+<BODY>
+
+<!-- Begin Adslot1 -->
+<CENTER>
+<SCRIPT language="JAVASCRIPT">
+<!-- hide from older browsers
+now = new Date();
+my_random = now.getTime();
+document.write('<A href="http://adex3.flycast.com/server/socket/127.0.0.1:2800/click/VBWorldnet/VBAPI/' + my_random + '">');
+document.write('<IMG width="468" height="60" border="1" src="http://adex3.flycast.com/server/socket/127.0.0.1:2800/ad/VBWorldnet/VBAPI/' + my_random + '"></A>');
+// -->
+</SCRIPT>
+</CENTER>
+<!-- End Adslot1 -->
+
+<HR>
+
+<H1>SetWindowRgn Function</H1>
+
+<P><CODE class="declare"><SPAN class="kw">Declare Function</SPAN> SetWindowRgn <SPAN class="kw">Lib</SPAN> "user32.dll" (<SPAN class="kw">ByVal</SPAN> hWnd <SPAN class="kw">As Long</SPAN>, <SPAN class="kw">ByVal</SPAN> hRgn <SPAN class="kw">As Long</SPAN>, <SPAN class="kw">ByVal</SPAN> bRedraw <SPAN class="kw">As Boolean</SPAN>) <SPAN class="kw">As Long</SPAN>
+</CODE></P>
+
+<H2>Platforms</H2>
+<P><UL>
+<LI><B>Windows 95:</B> Supported.
+<LI><B>Windows 98:</B> Supported.
+<LI><B>Windows NT:</B> Requires Windows NT 3.51 or later.
+<LI><B>Windows 2000:</B> Supported.
+<LI><B>Windows CE:</B> Not Supported.
+</UL></P>
+
+<H2>Description &amp; Usage</H2>
+<P><B>SetWindowRgn</B> changes the visible region of a window.  Using this function, you can make a window appear non-rectangular.  Any portion of the window lying outside of the region is not drawn, and so is invisible.</P>
+
+<H2>Return Value</H2>
+<P>If successful, the function returns a non-zero value.  If an error occured, the function returns zero (<B>Windows NT/2000:</B> use <A href="getlasterror.html" tppabs="http://www.vbapi.com/ref/g/getlasterror.html">GetLastError</A> to get the error code).</P>
+
+<H2>Visual Basic-Specific Issues</H2>
+<P>None.</P>
+
+<H2>Parameters</H2>
+<P><DL>
+<DT><VAR>hWnd</VAR><DD>A <A class="def" href="glossary.html#handle" tppabs="http://www.vbapi.com/ref/glossary.html#handle" rel="glossary">handle</A> to the window to set the region of.
+<DT><VAR>hRgn</VAR><DD>A handle to a <A class="def" href="glossary.html#region" tppabs="http://www.vbapi.com/ref/glossary.html#region" rel="glossary">region</A> that defines what to make the visible area of the window.  If this is zero, the entire window is displayed (effectively removing any special region set previously).
+<DT><VAR>bRedraw</VAR><DD>Specifies whether to immediately redraw the window using its new region or not.  If this is True, the window is redrawn.  If this is False, it is not.
+</DL></P>
+
+<H2>Example</H2>
+<P>Use an elliptic region to make window Form1 appear elliptical.  Notice how, as this example is written, a portion of the title bar is still visible after applying the region.  This allows us to move the window without adding any special code providing a different way for the user to move the window.  Normally, in a real program, you would not want the title bar to be displayed, but after all, this is just an example.  At least it shows you that the region only changes what part of the window you can see -- it doesn't change anything else about the window.</P>
+
+<P>To run this example, make two windows Form1 and Form2.  The latter will be used to illustrate <A href="getwindowrgn.html" tppabs="http://www.vbapi.com/ref/g/getwindowrgn.html">GetWindowRgn</A>.  Place the following three buttons on Form1: a button labeled "Apply Region" and named cmdApplyRegion, a button labeled "Remove Region" and named cmdRemoveRegion, and a button labeled "Show Region" and named cmdShowRegion.  Place these buttons near the center of Form1 to make sure parts of them won't be hidden when the region is applied.</P>
+
+<P><PRE><CODE class="example"><SPAN class="com">' This code is licensed according to the terms and conditions listed <A href="copyrite.html#license" tppabs="http://www.vbapi.com/copyrite.html#license" rel="copyright">here</A>.</SPAN>
+
+<SPAN class="com">' Declarations and such needed for the example:
+' (Copy them to the (declarations) section of a module.)</SPAN>
+<SPAN class="kw">Public Declare Function</SPAN> <A href="getwindowrgn.html" tppabs="http://www.vbapi.com/ref/g/getwindowrgn.html">GetWindowRgn</A> <SPAN class="kw">Lib</SPAN> "user32.dll" (<SPAN class="kw">ByVal</SPAN> hWnd <SPAN class="kw">As Long</SPAN>, <SPAN class="kw">ByVal</SPAN> hRgn <SPAN class="kw">As Long</SPAN>) <SPAN class="kw">As Long</SPAN>
+<SPAN class="kw">Public Declare Function</SPAN> <B>SetWindowRgn</B> <SPAN class="kw">Lib</SPAN> "user32.dll" (<SPAN class="kw">ByVal</SPAN> hWnd <SPAN class="kw">As Long</SPAN>, <SPAN class="kw">ByVal</SPAN> hRgn <SPAN class="kw">As Long</SPAN>, _
+	<SPAN class="kw">ByVal</SPAN> bRedraw <SPAN class="kw">As Boolean</SPAN>) <SPAN class="kw">As Long</SPAN>
+<SPAN class="kw">Public Declare Function</SPAN> <A href="createellipticrgn.html" tppabs="http://www.vbapi.com/ref/c/createellipticrgn.html">CreateEllipticRgn</A> <SPAN class="kw">Lib</SPAN> "gdi32.dll" (<SPAN class="kw">ByVal</SPAN> nLeftRect <SPAN class="kw">As Long</SPAN>, <SPAN class="kw">ByVal</SPAN> nTopRect _
+	<SPAN class="kw">As Long</SPAN>, <SPAN class="kw">ByVal</SPAN> nRightRect <SPAN class="kw">As Long</SPAN>, <SPAN class="kw">ByVal</SPAN> nBottomRect <SPAN class="kw">As Long</SPAN>) <SPAN class="kw">As Long</SPAN>
+<SPAN class="kw">Public Declare Function</SPAN> <A href="deleteobject.html" tppabs="http://www.vbapi.com/ref/d/deleteobject.html">DeleteObject</A> <SPAN class="kw">Lib</SPAN> "gdi32.dll" (<SPAN class="kw">ByVal</SPAN> hObject <SPAN class="kw">As Long</SPAN>) <SPAN class="kw">As Long</SPAN>
+<SPAN class="kw">Public Declare Function</SPAN> <A href="invertrgn.html" tppabs="http://www.vbapi.com/ref/i/invertrgn.html">InvertRgn</A> <SPAN class="kw">Lib</SPAN> "gdi32.dll" (<SPAN class="kw">ByVal</SPAN> hdc <SPAN class="kw">As Long</SPAN>, <SPAN class="kw">ByVal</SPAN> hrgn <SPAN class="kw">As Long</SPAN>) <SPAN class="kw">As Long</SPAN>
+
+<SPAN class="com">' *** Place the following code inside Form1. ***</SPAN>
+
+<SPAN class="com">' Stores a handle to the special window region, if it exists.</SPAN>
+<SPAN class="kw">Private</SPAN> hRgnWindow <SPAN class="kw">As Long</SPAN>
+
+<SPAN class="kw">Private Sub</SPAN> Form_Load()
+	<SPAN class="com">' Open Form2 when this loads.  Form2 is used to display a sort of
+	' "shadow" of the region used by Form1, although it really isn't a shadow effect.</SPAN>
+	Form2.Show
+	
+	<SPAN class="com">' Initially disable the "Remove Region" button, sice one hasn't
+	' yet been applied.</SPAN>
+	cmdRemoveRegion.Enabled = <SPAN class="kw">False</SPAN>
+<SPAN class="kw">End Sub</SPAN>
+
+<SPAN class="kw">Private Sub</SPAN> cmdApplyRegion_Click()
+	<SPAN class="com">' Create an elliptic region slightly smaller than the current size of
+	' Form1, and make that the window region.  This makes the previously
+	' rectangular Form1 appear to be an ellipse.</SPAN>
+	
+	<SPAN class="kw">Dim</SPAN> retval <SPAN class="kw">As Long</SPAN>  <SPAN class="com">' return value</SPAN>
+	
+	<SPAN class="com">' First, make the elliptical region, slightly smaller than Form1.</SPAN>
+	hRgnWindow = <A href="createellipticrgn.html" tppabs="http://www.vbapi.com/ref/c/createellipticrgn.html">CreateEllipticRgn</A>(5, 5, (Form1.Width / Screen.TwipsPerPixelX) - 5, _
+		(Form1.Height / Screen.TwipsPerPixelY) - 5)
+	<SPAN class="com">' Apply this region to Form1 and show the change immediately.</SPAN>
+	retval = <B>SetWindowRgn</B>(Form1.hWnd, hRgnWindow, <SPAN class="kw">True</SPAN>)
+	
+	<SPAN class="com">' To make sure that multiple regions aren't created, disable
+	' this button and enable the "Remove Region" button.</SPAN>
+	cmdApplyRegion.Enabled = <SPAN class="kw">False</SPAN>
+	cmdRemoveRegion.Enabled = <SPAN class="kw">True</SPAN>
+<SPAN class="kw">End Sub</SPAN>
+
+<SPAN class="kw">Private Sub</SPAN> cmdRemoveRegion_Click()
+	<SPAN class="com">' Remove the window region from Form1, returning it to its
+	' normal rectangular shape.</SPAN>
+	
+	<SPAN class="kw">Dim</SPAN> retval <SPAN class="kw">As Long</SPAN>  <SPAN class="com">' return value</SPAN>
+	
+	<SPAN class="com">' Set a null window region, which removes the current one entirely.</SPAN>
+	retval = <B>SetWindowRgn</B>(Form1.hWnd, 0, <SPAN class="kw">True</SPAN>)
+	<SPAN class="com">' Delete the region object because it is no longer needed.</SPAN>
+	retval = <A href="deleteobject.html" tppabs="http://www.vbapi.com/ref/d/deleteobject.html">DeleteObject</A>(hRgnWindow)
+	
+	<SPAN class="com">' Since the region no longer exists, enable "Apply Region" and
+	' disable this button.</SPAN>
+	cmdApplyRegion.Enabled = <SPAN class="kw">True</SPAN>
+	cmdRemoveRegion.Enabled = <SPAN class="kw">False</SPAN>
+<SPAN class="kw">End Sub</SPAN>
+
+<SPAN class="kw">Private Sub</SPAN> cmdShowRegion_Click()
+	<SPAN class="com">' Show the region currently applied to Form1 by inverting that region on
+	' Form2.  Note that if no region is applied, nothing appears to happen because
+	' the actual window region is empty.</SPAN>
+	
+	<SPAN class="kw">Dim</SPAN> hRgnCopy <SPAN class="kw">As Long</SPAN>  <SPAN class="com">' region that receives copy of Form1's region</SPAN>
+	<SPAN class="kw">Dim</SPAN> retval <SPAN class="kw">As Long</SPAN>    <SPAN class="com">' return value</SPAN>
+	
+	<SPAN class="com">' Create a region.  It doesn't matter what, since it will be overwritten
+	' when GetWindowRgn is called.  We just need to have some region.</SPAN>
+	hRgnCopy = <A href="createellipticrgn.html" tppabs="http://www.vbapi.com/ref/c/createellipticrgn.html">CreateEllipticRgn</A>(0, 0, 0, 0)
+	<SPAN class="com">' Copy Form1's region to hRgnCopy.  The actual value of the handle
+	' does not change, but the information it "points" to does.</SPAN>
+	retval = <A href="getwindowrgn.html" tppabs="http://www.vbapi.com/ref/g/getwindowrgn.html">GetWindowRgn</A>(Form1.hWnd, hRgnCopy)
+	<SPAN class="com">' Invert the colors on Form2 that lie within this region.</SPAN>
+	retval = <A href="invertrgn.html" tppabs="http://www.vbapi.com/ref/i/invertrgn.html">InvertRgn</A>(Form2.hDC, hRgnCopy)
+	<SPAN class="com">' Delete the copied region, since we no longer need it.</SPAN>
+	retval = <A href="deleteobject.html" tppabs="http://www.vbapi.com/ref/d/deleteobject.html">DeleteObject</A>(hRgnCopy)
+<SPAN class="kw">End Sub</SPAN></CODE></PRE></P>
+
+<H2>See Also</H2>
+<P><A href="getwindowrgn.html" tppabs="http://www.vbapi.com/ref/g/getwindowrgn.html">GetWindowRgn</A></P>
+
+<H2>Category</H2>
+<P><A href="funcc.html#paintdraw" tppabs="http://www.vbapi.com/ref/funcc.html#paintdraw">Painting &amp; Drawing</A></P>
+
+<P><A href="funca.html" tppabs="http://www.vbapi.com/ref/funca.html">Back to the Function list.</A><BR>
+<A href="index.html" tppabs="http://www.vbapi.com/ref/index.html" rel="index">Back to the Reference section.</A></P>
+
+<HR>
+
+<P><B>Last Modified:</B> September 24, 2000<BR>
+This page is copyright &copy; 2000 Paul Kuliniewicz.  
+<A href="copyrite.html" tppabs="http://www.vbapi.com/copyrite.html" rel="copyright">Copyright Information</A>  <B>Revised October 29, 2000</B><BR>
+<A href="index-1.html" tppabs="http://www.vbapi.com/index.html" rel="home">Go back to the Windows API Guide home page.</A><BR>
+E-mail: <A href="javascript:if(confirm('http://www.vbapi.com/email.html  \n\nThis file was not retrieved by Teleport Pro, because it is addressed on a domain or path outside the boundaries set for its Starting Address.  \n\nDo you want to open it from the server?'))window.location='http://www.vbapi.com/email.html'" tppabs="http://www.vbapi.com/email.html">vbapi@vbapi.com</A>  <A href="javascript:if(confirm('http://www.vbapi.com/email.html  \n\nThis file was not retrieved by Teleport Pro, because it is addressed on a domain or path outside the boundaries set for its Starting Address.  \n\nDo you want to open it from the server?'))window.location='http://www.vbapi.com/email.html#secure'" tppabs="http://www.vbapi.com/email.html#secure">Send Encrypted E-Mail</A><BR>
+This page is at <A href="setwindowrgn.html" tppabs="http://www.vbapi.com/ref/s/setwindowrgn.html">http://www.vbapi.com/ref/s/setwindowrgn.html</A></P>
+</BODY>
+</HTML>

@@ -1,0 +1,543 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!-- saved from url=(0039)http://www2.webng.com/amrlearn/106.html -->
+<HTML><HEAD><TITLE>Breadth First Search</TITLE><LINK 
+href="106_files/stylesheet.css" type=text/css rel=stylesheet>
+<META http-equiv=Content-Type content="text/html; charset=UTF-8">
+<META content="Breadth First Search Breadth First Search " name=description>
+<META 
+content="C++, Breadth First Search, Breadth, First, Search, Breadth, First, Search " 
+name=keywords>
+<META content="Copyright 2007 Amr Saber" name=copyright>
+<META content="MSHTML 6.00.2900.2180" name=GENERATOR></HEAD>
+<BODY>
+<CENTER>
+<DIV id=header>
+<SCRIPT type=text/javascript><!--
+google_ad_client = "pub-9653171024150495";
+google_alternate_color = "C3D9FF";
+google_ad_width = 728;
+google_ad_height = 90;
+google_ad_format = "728x90_as";
+google_ad_type = "text";
+//2007-02-02: header
+google_ad_channel = "7161698987";
+//--></SCRIPT>
+
+<SCRIPT src="106_files/show_ads.js" type=text/javascript>
+</SCRIPT>
+</DIV></CENTER>
+<DIV id=index>
+<H3>Goooooooogle</H3>
+<SCRIPT type=text/javascript><!--
+google_ad_client = "pub-9653171024150495";
+google_alternate_color = "C3D9FF";
+google_ad_width = 120;
+google_ad_height = 600;
+google_ad_format = "120x600_as";
+google_ad_type = "text";
+//2007-02-02: header, right
+google_ad_channel = "7161698987+2593520185";
+//--></SCRIPT>
+
+<SCRIPT src="106_files/show_ads.js" type=text/javascript>
+</SCRIPT>
+</DIV>
+<DIV id=index2>
+<H3>Goooooooogle</H3>
+<SCRIPT type=text/javascript><!--
+google_ad_client = "pub-9653171024150495";
+google_alternate_color = "C3D9FF";
+google_ad_width = 120;
+google_ad_height = 600;
+google_ad_format = "120x600_as";
+google_ad_type = "text";
+google_ad_channel = "";
+//--></SCRIPT>
+
+<SCRIPT src="106_files/show_ads.js" type=text/javascript>
+</SCRIPT>
+</DIV>
+<DIV id=content>
+<H3>Breadth First Search</H3>
+<P></P><TEXTAREA>
+#include&lt;iostream.h&gt;
+#include&lt;process.h&gt;
+//===========================struct Node================================
+struct Eltype
+{
+public:
+	int x,y;
+	int parent;
+	bool operator ==(Eltype d)
+	{	return (d.x == x &amp;&amp; d.y == y);	}
+	bool operator !=(Eltype d)
+	{	return (d.x != x || d.y !=y);	}
+	void display()
+	{	cout &lt;&lt;"("&lt;&lt;x&lt;&lt;" , "&lt;&lt;y&lt;&lt;")"&lt;&lt;endl;	}
+};
+
+
+
+//===========================struct Eltype==========================
+
+struct Node
+{
+	Eltype data;
+	Node* next;
+};
+
+//===========================class LinkedList=======================
+
+
+
+
+
+class LinkedList
+{
+private:
+	Node* list;			
+public:
+	
+	LinkedList()
+	{
+		list=NULL;
+	}
+	void Add_To_First(Eltype d);
+	void Add_To_End(Eltype d);
+	int  No_of_node();
+	void isFound(Eltype d);
+	bool isEmpty();
+	void del_elem(Eltype d);
+	void del_elem_all(Eltype d);
+	void display_list();
+	Eltype getFirst();
+};
+//===========================================================
+void LinkedList::Add_To_First(Eltype d)
+{
+		Node* newlist= new Node;
+		newlist-&gt;data=d;
+		newlist-&gt;next=list;
+		list=newlist;
+}
+//===========================================================
+
+void LinkedList::Add_To_End(Eltype d)
+{
+	Node* newlist= new Node;
+	newlist-&gt;data=d;
+	newlist-&gt;next=NULL;
+
+	if(list==NULL)
+	{
+		list=newlist;
+	}
+	else
+	{
+		Node* current=list;
+		while(current-&gt;next!=NULL)
+		{
+			current=current-&gt;next;
+		}
+		current-&gt;next=newlist;
+	}
+}
+//===========================================================
+
+int LinkedList::No_of_node()
+{
+	int count=0;
+	Node* current=list;
+	while(current != NULL)
+	{	
+		count++;
+		current=current-&gt;next;
+	}
+	return count;
+}
+//===========================================================
+
+void LinkedList::del_elem(Eltype d)
+{
+	if(list-&gt;data==d)
+	{
+		list=list-&gt;next;
+		cout&lt;&lt;"deleted"&lt;&lt;endl;
+	}
+	else
+	{
+		Node* current=list-&gt;next;
+		Node* prev=list;
+		bool flage=false;
+		while(current != NULL)
+		{
+			if(current-&gt;data==d)
+			{
+				prev-&gt;next=current-&gt;next;
+				current=current-&gt;next;
+				flage=true;
+				break;
+			}
+			else
+			{
+				prev=current;
+				current=current-&gt;next;
+			}
+		}
+		if(flage==true)
+			cout&lt;&lt;"deleted"&lt;&lt;endl;
+		else
+			cout&lt;&lt;"Not found"&lt;&lt;endl;
+	}
+}
+//===========================================================
+void LinkedList::del_elem_all(Eltype d)
+{
+	if(list-&gt;data==d)
+	{
+		list=list-&gt;next;
+		cout&lt;&lt;"deleted"&lt;&lt;endl;
+	}
+	else
+	{
+		Node* current=list-&gt;next;
+		Node* prev=list;
+		bool flage=false;
+		while(current != NULL)
+		{
+			if(current-&gt;data==d)
+			{
+				prev-&gt;next=current-&gt;next;
+				current=current-&gt;next;
+				flage=true;
+			}
+			else
+			{
+				prev=current;
+				current=current-&gt;next;
+			}
+		}
+		if(flage==true)
+			cout&lt;&lt;"deleted"&lt;&lt;endl;
+		else
+			cout&lt;&lt;"Not found"&lt;&lt;endl;
+	}
+}
+//===========================================================
+void LinkedList::display_list()
+{
+		Node* current=list;
+		while(current != NULL)
+		{
+			current-&gt;data.display();
+			current=current-&gt;next;
+		}
+}
+//===========================================================
+void LinkedList::isFound(Eltype d)
+{
+	Node* current=list;
+	while(current != NULL)
+	{
+		if(current-&gt;data==d)
+		{
+			cout&lt;&lt;"found"&lt;&lt;endl;
+			return;
+		}
+		else
+			current=current-&gt;next;
+	}
+	cout&lt;&lt;"Not found"&lt;&lt;endl;
+}
+//===========================================================
+bool LinkedList::isEmpty()
+{
+	Node* current=list;
+	if(current==NULL)
+		return true;
+	else
+		return false;
+}
+//===========================================================
+Eltype LinkedList::getFirst()	// get the First node of the list then delete it
+{
+	Eltype e;
+	Node* First=list;
+	list=list-&gt;next;
+	e=First-&gt;data;
+	return e;
+}
+//===========================================================
+//===========================================================
+class stack
+{
+public:
+	int Top;
+	Eltype data[100];
+
+	stack(){ Top=-1; }			//construcTor
+
+	bool IsEmpty();
+	bool IsFull();
+	bool IsFound(Eltype);
+	void push(Eltype d);
+	Eltype   pop();
+	void DispalyStack();
+	void PrintStack();
+	void PrintStackUp();
+};
+//===========================================================
+bool stack :: IsEmpty()
+{
+	if(Top==-1)
+		return (true);
+	else
+		return (false);
+}
+//===========================================================
+bool stack :: IsFull()
+{
+	return(Top==99 ?true : false);
+}
+//===========================================================
+bool stack::IsFound(Eltype e)
+{
+	int n=Top;
+	while(n&gt;=0)
+	{
+		if(e==data[n])
+			return true;
+		else
+			n--;
+	}
+	return false;
+}
+//===========================================================
+void stack :: push(Eltype d)
+{
+	if(IsFull())
+	{
+		cout&lt;&lt;"The Stack is Full"&lt;&lt;endl;
+		return;
+	}
+	else
+	{
+		Top++;
+		data[Top]=d;
+	}
+}
+//===========================================================
+Eltype stack :: pop()
+{
+	if(IsEmpty())
+	{
+		cout&lt;&lt;"The Stack is Empty"&lt;&lt;endl;
+		exit(0);
+	}
+	else
+	{
+		Eltype d=data[Top];
+		Top--;
+		return d;
+	}
+}
+//===========================================================
+void stack :: DispalyStack()
+{
+	if(! IsEmpty())
+	{
+		stack st;
+		Eltype s;
+		while(! IsEmpty())
+		{
+			s=pop();
+			s.display();
+			st.push(s);
+		}
+		while(! st.IsEmpty())
+		{
+			s=st.pop();
+			push(s);
+		}
+	}
+}
+//===========================================================
+void stack :: PrintStack()
+{
+	if(! IsEmpty())
+	{
+		Eltype s=pop();
+		s.display();
+		PrintStack();
+		push(s);
+	}
+}
+//===========================================================
+void stack :: PrintStackUp()
+{
+	if(! IsEmpty())
+	{
+		Eltype s=pop();
+		PrintStackUp();
+		s.display();
+		push(s);
+	}
+}
+//===========================================================
+//===========================================================
+stack rules(Eltype state)
+{
+	stack s;
+	Eltype next_state;
+
+	// fill x
+	if(state.x&lt;4)							
+	{
+		next_state.x=4;
+		next_state.y=state.y;
+		s.push(next_state);
+	}
+	
+	// fill y
+	if(state.y&lt;3)							
+	{
+		next_state.x=state.x;
+		next_state.y=3;
+		s.push(next_state);
+	}
+
+	// empty x or y	
+	if(state.x&gt;0 || state.y&gt;0)				
+	{
+		next_state.x=0;
+		next_state.y=state.y;
+		s.push(next_state);
+		next_state.x=state.x;
+		next_state.y=0;
+		s.push(next_state);
+	}
+
+	
+	// fill y from x untill y is full
+	if(state.x &gt;= (3-state.y) &amp;&amp; state.y &lt; 3)			
+	{
+		next_state.x=state.x-(3-state.y);
+		next_state.y=3;
+		s.push(next_state);
+	}
+
+	// fill x from y untill x is full
+	if(state.y &gt;= (4-state.x) &amp;&amp; state.x &lt; 4)			
+	{
+		next_state.x=4;
+		next_state.y=state.y-(4-state.x);
+		s.push(next_state);
+	}
+
+	// poor x inTo y					//and no out
+	if(state.x &gt;0 &amp;&amp; state.x &lt;=3-state.y)			
+	{
+		next_state.x=0;
+		next_state.y=state.y+state.x;
+		s.push(next_state);
+	}
+	
+	// poor y inTo x
+	if(state.y &gt;0 &amp;&amp; state.y &lt;=4- state.x )		
+	{
+		next_state.x=state.y+state.x;
+		next_state.y=0;
+		s.push(next_state);
+	}
+	return s;
+}
+//===========================================================
+bool breadth(Eltype i,Eltype g,stack&amp; closed)
+{
+	LinkedList open;
+	Eltype e;
+	open.Add_To_End(i);
+	while(!open.isEmpty())
+	{
+		e=open.getFirst();
+
+		closed.push(e);
+		if(e==g)
+			return true;
+		else
+		{
+			stack s=rules(e);
+			while(!s.IsEmpty())
+			{
+				Eltype x;
+				x=s.pop();
+				if(!closed.IsFound(x))
+				{
+					x.parent=closed.Top;
+					open.Add_To_End(x);
+				}
+			}
+		}
+	}
+	return false;
+}
+
+
+
+
+//=============================================================
+void main()
+{
+	Eltype i;
+	i.x=0;
+	i.y=0;
+	stack s;
+
+	Eltype g;
+	g.x=0;
+	g.y=2;
+	stack path,sol;
+
+	Eltype x;
+
+	if(breadth(i,g,path))
+	{
+		while(!path.IsEmpty())
+		{
+			x=path.pop();
+			sol.push(x);
+			while(x.parent &lt; path.Top &amp;&amp; !path.IsEmpty())
+				path.pop();
+		}
+		sol.PrintStack();
+	}
+		
+	else
+		cout&lt;&lt;"fail"&lt;&lt;endl;
+
+
+}
+
+</TEXTAREA> <!-- Search Google -->
+<CENTER>
+<FORM action=http://www.google.com/custom method=get target=_top>
+<TABLE bgColor=#ffffff>
+  <TBODY>
+  <TR>
+    <TD vAlign=top noWrap align=left height=32><A 
+      href="http://www.google.com/"><IMG alt=Google 
+      src="106_files/Logo_25wht.gif" align=middle border=0></IMG></A> <LABEL 
+      style="DISPLAY: none" for=sbi>Enter your search terms</LABEL> <INPUT 
+      id=sbi maxLength=255 size=40 name=q></INPUT> <LABEL style="DISPLAY: none" 
+      for=sbb>Submit search form</LABEL> <INPUT id=sbb type=submit value=Search name=sa></INPUT> <INPUT type=hidden 
+      value=pub-9653171024150495 name=client></INPUT> <INPUT type=hidden value=1 
+      name=forid></INPUT> <INPUT type=hidden value=ISO-8859-1 name=ie></INPUT> 
+      <INPUT type=hidden value=ISO-8859-1 name=oe></INPUT> <INPUT type=hidden 
+      value=active name=safe></INPUT> <INPUT type=hidden 
+      value=GALT:#008000;GL:1;DIV:#336699;VLC:663399;AH:center;BGC:FFFFFF;LBGC:336699;ALC:0000FF;LC:0000FF;T:000000;GFNT:0000FF;GIMP:0000FF;FORID:1 
+      name=cof></INPUT> <INPUT type=hidden value=en name=hl></INPUT> 
+  </TD></TR></TBODY></TABLE></FORM></CENTER><!-- Search Google -->
+<H3><A 
+href="http://www2.webng.com/amrlearn/Index.html">Home</A>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A 
+href="http://www2.webng.com/amrlearn/88.html">Previous</A>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A 
+href="http://www2.webng.com/amrlearn/107.html">Next</A></H3></DIV></BODY></HTML>

@@ -1,0 +1,153 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+<HTML lang="en-us">
+<HEAD>
+<TITLE>Windows API Guide: OpenPrinter Function</TITLE>
+<META content="vbapi@vbapi.com" name="author">
+<META content="Information about the OpenPrinter function in the Windows API, geared towards the Visual Basic user." name="description">
+<META content="Kuliniewicz,Windows,Windows 95,Windows NT,Windows 98,Windows CE,Windows 2000,API,Application Programming Interface,Programming,Visual Basic,Basic,VB,OpenPrinter" name="keywords">
+<META content="Omicron HTML Editor" name="generator">
+<LINK href="default.css" tppabs="http://www.vbapi.com/css/default.css" rel="stylesheet" type="text/css">
+<LINK href="index-1.html" tppabs="http://www.vbapi.com/index.html" rel="home">
+<LINK href="glossary.html" tppabs="http://www.vbapi.com/ref/glossary.html" rel="glossary">
+<LINK href="copyrite.html" tppabs="http://www.vbapi.com/copyrite.html" rel="copyright">
+</HEAD>
+<BODY>
+
+<!-- Begin Adslot1 -->
+<CENTER>
+<SCRIPT language="JAVASCRIPT">
+<!-- hide from older browsers
+now = new Date();
+my_random = now.getTime();
+document.write('<A href="http://adex3.flycast.com/server/socket/127.0.0.1:2800/click/VBWorldnet/VBAPI/' + my_random + '">');
+document.write('<IMG width="468" height="60" border="1" src="http://adex3.flycast.com/server/socket/127.0.0.1:2800/ad/VBWorldnet/VBAPI/' + my_random + '"></A>');
+// -->
+</SCRIPT>
+</CENTER>
+<!-- End Adslot1 -->
+
+<HR>
+
+<H1>OpenPrinter Function</H1>
+
+<P><CODE class="declare"><SPAN class="kw">Declare Function</SPAN> OpenPrinter <SPAN class="kw">Lib</SPAN> "winspool.drv" <SPAN class="kw">Alias</SPAN> "OpenPrinterA" (<SPAN class="kw">ByVal</SPAN> pPrinterName <SPAN class="kw">As String</SPAN>, phPrinter <SPAN class="kw">As Long</SPAN>, pDefault <SPAN class="kw">As Any</SPAN>) <SPAN class="kw">As Long</SPAN></CODE></P>
+
+<H2>Platforms</H2>
+<P><UL>
+<LI><B>Windows 95:</B> Supported.
+<LI><B>Windows 98:</B> Supported.
+<LI><B>Windows NT:</B> Requires Windows NT 3.1 or later.
+<LI><B>Windows 2000:</B> Supported.
+<LI><B>Windows CE:</B> Not Supported.
+</UL></P>
+
+<H2>Description &amp; Usage</H2>
+<P><B>OpenPrinter</B> opens a printer and obtains a <A class="def" href="glossary.html#handle" tppabs="http://www.vbapi.com/ref/glossary.html#handle" rel="glossary">handle</A> to it.  This handle can then be used by a number of printer API functions to reference the printer.  After your program is finished using this handle, it should close the printer via <A href="closeprinter.html" tppabs="http://www.vbapi.com/ref/c/closeprinter.html">ClosePrinter</A>.</P>
+
+<H2>Return Value</H2>
+<P>If successful, the function returns a non-zero value.  If an error occured, the function returns zero (use <A href="getlasterror.html" tppabs="http://www.vbapi.com/ref/g/getlasterror.html">GetLastError</A> to get the error code).</P>
+
+<H2>Visual Basic-Specific Issues</H2>
+<P>When passing zero for <VAR>pDefault</VAR>, the expression ByVal CLng(0) must be used.</P>
+
+<H2>Parameters</H2>
+<P><DL>
+<DT><VAR>pPrinterName</VAR><DD>The name of the printer or print server to obtain a handle to.  If this is an empty string, the function obtains a handle to the default print server.
+<DT><VAR>phPrinter</VAR><DD>Receives a handle to the newly opened printer.
+<DT><VAR>pDefault</VAR><DD>A <A href="printer_defaults.html" tppabs="http://www.vbapi.com/ref/p/printer_defaults.html">PRINTER_DEFAULTS</A> structure specifying some options for opening the printer.  To use the default settings, pass zero for this parameter.
+</DL></P>
+
+<H2>Example</H2>
+<P>Display the Properties dialog box for the system's default printer.  The dialog box is opened when the user clicks the button cmdProperties.  To use the example, first place a command button named cmdProperties on a form window.</P>
+
+<P><PRE><CODE class="example"><SPAN class="com">' This code is licensed according to the terms and conditions listed <A href="copyrite.html#license" tppabs="http://www.vbapi.com/copyrite.html#license" rel="copyright">here</A>.</SPAN>
+
+<SPAN class="com">' Declarations and such needed for the example:
+' (Copy them to the (declarations) section of a module.)</SPAN>
+<SPAN class="kw">Public Type</SPAN> <A href="printer_info_1.html" tppabs="http://www.vbapi.com/ref/p/printer_info_1.html">PRINTER_INFO_1</A>
+	flags <SPAN class="kw">As Long</SPAN>
+	pDescription <SPAN class="kw">As String</SPAN>
+	pName <SPAN class="kw">As String</SPAN>
+	pComment <SPAN class="kw">As String</SPAN>
+<SPAN class="kw">End Type</SPAN>
+<SPAN class="kw">Public Declare Function</SPAN> <A href="enumprinters.html" tppabs="http://www.vbapi.com/ref/e/enumprinters.html">EnumPrinters</A> <SPAN class="kw">Lib</SPAN> "winspool.drv" <SPAN class="kw">Alias</SPAN> "EnumPrintersA" (<SPAN class="kw">ByVal</SPAN> flags <SPAN class="kw">As Long</SPAN>, _
+	<SPAN class="kw">ByVal</SPAN> name <SPAN class="kw">As String</SPAN>, <SPAN class="kw">ByVal</SPAN> Level <SPAN class="kw">As Long</SPAN>, pPrinterEnum <SPAN class="kw">As Long</SPAN>, <SPAN class="kw">ByVal</SPAN> cdBuf <SPAN class="kw">As Long</SPAN>, _
+	pcbNeeded <SPAN class="kw">As Long</SPAN>, pcReturned <SPAN class="kw">As Long</SPAN>) <SPAN class="kw">As Long</SPAN>
+<SPAN class="kw">Public Const</SPAN> PRINTER_ENUM_DEFAULT = &amp;H1
+<SPAN class="kw">Public Declare Function</SPAN> <A href="lstrcpy.html" tppabs="http://www.vbapi.com/ref/l/lstrcpy.html">lstrcpy</A> <SPAN class="kw">Lib</SPAN> "kernel32.dll" <SPAN class="kw">Alias</SPAN> "lstrcpyA" (<SPAN class="kw">ByVal</SPAN> lpString1 <SPAN class="kw">As Any</SPAN>, _
+	<SPAN class="kw">ByVal</SPAN> lpString2 <SPAN class="kw">As Any</SPAN>) <SPAN class="kw">As Long</SPAN>
+<SPAN class="kw">Public Declare Function</SPAN> <A href="lstrlen.html" tppabs="http://www.vbapi.com/ref/l/lstrlen.html">lstrlen</A> <SPAN class="kw">Lib</SPAN> "kernel32.dll" <SPAN class="kw">Alias</SPAN> "lstrlenA" (<SPAN class="kw">ByVal</SPAN> lpString <SPAN class="kw">As Any</SPAN>) <SPAN class="kw">As Long</SPAN>
+<SPAN class="kw">Public Declare Function</SPAN> <B>OpenPrinter</B> <SPAN class="kw">Lib</SPAN> "winspool.drv" <SPAN class="kw">Alias</SPAN> "OpenPrinterA" (<SPAN class="kw">ByVal</SPAN> pPrinterName _
+	<SPAN class="kw">As String</SPAN>, phPrinter <SPAN class="kw">As Long</SPAN>, pDefault <SPAN class="kw">As Any</SPAN>) <SPAN class="kw">As Long</SPAN>
+<SPAN class="kw">Public Declare Function</SPAN> <A href="javascript:if(confirm('http://www.vbapi.com/ref/p/printerproperties.html  \n\nThis file was not retrieved by Teleport Pro, because the server reports that this file cannot be found.  \n\nDo you want to open it from the server?'))window.location='http://www.vbapi.com/ref/p/printerproperties.html'" tppabs="http://www.vbapi.com/ref/p/printerproperties.html">PrinterProperties</A> <SPAN class="kw">Lib</SPAN> "winspool.drv" (<SPAN class="kw">ByVal</SPAN> hWnd <SPAN class="kw">As Long</SPAN>, <SPAN class="kw">ByVal</SPAN> hPrinter _
+	<SPAN class="kw">As Long</SPAN>) <SPAN class="kw">As Long</SPAN>
+<SPAN class="kw">Public Declare Function</SPAN> <A href="closeprinter.html" tppabs="http://www.vbapi.com/ref/c/closeprinter.html">ClosePrinter</A> <SPAN class="kw">Lib</SPAN> "winspool.drv" (<SPAN class="kw">ByVal</SPAN> hPrinter <SPAN class="kw">As Long</SPAN>) <SPAN class="kw">As Long</SPAN>
+
+<SPAN class="com">' *** Place the following code inside a form window. ***</SPAN>
+
+<SPAN class="kw">Private Sub</SPAN> cmdProperties_Click()
+	<SPAN class="kw">Dim</SPAN> pi1 <SPAN class="kw">As</SPAN> <A href="printer_info_1.html" tppabs="http://www.vbapi.com/ref/p/printer_info_1.html">PRINTER_INFO_1</A>  <SPAN class="com">' a little info about the printer</SPAN>
+	<SPAN class="kw">Dim</SPAN> bytesNeeded <SPAN class="kw">As Long</SPAN>    <SPAN class="com">' size needed for buffer</SPAN>
+	<SPAN class="kw">Dim</SPAN> numPrinters <SPAN class="kw">As Long</SPAN>    <SPAN class="com">' number of printers enumerated (should be 1)</SPAN>
+	<SPAN class="kw">Dim</SPAN> buffer() <SPAN class="kw">As Long</SPAN>       <SPAN class="com">' buffer for printer information</SPAN>
+	<SPAN class="kw">Dim</SPAN> slength <SPAN class="kw">As Long</SPAN>        <SPAN class="com">' length of string to copy</SPAN>
+	<SPAN class="kw">Dim</SPAN> hPrinter <SPAN class="kw">As Long</SPAN>       <SPAN class="com">' handle to the printer</SPAN>
+	<SPAN class="kw">Dim</SPAN> retval <SPAN class="kw">As Long</SPAN>         <SPAN class="com">' generic return value</SPAN>
+	
+	<SPAN class="com">' Figure out how much space is needed to store the printer information.</SPAN>
+	retval = <A href="enumprinters.html" tppabs="http://www.vbapi.com/ref/e/enumprinters.html">EnumPrinters</A>(PRINTER_ENUM_DEFAULT, vbNullString, 1, <SPAN class="kw">ByVal</SPAN> 0, 0, bytesNeeded, numPrinters)
+	<SPAN class="com">' Allocate that much space in the buffer array.</SPAN>
+	<SPAN class="kw">ReDim</SPAN> buffer(0 <SPAN class="kw">To</SPAN> bytesNeeded / 4 - 1) <SPAN class="kw">As Long</SPAN>
+	<SPAN class="com">' Get information about the default printer.</SPAN>
+	retval = <A href="enumprinters.html" tppabs="http://www.vbapi.com/ref/e/enumprinters.html">EnumPrinters</A>(PRINTER_ENUM_DEFAULT, vbNullString, 1, buffer(0), bytesNeeded, _
+		bytesNeeded, numPrinters)
+	<SPAN class="com">' Make sure we were successful.</SPAN>
+	<SPAN class="kw">If</SPAN> retval = 0 <SPAN class="kw">Or</SPAN> numPrinters &lt;&gt; 1 <SPAN class="kw">Then</SPAN>
+		<SPAN class="kw">Debug</SPAN>.<SPAN class="kw">Print</SPAN> "No default printer or some other error."
+		<SPAN class="kw">Exit Sub</SPAN>
+	<SPAN class="kw">End If</SPAN>
+	
+	<SPAN class="com">' Copy the data into the structure.</SPAN>
+	<SPAN class="kw">With</SPAN> pi1
+		<SPAN class="com">' Copy numerical data directly.</SPAN>
+		.flags = buffer(0)
+		<SPAN class="com">' Strings require more work, since the buffer holds pointers to them.</SPAN>
+		.pDescription = Space(<A href="lstrlen.html" tppabs="http://www.vbapi.com/ref/l/lstrlen.html">lstrlen</A>(buffer(1)))
+		retval = <A href="lstrcpy.html" tppabs="http://www.vbapi.com/ref/l/lstrcpy.html">lstrcpy</A>(.pDescription, buffer(1))
+		.pName = Space(<A href="lstrlen.html" tppabs="http://www.vbapi.com/ref/l/lstrlen.html">lstrlen</A>(buffer(2)))
+		retval = <A href="lstrcpy.html" tppabs="http://www.vbapi.com/ref/l/lstrcpy.html">lstrcpy</A>(.pName, buffer(2))
+		.pComment = Space(<A href="lstrlen.html" tppabs="http://www.vbapi.com/ref/l/lstrlen.html">lstrlen</A>(buffer(3)))
+		retval = <A href="lstrcpy.html" tppabs="http://www.vbapi.com/ref/l/lstrcpy.html">lstrcpy</A>(.pComment, buffer(3))
+	<SPAN class="kw">End With</SPAN>
+	
+	<SPAN class="com">' Open the printer.</SPAN>
+	retval = <B>OpenPrinter</B>(pi1.pName, hPrinter, <SPAN class="kw">ByVal CLng(</SPAN>0<SPAN class="kw">)</SPAN>)
+	<SPAN class="kw">If</SPAN> retval &lt;&gt; 0 <SPAN class="kw">Then</SPAN>
+		<SPAN class="com">' Display the properties dialog.</SPAN>
+		retval = <A href="javascript:if(confirm('http://www.vbapi.com/ref/p/printerproperties.html  \n\nThis file was not retrieved by Teleport Pro, because the server reports that this file cannot be found.  \n\nDo you want to open it from the server?'))window.location='http://www.vbapi.com/ref/p/printerproperties.html'" tppabs="http://www.vbapi.com/ref/p/printerproperties.html">PrinterProperties</A>(Me.hWnd, hPrinter)
+		<SPAN class="com">' Close the printer.</SPAN>
+		retval = <A href="closeprinter.html" tppabs="http://www.vbapi.com/ref/c/closeprinter.html">ClosePrinter</A>(hPrinter)
+	<SPAN class="kw">Else</SPAN>
+		<SPAN class="kw">Debug</SPAN>.<SPAN class="kw">Print</SPAN> "Unable to open printer!"
+	<SPAN class="kw">End If</SPAN>
+<SPAN class="kw">End Sub</SPAN></CODE></PRE></P>
+
+<H2>See Also</H2>
+<P><A href="closeprinter.html" tppabs="http://www.vbapi.com/ref/c/closeprinter.html">ClosePrinter</A></P>
+
+<H2>Category</H2>
+<P><A href="funcc.html#printers" tppabs="http://www.vbapi.com/ref/funcc.html#printers">Printers</A></P>
+
+<P><A href="funca.html" tppabs="http://www.vbapi.com/ref/funca.html">Go back to the Function listing.</A><BR>
+<A href="index.html" tppabs="http://www.vbapi.com/ref/index.html">Go back to the Reference section index.</A></P>
+
+<HR>
+
+<P><B>Last Modified:</B> January 21, 2001<BR>
+This page is copyright &copy; 2001 Paul Kuliniewicz.  
+<A href="copyrite.html" tppabs="http://www.vbapi.com/copyrite.html" rel="copyright">Copyright Information</A>  <B>Revised October 29, 2000</B><BR>
+<A href="index-1.html" tppabs="http://www.vbapi.com/index.html">Go back to the Windows API Guide home page.</A><BR>
+E-mail: <A href="javascript:if(confirm('http://www.vbapi.com/email.html  \n\nThis file was not retrieved by Teleport Pro, because it is addressed on a domain or path outside the boundaries set for its Starting Address.  \n\nDo you want to open it from the server?'))window.location='http://www.vbapi.com/email.html'" tppabs="http://www.vbapi.com/email.html">vbapi@vbapi.com</A>  <A href="javascript:if(confirm('http://www.vbapi.com/email.html  \n\nThis file was not retrieved by Teleport Pro, because it is addressed on a domain or path outside the boundaries set for its Starting Address.  \n\nDo you want to open it from the server?'))window.location='http://www.vbapi.com/email.html#secure'" tppabs="http://www.vbapi.com/email.html#secure">Send Encrypted E-Mail</A><BR>
+This page is at <A href="openprinter.html" tppabs="http://www.vbapi.com/ref/o/openprinter.html">http://www.vbapi.com/ref/o/openprinter.html</A></P>
+</BODY>
+</HTML>

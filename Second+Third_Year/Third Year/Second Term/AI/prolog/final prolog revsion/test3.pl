@@ -1,0 +1,20 @@
+w1(X):-
+	write('w1-->'),write(X),nl,!.
+w1(X):-
+	write('w1-->welcome'),write(X),nl.
+w2(X):-
+	write('w2-->'),write(X),nl.
+w2(X):-
+	write('w2-->welcome'),write(X),nl.
+test1:-w1('Ali'),fail.
+test1:-w2('Ali').
+
+%--------------------------------------------------------
+p(X,Y):-q(X,Y),!,r(Y).
+p(X,c):-s(X).
+q(e,Z):-!,Z=d.
+q(W,V).
+r(a).
+r(b):-!.
+r(d).
+s(g).

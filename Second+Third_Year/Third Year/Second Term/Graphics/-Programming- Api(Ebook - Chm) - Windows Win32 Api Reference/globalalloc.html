@@ -1,0 +1,100 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+<HTML lang="en-us">
+<HEAD>
+<TITLE>Windows API Guide: GlobalAlloc Function</TITLE>
+<META content="vbapi@vbapi.com" name="author">
+<META content="Information about the GlobalAlloc function in the Windows API, geared towards the Visual Basic user." name="description">
+<META content="Kuliniewicz,Windows,Windows 95,Windows NT,Windows 98,Windows 32s,32s,API,Application Programming Interface,Programming,Visual Basic,Basic,VB,GlobalAlloc" name="keywords">
+<META content="Omicron HTML Editor" name="generator">
+<LINK href="default.css" tppabs="http://www.vbapi.com/css/default.css" rel="stylesheet" type="text/css">
+<LINK href="index-1.html" tppabs="http://www.vbapi.com/index.html" rel="home">
+</HEAD>
+<BODY>
+
+<!-- Begin Adslot1 -->
+<CENTER>
+<SCRIPT language="JAVASCRIPT">
+<!-- hide from older browsers
+now = new Date();
+my_random = now.getTime();
+document.write('<A href="http://adex3.flycast.com/server/socket/127.0.0.1:2800/click/VBWorldnet/VBAPI/' + my_random + '">');
+document.write('<IMG width="468" height="60" border="1" src="http://adex3.flycast.com/server/socket/127.0.0.1:2800/ad/VBWorldnet/VBAPI/' + my_random + '"></A>');
+// -->
+</SCRIPT>
+</CENTER>
+<!-- End Adslot1 -->
+
+<HR>
+
+<H1>GlobalAlloc Function</H1>
+
+<P><CODE class="declare">Declare Function GlobalAlloc Lib "kernel32.dll" (ByVal wFlags As Long, ByVal dwBytes As Long) As Long</CODE>
+
+<P><B>Platforms:</B> Win 32s, Win 95/98, Win NT
+
+<P><B>GlobalAlloc</B> allocates a series of bytes in the computer's global memory.  The memory can be used for any purpose necessary.  The function's return value, if successful, depends on the flags specified in <VAR>wFlags</VAR>.  It will either be a pointer to the block of allocated memory or a handle to the block of allocated memory.  Although they both identify the same thing, they will most likely not be equal and cannot be used interchangably!  If the function fails, a value of 0 will be returned.  Note that Windows will not allocate a memory block starting at base address 0.
+
+<DL>
+<DT><VAR>wFlags</VAR><DD>One or more of the following flags specifying how to allocate the block of memory:
+<DL>
+<DT>GHND = &amp;H40<DD>Same as combining GMEM_MOVEABLE with GMEM_ZEROINIT.
+<DT>GMEM_DDESHARE = &amp;H2000<DD>Optimize the allocated memory for use in DDE conversations.
+<DT>GMEM_DISCARDABLE = &amp;H100<DD>Allocate discardable memory.  (Cannot be combined with GMEM_FIXED.)
+<DT>GMEM_FIXED = &amp;H0<DD>Allocate fixed memory.  The function's return value is a pointer to the beginning of the memory block.  (Cannot be combined with GMEM_DISCARDABLE or GMEM_MOVEABLE.)
+<DT>GMEM_MOVEABLE = &amp;H2<DD>Allocate moveable memory.  The memory block's lock count is initialized at 0 (unlocked).  The function's return value is a handle to the beginning of the memory block.  (Cannot be combined with GMEM_FIXED.)
+<DT>GMEM_NOCOMPACT = &amp;H10<DD>Do not compact any memory or discard any discardable memory to allocate the requested block.
+<DT>GMEM_NODISCARD = &amp;H20<DD>Do not discard any discardable memory to allocate the requested block.
+<DT>GMEM_SHARE = &amp;H2000<DD>Same as GMEM_DDESHARE.
+<DT>GMEM_ZEROINIT = &amp;H40<DD>Initialize the contents of the memory block to 0.
+<DT>GPTR = &amp;H42<DD>Same as combining GMEM_FIXED with GMEM_ZEROINIT.
+</DL>
+<DT><VAR>dwBytes</VAR><DD>The number of bytes to allocate; i.e., the size of the memory block to allocate.
+</DL>
+
+<P><B>Example:</B>
+<PRE><CODE class="example">' Use a block of memory as an intermediary step to copy
+' the contents of array s() to array t().  Yes, you could copy them directly,
+' but this demonstrates a few different memory functions.
+Dim s(0 To 255) As Integer, t(0 To 255) As Integer  ' arrays to copy from/to
+Dim c As Integer, retval As Long  ' counter variable &amp; return value
+Dim hMem As Long, pMem As Long  ' handle and pointer to memory block
+
+' Initialize the source array s()'s data
+For c = 0 To 255
+  s(c) = 2 * c  ' each element equals double its index
+Next c
+
+' Allocate a moveable block of memory (returns a handle) (Integer type = 2 bytes)
+hMem = <B>GlobalAlloc</B>(GMEM_MOVEABLE Or GMEM_ZEROINIT, 256 * 2)
+' Lock the memory block, returning a pointer to it
+pMem = <A href="globallock.html" tppabs="http://www.vbapi.com/ref/g/globallock.html">GlobalLock</A>(hMem)
+' Copy the entire contents of s() to the memory block
+' Note that pMem is ByVal because we want its contents, not a pointer to it
+<A href="copymemory.html" tppabs="http://www.vbapi.com/ref/c/copymemory.html">CopyMemory</A> ByVal pMem, s(0), 256 * 2
+' Copy the contents of the memory block to t()  (we could have just copied s() to t())
+<A href="copymemory.html" tppabs="http://www.vbapi.com/ref/c/copymemory.html">CopyMemory</A> t(0), ByVal pMem, 256 * 2
+' Unlock the memory block, destroying the pointer and freeing resources
+x = <A href="globalunlock.html" tppabs="http://www.vbapi.com/ref/g/globalunlock.html">GlobalUnlock</A>(hMem)
+' Free the memory block (de-allocate it)
+x = <A href="globalfree.html" tppabs="http://www.vbapi.com/ref/g/globalfree.html">GlobalFree</A>(hMem)
+
+' Verify that t() = s(), which it should
+For c = 0 To 255
+  If s(c) &lt;&gt; t(c) Then Debug.Print "Copy attempt failed."
+End If</CODE></PRE>
+
+<P><B>See Also:</B> <A href="globalfree.html" tppabs="http://www.vbapi.com/ref/g/globalfree.html">GlobalFree</A><BR>
+<B>Category:</B> <A href="index.html#memory" tppabs="http://www.vbapi.com/ref/index.html#memory">Memory</A></P>
+
+<P><A href="funca.html" tppabs="http://www.vbapi.com/ref/funca.html">Go back to the alphabetical Function listing.</A><BR>
+<A href="index.html" tppabs="http://www.vbapi.com/ref/index.html">Go back to the Reference section index.</A></P>
+
+<HR>
+
+<P>This page is copyright &copy; 2000 Paul Kuliniewicz.  <A href="copyrite.html" tppabs="http://www.vbapi.com/copyrite.html" rel="copyright">Copyright Information.</A><BR>
+<A href="index-1.html" tppabs="http://www.vbapi.com/index.html">Go back to the Windows API Guide home page.</A><BR>
+E-mail: <A href="javascript:if(confirm('http://www.vbapi.com/email.html  \n\nThis file was not retrieved by Teleport Pro, because it is addressed on a domain or path outside the boundaries set for its Starting Address.  \n\nDo you want to open it from the server?'))window.location='http://www.vbapi.com/email.html'" tppabs="http://www.vbapi.com/email.html">vbapi@vbapi.com</A>  <A href="javascript:if(confirm('http://www.vbapi.com/email.html  \n\nThis file was not retrieved by Teleport Pro, because it is addressed on a domain or path outside the boundaries set for its Starting Address.  \n\nDo you want to open it from the server?'))window.location='http://www.vbapi.com/email.html#secure'" tppabs="http://www.vbapi.com/email.html#secure">Send Encrypted E-Mail</A><BR>
+This page is at <A href="globalalloc.html" tppabs="http://www.vbapi.com/ref/g/globalalloc.html">http://www.vbapi.com/ref/g/globalalloc.html</A>
+
+</BODY>
+</HTML>

@@ -1,0 +1,478 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!-- saved from url=(0039)http://www2.webng.com/amrlearn/136.html -->
+<HTML><HEAD><TITLE>Drawing A Triangle</TITLE><LINK 
+href="136_files/stylesheet.css" type=text/css rel=stylesheet>
+<META http-equiv=Content-Type content="text/html; charset=UTF-8">
+<META content="Computer Graphics, Drawing A Triangle Drawing A Triangle " 
+name=description>
+<META 
+content="Computer Graphics, Computer, Graphics, Drawing A Triangle, Drawing, A Triangle, Drawing A Triangle " 
+name=keywords>
+<META content="Copyright 2007 Amr Saber" name=copyright>
+<META content="MSHTML 6.00.2900.2180" name=GENERATOR></HEAD>
+<BODY>
+<CENTER>
+<DIV id=header>
+<SCRIPT type=text/javascript><!--
+google_ad_client = "pub-9653171024150495";
+google_alternate_color = "C3D9FF";
+google_ad_width = 728;
+google_ad_height = 90;
+google_ad_format = "728x90_as";
+google_ad_type = "text";
+//2007-02-02: header
+google_ad_channel = "7161698987";
+//--></SCRIPT>
+
+<SCRIPT src="136_files/show_ads.js" type=text/javascript>
+</SCRIPT>
+</DIV></CENTER>
+<DIV id=index>
+<H3>Goooooooogle</H3>
+<SCRIPT type=text/javascript><!--
+google_ad_client = "pub-9653171024150495";
+google_alternate_color = "C3D9FF";
+google_ad_width = 120;
+google_ad_height = 600;
+google_ad_format = "120x600_as";
+google_ad_type = "text";
+//2007-02-02: header, right
+google_ad_channel = "7161698987+2593520185";
+//--></SCRIPT>
+
+<SCRIPT src="136_files/show_ads.js" type=text/javascript>
+</SCRIPT>
+</DIV>
+<DIV id=index2>
+<H3>Goooooooogle</H3>
+<SCRIPT type=text/javascript><!--
+google_ad_client = "pub-9653171024150495";
+google_alternate_color = "C3D9FF";
+google_ad_width = 120;
+google_ad_height = 600;
+google_ad_format = "120x600_as";
+google_ad_type = "text";
+google_ad_channel = "";
+//--></SCRIPT>
+
+<SCRIPT src="136_files/show_ads.js" type=text/javascript>
+</SCRIPT>
+</DIV>
+<DIV id=content>
+<H3>Drawing A Triangle</H3><TEXTAREA>#include&lt;windows.h&gt;
+LRESULT CALLBACK WndProc(HWND , UINT , WPARAM ,LPARAM);
+static char gszClassName[] = "MyWindowClass";
+static HINSTANCE ghInstance = NULL;
+int WINAPI WinMain(HINSTANCE hInstance , HINSTANCE hprevInstance , LPSTR lpCmdLine ,int nCmdShow)
+{
+	WNDCLASSEX WndClass;
+	HWND hwnd;
+	MSG Msg;
+	ghInstance = hInstance ;
+	WndClass.cbSize = sizeof(WNDCLASSEX);
+	WndClass.style = NULL;
+	WndClass.lpfnWndProc = WndProc ;
+	WndClass.cbClsExtra =0;
+	WndClass.cbWndExtra = 0;
+	WndClass.hInstance =ghInstance ;
+	WndClass.hIcon = LoadIcon(NULL,IDI_APPLICATION);
+	WndClass.hCursor =LoadCursor(NULL ,IDC_ARROW);
+    WndClass.hbrBackground = (HBRUSH)(COLOR_WINDOW+21);
+    WndClass.lpszMenuName = NULL ;
+	WndClass.lpszClassName = gszClassName ;
+	WndClass.hIconSm = LoadIcon(NULL , IDI_APPLICATION);
+	if(!RegisterClassEx(&amp;WndClass))
+	{
+		MessageBox(0, "window registeration failed!!","error",MB_ICONSTOP|MB_OK);
+		return 0;
+	}
+
+	hwnd =CreateWindowEx(WS_EX_STATICEDGE , gszClassName ," Window Title",WS_OVERLAPPEDWINDOW ,
+		CW_USEDEFAULT ,CW_USEDEFAULT,320,240,NULL,NULL,ghInstance,NULL);
+	if(hwnd == NULL)
+	{
+		MessageBox(0,"windows greated failed!!","Error" ,MB_ICONSTOP|MB_OK);
+         return 0;
+	}
+	ShowWindow(hwnd,nCmdShow);
+	UpdateWindow(hwnd);
+	while(GetMessage(&amp;Msg ,NULL ,0,0))
+	{
+		TranslateMessage(&amp;Msg);
+		DispatchMessage(&amp;Msg);
+	}
+	return Msg.wParam;
+}
+//*********************************
+const int r=3;
+const int c=3;
+struct Matrix
+{
+	double m[r][c];
+	
+
+};
+//**********
+struct Vector
+{
+	double v[r];	
+
+};
+
+//*********************************
+void DDA(float x1, float x2, float y1, float y2,COLORREF color,HDC hdc)
+{
+	//** dda alg. depend on the slope value
+	
+	float slopeM=(y2-y1)/(x2-x1);
+	int x,y;
+	float xf,yf;
+	//*** 1- when slope&lt;1 dx&gt;dy
+	if(slopeM&lt;=1)
+	{
+		if(x1&lt;=x2 &amp;&amp; y1&lt;=y2)   // p1&lt;p2 =&gt; x1&lt;x2 Xbeg=x1 Xend=x2
+		{
+			x=x1;yf=y1;
+			while(x&lt;=x2)
+			{
+				y=int(yf+0.5);
+				SetPixel(hdc,x,y,color);
+				x++;
+				yf=yf+slopeM;
+			}
+		}
+		else      // p1&gt;p2 =&gt; x1&gt;x2 Xbeg=x2 Xend=x1
+		{
+			x=x2;yf=y2;
+			while(x&lt;=x1)
+			{
+				y=int(yf+0.5);
+				SetPixel(hdc,x,y,color);
+				x++;
+				yf=yf+slopeM; // slopeM&lt;0
+			}
+		}
+	}
+	//** NOW slopeM&gt;1 =&gt; dy&gt;dx &amp; Y=Y+1
+	if(slopeM&gt;1)
+	{
+		if(y1&lt;y2)   // P1 &lt;P2  =&gt; y1&lt;y2 ignore x1,x2
+		{
+			y=y1;xf=x1;
+			while(y&lt;=y2)
+			{
+				x=int(xf+0.5);
+				SetPixel(hdc,x,y,color);
+				y++;
+				xf=xf+(1/slopeM);
+			}
+		}
+		else  // p1&gt;p2 =&gt; y1&gt;y2
+		{
+			y=y2;xf=x2;
+			while(y&lt;=y1)
+			{
+				x=int(xf+0.5);
+				SetPixel(hdc,x,y,color);
+				y++;
+				xf=xf+(1/slopeM);
+			}
+		}
+	}	
+}
+//*******************************************
+void BresenHamA(float x1, float x2, float y1, float y2,COLORREF color,HDC hdc)
+{
+	int xBEG,yBEG;
+	float dx,dy,ds,dt,d,slopeM=(y2-y1)/(x1-x2);
+	if(slopeM &lt;= 1) // dx&gt;dy horizantal
+	{
+		if(x1&lt;x2)    // P1&lt;P2 =&gt; x1&lt;x2 
+		{
+			xBEG=x1,yBEG=y1;
+			dx=x2-x1; dy=y2-y1;    // di+1=di+2*(dy-dx)
+			ds=2*dy;  dt=2*(dy-dx);// di+1=di+2*dy
+			d=2*dy-dx;
+			SetPixel(hdc,xBEG,yBEG,color);
+			while(xBEG &lt;= x2)
+			{
+				xBEG++; // slopeM&lt;1
+				if(d&lt;0)
+					d=d+ds;
+				else // choose T point yBEG=yBEG+1
+				{
+					yBEG++;
+					d=d+dt;					
+				}
+				SetPixel(hdc,xBEG,yBEG,color);
+			}
+		}
+
+		////////////////
+		if(x2&lt;x1)    // P1&gt;P2 =&gt; x1&gt;x2 
+		{
+			xBEG=x2,yBEG=y2;
+			dx=x1-x2; dy=y1-y2;    // di+1=di+2*(dy-dx)
+			ds=2*dy;  dt=2*(dy-dx);// di+1=di+2*dy
+			d=2*dy-dx;
+			SetPixel(hdc,xBEG,yBEG,color);
+			while(xBEG &lt;= x2)
+			{
+				xBEG++; // slopeM&lt;1
+				if(d&lt;0)
+					d=d+ds;
+				else // choose T point yBEG=yBEG+1
+				{
+					d=d+dt;
+					yBEG++;
+				}
+				SetPixel(hdc,xBEG,yBEG,color);
+			}
+		}
+	} //eND slopeM&lt;=1
+
+//***************slopeM&gt;1**************
+	if(slopeM&gt; 1)	// slope greater than 1
+	{
+		
+		ds = 2 * dx;
+		dt = 2 * (dx - dy);
+	    d = ds - dy;
+		yBEG=y1,xBEG=x1;
+		while(yBEG &lt; y2)
+		{
+			yBEG ++;
+			 if(d &lt; 0)
+			   d = d + ds;
+			 else
+			 {
+			   d = d + dt;
+			   xBEG ++;
+			 }//else
+			   SetPixel(hdc, xBEG, yBEG, color);
+		   }//while
+	   }//else
+}
+//***************************************
+///************MIDPOINT ALGORITHM*********
+void Midpoint_circle(int r,int h,int k,HDC hdc,COLORREF color)
+{
+	int x=0,y=r,p=1-r;
+//	int h=77,k=77;
+	while(x&lt;=y)
+	{
+		SetPixel(hdc,x+h,y+k,color);
+		SetPixel(hdc,-x+h,-y+k,color);
+		SetPixel(hdc,y+h,x+k,color);
+		SetPixel(hdc,-y+h,-x+k,color);
+		SetPixel(hdc,-y+h,x+k,color);
+		SetPixel(hdc,y+h,-x+k,color);
+		SetPixel(hdc,-x+h,y+k,color);
+		SetPixel(hdc,x+h,-y+k,color);
+		
+		if(p&lt;0)
+			p=p+2*x+3;
+		else
+		{
+			p=p+2*(x-y)+5;
+			y--;
+		}
+		x++;
+	}
+}
+//*******************************************
+void Bresenham_circle(int r,int h,int k,HDC hdc,COLORREF color)
+{
+	int x=0,y=r,d=3-2*r;
+	while(x&lt;=y)
+	{
+		SetPixel(hdc,x+h,y+k,color);
+		SetPixel(hdc,-x+h,-y+k,color);
+		SetPixel(hdc,y+h,x+k,color);
+		SetPixel(hdc,-y+h,-x+k,color);
+		SetPixel(hdc,-y+h,x+k,color);
+		SetPixel(hdc,y+h,-x+k,color);
+		SetPixel(hdc,-x+h,y+k,color);
+		SetPixel(hdc,x+h,-y+k,color);
+		if(d&lt;0)
+			d=d+4*x+6;
+		else
+		{
+			d=d+4*(x-y)+10;
+			y--;
+		}
+		x++;
+	}
+}
+//******************************************
+void Fill_shape(int x,int y,HDC hdc,COLORREF FC,COLORREF BC)
+{
+	COLORREF TC=GetPixel(hdc,x,y);
+	if(TC==BC ||TC==FC)
+		return;
+	else
+	{
+		SetPixel(hdc,x,y,FC);
+		Fill_shape(x+1,y,hdc,FC,BC); //right
+		Fill_shape(x-1,y,hdc,FC,BC); //left
+		Fill_shape(x,y+1,hdc,FC,BC); //top
+		Fill_shape(x,y-1,hdc,FC,BC); //down
+	}
+
+	
+}
+////////////////////////////////////////////
+Matrix TRANSLATE(float dx,float dy)
+{
+	Matrix mat;
+	for(int i=0;i&lt;r;i++)
+		for(int j=0;j&lt;c;j++)
+		{
+			mat.m[i][j]=(i==j);
+			
+		}
+	mat.m[0][r-1]=dx;
+	mat.m[1][r-1]=dy;
+	return mat;
+}
+//******************
+Vector MUL(Matrix mul,Vector GV)
+{
+	Vector RV;
+	for(int i=0;i&lt;r;i++)
+	{
+		RV.v[i]=0;
+		for(int j=0;j&lt;c;j++)
+			RV.v[i]+=mul.m[i][j]*GV.v[j];
+	}
+	return RV;
+}
+//******************
+void TR_LINE(float x1,float y1,float x2,float y2,COLORREF col,HDC hdc)
+{
+	DDA(x1,x2,y1,y2,col,hdc);
+	Matrix SUPER=TRANSLATE(30,40);
+	Vector Vpoint1,Vpoint2;
+	Vpoint1.v[0]=x1;
+	Vpoint1.v[1]=y1;
+	Vpoint1.v[2]=1;
+	//---------
+	Vpoint2.v[0]=x2;
+	Vpoint2.v[1]=y2;
+	Vpoint2.v[2]=1;
+	//-------------
+	Vector N_Vpoint1=MUL(SUPER,Vpoint1);
+	Vector N_Vpoint2=MUL(SUPER,Vpoint2);
+
+	//-------------
+	DDA(N_Vpoint1.v[0],N_Vpoint2.v[0],N_Vpoint1.v[1],N_Vpoint2.v[1],col,hdc);
+
+}
+//*******************************************
+/*void T_LINE(float x1,float y1,float x2,float y2,COLORREF col,HDC hdc)
+{
+	DDA(x1,x2,y1,y2,col,hdc);
+	//Mul_Matrix(x1,y1,x2,y2);
+	float dx=30,dy=40;//x2-x1,dy=y2-y1;
+	float NX1=x1+dx;
+	float NY1=y1+dy;
+	float NX2=x2+dx;
+	float NY2=y2+dy;
+	DDA(NX1,NX2,NY1,NY2,col,hdc);
+
+}*/
+//*******************************************
+
+LRESULT CALLBACK WndProc(HWND hwnd ,UINT Message ,WPARAM wparam ,LPARAM
+						 lparam)
+{
+	COLORREF color=RGB(0,0,250);
+	COLORREF Bcolor=RGB(250,0,0),Fill=RGB(0,0,0);
+	HDC      hdc;
+	int i;
+	switch(Message)
+	{
+	case WM_CLOSE :
+		DestroyWindow(hwnd);
+		break ;
+	case WM_DESTROY:
+		PostQuitMessage(0);
+		break ;
+	case WM_LBUTTONDOWN:
+		hdc=GetDC(hwnd);
+//**	DDA(X1, X2 , Y1, Y2, color, hdc);
+/*		DDA(20,100 , 50, 50, color, hdc); // -
+		TR_LINE(20, 20 , 50, 70, color, hdc); // &lt;| 
+//		DDA(100,100, 50, 70, color, hdc); // |&gt;
+		TR_LINE((20, 100, 70, 70, color, hdc); // -
+		TR_LINE((20, 100,50 , 70, color, hdc); //DIAGNOAL \		
+/*		DDA(100, 20, 50, 70, color, hdc);  // /
+
+		//** BHA
+		BresenHamA(130, 190, 50, 70,Bcolor,hdc); // x1&lt;x2
+		BresenHamA(130, 190, 50, 50,Bcolor,hdc);//-
+		BresenHamA(130, 190, 70, 50,Bcolor,hdc); // x1&gt;x2
+		BresenHamA(190, 130, 70, 70,Bcolor,hdc);//-
+		BresenHamA(130, 130, 50, 70,Bcolor,hdc);// |&gt;
+		BresenHamA(190, 190, 50, 70,Bcolor,hdc);// &lt;|
+		BresenHamA(130, 190, 70, 50,Bcolor,hdc);
+		
+		Bresenham_circle(17,150,100,hdc,Bcolor);
+		Bresenham_circle(23,150,100,hdc,Bcolor);
+		Bresenham_circle(27,150,100,hdc,Bcolor);
+
+		Midpoint_circle(17,70,100,hdc,color);
+		Midpoint_circle(23,70,100,hdc,color);
+		Midpoint_circle(27,70,100,hdc,color);
+		
+		Fill_shape(150,100,hdc,Fill,Bcolor);
+		Fill_shape(70,100,hdc,Fill,color);
+*/
+		TR_LINE(20, 20 , 50, 70, color, hdc);
+		TR_LINE(20, 100, 70, 70, color, hdc);
+		TR_LINE(20, 100,50 , 70, color, hdc);
+
+		DDA(20, 20 , 50, 70, Bcolor, hdc);
+		DDA(20, 100, 70, 70, Bcolor, hdc);
+		DDA(20, 100,50 , 70, Bcolor, hdc);
+
+	//	Fill_shape(60,60,hdc,Fill,color);
+	//	Fill_shape(60,160,hdc,Fill,Bcolor);
+		
+		ReleaseDC(hwnd,hdc);
+		break ;
+	default:
+		return DefWindowProc(hwnd,Message,wparam,lparam);
+	}
+	return 0;
+}
+
+	
+
+
+</TEXTAREA> <BR>
+<CENTER><IMG 
+style="BORDER-RIGHT: #0066cf 1px solid; BORDER-TOP: #0066cf 1px solid; BORDER-LEFT: #0066cf 1px solid; BORDER-BOTTOM: #0066cf 1px solid" 
+src="136_files/transform.gif"> </CENTER><!-- Search Google -->
+<CENTER>
+<FORM action=http://www.google.com/custom method=get target=_top>
+<TABLE bgColor=#ffffff>
+  <TBODY>
+  <TR>
+    <TD vAlign=top noWrap align=left height=32><A 
+      href="http://www.google.com/"><IMG alt=Google 
+      src="136_files/Logo_25wht.gif" align=middle border=0></IMG></A> <LABEL 
+      style="DISPLAY: none" for=sbi>Enter your search terms</LABEL> <INPUT 
+      id=sbi maxLength=255 size=40 name=q></INPUT> <LABEL style="DISPLAY: none" 
+      for=sbb>Submit search form</LABEL> <INPUT id=sbb type=submit value=Search name=sa></INPUT> <INPUT type=hidden 
+      value=pub-9653171024150495 name=client></INPUT> <INPUT type=hidden value=1 
+      name=forid></INPUT> <INPUT type=hidden value=ISO-8859-1 name=ie></INPUT> 
+      <INPUT type=hidden value=ISO-8859-1 name=oe></INPUT> <INPUT type=hidden 
+      value=active name=safe></INPUT> <INPUT type=hidden 
+      value=GALT:#008000;GL:1;DIV:#336699;VLC:663399;AH:center;BGC:FFFFFF;LBGC:336699;ALC:0000FF;LC:0000FF;T:000000;GFNT:0000FF;GIMP:0000FF;FORID:1 
+      name=cof></INPUT> <INPUT type=hidden value=en name=hl></INPUT> 
+  </TD></TR></TBODY></TABLE></FORM></CENTER><!-- Search Google -->
+<H3><A 
+href="http://www2.webng.com/amrlearn/Index.html">Home</A>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A 
+href="http://www2.webng.com/amrlearn/118.html">Previous</A>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A 
+href="http://www2.webng.com/amrlearn/131.html">Next</A></H3></DIV></BODY></HTML>

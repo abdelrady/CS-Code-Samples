@@ -1,0 +1,160 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+<HTML lang="en-us">
+<HEAD>
+<TITLE>Windows API Guide: SetWindowLong Function</TITLE>
+<META content="vbapi@vbapi.com" name="author">
+<META content="Information about the SetWindowLong function in the Windows API, geared towards the Visual Basic user." name="description">
+<META content="Kuliniewicz,Windows,Windows 95,Windows NT,Windows 98,Windows CE,Windows 2000,API,Application Programming Interface,Programming,Visual Basic,Basic,VB,SetWindowLong" name="keywords">
+<META content="Omicron HTML Editor" name="generator">
+<LINK href="default.css" tppabs="http://www.vbapi.com/css/default.css" rel="stylesheet" type="text/css">
+<LINK href="index-1.html" tppabs="http://www.vbapi.com/index.html" rel="home">
+<LINK href="glossary.html" tppabs="http://www.vbapi.com/ref/glossary.html" rel="glossary">
+<LINK href="copyrite.html" tppabs="http://www.vbapi.com/copyrite.html" rel="copyright">
+</HEAD>
+<BODY>
+
+<!-- Begin Adslot1 -->
+<CENTER>
+<SCRIPT language="JAVASCRIPT">
+<!-- hide from older browsers
+now = new Date();
+my_random = now.getTime();
+document.write('<A href="http://adex3.flycast.com/server/socket/127.0.0.1:2800/click/VBWorldnet/VBAPI/' + my_random + '">');
+document.write('<IMG width="468" height="60" border="1" src="http://adex3.flycast.com/server/socket/127.0.0.1:2800/ad/VBWorldnet/VBAPI/' + my_random + '"></A>');
+// -->
+</SCRIPT>
+</CENTER>
+<!-- End Adslot1 -->
+
+<HR>
+
+<H1>SetWindowLong Function</H1>
+
+<P><CODE class="declare"><SPAN class="kw">Declare Function</SPAN> SetWindowLong <SPAN class="kw">Lib</SPAN> "user32.dll" <SPAN class="kw">Alias</SPAN> "SetWindowLongA" (<SPAN class="kw">ByVal</SPAN> hWnd <SPAN class="kw">As Long</SPAN>, <SPAN class="kw">ByVal</SPAN> nIndex <SPAN class="kw">As Long</SPAN>, <SPAN class="kw">ByVal</SPAN> dwNewLong <SPAN class="kw">As Long</SPAN>) <SPAN class="kw">As Long</SPAN></CODE></P>
+
+<H2>Platforms</H2>
+<P><UL>
+<LI><B>Windows 95:</B> Supported.
+<LI><B>Windows 98:</B> Supported.
+<LI><B>Windows NT:</B> Requires Windows NT 3.1 or later.
+<LI><B>Windows 2000:</B> Supported.
+<LI><B>Windows CE:</B> Requires Windows CE 1.0 or later.
+</UL></P>
+
+<H2>Description &amp; Usage</H2>
+<P><B>SetWindowLong</B> sets a 32-bit value constituting the information about a window.  This function can also set a 32-bit value within the block of extra memory given to the window, if such a block exists.</P>
+
+<H2>Return Value</H2>
+<P>If an error occured, the function returns 0 (use <A href="getlasterror.html" tppabs="http://www.vbapi.com/ref/g/getlasterror.html">GetLastError</A> to get the error code).  If successful, the function returns the previous setting of whatever 32-bit value was replaced.</P>
+
+<H2>Visual Basic-Specific Issues</H2>
+<P>None.</P>
+
+<H2>Parameters</H2>
+<P><DL>
+<DT><VAR>hWnd</VAR><DD>A <A class="def" href="glossary.html#handle" tppabs="http://www.vbapi.com/ref/glossary.html#handle" rel="glossary">handle</A> to the window to set a 32-bit value in.
+<DT><VAR>nIndex</VAR><DD>To set a 32-bit value within the window's extra memory block, this is the zero-based offset of the byte to begin writing to.  Valid values range from 0 to the size of the extra memory block in bytes minus four.  To set a 32-bit value of one of the properties of the window, this is one of the following flags specifying which piece of information to set:
+<DL>
+<DT>GWL_EXSTYLE<DD>Set the <A href="extstyles.html" tppabs="http://www.vbapi.com/ref/other/classes/extstyles.html">extended window styles</A> of the window.  <VAR>dwNewLong</VAR> is the new setting.
+<DT>GWL_HINSTANCE<DD>Set which application instance is considered to own the window.  <VAR>dwNewLong</VAR> is the new setting.
+<DT>GWL_HWNDPARENT<DD>Retrieve a handle to the parent window, if any.  <VAR>dwNewLong</VAR> is a handle to the instance to set as the owner.
+<DT>GWL_ID<DD>Set the identifier of the window.  <VAR>dwNewLong</VAR> is the new identifier.
+<DT>GWL_USERDATA<DD>Set the application-defined 32-bit value associated with the window.  <VAR>dwNewLong</VAR> is the new value.
+<DT>GWL_STYLE<DD>Retrieve the <A href="index-3.html" tppabs="http://www.vbapi.com/ref/other/classes/index.html">window styles</A> of the window.
+<DT>GWL_WNDPROC<DD>Set the <A href="windowproc.html" tppabs="http://www.vbapi.com/ref/w/windowproc.html">WindowProc</A> <A class="def" href="glossary.html#hookfunction" tppabs="http://www.vbapi.com/ref/glossary.html#hookfunction" rel="glossary">hook function</A> to use as the window's procedure.  <VAR>dwNewLong</VAR> is a <A class="def" href="glossary.html#pointer" tppabs="http://www.vbapi.com/ref/glossary.html#pointer" rel="glossary">pointer</A> to the hook function to set as the window procedure.
+</DL>
+If the window happens to be a dialog box, this could also be one of the following flags:
+<DL>
+<DT>DWL_DLGPROC<DD>Set the <A href="windowproc.html" tppabs="http://www.vbapi.com/ref/w/windowproc.html">WindowProc</A> hook function to use as the dialog box procedure.  <VAR>dwNewLong</VAR> is a pointer to the hook function to set as the window procedure.
+<DT>DWL_MSGRESULT<DD>Set the return value of the last <A class="def" href="glossary.html#message" tppabs="http://www.vbapi.com/ref/glossary.html#message" rel="glossary">message</A> processed by the dialog box.  <VAR>dwNewLong</VAR> is the new value.
+<DT>DWL_USER<DD>Set the application-defined 32-bit value associated with the dialog box.  <VAR>dwNewLong</VAR> is the new value.
+</DL>
+<DT><VAR>dwNewLong</VAR><DD>The 32-bit value to set as specified by <VAR>nIndex</VAR>.
+</DL></P>
+
+<H2>Constant Definitions</H2>
+<P><PRE><CODE class="const"><SPAN class="kw">Const</SPAN> GWL_EXSTYLE = -20
+<SPAN class="kw">Const</SPAN> GWL_HINSTANCE = -6
+<SPAN class="kw">Const</SPAN> GWL_HWNDPARENT = -8
+<SPAN class="kw">Const</SPAN> GWL_ID = -12
+<SPAN class="kw">Const</SPAN> GWL_STYLE = -16
+<SPAN class="kw">Const</SPAN> GWL_USERDATA = -21
+<SPAN class="kw">Const</SPAN> GWL_WNDPROC = -4
+<SPAN class="kw">Const</SPAN> DWL_DLGPROC = 4
+<SPAN class="kw">Const</SPAN> DWL_MSGRESULT = 0
+<SPAN class="kw">Const</SPAN> DWL_USER = 8</CODE></PRE></P>
+
+<H2>Example</H2>
+<P>Have a window play the SystemAsterisk sound whenever it gains or loses the focus.  This is done by playing the sound whenever the window receives the WM_ACTIVATE message.  To use this example, copy the following code into the proper locations.</P>
+
+<P><PRE><CODE class="example"><SPAN class="com">' This code is licensed according to the terms and conditions listed <A href="copyrite.html#license" tppabs="http://www.vbapi.com/copyrite.html#license" rel="copyright">here</A>.</SPAN>
+
+<SPAN class="com">' Declarations and such needed for the example:
+' (Copy them to the (declarations) section of a module.)</SPAN>
+<SPAN class="kw">Public Declare Function</SPAN> <B>SetWindowLong</B> <SPAN class="kw">Lib</SPAN> "user32.dll" <SPAN class="kw">Alias</SPAN> "SetWindowLongA" (<SPAN class="kw">ByVal</SPAN> hWnd <SPAN class="kw">As Long</SPAN>, _
+	<SPAN class="kw">ByVal</SPAN> nIndex <SPAN class="kw">As Long</SPAN>, <SPAN class="kw">ByVal</SPAN> dwNewLong <SPAN class="kw">As Long</SPAN>) <SPAN class="kw">As Long</SPAN>
+<SPAN class="kw">Public Const</SPAN> GWL_WNDPROC = -4
+<SPAN class="kw">Public Declare Function</SPAN> <A href="callwindowproc.html" tppabs="http://www.vbapi.com/ref/c/callwindowproc.html">CallWindowProc</A> <SPAN class="kw">Lib</SPAN> "user32.dll" <SPAN class="kw">Alias</SPAN> "CallWindowProcA" (<SPAN class="kw">ByVal</SPAN> lpPrevWndFunc _
+	<SPAN class="kw">As Long</SPAN>, <SPAN class="kw">ByVal</SPAN> hWnd <SPAN class="kw">As Long</SPAN>, <SPAN class="kw">ByVal</SPAN> Msg <SPAN class="kw">As Long</SPAN>, <SPAN class="kw">ByVal</SPAN> wParam <SPAN class="kw">As Long</SPAN>, <SPAN class="kw">ByVal</SPAN> lParam <SPAN class="kw">As Long</SPAN>) <SPAN class="kw">As Long</SPAN>
+<SPAN class="kw">Public Declare Function</SPAN> <A href="playsound.html" tppabs="http://www.vbapi.com/ref/p/playsound.html">PlaySound</A> <SPAN class="kw">Lib</SPAN> "winmm.dll" <SPAN class="kw">Alias</SPAN> "PlaySoundA" (<SPAN class="kw">ByVal</SPAN> lpszName <SPAN class="kw">As Any</SPAN>, <SPAN class="kw">ByVal</SPAN> _
+	hModule <SPAN class="kw">As Long</SPAN>, <SPAN class="kw">ByVal</SPAN> dwFlags <SPAN class="kw">As Long</SPAN>) <SPAN class="kw">As Long</SPAN> 
+<SPAN class="kw">Public Const</SPAN> WM_ACTIVATE = &amp;H6
+
+<SPAN class="com">' *** Place this code in a module. ***</SPAN>
+
+<SPAN class="com">' The following variable is accessible to all code in this example.</SPAN>
+<SPAN class="kw">Public</SPAN> pOldProc <SPAN class="kw">As Long</SPAN>  <SPAN class="com">' pointer to the previous window function</SPAN>
+
+<SPAN class="com">' Define the new window procedure.</SPAN>
+<SPAN class="kw">Public Function</SPAN> <A href="windowproc.html" tppabs="http://www.vbapi.com/ref/w/windowproc.html">WindowProc</A> (<SPAN class="kw">ByVal</SPAN> hWnd <SPAN class="kw">As Long</SPAN>, <SPAN class="kw">ByVal</SPAN> uMsg <SPAN class="kw">As Long</SPAN>, <SPAN class="kw">ByVal</SPAN> wParam <SPAN class="kw">As Long</SPAN>, _
+		 <SPAN class="kw">ByVal</SPAN> lParam <SPAN class="kw">As Long</SPAN>) <SPAN class="kw">As Long</SPAN>
+	<SPAN class="kw">Dim</SPAN> retval <SPAN class="kw">As Long</SPAN>  <SPAN class="com">' return value</SPAN>
+	<SPAN class="com">' If the message is WM_ACTIVATE (we don't care about the parameters),
+	' play the SystemAsterisk sound.</SPAN>
+	<SPAN class="kw">If</SPAN> uMsg = WM_ACTIVATE <SPAN class="kw">Then</SPAN>
+		retval = <A href="playsound.html" tppabs="http://www.vbapi.com/ref/p/playsound.html">PlaySound</A>("SystemAsterisk", 0, SND_ALIAS <SPAN class="kw">Or</SPAN> SND_ASYNC)
+	<SPAN class="kw">End If</SPAN>
+	<SPAN class="com">' No matter what happened, use the old window procedure to
+	' finish processing the message.</SPAN>
+	retval = <A href="callwindowproc.html" tppabs="http://www.vbapi.com/ref/c/callwindowproc.html">CallWindowProc</A>(pOldProc, hWnd, uMsg, wParam, lParam)
+	<SPAN class="com">' Have this function return whatever the function above returned.</SPAN>
+	WindowProc = retval
+<SPAN class="kw">End Function</SPAN>
+
+<SPAN class="com">' *** Place the following code in the form window. ***</SPAN>
+
+<SPAN class="kw">Private Sub</SPAN> Form_Load ()
+	<SPAN class="kw">Dim</SPAN> retval <SPAN class="kw">As Long</SPAN>  <SPAN class="com">' return value</SPAN>
+	
+	<SPAN class="com">' Set the new window procedure for Form1, saving a pointer to the old one.</SPAN>
+	pOldProc = <B>SetWindowLong</B>(Me.hWnd, GWL_WNDPROC, <SPAN class="kw">AddressOf</SPAN> <A href="windowproc.html" tppabs="http://www.vbapi.com/ref/w/windowproc.html">WindowProc</A>)
+<SPAN class="kw">End Sub</SPAN>
+
+<SPAN class="kw">Private Sub</SPAN> Form_Unload (Cancel <SPAN class="kw">As Integer)</SPAN>
+	<SPAN class="kw">Dim</SPAN> retval <SPAN class="kw">As Long</SPAN>  <SPAN class="com">' return value</SPAN>
+	
+	<SPAN class="com">' Restore the window's procedure before closing.</SPAN>
+	retval = <B>SetWindowLong</B>(Me.hWnd, GWL_WNDPROC, pOldProc)
+<SPAN class="kw">End Sub</SPAN></SPAN></CODE></PRE></P>
+
+<H2>See Also</H2>
+<P><A href="getwindowlong.html" tppabs="http://www.vbapi.com/ref/g/getwindowlong.html">GetWindowLong</A>, 
+<A href="setclasslong.html" tppabs="http://www.vbapi.com/ref/s/setclasslong.html">SetClassLong</A></P>
+
+<H2>Category</H2>
+<P><A href="funcc.html#windowclasses" tppabs="http://www.vbapi.com/ref/funcc.html#windowclasses">Window Classes</A></P>
+
+<P><A href="funca.html" tppabs="http://www.vbapi.com/ref/funca.html">Go back to the alphabetical Function listing.</A><BR>
+<A href="index.html" tppabs="http://www.vbapi.com/ref/index.html">Go back to the Reference section index.</A></P>
+
+<HR>
+
+<P><B>Last Modified:</B> October 29, 2000<BR>
+This page is copyright &copy; 2000 Paul Kuliniewicz.  
+<A href="copyrite.html" tppabs="http://www.vbapi.com/copyrite.html" rel="copyright">Copyright Information</A>  <B>Revised October 29, 2000</B><BR>
+<A href="index-1.html" tppabs="http://www.vbapi.com/index.html">Go back to the Windows API Guide home page.</A><BR>
+E-mail: <A href="javascript:if(confirm('http://www.vbapi.com/email.html  \n\nThis file was not retrieved by Teleport Pro, because it is addressed on a domain or path outside the boundaries set for its Starting Address.  \n\nDo you want to open it from the server?'))window.location='http://www.vbapi.com/email.html'" tppabs="http://www.vbapi.com/email.html">vbapi@vbapi.com</A>  <A href="javascript:if(confirm('http://www.vbapi.com/email.html  \n\nThis file was not retrieved by Teleport Pro, because it is addressed on a domain or path outside the boundaries set for its Starting Address.  \n\nDo you want to open it from the server?'))window.location='http://www.vbapi.com/email.html#secure'" tppabs="http://www.vbapi.com/email.html#secure">Send Encrypted E-Mail</A><BR>
+This page is at <A href="setwindowlong.html" tppabs="http://www.vbapi.com/ref/s/setwindowlong.html">http://www.vbapi.com/ref/s/setwindowlong.html</A>
+</P>
+</BODY>
+</HTML>

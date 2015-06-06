@@ -1,0 +1,108 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+<HTML lang="en-us">
+<HEAD>
+<TITLE>Windows API Guide: keybd_event Function</TITLE>
+<META content="vbapi@vbapi.com" name="author">
+<META content="Information about the keybd_event function in the Windows API, geared towards the Visual Basic user." name="description">
+<META content="Kuliniewicz,Windows,Windows 95,Windows NT,Windows 98,Windows CE,Windows 2000,API,Application Programming Interface,Programming,Visual Basic,Basic,VB,keybd_event" name="keywords">
+<META content="Omicron HTML Editor" name="generator">
+<META content="Sat, 07 Aug 1999 17:17:00 GMT" http-equiv="Last-Modified">
+<LINK href="default.css" tppabs="http://www.vbapi.com/css/default.css" rel="stylesheet" type="text/css">
+<LINK href="index-1.html" tppabs="http://www.vbapi.com/index.html" rel="home">
+
+<LINK href="glossary.html" tppabs="http://www.vbapi.com/ref/glossary.html" rel="glossary">
+<LINK href="copyrite.html" tppabs="http://www.vbapi.com/copyrite.html" rel="copyright">
+</HEAD>
+<BODY>
+
+<!-- Begin Adslot1 -->
+<CENTER>
+<SCRIPT language="JAVASCRIPT">
+<!-- hide from older browsers
+now = new Date();
+my_random = now.getTime();
+document.write('<A href="http://adex3.flycast.com/server/socket/127.0.0.1:2800/click/VBWorldnet/VBAPI/' + my_random + '">');
+document.write('<IMG width="468" height="60" border="1" src="http://adex3.flycast.com/server/socket/127.0.0.1:2800/ad/VBWorldnet/VBAPI/' + my_random + '"></A>');
+// -->
+</SCRIPT>
+</CENTER>
+<!-- End Adslot1 -->
+
+<HR>
+
+<H1>keybd_event Function</H1>
+
+<P><CODE class="declare">Declare Sub keybd_event Lib "user32.dll" (ByVal bVk As Byte, ByVal bScan As Byte, ByVal dwFlags As Long, ByVal dwExtraInfo As Long) </CODE></P>
+
+<H2>Platforms</H2>
+<P><UL>
+<LI><B>Windows 95:</B> Supported.
+<LI><B>Windows 98:</B> Supported but Obsolete; use <A href="sendinput.html" tppabs="http://www.vbapi.com/ref/s/sendinput.html">SendInput</A> instead.
+<LI><B>Windows NT:</B> Requires Windows NT 3.1 or later but Obsolete with Windows NT 4.0 with Service Pack 3 (SP3) or later; use <A href="sendinput.html" tppabs="http://www.vbapi.com/ref/s/sendinput.html">SendInput</A> instead.
+<LI><B>Windows 2000:</B> Supported but Obsolete; use <A href="sendinput.html" tppabs="http://www.vbapi.com/ref/s/sendinput.html">SendInput</A> instead.
+<LI><B>Windows CE:</B> Requires Windows CE 1.0 or later but Obsolete with Windows CE 2.0 or later; use <A href="sendinput.html" tppabs="http://www.vbapi.com/ref/s/sendinput.html">SendInput</A> instead.
+</UL></P>
+
+<H2>Description &amp; Usage</H2>
+<P><B>keybd_event</B> simulates keyboard input by placing a keyboard input event into the input stream.  The function can simulate a single press or release of a single key.  This function should only be used when a key's state changes.  For example, do not tell the function to simulate pressing the Z key if the Z key is already pressed.</P>
+
+<H2>Return Value</H2>
+<P><B>keybd_event</B> does not return a value.</P>
+
+<H2>Visual Basic-Specific Issues</H2>
+<P>None.</P>
+
+<H2>Parameters</H2>
+<P><DL>
+<DT><VAR>bVk</VAR><DD>The <A href="virtualkeycodes.html" tppabs="http://www.vbapi.com/ref/other/virtualkeycodes.html">virtual-key code</A> of the key to simulate pressing or releasing.
+<DT><VAR>bScan</VAR><DD>Reserved -- set to 0.
+<DT><VAR>dwFlags</VAR><DD>A combination of the following flags specifying what kind of keyboard input to synthesize:
+<DL>
+<DT>KEYEVENTF_EXTENDEDKEY<DD>Prefix the scan code with a prefix byte having the value &amp;HE0.
+<DT>KEYEVENTF_KEYUP<DD>The key specified in <VAR>bVk</VAR> is being released.  If this flag is not specified, the key is being pressed.
+</DL>
+<DT><VAR>dwExtraInfo</VAR><DD>An additional 32-bit value associated with the keyboard event.
+</DL></P>
+
+<H2>Constant Definitions</H2>
+<P><PRE><CODE class="const">Const KEYEVENTF_EXTENDEDKEY = &amp;H1
+Const KEYEVENTF_KEYUP = &amp;H2</CODE></PRE></P>
+
+<H2>Example</H2>
+<P><PRE><CODE class="example"><SPAN class="com">' This code is licensed according to the terms and conditions listed <A href="copyrite.html#license" tppabs="http://www.vbapi.com/copyrite.html#license" rel="copyright">here</A>.</SPAN>
+
+' Simulate the user pressing Alt+Space followed by N.  This
+' key combination will minimize the active window.
+
+' Hold the Alt key while typing Space.
+<B>keybd_event</B> VK_MENU, 0, 0, 0  ' press Alt
+<B>keybd_event</B> VK_SPACE, 0, 0, 0  ' press Space
+<B>keybd_event</B> VK_SPACE, 0, KEYEVENTF_KEYUP, 0  ' release Space
+<B>keybd_event</B> VK_MENU, 0, KEYEVENTF_KEYUP, 0  ' release Alt
+
+' Type the N key.
+<B>keybd_event</B> VK_N, 0, 0, 0  ' press N
+<B>keybd_event</B> VK_N, 0, KEYEVENTF_KEYUP, 0  ' release N</CODE></PRE></P>
+
+<H2>See Also</H2>
+<P><A href="mouse_event.html" tppabs="http://www.vbapi.com/ref/m/mouse_event.html">mouse_event</A>, <A href="sendinput.html" tppabs="http://www.vbapi.com/ref/s/sendinput.html">SendInput</A></P>
+
+<H2>Category</H2>
+<P><A href="funcc.html#keyboard" tppabs="http://www.vbapi.com/ref/funcc.html#keyboard">Keyboard</A></P>
+
+<P><A href="funca.html" tppabs="http://www.vbapi.com/ref/funca.html">Go back to the alphabetical Function listing.</A><BR>
+<A href="index.html" tppabs="http://www.vbapi.com/ref/index.html">Go back to the Reference section index.</A></P>
+
+<HR>
+
+<P>
+<B>Last Modified:</B> August 7, 1999<BR>
+This page is copyright &copy; 1999 Paul Kuliniewicz.  
+<A href="copyrite.html" tppabs="http://www.vbapi.com/copyrite.html" rel="copyright">Copyright Information</A>  <B>Revised October 29, 2000</B><BR>
+
+<A href="index-1.html" tppabs="http://www.vbapi.com/index.html">Go back to the Windows API Guide home page.</A><BR>
+E-mail: <A href="javascript:if(confirm('http://www.vbapi.com/email.html  \n\nThis file was not retrieved by Teleport Pro, because it is addressed on a domain or path outside the boundaries set for its Starting Address.  \n\nDo you want to open it from the server?'))window.location='http://www.vbapi.com/email.html'" tppabs="http://www.vbapi.com/email.html">vbapi@vbapi.com</A>  <A href="javascript:if(confirm('http://www.vbapi.com/email.html  \n\nThis file was not retrieved by Teleport Pro, because it is addressed on a domain or path outside the boundaries set for its Starting Address.  \n\nDo you want to open it from the server?'))window.location='http://www.vbapi.com/email.html#secure'" tppabs="http://www.vbapi.com/email.html#secure">Send Encrypted E-Mail</A><BR>
+This page is at <A href="keybd_event.html" tppabs="http://www.vbapi.com/ref/k/keybd_event.html">http://www.vbapi.com/ref/k/keybd_event.html</A>
+</P>
+</BODY>
+</HTML>

@@ -1,0 +1,157 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+<HTML lang="en-us">
+<HEAD>
+<TITLE>Windows API Guide: WM_TIMER Message</TITLE>
+<META content="vbapi@vbapi.com" name="author">
+<META content="Information about the WM_TIMER message in the Windows API, geared towards the Visual Basic user." name="description">
+<META content="Kuliniewicz,Windows,Windows 95,Windows NT,Windows 98,Windows CE,Windows 2000,API,Application Programming Interface,Programming,Visual Basic,Basic,VB,WM_TIMER" name="keywords">
+<META content="Omicron HTML Editor" name="generator">
+<LINK href="default.css" tppabs="http://www.vbapi.com/css/default.css" rel="stylesheet" type="text/css">
+<LINK href="index-1.html" tppabs="http://www.vbapi.com/index.html" rel="home">
+<LINK href="glossary.html" tppabs="http://www.vbapi.com/ref/glossary.html" rel="glossary">
+<LINK href="copyrite.html" tppabs="http://www.vbapi.com/copyrite.html" rel="copyright">
+</HEAD>
+<BODY>
+
+<!-- Begin Adslot1 -->
+<CENTER>
+<SCRIPT language="JAVASCRIPT">
+<!-- hide from older browsers
+now = new Date();
+my_random = now.getTime();
+document.write('<A href="http://adex3.flycast.com/server/socket/127.0.0.1:2800/click/VBWorldnet/VBAPI/' + my_random + '">');
+document.write('<IMG width="468" height="60" border="1" src="http://adex3.flycast.com/server/socket/127.0.0.1:2800/ad/VBWorldnet/VBAPI/' + my_random + '"></A>');
+// -->
+</SCRIPT>
+</CENTER>
+<!-- End Adslot1 -->
+
+<HR>
+
+<H1>WM_TIMER Message</H1>
+
+<H2>Platforms</H2>
+<P><UL>
+<LI><B>Windows 95:</B> Supported.
+<LI><B>Windows 98:</B> Supported.
+<LI><B>Windows NT:</B> Requires Windows NT 3.1 or later.
+<LI><B>Windows 2000:</B> Supported.
+<LI><B>Windows CE:</B> Requires Windows CE 1.0 or later.
+</UL></P>
+
+<H2>Description &amp; Usage</H2>
+<P>A window receives the <B>WM_TIMER</B> message when the time-out period of a timer (created by the <A href="settimer.html" tppabs="http://www.vbapi.com/ref/s/settimer.html">SetTimer</A> function) elapses.  You should only create a handler for this message if you did not specify a <A href="timerproc.html" tppabs="http://www.vbapi.com/ref/t/timerproc.html">TimerProc</A> <A class="def" href="glossary.html#callbackfunction" tppabs="http://www.vbapi.com/ref/glossary.html#callbackfunction" rel="glossary">callback function</A> for the timer.  Otherwise, allow the window's default message handler to invoke the <A href="timerproc.html" tppabs="http://www.vbapi.com/ref/t/timerproc.html">TimerProc</A> function.</P>
+
+<H2>Return Value</H2>
+<P>The <B>WM_TIMER</B> message should always return 0.</P>
+
+<H2>Visual Basic-Specific Issues</H2>
+<P>None.</P>
+
+<H2>Parameters</H2>
+<P><DL>
+<DT><VAR>wParam</VAR><DD>The unique identifier of the timer that sent the message.
+<DT><VAR>lParam</VAR><DD>A <A class="def" href="glossary.html#pointer" tppabs="http://www.vbapi.com/ref/glossary.html#pointer" rel="glossary">pointer</A> to the <A href="timerproc.html" tppabs="http://www.vbapi.com/ref/t/timerproc.html">TimerProc</A> callback function that should be invoked.  If no function is specified, this will be 0.
+</DL></P>
+
+<H2>Constant Definitions</H2>
+<P><PRE><CODE class="const"><SPAN class="const">Const</SPAN> WM_TIMER = &amp;H113</CODE></PRE></P>
+
+<H2>Example</H2>
+<P>Display the current time in text box control Text1.  The time is updated twice every second, and the time is formatted according to the current locale's settings.  To use this example, place a text edit box named Text1 on a form window.</P>
+
+<P><PRE><CODE class="example"><SPAN class="com">' This code is licensed according to the terms and conditions listed <A href="copyrite.html#license" tppabs="http://www.vbapi.com/copyrite.html#license" rel="copyright">here</A>.</SPAN>
+
+<SPAN class="com">' Declarations and such needed for the example:
+' (Copy them to the (declarations) section of a module.)</SPAN>
+<SPAN class="kw">Public Type</SPAN> <A href="systemtime.html" tppabs="http://www.vbapi.com/ref/s/systemtime.html">SYSTEMTIME</A>
+	wYear <SPAN class="kw">As Integer</SPAN>
+	wMonth <SPAN class="kw">As Integer</SPAN>
+	wDayOfWeek <SPAN class="kw">As Integer</SPAN>
+	wDay <SPAN class="kw">As Integer</SPAN>
+	wHour <SPAN class="kw">As Integer</SPAN>
+	wMinute <SPAN class="kw">As Integer</SPAN>
+	wSecond <SPAN class="kw">As Integer</SPAN>
+	wMilliseconds <SPAN class="kw">As Integer</SPAN>
+End Type
+<SPAN class="kw">Public Declare Function</SPAN> <A href="settimer.html" tppabs="http://www.vbapi.com/ref/s/settimer.html">SetTimer</A> <SPAN class="kw">Lib</SPAN> "user32.dll" (<SPAN class="kw">ByVal</SPAN> hWnd <SPAN class="kw">As Long</SPAN>, <SPAN class="kw">ByVal</SPAN> nIDEvent _
+	<SPAN class="kw">As Long</SPAN>, <SPAN class="kw">ByVal</SPAN> uElapse <SPAN class="kw">As Long</SPAN>, <SPAN class="kw">ByVal</SPAN> lpTimerFunc <SPAN class="kw">As Long</SPAN>) <SPAN class="kw">As Long</SPAN>
+<SPAN class="kw">Public Declare Function</SPAN> <A href="killtimer.html" tppabs="http://www.vbapi.com/ref/k/killtimer.html">KillTimer</A> <SPAN class="kw">Lib</SPAN> "user32.dll" (<SPAN class="kw">ByVal</SPAN> hWnd <SPAN class="kw">As Long</SPAN>, <SPAN class="kw">ByVal</SPAN> nIDEvent <SPAN class="kw">As Long</SPAN>) <SPAN class="kw">As Long</SPAN>
+<SPAN class="kw">Public Const</SPAN> <B>WM_TIMER</B> = &amp;H113
+<SPAN class="kw">Public Declare Function</SPAN> <A href="gettimeformat.html" tppabs="http://www.vbapi.com/ref/g/gettimeformat.html">GetTimeFormat</A> <SPAN class="kw">Lib</SPAN> "kernel32.dll" <SPAN class="kw">Alias</SPAN> "GetTimeFormatA" (<SPAN class="kw">ByVal</SPAN> _
+	Locale <SPAN class="kw">As Long</SPAN>, <SPAN class="kw">ByVal</SPAN> dwFlags <SPAN class="kw">As Long</SPAN>, lpTime <SPAN class="kw">As</SPAN> <A href="systemtime.html" tppabs="http://www.vbapi.com/ref/s/systemtime.html">SYSTEMTIME</A>, <SPAN class="kw">ByVal</SPAN> lpFormat <SPAN class="kw">As Any</SPAN>, _
+	<SPAN class="kw">ByVal</SPAN> lpTimeStr <SPAN class="kw">As String</SPAN>, <SPAN class="kw">ByVal</SPAN> cchTime <SPAN class="kw">As Long</SPAN>) <SPAN class="kw">As Long</SPAN>
+<SPAN class="kw">Public Declare Function</SPAN> <A href="setwindowlong.html" tppabs="http://www.vbapi.com/ref/s/setwindowlong.html">SetWindowLong</A> <SPAN class="kw">Lib</SPAN> "user32.dll" <SPAN class="kw">Alias</SPAN> "SetWindowLongA" (<SPAN class="kw">ByVal</SPAN> hWnd _
+	<SPAN class="kw">As Long</SPAN>, <SPAN class="kw">ByVal</SPAN> nIndex <SPAN class="kw">As Long</SPAN>, <SPAN class="kw">ByVal</SPAN> dwNewLong <SPAN class="kw">As Long</SPAN>) <SPAN class="kw">As Long</SPAN>
+<SPAN class="kw">Public Const</SPAN> GWL_WNDPROC = -4
+<SPAN class="kw">Public Declare Function</SPAN> <A href="callwindowproc.html" tppabs="http://www.vbapi.com/ref/c/callwindowproc.html">CallWindowProc</A> <SPAN class="kw">Lib</SPAN> "user32.dll" <SPAN class="kw">Alias</SPAN> "CallWindowProcA" (<SPAN class="kw">ByVal</SPAN> _
+	lpPrevWndFunc <SPAN class="kw">As Long</SPAN>, <SPAN class="kw">ByVal</SPAN> hWnd <SPAN class="kw">As Long</SPAN>, <SPAN class="kw">ByVal</SPAN> Msg <SPAN class="kw">As Long</SPAN>, <SPAN class="kw">ByVal</SPAN> wParam <SPAN class="kw">As Long</SPAN>, _
+	<SPAN class="kw">ByVal</SPAN> lParam <SPAN class="kw">As Long</SPAN>) <SPAN class="kw">As Long</SPAN>
+
+<SPAN class="com">' *** Place the following code inside a module. ***</SPAN>
+
+<SPAN class="com">' A pointer to Form1's default window procedure:</SPAN>
+<SPAN class="kw">Pubic</SPAN> pOldProc <SPAN class="kw">As Long</SPAN>
+
+<SPAN class="com">' The following function will handle all of Form1's messages.  It only
+' actually processes WM_TIMER and passes all others to the default handler.</SPAN>
+<SPAN class="kw">Public Function</SPAN> <A href="windowproc.html" tppabs="http://www.vbapi.com/ref/w/windowproc.html">WindowProc</A> (<SPAN class="kw">ByVal</SPAN> hWnd <SPAN class="kw">As Long</SPAN>, <SPAN class="kw">ByVal</SPAN> uMsg <SPAN class="kw">As Long</SPAN>, <SPAN class="kw">ByVal</SPAN> wParam <SPAN class="kw">As Long</SPAN>, _
+		<SPAN class="kw">ByVal</SPAN> lParam <SPAN class="kw">As Long</SPAN>)
+	<SPAN class="kw">Dim</SPAN> systime <SPAN class="kw">As</SPAN> <A href="systemtime.html" tppabs="http://www.vbapi.com/ref/s/systemtime.html">SYSTEMTIME</A>    <SPAN class="com">' the current time</SPAN>
+	<SPAN class="kw">Dim</SPAN> timestr <SPAN class="kw">As String</SPAN> * 260  <SPAN class="com">' receives the formatted string</SPAN>
+	<SPAN class="kw">Dim</SPAN> slength <SPAN class="kw">As Long</SPAN>          <SPAN class="com">' length of formatted string returned</SPAN>
+
+	<SPAN class="kw">Select Case</SPAN> uMsg
+	<SPAN class="kw">Case</SPAN> <B>WM_TIMER</B>
+		<SPAN class="com">' Retrieve the current time, according to the computer's time zone.</SPAN>
+		<A href="getlocaltime.html" tppabs="http://www.vbapi.com/ref/g/getlocaltime.html">GetLocalTime</A> systime
+		<SPAN class="com">' Format a string to represent the time.</SPAN>
+		slength = <A href="gettimeformat.html" tppabs="http://www.vbapi.com/ref/g/gettimeformat.html">GetTimeFormat</A>(0, 0, systime, <SPAN class="kw">CLng(</SPAN>0<SPAN class="kw">)</SPAN>, timestr, <SPAN class="kw">Len(</SPAN>timestr<SPAN class="kw">)</SPAN>)
+		<SPAN class="com">' Display the string in Text1, found on window Form1.</SPAN>
+		Form1.Text1.Text = <SPAN class="kw">Left(</SPAN>timestr, slength<SPAN class="kw">)</SPAN>
+		WindowProc = 0
+	<SPAN class="kw">Case Else</SPAN>
+		<SPAN class="com">' Pass the message to Form1's previous procedure.</SPAN>
+		WindowProc = <A href="callwindowproc.html" tppabs="http://www.vbapi.com/ref/c/callwindowproc.html">CallWindowProc</A>(pOldProc, hWnd, uMsg, wParam, lParam)
+	<SPAN class="kw">End Select</SPAN>
+<SPAN class="kw">End Function</SPAN>
+
+<SPAN class="com">' *** Place the following code inside Form1. ***</SPAN>
+
+<SPAN class="com">' Create the timer when the form opens and destroy it when the form closes.
+' The timer is given an ID of 1, so the return values don't need to be saved.
+' Also, set up the window procedure when the form is loaded, and remove it
+' when the form is unloaded.  This procedure will receive all of Form1's messages.</SPAN>
+<SPAN class="kw">Private Sub</SPAN> Form1_Load()
+	<SPAN class="kw">Dim</SPAN> retval <SPAN class="kw">As Long</SPAN>  <SPAN class="com">' return value</SPAN>
+
+	pOldProc = <A href="setwindowlong.html" tppabs="http://www.vbapi.com/ref/s/setwindowlong.html">SetWindowLong</A>(Form1.<SPAN class="kw">hWnd</SPAN>, GWL_WNDPROC, <SPAN class="kw">AddressOf</SPAN> <A href="windowproc.html" tppabs="http://www.vbapi.com/ref/w/windowproc.html">WindowProc</A>)
+	retval = <B>SetTimer</B>(Form1.<SPAN class="kw">hWnd</SPAN>, 1, 500, <SPAN class="kw">AddressOf</SPAN> <A href="timerproc.html" tppabs="http://www.vbapi.com/ref/t/timerproc.html">TimerProc</A>)
+<SPAN class="kw">End Sub</SPAN>
+
+<SPAN class="kw">Private Sub</SPAN> Form1_Unload(Cancel <SPAN class="kw">As Integer</SPAN>)
+	<SPAN class="kw">Dim</SPAN> retval <SPAN class="kw">As Long</SPAN>  <SPAN class="com">' return value</SPAN>
+
+	retval = <A href="killtimer.html" tppabs="http://www.vbapi.com/ref/k/killtimer.html">KillTimer</A>(Form1.<SPAN class="kw">hWnd</SPAN>, 1)
+	retval = <A href="setwindowlong.html" tppabs="http://www.vbapi.com/ref/s/setwindowlong.html">SetWindowLong</A>(Form1.<SPAN class="kw">hWnd</SPAN>, GWL_WNDPROC, pOldProc)
+<SPAN class="ke">End Sub</SPAN></CODE></PRE></P>
+
+<H2>See Also</H2>
+<P><A href="settimer.html" tppabs="http://www.vbapi.com/ref/s/settimer.html">SetTimer</A></P>
+
+<H2>Category</H2>
+<P><A href="javascript:if(confirm('http://www.vbapi.com/ref/w/msgc.html  \n\nThis file was not retrieved by Teleport Pro, because the server reports that this file cannot be found.  \n\nDo you want to open it from the server?'))window.location='http://www.vbapi.com/ref/w/msgc.html#timers'" tppabs="http://www.vbapi.com/ref/w/msgc.html#timers">Timers</A></P>
+
+<P><A href="msga.html" tppabs="http://www.vbapi.com/ref/msga.html">Back to the Message list.</A><BR>
+<A href="index.html" tppabs="http://www.vbapi.com/ref/index.html" rel="index">Back to the Reference section.</A></P>
+
+<HR>
+
+<P><B>Last Modified:</B> December 17, 2000<BR>
+This page is copyright &copy; 2000 Paul Kuliniewicz.  
+<A href="copyrite.html" tppabs="http://www.vbapi.com/copyrite.html" rel="copyright">Copyright Information</A>  <B>Revised October 29, 2000</B><BR>
+<A href="index-1.html" tppabs="http://www.vbapi.com/index.html" rel="home">Go back to the Windows API Guide home page.</A><BR>
+E-mail: <A href="javascript:if(confirm('http://www.vbapi.com/email.html  \n\nThis file was not retrieved by Teleport Pro, because it is addressed on a domain or path outside the boundaries set for its Starting Address.  \n\nDo you want to open it from the server?'))window.location='http://www.vbapi.com/email.html'" tppabs="http://www.vbapi.com/email.html">vbapi@vbapi.com</A>  <A href="javascript:if(confirm('http://www.vbapi.com/email.html  \n\nThis file was not retrieved by Teleport Pro, because it is addressed on a domain or path outside the boundaries set for its Starting Address.  \n\nDo you want to open it from the server?'))window.location='http://www.vbapi.com/email.html#secure'" tppabs="http://www.vbapi.com/email.html#secure">Send Encrypted E-Mail</A><BR>
+This page is at <A href="wm_timer.html" tppabs="http://www.vbapi.com/ref/w/wm_timer.html">http://www.vbapi.com/ref/w/wm_timer.html</A></P>
+</BODY>
+</HTML>

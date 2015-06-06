@@ -1,0 +1,474 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!-- saved from url=(0039)http://www2.webng.com/amrlearn/109.html -->
+<HTML><HEAD><TITLE>Graph Operations</TITLE><LINK 
+href="109_files/stylesheet.css" type=text/css rel=stylesheet>
+<META http-equiv=Content-Type content="text/html; charset=UTF-8">
+<META content="Graph Operations Graph Operations " name=description>
+<META 
+content="C++, C++, Graph Operations, Graph, Operations, Graph, Operations " 
+name=keywords>
+<META content="Copyright 2007 Amr Saber" name=copyright>
+<META content="MSHTML 6.00.2900.2180" name=GENERATOR></HEAD>
+<BODY>
+<CENTER>
+<DIV id=header>
+<SCRIPT type=text/javascript><!--
+google_ad_client = "pub-9653171024150495";
+google_alternate_color = "C3D9FF";
+google_ad_width = 728;
+google_ad_height = 90;
+google_ad_format = "728x90_as";
+google_ad_type = "text";
+//2007-02-02: header
+google_ad_channel = "7161698987";
+//--></SCRIPT>
+
+<SCRIPT src="109_files/show_ads.js" type=text/javascript>
+</SCRIPT>
+</DIV></CENTER>
+<DIV id=index>
+<H3>Goooooooogle</H3>
+<SCRIPT type=text/javascript><!--
+google_ad_client = "pub-9653171024150495";
+google_alternate_color = "C3D9FF";
+google_ad_width = 120;
+google_ad_height = 600;
+google_ad_format = "120x600_as";
+google_ad_type = "text";
+//2007-02-02: header, right
+google_ad_channel = "7161698987+2593520185";
+//--></SCRIPT>
+
+<SCRIPT src="109_files/show_ads.js" type=text/javascript>
+</SCRIPT>
+</DIV>
+<DIV id=index2>
+<H3>Goooooooogle</H3>
+<SCRIPT type=text/javascript><!--
+google_ad_client = "pub-9653171024150495";
+google_alternate_color = "C3D9FF";
+google_ad_width = 120;
+google_ad_height = 600;
+google_ad_format = "120x600_as";
+google_ad_type = "text";
+google_ad_channel = "";
+//--></SCRIPT>
+
+<SCRIPT src="109_files/show_ads.js" type=text/javascript>
+</SCRIPT>
+</DIV>
+<DIV id=content>
+<H3>Graph Operations</H3>
+<P></P><TEXTAREA>
+#include&lt;fstream.h&gt;
+#include&lt;process.h&gt;
+typedef int ktype;
+/****structure***/
+struct eltype
+{
+	char name;
+	ktype key;
+	void showdata()
+	{
+		cout&lt;&lt;name&lt;&lt;"\t"&lt;&lt;key&lt;&lt;endl;
+	}
+};
+const int max=100;
+/***  class graph*************/
+class graph
+{
+   private:
+	   int count;
+	   eltype nodes[max];
+	   float edges[max][max];
+   public:
+	   //the constructor
+	   graph()
+	   {
+		   count=0;
+	   }
+	   //return count
+	   int getcount()
+	   {
+		   return count;
+	   }
+	   ktype getkey(int i)
+	   {
+		   return nodes[i].key;
+	   }
+	   //graph full
+	   bool graph_is_full()
+	   {
+		   return (count==max)?true:false;
+	   }
+	   //graph empety
+	   bool graph_is_empety()
+	   {
+		   return (count==0)?true:false;
+	   }
+	   //key found
+	   bool keyfound(ktype k)
+	   {
+		   int i;
+		   for(i=0;i&lt;=count;i++)
+		   if(nodes[i].key==k)
+			   return true;
+		   return false;
+	   }
+	   //find node
+	   int findnode(ktype k)
+	   {
+		   int i;
+		   for(i=0;i&lt;=count;i++)
+		   if(nodes[i].key==k)
+			   return i;
+		   return -1;
+	   }
+	   //insertnode
+	   void insertnode(eltype e)
+	   {
+		   if(graph_is_full())
+		   {
+			   cout&lt;&lt;"Error graph_is_full\n";
+			   return;
+		   }
+		   if(keyfound(e.key))
+		   { 
+		   	   cout&lt;&lt;"Error Duplicate key found\n";
+			   return;
+		   }
+		   nodes[count]=e;
+		   for(int i=0;i&lt;=count;i++)
+		   { 
+		       edges[i][count]=0;
+			   edges[count][i]=0;
+		   }
+		   count++;
+	   }
+	   //delete node
+	   void deletenode(eltype e)
+	   {
+		   if(graph_is_empety())
+		   {
+			   cout&lt;&lt;"Error graph_is_empety\n";
+			   return;
+		   }
+		   count--;
+		   int where=findnode(e.key);
+		   if(where==-1)
+		   {
+			   cout&lt;&lt;"Error key is found\n";
+			   return;
+		   }
+          
+		   for(int i=0;i&lt;=count;i++)
+		   { 
+		       edges[where][i]=edges[count][i];
+			   edges[i][where]=edges[i][count];
+		   }
+		   edges[where][where]=edges[count][count];
+		   
+	   }
+	   //updata node
+	   bool updatenode(eltype e)
+	   {
+		   int i=findnode(e.key);
+			   if(i==-1)
+			   {
+				cout&lt;&lt;"Error update missing key\n";
+			   return false;
+			   }
+			   nodes[i]=e;
+			   return true;
+	   }
+	   //insertedge
+	   void insertedge(ktype k1,ktype k2,float d)
+	   {
+		   int n1=findnode(k1);
+		   int n2=findnode(k2);
+		   if(n1==-1||n2==-1)
+		   {
+			   cout&lt;&lt;"Error the node that you want to connect is missing\n";
+			   return;
+		   }
+		   edges[n1][n2]=d;
+		   edges[n2][n1]=d;
+	   
+	   }
+	   //delete edge
+	   void deleteedge(ktype k1,ktype k2)
+	   {
+		   int n1=findnode(k1);
+		   int n2=findnode(k2);
+		   if(n1==-1||n2==-1)
+		   {
+			   cout&lt;&lt;"Error the node that you want to remove edge is missing\n";
+			   return;
+		   }
+		   edges[n1][n2]=0;
+		   edges[n2][n1]=0;
+	   }
+	   // is adjesnt
+	   bool isadjacent(ktype k1,ktype k2)
+	   {
+		   int n1=findnode(k1);
+		   int n2=findnode(k2);
+		   if(n1==-1||n2==-1)
+		   {
+			   cout&lt;&lt;"Error the node that you want to remove edge is missing\n";
+			   exit(0);
+		   }
+		   if(edges[n1][n2]!=0||edges[n2][n1]!=0)
+			   return true;
+		   else
+			   return false;
+	   }
+	   //display graph
+	   void displaygraph()
+	   {
+		   for(int i=0;i&lt;count;i++)
+			   nodes[i].showdata();
+
+		   for(i=0;i&lt;count;i++)
+		   {
+			   for(int j=0;j&lt;count;j++)
+				   cout&lt;&lt;edges[i][j]&lt;&lt;"\t";
+				   cout&lt;&lt;endl;
+		   }
+	   }
+	   //retriveedge
+	   float retriveedge(ktype k1,ktype k2)
+	   {
+		   int n1=findnode(k1);
+		   int n2=findnode(k2);
+		   if(n1==-1||n2==-1)
+		   {
+			   cout&lt;&lt;"Error the node that you want to remove edge is missing\n";
+			   exit(0);
+		   }
+		   return edges[n1][n2];
+	   }
+
+};
+///////////////***********build graph**************////////////////
+void build_graph(graph&amp;g)
+{
+	eltype e1,e2;
+	float dis;
+	char* filename="shortestpath.txt";
+	ifstream file(filename);
+	if(!file)
+	{
+		cout&lt;&lt;"Error file error\n";
+		return;
+	}
+	while(file&gt;&gt;e1.key)
+	{
+		file&gt;&gt;e1.name;
+		if(g.keyfound(e1.key))
+			g.updatenode(e1);
+		else
+			g.insertnode(e1);
+		
+			char ch;
+			while(file.get(ch)&amp;&amp;ch!='\n')
+			{
+				file&gt;&gt;e2.key;
+				file&gt;&gt;dis;
+				if(!g.keyfound(e2.key))
+					g.insertnode(e2);
+				g.insertedge(e1.key,e2.key,dis);
+			}
+	}
+}
+/**********showmenu**********/
+int showmenu()
+{
+	int i;
+	cout&lt;&lt;"1-Insert Node\n";
+	cout&lt;&lt;"2-Update Node\n";
+	cout&lt;&lt;"3-Display bgraph\n";
+	cout&lt;&lt;"4-Shortest Path\n";                     
+	cout&lt;&lt;"5-Exit\n";                     
+	cout&lt;&lt;"                  Enter choice:  ";
+	cin&gt;&gt;i;
+	return i;
+}
+//************** get shortest path********//////////
+void getpath(graph g)
+{
+	float distance[max];
+	int fromnode[max];
+	bool processed[max];
+    int n=g.getcount();
+	distance[0]=0;
+	processed[0]=true;
+	fromnode[0]=-1;
+    /////********1- initialization*****************////////////////
+	for(int i=1;i&lt;n;i++)
+	{
+		fromnode[i]=-1;
+		distance[i]=2000;
+		if(g.isadjacent(0,i))
+		{
+        distance[i]=g.retriveedge(0,i);
+		fromnode[i]=0;
+		}
+			
+			processed[i]=false;
+			
+	}     //******END OF INITIALIZE******************//
+
+	///********(2) function********//////////
+	int indexmin;
+	float sum=0.0f;
+	float mindis=1000;
+	  
+	for(i=0;i&lt;n-1;i++)
+	{       //Find Closest Node not Processed
+		for(int k=1;k&lt;n-1;k++)
+		{
+			if(!processed[k])
+			{
+				if(distance[k]&lt;mindis)
+				{
+					indexmin=k;
+					mindis=distance[k];
+				}
+			}
+		}//end iner loop
+		processed[indexmin]=true;
+
+		for(int j=1;j&lt;n;j++)
+		{
+			if(!processed[j]&amp;&amp;g.isadjacent(j,indexmin))
+			{
+				sum=g.retriveedge(j,indexmin)+distance[indexmin];
+				if(sum&lt;distance[j])
+				{
+					distance[j]=sum;
+					fromnode[j]=indexmin;
+				}
+				
+			}
+			
+
+		}//end inner loop
+		mindis=2000;
+	}//end outer loop
+
+cout&lt;&lt;"the shortest path is   "&lt;&lt;distance[n-1]&lt;&lt;endl;	
+
+
+}//end getpath
+
+/***************main****************/
+int main()
+{
+	graph g;
+	eltype e;
+	build_graph(g);
+	g.displaygraph();
+	int n; bool flag=true;;
+	while(flag)
+	{
+
+
+     n=showmenu();
+	switch(n)
+	{
+	case 1:
+		cout&lt;&lt;"Enter the key :  ";
+		cin&gt;&gt;e.key;
+		if(g.keyfound(e.key))
+		{
+			exit(0);
+		}
+		cout&lt;&lt;"Enter the name :  ";
+		cin&gt;&gt;e.name;
+		g.insertnode(e);
+		cout&lt;&lt;"Enter the keys of the conected edges (1) if you want to connect or (0) otherwise ";
+		int i;
+		float x;
+		for(i=0;i&lt;g.getcount();i++)
+		{
+			cout&lt;&lt;"do you want to connect this node with node whose key is ";
+			cout&lt;&lt;g.getkey(i);
+			cin&gt;&gt;x;
+			if(x!=0)
+				g.insertedge(e.key,g.getkey(i),x);
+			else
+				continue;
+		}
+		break;
+	case 2:
+        cout&lt;&lt;"Enter the key :  ";
+		cin&gt;&gt;e.key;
+		if(!g.keyfound(e.key))
+		{
+			cout&lt;&lt;"Canot update not found key\n";
+			exit(0);
+		}
+		cout&lt;&lt;"Enter the name :  ";
+		cin&gt;&gt;e.name;
+		g.updatenode(e);
+		break;
+	case 3:
+		g.displaygraph();
+		break;
+	case 4:
+      getpath(g); 
+		break;
+		case 5:
+		flag=false;
+		break;
+	default:
+		cout&lt;&lt;"error\n";
+		
+	}
+
+		
+	}
+	return 0;
+	
+}
+	
+
+
+=======================================================================
+graph.txt
+----------
+----------
+
+1 a 2 5 6 7
+2 b 2 5 6 7
+3 c 2 5 6 7
+4 d 2 5 6
+5 e 3
+6 f 5 6
+7 g 1 3
+
+
+</TEXTAREA> <!-- Search Google -->
+<CENTER>
+<FORM action=http://www.google.com/custom method=get target=_top>
+<TABLE bgColor=#ffffff>
+  <TBODY>
+  <TR>
+    <TD vAlign=top noWrap align=left height=32><A 
+      href="http://www.google.com/"><IMG alt=Google 
+      src="109_files/Logo_25wht.gif" align=middle border=0></IMG></A> <LABEL 
+      style="DISPLAY: none" for=sbi>Enter your search terms</LABEL> <INPUT 
+      id=sbi maxLength=255 size=40 name=q></INPUT> <LABEL style="DISPLAY: none" 
+      for=sbb>Submit search form</LABEL> <INPUT id=sbb type=submit value=Search name=sa></INPUT> <INPUT type=hidden 
+      value=pub-9653171024150495 name=client></INPUT> <INPUT type=hidden value=1 
+      name=forid></INPUT> <INPUT type=hidden value=ISO-8859-1 name=ie></INPUT> 
+      <INPUT type=hidden value=ISO-8859-1 name=oe></INPUT> <INPUT type=hidden 
+      value=active name=safe></INPUT> <INPUT type=hidden 
+      value=GALT:#008000;GL:1;DIV:#336699;VLC:663399;AH:center;BGC:FFFFFF;LBGC:336699;ALC:0000FF;LC:0000FF;T:000000;GFNT:0000FF;GIMP:0000FF;FORID:1 
+      name=cof></INPUT> <INPUT type=hidden value=en name=hl></INPUT> 
+  </TD></TR></TBODY></TABLE></FORM></CENTER><!-- Search Google -->
+<H3><A 
+href="http://www2.webng.com/amrlearn/Index.html">Home</A>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A 
+href="http://www2.webng.com/amrlearn/114.html">Previous</A>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A 
+href="http://www2.webng.com/amrlearn/110.html">Next</A></H3></DIV></BODY></HTML>

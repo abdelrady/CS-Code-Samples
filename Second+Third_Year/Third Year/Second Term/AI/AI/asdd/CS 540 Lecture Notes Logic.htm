@@ -1,0 +1,350 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!-- saved from url=(0051)http://www.cs.wisc.edu/~dyer/cs540/notes/logic.html -->
+<HTML><HEAD><TITLE>CS 540 Lecture Notes: Logic</TITLE>
+<META http-equiv=Content-Type content="text/html; charset=iso-8859-1">
+<META content="MSHTML 6.00.2900.2180" name=GENERATOR></HEAD>
+<BODY vLink=#0060f0 link=#ff3300 bgColor=#ffffff>
+<TABLE width="100%">
+  <TBODY>
+  <TR>
+    <TD align=left>University of Wisconsin - Madison</TD>
+    <TD align=middle>CS 540 Lecture Notes</TD>
+    <TD align=right>C. R. Dyer</TD></TR></TBODY></TABLE>
+<P>
+<P>
+<CENTER><FONT size=6>Logic</FONT> (Chapter 7)</CENTER>
+<P>
+<HR>
+
+<P>
+<H3>Logic for Knowledge Representation and Reasoning</H3>
+<UL>
+  <LI>One of the core problems in developing an intelligent system is 
+  <B>knowledge representation</B>, i.e., solving the problems of (1) how to 
+  represent the knowledge one has about a problem domain, and (2) how to reason 
+  using that knowledge in order to answer questions or make decisions 
+  <LI>Knowledge representation deals with the problem of how to model the world 
+  sufficiently for intelligent action 
+  <LI>Logic is one of the oldest representation languages studied for AI, and is 
+  the foundation for many existing systems that use logic as either inspiration 
+  or the basis for the tools in that system (e.g., rule-based expert systems and 
+  the Prolog programming language) 
+  <LI>For a knowledge-based intelligent agent, we need: 
+  <UL>
+    <LI>To represent knowledge about the world in a <I>formal language</I> 
+    <LI>To reason about the world using <I>inferences</I> in the language 
+    <LI>To decide what action to take by <I>inferring</I> that the selected 
+    action is good </LI></UL></LI></UL>
+<P>
+<H3>Representation Languages</H3>
+<UL>
+  <LI>Fundamental problem of designing a knowledge representation language is 
+  the fundamental tradeoff between (1) a language that is <B>expressive</B> 
+  enough to represent the important objects and relations in a problem domain, 
+  yet (2) allows for a <B>tractable</B> (i.e., efficient) means of reasoning and 
+  answering questions about implicit information in a reasonable amount of time 
+  <LI><B>Logic</B> is a well-studied, general-purpose language for describing 
+  what's true and false in the world, along with mechanical procedures that can 
+  operate on sentences in the language to perform reasoning (i.e., to determine 
+  what "implicitly follows" from what is explicitly represented) </LI></UL>
+<P>
+<H3>Logic</H3>
+<UL>
+  <LI>Logic is a formal system in which the formulas or sentences have true or 
+  false values 
+  <LI>A logic includes: 
+  <UL>
+    <LI><B>Syntax</B>: Specifies the symbols in the language and how they can be 
+    combined to form sentences. Hence facts about the world are represented as 
+    sentences in logic 
+    <LI><B>Semantics</B>: Specifies what facts in the world a sentence refers 
+    to. Hence, also specifies how you assign a truth value to a sentence based 
+    on its meaning in the world. A <B>fact</B> is a claim about the world, and 
+    may be true or false. 
+    <LI><B>Inference Procedure</B>: Mechanical method for computing (deriving) 
+    new (true) sentences from existing sentences </LI></UL>
+  <LI><B>Facts</B> are claims about the world that are True or False, whereas a 
+  <B>representation</B> is an expression (sentence) in some language that can be 
+  encoded in a computer program and stands for the objects and relations in the 
+  world 
+  <LI>We need to ensure that the representation is consistent with reality, so 
+  that the following figure holds: <PRE>                               entails
+Representation:    Sentences --------------&gt; Sentences
+		       |                         |
+		       |                         |
+		       | Semantics               | Semantics
+		       | refer to                | refer to
+		       |                         |
+                       \/      follows           \/
+World:               Facts ------------------&gt; Facts
+</PRE>
+  <LI><B>Truth</B>: A sentence is True if the state of affairs it describes is 
+  actually the case in the world. So, truth can only be assessed with respect to 
+  the semantics. Yet the computer does not know the semantics of the knowledge 
+  representation language, so we need some way of performing inferences to 
+  derive valid conclusions even when the computer does not know what the 
+  semantics (the interpretation) is 
+  <LI>To build a logic-based representation: 
+  <UL>
+    <LI>User defines a set of primitive symbols and the associated semantics 
+    <LI>Logic defines the ways of putting these symbols together so that the 
+    user can define legal sentences in the language that represent true facts in 
+    the world 
+    <LI>Logic defines ways of inferring new sentences from existing ones 
+  </LI></UL></LI></UL>
+<P>
+<H3>Propositional Logic (PL)</H3>
+<UL>
+  <LI>A simple language that is useful for showing key ideas and definitions 
+  <LI>User defines a set of propositional <B>symbols</B>, like <I>P</I> and 
+  <I>Q</I>. User defines the semantics of each of these symbols. For example, 
+  <UL>
+    <LI>P means "It is hot" 
+    <LI>Q means "It is humid" 
+    <LI>R means "It is raining" </LI></UL>
+  <LI>A <B>sentence</B> (also called a formula or well-formed formula or wff) is 
+  defined as: 
+  <OL>
+    <LI>A symbol 
+    <LI>If S is a sentence, then ~S is a sentence, where "~" is the "not" 
+    logical operator 
+    <LI>If S and T are sentences, then (S v T), (S ^ T), (S =&gt; T), and (S 
+    &lt;=&gt; T) are sentences, where the four logical connectives correspond to 
+    "or," "and," "implies," and "if and only if," respectively 
+    <LI>A finite number of applications of (1)-(3) </LI></OL>
+  <LI>Examples of PL sentences: 
+  <UL>
+    <LI>(P ^ Q) =&gt; R (here meaning "If it is hot and humid, then it is 
+    raining") 
+    <LI>Q =&gt; P (here meaning "If it is humid, then it is hot") 
+    <LI>Q (here meaning "It is humid.") </LI></UL>
+  <LI>Given the truth values of all of the constituent symbols in a sentence, 
+  that sentence can be "evaluated" to determine its truth value (True or False). 
+  This is called an <B>interpretation</B> of the sentence. 
+  <LI>A <B>model</B> is an interpretation (i.e., an assignment of truth values 
+  to symbols) of a set of sentences such that each sentence is True. A model is 
+  just a formal mathematical structure that "stands in" for the world. 
+  <LI>A <B>valid</B> sentence (also called a <B>tautology</B>) is a sentence 
+  that is True under <I>all</I> interpretations. Hence, no matter what the world 
+  is actually like or what the semantics is, the sentence is True. For example 
+  "It's raining or it's not raining." 
+  <LI>An <B>inconsistent</B> sentence (also called <B>unsatisfiable</B> or a 
+  <B>contradiction</B>) is a sentence that is False under <I>all</I> 
+  interpretations. Hence the world is never like what it describes. For example, 
+  "It's raining and it's not raining." 
+  <LI>Sentence P <B>entails</B> sentence Q, written P |= Q, means that whenever 
+  P is True, so is Q. In other words, all models of P are also models of Q 
+</LI></UL>
+<P>
+<H3>Logical (Deductive) Inference</H3>Let KB = { S1, S2,..., SM } be the set of 
+all sentences in our Knowledge Base, where each Si is a sentence in 
+Propositional Logic. Let { X1, X2, ..., XN } be the set of all the symbols 
+(i.e., variables) that are contained in all of the M sentences in KB. Say we 
+want to know if a goal (aka query, conclusion, or theorem) sentence G follows 
+from KB.
+<P>Since the computer doesn't know the <B>interpretation</B> of these sentences 
+in the world, we don't know whether the constituent symbols represent facts in 
+the world that are True or False. So, instead, consider <EM>all</EM> possible 
+combinations of truth values for all the symbols, hence enumerating all 
+logically distinct cases: 
+<P><PRE>X1 X2 ... XN | S1 S2 ... SM | S1 ^ S2 ^...^ SM | G | (S1 ^...^ SM) =&gt; G
+-------------|--------------|------------------|---|-------------------
+F  F  ... F  |              |                  |   |
+F  F  ... T  |              |                  |   |
+...          |              |                  |   |
+T  T  ... T  |              |                  |   | </PRE>
+<UL>
+  <LI>There are 2^N rows in the table. 
+  <LI>Each row corresponds to an equivalence class of worlds that, under a given 
+  interpretation, have the truth values for the N symbols assigned in that row. 
+  <LI>The <B>models</B> of KB are the rows where the third-to-last column is 
+  <I>true</I>, i.e., where all of the sentences in KB are <I>true</I>. 
+  <LI>A sentence R is <B>valid</B> if and only if it is true under all possible 
+  interpretations, i.e., if the entire column associated with R contains all 
+  <I>true</I> values. 
+  <LI>Since we don't know the semantics and therefore whether each symbol is 
+  True or False, to determine if a sentence G is <B>entailed</B> by KB, we must 
+  determine if <B>all</B> models of KB are also models of G. That is, whenever 
+  KB is true, G is true too. In other words, whenever the third-to-last column 
+  has a T, the same row in the second-to-last column also has a T. But this is 
+  logically equivalent to saying that the sentence (KB =&gt; G) is valid (by 
+  definition of the "implies" connective). In other words, if the last column of 
+  the table above contains only <I>True</I>, then <B>KB entails G</B>; or 
+  conclusion G logically follows from the premises in KB, no matter what the 
+  interpretations (i.e., semantics) associated with all of the sentences!
+  <P></P>
+  <LI>The truth table method of inference is <B>complete</B> for PL 
+  (Propositional Logic) because we can always enumerate all 2^<I>n</I> rows for 
+  the <I>n</I> propositional symbols that occur. But this is exponential in 
+  <I>n</I>. In general, it has been shown that the problem of checking if a set 
+  of sentences in PL is satisfiable is NP-complete. (The truth table method of 
+  inference is <I>not</I> complete for FOL (First-Order Logic).)
+  <P></P></LI></UL>
+<P><B>Example</B><BR>Using the "weather" sentences from above, let KB = (((P ^ 
+Q) =&gt; R) ^ (Q =&gt; P) ^ Q) corresponding to the three facts we know about 
+the weather: (1) "If it is hot and humid, then it is raining," (2) "If it is 
+humid, then it is hot," and (3) "It is humid." Now let's ask the query "Is it 
+raining?" That is, is the query sentence R entailed by KB? Using the truth-table 
+approach to answering this query we have: <PRE>P Q R | (P ^ Q) =&gt; R | Q =&gt; P | Q | KB | R | KB =&gt; R
+-----------------------------------------------------
+T T T         T           T     T   T    T      T
+T T F         F           T     T   F    F      T
+T F T         T           T     F   F    T      T
+T F F         T           T     F   F    F      T
+F T T         T           F     T   F    T      T
+F T F         T           F     T   F    F      T
+F F T         T           T     F   F    T      T
+F F F         T           T     F   F    F      T
+</PRE>Hence, in this problem there is only one model of KB, when P, Q, and R are 
+all True. And in this case R is also True, so R is entailed by KB. Also, you can 
+see that the last column is all True values, so the sentence KB =&gt; R is 
+valid. 
+<P>Instead of an exponential length proof by truth table construction, is there 
+a faster way to implement the inference process? Yes, using a <B>proof 
+procedure</B> or <B>inference procedure</B> that uses <B>sound rules of 
+inference</B> to deduce (i.e., derive) new sentences that are true in all cases 
+where the premises are true. For example, consider the following: 
+<P><PRE>    P   Q | P   P =&gt; Q | P ^ (P =&gt; Q) | Q | (P ^ (P =&gt; Q)) =&gt; Q
+    ------|------------|--------------|-------------------------
+    F   F | F      T   |       F      | F |       T
+    F   T | F      T   |       F      | T |       T
+    T   F | T      F   |       F      | F |       T
+    T   T | T      T   |       T      | T |       T</PRE>Since whenever P and P 
+=&gt; Q are both true (last row only), Q is true too, Q is said to be 
+<B>derived</B> from these two premise sentences. We write this as KB |- Q. This 
+local pattern referencing only two of the M sentences in KB is called the 
+<B>Modus Ponens</B> inference rule. The truth table shows that this inference 
+rule is <B>sound</B>. It specifies how to make one kind of step in deriving a 
+conclusion sentence from a KB.
+<P>Therefore, given the sentences in KB, construct a <B>proof</B> that a given 
+conclusion sentence can be derived from KB by applying a sequence of sound 
+inferences using either sentences in KB or sentences derived earlier in the 
+proof, until the conclusion sentence is derived. This method is called the 
+<B>Natural Deduction</B> procedure. (Note: This step-by-step, local proof 
+process also relies on the <B>monotonicity</B> property of PL and FOL. That is, 
+adding a new sentence to KB does not affect what can be entailed from the 
+original KB and does not invalidate old sentences.)
+<P>
+<H3>Sound Rules of Inference</H3>Here are some examples of sound rules of 
+inference. Each can be shown to be sound once and for all using a truth table. 
+The left column contains the premise sentence(s), and the right column contains 
+the derived sentence. We write each of these derivations as A |- B , where A is 
+the premise and B is the derived sentence.
+<P>
+<TABLE cellSpacing=5 cellPadding=3 width="100%">
+  <TBODY>
+  <TR>
+    <TH align=left>Name</TH>
+    <TH align=left>Premise(s)</TH>
+    <TH align=left>Derived Sentence</TH></TR>
+  <TR>
+    <TD>Modus Ponens</TD>
+    <TD>A, A =&gt; B</TD>
+    <TD>B</TD></TR>
+  <TR>
+    <TD>And Introduction</TD>
+    <TD>A, B</TD>
+    <TD>A ^ B</TD></TR>
+  <TR>
+    <TD>And Elimination</TD>
+    <TD>A ^ B</TD>
+    <TD>A</TD></TR>
+  <TR>
+    <TD>Double Negation</TD>
+    <TD>~~A</TD>
+    <TD>A</TD></TR>
+  <TR>
+    <TD>Unit Resolution</TD>
+    <TD>A v B, ~B</TD>
+    <TD>A</TD></TR>
+  <TR>
+    <TD>Resolution</TD>
+    <TD>A v B, ~B v C</TD>
+    <TD>A v C</TD></TR></TBODY></TABLE>
+<P>
+<H3>Using Inference Rules to Prove a Query/Goal/Theorem</H3>A proof is a 
+sequence of sentences, where each sentence is either a premise or a sentence 
+derived from earlier sentences in the proof by one of the rules of inference. 
+The last sentence is the query (also called goal or theorem) that we want to 
+prove.
+<P>Example for the "weather problem" given above.
+<P>
+<TABLE width="80%">
+  <TBODY>
+  <TR>
+    <TD>1.</TD>
+    <TD>Q</TD>
+    <TD>Premise</TD></TR>
+  <TR>
+    <TD>2.</TD>
+    <TD>Q =&gt; P</TD>
+    <TD>Premise</TD></TR>
+  <TR>
+    <TD>3.</TD>
+    <TD>P</TD>
+    <TD>Modus Ponens(1,2)</TD></TR>
+  <TR>
+    <TD>4.</TD>
+    <TD>(P ^ Q) =&gt; R</TD>
+    <TD>Premise</TD></TR>
+  <TR>
+    <TD>5.</TD>
+    <TD>P ^ Q</TD>
+    <TD>And Introduction(1,3)</TD></TR>
+  <TR>
+    <TD>6.</TD>
+    <TD>R</TD>
+    <TD>Modus Ponens(4,5)</TD></TR></TBODY></TABLE>
+<H3>Two Important Properties for Inference</H3>
+<UL>
+  <LI><B>Soundness</B>: If KB |- Q then KB |= Q<BR>That is, if Q is derived from 
+  a set of sentences KB using a given set of rules of inference, then Q is 
+  entailed by KB. Hence, inference produces only real entailments, or any 
+  sentence that follows deductively from the premises is valid.
+  <P></P>
+  <LI><B>Completeness</B>: If KB |= Q then KB |- Q<BR>That is, if Q is entailed 
+  by a set of sentences KB, then Q can be derived from KB using the rules of 
+  inference. Hence, inference produces <I>all</I> entailments, or all valid 
+  sentences can be proved from the premises. </LI></UL>
+<P>
+<H3>Propositional Logic is Too Weak a Representational 
+Language</H3>Propositional Logic (PL) is not a very expressive language because: 
+
+<UL>
+  <LI>Hard to identify "individuals." E.g., Mary, 3 
+  <LI>Can't directly talk about properties of individuals or relations between 
+  individuals. E.g., tall(Bill) 
+  <LI>Generalizations, patterns, regularities can't easily be represented. E.g., 
+  all triangles have 3 sides </LI></UL>
+<P>Consider the problem of representing the following information: 
+<UL>
+  <LI>Every person is mortal. 
+  <LI>Confucius is a person. 
+  <LI>Confucius is mortal. </LI></UL>
+<P>How can these sentences be represented so that we can infer the third 
+sentence from the first two? In PL we have to create propositional symbols to 
+stand for all or part of each sentence. For example, we might do: 
+<UL>
+  <LI>Person =&gt; Mortal 
+  <LI>Person-Confucius 
+  <LI>Mortal-Confucius </LI></UL>That is, we have used four symbols to represent 
+the three given sentences. But, given this representation, the third sentence is 
+<I>not</I> entailed by the first two. 
+<P>A different representation would be to use three symbols to represent the 
+three sentences as 
+<UL>
+  <LI>Person =&gt; Mortal 
+  <LI>Confucius =&gt; Person 
+  <LI>Confucius =&gt; Mortal </LI></UL>In this case the third sentence <I>is</I> 
+entailed by the first two, but we needed an explicit symbol, Confucius, to 
+represent an individual who is a member of the classes "person" and "mortal." 
+So, to represent other individuals we must introduce separate symbols for each 
+one, with means for representing the fact that all individuals who are "people" 
+are also "mortal." <B>First-Order Logic</B> (abbreviated <B>FOL</B> or 
+<B>FOPC</B>) is expressive enough to concisely represent this kind of situation.
+<P>
+<P>
+<HR>
+
+<P>Copyright © 1996-2003 by Charles R. Dyer. All rights reserved. 
+</P></BODY></HTML>

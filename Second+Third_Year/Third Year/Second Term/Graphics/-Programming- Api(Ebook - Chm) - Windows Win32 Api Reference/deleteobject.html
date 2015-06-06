@@ -1,0 +1,68 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+<HTML lang="en-us">
+<HEAD>
+<TITLE>Windows API Guide: DeleteObject Function</TITLE>
+<META content="vbapi@vbapi.com" name="author">
+<META content="Information about the DeleteObject function in the Windows API, geared towards the Visual Basic user." name="description">
+<META content="Kuliniewicz,Windows,Windows 95,Windows NT,Windows 98,Windows 32s,32s,API,Application Programming Interface,Programming,Visual Basic,Basic,VB,DeleteObject" name="keywords">
+<META content="Omicron HTML Editor" name="generator">
+<LINK href="default.css" tppabs="http://www.vbapi.com/css/default.css" rel="stylesheet" type="text/css">
+<LINK href="index-1.html" tppabs="http://www.vbapi.com/index.html" rel="home">
+</HEAD>
+<BODY>
+
+<!-- Begin Adslot1 -->
+<CENTER>
+<SCRIPT language="JAVASCRIPT">
+<!-- hide from older browsers
+now = new Date();
+my_random = now.getTime();
+document.write('<A href="http://adex3.flycast.com/server/socket/127.0.0.1:2800/click/VBWorldnet/VBAPI/' + my_random + '">');
+document.write('<IMG width="468" height="60" border="1" src="http://adex3.flycast.com/server/socket/127.0.0.1:2800/ad/VBWorldnet/VBAPI/' + my_random + '"></A>');
+// -->
+</SCRIPT>
+</CENTER>
+<!-- End Adslot1 -->
+
+<HR>
+
+<H1>DeleteObject Function</H1>
+
+<P><CODE class="declare">Declare Function DeleteObject Lib "gdi32.dll" (ByVal hObject As Long) As Long</CODE>
+
+<P><B>DeleteObject</B> deletes an object after the program has finished using it.  These objects include bitmaps, brushes, fonts, palettes, pens, and regions.  Of course the object should never be deleted until it is no longer in use by any devices (see the example for a demonstration).  Deleting the object frees up system resources associated with it.  The function returns 1 if successful, or 0 if an error occured.
+
+<DL>
+<DT><VAR>hObject</VAR><DD>A handle to the bitmap, brush, font, palette, pen, or region to delete.
+</DL>
+
+<P><B>Example:</B>
+<PRE><CODE class="example">' Draw a rectangle with corners (10,20) and (175,100)
+' on window Form1.  Use a solid yellow brush to fill the rectangle.
+Dim hbrush As Long  ' receives handle to the solid yellow brush
+Dim holdbrush As Long  ' receives handle to Form1's default brush
+Dim retval As Long  ' return value
+
+hbrush = <A href="createsolidbrush.html" tppabs="http://www.vbapi.com/ref/c/createsolidbrush.html">CreateSolidBrush</A>(RGB(255, 255, 0))  ' create a solid yellow brush
+' Save Form1's default brush so we can restore it after the program is finished
+holdbrush = <A href="selectobject.html" tppabs="http://www.vbapi.com/ref/s/selectobject.html">SelectObject</A>(Form1.hDC, hbrush)  ' select the brush
+' Draw the rectangle filled using the solid yellow brush
+retval = <A href="rectangle.html" tppabs="http://www.vbapi.com/ref/r/rectangle.html">Rectangle</A>(Form1.hDC, 10, 20, 175, 100)
+' Restore Form1's previous brush before destroying the created one
+retval = <A href="selectobject.html" tppabs="http://www.vbapi.com/ref/s/selectobject.html">SelectObject</A>(Form1.hDC, holdbrush)  ' select old brush
+retval = <B>DeleteObject</B>(hbrush)  ' destroy the solid yellow brush</CODE></PRE>
+
+<P><B>Category:</B> <A href="index.html#devices" tppabs="http://www.vbapi.com/ref/index.html#devices">Devices</A></P>
+
+<P><A href="funca.html" tppabs="http://www.vbapi.com/ref/funca.html">Go back to the alphabetical Function listing.</A><BR>
+<A href="index.html" tppabs="http://www.vbapi.com/ref/index.html">Go back to the Reference section index.</A></P>
+
+<HR>
+
+<P>This page is copyright &copy; 2000 Paul Kuliniewicz.  <A href="copyrite.html" tppabs="http://www.vbapi.com/copyrite.html" rel="copyright">Copyright Information.</A><BR>
+<A href="index-1.html" tppabs="http://www.vbapi.com/index.html">Go back to the Windows API Guide home page.</A><BR>
+E-mail: <A href="javascript:if(confirm('http://www.vbapi.com/email.html  \n\nThis file was not retrieved by Teleport Pro, because it is addressed on a domain or path outside the boundaries set for its Starting Address.  \n\nDo you want to open it from the server?'))window.location='http://www.vbapi.com/email.html'" tppabs="http://www.vbapi.com/email.html">vbapi@vbapi.com</A>  <A href="javascript:if(confirm('http://www.vbapi.com/email.html  \n\nThis file was not retrieved by Teleport Pro, because it is addressed on a domain or path outside the boundaries set for its Starting Address.  \n\nDo you want to open it from the server?'))window.location='http://www.vbapi.com/email.html#secure'" tppabs="http://www.vbapi.com/email.html#secure">Send Encrypted E-Mail</A><BR>
+This page is at <A href="deleteobject.html" tppabs="http://www.vbapi.com/ref/d/deleteobject.html">http://www.vbapi.com/ref/d/deleteobject.html</A>
+
+</BODY>
+</HTML>
